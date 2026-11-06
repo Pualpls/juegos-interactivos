@@ -1,0 +1,2935 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Suite de Lectoescritura y Mecánica del Lenguaje - 3° Primaria</title>
+  <style>
+    :root {
+      --font-main: 'Comic Neue', 'Fredoka', 'Lexend', 'Comic Sans MS', 'Ubuntu', 'Roboto', 'Noto Sans', sans-serif;
+      --text-scale: 1;
+      --bg-dark: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #f59e0b;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --purple: #7c3aed;
+      --teal: #0d9488;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --shadow-lg: 0 8px 20px -5px rgba(0, 0, 0, 0.22);
+      --radius-lg: 1.1rem;
+      --radius-md: 0.75rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-dark);
+      background-image: url('./recursos_juego/fondo_taller_escritura.webp');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text-main);
+      width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      font-size: calc(16px * var(--text-scale));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.72) 0%, rgba(30, 41, 59, 0.58) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* BARRA SUPERIOR COMPACTA PARA PANTALLA 2:1 */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 1.2rem;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 3px solid #cbd5e1;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .mascot-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--secondary);
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .brand-title h1 {
+      font-size: calc(1.15rem * var(--text-scale));
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .brand-title p {
+      font-size: calc(0.78rem * var(--text-scale));
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .controls-area {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .score-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      padding: 0.28rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 800;
+      color: #92400e;
+      font-size: calc(0.95rem * var(--text-scale));
+    }
+
+    .score-pill img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .btn {
+      font-family: var(--font-main);
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border-radius: var(--radius-md);
+      padding: 0.45rem 0.9rem;
+      font-size: calc(0.92rem * var(--text-scale));
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+      min-height: 42px;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 0 #1e40af;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #1e293b;
+      box-shadow: 0 3px 0 #94a3b8;
+    }
+
+    .btn-amber {
+      background: #f59e0b;
+      color: #fff;
+      box-shadow: 0 3px 0 #b45309;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 3px 0 #15803d;
+    }
+
+    .btn-purple {
+      background: var(--purple);
+      color: #fff;
+      box-shadow: 0 3px 0 #5b21b6;
+    }
+
+    .scale-controls {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    /* CONTENEDOR PRINCIPAL OPTIMIZADO 2:1 */
+    main {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0.55rem 1.1rem;
+    }
+
+    /* DASHBOARD DE LOS 4 GIMNASIOS */
+    #hub-view {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .gym-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 3px solid transparent;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .gym-card.gym-1 { border-color: #3b82f6; }
+    .gym-card.gym-2 { border-color: #10b981; }
+    .gym-card.gym-3 { border-color: #8b5cf6; }
+    .gym-card.gym-4 { border-color: #f59e0b; }
+
+    .gym-header {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .gym-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      flex-shrink: 0;
+    }
+
+    .gym-title-box h2 {
+      font-size: calc(1.05rem * var(--text-scale));
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .gym-badge {
+      display: inline-block;
+      font-size: calc(0.7rem * var(--text-scale));
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      margin-bottom: 0.15rem;
+    }
+
+    .gym-1 .gym-badge { background: #dbeafe; color: #1e40af; }
+    .gym-2 .gym-badge { background: #d1fae5; color: #065f46; }
+    .gym-3 .gym-badge { background: #ede9fe; color: #5b21b6; }
+    .gym-4 .gym-badge { background: #fef3c7; color: #92400e; }
+
+    .gym-desc {
+      font-size: calc(0.84rem * var(--text-scale));
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+      line-height: 1.3;
+    }
+
+    .module-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.42rem;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .mod-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.55rem 0.7rem;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      font-family: var(--font-main);
+      font-size: calc(0.88rem * var(--text-scale));
+      font-weight: 800;
+      color: #0f172a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+      min-height: 46px;
+    }
+
+    .mod-btn:hover {
+      background: #eff6ff;
+      border-color: var(--primary);
+      transform: translateX(3px);
+    }
+
+    .mod-btn span.mod-num {
+      background: #e2e8f0;
+      color: #334155;
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.4rem;
+      font-size: calc(0.76rem * var(--text-scale));
+      margin-right: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    /* VISTA DE ARENA DE JUEGO (PROPORCIÓN ~2:1 HORIZONTAL) */
+    #game-view {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .game-top-bar {
+      background: var(--card-bg);
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      border: 2px solid #cbd5e1;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .mod-header-info {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .mod-header-info h2 {
+      font-size: calc(1.12rem * var(--text-scale));
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      border: 2px solid #94a3b8;
+    }
+
+    .dot.active {
+      background: var(--secondary);
+      border-color: #b45309;
+      transform: scale(1.2);
+    }
+
+    .dot.done {
+      background: var(--success);
+      border-color: #15803d;
+    }
+
+    /* ESCENARIO INTERACTIVO DE 2 COLUMNAS PARA PANTALLA 2:1 */
+    .arena {
+      flex: 1;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 3px solid #94a3b8;
+      box-shadow: var(--shadow-lg);
+      padding: 0.85rem 1.15rem;
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 1.1rem;
+      align-items: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .panel-left, .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.65rem;
+      width: 100%;
+    }
+
+    .panel-left {
+      border-right: 2px dashed #cbd5e1;
+      padding-right: 1rem;
+    }
+
+    /* ELEMENTOS PEDAGÓGICOS Y TÁCTILES */
+    .prompt-box {
+      background: #f8fafc;
+      border: 3px solid #cbd5e1;
+      border-radius: var(--radius-lg);
+      padding: 0.9rem 1.1rem;
+      text-align: center;
+      font-size: calc(1.55rem * var(--text-scale));
+      font-weight: 800;
+      color: #0f172a;
+      min-height: 105px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.04);
+      line-height: 1.45;
+    }
+
+    .word-visual-card {
+      width: 112px;
+      height: 112px;
+      border-radius: 0.9rem;
+      border: 3px solid #93c5fd;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .word-visual-card img, .word-visual-card svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .drop-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 78px;
+      min-height: 54px;
+      padding: 0.2rem 0.6rem;
+      border: 3px dashed var(--primary);
+      background: #eff6ff;
+      border-radius: var(--radius-md);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: calc(1.45rem * var(--text-scale));
+      transition: all 0.15s ease;
+      vertical-align: middle;
+      cursor: pointer;
+      touch-action: none !important;
+    }
+
+    .drop-slot.hovered {
+      background: #dbeafe;
+      border-color: #1d4ed8;
+      transform: scale(1.07);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .drop-slot.filled {
+      border-style: solid;
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+
+    .chips-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem;
+      background: #f1f5f9;
+      border-radius: var(--radius-lg);
+      border: 2px solid #cbd5e1;
+      min-height: 92px;
+    }
+
+    .draggable-chip {
+      min-width: 72px;
+      min-height: 54px;
+      padding: 0.5rem 1rem;
+      background: #ffffff;
+      border: 3px solid #3b82f6;
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 0 #1d4ed8, 0 5px 10px rgba(0,0,0,0.1);
+      font-size: calc(1.35rem * var(--text-scale));
+      font-weight: 800;
+      color: #1e3a8a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none !important;
+      position: relative;
+      z-index: 20;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .draggable-chip:active {
+      cursor: grabbing;
+    }
+
+    .draggable-chip.selected-chip {
+      outline: 4px solid #f59e0b;
+      outline-offset: 2px;
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .draggable-chip.chip-blue {
+      background: #dbeafe;
+      border-color: #2563eb;
+      color: #1d4ed8;
+      box-shadow: 0 4px 0 #1e40af;
+    }
+
+    .draggable-chip.chip-amber {
+      border-color: #f59e0b;
+      color: #92400e;
+      box-shadow: 0 4px 0 #b45309;
+      background: #fffbeb;
+    }
+
+    .draggable-chip.chip-purple {
+      border-color: #8b5cf6;
+      color: #5b21b6;
+      box-shadow: 0 4px 0 #5b21b6;
+      background: #f5f3ff;
+    }
+
+    .draggable-chip.chip-teal {
+      border-color: #10b981;
+      color: #065f46;
+      box-shadow: 0 4px 0 #047857;
+      background: #ecfdf5;
+    }
+
+    /* RANURAS ENTRE LETRAS (MÓDULOS 4 y 6: BARRA ESPACIADORA EN BLANCO) */
+    .char-stream-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      row-gap: 0.6rem;
+      padding: 0.9rem 1rem;
+      background: #ffffff;
+      border: 3px solid #94a3b8;
+      border-radius: var(--radius-lg);
+      min-height: 100px;
+    }
+
+    .stream-char {
+      font-size: calc(1.75rem * var(--text-scale));
+      font-weight: 800;
+      color: #0f172a;
+      padding: 0.1rem 0.04rem;
+      line-height: 1.2;
+    }
+
+    .char-gap-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 46px;
+      margin: 0 1px;
+      border-radius: 6px;
+      border: 2px dashed transparent;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      touch-action: none !important;
+    }
+
+    .char-gap-slot:hover, .char-gap-slot.hovered {
+      width: 24px;
+      background: #dbeafe;
+      border-color: #2563eb;
+    }
+
+    .char-gap-slot.has-spacer {
+      width: 24px;
+      height: 42px;
+      margin: 0 5px;
+      background: #ffffff;
+      border: 2px solid #64748b;
+      border-radius: 6px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    /* RANURAS INVISIBLES ENTRE PALABRAS (MÓDULOS 7 y 10) */
+    .interword-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 44px;
+      margin: 0 2px;
+      padding: 0 3px;
+      border-radius: 8px;
+      border: 2px dashed transparent;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      vertical-align: middle;
+      touch-action: none !important;
+    }
+
+    .interword-slot:hover, .interword-slot.hovered {
+      min-width: 42px;
+      background: #dbeafe;
+      border-color: #2563eb;
+    }
+
+    .interword-slot.placed-sign {
+      min-width: 42px;
+      height: 44px;
+      margin: 0 5px;
+      padding: 0 10px;
+      background: #dbeafe;
+      border: 3px solid #2563eb;
+      box-shadow: 0 3px 0 #1e40af;
+      color: #1d4ed8;
+      font-weight: 900;
+      font-size: calc(1.35rem * var(--text-scale));
+    }
+
+    /* BOTONES DE LETRAS PARA MÓDULO 11 (MAYÚSCULAS / MINÚSCULAS) */
+    .m11-word-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      margin: 4px 7px;
+      white-space: nowrap;
+    }
+
+    .vacuum-letter-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 52px;
+      margin: 1px;
+      border-radius: 0.45rem;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-family: var(--font-main);
+      font-size: calc(1.45rem * var(--text-scale));
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      box-shadow: 0 3px 0 #94a3b8;
+      color: #0f172a;
+      touch-action: manipulation;
+    }
+
+    .vacuum-letter-btn.compact-letter {
+      width: 31px;
+      height: 41px;
+      font-size: calc(1.18rem * var(--text-scale));
+      border-radius: 0.35rem;
+      box-shadow: 0 2px 0 #94a3b8;
+    }
+
+    .vacuum-letter-btn.is-upper {
+      background: #fee2e2;
+      border-color: #dc2626;
+      color: #dc2626;
+      box-shadow: 0 3px 0 #991b1c;
+    }
+
+    .vacuum-letter-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    /* CÓDIGO BICOLOR ESCOLAR: MAYÚSCULAS EN ROJO Y SIGNOS DE PUNTUACIÓN EN AZUL */
+    .bicolor-upper {
+      color: #dc2626 !important;
+      font-weight: 900;
+    }
+
+    .bicolor-punct {
+      color: #2563eb !important;
+      font-weight: 900;
+    }
+
+    .m123-tight-slot {
+      min-width: 48px !important;
+      min-height: 46px !important;
+      padding: 0.08rem 0.22rem !important;
+      margin: 0 2px !important;
+    }
+
+    /* TARJETA DE RETROALIMENTACIÓN COGNITIVA */
+    .feedback-banner {
+      padding: 0.65rem 0.95rem;
+      border-radius: var(--radius-md);
+      font-size: calc(0.95rem * var(--text-scale));
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      line-height: 1.35;
+    }
+
+    .feedback-banner.success {
+      display: flex;
+      background: #dcfce7;
+      border: 2px solid #16a34a;
+      color: #14532d;
+    }
+
+    .feedback-banner.error {
+      display: flex;
+      background: #fee2e2;
+      border: 2px solid #dc2626;
+      color: #7f1d1d;
+    }
+
+    /* APOYO VISUAL B/D */
+    .bd-helper-img {
+      max-width: 195px;
+      max-height: 118px;
+      border-radius: var(--radius-md);
+      border: 2px solid #cbd5e1;
+      object-fit: contain;
+      background: #fff;
+      margin: 0 auto;
+    }
+
+    .sticker-ref {
+      width: 115px;
+      height: 115px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      background: #fff;
+      border: 3px solid #93c5fd;
+      padding: 0.3rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    @media (max-width: 1100px) {
+      #hub-view {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .arena {
+        grid-template-columns: 1fr;
+      }
+      .panel-left {
+        border-right: none;
+        border-bottom: 2px dashed #cbd5e1;
+        padding-right: 0;
+        padding-bottom: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header>
+    <div class="brand-area">
+      <img src="./recursos_juego/mascota_detective_letras.webp" alt="Mascota" class="mascot-avatar" onerror="this.style.display='none'">
+      <div class="brand-title">
+        <h1>Suite de Lectoescritura y Mecánica del Lenguaje</h1>
+        <p>3° de Primaria • Entrenamiento Fonológico, Segmentación, Puntuación y Ortografía</p>
+      </div>
+    </div>
+
+    <div class="controls-area">
+      <div class="score-pill" title="Puntos acumulados">
+        <img src="./recursos_juego/trofeo_maestro_escritor.webp" alt="Trofeo" onerror="this.style.display='none'">
+        <span id="score-display">0 pts</span>
+      </div>
+
+      <div class="scale-controls" title="Tamaño de letra para pizarrón">
+        <button class="btn btn-secondary" onclick="adjustTextScale(-0.08)">A-</button>
+        <button class="btn btn-secondary" onclick="adjustTextScale(0.08)">A+</button>
+      </div>
+
+      <button class="btn btn-amber" id="btn-tts-repeat" onclick="repeatCurrentPromptAudio()" style="display:none;">
+        🔊 Escuchar
+      </button>
+
+      <button class="btn btn-primary" id="btn-back-hub" onclick="showHub()" style="display:none;">
+        🏠 Menú de Gimnasios
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <!-- HUB DE 4 GIMNASIOS (12 MÓDULOS) -->
+    <section id="hub-view">
+      <!-- GIMNASIO 1 -->
+      <div class="gym-card gym-1">
+        <div>
+          <div class="gym-header">
+            <img src="./recursos_juego/icono_fonologia.webp" alt="Fonología" class="gym-icon" onerror="this.style.display='none'">
+            <div class="gym-title-box">
+              <span class="gym-badge">Gimnasio 1</span>
+              <h2>Fonología y Trabadas</h2>
+            </div>
+          </div>
+          <p class="gym-desc">Observa la tarjeta ilustrada a color, escucha la palabra y coloca la sílaba correcta.</p>
+        </div>
+        <div class="module-list">
+          <button class="mod-btn" onclick="openModule(1)">
+            <div><span class="mod-num">M1</span>Destrabador de la "L" (bl, cl, fl, gl, pl, tl)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(2)">
+            <div><span class="mod-num">M2</span>Destrabador de la "R" (br, cr, dr, fr, gr, pr, tr)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(3)">
+            <div><span class="mod-num">M3</span>Sílabas Inversas (es/se, al/la, ar/ra, in/ni)</div>
+            <span>▶</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GIMNASIO 2 -->
+      <div class="gym-card gym-2">
+        <div>
+          <div class="gym-header">
+            <img src="./recursos_juego/icono_segmentacion.webp" alt="Segmentación" class="gym-icon" onerror="this.style.display='none'">
+            <div class="gym-title-box">
+              <span class="gym-badge">Gimnasio 2</span>
+              <h2>Fronteras de Palabras</h2>
+            </div>
+          </div>
+          <p class="gym-desc">Separa oraciones pegadas con tarjetas espaciadoras, une sílabas y cuenta palabras.</p>
+        </div>
+        <div class="module-list">
+          <button class="mod-btn" onclick="openModule(4)">
+            <div><span class="mod-num">M4</span>Tarjetas Espaciadoras (Separar palabras)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(5)">
+            <div><span class="mod-num">M5</span>Pegamento de Palabras (Unir sílabas)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(6)">
+            <div><span class="mod-num">M6</span>Ordenador de Oraciones (Armar con sentido)</div>
+            <span>▶</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GIMNASIO 3 -->
+      <div class="gym-card gym-3">
+        <div>
+          <div class="gym-header">
+            <img src="./recursos_juego/icono_puntuacion.webp" alt="Puntuación" class="gym-icon" onerror="this.style.display='none'">
+            <div class="gym-title-box">
+              <span class="gym-badge">Gimnasio 3</span>
+              <h2>Puntuación y Entonación</h2>
+            </div>
+          </div>
+          <p class="gym-desc">Corta la "y" repetitiva con comas y puntos azules, borra puntos intrusos y usa ¿? e ¡!.</p>
+        </div>
+        <div class="module-list">
+          <button class="mod-btn" onclick="openModule(7)">
+            <div><span class="mod-num">M7</span>Cortar la "y" Repetitiva (Coma y Punto)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(8)">
+            <div><span class="mod-num">M8</span>Borrador del Punto Falso Intruso</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(9)">
+            <div><span class="mod-num">M9</span>Teatro de Signos (¿? e ¡!)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(10)">
+            <div><span class="mod-num">M10</span>Coma, "y" y Punto en Enumeraciones</div>
+            <span>▶</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GIMNASIO 4 -->
+      <div class="gym-card gym-4">
+        <div>
+          <div class="gym-header">
+            <img src="./recursos_juego/icono_ortografia.webp" alt="Ortografía" class="gym-icon" onerror="this.style.display='none'">
+            <div class="gym-title-box">
+              <span class="gym-badge">Gimnasio 4</span>
+              <h2>Mayúsculas y Ortografía</h2>
+            </div>
+          </div>
+          <p class="gym-desc">Cambia mayúsculas y minúsculas en palabras y oraciones, y domina b/d, p/q, b/v, c/s/z.</p>
+        </div>
+        <div class="module-list">
+          <button class="mod-btn" onclick="openModule(11)">
+            <div><span class="mod-num">M11</span>Mayúsculas y Minúsculas (Palabras y Oraciones)</div>
+            <span>▶</span>
+          </button>
+          <button class="mod-btn" onclick="openModule(12)">
+            <div><span class="mod-num">M12</span>Letras Espejo (b/d, p/q) y Ortografía</div>
+            <span>▶</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA DE JUEGO ACTIVO -->
+    <section id="game-view">
+      <div class="game-top-bar">
+        <div class="mod-header-info">
+          <span class="gym-badge" id="active-mod-badge" style="background:#dbeafe; color:#1e40af;">Módulo 1</span>
+          <h2 id="active-mod-title">Título del Módulo</h2>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <div class="progress-dots" id="progress-dots"></div>
+          <button class="btn btn-secondary" onclick="nextChallenge()">Siguiente Reto ➡</button>
+        </div>
+      </div>
+
+      <div class="arena" id="arena-container">
+        <div class="panel-left" id="panel-left-content"></div>
+        <div class="panel-right" id="panel-right-content"></div>
+      </div>
+
+      <div class="feedback-banner" id="feedback-banner">
+        <span id="feedback-text"></span>
+        <button class="btn btn-success" onclick="nextChallenge()">Continuar ➡</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y CLIC FANTASMA (LINUX / TOUCHBOARD)
+       ========================================================================= */
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    window._dragJustFinished = 0;
+    window.addEventListener('click', (e) => {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }, true);
+
+    /* =========================================================================
+       ESTADO GLOBAL Y SINTETIZADOR DE AUDIO / VOZ (100% OFFLINE)
+       ========================================================================= */
+    let currentModule = 0;
+    let challengeIndex = 0;
+    let totalScore = 0;
+    let textScale = 1;
+    let currentPromptAudioText = "";
+    let activeChallengeData = null;
+    let challengeSolved = false;
+    let selectedChipEl = null;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playBeep(type = 'success') {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        if (type === 'success') {
+          [523.25, 659.25, 783.99].forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            gain.gain.setValueAtTime(0.18, now + i * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.24);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.24);
+          });
+        } else if (type === 'error') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(210, now);
+          osc.frequency.linearRampToValueAtTime(140, now + 0.25);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.26);
+        } else {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(460, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    function speakText(text, pitch = 1.05, rate = 0.9) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'es-MX';
+        utter.pitch = pitch;
+        utter.rate = rate;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {}
+    }
+
+    function repeatCurrentPromptAudio() {
+      if (currentPromptAudioText) speakText(currentPromptAudioText);
+    }
+
+    function adjustTextScale(delta) {
+      textScale = Math.min(1.25, Math.max(0.84, +(textScale + delta).toFixed(2)));
+      document.documentElement.style.setProperty('--text-scale', textScale);
+    }
+
+    function addScore(pts) {
+      totalScore += pts;
+      document.getElementById('score-display').textContent = `${totalScore} pts`;
+    }
+
+    function clearSelectedChip() {
+      if (selectedChipEl) {
+        selectedChipEl.classList.remove('selected-chip');
+        selectedChipEl = null;
+      }
+    }
+
+    /* =========================================================================
+       MOTOR UNIVERSAL DE ARRASTRE POINTER EVENTS + TAP-TO-PLACE (LINUX / TOUCH)
+       ========================================================================= */
+    const DROP_ZONE_SELECTOR = '.drop-slot, .interword-slot, .char-gap-slot, #m5-glue-zone, #m6-sentence-zone';
+
+    function makePointerDraggable(chip, onDropValid) {
+      chip._onDropValidCallback = onDropValid;
+      if (chip._pointerDraggableAttached) return;
+      chip._pointerDraggableAttached = true;
+
+      let ghost = null;
+      let startX = 0, startY = 0;
+      let hasMoved = false;
+      let activeHovered = null;
+
+      const cleanupDrag = () => {
+        if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+        ghost = null;
+        chip.style.opacity = '1';
+        if (activeHovered) {
+          activeHovered.classList.remove('hovered');
+          activeHovered = null;
+        }
+      };
+
+      chip.addEventListener('pointerdown', (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        startX = e.clientX;
+        startY = e.clientY;
+        hasMoved = false;
+
+        try { chip.setPointerCapture(e.pointerId); } catch (err) {}
+
+        const rect = chip.getBoundingClientRect();
+        ghost = chip.cloneNode(true);
+        ghost.classList.remove('selected-chip');
+        ghost.style.position = 'fixed';
+        ghost.style.left = `${rect.left}px`;
+        ghost.style.top = `${rect.top}px`;
+        ghost.style.width = `${rect.width}px`;
+        ghost.style.height = `${rect.height}px`;
+        ghost.style.margin = '0';
+        ghost.style.zIndex = '999999';
+        ghost.style.pointerEvents = 'none';
+        ghost.style.opacity = '0.94';
+        ghost.style.transform = 'scale(1.08)';
+        document.body.appendChild(ghost);
+        chip.style.opacity = '0.35';
+      });
+
+      chip.addEventListener('pointermove', (e) => {
+        if (!ghost) return;
+        e.preventDefault();
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasMoved = true;
+
+        const w = ghost.offsetWidth || 72;
+        const h = ghost.offsetHeight || 52;
+        ghost.style.left = `${e.clientX - w / 2}px`;
+        ghost.style.top = `${e.clientY - h / 2}px`;
+
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        const dropZone = elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null;
+        if (activeHovered && activeHovered !== dropZone) {
+          activeHovered.classList.remove('hovered');
+        }
+        if (dropZone) {
+          dropZone.classList.add('hovered');
+          activeHovered = dropZone;
+        } else {
+          activeHovered = null;
+        }
+      });
+
+      chip.addEventListener('pointerup', (e) => {
+        if (!ghost) return;
+        e.preventDefault();
+        e.stopPropagation();
+        try { chip.releasePointerCapture(e.pointerId); } catch (err) {}
+
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        const dropZone = (elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null) || activeHovered;
+
+        cleanupDrag();
+
+        if (hasMoved) {
+          window._dragJustFinished = Date.now() + 420;
+          if (dropZone && chip._onDropValidCallback) {
+            clearSelectedChip();
+            chip._onDropValidCallback(chip, dropZone);
+          } else {
+            playBeep('pop');
+          }
+        } else {
+          // Modo Tap-to-Select / Tap-to-Place para pizarrones táctiles Linux
+          if (selectedChipEl === chip) {
+            clearSelectedChip();
+          } else {
+            clearSelectedChip();
+            selectedChipEl = chip;
+            chip.classList.add('selected-chip');
+            playBeep('pop');
+            // Si en el módulo hay una única ranura evidente (.drop-slot única), permitir colocación directa o esperar toque en ranura
+            const singleSlots = document.querySelectorAll('#arena-container .drop-slot');
+            if (singleSlots.length === 1 && chip._onDropValidCallback) {
+              clearSelectedChip();
+              chip._onDropValidCallback(chip, singleSlots[0]);
+            }
+          }
+        }
+      });
+
+      chip.addEventListener('pointercancel', () => {
+        cleanupDrag();
+      });
+    }
+
+    // Permitir que al tocar cualquier zona de destino con una ficha seleccionada (Tap-to-Place) se coloque allí sin disparar el borrado de la ranura
+    document.addEventListener('click', (e) => {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      if (!selectedChipEl) return;
+      const targetZone = e.target.closest(DROP_ZONE_SELECTOR);
+      if (targetZone && selectedChipEl._onDropValidCallback) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        const chip = selectedChipEl;
+        clearSelectedChip();
+        chip._onDropValidCallback(chip, targetZone);
+      }
+    }, true);
+
+    /* =========================================================================
+       ILUSTRACIONES VECTORIALES DE RESPALDO PARA PALABRAS SIN STICKER .WEBP
+       ========================================================================= */
+    function getWordVisualCardHTML(item) {
+      if (item.img) {
+        return `<div class="word-visual-card" title="Observa la imagen"><img src="./recursos_juego/${item.img}" alt="Ilustración"></div>`;
+      }
+      if (item.svg) {
+        return `<div class="word-visual-card" title="Observa la imagen">${item.svg}</div>`;
+      }
+      return '';
+    }
+
+    /* =========================================================================
+       BANCOS DE DATOS EXPANDIDOS POR MÓDULO (1 A 12)
+       ========================================================================= */
+
+    // MÓDULO 1: SÍLABAS TRABADAS CON L (bl, cl, fl, gl, pl, tl) — 20 PALABRAS CON IMAGEN A COLOR
+    const DATA_M1 = [
+      { word: 'plato', prefix: '', suffix: 'ato', target: 'pl', trap: 'p', wrongWord: 'pato', img: 'ref_plato.webp', context: 'Sirve la sopa caliente en el ___.' },
+      { word: 'blusa', prefix: '', suffix: 'usa', target: 'bl', trap: 'b', wrongWord: 'busa', img: 'ref_blusa.webp', context: 'Mi mamá planchó su ___ rosa.' },
+      { word: 'clavo', prefix: '', suffix: 'avo', target: 'cl', trap: 'c', wrongWord: 'cavo', img: 'ref_clavo.webp', context: 'Papá golpeó el ___ con el martillo.' },
+      { word: 'flor', prefix: '', suffix: 'or', target: 'fl', trap: 'f', wrongWord: 'for', img: 'ref_flor.webp', context: 'En la maceta nació una hermosa ___.' },
+      { word: 'globo', prefix: '', suffix: 'obo', target: 'gl', trap: 'g', wrongWord: 'gobo', img: 'ref_globo.webp', context: 'El ___ rojo subió hasta las nubes.' },
+      { word: 'plátano', prefix: '', suffix: 'átano', target: 'pl', trap: 'p', wrongWord: 'pátano', img: 'ref_platano.webp', context: 'El mono come un ___ amarillo.' },
+      { word: 'bicicleta', prefix: 'bici', suffix: 'eta', target: 'cl', trap: 'qu', wrongWord: 'biciqueta', img: 'ref_bicicleta.webp', context: 'Fui al parque pedaleando mi ___.' },
+      { word: 'flauta', prefix: '', suffix: 'auta', target: 'fl', trap: 'f', wrongWord: 'fauta', img: 'ref_flauta.webp', context: 'Tocamos una melodía con la ___.' },
+      { word: 'iglesia', prefix: 'i', suffix: 'esia', target: 'gl', trap: 'g', wrongWord: 'igesia', img: 'ref_iglesia.webp', context: 'Las campanas de la ___ suenan fuerte.' },
+      { word: 'pluma', prefix: '', suffix: 'uma', target: 'pl', trap: 'p', wrongWord: 'puma', img: 'ref_pluma.webp', context: 'El pájaro dejó caer una ___ azul.' },
+      { word: 'flecha', prefix: '', suffix: 'echa', target: 'fl', trap: 'f', wrongWord: 'fecha', img: 'ref_flecha.webp', context: 'La ___ señala el camino correcto.' },
+      { word: 'planeta', prefix: '', suffix: 'aneta', target: 'pl', trap: 'p', wrongWord: 'paneta', img: 'ref_planeta.webp', context: 'La Tierra es nuestro ___.' },
+      { word: 'ancla', prefix: 'an', suffix: 'a', target: 'cl', trap: 'c', wrongWord: 'anca', img: 'ref_ancla.webp', context: 'El barco bajó el ___ al fondo del mar.' },
+      { word: 'regla', prefix: 're', suffix: 'a', target: 'gl', trap: 'g', wrongWord: 'rega', img: 'ref_regla.webp', context: 'Trazamos una línea recta con la ___.' },
+      { word: 'blanco', prefix: '', suffix: 'anco', target: 'bl', trap: 'b', wrongWord: 'banco', svg: '<svg viewBox="0 0 100 100"><rect x="14" y="18" width="72" height="64" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="5"/><circle cx="38" cy="48" r="6" fill="#1e293b"/><circle cx="62" cy="48" r="6" fill="#1e293b"/><path d="M38 64 Q50 74 62 64" stroke="#1e293b" stroke-width="5" fill="none" stroke-linecap="round"/></svg>', context: 'La nieve y las nubes son de color ___.' },
+      { word: 'bloque', prefix: '', suffix: 'oque', target: 'bl', trap: 'b', wrongWord: 'boque', svg: '<svg viewBox="0 0 100 100"><rect x="18" y="34" width="64" height="46" rx="6" fill="#ef4444" stroke="#991b1b" stroke-width="4"/><rect x="26" y="22" width="18" height="12" rx="3" fill="#ef4444" stroke="#991b1b" stroke-width="4"/><rect x="56" y="22" width="18" height="12" rx="3" fill="#ef4444" stroke="#991b1b" stroke-width="4"/></svg>', context: 'Armamos una torre con un ___ de juguete.' },
+      { word: 'cable', prefix: 'ca', suffix: 'e', target: 'bl', trap: 'b', wrongWord: 'cabe', svg: '<svg viewBox="0 0 100 100"><path d="M15 65 C35 20, 65 80, 80 35" stroke="#2563eb" stroke-width="10" fill="none" stroke-linecap="round"/><rect x="74" y="20" width="16" height="20" rx="4" fill="#334155"/><line x1="78" y1="12" x2="78" y2="20" stroke="#94a3b8" stroke-width="4"/><line x1="86" y1="12" x2="86" y2="20" stroke="#94a3b8" stroke-width="4"/></svg>', context: 'Conectamos la lámpara con el ___ eléctrico.' },
+      { word: 'playa', prefix: '', suffix: 'aya', target: 'pl', trap: 'p', wrongWord: 'paya', svg: '<svg viewBox="0 0 100 100"><circle cx="75" cy="24" r="14" fill="#facc15"/><path d="M10 72 Q50 58 90 72 L90 92 L10 92 Z" fill="#fde047"/><path d="M10 62 Q50 50 90 62 L90 74 Q50 62 10 74 Z" fill="#38bdf8"/></svg>', context: 'En vacaciones hicimos castillos de arena en la ___.' },
+      { word: 'planta', prefix: '', suffix: 'anta', target: 'pl', trap: 'p', wrongWord: 'panta', svg: '<svg viewBox="0 0 100 100"><polygon points="32,58 68,58 62,88 38,88" fill="#d97706"/><line x1="50" y1="58" x2="50" y2="26" stroke="#16a34a" stroke-width="6"/><ellipse cx="36" cy="40" rx="14" ry="8" transform="rotate(-25 36 40)" fill="#22c55e"/><ellipse cx="64" cy="36" rx="14" ry="8" transform="rotate(25 64 36)" fill="#22c55e"/></svg>', context: 'Regamos la ___ verde de la maceta.' },
+      { word: 'atleta', prefix: 'a', suffix: 'eta', target: 'tl', trap: 't', wrongWord: 'ateta', svg: '<svg viewBox="0 0 100 100"><circle cx="54" cy="22" r="11" fill="#f59e0b"/><path d="M35 42 L68 38 L56 64 L32 58 Z" fill="#2563eb"/><path d="M56 64 L76 84 M40 60 L22 82" stroke="#1e293b" stroke-width="7" stroke-linecap="round"/></svg>', context: 'El ___ corrió muy rápido en la pista.' }
+    ];
+
+    // MÓDULO 2: SÍLABAS TRABADAS CON R (br, cr, dr, fr, gr, pr, tr) — 20 PALABRAS CON IMAGEN A COLOR
+    const DATA_M2 = [
+      { word: 'libro', prefix: 'li', suffix: 'o', target: 'br', trap: 'pr', wrongWord: 'lipro', img: 'ref_libro.webp', context: 'Leímos un cuento hermoso en el ___.' },
+      { word: 'tigre', prefix: 'ti', suffix: 'e', target: 'gr', trap: 'g', wrongWord: 'tige', img: 'ref_tigre.webp', context: 'El ___ tiene rayas negras y naranjas.' },
+      { word: 'fresa', prefix: '', suffix: 'esa', target: 'fr', trap: 'f', wrongWord: 'fesa', img: 'ref_fresa.webp', context: 'La ___ roja del pastel es muy dulce.' },
+      { word: 'dragón', prefix: '', suffix: 'agón', target: 'dr', trap: 'd', wrongWord: 'dagón', img: 'ref_dragon.webp', context: 'El ___ del cuento vuela entre las montañas.' },
+      { word: 'estrella', prefix: 'es', suffix: 'ella', target: 'tr', trap: 't', wrongWord: 'estella', img: 'ref_estrella.webp', context: 'En la noche brilla una ___ en el cielo.' },
+      { word: 'bruja', prefix: '', suffix: 'uja', target: 'br', trap: 'b', wrongWord: 'buja', img: 'ref_bruja.webp', context: 'La ___ del cuento vuela en su escoba.' },
+      { word: 'tren', prefix: '', suffix: 'en', target: 'tr', trap: 't', wrongWord: 'ten', img: 'ref_tren.webp', context: 'El ___ avanza haciendo chu-chu por la vía.' },
+      { word: 'cangrejo', prefix: 'can', suffix: 'ejo', target: 'gr', trap: 'g', wrongWord: 'cangejo', img: 'ref_cangrejo.webp', context: 'El ___ rojo camina de lado en la arena.' },
+      { word: 'princesa', prefix: '', suffix: 'incesa', target: 'pr', trap: 'p', wrongWord: 'pincesa', img: 'ref_princesa.webp', context: 'La ___ del cuento vive en un castillo.' },
+      { word: 'tractor', prefix: '', suffix: 'actor', target: 'tr', trap: 't', wrongWord: 'tactor', img: 'ref_tractor.webp', context: 'El campesino ara la tierra con el ___.' },
+      { word: 'cofre', prefix: 'co', suffix: 'e', target: 'fr', trap: 'f', wrongWord: 'cofe', img: 'ref_cofre.webp', context: 'Los piratas encontraron un ___ con monedas.' },
+      { word: 'cebra', prefix: 'ce', suffix: 'a', target: 'br', trap: 'b', wrongWord: 'ceba', img: 'ref_cebra.webp', context: 'La ___ parece un caballito con rayas blancas y negras.' },
+      { word: 'cocodrilo', prefix: 'coco', suffix: 'ilo', target: 'dr', trap: 'd', wrongWord: 'cocodilo', img: 'ref_cocodrilo.webp', context: 'El ___ verde nada tranquilo en el río.' },
+      { word: 'trompo', prefix: '', suffix: 'ompo', target: 'tr', trap: 't', wrongWord: 'tompo', img: 'ref_trompo.webp', context: 'Hicimos girar el ___ de madera con su cuerda.' },
+      { word: 'trofeo', prefix: '', suffix: 'ofeo', target: 'tr', trap: 't', wrongWord: 'tofeo', img: 'trofeo_maestro_escritor.webp', context: 'El equipo campeón levantó la copa y el ___.' },
+      { word: 'cruz', prefix: '', suffix: 'uz', target: 'cr', trap: 'c', wrongWord: 'cuz', svg: '<svg viewBox="0 0 100 100"><rect x="40" y="14" width="20" height="72" rx="5" fill="#ef4444"/><rect x="18" y="36" width="64" height="20" rx="5" fill="#ef4444"/></svg>', context: 'El botiquín escolar tiene una ___ roja.' },
+      { word: 'cuadro', prefix: 'cua', suffix: 'o', target: 'dr', trap: 'd', wrongWord: 'cuado', svg: '<svg viewBox="0 0 100 100"><rect x="16" y="18" width="68" height="64" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="8"/><circle cx="38" cy="40" r="8" fill="#f59e0b"/><polygon points="24,74 48,48 64,66 76,54 76,74" fill="#16a34a"/></svg>', context: 'Colgamos un ___ pintado en la pared.' },
+      { word: 'brazo', prefix: '', suffix: 'azo', target: 'br', trap: 'b', wrongWord: 'bazo', svg: '<svg viewBox="0 0 100 100"><path d="M22 65 L52 65 L65 32" stroke="#f59e0b" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="66" cy="26" r="10" fill="#f59e0b"/></svg>', context: 'Doblé el codo para mover mi ___.' },
+      { word: 'grillo', prefix: '', suffix: 'illo', target: 'gr', trap: 'g', wrongWord: 'gillo', svg: '<svg viewBox="0 0 100 100"><ellipse cx="52" cy="58" rx="24" ry="12" fill="#16a34a"/><circle cx="28" cy="54" r="10" fill="#15803d"/><path d="M56 54 L76 30 L84 68" stroke="#15803d" stroke-width="5" fill="none"/><path d="M22 46 L10 30" stroke="#15803d" stroke-width="3"/></svg>', context: 'Por la noche se escucha cantar al ___.' },
+      { word: 'frutas', prefix: '', suffix: 'utas', target: 'fr', trap: 'f', wrongWord: 'futas', svg: '<svg viewBox="0 0 100 100"><path d="M18 58 Q50 90 82 58 Z" fill="#b45309"/><circle cx="38" cy="48" r="12" fill="#ef4444"/><circle cx="58" cy="46" r="12" fill="#f59e0b"/><circle cx="48" cy="36" r="10" fill="#84cc16"/></svg>', context: 'En el recreo comemos un cóctel de ___.' }
+    ];
+
+    // MÓDULO 3: SÍLABAS INVERSAS (VC vs CV) — 20 PALABRAS CON IMAGEN A COLOR
+    const DATA_M3 = [
+      { word: 'escuela', prefix: '', suffix: 'cuela', target: 'es', trap: 'se', wrongWord: 'secuela', img: 'ref_escuela.webp', context: 'Todos los días aprendemos mucho en la ___.' },
+      { word: 'árbol', prefix: '', suffix: 'bol', target: 'ár', trap: 'rá', wrongWord: 'rábol', img: 'ref_arbol.webp', context: 'Nos sentamos bajo la sombra del ___.' },
+      { word: 'almohada', prefix: '', suffix: 'mohada', target: 'al', trap: 'la', wrongWord: 'lamohada', img: 'ref_almohada.webp', context: 'Apoyé mi cabeza sobre la suave ___.' },
+      { word: 'isla', prefix: '', suffix: 'la', target: 'is', trap: 'si', wrongWord: 'sila', img: 'ref_isla.webp', context: 'Una ___ está rodeada de agua por todas partes.' },
+      { word: 'espejo', prefix: '', suffix: 'pejo', target: 'es', trap: 'se', wrongWord: 'sepejo', img: 'ref_espejo.webp', context: 'Me miré la cara en el ___ del baño.' },
+      { word: 'ardilla', prefix: '', suffix: 'dilla', target: 'ar', trap: 'ra', wrongWord: 'radilla', img: 'ref_ardilla.webp', context: 'La ___ subió al pino con una bellota.' },
+      { word: 'insecto', prefix: '', suffix: 'secto', target: 'in', trap: 'ni', wrongWord: 'nisecto', img: 'ref_insecto.webp', context: 'La catarina es un pequeño ___ con seis patas.' },
+      { word: 'estrella', prefix: '', suffix: 'trella', target: 'es', trap: 'se', wrongWord: 'setrella', img: 'ref_estrella.webp', context: 'Vimos brillar una ___ fugaz.' },
+      { word: 'elefante', prefix: '', suffix: 'lefante', target: 'e', trap: 'le', wrongWord: 'lelefante', img: 'ref_elefante.webp', context: 'El ___ tiene una trompa larga y grandes orejas.' },
+      { word: 'espada', prefix: '', suffix: 'pada', target: 'es', trap: 'se', wrongWord: 'sepada', img: 'ref_espada.webp', context: 'El caballero del cuento lleva escudo y ___.' },
+      { word: 'arcoíris', prefix: '', suffix: 'coíris', target: 'ar', trap: 'ra', wrongWord: 'racoíris', img: 'ref_arcoiris.webp', context: 'Después de la lluvia salió el ___ de siete colores.' },
+      { word: 'invierno', prefix: '', suffix: 'vierno', target: 'in', trap: 'ni', wrongWord: 'nivierno', img: 'ref_invierno.webp', context: 'En el ___ hace frío y usamos bufanda.' },
+      { word: 'antena', prefix: '', suffix: 'tena', target: 'an', trap: 'na', wrongWord: 'natena', img: 'ref_antena.webp', context: 'La ___ del techo recibe la señal de televisión.' },
+      { word: 'escoba', prefix: '', suffix: 'coba', target: 'es', trap: 'se', wrongWord: 'secoba', img: 'ref_escoba.webp', context: 'Barrimos el salón con la ___.' },
+      { word: 'ambulancia', prefix: '', suffix: 'bulancia', target: 'am', trap: 'ma', wrongWord: 'mabulancia', img: 'ref_ambulancia.webp', context: 'La ___ lleva a los enfermos al hospital.' },
+      { word: 'imán', prefix: 'i', suffix: 'án', target: 'm', trap: 'n', wrongWord: 'inán', img: 'ref_iman.webp', context: 'El ___ atrae los clavos de hierro.' },
+      { word: 'pastel', prefix: 'p', suffix: 'tel', target: 'as', trap: 'sa', wrongWord: 'psatel', img: 'ref_pastel.webp', context: 'Soplamos las velitas del ___ de cumpleaños.' },
+      { word: 'alberca', prefix: '', suffix: 'berca', target: 'al', trap: 'la', wrongWord: 'laberca', svg: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="38" ry="22" fill="#38bdf8" stroke="#0284c7" stroke-width="5"/><path d="M32 24 L32 58 M52 24 L52 58 M32 34 L52 34 M32 46 L52 46" stroke="#64748b" stroke-width="4" stroke-linecap="round"/></svg>', context: 'Nadamos toda la tarde en la ___.' },
+      { word: 'arpa', prefix: '', suffix: 'pa', target: 'ar', trap: 'ra', wrongWord: 'rapa', svg: '<svg viewBox="0 0 100 100"><path d="M26 18 L26 82 L74 82 Q70 36 26 18 Z" fill="none" stroke="#d97706" stroke-width="7" stroke-linejoin="round"/><line x1="38" y1="28" x2="38" y2="80" stroke="#f59e0b" stroke-width="2"/><line x1="48" y1="36" x2="48" y2="80" stroke="#f59e0b" stroke-width="2"/><line x1="58" y1="46" x2="58" y2="80" stroke="#f59e0b" stroke-width="2"/></svg>', context: 'El músico toca las cuerdas del ___.' },
+      { word: 'embudo', prefix: '', suffix: 'budo', target: 'em', trap: 'me', wrongWord: 'mebudo', svg: '<svg viewBox="0 0 100 100"><polygon points="18,22 82,22 56,58 56,84 44,84 44,58" fill="#f97316" stroke="#c2410c" stroke-width="4"/></svg>', context: 'Pasamos el agua a la botella usando un ___.' }
+    ];
+
+    // MÓDULO 4: TARJETAS ESPACIADORAS EN BLANCO (SEPARAR PALABRAS PEGADAS) — 24 ORACIONES
+    const DATA_M4 = [
+      { words: ['Mi', 'mamá', 'me', 'quiere'] },
+      { words: ['El', 'perro', 'corre', 'rápido'] },
+      { words: ['La', 'niña', 'lee', 'un', 'cuento'] },
+      { words: ['Vamos', 'a', 'jugar', 'al', 'patio'] },
+      { words: ['Me', 'gusta', 'comer', 'manzana'] },
+      { words: ['Los', 'alumnos', 'cuidan', 'su', 'salón'] },
+      { words: ['El', 'gato', 'duerme', 'en', 'la', 'silla'] },
+      { words: ['Mi', 'escuela', 'está', 'muy', 'limpia'] },
+      { words: ['Ayer', 'comimos', 'tacos', 'de', 'frijol'] },
+      { words: ['La', 'maestra', 'escribe', 'en', 'el', 'pizarrón'] },
+      { words: ['El', 'sol', 'ilumina', 'todo', 'el', 'campo'] },
+      { words: ['Naomi', 'guarda', 'sus', 'colores', 'nuevos'] },
+      { words: ['Las', 'aves', 'cantan', 'por', 'la', 'mañana'] },
+      { words: ['Jarol', 'toma', 'agua', 'fresca', 'de', 'limón'] },
+      { words: ['Mi', 'abuelo', 'siembra', 'maíz', 'en', 'la', 'milpa'] },
+      { words: ['Nosotros', 'respetamos', 'las', 'reglas', 'del', 'juego'] },
+      { words: ['La', 'rana', 'salta', 'sobre', 'el', 'charco'] },
+      { words: ['El', 'panadero', 'hornea', 'pan', 'caliente'] },
+      { words: ['Mis', 'amigos', 'comparten', 'su', 'desayuno'] },
+      { words: ['La', 'lluvia', 'moja', 'los', 'árboles', 'verdes'] },
+      { words: ['El', 'conejo', 'blanco', 'come', 'zanahoria'] },
+      { words: ['En', 'la', 'biblioteca', 'leemos', 'en', 'silencio'] },
+      { words: ['Papá', 'prepara', 'sopa', 'de', 'verduras'] },
+      { words: ['La', 'mariposa', 'vuela', 'entre', 'las', 'flores'] }
+    ];
+
+    // MÓDULO 5: TALLER DE PEGAMENTO (UNIR SÍLABAS SIN FALTAS ORTOGRÁFICAS + DRAG & DROP) — 24 PALABRAS
+    const DATA_M5 = [
+      { fragments: ['pe', 'lear'], correct: 'pelear', sentence: 'En la escuela dialogamos para no ___.' },
+      { fragments: ['cam', 'biar'], correct: 'cambiar', sentence: 'Debemos ___ la basura de bote.' },
+      { fragments: ['es', 'cue', 'la'], correct: 'escuela', sentence: 'Llegamos temprano a nuestra ___.' },
+      { fragments: ['em', 'pe', 'zar'], correct: 'empezar', sentence: 'Ya va a ___ el partido de futbol.' },
+      { fragments: ['a', 'yu', 'dar'], correct: 'ayudar', sentence: 'Me gusta ___ a mis compañeros.' },
+      { fragments: ['tra', 'ba', 'jar'], correct: 'trabajar', sentence: 'En equipo es más bonito ___.' },
+      { fragments: ['en', 'ton', 'ces'], correct: 'entonces', sentence: 'Terminamos la tarea y ___ salimos al recreo.' },
+      { fragments: ['com', 'par', 'tir'], correct: 'compartir', sentence: 'Es importante ___ los materiales del aula.' },
+      { fragments: ['es', 'cri', 'bir'], correct: 'escribir', sentence: 'Voy a ___ un cuento en mi cuaderno.' },
+      { fragments: ['en', 'con', 'trar'], correct: 'encontrar', sentence: 'Pude ___ mi lápiz debajo de la mesa.' },
+      { fragments: ['des', 'can', 'sar'], correct: 'descansar', sentence: 'Después de correr vamos a ___.' },
+      { fragments: ['a', 'pren', 'der'], correct: 'aprender', sentence: 'Venimos a tercer grado para ___.' },
+      { fragments: ['ex', 'pli', 'car'], correct: 'explicar', sentence: 'El maestro nos va a ___ el tema.' },
+      { fragments: ['con', 'tes', 'tar'], correct: 'contestar', sentence: 'Levanté la mano para ___ la pregunta.' },
+      { fragments: ['res', 'pe', 'tar'], correct: 'respetar', sentence: 'Debemos ___ el turno de cada compañero.' },
+      { fragments: ['or', 'de', 'nar'], correct: 'ordenar', sentence: 'Antes de salir hay que ___ los libros.' },
+      { fragments: ['pre', 'gun', 'tar'], correct: 'preguntar', sentence: 'Si tienes una duda puedes ___.' },
+      { fragments: ['es', 'cu', 'char'], correct: 'escuchar', sentence: 'Guardamos silencio para ___ el cuento.' },
+      { fragments: ['re', 'cor', 'tar'], correct: 'recortar', sentence: 'Usé las tijeras para ___ las figuras.' },
+      { fragments: ['co', 'lo', 'rear'], correct: 'colorear', sentence: 'Me encanta ___ los dibujos con crayolas.' },
+      { fragments: ['sem', 'brar'], correct: 'sembrar', sentence: 'Fuimos al jardín para ___ semillas.' },
+      { fragments: ['lim', 'piar'], correct: 'limpiar', sentence: 'Entre todos ayudamos a ___ nuestra mesa.' },
+      { fragments: ['ca', 'mi', 'nar'], correct: 'caminar', sentence: 'Por el pasillo debemos ___ sin empujar.' },
+      { fragments: ['sa', 'lu', 'dar'], correct: 'saludar', sentence: 'Al llegar al salón debemos ___ con alegría.' }
+    ];
+
+    // MÓDULO 6: BÁSCULA CONTADORA DE PALABRAS (SEPARAR ORACIÓN PEGADA Y CONTAR) — 24 ORACIONES
+    const DATA_M6 = [
+      { words: ['El', 'sol', 'brilla', 'en', 'Sayula.'] },
+      { words: ['Los', 'perros', 'ladran', 'fuerte.'] },
+      { words: ['Mi', 'abuela', 'hace', 'tamales', 'ricos.'] },
+      { words: ['Hoy', 'leímos', 'un', 'libro', 'muy', 'bonito.'] },
+      { words: ['La', 'lluvia', 'moja', 'el', 'patio.'] },
+      { words: ['Las', 'mariposas', 'vuelan', 'alto.'] },
+      { words: ['El', 'maestro', 'revisa', 'la', 'tarea.'] },
+      { words: ['Yo', 'tomo', 'agua', 'simple', 'todos', 'los', 'días.'] },
+      { words: ['Mi', 'gato', 'negro', 'duerme', 'mucho.'] },
+      { words: ['Los', 'niños', 'juegan', 'futbol', 'en', 'la', 'cancha.'] },
+      { words: ['Mamá', 'compró', 'uvas', 'dulces.'] },
+      { words: ['El', 'reloj', 'marca', 'las', 'ocho.'] },
+      { words: ['Nosotros', 'cuidamos', 'las', 'plantas', 'del', 'jardín.'] },
+      { words: ['El', 'pájaro', 'canta', 'en', 'la', 'rama.'] },
+      { words: ['Brianna', 'tiene', 'una', 'mochila', 'azul.'] },
+      { words: ['Papá', 'lava', 'los', 'platos', 'limpios.'] },
+      { words: ['La', 'campana', 'suena', 'en', 'el', 'recreo.'] },
+      { words: ['El', 'conejo', 'salta', 'por', 'el', 'campo.'] },
+      { words: ['Mis', 'hermanos', 'arman', 'un', 'rompecabezas.'] },
+      { words: ['La', 'tortuga', 'camina', 'muy', 'despacio.'] },
+      { words: ['En', 'el', 'salón', 'hay', 'veinte', 'sillas.'] },
+      { words: ['El', 'viento', 'mueve', 'las', 'hojas', 'secas.'] },
+      { words: ['La', 'señora', 'Lupita', 'limpia', 'el', 'patio.'] },
+      { words: ['Los', 'peces', 'nadan', 'en', 'el', 'río.'] }
+    ];
+
+    // MÓDULO 7: GENERADOR COMBINATORIO DE COMAS Y PUNTOS AZULES (CON PISTA DE MAYÚSCULA INTERMEDIA)
+    const M7_CLAUSE_1 = [
+      { words: ['Los', 'niños', 'salieron', 'al', 'patio'], commaCont: ['tomaron', 'agua', 'fresca'] },
+      { words: ['Mi', 'mamá', 'fue', 'al', 'mercado'], commaCont: ['compró', 'verduras', 'frescas'] },
+      { words: ['Naomi', 'abrió', 'su', 'cuaderno'], commaCont: ['escribió', 'la', 'fecha'] },
+      { words: ['Daniel', 'guardó', 'sus', 'colores'], commaCont: ['ordenó', 'su', 'mochila'] },
+      { words: ['El', 'perro', 'corrió', 'por', 'el', 'jardín'], commaCont: ['buscó', 'su', 'pelota'] },
+      { words: ['Las', 'niñas', 'leyeron', 'un', 'cuento'], commaCont: ['hicieron', 'un', 'dibujo'] },
+      { words: ['Mi', 'abuelita', 'encendió', 'la', 'estufa'], commaCont: ['preparó', 'arroz', 'caliente'] },
+      { words: ['El', 'panadero', 'amasó', 'la', 'harina'], commaCont: ['horneó', 'los', 'bolillos'] },
+      { words: ['Nosotros', 'limpiamos', 'las', 'mesas'], commaCont: ['acomodamos', 'las', 'sillas'] },
+      { words: ['El', 'abuelo', 'de', 'Jarol', 'regó', 'la', 'milpa'], commaCont: ['cortó', 'los', 'elotes'] }
+    ];
+
+    const M7_CLAUSE_2_CAP = [
+      ['El', 'maestro', 'Paul', 'nos', 'felicitó', 'a', 'todos'],
+      ['La', 'maestra', 'Vero', 'tocó', 'la', 'campana', 'del', 'recreo'],
+      ['Después', 'todos', 'regresamos', 'muy', 'contentos'],
+      ['En', 'la', 'tarde', 'empezó', 'a', 'soplar', 'el', 'viento'],
+      ['Al', 'final', 'compartimos', 'la', 'fruta', 'en', 'equipo'],
+      ['El', 'director', 'Abel', 'saludó', 'a', 'nuestro', 'grupo'],
+      ['La', 'tarde', 'estuvo', 'llena', 'de', 'alegría'],
+      ['Todos', 'los', 'vecinos', 'aplaudieron', 'con', 'gusto']
+    ];
+
+    // MÓDULO 8: CAZADOR DEL PUNTO FALSO INTRUSO (SIN RESALTAR EN ROJO) — 24 RETOS
+    const DATA_M8 = [
+      { tokens: ['Las.', 'personas', 'caminan', 'por', 'la', 'plaza.', 'El', 'sol', 'brilla', 'mucho.'], falseIndices: [0] },
+      { tokens: ['Los', 'niños', 'quieren', 'estar.', 'jugando', 'futbol.', 'La', 'cancha', 'es', 'grande.'], falseIndices: [3] },
+      { tokens: ['Mi', 'mamá', 'fue.', 'a', 'comprar', 'tortillas.', 'Ya', 'vamos', 'a', 'comer.'], falseIndices: [2] },
+      { tokens: ['El', 'perro', 'de.', 'mi', 'tío', 'ladra', 'fuerte.', 'Cuida', 'toda', 'la', 'casa.'], falseIndices: [2] },
+      { tokens: ['Ayer', 'comimos.', 'tacos', 'en', 'el', 'recreo.', 'Estaban', 'muy', 'ricos.'], falseIndices: [1] },
+      { tokens: ['La', 'maestra.', 'nos', 'leyó', 'un', 'cuento.', 'Nos', 'gustó', 'el', 'final.'], falseIndices: [1] },
+      { tokens: ['En', 'el', 'jardín.', 'hay', 'muchas', 'flores', 'rojas.', 'Huelen', 'muy', 'bien.'], falseIndices: [2] },
+      { tokens: ['Mi', 'hermano', 'pequeño.', 'duerme', 'en', 'su', 'cuna.', 'No', 'hagamos', 'ruido.'], falseIndices: [2] },
+      { tokens: ['El', 'tren', 'avanza.', 'rápido', 'por', 'la', 'vía.', 'Lleva', 'muchos', 'vagones.'], falseIndices: [2] },
+      { tokens: ['Nosotros', 'cuidamos.', 'el', 'agua', 'de', 'la', 'escuela.', 'Cerramos', 'bien', 'la', 'llave.'], falseIndices: [1] },
+      { tokens: ['Las', 'mariposas', 'vuelan.', 'sobre', 'el', 'campo', 'verde.', 'Hace', 'buen', 'clima.'], falseIndices: [2] },
+      { tokens: ['Dalary', 'guardó.', 'sus', 'lápices', 'en', 'la', 'lapicera.', 'Ya', 'terminó', 'su', 'trabajo.'], falseIndices: [1] },
+      { tokens: ['El', 'gato', 'blanco.', 'subió', 'al', 'techo.', 'Desde', 'allá', 'mira', 'la', 'calle.'], falseIndices: [2] },
+      { tokens: ['Mi', 'papá', 'prepara.', 'jugo', 'de', 'naranja', 'fresco.', 'Desayunamos', 'en', 'familia.'], falseIndices: [2] },
+      { tokens: ['En', 'la', 'biblioteca.', 'leemos', 'libros', 'interesantes.', 'Aprendemos', 'cosas', 'nuevas.'], falseIndices: [2] },
+      { tokens: ['Los', 'pájaros.', 'cantan', 'temprano', 'en', 'el', 'árbol.', 'Anuncian', 'la', 'mañana.'], falseIndices: [1] },
+      { tokens: ['El', 'campesino.', 'cosecha', 'maíz', 'en', 'la', 'parcela.', 'Trabaja', 'desde', 'temprano.'], falseIndices: [1] },
+      { tokens: ['La', 'sopa', 'caliente.', 'está', 'servida', 'en', 'el', 'plato.', 'Huele', 'delicioso.'], falseIndices: [2] },
+      { tokens: ['Iker', 'pateó.', 'el', 'balón', 'hacia', 'la', 'portería.', 'Anotó', 'un', 'gran', 'gol.'], falseIndices: [1] },
+      { tokens: ['La', 'tortuga', 'verde.', 'nada', 'tranquila', 'en', 'el', 'estanque.', 'Busca', 'una', 'hoja.'], falseIndices: [2] },
+      { tokens: ['Mis', 'abuelos.', 'viven', 'cerca', 'de', 'la', 'plaza.', 'Los', 'visitamos', 'el', 'domingo.'], falseIndices: [1] },
+      { tokens: ['El', 'viento', 'fresco.', 'mueve', 'las', 'ramas', 'altas.', 'Pronto', 'va', 'a', 'llover.'], falseIndices: [2] },
+      { tokens: ['La', 'señora', 'Carmen.', 'vende', 'tacos', 'dorados', 'en', 'la', 'cooperativa.', 'Son', 'ricos.'], falseIndices: [2] },
+      { tokens: ['Los', 'bomberos.', 'apagaron', 'el', 'fuego', 'con', 'mangueras.', 'Son', 'muy', 'valientes.'], falseIndices: [1] }
+    ];
+
+    // MÓDULO 9: TEATRO DE SIGNOS (¿? vs ¡! SIN PUNTO Y SIN FRASES AMBIGUAS) — 24 FRASES
+    const DATA_M9 = [
+      { base: 'A qué hora salimos al recreo hoy', type: 'interrogacion', full: '¿A qué hora salimos al recreo hoy?', desc: 'Quieres saber la hora exacta del recreo.' },
+      { base: 'Qué susto tan grande me diste', type: 'exclamacion', full: '¡Qué susto tan grande me diste!', desc: 'Brincas de sorpresa porque alguien te asustó.' },
+      { base: 'Dónde dejaste guardada tu mochila azul', type: 'interrogacion', full: '¿Dónde dejaste guardada tu mochila azul?', desc: 'Preguntas en qué lugar quedó la mochila.' },
+      { base: 'Auxilio, se está tirando toda el agua', type: 'exclamacion', full: '¡Auxilio, se está tirando toda el agua!', desc: 'Pides ayuda urgente con voz fuerte.' },
+      { base: 'Cuántos años cumpliste en este mes', type: 'interrogacion', full: '¿Cuántos años cumpliste en este mes?', desc: 'Preguntas la edad de un compañero.' },
+      { base: 'Muchas felicidades en tu cumpleaños', type: 'exclamacion', full: '¡Muchas felicidades en tu cumpleaños!', desc: 'Festejas con mucha alegría a tu amigo.' },
+      { base: 'Cuál es tu cuento favorito de la biblioteca', type: 'interrogacion', full: '¿Cuál es tu cuento favorito de la biblioteca?', desc: 'Haces una pregunta para conocer su libro preferido.' },
+      { base: 'Ay, me piqué el dedo con una espina', type: 'exclamacion', full: '¡Ay, me piqué el dedo con una espina!', desc: 'Expresas dolor repentino al tocar un rosal.' },
+      { base: 'Quién trajo las cartulinas para el equipo', type: 'interrogacion', full: '¿Quién trajo las cartulinas para el equipo?', desc: 'Preguntas qué integrante llevó el material.' },
+      { base: 'Qué golazo tan increíble anotó Adriel', type: 'exclamacion', full: '¡Qué golazo tan increíble anotó Adriel!', desc: 'Gritas de emoción en la cancha de futbol.' },
+      { base: 'Cómo se llama el río que pasa por tu pueblo', type: 'interrogacion', full: '¿Cómo se llama el río que pasa por tu pueblo?', desc: 'Investigas el nombre de un río.' },
+      { base: 'Cuidado, el piso está muy resbaloso', type: 'exclamacion', full: '¡Cuidado, el piso está muy resbaloso!', desc: 'Adviertes con urgencia para que nadie se caiga.' },
+      { base: 'Cuándo vamos a visitar el museo de Sayula', type: 'interrogacion', full: '¿Cuándo vamos a visitar el museo de Sayula?', desc: 'Preguntas en qué fecha será la excursión.' },
+      { base: 'Qué deliciosa quedó la sopa de mi abuelita', type: 'exclamacion', full: '¡Qué deliciosa quedó la sopa de mi abuelita!', desc: 'Expresas entusiasmo al probar la comida.' },
+      { base: 'Por qué usan caparazón las tortugas', type: 'interrogacion', full: '¿Por qué usan caparazón las tortugas?', desc: 'Haces una pregunta científica en clase.' },
+      { base: 'Bravo, ganamos el primer lugar del torneo', type: 'exclamacion', full: '¡Bravo, ganamos el primer lugar del torneo!', desc: 'Celebras con júbilo el triunfo del grupo.' },
+      { base: 'Cuánto cuesta un agua de limón en la cooperativa', type: 'interrogacion', full: '¿Cuánto cuesta un agua de limón en la cooperativa?', desc: 'Preguntas el precio antes de comprar.' },
+      { base: 'Qué frío tan fuerte hace esta mañana', type: 'exclamacion', full: '¡Qué frío tan fuerte hace esta mañana!', desc: 'Tiemblas de asombro al salir al patio.' },
+      { base: 'En qué página del libro empieza la lectura', type: 'interrogacion', full: '¿En qué página del libro empieza la lectura?', desc: 'Preguntas al maestro el número de página.' },
+      { base: 'Qué hermoso arcoíris salió entre las nubes', type: 'exclamacion', full: '¡Qué hermoso arcoíris salió entre las nubes!', desc: 'Te maravillas al mirar el cielo.' },
+      { base: 'De qué color pintaste el techo de tu dibujo', type: 'interrogacion', full: '¿De qué color pintaste el techo de tu dibujo?', desc: 'Preguntas a tu compañero por su dibujo.' },
+      { base: 'Corre, que ya están cerrando la puerta', type: 'exclamacion', full: '¡Corre, que ya están cerrando la puerta!', desc: 'Apuras con emoción a tu hermano.' },
+      { base: 'Me prestas tu sacapuntas por un momento', type: 'interrogacion', full: '¿Me prestas tu sacapuntas por un momento?', desc: 'Pides prestado un útil con una pregunta.' },
+      { base: 'Qué alegría volver a verte en la escuela', type: 'exclamacion', full: '¡Qué alegría volver a verte en la escuela!', desc: 'Saludas con gran emoción a tu mejor amigo.' }
+    ];
+
+    // MÓDULO 10: COMA DE LA TIENDITA (ENUMERACIONES SIN REGALAR POSICIONES) — 20 LISTAS
+    const DATA_M10 = [
+      { intro: ['En', 'la', 'cooperativa', 'compré'], items: [['tacos'], ['jícama'], ['uvas'], ['agua']] },
+      { intro: ['En', 'mi', 'mochila', 'llevo'], items: [['lápiz'], ['borrador'], ['tijeras'], ['colores']] },
+      { intro: ['Mis', 'amigos', 'del', 'salón', 'son'], items: [['Gael'], ['Estrella'], ['Naomi'], ['Daniel']] },
+      { intro: ['En', 'el', 'jardín', 'sembramos'], items: [['jitomate'], ['lechuga'], ['zanahoria'], ['cilantro']] },
+      { intro: ['Para', 'el', 'cartel', 'usamos'], items: [['cartulina'], ['marcadores'], ['pegamento'], ['recortes']] },
+      { intro: ['En', 'la', 'granja', 'vimos'], items: [['vacas'], ['caballos'], ['borregos'], ['gallinas']] },
+      { intro: ['Mi', 'mamá', 'puso', 'en', 'la', 'mesa'], items: [['platos'], ['vasos'], ['cucharas'], ['servilletas']] },
+      { intro: ['Los', 'colores', 'del', 'semáforo', 'son'], items: [['verde'], ['amarillo'], ['rojo']] },
+      { intro: ['En', 'el', 'parque', 'jugamos', 'a'], items: [['correr'], ['saltar'], ['escondernos'], ['cantar']] },
+      { intro: ['La', 'ensalada', 'de', 'frutas', 'tiene'], items: [['manzana'], ['plátano'], ['fresa'], ['melón']] },
+      { intro: ['En', 'el', 'zoológico', 'conocimos'], items: [['tigres'], ['elefantes'], ['jirafas'], ['monos']] },
+      { intro: ['Para', 'abrigarme', 'en', 'invierno', 'uso'], items: [['suéter'], ['bufanda'], ['gorro'], ['guantes']] },
+      { intro: ['En', 'la', 'papelería', 'pedimos'], items: [['regla'], ['compás'], ['libreta'], ['sacapuntas']] },
+      { intro: ['El', 'músico', 'sabe', 'tocar'], items: [['flauta'], ['guitarra'], ['tambor'], ['violín']] },
+      { intro: ['En', 'la', 'costa', 'observamos'], items: [['barcos'], ['cangrejos'], ['delfines'], ['gaviotas']] },
+      { intro: ['Las', 'estaciones', 'del', 'año', 'son'], items: [['primavera'], ['verano'], ['otoño'], ['invierno']] },
+      { intro: ['En', 'el', 'desayuno', 'comimos'], items: [['huevo'], ['frijoles'], ['tortillas'], ['queso']] },
+      { intro: ['El', 'carpintero', 'trabaja', 'con'], items: [['martillo'], ['clavos'], ['serrucho'], ['madera']] },
+      { intro: ['En', 'el', 'cielo', 'nocturno', 'brillan'], items: [['estrellas'], ['planetas'], ['cometas']] },
+      { intro: ['Mi', 'abuelita', 'cultiva', 'en', 'macetas'], items: [['rosas'], ['claveles'], ['girasoles'], ['violetas']] }
+    ];
+
+    // MÓDULO 11: CORRECTOR DE MAYÚSCULAS Y MINÚSCULAS (100% ORTOGRAFÍA CORRECTA, PALABRAS Y ORACIONES) — 28 RETOS
+    const DATA_M11 = [
+      // Palabras comunes sueltas (toda la palabra va con minúscula, incluso la primera letra)
+      { type: 'palabra_comun', wrong: 'CoMpArTiR', correct: 'compartir', hint: 'Es una sola palabra común (no es nombre propio ni oración): todas sus letras van con minúscula.' },
+      { type: 'palabra_comun', wrong: 'EsTrElLa', correct: 'estrella', hint: 'Palabra común aislada (astro del cielo): escríbela toda con minúsculas.' },
+      { type: 'palabra_comun', wrong: 'TrAbAjOs', correct: 'trabajos', hint: 'Palabra común aislada: todas sus letras deben ir en minúscula.' },
+      { type: 'palabra_comun', wrong: 'LiBrO', correct: 'libro', hint: 'Palabra común aislada: pon todas sus letras en minúscula.' },
+      { type: 'palabra_comun', wrong: 'EsCuElA', correct: 'escuela', hint: 'Palabra común aislada: cámbiala toda a minúsculas.' },
+      { type: 'palabra_comun', wrong: 'MaRiPoSa', correct: 'mariposa', hint: 'Palabra común aislada: no lleva ninguna mayúscula.' },
+      { type: 'palabra_comun', wrong: 'CuAdErNo', correct: 'cuaderno', hint: 'Palabra común aislada: todas sus letras van en minúscula.' },
+      { type: 'palabra_comun', wrong: 'BiCiClEtA', correct: 'bicicleta', hint: 'Palabra común aislada: conviértela toda a minúsculas.' },
+      { type: 'palabra_comun', wrong: 'CaMpAnA', correct: 'campana', hint: 'Palabra común aislada: todas sus letras deben quedar en minúscula.' },
+      { type: 'palabra_comun', wrong: 'MoChIlA', correct: 'mochila', hint: 'Palabra común aislada: todas sus letras van en minúscula.' },
+
+      // Nombres propios sueltos (primera letra con Mayúscula en rojo, el resto con minúscula)
+      { type: 'nombre_propio', wrong: 'sAyULa', correct: 'Sayula', hint: 'Nombre propio de lugar: inicia con Mayúscula (roja) y el resto va con minúscula.' },
+      { type: 'nombre_propio', wrong: 'gAeL', correct: 'Gael', hint: 'Nombre propio de persona: primera letra Mayúscula (roja) y las demás minúsculas.' },
+      { type: 'nombre_propio', wrong: 'aUrOrA', correct: 'Aurora', hint: 'Nombre propio de persona: inicia con Mayúscula (roja) y sigue con minúsculas.' },
+      { type: 'nombre_propio', wrong: 'jAlIsCo', correct: 'Jalisco', hint: 'Nombre propio de nuestro estado: primera letra Mayúscula (roja) y el resto minúsculas.' },
+      { type: 'nombre_propio', wrong: 'mÉxIcO', correct: 'México', hint: 'Nombre propio de nuestro país: inicia con Mayúscula (roja) y el resto en minúscula.' },
+      { type: 'nombre_propio', wrong: 'dAnIeL', correct: 'Daniel', hint: 'Nombre propio de persona: solo la primera letra va en Mayúscula (roja).' },
+      { type: 'nombre_propio', wrong: 'nAoMi', correct: 'Naomi', hint: 'Nombre propio de persona: primera letra Mayúscula (roja) y las demás minúsculas.' },
+      { type: 'nombre_propio', wrong: 'gUaDaLaJaRa', correct: 'Guadalajara', hint: 'Nombre propio de ciudad: inicia con Mayúscula (roja) y el resto con minúscula.' },
+
+      // Oraciones completas (Inicio de oración, después de punto y nombres propios van con Mayúscula en rojo)
+      { type: 'oracion', wrong: 'el perro de dAniel juega en sAyula.', correct: 'El perro de Daniel juega en Sayula.', hint: 'Oración: inicia con Mayúscula y pon Mayúscula en el nombre de persona (Daniel) y de lugar (Sayula).' },
+      { type: 'oracion', wrong: 'ayer fuimos a jAlisco. vImos un tren.', correct: 'Ayer fuimos a Jalisco. Vimos un tren.', hint: 'Oración con punto: Mayúscula al inicio, en el estado (Jalisco) y en la palabra después del punto (Vimos).' },
+      { type: 'oracion', wrong: 'la MaEstra felicita a nAomi.', correct: 'La maestra felicita a Naomi.', hint: 'Oración: inicia con Mayúscula, corrige "maestra" a minúsculas y pon Mayúscula en "Naomi".' },
+      { type: 'oracion', wrong: 'sonó la CaMpana. los niños salieron al PaTio.', correct: 'Sonó la campana. Los niños salieron al patio.', hint: 'Oración con punto: Mayúscula al iniciar y después del punto ("Los"); las palabras comunes van en minúscula.' },
+      { type: 'oracion', wrong: 'mi AbUela vive en mÉxico. cocina muy RiCo.', correct: 'Mi abuela vive en México. Cocina muy rico.', hint: 'Oración con punto: Mayúscula al inicio, en "México" y después del punto ("Cocina").' },
+      { type: 'oracion', wrong: 'gAel y aUrora leen un CuEnto en clase.', correct: 'Gael y Aurora leen un cuento en clase.', hint: 'Oración: los nombres propios "Gael" y "Aurora" inician con Mayúscula; "cuento" va en minúsculas.' },
+      { type: 'oracion', wrong: 'el Sol brilla hoy. hace calor en el PaRque.', correct: 'El sol brilla hoy. Hace calor en el parque.', hint: 'Oración con punto: Mayúscula al empezar ("El") y después del punto ("Hace").' },
+      { type: 'oracion', wrong: 'la señora luPita limpia el PaTio.', correct: 'La señora Lupita limpia el patio.', hint: 'Oración: Mayúscula al inicio ("La") y en el nombre propio ("Lupita").' },
+      { type: 'oracion', wrong: 'la LluVia mojó el jardín. las flores CrEcieron.', correct: 'La lluvia mojó el jardín. Las flores crecieron.', hint: 'Oración con punto: Mayúscula al inicio ("La") y después del punto ("Las").' },
+      { type: 'oracion', wrong: 'jarol viajó a colima en AuTobús.', correct: 'Jarol viajó a Colima en autobús.', hint: 'Oración: Mayúscula en "Jarol" y en el lugar "Colima"; "autobús" va en minúsculas.' }
+    ];
+
+    // MÓDULO 12: LETRAS ESPEJO Y DETECTIVE ORTOGRÁFICO (SIN PALABRA DEBAJO DE IMAGEN + BANCO MASIVO DE 52 PALABRAS)
+    const DATA_M12 = [
+      // b vs d (Con sticker propio a color)
+      { word: 'bota', masked: '_ota', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_bota.webp', hint: 'Calzado para la lluvia: la "b" tiene la pancita a la derecha.' },
+      { word: 'dedo', masked: '_edo', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_dedo.webp', hint: 'Parte de la mano: la "d" mira hacia la izquierda.' },
+      { word: 'dado', masked: '_ado', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_dado.webp', hint: 'Cubo con puntos para jugar: inicia con "d".' },
+      { word: 'balón', masked: '_alón', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_balon.webp', hint: 'Esfera para jugar futbol: inicia con "b".' },
+      { word: 'diente', masked: '_iente', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_diente.webp', hint: 'Pieza blanca de nuestra sonrisa: inicia con "d".' },
+      { word: 'barco', masked: '_arco', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_barco.webp', hint: 'Navega por el mar con sus velas: inicia con "b".' },
+      { word: 'dulce', masked: '_ulce', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_dulce.webp', hint: 'Caramelo envuelto de colores: inicia con "d".' },
+      { word: 'búho', masked: '_úho', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_buho.webp', hint: 'Ave nocturna de ojos grandes: inicia con "b".' },
+      { word: 'duende', masked: '_uende', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_duende.webp', hint: 'Personaje pequeño de gorro verde: inicia con "d".' },
+      { word: 'burro', masked: '_urro', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_burro.webp', hint: 'Animal de orejas largas del campo: inicia con "b".' },
+      { word: 'dona', masked: '_ona', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_dona.webp', hint: 'Pan redondo con glaseado rosa: inicia con "d".' },
+      { word: 'bote', masked: '_ote', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_bote.webp', hint: 'Cubeta con asa: inicia con "b".' },
+      { word: 'delfín', masked: '_elfín', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_delfin.webp', hint: 'Animal marino inteligente que salta: inicia con "d".' },
+      { word: 'bebé', masked: '_ebé', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_bebe.webp', hint: 'Niño recién nacido con chupón: inicia con "b".' },
+      { word: 'botón', masked: '_otón', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_boton.webp', hint: 'Pieza redonda para abrochar la camisa: inicia con "b".' },
+      { word: 'dragón', masked: '_ragón', target: 'd', options: ['b', 'd'], group: 'bd', img: 'ref_dragon.webp', hint: 'Criatura fantástica con alas: inicia con "d".' },
+
+      // p vs q (Con sticker propio a color, incluyendo ref_paquete.webp)
+      { word: 'paquete', masked: 'pa_uete', target: 'q', options: ['p', 'q'], group: 'pq', img: 'ref_paquete.webp', hint: 'Caja de regalo atada con listón rojo: antes de "ue" va "q".' },
+      { word: 'pato', masked: '_ato', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_pato.webp', hint: 'Ave amarilla que nada en el estanque: inicia con "p".' },
+      { word: 'queso', masked: '_ueso', target: 'q', options: ['p', 'q'], group: 'pq', img: 'ref_queso.webp', hint: 'Alimento amarillo hecho con leche: se escribe con "qu".' },
+      { word: 'pelota', masked: '_elota', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_pelota.webp', hint: 'Juguete redondo de colores para la playa: inicia con "p".' },
+      { word: 'perro', masked: '_erro', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_perro.webp', hint: 'Cachorro fiel con collar rojo: inicia con "p".' },
+      { word: 'puerta', masked: '_uerta', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_puerta.webp', hint: 'Entrada de madera con perilla dorada: inicia con "p".' },
+      { word: 'quetzal', masked: '_uetzal', target: 'q', options: ['p', 'q'], group: 'pq', img: 'ref_quetzal.webp', hint: 'Ave hermosa de plumas verdes y pecho rojo: inicia con "q".' },
+      { word: 'plátano', masked: '_látano', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_platano.webp', hint: 'Fruta amarilla alargada: inicia con "p".' },
+      { word: 'pastel', masked: '_astel', target: 'p', options: ['p', 'q'], group: 'pq', img: 'ref_pastel.webp', hint: 'Postre de cumpleaños con velitas: inicia con "p".' },
+      { word: 'parque', masked: 'par_ue', target: 'q', options: ['p', 'q'], group: 'pq', img: null, hint: 'Lugar con árboles y juegos donde paseamos: termina en "-que".' },
+      { word: 'pequeño', masked: 'pe_ueño', target: 'q', options: ['p', 'q'], group: 'pq', img: null, hint: 'Lo contrario de grande: lleva "qu" en la segunda sílaba.' },
+      { word: 'equipo', masked: 'e_uipo', target: 'q', options: ['p', 'q'], group: 'pq', img: null, hint: 'Grupo de compañeros que trabajan o juegan juntos: lleva "qui".' },
+
+      // Detective Ortográfico (b/v, c/s/z, h, m/n)
+      { word: 'helado', masked: '_elado', target: 'h', options: ['h', 'e'], group: 'orto', img: 'ref_helado.webp', hint: 'Postre frío en cono: inicia con "h" muda.' },
+      { word: 'manzana', masked: 'man_ana', target: 'z', options: ['s', 'z'], group: 'orto', img: 'ref_manzana.webp', hint: 'Fruta roja brillante: se escribe con "z".' },
+      { word: 'huevo', masked: '_uevo', target: 'h', options: ['h', 'g'], group: 'orto', img: 'ref_huevo.webp', hint: 'Todas las palabras que empiezan con "hue-" llevan "h".' },
+      { word: 'vaca', masked: '_aca', target: 'v', options: ['b', 'v'], group: 'orto', img: 'ref_vaca.webp', hint: 'Animal de la granja que nos da leche: se escribe con "v".' },
+      { word: 'abuela', masked: 'a_uela', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_abuela.webp', hint: 'Mamá de tu mamá o papá: se escribe con "b".' },
+      { word: 'cielo', masked: '_ielo', target: 'c', options: ['c', 's'], group: 'orto', img: 'ref_cielo.webp', hint: 'Donde están el sol y las nubes: inicia con "c".' },
+      { word: 'hormiga', masked: '_ormiga', target: 'h', options: ['h', 'o'], group: 'orto', img: 'ref_hormiga.webp', hint: 'Insecto trabajador del hormiguero: lleva "h" inicial.' },
+      { word: 'lluvia', masked: 'llu_ia', target: 'v', options: ['b', 'v'], group: 'orto', img: 'ref_lluvia.webp', hint: 'Agua que cae de las nubes: después de "llu-" va "v".' },
+      { word: 'zapato', masked: '_apato', target: 'z', options: ['s', 'z'], group: 'orto', img: 'ref_zapato.webp', hint: 'Calzado con agujetas: inicia con "z".' },
+      { word: 'bicicleta', masked: '_icicleta', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_bicicleta.webp', hint: 'El prefijo "bi-" (dos ruedas) siempre se escribe con "b".' },
+      { word: 'caballo', masked: 'ca_allo', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_caballo.webp', hint: 'Animal veloz con crin: se escribe con "b".' },
+      { word: 'invierno', masked: 'in_ierno', target: 'v', options: ['b', 'v'], group: 'orto', img: 'ref_invierno.webp', hint: 'Estación fría del año: después de "n" siempre se escribe "v".' },
+      { word: 'ambulancia', masked: 'a_bulancia', target: 'm', options: ['m', 'n'], group: 'orto', img: 'ref_ambulancia.webp', hint: 'Regla de oro: antes de "b" y "p" siempre se escribe "m".' },
+      { word: 'trompo', masked: 'tro_po', target: 'm', options: ['m', 'n'], group: 'orto', img: 'ref_trompo.webp', hint: 'Regla de oro: antes de "p" siempre se escribe "m".' },
+      { word: 'cebra', masked: '_ebra', target: 'c', options: ['c', 's'], group: 'orto', img: 'ref_cebra.webp', hint: 'Animal africano con rayas: inicia con "c".' },
+      { word: 'escoba', masked: 'esco_a', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_escoba.webp', hint: 'Utensilio para barrer el piso: se escribe con "b".' },
+      { word: 'almohada', masked: 'almo_ada', target: 'h', options: ['h', 'g'], group: 'orto', img: 'ref_almohada.webp', hint: 'Lleva una "h" intermedia muda: almo-ha-da.' },
+      { word: 'campana', masked: 'ca_pana', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Suena en la escuela o iglesia: antes de "p" siempre va "m".' },
+      { word: 'también', masked: 'ta_bién', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Antes de "b" siempre escribimos "m".' },
+      { word: 'tiempo', masked: 'tie_po', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Lo medimos con el reloj: antes de "p" siempre va "m".' },
+      { word: 'septiembre', masked: 'septie_bre', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Mes de la patria: antes de "br" se escribe "m".' },
+      { word: 'hacer', masked: '_acer', target: 'h', options: ['h', 'a'], group: 'orto', img: null, hint: 'Verbo muy importante (yo hago, tú haces): lleva "h" inicial.' },
+      { word: 'hablar', masked: '_ablar', target: 'h', options: ['h', 'a'], group: 'orto', img: null, hint: 'Conversar con palabras: inicia con "h" y lleva "bl".' },
+      { word: 'vivir', masked: '_ivir', target: 'v', options: ['b', 'v'], group: 'orto', img: null, hint: 'Tener vida o habitar en un lugar: sus dos sílabas llevan "v".' }
+    ];
+
+    /* =========================================================================
+       MOTOR DE BARAJEO ALEATORIO UNIVERSAL (FISHER-YATES) PARA TODOS LOS MÓDULOS
+       ========================================================================= */
+    const shuffledDecks = {};
+
+    function getRandomItemFromDeck(deckKey, dataset) {
+      if (!shuffledDecks[deckKey] || shuffledDecks[deckKey].remaining.length === 0 || shuffledDecks[deckKey].totalLen !== dataset.length) {
+        const indices = Array.from({ length: dataset.length }, (_, i) => i);
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        // Evitar que el primer elemento del nuevo mazo sea idéntico al último jugado
+        if (shuffledDecks[deckKey] && indices.length > 1 && indices[0] === shuffledDecks[deckKey].lastIdx) {
+          [indices[0], indices[1]] = [indices[1], indices[0]];
+        }
+        shuffledDecks[deckKey] = { remaining: indices, totalLen: dataset.length, lastIdx: -1 };
+      }
+      const nextIdx = shuffledDecks[deckKey].remaining.pop();
+      shuffledDecks[deckKey].lastIdx = nextIdx;
+      return dataset[nextIdx];
+    }
+
+    /* =========================================================================
+       NAVEGACIÓN Y FLUJO DE MÓDULOS
+       ========================================================================= */
+    function showHub() {
+      clearSelectedChip();
+      document.getElementById('hub-view').style.display = 'grid';
+      document.getElementById('game-view').style.display = 'none';
+      document.getElementById('btn-back-hub').style.display = 'none';
+      document.getElementById('btn-tts-repeat').style.display = 'none';
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    }
+
+    function openModule(modNum) {
+      clearSelectedChip();
+      currentModule = modNum;
+      challengeIndex = 0;
+      document.getElementById('hub-view').style.display = 'none';
+      document.getElementById('game-view').style.display = 'flex';
+      document.getElementById('btn-back-hub').style.display = 'inline-flex';
+      document.getElementById('btn-tts-repeat').style.display = 'inline-flex';
+      renderCurrentChallenge();
+    }
+
+    function nextChallenge() {
+      clearSelectedChip();
+      challengeIndex++;
+      renderCurrentChallenge();
+    }
+
+    function updateProgressDots(total = 8) {
+      const container = document.getElementById('progress-dots');
+      container.innerHTML = '';
+      const activePos = challengeIndex % total;
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i < activePos ? ' done' : (i === activePos ? ' active' : ''));
+        container.appendChild(dot);
+      }
+    }
+
+    function hideFeedback() {
+      const fb = document.getElementById('feedback-banner');
+      fb.className = 'feedback-banner';
+      document.getElementById('feedback-text').innerHTML = '';
+    }
+
+    function showFeedback(isSuccess, htmlMsg) {
+      const fb = document.getElementById('feedback-banner');
+      fb.className = 'feedback-banner ' + (isSuccess ? 'success' : 'error');
+      document.getElementById('feedback-text').innerHTML = htmlMsg;
+      if (isSuccess) {
+        playBeep('success');
+        if (!challengeSolved) {
+          challengeSolved = true;
+          addScore(15);
+        }
+      } else {
+        playBeep('error');
+      }
+    }
+
+    function renderCurrentChallenge() {
+      hideFeedback();
+      clearSelectedChip();
+      challengeSolved = false;
+      updateProgressDots(8);
+      const badge = document.getElementById('active-mod-badge');
+      badge.textContent = `Módulo ${currentModule}`;
+
+      switch (currentModule) {
+        case 1: renderM1_M2_M3('m1', DATA_M1, 'Destrabador de la "L" (bl, cl, fl, gl, pl, tl)', ['bl', 'cl', 'fl', 'gl', 'pl', 'tl']); break;
+        case 2: renderM1_M2_M3('m2', DATA_M2, 'Destrabador de la "R" (br, cr, dr, fr, gr, pr, tr)', ['br', 'cr', 'dr', 'fr', 'gr', 'pr', 'tr']); break;
+        case 3: renderM1_M2_M3('m3', DATA_M3, 'Sílabas Inversas (es/se, al/la, ar/ra, in/ni, am/ma)', ['es', 'se', 'al', 'la', 'ar', 'ra', 'in', 'ni']); break;
+        case 4: renderM4(); break;
+        case 5: renderM5(); break;
+        case 6: renderM6(); break;
+        case 7: renderM7(); break;
+        case 8: renderM8(); break;
+        case 9: renderM9(); break;
+        case 10: renderM10(); break;
+        case 11: renderM11(); break;
+        case 12: renderM12(); break;
+      }
+    }
+
+    /* =========================================================================
+       HELPER BICOLOR ESCOLAR: MAYÚSCULAS EN ROJO (#dc2626) Y PUNTUACIÓN EN AZUL (#2563eb)
+       (Solo colorea la letra Mayúscula individual, jamás las minúsculas)
+       ========================================================================= */
+    function colorizeBicolor(str) {
+      if (!str) return '';
+      return String(str).split('').map(ch => {
+        if (/[A-ZÁÉÍÓÚÜÑ]/.test(ch)) {
+          return `<span class="bicolor-upper">${ch}</span>`;
+        }
+        if (/[.,¿?¡!:;]/.test(ch)) {
+          return `<span class="bicolor-punct">${ch}</span>`;
+        }
+        return ch;
+      }).join('');
+    }
+
+    function colorizeSentenceNoOrphan(str) {
+      if (!str) return '';
+      return String(str).split(/\s+/).map(token => {
+        if (token.includes('___')) {
+          const rendered = token.replace('___', '<span style="display:inline-block; min-width:72px; border-bottom:4px dashed #059669; color:#059669; margin:0 3px;">___</span>');
+          return `<span style="white-space:nowrap; display:inline-block;">${rendered}</span>`;
+        }
+        return `<span style="white-space:nowrap; display:inline-block;">${colorizeBicolor(token)}</span>`;
+      }).join(' ');
+    }
+
+    /* =========================================================================
+       GIMNASIO 1 (MÓDULOS 1, 2 Y 3): TARJETAS ILUSTRADAS A COLOR + SÍLABAS
+       ========================================================================= */
+    function renderM1_M2_M3(deckKey, dataset, titleText, extraPool) {
+      document.getElementById('active-mod-title').textContent = titleText;
+      const item = getRandomItemFromDeck(deckKey, dataset);
+      activeChallengeData = item;
+      currentPromptAudioText = `${item.word}. ${item.context.replace('___', item.word)}`;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 1.02rem; color: var(--text-muted); font-weight: 700;">
+          Observa la tarjeta ilustrada: <b>${colorizeSentenceNoOrphan(item.context)}</b>
+        </div>
+        <div class="prompt-box" style="gap: 1.1rem; padding: 0.85rem 1.15rem;">
+          ${getWordVisualCardHTML(item)}
+          <div style="display: inline-flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
+            <span>${colorizeBicolor(item.prefix)}</span>
+            <div class="drop-slot m123-tight-slot" id="m123-slot" data-expected="${item.target}" onclick="clearM123Slot()" title="Toca para devolver la sílaba">?</div>
+            <span>${colorizeBicolor(item.suffix)}</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="speakText('${item.word}', 1.05, 0.82)">🔊 Escuchar Palabra</button>
+          <button class="btn btn-purple" onclick="comparePhoneticM123()">👂 Comparar con "${item.wrongWord}"</button>
+        </div>
+      `;
+
+      const optionsSet = new Set([item.target, item.trap]);
+      extraPool.forEach(s => { if (optionsSet.size < 5) optionsSet.add(s); });
+      const shuffled = Array.from(optionsSet).sort(() => Math.random() - 0.5);
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.98rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra o toca la sílaba correcta para colocarla en la palabra:
+        </div>
+        <div class="chips-bank" id="m123-bank" style="gap: 0.95rem;">
+          ${shuffled.map(opt => `<div class="draggable-chip" data-val="${opt}">${opt}</div>`).join('')}
+        </div>
+      `;
+
+      document.querySelectorAll('#m123-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.id !== 'm123-slot') return;
+          const val = dragged.dataset.val;
+          zone.textContent = val;
+          zone.classList.add('filled');
+          if (val === item.target) {
+            showFeedback(true, `🎉 <b>¡Excelente!</b> Se escribe y pronuncia <b>"${item.word}"</b> con <b>"${item.target}"</b>.`);
+            speakText(item.word, 1.1, 0.9);
+          } else {
+            showFeedback(false, `⚠️ Si pones <b>"${val}"</b> diría <i>"${item.prefix}${val}${item.suffix}"</i>. Escucha bien la palabra <b>"${item.word}"</b> o toca la casilla para cambiarla.`);
+            speakText(`${item.prefix}${val}${item.suffix}`, 0.95, 0.85);
+          }
+        });
+      });
+
+      setTimeout(() => speakText(item.word, 1.05, 0.85), 250);
+    }
+
+    function clearM123Slot() {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      const slot = document.getElementById('m123-slot');
+      if (slot && slot.classList.contains('filled')) {
+        slot.textContent = '?';
+        slot.classList.remove('filled');
+        hideFeedback();
+        playBeep('pop');
+      }
+    }
+
+    function comparePhoneticM123() {
+      if (!activeChallengeData) return;
+      speakText(`Escucha la diferencia: ${activeChallengeData.word}... no es ${activeChallengeData.wrongWord}.`, 1.05, 0.88);
+    }
+
+    /* =========================================================================
+       MÓDULO 4: TARJETAS ESPACIADORAS EN BLANCO (MAYÚSCULA ROJA Y PUNTO FINAL AZUL)
+       ========================================================================= */
+    let m4CutPositions = new Set();
+
+    function renderM4() {
+      document.getElementById('active-mod-title').textContent = 'Tarjetas Espaciadoras (Separar palabras pegadas)';
+      const item = getRandomItemFromDeck('m4', DATA_M4);
+      activeChallengeData = item;
+      m4CutPositions.clear();
+
+      const fullSpaced = item.words.join(' ') + '.';
+      currentPromptAudioText = fullSpaced;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.98rem; color: var(--text-muted); font-weight: 700;">
+          Arrastra la <b>barra blanca</b> entre las letras donde termina cada palabra para que el texto se separe (toca un espacio colocado si deseas quitarlo):
+        </div>
+        <div class="char-stream-box" id="m4-stream-box"></div>
+        <div style="background: #eff6ff; padding: 0.65rem 0.9rem; border-radius: 0.7rem; border: 2px solid #93c5fd;">
+          <span style="font-size: 0.86rem; color: #1e40af; font-weight: 800;">VISTA PREVIA DE TU ORACIÓN:</span>
+          <div id="m4-preview-text" style="font-size: 1.38rem; font-weight: 800; color: #0f172a; margin-top: 0.15rem; letter-spacing: 0.02em; line-height: 1.4;"></div>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="text-align:center; display:flex; flex-direction:column; gap:0.75rem; align-items:center;">
+          <div style="font-size: 0.95rem; color: var(--text-muted); font-weight: 700;">
+            Arrastra esta tarjeta en blanco delgada entre dos letras:
+          </div>
+          <div class="chips-bank" id="m4-spacer-bank" style="width:100%;">
+            <div class="draggable-chip" id="m4-spacer-card" data-spacer="1" title="Arrastra para separar palabras"
+              style="width: 24px; min-width: 24px; height: 48px; padding: 0; background: #ffffff; border: 3px solid #64748b; border-radius: 6px; box-shadow: 0 3px 0 #475569;"></div>
+          </div>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+            <button class="btn btn-amber" onclick="speakText('${fullSpaced}')">🔊 Escuchar Oración</button>
+            <button class="btn btn-secondary" onclick="resetM4Spacers()">🔄 Quitar Espacios</button>
+            <button class="btn btn-primary" onclick="validateM4()">✅ Comprobar Separación</button>
+          </div>
+        </div>
+      `;
+
+      renderM4Stream();
+      attachM4SpacerDraggable();
+      setTimeout(() => speakText(fullSpaced), 250);
+    }
+
+    function attachM4SpacerDraggable() {
+      const card = document.getElementById('m4-spacer-card');
+      if (!card) return;
+      makePointerDraggable(card, (dragged, zone) => {
+        if (zone.classList.contains('char-gap-slot') && zone.dataset.gapIdx !== undefined) {
+          const idx = parseInt(zone.dataset.gapIdx, 10);
+          m4CutPositions.add(idx);
+          playBeep('pop');
+          renderM4Stream();
+        }
+      });
+    }
+
+    function renderM4Stream() {
+      const item = activeChallengeData;
+      const joined = item.words.join('');
+      const chars = joined.split('');
+      const box = document.getElementById('m4-stream-box');
+      if (!box) return;
+
+      let html = '';
+      chars.forEach((ch, idx) => {
+        const isUpper = /[A-ZÁÉÍÓÚÜÑ]/.test(ch);
+        const charSpan = `<span class="stream-char ${isUpper ? 'bicolor-upper' : ''}">${ch}</span>`;
+        if (idx < chars.length - 1) {
+          const hasSpacer = m4CutPositions.has(idx);
+          html += charSpan;
+          html += `<span class="char-gap-slot ${hasSpacer ? 'has-spacer' : ''}" data-gap-idx="${idx}" onclick="toggleM4Gap(${idx})" title="${hasSpacer ? 'Toca para quitar espacio' : 'Coloca aquí una barra en blanco'}"></span>`;
+        } else {
+          // Última letra unida con nowrap al punto final azul para que jamás salte solo a otro renglón
+          html += `<span style="display:inline-flex; align-items:center; white-space:nowrap;">${charSpan}<span class="stream-char bicolor-punct">.</span></span>`;
+        }
+      });
+      box.innerHTML = html;
+
+      const previewWords = [];
+      let cur = '';
+      chars.forEach((ch, idx) => {
+        cur += ch;
+        if (m4CutPositions.has(idx)) {
+          previewWords.push(cur);
+          cur = '';
+        }
+      });
+      if (cur) previewWords.push(cur);
+      if (previewWords.length > 0) {
+        previewWords[previewWords.length - 1] = previewWords[previewWords.length - 1] + '.';
+      }
+
+      const prevEl = document.getElementById('m4-preview-text');
+      if (prevEl) {
+        prevEl.innerHTML = previewWords.map(w => `<span style="white-space:nowrap; display:inline-block;">${colorizeBicolor(w)}</span>`).join('&nbsp;&nbsp;&nbsp;');
+      }
+    }
+
+    function toggleM4Gap(idx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      if (m4CutPositions.has(idx)) {
+        m4CutPositions.delete(idx);
+      } else {
+        m4CutPositions.add(idx);
+      }
+      playBeep('pop');
+      renderM4Stream();
+    }
+
+    function resetM4Spacers() {
+      m4CutPositions.clear();
+      playBeep('pop');
+      renderM4Stream();
+      hideFeedback();
+    }
+
+    function validateM4() {
+      const item = activeChallengeData;
+      const expectedCuts = [];
+      let acc = 0;
+      for (let i = 0; i < item.words.length - 1; i++) {
+        acc += item.words[i].length;
+        expectedCuts.push(acc - 1);
+      }
+
+      const userCuts = Array.from(m4CutPositions).sort((a, b) => a - b);
+      const isCorrect = expectedCuts.length === userCuts.length && expectedCuts.every((v, i) => v === userCuts[i]);
+
+      if (isCorrect) {
+        const fullCorrect = item.words.join(' ') + '.';
+        showFeedback(true, `🎉 <b>¡Separación perfecta!</b> La oración tiene <b>${item.words.length} palabras</b>: <i>"${colorizeSentenceNoOrphan(fullCorrect)}"</i>`);
+        speakText(fullCorrect);
+      } else {
+        showFeedback(false, `❌ Aún no quedan bien separadas las palabras. Recuerda que puedes tocar un espacio colocado para quitarlo o arrastrar otra barra en blanco.`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 5: PEGAMENTO DE PALABRAS (ORACIÓN GRANDE Y DESTACADA + BICOLOR)
+       ========================================================================= */
+    let m5SelectedOrder = [];
+
+    function renderM5() {
+      document.getElementById('active-mod-title').textContent = 'Pegamento de Palabras (Unir sílabas sin separar de más)';
+      const item = getRandomItemFromDeck('m5', DATA_M5);
+      activeChallengeData = item;
+      m5SelectedOrder = [];
+      currentPromptAudioText = item.sentence.replace('___', item.correct);
+
+      const sentenceNormalized = /[.!?]$/.test(item.sentence.trim()) ? item.sentence.trim() : item.sentence.trim() + '.';
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="background: #ffffff; border: 3px solid #94a3b8; border-radius: 0.85rem; padding: 0.7rem 1.05rem; font-size: calc(1.52rem * var(--text-scale)); font-weight: 800; color: #0f172a; text-align: center; line-height: 1.45; box-shadow: 0 3px 6px rgba(15,23,42,0.06);">
+          ${colorizeSentenceNoOrphan(sentenceNormalized)}
+        </div>
+        <div class="prompt-box" id="m5-glue-zone" style="min-height: 98px; border: 3px dashed #10b981; background: #ecfdf5; cursor: pointer;">
+          <span style="color: #047857; font-size: 1.05rem;">Arrastra o toca las sílabas de la derecha para unir la palabra faltante aquí...</span>
+        </div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="speakText('${item.correct}')">🔊 Escuchar Palabra</button>
+          <button class="btn btn-secondary" onclick="resetM5()">🔄 Vaciar Caja</button>
+        </div>
+      `;
+
+      const shuffled = item.fragments.map((text, idx) => ({ text, idx })).sort(() => Math.random() - 0.5);
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra o toca las sílabas en orden para pegar la palabra (toca una sílaba colocada si deseas devolverla):
+        </div>
+        <div class="chips-bank" id="m5-bank">
+          ${shuffled.map(f => `<div class="draggable-chip chip-teal" data-frag-idx="${f.idx}" data-frag="${f.text}">${colorizeBicolor(f.text)}</div>`).join('')}
+        </div>
+      `;
+
+      attachM5Draggables();
+      setTimeout(() => speakText(item.correct), 250);
+    }
+
+    function attachM5Draggables() {
+      document.querySelectorAll('#m5-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.id === 'm5-glue-zone' || zone.closest('#m5-glue-zone')) {
+            addM5Fragment(dragged);
+          }
+        });
+        chip.onclick = (e) => {
+          if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+          clearSelectedChip();
+          addM5Fragment(chip);
+        };
+      });
+    }
+
+    function addM5Fragment(chipEl) {
+      if (chipEl.style.display === 'none') return;
+      const fragText = chipEl.dataset.frag;
+      const fragIdx = chipEl.dataset.fragIdx;
+      m5SelectedOrder.push({ text: fragText, idx: fragIdx });
+      chipEl.style.display = 'none';
+      playBeep('pop');
+      renderM5GlueZone();
+    }
+
+    function removeM5Fragment(posIdx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      const removed = m5SelectedOrder.splice(posIdx, 1)[0];
+      if (removed) {
+        const chipEl = document.querySelector(`#m5-bank .draggable-chip[data-frag-idx="${removed.idx}"]`);
+        if (chipEl) chipEl.style.display = 'inline-flex';
+      }
+      hideFeedback();
+      playBeep('pop');
+      renderM5GlueZone();
+    }
+
+    function renderM5GlueZone() {
+      const item = activeChallengeData;
+      const zone = document.getElementById('m5-glue-zone');
+      if (!zone) return;
+
+      if (m5SelectedOrder.length === 0) {
+        zone.innerHTML = `<span style="color: #047857; font-size: 1.05rem;">Arrastra o toca las sílabas de la derecha para unir la palabra faltante aquí...</span>`;
+        return;
+      }
+
+      const joinedWord = m5SelectedOrder.map(o => o.text).join('');
+      const isComplete = m5SelectedOrder.length === item.fragments.length;
+
+      zone.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem;">
+          <div style="display:flex; gap:0.35rem; flex-wrap:wrap; justify-content:center;">
+            ${m5SelectedOrder.map((o, i) => `
+              <span onclick="removeM5Fragment(${i})" title="Toca para devolver esta sílaba" style="background:#ffffff; border:2px solid #059669; color:#065f46; padding:0.22rem 0.65rem; border-radius:0.5rem; font-size:1.28rem; cursor:pointer;">
+                ${colorizeBicolor(o.text)}
+              </span>
+            `).join('<span style="color:#059669; font-weight:900;">+</span>')}
+          </div>
+          <div style="font-size: 1.8rem; color: #065f46; letter-spacing: 0.02em;">${colorizeBicolor(joinedWord)}</div>
+        </div>
+      `;
+
+      if (isComplete) {
+        if (joinedWord.toLowerCase() === item.correct.toLowerCase()) {
+          showFeedback(true, `🎉 <b>¡Palabra bien pegada!</b> <b>"${item.correct}"</b> es una sola palabra y se escribe sin espacios intermedios.`);
+          speakText(item.correct);
+        } else {
+          showFeedback(false, `❌ Formaste <b>"${joinedWord}"</b>. Toca las sílabas dentro de la caja verde para acomodarlas en el orden correcto.`);
+        }
+      }
+    }
+
+    function resetM5() {
+      if (!activeChallengeData) return;
+      m5SelectedOrder = [];
+      document.querySelectorAll('#m5-bank .draggable-chip').forEach(c => c.style.display = 'inline-flex');
+      hideFeedback();
+      renderM5GlueZone();
+    }
+
+    /* =========================================================================
+       MÓDULO 6 (OPCIÓN 1B): ORDENADOR DE ORACIONES (ARMAR LA ORACIÓN EN ORDEN CON SENTIDO)
+       ========================================================================= */
+    let m6SelectedWords = [];
+
+    function renderM6() {
+      document.getElementById('active-mod-title').textContent = 'Ordenador de Oraciones (Ordena las tarjetas para armar la oración)';
+      const rawItem = getRandomItemFromDeck('m6', DATA_M6);
+      // Aseguramos que la última palabra tenga su punto final azul adherido para no quedar huérfano
+      const targetWords = rawItem.words.map((w, idx) => {
+        if (idx === rawItem.words.length - 1 && !/[.!?]$/.test(w)) {
+          return w + '.';
+        }
+        return w;
+      });
+      const fullSentence = targetWords.join(' ');
+      activeChallengeData = { targetWords, fullSentence };
+      m6SelectedWords = [];
+      currentPromptAudioText = fullSentence;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
+          Las palabras de la oración se revolvieron. Arrastra o toca cada tarjeta en orden para armar la oración con sentido (fíjate en la <b style="color:#0f172a;"><span class="bicolor-upper">M</span>ayúscula</b> inicial y en el <b class="bicolor-punct">.</b> final):
+        </div>
+        <div class="prompt-box" id="m6-sentence-zone" style="min-height: 108px; border: 3px dashed #2563eb; background: #eff6ff; gap: 0.5rem; padding: 0.85rem;"></div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="speakText('${fullSentence}')">🔊 Escuchar Pista</button>
+          <button class="btn btn-secondary" onclick="resetM6Order()">🔄 Reiniciar Tarjetas</button>
+          <button class="btn btn-primary" onclick="validateM6Order()">✅ Comprobar Oración</button>
+        </div>
+      `;
+
+      // Barajar garantizando que no salga ya ordenada
+      let shuffled = targetWords.map((text, idx) => ({ text, idx }));
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      if (shuffled.every((item, i) => item.idx === i) && shuffled.length > 1) {
+        [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+      }
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra o toca las tarjetas de palabras para colocarlas en la oración (toca una palabra colocada si deseas regresarla):
+        </div>
+        <div class="chips-bank" id="m6-bank" style="gap: 0.75rem;">
+          ${shuffled.map(w => `
+            <div class="draggable-chip" data-word-idx="${w.idx}" data-word="${w.text}" style="white-space:nowrap; font-size:1.35rem; padding:0.45rem 0.9rem;">
+              <span style="white-space:nowrap;">${colorizeBicolor(w.text)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      renderM6SentenceZone();
+      document.querySelectorAll('#m6-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.id === 'm6-sentence-zone' || zone.closest('#m6-sentence-zone')) {
+            addM6Word(dragged);
+          }
+        });
+        chip.onclick = () => {
+          if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+          clearSelectedChip();
+          addM6Word(chip);
+        };
+      });
+
+      setTimeout(() => speakText(fullSentence), 250);
+    }
+
+    function addM6Word(chipEl) {
+      if (chipEl.style.display === 'none') return;
+      m6SelectedWords.push({
+        text: chipEl.dataset.word,
+        idx: parseInt(chipEl.dataset.wordIdx, 10)
+      });
+      chipEl.style.display = 'none';
+      playBeep('pop');
+      hideFeedback();
+      renderM6SentenceZone();
+    }
+
+    function removeM6Word(posIdx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      const removed = m6SelectedWords.splice(posIdx, 1)[0];
+      if (removed) {
+        const chipEl = document.querySelector(`#m6-bank .draggable-chip[data-word-idx="${removed.idx}"]`);
+        if (chipEl) chipEl.style.display = 'inline-flex';
+      }
+      playBeep('pop');
+      hideFeedback();
+      renderM6SentenceZone();
+    }
+
+    function renderM6SentenceZone() {
+      const item = activeChallengeData;
+      const zone = document.getElementById('m6-sentence-zone');
+      if (!zone) return;
+
+      if (m6SelectedWords.length === 0) {
+        zone.innerHTML = `<span style="color:#1e40af; font-size:1.05rem;">Arrastra o toca las tarjetas de la derecha para formar la oración aquí...</span>`;
+        return;
+      }
+
+      zone.innerHTML = m6SelectedWords.map((w, i) => `
+        <span onclick="removeM6Word(${i})" title="Toca para devolver esta palabra"
+          style="display:inline-flex; align-items:center; white-space:nowrap; background:#ffffff; border:2px solid #2563eb; color:#0f172a; padding:0.3rem 0.7rem; border-radius:0.55rem; font-size:1.42rem; font-weight:800; cursor:pointer; box-shadow:0 2px 0 #93c5fd;">
+          ${colorizeBicolor(w.text)}
+        </span>
+      `).join(' ');
+
+      if (m6SelectedWords.length === item.targetWords.length) {
+        validateM6Order();
+      }
+    }
+
+    function resetM6Order() {
+      m6SelectedWords = [];
+      document.querySelectorAll('#m6-bank .draggable-chip').forEach(c => c.style.display = 'inline-flex');
+      playBeep('pop');
+      hideFeedback();
+      renderM6SentenceZone();
+    }
+
+    function validateM6Order() {
+      const item = activeChallengeData;
+      if (m6SelectedWords.length < item.targetWords.length) {
+        showFeedback(false, `⚠️ Aún faltan tarjetas por colocar. Usa todas las palabras para completar la oración.`);
+        return;
+      }
+      const userSentence = m6SelectedWords.map(w => w.text).join(' ');
+      if (userSentence === item.fullSentence) {
+        showFeedback(true, `🎉 <b>¡Oración bien ordenada!</b> Formaste correctamente: <i>"${colorizeSentenceNoOrphan(item.fullSentence)}"</i>`);
+        speakText(item.fullSentence);
+      } else {
+        showFeedback(false, `❌ El orden de las palabras todavía no suena bien. Toca cualquier palabra de la caja azul para devolverla y acomódalas desde la <b style="color:#0f172a;"><span class="bicolor-upper">M</span>ayúscula</b> inicial hasta el <b class="bicolor-punct">.</b> final.`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 7 (OPCIÓN 2A): CORTAR LA "Y" REPETITIVA CON COMAS Y PUNTOS AZULES
+       (Solo la letra Mayúscula inicial va en rojo: ej. "El" -> E roja, l oscura)
+       ========================================================================= */
+    let m7PlacedSigns = {};
+    const M7_SEEDS = Array.from({ length: M7_CLAUSE_1.length * M7_CLAUSE_2_CAP.length * 2 }, (_, i) => i);
+
+    function buildM7Challenge() {
+      const seedIdx = getRandomItemFromDeck('m7', M7_SEEDS);
+      const c1 = M7_CLAUSE_1[seedIdx % M7_CLAUSE_1.length];
+      const c2 = M7_CLAUSE_2_CAP[Math.floor(seedIdx / M7_CLAUSE_1.length) % M7_CLAUSE_2_CAP.length];
+      const pattern = Math.floor(seedIdx / (M7_CLAUSE_1.length * M7_CLAUSE_2_CAP.length)) % 2;
+
+      if (pattern === 0) {
+        const words = [...c1.words, ...c1.commaCont, ...c2];
+        const commaGapIdx = c1.words.length - 1;
+        const periodMidGapIdx = c1.words.length + c1.commaCont.length - 1;
+        const periodEndGapIdx = words.length - 1;
+        return {
+          words,
+          intrusiveYGaps: [commaGapIdx, periodMidGapIdx],
+          expected: {
+            [commaGapIdx]: ',',
+            [periodMidGapIdx]: '.',
+            [periodEndGapIdx]: '.'
+          },
+          capWord: c2[0],
+          lowWord: c1.commaCont[0],
+          fullCorrectText: `${c1.words.join(' ')}, ${c1.commaCont.join(' ')}. ${c2.join(' ')}.`
+        };
+      } else {
+        const words = [...c2, ...c1.words, ...c1.commaCont];
+        const periodMidGapIdx = c2.length - 1;
+        const commaGapIdx = c2.length + c1.words.length - 1;
+        const periodEndGapIdx = words.length - 1;
+        return {
+          words,
+          intrusiveYGaps: [periodMidGapIdx, commaGapIdx],
+          expected: {
+            [periodMidGapIdx]: '.',
+            [commaGapIdx]: ',',
+            [periodEndGapIdx]: '.'
+          },
+          capWord: c1.words[0],
+          lowWord: c1.commaCont[0],
+          fullCorrectText: `${c2.join(' ')}. ${c1.words.join(' ')}, ${c1.commaCont.join(' ')}.`
+        };
+      }
+    }
+
+    function renderM7() {
+      document.getElementById('active-mod-title').textContent = 'Cortar la "y" Repetitiva (Cambia las "y" sobrantes por Coma o Punto)';
+      const item = buildM7Challenge();
+      activeChallengeData = item;
+      m7PlacedSigns = {};
+      currentPromptAudioText = item.fullCorrectText;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.95rem; color: var(--text-muted); font-weight: 700;">
+          A este texto le pusieron demasiadas <b>"y"</b> repetidas. Arrastra el signo <b class="bicolor-punct">,</b> o <b class="bicolor-punct">.</b> encima de las <b>"y"</b> (y al final) para corregir la lectura.
+          <span>¡Pista! Si la siguiente palabra empieza con <b style="color:#0f172a;">mayúscula</b> (como <b style="color:#0f172a;">"${colorizeBicolor(item.capWord)}"</b>), antes de ella debe ir un <b class="bicolor-punct">.</b>:</span>
+        </div>
+        <div class="prompt-box" id="m7-sentence-box" style="font-size: 1.36rem; line-height: 2.05; justify-content: flex-start; text-align: left; padding: 0.95rem;"></div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="speakText('${item.fullCorrectText}')">🔊 Escuchar Párrafo</button>
+          <button class="btn btn-secondary" onclick="resetM7Signs()">🔄 Restaurar</button>
+          <button class="btn btn-primary" onclick="validateM7()">✅ Comprobar Puntuación</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra los signos azules sobre las <b>"y"</b> repetidas y al final del texto (toca un signo colocado si deseas quitarlo):
+        </div>
+        <div class="chips-bank" id="m7-bank">
+          <div class="draggable-chip chip-blue" data-sign="," style="min-width:56px; width:56px; height:56px; padding:0; font-size:1.8rem;">,</div>
+          <div class="draggable-chip chip-blue" data-sign="." style="min-width:56px; width:56px; height:56px; padding:0; font-size:1.8rem;">.</div>
+        </div>
+        <div style="padding: 0.75rem; background: #eff6ff; border-radius: 0.7rem; border: 2px solid #93c5fd; font-size: 0.9rem; line-height: 1.42;">
+          📘 <b>Regla clave:</b><br>
+          • Cambia la <b>"y"</b> por <b class="bicolor-punct">,</b> cuando la siguiente palabra sigue con <b>minúscula</b>.<br>
+          • Cambia la <b>"y"</b> por <b class="bicolor-punct">.</b> antes de una palabra que inicia con <b style="color:#0f172a;">mayúscula</b> (como <b style="color:#0f172a;">"${colorizeBicolor(item.capWord)}"</b>) y coloca <b class="bicolor-punct">.</b> al <b>final</b>.
+        </div>
+      `;
+
+      renderM7Sentence();
+      document.querySelectorAll('#m7-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.classList.contains('interword-slot') && zone.dataset.gapIdx !== undefined) {
+            const idx = parseInt(zone.dataset.gapIdx, 10);
+            m7PlacedSigns[idx] = dragged.dataset.sign;
+            playBeep('pop');
+            renderM7Sentence();
+          }
+        });
+      });
+    }
+
+    function renderM7Sentence() {
+      const item = activeChallengeData;
+      const box = document.getElementById('m7-sentence-box');
+      if (!box) return;
+
+      box.innerHTML = item.words.map((w, idx) => {
+        const placed = m7PlacedSigns[idx] || '';
+        const isIntrusiveY = item.intrusiveYGaps && item.intrusiveYGaps.includes(idx);
+        const displaySlotText = placed ? placed : (isIntrusiveY ? 'y' : '');
+        const extraStyle = (!placed && isIntrusiveY)
+          ? 'background:#fef3c7; border:2px dashed #d97706; color:#b45309; min-width:34px; font-weight:900;'
+          : '';
+        return `
+          <span style="display:inline-flex; align-items:center; white-space:nowrap;">
+            <span>${colorizeBicolor(w)}</span>
+            <span class="interword-slot ${placed ? 'placed-sign' : ''}" style="${extraStyle}" data-gap-idx="${idx}" onclick="removeM7Sign(${idx})" title="${placed ? 'Toca para quitar este signo' : 'Suelta aquí , o .'}">${displaySlotText}</span>
+          </span>
+        `;
+      }).join(' ');
+    }
+
+    function removeM7Sign(idx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      if (m7PlacedSigns[idx]) {
+        delete m7PlacedSigns[idx];
+        playBeep('pop');
+        renderM7Sentence();
+        hideFeedback();
+      }
+    }
+
+    function resetM7Signs() {
+      m7PlacedSigns = {};
+      playBeep('pop');
+      renderM7Sentence();
+      hideFeedback();
+    }
+
+    function validateM7() {
+      const item = activeChallengeData;
+      const expKeys = Object.keys(item.expected).map(Number);
+      const userKeys = Object.keys(m7PlacedSigns).map(Number);
+
+      const allMatch = expKeys.length === userKeys.length &&
+        expKeys.every(k => m7PlacedSigns[k] === item.expected[k]);
+
+      if (allMatch) {
+        showFeedback(true, `🎉 <b>¡Puntuación impecable!</b> Reemplazaste las "y" repetidas por la coma y el punto antes de <b>"${colorizeBicolor(item.capWord)}"</b>, y cerraste con punto final: <i>"${colorizeSentenceNoOrphan(item.fullCorrectText)}"</i>`);
+        speakText(item.fullCorrectText);
+      } else {
+        showFeedback(false, `❌ Revisa tus signos azules: pon <b class="bicolor-punct">,</b> donde la idea continúa con minúscula, <b class="bicolor-punct">.</b> justo antes de <b style="color:#0f172a;">"${colorizeBicolor(item.capWord)}"</b> (porque empieza con <b style="color:#0f172a;">mayúscula</b>) y <b class="bicolor-punct">.</b> al final.`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 8: BORRADOR DEL PUNTO FALSO INTRUSO (BICOLOR + ORDEN ALEATORIO)
+       ========================================================================= */
+    let m8ErasedIndices = new Set();
+
+    function renderM8() {
+      document.getElementById('active-mod-title').textContent = 'Borrador del Punto Falso (Lee con atención y borra el punto intruso)';
+      const item = getRandomItemFromDeck('m8', DATA_M8);
+      activeChallengeData = item;
+      m8ErasedIndices.clear();
+
+      const cleanSentence = item.tokens.map((t, idx) => item.falseIndices.includes(idx) ? t.replace('.', '') : t).join(' ');
+      currentPromptAudioText = cleanSentence;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
+          En este texto hay puntos verdaderos (que cierran una oración completa) y un <b>punto falso intruso</b> que pusieron a mitad de una idea. Arrastra el <b>Borrador</b> sobre la palabra que tiene el punto falso (o tócala):
+        </div>
+        <div class="prompt-box" id="m8-words-container" style="font-size: 1.42rem; flex-wrap: wrap; gap: 0.45rem; justify-content: center;"></div>
+        <div style="display:flex; gap:0.65rem; justify-content:center;">
+          <button class="btn btn-amber" onclick="speakText('${cleanSentence}')">🔊 Escuchar Idea</button>
+          <button class="btn btn-secondary" onclick="resetM8()">🔄 Restaurar Puntos</button>
+          <button class="btn btn-primary" onclick="validateM8()">✅ Comprobar Oración</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0.75rem; align-items:center;">
+          <div style="font-size: 0.95rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+            Arrastra el borrador hacia la palabra que tenga el punto falso:
+          </div>
+          <div class="chips-bank" style="width:100%;">
+            <div class="draggable-chip chip-amber" id="m8-eraser-chip" style="min-width:165px;">
+              🧽 Borrador de Punto
+            </div>
+          </div>
+          <div style="padding: 0.8rem; background: #fff7ed; border-radius: 0.7rem; border: 2px solid #fed7aa; font-size: 0.92rem; line-height: 1.45;">
+            🎯 <b>¿Cómo distinguir un punto verdadero de uno falso?</b><br>
+            • El <b style="color:#2563eb;">punto verdadero (<span class="bicolor-punct">.</span>)</b> cierra una idea completa y la siguiente oración empieza con <b style="color:#0f172a;">mayúscula</b>.<br>
+            • El <b>punto falso</b> corta la frase a la mitad y la palabra que sigue empieza con <b>minúscula</b>.
+          </div>
+        </div>
+      `;
+
+      renderM8Words();
+      const eraser = document.getElementById('m8-eraser-chip');
+      if (eraser) {
+        makePointerDraggable(eraser, (dragged, zone) => {
+          if (zone.dataset.m8Idx !== undefined) {
+            toggleM8Word(parseInt(zone.dataset.m8Idx, 10));
+          }
+        });
+      }
+    }
+
+    function renderM8Words() {
+      const item = activeChallengeData;
+      const container = document.getElementById('m8-words-container');
+      if (!container) return;
+
+      container.innerHTML = item.tokens.map((w, idx) => {
+        const isErased = m8ErasedIndices.has(idx);
+        const displayWord = isErased ? w.replace('.', '') : w;
+        return `
+          <span class="drop-slot" data-m8-idx="${idx}" onclick="toggleM8Word(${idx})"
+            style="min-width:auto; min-height:44px; padding:0.25rem 0.55rem; white-space:nowrap; border:2px solid ${isErased ? '#f59e0b' : '#cbd5e1'}; background:${isErased ? '#fef3c7' : '#ffffff'}; color:#0f172a; font-size:1.38rem;">
+            ${colorizeBicolor(displayWord)}
+          </span>
+        `;
+      }).join('');
+    }
+
+    function toggleM8Word(idx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      const item = activeChallengeData;
+      if (!item.tokens[idx].includes('.')) {
+        playBeep('error');
+        showFeedback(false, `⚠️ La palabra <b>"${colorizeBicolor(item.tokens[idx])}"</b> no tiene ningún punto. Observa bien cuáles palabras terminan con punto.`);
+        return;
+      }
+      if (m8ErasedIndices.has(idx)) m8ErasedIndices.delete(idx);
+      else m8ErasedIndices.add(idx);
+      playBeep('pop');
+      hideFeedback();
+      renderM8Words();
+    }
+
+    function resetM8() {
+      m8ErasedIndices.clear();
+      playBeep('pop');
+      hideFeedback();
+      renderM8Words();
+    }
+
+    function validateM8() {
+      const item = activeChallengeData;
+      const erasedArr = Array.from(m8ErasedIndices).sort((a, b) => a - b);
+      const expectedArr = [...item.falseIndices].sort((a, b) => a - b);
+      const isOk = erasedArr.length === expectedArr.length && erasedArr.every((v, i) => v === expectedArr[i]);
+      const cleanSentence = item.tokens.map((t, idx) => item.falseIndices.includes(idx) ? t.replace('.', '') : t).join(' ');
+
+      if (isOk) {
+        showFeedback(true, `🎉 <b>¡Excelente lectura!</b> Borraste únicamente el punto falso intruso y conservaste los puntos verdaderos: <i>"${colorizeSentenceNoOrphan(cleanSentence)}"</i>`);
+        speakText(cleanSentence);
+      } else {
+        showFeedback(false, `❌ Revisa qué punto borraste. Recuerda: no borres los puntos donde termina una oración completa; borra solo el punto intruso que corta la frase antes de una minúscula.`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 9: TEATRO DE LOS SIGNOS (¿? vs ¡! EN AZUL, MAYÚSCULAS ROJAS, CUADROS EN BLANCO)
+       ========================================================================= */
+    let m9OpenSign = '';
+    let m9CloseSign = '';
+
+    function renderM9() {
+      document.getElementById('active-mod-title').textContent = 'Teatro de los Signos (¿Pregunta ¿? o Exclamación ¡!?)';
+      const item = getRandomItemFromDeck('m9', DATA_M9);
+      activeChallengeData = item;
+      m9OpenSign = '';
+      m9CloseSign = '';
+      currentPromptAudioText = item.full;
+
+      const baseWords = item.base.trim().split(/\s+/);
+      const firstWord = baseWords[0] || '';
+      const lastWord = baseWords.length > 1 ? baseWords[baseWords.length - 1] : '';
+      const middleWords = baseWords.length > 2 ? baseWords.slice(1, -1) : [];
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.98rem; color: var(--text-muted); font-weight: 700;">
+          <b>Situación:</b> ${colorizeSentenceNoOrphan(item.desc)}
+        </div>
+        <div class="prompt-box" style="font-size: 1.48rem; gap: 0.45rem; flex-wrap: wrap;">
+          <span style="display:inline-flex; align-items:center; white-space:nowrap; gap:0.3rem;">
+            <div class="drop-slot" id="m9-slot-open" data-slot="open" onclick="clearM9Slot('open')" style="min-width: 52px; min-height: 52px; color:#2563eb;" title="Toca para vaciar"></div>
+            <span>${colorizeBicolor(firstWord)}</span>
+          </span>
+          ${middleWords.map(w => `<span style="white-space:nowrap;">${colorizeBicolor(w)}</span>`).join(' ')}
+          <span style="display:inline-flex; align-items:center; white-space:nowrap; gap:0.3rem;">
+            ${lastWord ? `<span>${colorizeBicolor(lastWord)}</span>` : ''}
+            <div class="drop-slot" id="m9-slot-close" data-slot="close" onclick="clearM9Slot('close')" style="min-width: 52px; min-height: 52px; color:#2563eb;" title="Toca para vaciar"></div>
+          </span>
+        </div>
+        <div style="display:flex; gap:0.65rem; justify-content:center;">
+          <button class="btn btn-amber" onclick="speakText('${item.full}', ${item.type === 'interrogacion' ? '1.22' : '1.3'}, 0.95)">🔊 Escuchar Entonación</button>
+          <button class="btn btn-primary" onclick="validateM9()">🎭 Comprobar Signos</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra o toca el signo de apertura (inicio) y el signo de cierre (final):
+        </div>
+        <div class="chips-bank" id="m9-bank">
+          <div class="draggable-chip chip-blue" data-sign="¿" data-pos="open">¿</div>
+          <div class="draggable-chip chip-blue" data-sign="?" data-pos="close">?</div>
+          <div class="draggable-chip chip-blue" data-sign="¡" data-pos="open">¡</div>
+          <div class="draggable-chip chip-blue" data-sign="!" data-pos="close">!</div>
+        </div>
+        <div style="padding: 0.75rem; background: #eff6ff; border-radius: 0.7rem; border: 2px solid #93c5fd; font-size: 0.9rem; line-height: 1.4;">
+          🎭 <b>Recuerda:</b><br>
+          • Para hacer una <b>pregunta</b> abrimos con <b class="bicolor-punct">¿</b> y cerramos con <b class="bicolor-punct">?</b>.<br>
+          • Para expresar <b>emoción, sorpresa o alerta</b> abrimos con <b class="bicolor-punct">¡</b> y cerramos con <b class="bicolor-punct">!</b>.
+        </div>
+      `;
+
+      document.querySelectorAll('#m9-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          const sign = dragged.dataset.sign;
+          if (zone.dataset.slot === 'open') {
+            m9OpenSign = sign;
+          } else if (zone.dataset.slot === 'close') {
+            m9CloseSign = sign;
+          } else {
+            return;
+          }
+          playBeep('pop');
+          renderM9Slots();
+        });
+      });
+    }
+
+    function renderM9Slots() {
+      const openEl = document.getElementById('m9-slot-open');
+      const closeEl = document.getElementById('m9-slot-close');
+      if (openEl) {
+        openEl.innerHTML = m9OpenSign ? `<span class="bicolor-punct">${m9OpenSign}</span>` : '';
+        openEl.classList.toggle('filled', !!m9OpenSign);
+      }
+      if (closeEl) {
+        closeEl.innerHTML = m9CloseSign ? `<span class="bicolor-punct">${m9CloseSign}</span>` : '';
+        closeEl.classList.toggle('filled', !!m9CloseSign);
+      }
+    }
+
+    function clearM9Slot(which) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      if (which === 'open') m9OpenSign = '';
+      else m9CloseSign = '';
+      playBeep('pop');
+      hideFeedback();
+      renderM9Slots();
+    }
+
+    function validateM9() {
+      const item = activeChallengeData;
+      if (item.type === 'interrogacion') {
+        if (m9OpenSign === '¿' && m9CloseSign === '?') {
+          showFeedback(true, `🎉 <b>¡Pregunta perfecta!</b> Abres con <b class="bicolor-punct">¿</b> y cierras con <b class="bicolor-punct">?</b>: <i>"${colorizeSentenceNoOrphan(item.full)}"</i>`);
+          speakText(item.full, 1.25, 0.95);
+        } else {
+          showFeedback(false, `❌ Lee la frase: está haciendo una pregunta para saber algo. Necesita abrir con <b class="bicolor-punct">¿</b> al inicio y cerrar con <b class="bicolor-punct">?</b> al final.`);
+        }
+      } else {
+        if (m9OpenSign === '¡' && m9CloseSign === '!') {
+          showFeedback(true, `🎉 <b>¡Gran exclamación!</b> Abres con <b class="bicolor-punct">¡</b> y cierras con <b class="bicolor-punct">!</b>: <i>"${colorizeSentenceNoOrphan(item.full)}"</i>`);
+          speakText(item.full, 1.32, 1.02);
+        } else {
+          showFeedback(false, `❌ Esta frase expresa emoción, sorpresa o aviso urgente. Necesita abrir con <b class="bicolor-punct">¡</b> al inicio y cerrar con <b class="bicolor-punct">!</b> al final.`);
+        }
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 10: COMA, "Y" Y PUNTO EN ENUMERACIONES (BICOLOR + SIN PUNTO HUÉRFANO)
+       ========================================================================= */
+    let m10Placed = {};
+
+    function renderM10() {
+      document.getElementById('active-mod-title').textContent = 'Enumeraciones en la Cooperativa (Coloca comas, la "y" y el punto)';
+      const raw = getRandomItemFromDeck('m10', DATA_M10);
+      const flatWords = [...raw.intro];
+      const expectedMap = {};
+
+      raw.items.forEach((itemWords, idx) => {
+        itemWords.forEach(w => flatWords.push(w));
+        const endGapIdx = flatWords.length - 1;
+        if (idx < raw.items.length - 2) {
+          expectedMap[endGapIdx] = ',';
+        } else if (idx === raw.items.length - 2) {
+          expectedMap[endGapIdx] = 'y';
+        } else {
+          expectedMap[endGapIdx] = '.';
+        }
+      });
+
+      const fullCorrect = `${raw.intro.join(' ')} ${raw.items.slice(0, -1).map(x => x.join(' ')).join(', ')} y ${raw.items[raw.items.length - 1].join(' ')}.`;
+      activeChallengeData = { flatWords, expectedMap, fullCorrect };
+      m10Placed = {};
+      currentPromptAudioText = fullCorrect;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="font-size: 0.95rem; color: var(--text-muted); font-weight: 700;">
+          Arrastra <b class="bicolor-punct">,</b> , la letra <b>y</b> y el <b class="bicolor-punct">.</b> entre las palabras donde correspondan.
+          <span style="color:#1d4ed8;">(Si te equivocas, toca el símbolo colocado para regresarlo):</span>
+        </div>
+        <div class="prompt-box" id="m10-sentence-box" style="font-size: 1.42rem; line-height: 2.0; justify-content: center;"></div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button class="btn btn-amber" onclick="speakText('${fullCorrect}')">🔊 Escuchar Lista</button>
+          <button class="btn btn-secondary" onclick="resetM10()">🔄 Limpiar Todo</button>
+          <button class="btn btn-primary" onclick="validateM10()">✅ Comprobar Lista</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="font-size: 0.95rem; color: var(--text-muted); text-align:center; font-weight: 700;">
+          Arrastra los elementos hacia los espacios entre las palabras para abrirles lugar:
+        </div>
+        <div class="chips-bank" id="m10-bank">
+          <div class="draggable-chip chip-blue" data-token="," style="min-width:56px; width:56px; height:56px; padding:0; font-size:1.8rem;">,</div>
+          <div class="draggable-chip chip-teal" data-token="y" style="min-width:56px; width:56px; height:56px; padding:0; font-size:1.65rem;">y</div>
+          <div class="draggable-chip chip-blue" data-token="." style="min-width:56px; width:56px; height:56px; padding:0; font-size:1.8rem;">.</div>
+        </div>
+        <div style="padding: 0.75rem; background: #ecfdf5; border-radius: 0.7rem; border: 2px solid #a7f3d0; font-size: 0.9rem; line-height: 1.4;">
+          🛒 <b>Regla de las listas:</b><br>
+          • Separa los primeros elementos con <b class="bicolor-punct">,</b>.<br>
+          • Antes del último elemento de la lista coloca <b>"y"</b>.<br>
+          • Al terminar toda la oración coloca el <b class="bicolor-punct">.</b>.
+        </div>
+      `;
+
+      renderM10Sentence();
+      document.querySelectorAll('#m10-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.classList.contains('interword-slot') && zone.dataset.gapIdx !== undefined) {
+            const idx = parseInt(zone.dataset.gapIdx, 10);
+            m10Placed[idx] = dragged.dataset.token;
+            playBeep('pop');
+            renderM10Sentence();
+          }
+        });
+      });
+    }
+
+    function renderM10Sentence() {
+      const item = activeChallengeData;
+      const box = document.getElementById('m10-sentence-box');
+      if (!box) return;
+
+      box.innerHTML = item.flatWords.map((w, idx) => {
+        const placed = m10Placed[idx] || '';
+        const isY = placed === 'y';
+        const slotColorStyle = isY ? 'color:#0f766e; border-color:#0d9488; background:#ccfbf1;' : '';
+        return `
+          <span style="display:inline-flex; align-items:center; white-space:nowrap;">
+            <span>${colorizeBicolor(w)}</span>
+            <span class="interword-slot ${placed ? 'placed-sign' : ''}" style="${slotColorStyle}" data-gap-idx="${idx}" onclick="removeM10Token(${idx})" title="${placed ? 'Toca para devolver este símbolo' : 'Suelta aquí , y o .'}">${placed}</span>
+          </span>
+        `;
+      }).join(' ');
+    }
+
+    function removeM10Token(idx) {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      if (m10Placed[idx]) {
+        delete m10Placed[idx];
+        playBeep('pop');
+        hideFeedback();
+        renderM10Sentence();
+      }
+    }
+
+    function resetM10() {
+      m10Placed = {};
+      playBeep('pop');
+      hideFeedback();
+      renderM10Sentence();
+    }
+
+    function validateM10() {
+      const item = activeChallengeData;
+      const expKeys = Object.keys(item.expectedMap).map(Number);
+      const userKeys = Object.keys(m10Placed).map(Number);
+
+      const isOk = expKeys.length === userKeys.length &&
+        expKeys.every(k => m10Placed[k] === item.expectedMap[k]);
+
+      if (isOk) {
+        showFeedback(true, `🎉 <b>¡Lista perfecta!</b> Colocaste las comas, la "y" antes del último elemento y el punto final: <i>"${colorizeSentenceNoOrphan(item.fullCorrect)}"</i>`);
+        speakText(item.fullCorrect);
+      } else {
+        showFeedback(false, `❌ Revisa dónde colocaste cada símbolo. Recuerda: las comas separan los primeros elementos de la lista, la "y" va antes del último elemento, y el punto va al final.`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 11: MAYÚSCULAS EN ROJO Y MINÚSCULAS (CLIC REVERSIBLE A ↔ a + ALEATORIO)
+       ========================================================================= */
+    let m11Chars = [];
+
+    function renderM11() {
+      document.getElementById('active-mod-title').textContent = 'Mayúsculas en Rojo y Minúsculas (Palabras y Oraciones)';
+      const item = getRandomItemFromDeck('m11', DATA_M11);
+      activeChallengeData = item;
+      m11Chars = item.wrong.split('');
+      currentPromptAudioText = item.correct;
+
+      const badgeLabel = item.type === 'palabra_comun'
+        ? '📝 Palabra común suelta (toda con minúsculas)'
+        : (item.type === 'nombre_propio' ? '🏷️ Nombre propio (primera letra con Mayúscula en rojo)' : '📖 Oración completa (inicio, después de punto y nombres propios con Mayúscula en rojo)');
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem;">
+          <span style="background:#fee2e2; border:2px solid #dc2626; color:#991b1b; padding:0.2rem 0.65rem; border-radius:999px; font-weight:800; font-size:0.88rem;">
+            ${badgeLabel}
+          </span>
+          <span style="font-size:0.9rem; color:var(--text-muted); font-weight:700;">Toca cualquier letra para cambiarla entre <b style="color:#dc2626;">MAYÚSCULA</b> ↔ <b>minúscula</b></span>
+        </div>
+        <div class="prompt-box" id="m11-letters-box" style="padding: 0.85rem; min-height: 115px;"></div>
+        <div style="display: flex; gap: 0.65rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-amber" onclick="speakText('${item.correct}')">🔊 Escuchar</button>
+          <button class="btn btn-secondary" onclick="resetM11()">🔄 Reiniciar Letras</button>
+          <button class="btn btn-primary" onclick="validateM11()">✅ Comprobar Mayúsculas y Minúsculas</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="padding: 0.9rem; background: #fffbeb; border-radius: 0.75rem; border: 2px solid #fde68a; font-size: 0.95rem; line-height: 1.48;">
+          <p>💡 <b>Pista de este reto:</b> ${colorizeSentenceNoOrphan(item.hint)}</p>
+          <hr style="margin:0.55rem 0; border:none; border-top:1px dashed #f59e0b;">
+          <p>📏 <b>Código de colores escolar:</b></p>
+          <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+            <li>Si es <b>una sola palabra común</b> (como <i>libro</i> o <i>escuela</i>), <b>todas</b> sus letras van con <b>minúscula</b>.</li>
+            <li>Los <b>nombres propios</b> de personas y lugares (<i>${colorizeBicolor('Sayula, Daniel, Jalisco')}</i>) inician con <b style="color:#0f172a;">mayúscula</b> en rojo.</li>
+            <li>En una <b>oración</b>, la primera letra y la palabra después de un <b class="bicolor-punct">.</b> azul van con <b style="color:#0f172a;">mayúscula</b> en rojo.</li>
+          </ul>
+        </div>
+      `;
+
+      renderM11Letters();
+    }
+
+    function renderM11Letters() {
+      const item = activeChallengeData;
+      const box = document.getElementById('m11-letters-box');
+      if (!box) return;
+      const isSentence = item.type === 'oracion';
+
+      let html = '<div class="m11-word-group">';
+      m11Chars.forEach((ch, idx) => {
+        if (ch === ' ') {
+          html += '</div><div class="m11-word-group">';
+        } else if (ch === '.' || ch === ',') {
+          html += `<span style="font-size:1.65rem; font-weight:900; padding:0 4px; color:#2563eb;">${ch}</span>`;
+        } else {
+          const isUpper = ch === ch.toUpperCase() && ch !== ch.toLowerCase();
+          html += `
+            <button class="vacuum-letter-btn ${isSentence ? 'compact-letter' : ''} ${isUpper ? 'is-upper' : ''}"
+              onclick="toggleM11Letter(${idx})" title="Toca para cambiar Mayúscula / minúscula">
+              ${ch}
+            </button>
+          `;
+        }
+      });
+      html += '</div>';
+      box.innerHTML = html;
+    }
+
+    function toggleM11Letter(idx) {
+      const ch = m11Chars[idx];
+      const isUpper = ch === ch.toUpperCase() && ch !== ch.toLowerCase();
+      m11Chars[idx] = isUpper ? ch.toLowerCase() : ch.toUpperCase();
+      playBeep('pop');
+      hideFeedback();
+      renderM11Letters();
+    }
+
+    function resetM11() {
+      if (!activeChallengeData) return;
+      m11Chars = activeChallengeData.wrong.split('');
+      playBeep('pop');
+      hideFeedback();
+      renderM11Letters();
+    }
+
+    function validateM11() {
+      const item = activeChallengeData;
+      const currentStr = m11Chars.join('');
+      if (currentStr === item.correct) {
+        showFeedback(true, `🎉 <b>¡Excelente!</b> Escribiste correctamente las mayúsculas y minúsculas: <b>"${item.correct}"</b>.`);
+        speakText(item.correct);
+      } else {
+        showFeedback(false, `❌ Todavía hay letras por ajustar. Tienes: <b>"${currentStr}"</b>. ${item.hint}`);
+      }
+    }
+
+    /* =========================================================================
+       MÓDULO 12: LETRAS ESPEJO Y DETECTIVE ORTOGRÁFICO (SIN PALABRA BAJO IMAGEN + ALEATORIO)
+       ========================================================================= */
+    let m12Filter = 'all';
+
+    function setM12Filter(filterKey) {
+      m12Filter = filterKey;
+      challengeIndex = 0;
+      renderM12();
+    }
+
+    function getFilteredM12() {
+      if (m12Filter === 'all') return DATA_M12;
+      return DATA_M12.filter(item => item.group === m12Filter);
+    }
+
+    function renderM12() {
+      document.getElementById('active-mod-title').textContent = 'Letras Espejo (b/d, p/q) y Detective Ortográfico (b/v, c/s/z, h, m/n)';
+      const pool = getFilteredM12();
+      const item = getRandomItemFromDeck('m12_' + m12Filter, pool);
+      activeChallengeData = item;
+      currentPromptAudioText = item.word;
+
+      const parts = item.masked.split('_');
+
+      // Regla pedida por el usuario:
+      // - Si la palabra YA TIENE su propia imagen (item.img), mostramos la imagen SIN la palabra escrita debajo.
+      // - Si NO tiene imagen (item.img === null), mostramos una tarjeta limpia con la pista y botón de voz sin imagen equivocada.
+      const visualAreaHTML = item.img
+        ? `<div style="display:flex; flex-direction:column; align-items:center;">
+             <img src="./recursos_juego/${item.img}" alt="Referente visual" class="sticker-ref" title="Observa el dibujo">
+           </div>`
+        : `<div style="padding:0.65rem 0.9rem; background:#eff6ff; border:2px solid #93c5fd; border-radius:0.75rem; font-size:0.95rem; color:#1e3a8a; max-width:210px; text-align:left;">
+             🔊 <b>Palabra sin dibujo:</b> Escucha la palabra y lee la pista para elegir la letra correcta.
+           </div>`;
+
+      const pLeft = document.getElementById('panel-left-content');
+      pLeft.innerHTML = `
+        <div style="display:flex; gap:0.35rem; flex-wrap:wrap; justify-content:center;">
+          <button class="btn ${m12Filter === 'all' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('all')">🌟 Todas (${DATA_M12.length})</button>
+          <button class="btn ${m12Filter === 'bd' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('bd')">🪞 b vs d</button>
+          <button class="btn ${m12Filter === 'pq' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('pq')">🔍 p vs q</button>
+          <button class="btn ${m12Filter === 'orto' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('orto')">📝 b/v, c/s/z, h, m/n</button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1.1rem; flex-wrap: wrap;">
+          ${visualAreaHTML}
+          <div class="prompt-box" style="flex: 1; font-size: 2.1rem; min-width: 210px;">
+            <span>${parts[0]}</span>
+            <div class="drop-slot" id="m12-slot" onclick="clearM12Slot()" title="Toca para cambiar la letra">?</div>
+            <span>${parts[1] || ''}</span>
+          </div>
+        </div>
+
+        <div style="text-align: center; font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
+          💡 <b>Pista:</b> ${item.hint}
+        </div>
+        <div style="text-align: center;">
+          <button class="btn btn-amber" onclick="speakText('${item.word}')">🔊 Escuchar Palabra</button>
+        </div>
+      `;
+
+      const pRight = document.getElementById('panel-right-content');
+      pRight.innerHTML = `
+        <div style="text-align: center;">
+          <img src="./recursos_juego/apoyo_letras_espejo_bd.webp" alt="Apoyo b y d" class="bd-helper-img" onerror="this.style.display='none'">
+        </div>
+        <div style="font-size: 0.95rem; color: var(--text-muted); text-align: center; font-weight: 700;">
+          Arrastra o toca la letra correcta:
+        </div>
+        <div class="chips-bank" id="m12-bank">
+          ${item.options.map(opt => `
+            <div class="draggable-chip" data-letter="${opt}" style="font-size: 1.85rem; min-width: 82px; min-height: 68px;">
+              ${opt}
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      document.querySelectorAll('#m12-bank .draggable-chip').forEach(chip => {
+        makePointerDraggable(chip, (dragged, zone) => {
+          if (zone.id === 'm12-slot') {
+            checkM12Letter(dragged.dataset.letter);
+          }
+        });
+        chip.onclick = () => {
+          if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+          clearSelectedChip();
+          checkM12Letter(chip.dataset.letter);
+        };
+      });
+
+      setTimeout(() => speakText(item.word), 250);
+    }
+
+    function clearM12Slot() {
+      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+      const slot = document.getElementById('m12-slot');
+      if (slot && slot.classList.contains('filled')) {
+        slot.textContent = '?';
+        slot.classList.remove('filled');
+        hideFeedback();
+        playBeep('pop');
+      }
+    }
+
+    function checkM12Letter(letter) {
+      const item = activeChallengeData;
+      const slot = document.getElementById('m12-slot');
+      if (!slot) return;
+      slot.textContent = letter;
+      slot.classList.add('filled');
+
+      if (letter === item.target) {
+        showFeedback(true, `🎉 <b>¡Excelente!</b> Se escribe <b>"${item.word}"</b> con la letra <b>"${item.target}"</b>. ${item.hint}`);
+        speakText(item.word);
+      } else {
+        showFeedback(false, `❌ Con la letra "${letter}" no es correcto. Observa bien: ${item.hint}`);
+      }
+    }
+
+    // Permitir abrir un módulo directo por parámetro URL (?modulo=N)
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const m = parseInt(params.get('modulo'), 10);
+      if (m >= 1 && m <= 12) {
+        openModule(m);
+      }
+    });
+  </script>
+</body>
+</html>

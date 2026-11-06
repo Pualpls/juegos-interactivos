@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Semáforo Táctil de Decisiones ante Riesgos de Invierno</title>
+    <style>
+        /* ==========================================================================
+           REGLAS GLOBALES Y BLOQUEO DE INTERFAZ TÁCTIL (Pizarrón Computerland / Linux)
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        body {
+            font-family: 'Comic Neue', 'Fredoka', 'Lexend', 'Comic Sans MS', 'Ubuntu', 'Roboto', 'Noto Sans', sans-serif;
+            background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Cabecera escolar */
+        header {
+            background-color: #1e293b;
+            border-bottom: 3px solid #10b981;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title-box h1 {
+            font-size: 21px;
+            font-weight: 800;
+            color: #34d399;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title-box p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-restart {
+            background: #334155;
+            color: #f8fafc;
+            border: 2px solid #475569;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-restart:hover {
+            background: #475569;
+            border-color: #34d399;
+        }
+
+        /* Contenedor Principal (Proporción Panorámica 2:1) */
+        main {
+            flex: 1;
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 1550px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Zona Superior: Cinta de la Situación Actual */
+        .active-card-container {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .card-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-student-tag {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1.5px solid #38bdf8;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .progress-tag {
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .situation-chip {
+            background: #0f172a;
+            border: 2.5px solid #38bdf8;
+            border-radius: 12px;
+            padding: 18px 24px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #ffffff;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            touch-action: none;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .situation-chip:hover, .situation-chip.selected {
+            transform: scale(1.02);
+            border-color: #34d399;
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.4);
+        }
+
+        .situation-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .instruction-hint {
+            font-size: 13.5px;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        /* Zona Inferior: Los 3 Buzones del Semáforo (Layout Horizontal Panorámico) */
+        .traffic-lights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            min-height: 340px;
+        }
+
+        @media (max-width: 850px) {
+            .traffic-lights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .light-bin {
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 3px dashed transparent;
+        }
+
+        /* Estilo Buzón Verde */
+        .light-bin.green {
+            background: #064e3b;
+            border-color: #10b981;
+        }
+        .light-bin.green:hover, .light-bin.green.highlight {
+            background: #065f46;
+            border-style: solid;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Estilo Buzón Amarillo */
+        .light-bin.yellow {
+            background: #713f12;
+            border-color: #eab308;
+        }
+        .light-bin.yellow:hover, .light-bin.yellow.highlight {
+            background: #854d0e;
+            border-style: solid;
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Estilo Buzón Rojo */
+        .light-bin.red {
+            background: #7f1d1d;
+            border-color: #ef4444;
+        }
+        .light-bin.red:hover, .light-bin.red.highlight {
+            background: #991b1b;
+            border-style: solid;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .bin-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .bin-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+        }
+
+        .bin-circle.green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .bin-circle.yellow { background: #eab308; box-shadow: 0 0 10px #eab308; }
+        .bin-circle.red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+
+        .bin-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bin-subtitle {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.35;
+        }
+
+        .bin-items-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            max-height: 230px;
+            padding-right: 4px;
+        }
+
+        .classified-item {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13.5px;
+            line-height: 1.35;
+            color: #f8fafc;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal o Ventana de Retroalimentación Metacognitiva */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .feedback-card {
+            background: #1e293b;
+            border-radius: 16px;
+            max-width: 650px;
+            width: 100%;
+            padding: 24px;
+            border: 3px solid #38bdf8;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            animation: popIn 0.25s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .feedback-status {
+            font-size: 18px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-status.success { color: #34d399; }
+        .feedback-status.warning { color: #fbbf24; }
+
+        .feedback-text {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #f1f5f9;
+            background: #0f172a;
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 4px solid #38bdf8;
+        }
+
+        .btn-continue {
+            background: #0284c7;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            align-self: flex-end;
+            transition: all 0.2s ease;
+        }
+
+        .btn-continue:hover {
+            background: #0369a1;
+            transform: translateY(-2px);
+        }
+
+        /* Clon de arrastre Pointer Events */
+        .drag-ghost {
+            position: fixed;
+            pointer-events: none !important;
+            z-index: 9999999;
+            transform: translate(-50%, -50%);
+            background: #0284c7;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border: 2px solid #38bdf8;
+            max-width: 450px;
+        }
+
+        /* Footer y Marcador */
+        footer {
+            background: #0f172a;
+            border-top: 2px solid #334155;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13.5px;
+            color: #94a3b8;
+        }
+
+        .score-box {
+            font-size: 16px;
+            font-weight: 800;
+            color: #34d399;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABECERA -->
+    <header>
+        <div class="header-title-box">
+            <h1>Semáforo Táctil de Decisiones ante Riesgos de Invierno</h1>
+            <p>Primaria Federal "José Clemente Orozco" | 3° "A" (Sayula, Jalisco) | Turno Vespertino</p>
+        </div>
+        <div class="header-controls">
+            <button class="btn-restart" onclick="restartGame()">Reiniciar Desafío</button>
+        </div>
+    </header>
+
+    <!-- ÁREA DE JUEGO PRINCIPAL -->
+    <main>
+
+        <!-- SITUACIÓN ACTUAL ACTIVA (ARRASTRABLE / TOCABLE) -->
+        <section class="active-card-container" id="current-card-container">
+            <div class="card-top-bar">
+                <span class="card-student-tag" id="student-tag">Cargando situación...</span>
+                <span class="progress-tag" id="progress-tag">Situación 1 de 8</span>
+            </div>
+
+            <div class="situation-chip" id="active-situation-chip">
+                <span class="situation-icon" id="situation-icon">🛡️</span>
+                <span id="situation-text">Texto de la situación...</span>
+            </div>
+
+            <p class="instruction-hint">
+                👉 <strong>Arrastra la tarjeta hacia el buzón correspondiente</strong> o <strong>tócala y luego toca el buzón</strong> (Verde, Amarillo o Rojo).
+            </p>
+        </section>
+
+        <!-- BUZONES DEL SEMÁFORO (3 COLUMNAS PANORÁMICAS) -->
+        <section class="traffic-lights-grid">
+
+            <!-- Buzón Verde -->
+            <div class="light-bin green" data-target="green" onclick="handleBinClick('green')">
+                <div class="bin-header">
+                    <div class="bin-circle green"></div>
+                    <div>
+                        <div class="bin-title">Luz Verde</div>
+                        <div class="bin-subtitle">Decisión Segura / Hábito Preventivo</div>
+                    </div>
+                </div>
+                <div class="bin-items-list" id="list-green"></div>
+            </div>
+
+            <!-- Buzón Amarillo -->
+            <div class="light-bin yellow" data-target="yellow" onclick="handleBinClick('yellow')">
+                <div class="bin-header">
+                    <div class="bin-circle yellow"></div>
+                    <div>
+                        <div class="bin-title">Luz Amarilla</div>
+                        <div class="bin-subtitle">Precaución / Atención al Entorno</div>
+                    </div>
+                </div>
+                <div class="bin-items-list" id="list-yellow"></div>
+            </div>
+
+            <!-- Buzón Rojo -->
+            <div class="light-bin red" data-target="red" onclick="handleBinClick('red')">
+                <div class="bin-header">
+                    <div class="bin-circle red"></div>
+                    <div>
+                        <div class="bin-title">Luz Roja</div>
+                        <div class="bin-subtitle">Peligro Inmediato / Alto Riesgo</div>
+                    </div>
+                </div>
+                <div class="bin-items-list" id="list-red"></div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL DE RETROALIMENTACIÓN METACONSTRUCTIVISTA -->
+    <div class="modal-overlay" id="feedback-modal">
+        <div class="feedback-card">
+            <div class="feedback-status" id="feedback-status-title">Decisión Analizada</div>
+            <div class="feedback-text" id="feedback-desc-text">Explicación de consecuencias...</div>
+            <button class="btn-continue" onclick="closeFeedbackModal()">Continuar</button>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <div>Proyecto 3: Valoración ética de riesgos y toma de decisiones responsables</div>
+        <div class="score-box" id="score-counter">Decisiones Correctas: 0 / 10</div>
+    </footer>
+
+    <!-- SCRIPT VANILLA JS (100% OFFLINE) -->
+    <script>
+        /* ==========================================================================
+           1. BLOQUEO UNIVERSAL DE MENÚS CONTEXTUALES Y GESTOS PARÁSITOS
+           ========================================================================== */
+        window.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, { capture: true, passive: false });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        }, { capture: true, passive: false });
+
+        document.oncontextmenu = () => false;
+
+        window._dragJustFinished = 0;
+        window.addEventListener('click', function(e) {
+            if (Date.now() < window._dragJustFinished) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }, true);
+
+        /* ==========================================================================
+           2. BANCO DE SITUACIONES COTIDIANAS (Sayula, 3° "A")
+           ========================================================================== */
+        const SCENARIOS = [
+            {
+                student: 'Naomi y Brianna en el Salón',
+                icon: '🍊',
+                text: 'Comer naranjas, guayabas y mandarinas frescas de la región y beber agua simple todos los días para fortalecer las defensas.',
+                correctLight: 'green',
+                reason: '¡Decisión Segura! Las frutas de temporada en Sayula aportan vitamina C y agua, protegiendo las vías respiratorias ante los virus de invierno.'
+            },
+            {
+                student: 'Jarol y Daniel en la Cancha',
+                icon: '👟',
+                text: 'Correr a máxima velocidad y descalzo sobre el piso de la cancha cívica mojado por el sereno matutino.',
+                correctLight: 'red',
+                reason: '¡Peligro Inmediato! El suelo húmedo causa caídas violentas que pueden fracturar huesos o provocar golpes graves en la cabeza.'
+            },
+            {
+                student: 'José Manuel y Alexander en el Recreo',
+                icon: '🥤',
+                text: 'Compartir la misma botella de refresco o agua de jamaica entre varios compañeros tomando directamente del pico.',
+                correctLight: 'yellow',
+                reason: '¡Precaución! Compartir botellas facilita el contagio directo de microbios y virus respiratorios a través de la saliva.'
+            },
+            {
+                student: 'Jesús y Adriel en Casa',
+                icon: '💊',
+                text: 'Sentir fiebre o dolor de garganta y tomar pastillas guardadas en el botiquín sin que un médico las haya recetado.',
+                correctLight: 'red',
+                reason: '¡Peligro Inmediato! La automedicación puede causar intoxicaciones graves. Ante la fiebre, la regla es acudir de inmediato al médico.'
+            },
+            {
+                student: 'Estrella y Yamileth en el Aula',
+                icon: '🤧',
+                text: 'Aplicar el estornudo de etiqueta, cubriendo nariz y boca con la parte interna del codo para no dispersar microbios.',
+                correctLight: 'green',
+                reason: '¡Decisión Segura! El codo atrapa las gotitas de saliva y evita que viajen por el aire a los cuadernos y compañeros del aula.'
+            },
+            {
+                student: 'Keyla y Cristal en la Entrada de la Escuela',
+                icon: '🧣',
+                text: 'Salir al sereno fresco de la tarde sin suéter porque "sienten calor" tras jugar unos minutos.',
+                correctLight: 'yellow',
+                reason: '¡Precaución! El enfriamiento brusco del cuerpo disminuye las defensas de la garganta y aumenta el riesgo de contraer resfriados.'
+            },
+            {
+                student: 'Gael y la Intendente Lupita',
+                icon: '🪟',
+                text: 'Mantener abiertas las ventanas del salón de clases para que el aire circule ventilado y los virus no queden atrapados.',
+                correctLight: 'green',
+                reason: '¡Decisión Segura! La ventilación constante renueva el aire del salón y reduce drásticamente el contagio de enfermedades respiratorias.'
+            },
+            {
+                student: 'Dalary y Keyla en el Aula',
+                icon: '😷',
+                text: 'Colocarse el cubrebocas de inmediato al sentir tos o catarro y guardar distancia preventiva para cuidar a los compañeros.',
+                correctLight: 'green',
+                reason: '¡Decisión Segura y Solidaria! El cubrebocas retiene las microgotas de saliva al hablar o toser y evita contagiar a las y los compañeros.'
+            },
+            {
+                student: 'Gael y Alexander con el Maestro',
+                icon: '🩺',
+                text: 'Sentir dolor de garganta o cuerpo cortado y avisar enseguida al maestro y a la familia para recibir atención médica a tiempo.',
+                correctLight: 'green',
+                reason: '¡Decisión Segura! Atenderse de inmediato ante los primeros síntomas evita complicaciones de salud y protege a toda la comunidad escolar.'
+            },
+            {
+                student: 'Aurora y los Vecinos en la Calle',
+                icon: '🧨',
+                text: 'Comprar y encender cohetes o palomitas de pólvora en la banqueta durante las tardes frías.',
+                correctLight: 'red',
+                reason: '¡Peligro Inmediato! La pirotecnia provoca quemaduras graves, pérdida de dedos y accidentes irreversibles en los ojos.'
+            }
+        ];
+
+        /* ==========================================================================
+           3. ESTADO Y CONTROL DEL JUEGO
+           ========================================================================== */
+        const gameState = {
+            currentIndex: 0,
+            correctCount: 0,
+            selectedChip: false,
+            isDragging: false
+        };
+
+        function renderScenario() {
+            if (gameState.currentIndex >= SCENARIOS.length) {
+                showFinalSummary();
+                return;
+            }
+
+            const current = SCENARIOS[gameState.currentIndex];
+            document.getElementById('student-tag').textContent = current.student;
+            document.getElementById('progress-tag').textContent = `Situación ${gameState.currentIndex + 1} de ${SCENARIOS.length}`;
+            document.getElementById('situation-icon').textContent = current.icon;
+            document.getElementById('situation-text').textContent = current.text;
+            
+            const chip = document.getElementById('active-situation-chip');
+            chip.classList.remove('selected');
+            gameState.selectedChip = false;
+        }
+
+        // Interacción Dual: Toque en Chip para Seleccionar
+        const activeChip = document.getElementById('active-situation-chip');
+
+        activeChip.addEventListener('click', () => {
+            if (Date.now() < window._dragJustFinished) return;
+            gameState.selectedChip = !gameState.selectedChip;
+            activeChip.classList.toggle('selected', gameState.selectedChip);
+
+            document.querySelectorAll('.light-bin').forEach(b => {
+                b.classList.toggle('highlight', gameState.selectedChip);
+            });
+        });
+
+        // Interacción Dual: Pointer Events Drag and Drop
+        let ghostEl = null;
+
+        activeChip.addEventListener('pointerdown', (e) => {
+            gameState.isDragging = true;
+            activeChip.setPointerCapture(e.pointerId);
+
+            ghostEl = document.createElement('div');
+            ghostEl.className = 'drag-ghost';
+            ghostEl.textContent = activeChip.textContent.trim();
+            ghostEl.style.left = e.clientX + 'px';
+            ghostEl.style.top = e.clientY + 'px';
+            document.body.appendChild(ghostEl);
+
+            document.querySelectorAll('.light-bin').forEach(b => b.classList.add('highlight'));
+        });
+
+        activeChip.addEventListener('pointermove', (e) => {
+            if (!gameState.isDragging || !ghostEl) return;
+            ghostEl.style.left = e.clientX + 'px';
+            ghostEl.style.top = e.clientY + 'px';
+        });
+
+        activeChip.addEventListener('pointerup', (e) => {
+            if (!gameState.isDragging) return;
+            gameState.isDragging = false;
+            window._dragJustFinished = Date.now() + 350;
+
+            if (ghostEl) {
+                ghostEl.remove();
+                ghostEl = null;
+            }
+
+            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
+
+            const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+            if (targetEl) {
+                const bin = targetEl.closest('.light-bin');
+                if (bin) {
+                    const color = bin.getAttribute('data-target');
+                    evaluateDecision(color);
+                }
+            }
+        });
+
+        activeChip.addEventListener('pointercancel', () => {
+            gameState.isDragging = false;
+            if (ghostEl) {
+                ghostEl.remove();
+                ghostEl = null;
+            }
+            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
+        });
+
+        // Clic directo sobre el buzón (Tap dual)
+        function handleBinClick(color) {
+            if (gameState.selectedChip) {
+                evaluateDecision(color);
+            }
+        }
+
+        /* ==========================================================================
+           4. EVALUACIÓN Y RETROALIMENTACIÓN FORMATIVA
+           ========================================================================== */
+        function evaluateDecision(chosenLight) {
+            const current = SCENARIOS[gameState.currentIndex];
+            const isMatch = (chosenLight === current.correctLight);
+
+            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
+            activeChip.classList.remove('selected');
+            gameState.selectedChip = false;
+
+            if (isMatch) {
+                gameState.correctCount++;
+                document.getElementById('score-counter').textContent = `Decisiones Correctas: ${gameState.correctCount} / ${SCENARIOS.length}`;
+                
+                // Agregar tarjeta a la lista del buzón
+                const list = document.getElementById(`list-${chosenLight}`);
+                const item = document.createElement('div');
+                item.className = 'classified-item';
+                item.innerHTML = `<strong>${current.student}:</strong> ${current.text}`;
+                list.prepend(item);
+
+                showFeedbackModal(true, current.reason);
+            } else {
+                showFeedbackModal(false, `Esta acción corresponde al buzón <strong>Luz ${getLightName(current.correctLight)}</strong>. ` + current.reason);
+            }
+        }
+
+        function getLightName(color) {
+            if (color === 'green') return 'Verde (Segura)';
+            if (color === 'yellow') return 'Amarilla (Precaución)';
+            return 'Roja (Peligro Inmediato)';
+        }
+
+        function showFeedbackModal(isSuccess, message) {
+            const modal = document.getElementById('feedback-modal');
+            const title = document.getElementById('feedback-status-title');
+            const desc = document.getElementById('feedback-desc-text');
+
+            if (isSuccess) {
+                title.className = 'feedback-status success';
+                title.textContent = '✅ ¡Decisión Correcta!';
+            } else {
+                title.className = 'feedback-status warning';
+                title.textContent = '💡 Reflexión Preventiva';
+            }
+
+            desc.innerHTML = message;
+            modal.classList.add('show');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedback-modal').classList.remove('show');
+            gameState.currentIndex++;
+            renderScenario();
+        }
+
+        function showFinalSummary() {
+            document.getElementById('current-card-container').innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h2 style="color: #34d399; font-size: 24px; margin-bottom: 8px;">¡Desafío de Decisiones Concluido!</h2>
+                    <p style="font-size: 16px; color: #f8fafc; line-height: 1.5; margin-bottom: 16px;">
+                        Has clasificado las 8 situaciones de Sayula. El grupo de 3° "A" ha consolidado criterios éticos y responsables para prevenir riesgos y proteger la salud en invierno.
+                    </p>
+                    <div style="font-size: 20px; font-weight: 800; color: #38bdf8;">
+                        Total de Decisiones Correctas: ${gameState.correctCount} / ${SCENARIOS.length}
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartGame() {
+            gameState.currentIndex = 0;
+            gameState.correctCount = 0;
+            document.getElementById('list-green').innerHTML = '';
+            document.getElementById('list-yellow').innerHTML = '';
+            document.getElementById('list-red').innerHTML = '';
+            document.getElementById('score-counter').textContent = `Decisiones Correctas: 0 / ${SCENARIOS.length}`;
+            location.reload();
+        }
+
+        window.addEventListener('load', () => {
+            renderScenario();
+        });
+    </script>
+</body>
+</html>

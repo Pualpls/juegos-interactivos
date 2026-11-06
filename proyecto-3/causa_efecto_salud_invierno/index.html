@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Guardianes de la Salud en Invierno: Causa y Efecto</title>
+  <style>
+    /* ==========================================================================
+       ESTILOS GLOBALES Y OPTIMIZACIÓN TÁCTIL (Pizarrón Computerland / Linux)
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Fredoka', 'Comic Neue', 'Lexend', 'Comic Sans MS', 'Ubuntu', 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Cabecera del juego */
+    header {
+      background-color: #1e293b;
+      border-bottom: 3px solid #06b6d4;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-title-box h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title-box p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .stat-badge {
+      background: #0f172a;
+      border: 2px solid #334155;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-badge.highlight {
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+
+    /* Barra de navegación de niveles */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #334155;
+    }
+
+    .tab-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 2px solid #334155;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: #334155;
+      color: #f8fafc;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      border-color: #38bdf8;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Contenedor principal */
+    main {
+      flex: 1;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Instrucción didáctica */
+    .instruction-card {
+      background: #1e293b;
+      border-left: 5px solid #06b6d4;
+      padding: 14px 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .instruction-icon {
+      font-size: 28px;
+    }
+
+    .instruction-text h2 {
+      font-size: 17px;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .instruction-text p {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       NIVEL 1: EMPAREJAMIENTO DE CAUSA Y EFECTO
+       ========================================================================== */
+    .match-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .match-board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column-box {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .column-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-item {
+      background: #0f172a;
+      border: 2px solid #334155;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 64px;
+    }
+
+    .card-item:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+    }
+
+    .card-item.selected {
+      border-color: #f59e0b;
+      background: #451a03;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4);
+      transform: scale(1.02);
+    }
+
+    .card-item.matched {
+      background: #064e3b;
+      border-color: #10b981;
+      color: #6ee7b7;
+      cursor: default;
+      pointer-events: none;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .card-item .badge-num {
+      background: #334155;
+      color: #f8fafc;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .card-item.matched .badge-num {
+      background: #10b981;
+      color: #064e3b;
+    }
+
+    /* ==========================================================================
+       NIVEL 2: DETECTIVE DE CONECTORES PARA EL TRÍPTICO
+       ========================================================================== */
+    .connector-quiz-box {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .phrase-container {
+      background: #0f172a;
+      border: 2px dashed #0284c7;
+      border-radius: 14px;
+      padding: 24px;
+      font-size: 19px;
+      line-height: 1.6;
+      text-align: center;
+      color: #f1f5f9;
+    }
+
+    .connector-blank {
+      display: inline-block;
+      min-width: 150px;
+      padding: 4px 16px;
+      background: #1e293b;
+      border-bottom: 3px solid #f59e0b;
+      color: #fbbf24;
+      font-weight: 800;
+      border-radius: 6px;
+      margin: 0 6px;
+    }
+
+    .connector-blank.filled {
+      background: #065f46;
+      border-bottom: 3px solid #10b981;
+      color: #34d399;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .option-btn {
+      background: #0f172a;
+      border: 2px solid #334155;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .option-btn:hover {
+      border-color: #38bdf8;
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .option-btn.correct {
+      background: #065f46;
+      border-color: #10b981;
+      color: #6ee7b7;
+    }
+
+    .option-btn.wrong {
+      background: #7f1d1d;
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    .feedback-banner {
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feedback-banner.success {
+      display: flex;
+      background: #064e3b;
+      border: 1px solid #10b981;
+      color: #a7f3d0;
+    }
+
+    .feedback-banner.error {
+      display: flex;
+      background: #450a0a;
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    /* Modal de victoria */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .victory-card {
+      background: #1e293b;
+      border: 3px solid #f59e0b;
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .victory-card h2 {
+      font-size: 26px;
+      color: #fbbf24;
+    }
+
+    .victory-card p {
+      font-size: 16px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      align-self: center;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado de la Pantalla Computerland -->
+  <header>
+    <div class="header-title-box">
+      <h1>❄️ Causa y Efecto: Guardianes de la Salud en Invierno</h1>
+      <p>3° "A" Primaria Federal "José Clemente Orozco" | Sayula, Jalisco</p>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-badge highlight">⭐ Puntos: <span id="score-val">0</span></div>
+      <div class="stat-badge">🎯 Aciertos: <span id="hits-val">0</span>/6</div>
+    </div>
+  </header>
+
+  <!-- Pestañas de niveles -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" id="tab-lvl1" onclick="switchLevel(1)">
+      <span>🔗</span> Nivel 1: Emparejar Causa y Efecto
+    </button>
+    <button class="tab-btn" id="tab-lvl2" onclick="switchLevel(2)">
+      <span>🔍</span> Nivel 2: Conectores del Tríptico
+    </button>
+  </nav>
+
+  <main>
+    <!-- NIVEL 1 -->
+    <section id="level-1-view">
+      <div class="instruction-card">
+        <span class="instruction-icon">👉</span>
+        <div class="instruction-text">
+          <h2>Toca una CAUSA a la izquierda y luego toca su EFECTO correspondiente a la derecha</h2>
+          <p>Comprende cómo tus hábitos diarios protegen tu cuerpo y previenen resfriados en invierno.</p>
+        </div>
+      </div>
+
+      <div class="match-board">
+        <div class="column-box">
+          <div class="column-title">
+            <span>🔴 CAUSAS (¿Por qué ocurre?)</span>
+            <span id="causas-count">0/6</span>
+          </div>
+          <div id="causas-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <div class="column-box">
+          <div class="column-title">
+            <span>🟢 EFECTOS (¿Qué consecuencia trae?)</span>
+            <span id="efectos-count">0/6</span>
+          </div>
+          <div id="efectos-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NIVEL 2 -->
+    <section id="level-2-view" style="display: none;">
+      <div class="instruction-card">
+        <span class="instruction-icon">✍️</span>
+        <div class="instruction-text">
+          <h2>Detective de Conectores: Completa los enunciados de nuestro Tríptico</h2>
+          <p>Selecciona el nexo adecuado (porque, debido a, por lo tanto, en consecuencia) para unir la causa y el efecto.</p>
+        </div>
+      </div>
+
+      <div class="connector-quiz-box">
+        <div class="phrase-container" id="quiz-phrase">
+          Cargando reactivo...
+        </div>
+
+        <div class="options-grid" id="quiz-options"></div>
+
+        <div class="feedback-banner" id="quiz-feedback"></div>
+
+        <button class="btn-action" id="next-quiz-btn" style="display:none;" onclick="nextQuestion()">Siguiente enunciado ➡️</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de victoria -->
+  <div class="modal-overlay" id="victory-modal">
+    <div class="victory-card">
+      <div style="font-size: 54px;">🏆🎉</div>
+      <h2>¡Misión Cumplida, Guardianes de la Salud!</h2>
+      <p id="victory-msg">Has dominado las relaciones de causa y efecto. ¡Ahora tus textos expositivos y tu tríptico preventivo tendrán explicaciones científicas claras y conectores perfectos!</p>
+      <button class="btn-action" onclick="restartGame()">Volver a jugar 🔄</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* ==========================================================================
+       DATOS DIDÁCTICOS VINCULADOS AL PROYECTO 3 (SALUD E INVIERNO)
+       ========================================================================== */
+    const PAIRS_DATA = [
+      {
+        id: 1,
+        causa: "Salir al patio en una mañana helada de Sayula sin suéter o chamarra.",
+        efecto: "El cuerpo pierde calor rápidamente y bajan las defensas del sistema inmune.",
+        conector: "por lo tanto"
+      },
+      {
+        id: 2,
+        causa: "Lavarse las manos frecuentemente con agua y jabón durante 20 segundos.",
+        efecto: "Se eliminan microbios y virus antes de que entren a la boca, nariz u ojos.",
+        conector: "porque"
+      },
+      {
+        id: 3,
+        causa: "Aplicarse la vacuna contra la influenza estacional antes del frío intenso.",
+        efecto: "El sistema inmunitario genera anticuerpos para combatir la infección.",
+        conector: "debido a que"
+      },
+      {
+        id: 4,
+        causa: "Consumir mandarinas, naranjas y guayabas ricas en vitamina C.",
+        efecto: "Se fortalecen los tejidos del sistema respiratorio frente al invierno.",
+        conector: "en consecuencia"
+      },
+      {
+        id: 5,
+        causa: "Encender leña o anafres en habitaciones cerradas sin ventilación.",
+        efecto: "Se acumula monóxido de carbono provocando riesgo severo de intoxicación.",
+        conector: "por esta razón"
+      },
+      {
+        id: 6,
+        causa: "Estornudar o toser en el ángulo interno del codo (estornudo de etiqueta).",
+        efecto: "Se evita expulsar gotitas de saliva con gérmenes hacia los compañeros.",
+        conector: "de manera que"
+      }
+    ];
+
+    const QUIZ_DATA = [
+      {
+        part1: "En los meses de invierno aumentan los casos de gripe en la escuela",
+        blank: "debido a que",
+        part2: "el frío seco debilita las mucosas de las vías respiratorias.",
+        options: ["debido a que", "aunque", "pero", "mientras"]
+      },
+      {
+        part1: "Los alumnos organizaron una campaña de lavado de manos en Sayula,",
+        blank: "por lo tanto",
+        part2: "disminuyó el contagio de virus estomacales e infecciones respiratorias.",
+        options: ["por lo tanto", "sin embargo", "a pesar de", "ya que no"]
+      },
+      {
+        part1: "Daniel acudió puntualmente a la clínica a recibir su vacuna invernal,",
+        blank: "en consecuencia",
+        part2: "su cuerpo produjo defensas protectoras para no enfermar gravemente.",
+        options: ["en consecuencia", "porque no", "salvo que", "en vez de"]
+      },
+      {
+        part1: "Es peligroso tomar medicamentos sin receta médica,",
+        blank: "porque",
+        part2: "cada organismo reacciona distinto y podemos sufrir una intoxicación.",
+        options: ["porque", "por el contrario", "asimismo", "hasta que"]
+      }
+    ];
+
+    /* ==========================================================================
+       ESTADO DEL JUEGO Y AUDIO SINTETIZADO OFFLINE
+       ========================================================================== */
+    let currentScore = 0;
+    let matchesCount = 0;
+    let selectedCausaId = null;
+    let selectedEfectoId = null;
+    let currentQuizIndex = 0;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15, vol = 0.15) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function soundSuccess() {
+      playTone(523.25, 'triangle', 0.1, 0.2); // C5
+      setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.2), 100); // E5
+      setTimeout(() => playTone(783.99, 'triangle', 0.25, 0.2), 200); // G5
+    }
+
+    function soundError() {
+      playTone(200, 'sawtooth', 0.25, 0.18);
+    }
+
+    function soundClick() {
+      playTone(400, 'sine', 0.05, 0.08);
+    }
+
+    /* ==========================================================================
+       CONTROL DE VISTAS Y NIVELES
+       ========================================================================== */
+    function switchLevel(lvl) {
+      soundClick();
+      const tab1 = document.getElementById('tab-lvl1');
+      const tab2 = document.getElementById('tab-lvl2');
+      const view1 = document.getElementById('level-1-view');
+      const view2 = document.getElementById('level-2-view');
+
+      if (lvl === 1) {
+        tab1.classList.add('active');
+        tab2.classList.remove('active');
+        view1.style.display = 'block';
+        view2.style.display = 'none';
+      } else {
+        tab2.classList.add('active');
+        tab1.classList.remove('active');
+        view2.style.display = 'block';
+        view1.style.display = 'none';
+        renderQuiz();
+      }
+    }
+
+    /* ==========================================================================
+       LÓGICA NIVEL 1: EMPAREJAMIENTO
+       ========================================================================== */
+    function initLevel1() {
+      const causasList = document.getElementById('causas-list');
+      const efectosList = document.getElementById('efectos-list');
+      causasList.innerHTML = '';
+      efectosList.innerHTML = '';
+      matchesCount = 0;
+      selectedCausaId = null;
+      selectedEfectoId = null;
+
+      // Desordenar causas y efectos independientemente
+      const shuffledCausas = [...PAIRS_DATA].sort(() => Math.random() - 0.5);
+      const shuffledEfectos = [...PAIRS_DATA].sort(() => Math.random() - 0.5);
+
+      shuffledCausas.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'card-item';
+        div.id = 'causa-' + item.id;
+        div.innerHTML = `<span class="badge-num">${idx + 1}</span><span>${item.causa}</span>`;
+        div.onclick = () => selectCausa(item.id);
+        causasList.appendChild(div);
+      });
+
+      shuffledEfectos.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'card-item';
+        div.id = 'efecto-' + item.id;
+        div.innerHTML = `<span class="badge-num">${String.fromCharCode(65 + idx)}</span><span>${item.efecto}</span>`;
+        div.onclick = () => selectEfecto(item.id);
+        efectosList.appendChild(div);
+      });
+
+      updateStats();
+    }
+
+    function selectCausa(id) {
+      soundClick();
+      if (selectedCausaId) {
+        const prev = document.getElementById('causa-' + selectedCausaId);
+        if (prev) prev.classList.remove('selected');
+      }
+      selectedCausaId = id;
+      const cur = document.getElementById('causa-' + id);
+      if (cur) cur.classList.add('selected');
+
+      checkMatch();
+    }
+
+    function selectEfecto(id) {
+      soundClick();
+      if (selectedEfectoId) {
+        const prev = document.getElementById('efecto-' + selectedEfectoId);
+        if (prev) prev.classList.remove('selected');
+      }
+      selectedEfectoId = id;
+      const cur = document.getElementById('efecto-' + id);
+      if (cur) cur.classList.add('selected');
+
+      checkMatch();
+    }
+
+    function checkMatch() {
+      if (selectedCausaId !== null && selectedEfectoId !== null) {
+        const causaEl = document.getElementById('causa-' + selectedCausaId);
+        const efectoEl = document.getElementById('efecto-' + selectedEfectoId);
+
+        if (selectedCausaId === selectedEfectoId) {
+          // Acierto
+          soundSuccess();
+          causaEl.classList.remove('selected');
+          causaEl.classList.add('matched');
+          efectoEl.classList.remove('selected');
+          efectoEl.classList.add('matched');
+
+          currentScore += 100;
+          matchesCount++;
+          selectedCausaId = null;
+          selectedEfectoId = null;
+          updateStats();
+
+          if (matchesCount === PAIRS_DATA.length) {
+            setTimeout(() => {
+              document.getElementById('victory-modal').classList.add('active');
+            }, 500);
+          }
+        } else {
+          // Error
+          soundError();
+          setTimeout(() => {
+            if (causaEl) causaEl.classList.remove('selected');
+            if (efectoEl) efectoEl.classList.remove('selected');
+            selectedCausaId = null;
+            selectedEfectoId = null;
+          }, 400);
+        }
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('score-val').innerText = currentScore;
+      document.getElementById('hits-val').innerText = matchesCount;
+      document.getElementById('causas-count').innerText = `${matchesCount}/${PAIRS_DATA.length}`;
+      document.getElementById('efectos-count').innerText = `${matchesCount}/${PAIRS_DATA.length}`;
+    }
+
+    /* ==========================================================================
+       LÓGICA NIVEL 2: CONECTORES
+       ========================================================================== */
+    function renderQuiz() {
+      const q = QUIZ_DATA[currentQuizIndex];
+      const phraseEl = document.getElementById('quiz-phrase');
+      const optionsEl = document.getElementById('quiz-options');
+      const feedbackEl = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('next-quiz-btn');
+
+      feedbackEl.className = 'feedback-banner';
+      feedbackEl.style.display = 'none';
+      nextBtn.style.display = 'none';
+
+      phraseEl.innerHTML = `${q.part1} <span class="connector-blank" id="blank-slot">[¿Qué conector va aquí?]</span> ${q.part2}`;
+
+      optionsEl.innerHTML = '';
+      const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+
+      shuffled.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkQuizAnswer(opt, btn);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedOpt, btnEl) {
+      const q = QUIZ_DATA[currentQuizIndex];
+      const feedbackEl = document.getElementById('quiz-feedback');
+      const blankSlot = document.getElementById('blank-slot');
+      const nextBtn = document.getElementById('next-quiz-btn');
+      const allBtns = document.querySelectorAll('.option-btn');
+
+      if (selectedOpt === q.blank) {
+        soundSuccess();
+        btnEl.classList.add('correct');
+        blankSlot.innerText = selectedOpt;
+        blankSlot.classList.add('filled');
+        currentScore += 150;
+        updateStats();
+
+        feedbackEl.className = 'feedback-banner success';
+        feedbackEl.innerHTML = `✅ <strong>¡Exacto!</strong> El conector <em>"${selectedOpt}"</em> expresa con precisión la relación causal en el tríptico.`;
+        feedbackEl.style.display = 'flex';
+
+        allBtns.forEach(b => b.style.pointerEvents = 'none');
+        nextBtn.style.display = 'inline-block';
+      } else {
+        soundError();
+        btnEl.classList.add('wrong');
+        feedbackEl.className = 'feedback-banner error';
+        feedbackEl.innerHTML = `❌ <strong>Cuidado:</strong> El conector <em>"${selectedOpt}"</em> no expresa correctamente la relación de causa y efecto. ¡Inténtalo de nuevo!`;
+        feedbackEl.style.display = 'flex';
+      }
+    }
+
+    function nextQuestion() {
+      soundClick();
+      currentQuizIndex++;
+      if (currentQuizIndex < QUIZ_DATA.length) {
+        renderQuiz();
+      } else {
+        document.getElementById('victory-msg').innerText = "¡Completaste todos los retos de conectores del tríptico! Tus redacciones de textos expositivos ahora tienen coherencia y estructura formal.";
+        document.getElementById('victory-modal').classList.add('active');
+      }
+    }
+
+    function restartGame() {
+      soundClick();
+      document.getElementById('victory-modal').classList.remove('active');
+      currentScore = 0;
+      currentQuizIndex = 0;
+      initLevel1();
+      switchLevel(1);
+    }
+
+    // Inicializar al cargar
+    window.onload = () => {
+      initLevel1();
+    };
+  </script>
+</body>
+</html>

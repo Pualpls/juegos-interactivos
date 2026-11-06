@@ -1,0 +1,2894 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Exploradores de México! Gran Juego de los Pueblos Originarios</title>
+  <style>
+    :root {
+      --rosa-mexicano: #E4007C;
+      --rosa-dark: #B80063;
+      --turquesa: #00A896;
+      --turquesa-dark: #028090;
+      --amarillo-sol: #F4A261;
+      --naranja-fiesta: #E76F51;
+      --verde-jade: #2A9D8F;
+      --morado-artesania: #6A4C93;
+      --azul-noche: #1D3557;
+      --fondo-crema: #FFFDF9;
+      --fondo-tarjeta: #FFFFFF;
+      --texto-oscuro: #264653;
+      --texto-suave: #5C677D;
+      --borde-radio: 20px;
+      --sombra-suave: 0 8px 24px rgba(38, 70, 83, 0.12);
+      --sombra-boton: 0 4px 12px rgba(228, 0, 124, 0.25);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      font-family: 'Comic Neue', 'Quicksand', 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--fondo-crema);
+      color: var(--texto-oscuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: 
+        radial-gradient(#F4A261 0.75px, transparent 0.75px), 
+        radial-gradient(#2A9D8F 0.75px, var(--fondo-crema) 0.75px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+      overflow-x: hidden;
+    }
+
+    .papel-picado-bar {
+      width: 100%;
+      height: 16px;
+      display: flex;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--rosa-mexicano),
+        var(--rosa-mexicano) 25px,
+        var(--amarillo-sol) 25px,
+        var(--amarillo-sol) 50px,
+        var(--turquesa) 50px,
+        var(--turquesa) 75px,
+        var(--verde-jade) 75px,
+        var(--verde-jade) 100px,
+        var(--morado-artesania) 100px,
+        var(--morado-artesania) 125px
+      );
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    header {
+      width: 100%;
+      max-width: 980px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--rosa-mexicano), var(--naranja-fiesta));
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: var(--sombra-boton);
+      transform: rotate(-3deg);
+    }
+
+    .logo-title h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--azul-noche);
+      line-height: 1.2;
+    }
+
+    .logo-title p {
+      font-size: 0.85rem;
+      color: var(--turquesa-dark);
+      font-weight: 600;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sound-toggle, .btn-secondary, .btn-img-manager {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--texto-oscuro);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .sound-toggle:hover, .btn-secondary:hover, .btn-img-manager:hover {
+      background: #F8FAFC;
+      border-color: var(--turquesa);
+      transform: translateY(-2px);
+    }
+
+    .btn-img-manager {
+      border-color: #CBD5E1;
+      background: #FFFDF9;
+    }
+    .btn-img-manager.has-imgs {
+      border-color: #10B981;
+      color: #065F46;
+      background: #ECFDF5;
+    }
+
+    main {
+      width: 100%;
+      max-width: 980px;
+      padding: 10px 20px 40px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .view {
+      width: 100%;
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* PANTALLA DE INICIO */
+    .hero-card {
+      background: white;
+      border-radius: var(--borde-radio);
+      padding: 35px 30px;
+      box-shadow: var(--sombra-suave);
+      text-align: center;
+      border: 3px solid #F1FAEE;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--rosa-mexicano), var(--amarillo-sol), var(--turquesa), var(--morado-artesania));
+    }
+
+    .tag-aprendizaje {
+      display: inline-block;
+      background: #E8F5E9;
+      color: #2E7D32;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border: 1px solid #C8E6C9;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--azul-noche);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--texto-suave);
+      max-width: 720px;
+      margin: 0 auto 24px;
+      line-height: 1.5;
+    }
+
+    .img-alert-banner {
+      background: #FEF3C7;
+      border: 2px dashed #F59E0B;
+      border-radius: 14px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #92400E;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      text-align: left;
+    }
+
+    .pueblos-badge-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .pueblo-chip {
+      background: #F8F9FA;
+      border: 1.5px solid #E9ECEF;
+      padding: 6px 14px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--azul-noche);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s;
+    }
+
+    .pueblo-chip:hover {
+      transform: scale(1.05);
+      border-color: var(--rosa-mexicano);
+      background: #FFF0F6;
+    }
+
+    .modos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .modo-card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px 20px;
+      border: 2.5px solid #E2E8F0;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .modo-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--sombra-suave);
+    }
+
+    .modo-card.modo-1 { border-color: #FBCFE8; }
+    .modo-card.modo-1:hover { border-color: var(--rosa-mexicano); background: #FFFDFE; }
+    .modo-card.modo-2 { border-color: #CCFBF1; }
+    .modo-card.modo-2:hover { border-color: var(--turquesa); background: #F8FFFE; }
+    .modo-card.modo-3 { border-color: #FEF3C7; }
+    .modo-card.modo-3:hover { border-color: var(--amarillo-sol); background: #FFFDF9; }
+
+    .modo-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .modo-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--azul-noche);
+      margin-bottom: 6px;
+    }
+
+    .modo-card p {
+      font-size: 0.95rem;
+      color: var(--texto-suave);
+      line-height: 1.4;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+
+    .modo-btn {
+      align-self: flex-start;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-rosa { background: var(--rosa-mexicano); }
+    .btn-turquesa { background: var(--turquesa); }
+    .btn-amarillo { background: var(--naranja-fiesta); }
+    .btn-morado { background: var(--morado-artesania); }
+
+    /* Barra de Navegación del Juego */
+    .game-status-bar {
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      padding: 12px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border: 2px solid #EDF2F7;
+    }
+
+    .status-left, .status-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--azul-noche);
+      background: #F8FAFC;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 280px;
+      height: 14px;
+      background: #E2E8F0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 15px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--turquesa), var(--rosa-mexicano));
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    /* TARJETA DE PREGUNTA */
+    .question-card {
+      background: white;
+      border-radius: var(--borde-radio);
+      padding: 30px;
+      box-shadow: var(--sombra-suave);
+      border: 2px solid #EDF2F7;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .question-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--rosa-mexicano);
+      background: #FDF2F8;
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--azul-noche);
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+
+    .question-img-container {
+      text-align: center;
+      margin: 10px 0 20px;
+      display: none;
+    }
+
+    .question-img {
+      max-height: 220px;
+      max-width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      border: 3px solid #F1F5F9;
+    }
+
+    .question-context {
+      background: #F8FAFC;
+      border-left: 4px solid var(--turquesa);
+      padding: 12px 16px;
+      border-radius: 0 12px 12px 0;
+      font-size: 0.98rem;
+      color: var(--texto-oscuro);
+      margin-bottom: 24px;
+      line-height: 1.45;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 600px) {
+      .options-grid.two-cols {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .option-btn {
+      background: white;
+      border: 2.5px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--texto-oscuro);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--turquesa);
+      background: #F0FDFA;
+      transform: translateY(-2px);
+    }
+
+    .option-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #EDF2F7;
+      color: var(--azul-noche);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .option-btn.correct {
+      background: #ECFDF5 !important;
+      border-color: #10B981 !important;
+      color: #065F46 !important;
+    }
+
+    .option-btn.correct .option-indicator {
+      background: #10B981;
+      color: white;
+    }
+
+    .option-btn.incorrect {
+      background: #FEF2F2 !important;
+      border-color: #EF4444 !important;
+      color: #991B1B !important;
+    }
+
+    .option-btn.incorrect .option-indicator {
+      background: #EF4444;
+      color: white;
+    }
+
+    /* Caja de retroalimentación */
+    .feedback-box {
+      margin-top: 24px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      display: none;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .feedback-box.correct {
+      background: #ECFDF5;
+      border: 2px solid #10B981;
+      color: #065F46;
+      display: block;
+    }
+
+    .feedback-box.incorrect {
+      background: #FEF2F2;
+      border: 2px solid #EF4444;
+      color: #991B1B;
+      display: block;
+    }
+
+    .feedback-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .feedback-text {
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .action-btn-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--rosa-mexicano), var(--naranja-fiesta));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 28px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--sombra-boton);
+      transition: all 0.2s;
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(228, 0, 124, 0.35);
+    }
+
+    /* DETECTIVE CULTURAL */
+    .detective-case {
+      background: white;
+      border-radius: var(--borde-radio);
+      padding: 28px;
+      box-shadow: var(--sombra-suave);
+      border: 2px solid #E2E8F0;
+      margin-bottom: 24px;
+    }
+
+    .case-badge {
+      display: inline-block;
+      background: #FEF3C7;
+      color: #92400E;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .clues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .clue-card {
+      background: #F8FAFC;
+      border: 2px dashed #CBD5E1;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .clue-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clue-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .clue-content h4 {
+      font-size: 0.85rem;
+      color: var(--turquesa-dark);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .clue-content p {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--azul-noche);
+      line-height: 1.35;
+    }
+
+    .clue-thumb {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #E2E8F0;
+      display: none;
+    }
+
+    .suspects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .suspect-btn {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: var(--azul-noche);
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .suspect-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid #E2E8F0;
+      display: block;
+    }
+
+    .suspect-emoji-fallback {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .suspect-btn:hover:not(:disabled) {
+      border-color: var(--morado-artesania);
+      background: #FAF5FF;
+      transform: translateY(-3px);
+    }
+
+    .suspect-btn.correct {
+      background: #ECFDF5 !important;
+      border-color: #10B981 !important;
+      color: #065F46 !important;
+    }
+
+    .suspect-btn.incorrect {
+      background: #FEF2F2 !important;
+      border-color: #EF4444 !important;
+      color: #991B1B !important;
+    }
+
+    /* MEMORAMA / ASOCIACIÓN */
+    .match-container {
+      background: white;
+      border-radius: var(--borde-radio);
+      padding: 25px;
+      box-shadow: var(--sombra-suave);
+      margin-bottom: 20px;
+    }
+
+    .match-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .match-header h2 {
+      color: var(--azul-noche);
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .match-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .card-match {
+      background: white;
+      border: 2.5px solid #CBD5E1;
+      border-radius: 16px;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8px 6px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--azul-noche);
+      transition: all 0.25s ease;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+      line-height: 1.3;
+      gap: 5px;
+    }
+
+    .card-match-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-match:hover {
+      transform: translateY(-3px);
+      border-color: var(--turquesa);
+    }
+
+    .card-match.selected {
+      border-color: var(--rosa-mexicano);
+      background: #FFF1F7;
+      transform: scale(0.96);
+    }
+
+    .card-match.matched {
+      background: #D1FAE5;
+      border-color: #10B981;
+      color: #065F46;
+      cursor: default;
+      transform: none;
+      opacity: 0.9;
+    }
+
+    /* EXPLORADOR / PASAPORTE CULTURAL */
+    .passport-filter-bar {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 10px 16px;
+      border: 2px solid #CBD5E1;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      outline: none;
+      width: 100%;
+      max-width: 400px;
+      font-weight: 600;
+      color: var(--texto-oscuro);
+      background: white;
+    }
+
+    .search-input:focus {
+      border-color: var(--turquesa);
+      box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
+    }
+
+    .passport-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .pueblo-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      border: 2px solid #E2E8F0;
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pueblo-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--turquesa);
+    }
+
+    .pueblo-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed #F1F5F9;
+    }
+
+    .pueblo-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #F0FDF4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid #E2E8F0;
+    }
+
+    .pueblo-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pueblo-card-header h3 {
+      font-size: 1.2rem;
+      color: var(--azul-noche);
+      font-weight: 800;
+    }
+
+    .pueblo-card-header span {
+      font-size: 0.82rem;
+      color: var(--texto-suave);
+      font-weight: 600;
+    }
+
+    .pueblo-photo-box {
+      width: 100%;
+      height: 150px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      display: none;
+    }
+
+    .pueblo-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pueblo-info-row {
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .pueblo-info-row strong {
+      color: var(--turquesa-dark);
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* PANTALLA FINAL / RESULTADOS */
+    .results-card {
+      background: white;
+      border-radius: var(--borde-radio);
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: var(--sombra-suave);
+      border: 3px solid #E2E8F0;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .trophy-icon {
+      font-size: 4rem;
+      margin-bottom: 10px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
+    }
+
+    .diploma-box {
+      background: #FFFDF9;
+      border: 4px double var(--amarillo-sol);
+      border-radius: 18px;
+      padding: 24px;
+      margin: 25px 0;
+      text-align: center;
+    }
+
+    .diploma-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--naranja-fiesta);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .student-input {
+      border: 2px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--azul-noche);
+      width: 80%;
+      max-width: 320px;
+      margin: 10px 0 16px;
+      outline: none;
+    }
+
+    .student-input:focus {
+      border-color: var(--rosa-mexicano);
+    }
+
+    .results-stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 20px 0;
+    }
+
+    .result-stat-item {
+      background: #F8FAFC;
+      border-radius: 14px;
+      padding: 12px 20px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .result-stat-val {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--rosa-mexicano);
+    }
+
+    .result-stat-label {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      font-weight: 700;
+    }
+
+    .buttons-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-home {
+      background: white;
+      border: 2px solid #E2E8F0;
+      color: var(--azul-noche);
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-home:hover {
+      border-color: var(--rosa-mexicano);
+      background: #FFF1F7;
+    }
+
+    /* MODAL GESTOR DE IMÁGENES */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 20px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 26px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #F1F5F9;
+    }
+
+    .modal-close {
+      background: #F1F5F9;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--texto-oscuro);
+    }
+
+    .dropzone {
+      border: 3px dashed #CBD5E1;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      background: #F8FAFC;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 20px;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--turquesa);
+      background: #F0FDFA;
+    }
+
+    .img-status-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .img-status-table th {
+      background: #F8FAFC;
+      padding: 8px 12px;
+      text-align: left;
+      color: var(--turquesa-dark);
+      font-weight: 800;
+    }
+
+    .img-status-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #F1F5F9;
+      vertical-align: middle;
+    }
+
+    .badge-ok {
+      background: #DCFCE7;
+      color: #166534;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-missing {
+      background: #FEE2E2;
+      color: #991B1B;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 1.6rem; }
+      .hero-card { padding: 24px 16px; }
+      .question-text { font-size: 1.2rem; }
+      .question-card { padding: 20px 16px; }
+      .clues-grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; }
+      .papel-picado-bar, header, .game-status-bar, .buttons-group, .hero-card, .passport-filter-bar, .modal-overlay {
+        display: none !important;
+      }
+      .results-card {
+        box-shadow: none;
+        border: 2px solid black;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .diploma-box { border: 3px double #333; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="papel-picado-bar"></div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <header>
+    <div class="logo-container" onclick="mostrarVista('inicio')">
+      <div class="logo-badge">🇲🇽</div>
+      <div class="logo-title">
+        <h1>Exploradores de México</h1>
+        <p>Diversidad Cultural y Pueblos Originarios</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <button class="sound-toggle" id="soundBtn" onclick="toggleSonido()">
+        🔊 <span>Sonido: ON</span>
+      </button>
+      <button class="btn-img-manager" id="imgManagerBtn" onclick="abrirGestorImagenes()">
+        🖼️ <span id="imgManagerText">Cargar Imágenes</span>
+      </button>
+      <button class="btn-secondary" onclick="mostrarVista('explorador')">
+        📖 <span>Pasaporte</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- VISTA 1: INICIO -->
+    <section id="vista-inicio" class="view active">
+      <div class="hero-card">
+        <span class="tag-aprendizaje">🌿 Formación Cívica y Ética / Ciencias Sociales</span>
+        <h2 class="hero-title">¡Descubre la Riqueza de Nuestros 10 Pueblos Originarios!</h2>
+        <p class="hero-subtitle">
+          México es un país pluricultural y diverso. Conoce dónde viven, sus tradiciones, comidas,
+          artesanías y leyendas mientras juegas, superas retos y acumulas estrellas.
+        </p>
+
+        <!-- Banner de ayuda rápida sobre imágenes -->
+        <div class="img-alert-banner">
+          <div>
+            <strong>📸 ¿Tus imágenes no cargan o tienen otros nombres?</strong>
+            <p style="margin-top: 2px; font-size: 0.88rem;">
+              Puedes cargarlas o arrastrarlas directamente desde tu computadora con un solo clic.
+            </p>
+          </div>
+          <button class="modo-btn btn-turquesa" style="padding: 6px 14px; font-size: 0.85rem;" onclick="abrirGestorImagenes()">
+            📂 Abrir Gestor de Imágenes
+          </button>
+        </div>
+
+        <div class="pueblos-badge-grid">
+          <span class="pueblo-chip">🌽 Nahuas</span>
+          <span class="pueblo-chip">🏛️ Mayas</span>
+          <span class="pueblo-chip">☁️ Zapotecos</span>
+          <span class="pueblo-chip">🐑 Tseltales y Tsotsiles</span>
+          <span class="pueblo-chip">🎀 Otomíes</span>
+          <span class="pueblo-chip">🪵 Purépechas</span>
+          <span class="pueblo-chip">🏃 Tarahumaras</span>
+          <span class="pueblo-chip">🦌 Wixáritari</span>
+          <span class="pueblo-chip">🕊️ Totonacos</span>
+          <span class="pueblo-chip">🌾 Yoremes</span>
+        </div>
+
+        <div class="modos-container">
+          <div class="modo-card modo-1" onclick="iniciarModoTrivia()">
+            <span class="modo-icon">🎯</span>
+            <h3>Desafío Trivia</h3>
+            <p>Preguntas de opción múltiple y verdadero/falso para poner a prueba lo que sabes sobre sus estados y tradiciones.</p>
+            <button class="modo-btn btn-rosa">¡Jugar Trivia! →</button>
+          </div>
+
+          <div class="modo-card modo-2" onclick="iniciarModoDetective()">
+            <span class="modo-icon">🔍</span>
+            <h3>Detective Cultural</h3>
+            <p>Mira las pistas visuales (ubicación, artesanía o símbolo y comida) y descubre cuál de los 10 pueblos es.</p>
+            <button class="modo-btn btn-turquesa">¡Ser Detective! →</button>
+          </div>
+
+          <div class="modo-card modo-3" onclick="iniciarModoMemorama()">
+            <span class="modo-icon">🧩</span>
+            <h3>Parejas Culturales</h3>
+            <p>Asocia visualmente a cada pueblo con su estado o su símbolo más famoso (muñeca Lele, Voladores, alebrijes, etc.).</p>
+            <button class="modo-btn btn-amarillo">¡Emparejar! →</button>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn-secondary" style="font-size: 1rem; padding: 12px 24px;" onclick="mostrarVista('explorador')">
+            🎒 Abrir Pasaporte Cultural (Fichas ilustradas y buscador)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 2: TRIVIA -->
+    <section id="vista-trivia" class="view">
+      <div class="game-status-bar">
+        <div class="status-left">
+          <button class="btn-home" onclick="mostrarVista('inicio')">← Salir</button>
+          <div class="stat-pill">⭐ <span id="trivia-score">0</span> pts</div>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="trivia-progress"></div>
+        </div>
+        <div class="status-right">
+          <div class="stat-pill">Pregunta <span id="trivia-current">1</span>/<span id="trivia-total">10</span></div>
+        </div>
+      </div>
+
+      <div class="question-card" id="trivia-card">
+        <div class="question-category" id="trivia-badge">UBICACIÓN Y TRADICIONES</div>
+        <h3 class="question-text" id="trivia-question">Cargando pregunta...</h3>
+        
+        <div class="question-img-container" id="trivia-img-box">
+          <img id="trivia-img" class="question-img" src="" alt="Ilustración de la pregunta">
+        </div>
+
+        <div class="question-context" id="trivia-hint" style="display:none;"></div>
+
+        <div class="options-grid" id="trivia-options"></div>
+
+        <div class="feedback-box" id="trivia-feedback">
+          <div class="feedback-header">
+            <span id="feedback-icon">🎉</span>
+            <span id="feedback-title">¡Correcto!</span>
+          </div>
+          <p class="feedback-text" id="feedback-desc">Explicación didáctica...</p>
+        </div>
+
+        <div class="action-btn-container">
+          <button class="btn-next" id="trivia-next-btn" style="display:none;" onclick="siguientePreguntaTrivia()">
+            Siguiente pregunta →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 3: DETECTIVE CULTURAL -->
+    <section id="vista-detective" class="view">
+      <div class="game-status-bar">
+        <div class="status-left">
+          <button class="btn-home" onclick="mostrarVista('inicio')">← Salir</button>
+          <div class="stat-pill">🔍 Caso <span id="det-current">1</span>/<span id="det-total">10</span></div>
+        </div>
+        <div class="status-right">
+          <div class="stat-pill">⭐ Puntos: <span id="det-score">0</span></div>
+        </div>
+      </div>
+
+      <div class="detective-case">
+        <span class="case-badge">🕵️ MISIÓN DE INVESTIGACIÓN</span>
+        <h3 style="font-size: 1.4rem; color: var(--azul-noche); margin-bottom: 8px;">
+          ¿A qué pueblo originario corresponden estas pistas?
+        </h3>
+        <p style="color: var(--texto-suave); font-size: 0.95rem;">
+          Observa y lee atentamente las pistas sobre su ubicación y símbolos. Luego selecciona la cultura correcta:
+        </p>
+
+        <div class="clues-grid">
+          <div class="clue-card">
+            <div class="clue-card-header">
+              <span class="clue-icon">📍</span>
+              <div class="clue-content">
+                <h4>¿Dónde habitan?</h4>
+                <p id="clue-location">Cargando...</p>
+              </div>
+            </div>
+            <img id="clue-img-location" class="clue-thumb" src="" alt="Lugar">
+          </div>
+          
+          <div class="clue-card">
+            <div class="clue-card-header">
+              <span class="clue-icon">🎨</span>
+              <div class="clue-content">
+                <h4>Artesanía o Símbolo</h4>
+                <p id="clue-symbol">Cargando...</p>
+              </div>
+            </div>
+            <img id="clue-img-symbol" class="clue-thumb" src="" alt="Artesanía">
+          </div>
+
+          <div class="clue-card">
+            <div class="clue-card-header">
+              <span class="clue-icon">🌽</span>
+              <div class="clue-content">
+                <h4>Comida o Tradición</h4>
+                <p id="clue-tradition">Cargando...</p>
+              </div>
+            </div>
+            <img id="clue-img-tradition" class="clue-thumb" src="" alt="Tradición">
+          </div>
+        </div>
+
+        <h4 style="margin: 20px 0 12px; color: var(--azul-noche); font-weight: 800;">
+          Selecciona al pueblo originario:
+        </h4>
+        <div class="suspects-grid" id="detective-options"></div>
+
+        <div class="feedback-box" id="detective-feedback">
+          <div class="feedback-header">
+            <span id="det-feedback-icon">🎉</span>
+            <span id="det-feedback-title">¡Misión Cumplida!</span>
+          </div>
+          <p class="feedback-text" id="det-feedback-desc"></p>
+        </div>
+
+        <div class="action-btn-container">
+          <button class="btn-next" id="det-next-btn" style="display:none;" onclick="siguienteCasoDetective()">
+            Siguiente caso →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 4: PAREJAS / ASOCIACIÓN -->
+    <section id="vista-memorama" class="view">
+      <div class="game-status-bar">
+        <div class="status-left">
+          <button class="btn-home" onclick="mostrarVista('inicio')">← Salir</button>
+          <div class="stat-pill">Parejas: <span id="match-found">0</span>/10</div>
+        </div>
+        <div class="status-right">
+          <div class="stat-pill">Intentos: <span id="match-tries">0</span></div>
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 0.85rem;" onclick="iniciarModoMemorama()">Reiniciar</button>
+        </div>
+      </div>
+
+      <div class="match-container">
+        <div class="match-header">
+          <h2>🧩 Conecta cada Pueblo con su Rasgo o Estado</h2>
+          <p style="color: var(--texto-suave); font-size: 0.95rem;">
+            Toca una tarjeta morada (Pueblo) y luego su pareja verde (Estado o Símbolo representativo).
+          </p>
+        </div>
+
+        <div class="match-board" id="match-board"></div>
+      </div>
+    </section>
+
+    <!-- VISTA 5: PASAPORTE CULTURAL (EXPLORADOR) -->
+    <section id="vista-explorador" class="view">
+      <div class="game-status-bar">
+        <div class="status-left">
+          <button class="btn-home" onclick="mostrarVista('inicio')">← Volver al Menú</button>
+        </div>
+        <div class="status-right">
+          <span style="font-weight: 800; color: var(--turquesa-dark);">📚 10 Pueblos Originarios</span>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 18px;">
+        <h2 style="font-size: 1.8rem; color: var(--azul-noche); font-weight: 900;">Pasaporte Cultural de México</h2>
+        <p style="color: var(--texto-suave); max-width: 680px; margin: 6px auto 16px;">
+          Explora los estados donde viven y sus características más importantes con sus imágenes ilustrativas.
+        </p>
+
+        <div class="passport-filter-bar">
+          <input type="text" id="passport-search" class="search-input" placeholder="🔍 Escribe un estado (ej. Oaxaca, Michoacán, Chihuahua) o pueblo..." oninput="filtrarPasaporte()">
+        </div>
+      </div>
+
+      <div class="passport-grid" id="passport-grid"></div>
+    </section>
+
+    <!-- VISTA 6: RESULTADOS / DIPLOMA -->
+    <section id="vista-resultados" class="view">
+      <div class="results-card">
+        <div class="trophy-icon">🏆</div>
+        <h2 style="font-size: 1.8rem; color: var(--azul-noche); font-weight: 900; margin-bottom: 6px;">
+          ¡Felicidades, Gran Explorador(a)!
+        </h2>
+        <p style="color: var(--texto-suave); font-size: 1rem;">
+          Has demostrado que reconoces y valoras la gran diversidad cultural de México.
+        </p>
+
+        <div class="results-stats">
+          <div class="result-stat-item">
+            <div class="result-stat-val" id="res-score">100</div>
+            <div class="result-stat-label">PUNTOS</div>
+          </div>
+          <div class="result-stat-item">
+            <div class="result-stat-val" id="res-accuracy">100%</div>
+            <div class="result-stat-label">ACIERTOS</div>
+          </div>
+        </div>
+
+        <div class="diploma-box">
+          <div class="diploma-title">🏅 DIPLOMA DE RECONOCIMIENTO</div>
+          <p style="font-size: 0.95rem; color: var(--texto-oscuro); margin-bottom: 10px;">
+            Se otorga con orgullo el título de:
+          </p>
+          <p style="font-size: 1.25rem; font-weight: 900; color: var(--morado-artesania); margin-bottom: 12px;">
+            "Guardián de la Diversidad Cultural de México"
+          </p>
+          <input type="text" class="student-input" id="student-name-input" placeholder="Escribe tu nombre aquí" value="Explorador(a) Escolar">
+          <p style="font-size: 0.85rem; color: var(--texto-suave); font-style: italic;">
+            Por reconocer los estados, lenguas, comidas y tradiciones de nuestros pueblos originarios.
+          </p>
+        </div>
+
+        <div class="buttons-group">
+          <button class="btn-next" onclick="window.print()">🖨️ Imprimir Diploma</button>
+          <button class="btn-secondary" onclick="mostrarVista('inicio')">🏠 Menú Principal</button>
+          <button class="modo-btn btn-rosa" onclick="iniciarModoTrivia()">🔄 Jugar de nuevo</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL GESTOR DE IMÁGENES -->
+  <div class="modal-overlay" id="imgModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size: 1.3rem; color: var(--azul-noche); font-weight: 900;">
+            🖼️ Gestor de Imágenes del Juego
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--texto-suave);">
+            Carga o arrastra tus imágenes para que se guarden permanentemente en tu navegador.
+          </p>
+        </div>
+        <button class="modal-close" onclick="cerrarGestorImagenes()">✕</button>
+      </div>
+
+      <div class="dropzone" id="modalDropzone" onclick="document.getElementById('hiddenFileInput').click()">
+        <span style="font-size: 2.2rem; display: block; margin-bottom: 8px;">📂</span>
+        <strong style="color: var(--azul-noche); font-size: 1.05rem;">
+          Haz clic aquí para seleccionar tus imágenes o arrástralas a esta zona
+        </strong>
+        <p style="font-size: 0.85rem; color: var(--texto-suave); margin-top: 4px;">
+          Puedes seleccionar uno, varios o todos los archivos juntos (.jpg, .png, .jpeg, .webp).
+        </p>
+        <input type="file" id="hiddenFileInput" multiple accept="image/*" style="display:none;" onchange="procesarArchivosSubidos(this.files)">
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+        <h4 style="color: var(--azul-noche); font-size: 1rem;">
+          Estado de las imágenes (<span id="modalImgsCount">0</span>/30 detectadas)
+        </h4>
+        <button class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="limpiarImagenesGuardadas()">
+          🗑️ Borrar memoria
+        </button>
+      </div>
+
+      <div style="max-height: 320px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 12px;">
+        <table class="img-status-table">
+          <thead>
+            <tr>
+              <th>Vista</th>
+              <th>Elemento / Pueblo</th>
+              <th>Nombre de archivo esperado</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="imgStatusTbody">
+            <!-- Filas generadas dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="text-align: right; margin-top: 18px;">
+        <button class="btn-next" onclick="cerrarGestorImagenes()">
+          ¡Listo! Volver al Juego
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* =========================================================================
+       1. REGISTRO Y GESTOR DE IMÁGENES (IndexedDB + Aliases + Extensiones)
+       ========================================================================= */
+    const IMAGENES_REGISTRO = [
+      // 1. Nahuas
+      { clave: "pueblo_nahuas", desc: "Pueblo Nahuas (Avatar/Ropa)", aliases: ["pueblo_nahuas", "nahuas", "nahua"] },
+      { clave: "nahuas_papel_amate", desc: "Nahuas: Papel Amate / Pintura", aliases: ["nahuas_papel_amate", "papel_amate", "amate"] },
+      { clave: "nahuas_tlacoyos_mole", desc: "Nahuas: Tlacoyos y Mole Poblano", aliases: ["nahuas_tlacoyos_mole", "nahuas_tlacoyos", "tlacoyos", "mole_poblano", "mole"] },
+
+      // 2. Mayas
+      { clave: "pueblo_mayas", desc: "Pueblo Mayas (Avatar/Hipil)", aliases: ["pueblo_mayas", "mayas", "maya"] },
+      { clave: "mayas_chichen_itza", desc: "Mayas: Chichén Itzá / Cenote", aliases: ["mayas_chichen_itza", "chichen_itza", "kukulcan", "cenote"] },
+      { clave: "mayas_cochinita_pibil", desc: "Mayas: Cochinita Pibil con Achiote", aliases: ["mayas_cochinita_pibil", "cochinita_pibil", "cochinita", "papadzules"] },
+
+      // 3. Zapotecos
+      { clave: "pueblo_zapotecos", desc: "Pueblo Zapotecos (Tehuana)", aliases: ["pueblo_zapotecos", "zapotecos", "zapoteco", "tehuana"] },
+      { clave: "zapotecos_alebrijes", desc: "Zapotecos: Alebrijes / Barro negro", aliases: ["zapotecos_alebrijes", "alebrijes", "alebrije", "barro_negro"] },
+      { clave: "zapotecos_tlayudas", desc: "Zapotecos: Tlayudas con quesillo", aliases: ["zapotecos_tlayudas", "zapotecos_tlayuda", "tlayudas", "tlayuda", "tejate"] },
+
+      // 4. Tseltales y Tsotsiles
+      { clave: "pueblo_tseltales_tsotsiles", desc: "Tseltales y Tsotsiles (Chamula)", aliases: ["pueblo_tseltales_tsotsiles", "tseltales", "tsotsiles", "chamula"] },
+      { clave: "tseltales_lana_borrego", desc: "Tseltales: Ropa de lana de borrego", aliases: ["tseltales_lana_borrego", "lana_borrego", "lana"] },
+      { clave: "tseltales_tascalate", desc: "Tseltales: Bebida de Tascalate", aliases: ["tseltales_tascalate", "tascalate"] },
+
+      // 5. Otomíes
+      { clave: "pueblo_otomies", desc: "Pueblo Otomíes (Avatar)", aliases: ["pueblo_otomies", "otomies", "otomi"] },
+      { clave: "otomies_muneca_lele", desc: "Otomíes: Muñeca de trapo Lele", aliases: ["otomies_muneca_lele", "muneca_lele", "lele", "muñeca_lele", "tenango", "tenangos"] },
+      { clave: "otomies_maguey_barbacoa", desc: "Otomíes: Maguey y Barbacoa de horno", aliases: ["otomies_maguey_barbacoa", "otomies_barbacoa", "barbacoa", "maguey"] },
+
+      // 6. Purépechas
+      { clave: "pueblo_purepechas", desc: "Pueblo Purépechas (Pátzcuaro)", aliases: ["pueblo_purepechas", "purepechas", "purepecha"] },
+      { clave: "purepechas_danza_viejitos", desc: "Purépechas: Danza de los Viejitos", aliases: ["purepechas_danza_viejitos", "danza_viejitos", "viejitos", "cobre_martillado"] },
+      { clave: "purepechas_corundas", desc: "Purépechas: Corundas y Uchepos", aliases: ["purepechas_corundas", "corundas", "corunda", "uchepos"] },
+
+      // 7. Tarahumaras
+      { clave: "pueblo_tarahumaras", desc: "Pueblo Tarahumaras (Ralámuli)", aliases: ["pueblo_tarahumaras", "tarahumaras", "tarahumara", "ralamuli", "raramuri"] },
+      { clave: "tarahumaras_pies_ligeros", desc: "Tarahumaras: Pies ligeros / Carrera", aliases: ["tarahumaras_pies_ligeros", "pies_ligeros", "corredores", "barrancas_cobre"] },
+      { clave: "tarahumaras_pinole", desc: "Tarahumaras: Pinole de maíz", aliases: ["tarahumaras_pinole", "pinole"] },
+
+      // 8. Wixáritari
+      { clave: "pueblo_wixaritaris", desc: "Pueblo Wixáritari (Huicholes)", aliases: ["pueblo_wixaritaris", "wixaritaris", "wixarika", "huicholes", "huichol"] },
+      { clave: "wixaritaris_ojo_de_dios", desc: "Wixáritari: Ojo de Dios (Tsikuri)", aliases: ["wixaritaris_ojo_de_dios", "ojo_de_dios", "tsikuri", "chaquira"] },
+      { clave: "wixaritaris_maiz_sagrado", desc: "Wixáritari: Maíz sagrado / Venado", aliases: ["wixaritaris_maiz_sagrado", "maiz_sagrado", "maiz", "venado_azul"] },
+
+      // 9. Totonacos
+      { clave: "pueblo_totonacos", desc: "Pueblo Totonacos (Traje blanco)", aliases: ["pueblo_totonacos", "totonacos", "totonaco"] },
+      { clave: "totonacos_voladores_papantla", desc: "Totonacos: Voladores de Papantla", aliases: ["totonacos_voladores_papantla", "voladores_papantla", "voladores", "tajin"] },
+      { clave: "totonacos_vainilla", desc: "Totonacos: Vainilla / Zacahuil", aliases: ["totonacos_vainilla", "vainilla", "zacahuil"] },
+
+      // 10. Yoremes
+      { clave: "pueblo_yoremes", desc: "Pueblo Yoremes (Yaquis y Mayos)", aliases: ["pueblo_yoremes", "yoremes", "yoreme", "yaquis", "mayos"] },
+      { clave: "yoremes_danza_venado", desc: "Yoremes: Danza del Venado", aliases: ["yoremes_danza_venado", "danza_venado", "venado", "tenabaris"] },
+      { clave: "yoremes_tortilla_sobaquera", desc: "Yoremes: Tortillas sobaqueras / Wakabaki", aliases: ["yoremes_tortilla_sobaquera", "tortilla_sobaquera", "sobaquera", "sobaqueras", "wakabaki"] }
+    ];
+
+    // Memoria en vivo de imágenes cargadas (base64 o URLs)
+    const imagenesCargadas = {};
+
+    // Abrir o conectar a IndexedDB
+    let db = null;
+    function initDB() {
+      return new Promise((resolve) => {
+        try {
+          const req = indexedDB.open("PueblosOriginariosDB", 1);
+          req.onupgradeneeded = (e) => {
+            const d = e.target.result;
+            if (!d.objectStoreNames.contains("imagenes")) {
+              d.createObjectStore("imagenes");
+            }
+          };
+          req.onsuccess = (e) => {
+            db = e.target.result;
+            cargarImagenesDesdeDB().then(resolve);
+          };
+          req.onerror = () => resolve();
+        } catch(err) {
+          resolve();
+        }
+      });
+    }
+
+    async function cargarImagenesDesdeDB() {
+      if (!db) return;
+      return new Promise((resolve) => {
+        try {
+          const tx = db.transaction("imagenes", "readonly");
+          const store = tx.objectStore("imagenes");
+          const req = store.openCursor();
+          req.onsuccess = (e) => {
+            const cursor = e.target.result;
+            if (cursor) {
+              imagenesCargadas[cursor.key] = cursor.value;
+              cursor.continue();
+            } else {
+              actualizarContadorImagenesHeader();
+              resolve();
+            }
+          };
+          req.onerror = () => resolve();
+        } catch(e) {
+          resolve();
+        }
+      });
+    }
+
+    function guardarImagenEnDB(clave, dataUrl) {
+      imagenesCargadas[clave] = dataUrl;
+      actualizarContadorImagenesHeader();
+      if (!db) return;
+      try {
+        const tx = db.transaction("imagenes", "readwrite");
+        tx.objectStore("imagenes").put(dataUrl, clave);
+      } catch(e) {}
+    }
+
+    function limpiarImagenesGuardadas() {
+      if (!confirm("¿Deseas borrar las imágenes guardadas en el navegador?")) return;
+      for (const k in imagenesCargadas) delete imagenesCargadas[k];
+      if (db) {
+        try {
+          const tx = db.transaction("imagenes", "readwrite");
+          tx.objectStore("imagenes").clear();
+        } catch(e) {}
+      }
+      actualizarContadorImagenesHeader();
+      renderizarTablaEstadoImagenes();
+      renderizarPasaporte();
+    }
+
+    // Normalizador de nombres de archivo
+    function normalizarNombre(nombreArchivo) {
+      let n = nombreArchivo.toLowerCase();
+      // Quitar extensión
+      n = n.replace(/\.[a-z0-9]+$/i, "");
+      // Reemplazar acentos, guiones y espacios
+      n = n.normalize("NFD").replace(/[̀-ͯ]/g, "");
+      n = n.replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").trim();
+      return n;
+    }
+
+    function procesarArchivosSubidos(files) {
+      if (!files || !files.length) return;
+      Array.from(files).forEach(file => {
+        const norm = normalizarNombre(file.name);
+        
+        // Buscar a qué clave corresponde
+        let claveAsignada = null;
+        for (const item of IMAGENES_REGISTRO) {
+          for (const alias of item.aliases) {
+            if (norm === alias || norm.includes(alias) || alias.includes(norm)) {
+              claveAsignada = item.clave;
+              break;
+            }
+          }
+          if (claveAsignada) break;
+        }
+
+        if (claveAsignada) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            guardarImagenEnDB(claveAsignada, e.target.result);
+            renderizarTablaEstadoImagenes();
+            renderizarPasaporte();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    /* Rutas candidatas para cargar una imagen (intenta carpetas y extensiones comunes) */
+    function obtenerCandidatosRuta(clave) {
+      if (imagenesCargadas[clave]) {
+        return [imagenesCargadas[clave]];
+      }
+      const carpetas = ["imagenes/", "imágenes/", "img/", ""];
+      const extensiones = [".jpg", ".png", ".jpeg", ".webp", ".JPG", ".PNG"];
+      const candidatos = [];
+      carpetas.forEach(c => {
+        extensiones.forEach(ext => {
+          candidatos.push(c + clave + ext);
+        });
+      });
+      return candidatos;
+    }
+
+    /* Asignador de imagen con fallback progresivo de extensiones */
+    function asignarSrcConFallback(imgElement, clave, onFailHide = true, containerElem = null) {
+      if (!imgElement) return;
+
+      if (imagenesCargadas[clave]) {
+        imgElement.src = imagenesCargadas[clave];
+        imgElement.style.display = "block";
+        if (containerElem) containerElem.style.display = "block";
+        return;
+      }
+
+      const candidatos = obtenerCandidatosRuta(clave);
+      let index = 0;
+
+      imgElement.onerror = function() {
+        index++;
+        if (index < candidatos.length) {
+          imgElement.src = candidatos[index];
+        } else {
+          // Ya no hay más candidatos
+          imgElement.onerror = null;
+          if (onFailHide) {
+            imgElement.style.display = "none";
+            if (containerElem) containerElem.style.display = "none";
+          }
+        }
+      };
+
+      imgElement.onload = function() {
+        imgElement.style.display = "block";
+        if (containerElem) containerElem.style.display = "block";
+        // Guardar que esta clave sí fue encontrada para actualizar tabla
+        imagenesCargadas[clave] = imgElement.src;
+        actualizarContadorImagenesHeader();
+      };
+
+      imgElement.src = candidatos[0];
+    }
+
+    function actualizarContadorImagenesHeader() {
+      const count = Object.keys(imagenesCargadas).length;
+      const btnText = document.getElementById("imgManagerText");
+      const btn = document.getElementById("imgManagerBtn");
+      if (btnText && btn) {
+        if (count > 0) {
+          btnText.innerText = `Imágenes: ${count}/30`;
+          btn.classList.add("has-imgs");
+        } else {
+          btnText.innerText = "Cargar Imágenes";
+          btn.classList.remove("has-imgs");
+        }
+      }
+      const modalCount = document.getElementById("modalImgsCount");
+      if (modalCount) modalCount.innerText = count;
+    }
+
+    function abrirGestorImagenes() {
+      renderizarTablaEstadoImagenes();
+      document.getElementById("imgModal").style.display = "flex";
+    }
+
+    function cerrarGestorImagenes() {
+      document.getElementById("imgModal").style.display = "none";
+    }
+
+    function renderizarTablaEstadoImagenes() {
+      const tbody = document.getElementById("imgStatusTbody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      IMAGENES_REGISTRO.forEach(item => {
+        const tiene = !!imagenesCargadas[item.clave];
+        const tr = document.createElement("tr");
+
+        let thumbHtml = "⚪";
+        if (tiene) {
+          thumbHtml = `<img src="${imagenesCargadas[item.clave]}" style="width:36px; height:36px; border-radius:6px; object-fit:cover;">`;
+        }
+
+        tr.innerHTML = `
+          <td style="text-align:center;">${thumbHtml}</td>
+          <td><strong>${item.desc}</strong></td>
+          <td><code style="background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:0.8rem;">${item.clave}.jpg</code></td>
+          <td>
+            ${tiene 
+              ? '<span class="badge-ok">✅ Cargada</span>' 
+              : '<span class="badge-missing">⚠️ Pendiente</span>'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      actualizarContadorImagenesHeader();
+    }
+
+    // Configurar Drag and Drop en el Dropzone
+    document.addEventListener("DOMContentLoaded", () => {
+      const dropzone = document.getElementById("modalDropzone");
+      if (dropzone) {
+        ['dragenter', 'dragover'].forEach(name => {
+          dropzone.addEventListener(name, (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+          }, false);
+        });
+        ['dragleave', 'drop'].forEach(name => {
+          dropzone.addEventListener(name, (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+          }, false);
+        });
+        dropzone.addEventListener('drop', (e) => {
+          const dt = e.dataTransfer;
+          if (dt && dt.files) {
+            procesarArchivosSubidos(dt.files);
+          }
+        }, false);
+      }
+    });
+
+    /* =========================================================================
+       2. BASE DE DATOS DE LOS 10 PUEBLOS ORIGINARIOS
+       ========================================================================= */
+    const PUEBLOS_DATA = [
+      {
+        id: "nahuas",
+        nombre: "Nahuas",
+        icono: "🌽",
+        clavePueblo: "pueblo_nahuas",
+        claveArtesania: "nahuas_papel_amate",
+        claveComida: "nahuas_tlacoyos_mole",
+        estados: "Puebla, Hidalgo, Veracruz, Guerrero, San Luis Potosí, Estado de México, CDMX, Tlaxcala y Morelos.",
+        resumenEstados: "Centro y sur de México (Puebla, Hidalgo, Edomex, CDMX, Guerrero, Veracruz)",
+        lengua: "Náhuatl (palabras como chocolate, aguacate, papalote y tianguis).",
+        artesania: "Pinturas en papel amate con flores y aves, cazuelas de barro.",
+        comida: "Tlacoyos de frijol con nopales y mole poblano.",
+        simbolo: "Es el pueblo indígena más numeroso de México; nos legaron palabras que usamos todos los días.",
+        leyenda: "La leyenda del Conejo en la Luna y el Tlacuache que llevó el fuego."
+      },
+      {
+        id: "mayas",
+        nombre: "Mayas",
+        icono: "🏛️",
+        clavePueblo: "pueblo_mayas",
+        claveArtesania: "mayas_chichen_itza",
+        claveComida: "mayas_cochinita_pibil",
+        estados: "Península de Yucatán (Yucatán, Campeche, Quintana Roo), Chiapas y Tabasco.",
+        resumenEstados: "Península de Yucatán (Yucatán, Campeche, Quintana Roo), Chiapas y Tabasco",
+        lengua: "Maya peninsular.",
+        artesania: "Hamacas tejidas de henequén y bordados en punto de cruz.",
+        comida: "Cochinita pibil cocinada bajo tierra con achiote y papadzules.",
+        simbolo: "Famosos por sus pirámides (como Chichén Itzá), los cenotes sagrados y los aluxes (cuidadores de la milpa).",
+        leyenda: "Los Aluxes de la milpa y el pájaro Dziú que rescató el maíz."
+      },
+      {
+        id: "zapotecos",
+        nombre: "Zapotecos (Gente de las Nubes)",
+        icono: "☁️",
+        clavePueblo: "pueblo_zapotecos",
+        claveArtesania: "zapotecos_alebrijes",
+        claveComida: "zapotecos_tlayudas",
+        estados: "Oaxaca (Valles Centrales, Sierra Juárez y el Istmo de Tehuantepec).",
+        resumenEstados: "Oaxaca",
+        lengua: "Zapoteco (Diidxazá).",
+        artesania: "Alebrijes de madera de copal y piezas de barro negro pulido.",
+        comida: "Tlayudas con quesillo, mole negro y la bebida tradicional tejate.",
+        simbolo: "El traje de tehuana con flores gigantes bordadas y la ciudad sagrada de Monte Albán.",
+        leyenda: "La princesa Donají y el Árbol del Tule (el árbol con el tronco más grueso del planeta)."
+      },
+      {
+        id: "tseltales_tsotsiles",
+        nombre: "Tseltales y Tsotsiles",
+        icono: "🐑",
+        clavePueblo: "pueblo_tseltales_tsotsiles",
+        claveArtesania: "tseltales_lana_borrego",
+        claveComida: "tseltales_tascalate",
+        estados: "Chiapas (Los Altos de Chiapas: San Juan Chamula, Zinacantán, Tenejapa).",
+        resumenEstados: "Chiapas (Los Altos de Chiapas)",
+        lengua: "Tseltal y Tsotsil.",
+        artesania: "Ropa abrigadora tejida con lana virgen de borrego y huipiles bordados.",
+        comida: "Bebida de tascalate (maíz tostado, cacao y achiote naranja) y café de altura.",
+        simbolo: "Viven en montañas frías y nebulosas; sus templos se perfuman con ramas de pino oloroso en el suelo.",
+        leyenda: "El colibrí mensajero de amor y los espíritus guardianes de las cuevas de lluvia."
+      },
+      {
+        id: "otomies",
+        nombre: "Otomíes (Hñähñu)",
+        icono: "🎀",
+        clavePueblo: "pueblo_otomies",
+        claveArtesania: "otomies_muneca_lele",
+        claveComida: "otomies_maguey_barbacoa",
+        estados: "Hidalgo (Valle del Mezquital), Estado de México y Querétaro (Amealco).",
+        resumenEstados: "Hidalgo, Estado de México y Querétaro",
+        lengua: "Hñähñu.",
+        artesania: "La muñeca tradicional de trapo Lele (con trenzas de listones) y los bordados de Tenangos.",
+        comida: "Barbacoa tradicional en horno de tierra con pencas de maguey.",
+        simbolo: "Cuidadores del maguey sagrado, del cual obtenían fibras para vestir y agua dulce.",
+        leyenda: "La diosa Mayáhuel que regaló el maguey al pueblo."
+      },
+      {
+        id: "purepechas",
+        nombre: "Purépechas",
+        icono: "🪵",
+        clavePueblo: "pueblo_purepechas",
+        claveArtesania: "purepechas_danza_viejitos",
+        claveComida: "purepechas_corundas",
+        estados: "Michoacán (alrededor del Lago de Pátzcuaro y la Meseta Purépecha).",
+        resumenEstados: "Michoacán",
+        lengua: "P'urhépecha (una lengua única en el mundo).",
+        artesania: "Cazo de cobre martillado a mano en Santa Clara del Cobre y cestería de chuspata.",
+        comida: "Corundas (tamales triangulares envueltos en hoja verde) y uchepos de elote tierno.",
+        simbolo: "La alegre Danza de los Viejitos con bastones y máscaras de madera sonrientes.",
+        leyenda: "La Danza de los Viejitos como muestra de que la alegría del alma nunca envejece."
+      },
+      {
+        id: "tarahumaras",
+        nombre: "Tarahumaras (Ralámuli)",
+        icono: "🏃",
+        clavePueblo: "pueblo_tarahumaras",
+        claveArtesania: "tarahumaras_pies_ligeros",
+        claveComida: "tarahumaras_pinole",
+        estados: "Chihuahua (en la Sierra Tarahumara y las Barrancas del Cobre).",
+        resumenEstados: "Chihuahua (Sierra Tarahumara)",
+        lengua: "Ralámuli.",
+        artesania: "Tambores de cuero y canastas tejidas con hojas largas de pino.",
+        comida: "Pinole de maíz tostado con agua fresca (bebida que les da energía para correr).",
+        simbolo: "Conocidos como 'los de los pies ligeros'; corren maratones enteros por senderos rocosos con huaraches.",
+        leyenda: "La carrera de la bola (Rarajipari), que mantiene al mundo girando."
+      },
+      {
+        id: "wixaritaris",
+        nombre: "Wixáritari (Huicholes)",
+        icono: "🦌",
+        clavePueblo: "pueblo_wixaritaris",
+        claveArtesania: "wixaritaris_ojo_de_dios",
+        claveComida: "wixaritaris_maiz_sagrado",
+        estados: "Jalisco (norte), Nayarit, Durango y Zacatecas.",
+        resumenEstados: "Jalisco, Nayarit, Durango y Zacatecas",
+        lengua: "Wixarika.",
+        artesania: "El amuleto Ojo de Dios (Tsikuri) y figuras cubiertas con diminutas chaquiras de colores vivos.",
+        comida: "Maíz sagrado de cinco colores (blanco, azul, rojo, amarillo y pinto).",
+        simbolo: "Su arte espiritual lleno de colores brillantes y su respeto por el sagrado Venado Azul (Kauyumari).",
+        leyenda: "El Venado Azul que guió a los cazadores en el desierto y trajo bienestar."
+      },
+      {
+        id: "totonacos",
+        nombre: "Totonacos",
+        icono: "🕊️",
+        clavePueblo: "pueblo_totonacos",
+        claveArtesania: "totonacos_voladores_papantla",
+        claveComida: "totonacos_vainilla",
+        estados: "Veracruz (Papantla y El Tajín) y norte de Puebla.",
+        resumenEstados: "Veracruz y norte de Puebla",
+        lengua: "Tutunakú.",
+        artesania: "Coronas con flores y espejos, y figuras trenzadas con vainas de vainilla aromática.",
+        comida: "Zacahuil (un tamal gigante ceremonial de más de un metro de largo) y dulces de vainilla.",
+        simbolo: "La impresionante ceremonia de los Voladores de Papantla y la Pirámide de los Nichos.",
+        leyenda: "El vuelo de los cinco hombres pájaro para pedir lluvia fértil a la tierra."
+      },
+      {
+        id: "yoremes",
+        nombre: "Yoremes (Mayos y Yaquis)",
+        icono: "🌾",
+        clavePueblo: "pueblo_yoremes",
+        claveArtesania: "yoremes_danza_venado",
+        claveComida: "yoremes_tortilla_sobaquera",
+        estados: "Sonora (valles de los ríos Yaqui y Mayo) y norte de Sinaloa.",
+        resumenEstados: "Sonora y norte de Sinaloa",
+        lengua: "Jiak nokpo / Yoremnokpo.",
+        artesania: "Sonajas de calabaza y tiras de capullos de mariposa (tenábaris) para los tobillos.",
+        comida: "Caldo wakabaki de res con verduras y tortillas gigantes de harina ('sobaqueras').",
+        simbolo: "La emblemática Danza del Venado, donde el danzante porta una cabeza de venado en la frente.",
+        leyenda: "La Danza del Venado como tributo a la naturaleza y al monte sagrado."
+      }
+    ];
+
+    /* =========================================================================
+       3. BANCO DE PREGUNTAS (TRIVIA)
+       ========================================================================= */
+    const TRIVIA_QUESTIONS = [
+      {
+        categoria: "UBICACIÓN Y ESTADOS",
+        pregunta: "¿En qué estado del norte de México viven los Tarahumaras (Ralámuli), famosos por correr grandes distancias en las Barrancas del Cobre?",
+        pista: "Es el estado más grande de México.",
+        claveImg: "tarahumaras_pies_ligeros",
+        opciones: ["Chihuahua", "Yucatán", "Oaxaca", "Puebla"],
+        correcta: 0,
+        explicacion: "Los Tarahumaras viven en la Sierra de Chihuahua y son conocidos como 'los de los pies ligeros' por su asombrosa resistencia para correr."
+      },
+      {
+        categoria: "TRADICIONES Y FIESTAS",
+        pregunta: "La alegre Danza de los Viejitos, bailada con bastones de madera y máscaras sonrientes, ¿de qué pueblo originario y estado es representativa?",
+        pista: "Habitan en la zona del Lago de Pátzcuaro.",
+        claveImg: "purepechas_danza_viejitos",
+        opciones: ["Mayas de Yucatán", "Purépechas de Michoacán", "Totonacos de Veracruz", "Yoremes de Sonora"],
+        correcta: 1,
+        explicacion: "Los Purépechas de Michoacán crearon la Danza de los Viejitos para mostrar que la alegría y el espíritu nunca envejecen."
+      },
+      {
+        categoria: "ARTESANÍAS MEXICANAS",
+        pregunta: "La tierna muñequita de trapo 'Lele', que lleva trenzas y una hermosa corona de listones de colores, es una creación tradicional de:",
+        pista: "Este pueblo habita principalmente en Querétaro, Hidalgo y Estado de México.",
+        claveImg: "otomies_muneca_lele",
+        opciones: ["Los Mayas", "Los Zapotecos", "Los Otomíes", "Los Wixáritari"],
+        correcta: 2,
+        explicacion: "La muñeca Lele fue creada por artesanas del pueblo Otomí (Hñähñu) de Querétaro y hoy es símbolo de orgullo en todo México."
+      },
+      {
+        categoria: "CEREMONIAS Y TRADICIONES",
+        pregunta: "Los impresionantes 'Voladores de Papantla', que descienden girando atados de los tobillos desde lo alto de un gran poste, pertenecen a la tradición de:",
+        pista: "Viven en el norte de Veracruz y cultivan deliciosa vainilla.",
+        claveImg: "totonacos_voladores_papantla",
+        opciones: ["Los Totonacos de Veracruz", "Los Tarahumaras de Chihuahua", "Los Nahuas de la CDMX", "Los Zapotecos de Oaxaca"],
+        correcta: 0,
+        explicacion: "Los Totonacos de Veracruz realizan este ritual de los 'hombres pájaro' para pedir lluvias y fertilidad para la tierra."
+      },
+      {
+        categoria: "LENGUAS Y PALABRAS",
+        pregunta: "Palabras tan cotidianas como 'chocolate', 'aguacate', 'tianguis' y 'papalote' provienen de la lengua náhuatl. ¿Qué pueblo las heredó a México y al mundo?",
+        pista: "Es el pueblo originario más numeroso de nuestro país.",
+        claveImg: "nahuas_papel_amate",
+        opciones: ["Los Nahuas", "Los Mayas", "Los Purépechas", "Los Wixáritari"],
+        correcta: 0,
+        explicacion: "Los Nahuas hablaron náhuatl y de ellos conservamos cientos de palabras que usamos diariamente en el español mexicano."
+      },
+      {
+        categoria: "UBICACIÓN Y ESTADOS",
+        pregunta: "¿En qué región de la República Mexicana se ubica principalmente el pueblo Maya?",
+        pista: "Es una península rodeada por el Mar Caribe y el Golfo de México.",
+        claveImg: "mayas_chichen_itza",
+        opciones: [
+          "Sonora y Sinaloa",
+          "Península de Yucatán (Yucatán, Campeche, Quintana Roo), Chiapas y Tabasco",
+          "Chihuahua y Durango",
+          "Michoacán y Colima"
+        ],
+        correcta: 1,
+        explicacion: "Los Mayas habitan en la península de Yucatán, Chiapas y Tabasco, tierra de grandes pirámides y cenotes sagrados."
+      },
+      {
+        categoria: "ARTE Y SÍMBOLOS",
+        pregunta: "El 'Ojo de Dios' (Tsikuri) hecho con estambres de muchos colores y las coloridas figuras decoradas con chaquiras son arte característico de:",
+        pista: "Viven en el norte de Jalisco, Nayarit, Durango y Zacatecas.",
+        claveImg: "wixaritaris_ojo_de_dios",
+        opciones: ["Los Wixáritari (Huicholes)", "Los Otomíes", "Los Totonacos", "Los Tseltales"],
+        correcta: 0,
+        explicacion: "Los Wixáritari (Huicholes) elaboran el Ojo de Dios como un amuleto sagrado de protección y bendición."
+      },
+      {
+        categoria: "COMIDA Y TRADICIÓN",
+        pregunta: "Las deliciosas tlayudas con quesillo, el barro negro y los alebrijes de madera de copal son tesoros culturales del pueblo:",
+        pista: "Viven en el estado de Oaxaca.",
+        claveImg: "zapotecos_alebrijes",
+        opciones: ["Tarahumara", "Zapoteco", "Purépecha", "Yoreme"],
+        correcta: 1,
+        explicacion: "Los Zapotecos de Oaxaca crearon estos deliciosos platillos y hermosas artesanías de barro negro y alebrijes."
+      },
+      {
+        categoria: "TRADICIONES Y DANZA",
+        pregunta: "En Sonora y el norte de Sinaloa, los Yoremes (Yaquis y Mayos) realizan una danza muy especial donde el bailarín lleva:",
+        pista: "Representa a un animal sagrado del monte.",
+        claveImg: "yoremes_danza_venado",
+        opciones: [
+          "Una corona de plumas de pavo real",
+          "Una cabeza de venado en la frente y capullos sonoros en los tobillos",
+          "Una máscara gigante de madera de viejito",
+          "Alas de tela de mariposa monarca"
+        ],
+        correcta: 1,
+        explicacion: "En la Danza del Venado de los Yoremes, el danzante porta la cabeza de venado y capullos (tenábaris) en los tobillos para honrar a la naturaleza."
+      },
+      {
+        categoria: "VESTIMENTA Y CLIMA",
+        pregunta: "Los pueblos Tseltal y Tsotsil habitan en las montañas frías de Chiapas. Por eso, una de sus prendas tradicionales más importantes está hecha de:",
+        pista: "Proviene de un animalito de granja que da mucho calor.",
+        claveImg: "tseltales_lana_borrego",
+        opciones: ["Lana calientita de borrego", "Fibras de maguey del desierto", "Hojas secas de plátano", "Plumas de pelícano"],
+        correcta: 0,
+        explicacion: "En comunidades como San Juan Chamula usan chalecos y faldas de lana de borrego para protegerse del frío de las montañas de Chiapas."
+      },
+      {
+        categoria: "DIVERSIDAD Y DERECHOS",
+        pregunta: "¿Verdadero o Falso? Los pueblos originarios sólo vivieron en la antigüedad prehispánica y hoy en día ya no existen en México.",
+        pista: "Piensa en las personas que hoy hablan estas lenguas y conservan sus tradiciones.",
+        claveImg: null,
+        opciones: [
+          "Verdadero (sólo existieron en el pasado)",
+          "Falso (siguen vivos, presentes y forman parte esencial de nuestro país)"
+        ],
+        correcta: 1,
+        explicacion: "Los pueblos originarios siguen vivos y activos hoy en día. Con sus lenguas y tradiciones enriquecen la vida de todo México."
+      }
+    ];
+
+    /* =========================================================================
+       4. CASOS DE DETECTIVE CULTURAL
+       ========================================================================= */
+    const DETECTIVE_CASES = [
+      {
+        puebloId: "otomies",
+        ubicacion: "Hidalgo, Querétaro y Estado de México.",
+        simbolo: "Muñeca de trapo Lele y bordados de Tenangos.",
+        tradicion: "Aprovechan el maguey y preparan rica barbacoa de horno.",
+        claveSymbol: "otomies_muneca_lele",
+        claveTradition: "otomies_maguey_barbacoa",
+        opciones: ["Nahuas", "Otomíes", "Mayas", "Zapotecos"],
+        explicacion: "Se trata de los Otomíes (Hñähñu), creadores de la muñeca Lele y los coloridos Tenangos."
+      },
+      {
+        puebloId: "tarahumaras",
+        ubicacion: "Sierra Tarahumara y Barrancas del Cobre en Chihuahua.",
+        simbolo: "Huaraches resistentes y cinta kowéra en la frente.",
+        tradicion: "Beben pinole para correr cientos de kilómetros por la montaña.",
+        claveSymbol: "tarahumaras_pies_ligeros",
+        claveTradition: "tarahumaras_pinole",
+        opciones: ["Tarahumaras", "Purépechas", "Yoremes", "Totonacos"],
+        explicacion: "Son los Tarahumaras (Ralámuli), conocidos como 'los de los pies ligeros' de Chihuahua."
+      },
+      {
+        puebloId: "wixaritaris",
+        ubicacion: "Norte de Jalisco, Nayarit, Durango y Zacatecas.",
+        simbolo: "El amuleto 'Ojo de Dios' y figuras con chaquiras de colores brillantes.",
+        tradicion: "Honran el maíz de cinco colores y protegen al Venado Azul sagrado.",
+        claveSymbol: "wixaritaris_ojo_de_dios",
+        claveTradition: "wixaritaris_maiz_sagrado",
+        opciones: ["Zapotecos", "Wixáritari", "Tseltales", "Nahuas"],
+        explicacion: "Son los Wixáritari (Huicholes), famosos por sus cuadros de estambre y figuras de chaquira en Jalisco y Nayarit."
+      },
+      {
+        puebloId: "totonacos",
+        ubicacion: "Norte de Veracruz (Papantla) y norte de Puebla.",
+        simbolo: "El poste de los Voladores de Papantla y la Pirámide de los Nichos.",
+        tradicion: "Cosechan aromática vainilla y preparan el zacahuil (tamal gigante).",
+        claveSymbol: "totonacos_voladores_papantla",
+        claveTradition: "totonacos_vainilla",
+        opciones: ["Totonacos", "Mayas", "Purépechas", "Otomíes"],
+        explicacion: "Son los Totonacos de Veracruz, herederos del ritual de los voladores y el aroma de la vainilla."
+      },
+      {
+        puebloId: "purepechas",
+        ubicacion: "Michoacán, junto al bello Lago de Pátzcuaro.",
+        simbolo: "Máscaras de madera sonrientes para la Danza de los Viejitos.",
+        tradicion: "Trabajan el cobre martillado en Santa Clara y cocinan ricas corundas.",
+        claveSymbol: "purepechas_danza_viejitos",
+        claveTradition: "purepechas_corundas",
+        opciones: ["Purépechas", "Zapotecos", "Yoremes", "Nahuas"],
+        explicacion: "Son los Purépechas de Michoacán, reconocidos por su música, cobre y la Danza de los Viejitos."
+      },
+      {
+        puebloId: "mayas",
+        ubicacion: "Península de Yucatán (Yucatán, Campeche, Quintana Roo), Chiapas y Tabasco.",
+        simbolo: "Pirámide de Kukulcán (Chichén Itzá) y cenotes sagrados.",
+        tradicion: "Cochinita pibil con achiote y hamacas frescas de henequén.",
+        claveSymbol: "mayas_chichen_itza",
+        claveTradition: "mayas_cochinita_pibil",
+        opciones: ["Mayas", "Otomíes", "Totonacos", "Tarahumaras"],
+        explicacion: "Son los Mayas, una cultura milenaria de la península de Yucatán y el sureste mexicano."
+      },
+      {
+        puebloId: "zapotecos",
+        ubicacion: "Oaxaca (Valles Centrales, Sierra e Istmo de Tehuantepec).",
+        simbolo: "Alebrijes de copal, barro negro y trajes de tehuana con flores.",
+        tradicion: "Comen tlayudas con quesillo y toman tejate bien espumoso.",
+        claveSymbol: "zapotecos_alebrijes",
+        claveTradition: "zapotecos_tlayudas",
+        opciones: ["Zapotecos", "Wixáritari", "Purépechas", "Tseltales"],
+        explicacion: "Son los Zapotecos de Oaxaca, conocidos como la 'Gente de las Nubes' y creadores de los alebrijes."
+      },
+      {
+        puebloId: "yoremes",
+        ubicacion: "Valles de los ríos en Sonora y norte de Sinaloa.",
+        simbolo: "Cabeza de venado en la frente y capullos tenábaris en los tobillos.",
+        tradicion: "La Danza del Venado y ricas tortillas gigantes de harina (sobaqueras).",
+        claveSymbol: "yoremes_danza_venado",
+        claveTradition: "yoremes_tortilla_sobaquera",
+        opciones: ["Yoremes", "Tarahumaras", "Mayas", "Nahuas"],
+        explicacion: "Son los Yoremes (Yaquis y Mayos) de Sonora y Sinaloa, guardianes del venado sagrado."
+      },
+      {
+        puebloId: "tseltales_tsotsiles",
+        ubicacion: "Los Altos de Chiapas (como San Juan Chamula y Zinacantán).",
+        simbolo: "Capas y faldas de lana calientita de borrego y ramas de pino oloroso.",
+        tradicion: "Bebida de tascalate color naranja con cacao y café de las montañas.",
+        claveSymbol: "tseltales_lana_borrego",
+        claveTradition: "tseltales_tascalate",
+        opciones: ["Tseltales y Tsotsiles", "Otomíes", "Purépechas", "Wixáritari"],
+        explicacion: "Son los Tseltales y Tsotsiles de Chiapas, que viven en las montañas de niebla."
+      },
+      {
+        puebloId: "nahuas",
+        ubicacion: "Puebla, Hidalgo, Veracruz, Guerrero, Edomex, CDMX y Morelos.",
+        simbolo: "Pinturas de aves y flores en papel amate.",
+        tradicion: "Heredaron al mundo palabras como 'chocolate' y platillos como el mole poblano.",
+        claveSymbol: "nahuas_papel_amate",
+        claveTradition: "nahuas_tlacoyos_mole",
+        opciones: ["Nahuas", "Mayas", "Zapotecos", "Totonacos"],
+        explicacion: "Son los Nahuas, el pueblo indígena con más habitantes de México y herederos de la lengua náhuatl."
+      }
+    ];
+
+    /* =========================================================================
+       5. DATOS PARA PAREJAS CULTURALES
+       ========================================================================= */
+    const ALL_PAIRS_BANK = [
+      { id: "p1", type: "pueblo", text: "🎀 Otomíes", matchId: "m1", clave: "pueblo_otomies" },
+      { id: "m1", type: "info", text: "Querétaro / Muñeca Lele", matchId: "p1", clave: "otomies_muneca_lele" },
+
+      { id: "p2", type: "pueblo", text: "🪵 Purépechas", matchId: "m2", clave: "pueblo_purepechas" },
+      { id: "m2", type: "info", text: "Michoacán / Danza Viejitos", matchId: "p2", clave: "purepechas_danza_viejitos" },
+
+      { id: "p3", type: "pueblo", text: "🕊️ Totonacos", matchId: "m3", clave: "pueblo_totonacos" },
+      { id: "m3", type: "info", text: "Veracruz / Voladores Papantla", matchId: "p3", clave: "totonacos_voladores_papantla" },
+
+      { id: "p4", type: "pueblo", text: "🏃 Tarahumaras", matchId: "m4", clave: "pueblo_tarahumaras" },
+      { id: "m4", type: "info", text: "Chihuahua / Pies ligeros", matchId: "p4", clave: "tarahumaras_pies_ligeros" },
+
+      { id: "p5", type: "pueblo", text: "🦌 Wixáritari", matchId: "m5", clave: "pueblo_wixaritaris" },
+      { id: "m5", type: "info", text: "Jalisco y Nayarit / Ojo de Dios", matchId: "p5", clave: "wixaritaris_ojo_de_dios" },
+
+      { id: "p6", type: "pueblo", text: "☁️ Zapotecos", matchId: "m6", clave: "pueblo_zapotecos" },
+      { id: "m6", type: "info", text: "Oaxaca / Alebrijes y Tlayudas", matchId: "p6", clave: "zapotecos_alebrijes" },
+
+      { id: "p7", type: "pueblo", text: "🏛️ Mayas", matchId: "m7", clave: "pueblo_mayas" },
+      { id: "m7", type: "info", text: "Yucatán / Chichén Itzá", matchId: "p7", clave: "mayas_chichen_itza" },
+
+      { id: "p8", type: "pueblo", text: "🌾 Yoremes", matchId: "m8", clave: "pueblo_yoremes" },
+      { id: "m8", type: "info", text: "Sonora / Danza del Venado", matchId: "p8", clave: "yoremes_danza_venado" },
+
+      { id: "p9", type: "pueblo", text: "🐑 Tseltales / Tsotsiles", matchId: "m9", clave: "pueblo_tseltales_tsotsiles" },
+      { id: "m9", type: "info", text: "Chiapas / Lana y Chamula", matchId: "p9", clave: "tseltales_lana_borrego" },
+
+      { id: "p10", type: "pueblo", text: "🌽 Nahuas", matchId: "m10", clave: "pueblo_nahuas" },
+      { id: "m10", type: "info", text: "Centro México / Amate y Náhuatl", matchId: "p10", clave: "nahuas_papel_amate" }
+    ];
+
+    /* =========================================================================
+       6. SISTEMA DE AUDIO (Web Audio API - 100% Offline)
+       ========================================================================= */
+    let audioHabilitado = true;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function toggleSonido() {
+      audioHabilitado = !audioHabilitado;
+      const btn = document.getElementById("soundBtn");
+      if (audioHabilitado) {
+        btn.innerHTML = "🔊 <span>Sonido: ON</span>";
+        reproducirSonido("click");
+      } else {
+        btn.innerHTML = "🔇 <span>Sonido: OFF</span>";
+      }
+    }
+
+    function reproducirSonido(tipo) {
+      if (!audioHabilitado) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (tipo === "correcto") {
+          [523.25, 659.25, 783.99].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.4);
+          });
+        } else if (tipo === "incorrecto") {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.25);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (tipo === "victoria") {
+          const notas = [523.25, 659.25, 783.99, 1046.50];
+          notas.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            gain.gain.setValueAtTime(0.25, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.45);
+          });
+        } else if (tipo === "click") {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+      } catch (e) {}
+    }
+
+    /* =========================================================================
+       7. CONFETI NATIVO EN CANVAS
+       ========================================================================= */
+    function lanzarConfeti() {
+      const canvas = document.getElementById("confetti-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ["#E4007C", "#F4A261", "#00A896", "#2A9D8F", "#6A4C93", "#E76F51", "#FFD166"];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 3,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 1) * 14 - 3,
+          size: Math.random() * 8 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 12,
+          alpha: 1
+        });
+      }
+
+      let frame = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35;
+          p.rotation += p.rotationSpeed;
+          p.alpha -= 0.012;
+          if (p.alpha > 0) {
+            alive = true;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+            ctx.restore();
+          }
+        });
+        frame++;
+        if (alive && frame < 100) requestAnimationFrame(animate);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      animate();
+    }
+
+    /* =========================================================================
+       8. NAVEGACIÓN Y VISTAS
+       ========================================================================= */
+    function mostrarVista(nombreVista) {
+      reproducirSonido("click");
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      const target = document.getElementById("vista-" + nombreVista);
+      if (target) {
+        target.classList.add("active");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (nombreVista === "explorador") renderizarPasaporte();
+    }
+
+    /* =========================================================================
+       9. LÓGICA TRIVIA
+       ========================================================================= */
+    let triviaIndice = 0;
+    let triviaPuntos = 0;
+    let triviaRespondida = false;
+    let triviaPreguntasMezcladas = [];
+
+    function iniciarModoTrivia() {
+      triviaIndice = 0;
+      triviaPuntos = 0;
+      triviaPreguntasMezcladas = [...TRIVIA_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 10);
+      document.getElementById("trivia-total").innerText = triviaPreguntasMezcladas.length;
+      document.getElementById("trivia-score").innerText = "0";
+      mostrarVista("trivia");
+      cargarPreguntaTrivia();
+    }
+
+    function cargarPreguntaTrivia() {
+      triviaRespondida = false;
+      const q = triviaPreguntasMezcladas[triviaIndice];
+
+      document.getElementById("trivia-current").innerText = triviaIndice + 1;
+      document.getElementById("trivia-progress").style.width = ((triviaIndice) / triviaPreguntasMezcladas.length * 100) + "%";
+      document.getElementById("trivia-badge").innerText = q.categoria;
+      document.getElementById("trivia-question").innerText = q.pregunta;
+
+      const imgBox = document.getElementById("trivia-img-box");
+      const imgElem = document.getElementById("trivia-img");
+      if (q.claveImg) {
+        asignarSrcConFallback(imgElem, q.claveImg, true, imgBox);
+      } else {
+        imgBox.style.display = "none";
+      }
+
+      const hintElem = document.getElementById("trivia-hint");
+      if (q.pista) {
+        hintElem.style.display = "block";
+        hintElem.innerHTML = "<strong>💡 Pista para recordar:</strong> " + q.pista;
+      } else {
+        hintElem.style.display = "none";
+      }
+
+      const feedback = document.getElementById("trivia-feedback");
+      feedback.className = "feedback-box";
+      feedback.style.display = "none";
+      document.getElementById("trivia-next-btn").style.display = "none";
+
+      const optionsContainer = document.getElementById("trivia-options");
+      optionsContainer.innerHTML = "";
+      if (q.opciones.length === 2) optionsContainer.className = "options-grid two-cols";
+      else optionsContainer.className = "options-grid";
+
+      const letras = ["A", "B", "C", "D"];
+      q.opciones.forEach((opcion, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = `<span class="option-indicator">${letras[index] || "•"}</span> <span>${opcion}</span>`;
+        btn.onclick = () => responderTrivia(index, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function responderTrivia(indiceSeleccionado, botonPresionado) {
+      if (triviaRespondida) return;
+      triviaRespondida = true;
+
+      const q = triviaPreguntasMezcladas[triviaIndice];
+      const opcionesBtns = document.querySelectorAll("#trivia-options .option-btn");
+      const feedback = document.getElementById("trivia-feedback");
+      const fbTitle = document.getElementById("feedback-title");
+      const fbDesc = document.getElementById("feedback-desc");
+      const fbIcon = document.getElementById("feedback-icon");
+
+      opcionesBtns.forEach(btn => btn.disabled = true);
+
+      if (indiceSeleccionado === q.correcta) {
+        reproducirSonido("correcto");
+        lanzarConfeti();
+        botonPresionado.classList.add("correct");
+        triviaPuntos += 10;
+        document.getElementById("trivia-score").innerText = triviaPuntos;
+
+        feedback.className = "feedback-box correct";
+        feedback.style.display = "block";
+        fbIcon.innerText = "🌟";
+        fbTitle.innerText = "¡Respuesta correcta!";
+        fbDesc.innerText = "¡Muy bien! " + q.explicacion;
+      } else {
+        reproducirSonido("incorrecto");
+        botonPresionado.classList.add("incorrect");
+        if (opcionesBtns[q.correcta]) opcionesBtns[q.correcta].classList.add("correct");
+
+        feedback.className = "feedback-box incorrect";
+        feedback.style.display = "block";
+        fbIcon.innerText = "💡";
+        fbTitle.innerText = "Respuesta incorrecta:";
+        fbDesc.innerText = "La respuesta correcta era \"" + q.opciones[q.correcta] + "\". " + q.explicacion;
+      }
+      document.getElementById("trivia-next-btn").style.display = "inline-flex";
+    }
+
+    function siguientePreguntaTrivia() {
+      reproducirSonido("click");
+      triviaIndice++;
+      if (triviaIndice < triviaPreguntasMezcladas.length) {
+        cargarPreguntaTrivia();
+      } else {
+        document.getElementById("trivia-progress").style.width = "100%";
+        finalizarJuego(triviaPuntos, triviaPreguntasMezcladas.length * 10);
+      }
+    }
+
+    /* =========================================================================
+       10. LÓGICA DETECTIVE CULTURAL
+       ========================================================================= */
+    let detIndice = 0;
+    let detPuntos = 0;
+    let detRespondido = false;
+    let detCasosMezclados = [];
+
+    function iniciarModoDetective() {
+      detIndice = 0;
+      detPuntos = 0;
+      // Incluye los 10 pueblos completos en orden aleatorio
+      detCasosMezclados = [...DETECTIVE_CASES].sort(() => 0.5 - Math.random());
+      document.getElementById("det-total").innerText = detCasosMezclados.length; // 10
+      document.getElementById("det-score").innerText = "0";
+      mostrarVista("detective");
+      cargarCasoDetective();
+    }
+
+    function cargarCasoDetective() {
+      detRespondido = false;
+      const caso = detCasosMezclados[detIndice];
+
+      document.getElementById("det-current").innerText = detIndice + 1;
+      document.getElementById("clue-location").innerText = caso.ubicacion;
+      document.getElementById("clue-symbol").innerText = caso.simbolo;
+      document.getElementById("clue-tradition").innerText = caso.tradicion;
+
+      const imgSymbol = document.getElementById("clue-img-symbol");
+      if (caso.claveSymbol) {
+        asignarSrcConFallback(imgSymbol, caso.claveSymbol, true);
+      } else {
+        imgSymbol.style.display = "none";
+      }
+
+      const imgTrad = document.getElementById("clue-img-tradition");
+      if (caso.claveTradition) {
+        asignarSrcConFallback(imgTrad, caso.claveTradition, true);
+      } else {
+        imgTrad.style.display = "none";
+      }
+
+      document.getElementById("clue-img-location").style.display = "none";
+
+      const feedback = document.getElementById("detective-feedback");
+      feedback.style.display = "none";
+      document.getElementById("det-next-btn").style.display = "none";
+
+      const optionsContainer = document.getElementById("detective-options");
+      optionsContainer.innerHTML = "";
+
+      // Presenta a los 10 pueblos como opciones con sus fotos y nombres
+      PUEBLOS_DATA.forEach(pueblo => {
+        const btn = document.createElement("button");
+        btn.className = "suspect-btn";
+        btn.dataset.puebloId = pueblo.id;
+        
+        const img = document.createElement("img");
+        img.className = "suspect-thumb";
+        asignarSrcConFallback(img, pueblo.clavePueblo, false);
+        img.onerror = () => {
+          img.outerHTML = `<div class="suspect-emoji-fallback">${pueblo.icono}</div>`;
+        };
+
+        btn.appendChild(img);
+        const span = document.createElement("span");
+        // Nombre amigable para el botón
+        let displayName = pueblo.nombre.split(" ")[0];
+        if (pueblo.id === "tseltales_tsotsiles") displayName = "Tseltales / Tsotsiles";
+        span.innerText = displayName;
+        btn.appendChild(span);
+
+        btn.onclick = () => responderDetective(pueblo.id, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function responderDetective(puebloIdSeleccionado, btn) {
+      if (detRespondido) return;
+      detRespondido = true;
+
+      const caso = detCasosMezclados[detIndice];
+      const botones = document.querySelectorAll("#detective-options .suspect-btn");
+      const feedback = document.getElementById("detective-feedback");
+      const fbTitle = document.getElementById("det-feedback-title");
+      const fbDesc = document.getElementById("det-feedback-desc");
+      const fbIcon = document.getElementById("det-feedback-icon");
+
+      botones.forEach(b => b.disabled = true);
+
+      const esCorrecto = puebloIdSeleccionado === caso.puebloId;
+
+      const puebloCorrectoObj = PUEBLOS_DATA.find(p => p.id === caso.puebloId);
+      const nombrePuebloCorrecto = puebloCorrectoObj ? puebloCorrectoObj.nombre : "";
+
+      if (esCorrecto) {
+        reproducirSonido("correcto");
+        lanzarConfeti();
+        btn.classList.add("correct");
+        detPuntos += 10;
+        document.getElementById("det-score").innerText = detPuntos;
+
+        feedback.className = "feedback-box correct";
+        feedback.style.display = "block";
+        fbIcon.innerText = "🔍✨";
+        fbTitle.innerText = "¡Misterio Resuelto! ¡Acertaste!";
+        fbDesc.innerText = "¡Excelente deducción! " + caso.explicacion;
+      } else {
+        reproducirSonido("incorrecto");
+        btn.classList.add("incorrect");
+        botones.forEach(b => {
+          if (b.dataset.puebloId === caso.puebloId) {
+            b.classList.add("correct");
+          }
+        });
+
+        feedback.className = "feedback-box incorrect";
+        feedback.style.display = "block";
+        fbIcon.innerText = "🔎";
+        fbTitle.innerText = "Respuesta incorrecta:";
+        fbDesc.innerText = "El pueblo originario buscado era: " + nombrePuebloCorrecto + ". " + caso.explicacion;
+      }
+
+      document.getElementById("det-next-btn").style.display = "inline-flex";
+    }
+
+    function siguienteCasoDetective() {
+      reproducirSonido("click");
+      detIndice++;
+      if (detIndice < detCasosMezclados.length) {
+        cargarCasoDetective();
+      } else {
+        finalizarJuego(detPuntos, detCasosMezclados.length * 10);
+      }
+    }
+
+    /* =========================================================================
+       11. LÓGICA MEMORAMA / ASOCIACIÓN
+       ========================================================================= */
+    let matchSeleccionada = null;
+    let matchParejasEncontradas = 0;
+    let matchIntentos = 0;
+
+    function iniciarModoMemorama() {
+      matchSeleccionada = null;
+      matchParejasEncontradas = 0;
+      matchIntentos = 0;
+      document.getElementById("match-found").innerText = "0";
+      document.getElementById("match-tries").innerText = "0";
+      mostrarVista("memorama");
+
+      // Incluye a TODOS los 10 pueblos (20 tarjetas en total: 10 pueblos y 10 características)
+      const tarjetas = [...ALL_PAIRS_BANK].sort(() => 0.5 - Math.random());
+      const board = document.getElementById("match-board");
+      board.innerHTML = "";
+
+      tarjetas.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "card-match";
+        if (t.type === "pueblo") {
+          card.style.background = "#FAF5FF";
+          card.style.borderColor = "#D8B4FE";
+        } else {
+          card.style.background = "#F0FDF4";
+          card.style.borderColor = "#86EFAC";
+        }
+
+        const img = document.createElement("img");
+        img.className = "card-match-img";
+        asignarSrcConFallback(img, t.clave, true);
+
+        const span = document.createElement("span");
+        span.innerText = t.text;
+
+        card.appendChild(img);
+        card.appendChild(span);
+        card.dataset.id = t.id;
+        card.dataset.matchId = t.matchId;
+
+        card.onclick = () => seleccionarTarjetaMatch(card);
+        board.appendChild(card);
+      });
+    }
+
+    function seleccionarTarjetaMatch(card) {
+      if (card.classList.contains("matched") || card === matchSeleccionada) return;
+      reproducirSonido("click");
+
+      if (!matchSeleccionada) {
+        matchSeleccionada = card;
+        card.classList.add("selected");
+      } else {
+        matchIntentos++;
+        document.getElementById("match-tries").innerText = matchIntentos;
+
+        if (card.dataset.matchId === matchSeleccionada.dataset.id) {
+          reproducirSonido("correcto");
+          card.classList.add("matched");
+          matchSeleccionada.classList.add("matched");
+          matchSeleccionada.classList.remove("selected");
+          matchSeleccionada = null;
+          matchParejasEncontradas++;
+          document.getElementById("match-found").innerText = matchParejasEncontradas;
+
+          if (matchParejasEncontradas === 10) {
+            lanzarConfeti();
+            setTimeout(() => finalizarJuego(100, 100), 800);
+          }
+        } else {
+          reproducirSonido("incorrecto");
+          card.classList.add("selected");
+          setTimeout(() => {
+            card.classList.remove("selected");
+            if (matchSeleccionada) matchSeleccionada.classList.remove("selected");
+            matchSeleccionada = null;
+          }, 600);
+        }
+      }
+    }
+
+    /* =========================================================================
+       12. PASAPORTE CULTURAL (EXPLORADOR)
+       ========================================================================= */
+    function renderizarPasaporte(filtro = "") {
+      const container = document.getElementById("passport-grid");
+      container.innerHTML = "";
+
+      const query = filtro.trim().toLowerCase();
+
+      const filtrados = PUEBLOS_DATA.filter(p => {
+        if (!query) return true;
+        return p.nombre.toLowerCase().includes(query) ||
+               p.estados.toLowerCase().includes(query) ||
+               p.artesania.toLowerCase().includes(query) ||
+               p.comida.toLowerCase().includes(query) ||
+               p.simbolo.toLowerCase().includes(query);
+      });
+
+      if (filtrados.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--texto-suave); padding: 30px; font-weight: 700;">
+          No se encontraron resultados para "${filtro}". Prueba buscando un estado como "Oaxaca", "Chihuahua", "Michoacán", "Jalisco", "Puebla", "Veracruz" o "Querétaro".
+        </p>`;
+        return;
+      }
+
+      filtrados.forEach(pueblo => {
+        const card = document.createElement("div");
+        card.className = "pueblo-card";
+        
+        // Header
+        const header = document.createElement("div");
+        header.className = "pueblo-card-header";
+
+        const avatar = document.createElement("div");
+        avatar.className = "pueblo-avatar";
+        const avatarImg = document.createElement("img");
+        asignarSrcConFallback(avatarImg, pueblo.clavePueblo, false);
+        avatarImg.onerror = () => { avatar.innerHTML = pueblo.icono; };
+        avatar.appendChild(avatarImg);
+
+        const headerText = document.createElement("div");
+        headerText.innerHTML = `<h3>${pueblo.nombre}</h3><span>Pueblo Originario de México</span>`;
+
+        header.appendChild(avatar);
+        header.appendChild(headerText);
+        card.appendChild(header);
+
+        // Foto banner de artesanía
+        const photoBox = document.createElement("div");
+        photoBox.className = "pueblo-photo-box";
+        const bannerImg = document.createElement("img");
+        asignarSrcConFallback(bannerImg, pueblo.claveArtesania, true, photoBox);
+        photoBox.appendChild(bannerImg);
+        card.appendChild(photoBox);
+
+        // Info rows
+        const infoDiv = document.createElement("div");
+        infoDiv.innerHTML = `
+          <div class="pueblo-info-row">
+            <strong>📍 Estados donde viven:</strong>
+            ${pueblo.estados}
+          </div>
+          <div class="pueblo-info-row">
+            <strong>🎨 Artesanía o Símbolo clave:</strong>
+            ${pueblo.artesania}
+          </div>
+          <div class="pueblo-info-row" style="display:flex; align-items:flex-start; gap:10px;">
+            <div style="flex:1;">
+              <strong>🍲 Comida o tradición:</strong>
+              ${pueblo.comida}
+            </div>
+            <img class="food-thumb" src="" alt="Comida" style="width:52px; height:52px; border-radius:10px; object-fit:cover; border:1.5px solid #E2E8F0; display:none;" data-clave="${pueblo.claveComida}">
+          </div>
+          <div class="pueblo-info-row" style="background: #F8FAFC; padding: 10px; border-radius: 10px; margin-top: auto;">
+            <strong>✨ Dato para recordar:</strong>
+            ${pueblo.simbolo}
+          </div>
+        `;
+        card.appendChild(infoDiv);
+
+        // Cargar miniatura de comida si existe
+        const foodImg = card.querySelector('.food-thumb');
+        if (foodImg && pueblo.claveComida) {
+          asignarSrcConFallback(foodImg, pueblo.claveComida, true);
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    function filtrarPasaporte() {
+      const val = document.getElementById("passport-search").value;
+      renderizarPasaporte(val);
+    }
+
+    /* =========================================================================
+       13. PANTALLA FINAL Y DIPLOMA
+       ========================================================================= */
+    function finalizarJuego(puntos, maxPuntos) {
+      reproducirSonido("victoria");
+      lanzarConfeti();
+      const porcentaje = Math.round((puntos / maxPuntos) * 100);
+
+      document.getElementById("res-score").innerText = puntos;
+      document.getElementById("res-accuracy").innerText = porcentaje + "%";
+
+      mostrarVista("resultados");
+    }
+
+    // Inicializar
+    document.addEventListener("DOMContentLoaded", async () => {
+      await initDB();
+      renderizarPasaporte();
+      actualizarContadorImagenesHeader();
+    });
+  </script>
+</body>
+</html>

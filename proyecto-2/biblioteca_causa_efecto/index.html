@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detectives de la Biblioteca: El Enigma de Causa y Efecto</title>
+  <style>
+    /* ========================================================
+       VARIABLES Y ESTILOS GLOBALES
+       Diseñado para 3° grado de primaria (8-9 años) y proyección
+       ======================================================== */
+    :root {
+      --color-primary: #3b82f6;
+      --color-primary-dark: #1d4ed8;
+      --color-secondary: #f59e0b;
+      --color-secondary-dark: #b45309;
+      --color-accent: #10b981;
+      --color-accent-dark: #047857;
+      --color-danger: #ef4444;
+      --color-bg-shelf: #fef3c7;
+      --color-wood: #78350f;
+      --color-wood-light: #92400e;
+      --color-paper: #fffbeb;
+      --color-card-bg: #ffffff;
+      --color-text-main: #1f2937;
+      --color-text-muted: #4b5563;
+      --font-family: 'Comic Sans MS', 'Chalkboard SE', 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
+      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --shadow-interactive: 0 8px 0 rgba(0, 0, 0, 0.18);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: #451a03;
+      background-image: 
+        radial-gradient(circle at 50% 20%, #78350f 0%, #451a03 70%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 8px);
+      color: var(--color-text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 12px;
+    }
+
+    /* CONTENEDOR PRINCIPAL DEL JUEGO */
+    #game-container {
+      width: 100%;
+      max-width: 1150px;
+      min-height: 720px;
+      background: var(--color-paper);
+      border-radius: var(--radius-lg);
+      border: 8px solid var(--color-wood);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 2px 6px rgba(255,255,255,0.7);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* BARRA SUPERIOR / HEADER */
+    header {
+      background: linear-gradient(180deg, #92400e 0%, #78350f 100%);
+      color: #fff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 5px solid #b45309;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 10;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo-badge {
+      width: 46px;
+      height: 46px;
+      background: #fef3c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      border: 3px solid #f59e0b;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .header-title-box h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fef08a;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+      letter-spacing: 0.5px;
+    }
+
+    .header-title-box p {
+      font-size: 0.85rem;
+      color: #fed7aa;
+      font-weight: bold;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .stat-pill {
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-pill span.icon {
+      font-size: 1.25rem;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: #f59e0b;
+      color: #78350f;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 0 #b45309;
+      transition: all 0.15s ease;
+    }
+
+    .btn-icon:hover {
+      transform: translateY(-2px);
+      background: #fbbf24;
+    }
+
+    .btn-icon:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #b45309;
+    }
+
+    /* PANTALLAS (SCREENS) */
+    .screen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* PANTALLA 1: INICIO / PORTADA */
+    #screen-intro {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .intro-banner {
+      width: 100%;
+      max-width: 680px;
+      height: 250px;
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 5px solid #d97706;
+      box-shadow: var(--shadow-soft);
+      background: #fed7aa;
+    }
+
+    .intro-banner img,
+    .book-illustration-box img,
+    .carnet-trophy-box img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      z-index: 2;
+    }
+
+    .image-fallback {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #78350f;
+      padding: 16px;
+      z-index: 1;
+    }
+
+    .intro-title {
+      font-size: 2.3rem;
+      color: #92400e;
+      text-shadow: 2px 2px 0px #fef08a;
+      line-height: 1.15;
+    }
+
+    .intro-subtitle {
+      font-size: 1.15rem;
+      color: #4b5563;
+      max-width: 780px;
+      line-height: 1.45;
+      background: #ffffff;
+      padding: 14px 22px;
+      border-radius: var(--radius-sm);
+      border: 2px dashed #f59e0b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .intro-objective-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ecfdf5;
+      color: #065f46;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 8px 18px;
+      border-radius: 50px;
+      border: 2px solid #10b981;
+    }
+
+    .intro-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    /* BOTONES PRIMARIOS Y SECUNDARIOS */
+    .btn-main {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-size: 1.35rem;
+      font-weight: 800;
+      font-family: inherit;
+      padding: 14px 38px;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(16, 185, 129, 0.35);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+      box-shadow: 0 9px 0 #047857, 0 14px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-main:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #047857;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 800;
+      font-family: inherit;
+      padding: 12px 26px;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 5px 0 #1d4ed8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1d4ed8;
+    }
+
+    /* PANTALLA 2: JUEGO / TALLER DE CAUSA Y EFECTO */
+    #screen-game {
+      background: #fffdf5;
+      gap: 16px;
+      padding: 18px 24px;
+    }
+
+    .story-progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fef3c7;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      border: 2px solid #f59e0b;
+    }
+
+    .progress-stages {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stage-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: 2px solid #d1d5db;
+      transition: all 0.25s ease;
+    }
+
+    .stage-dot.completed {
+      background: #10b981;
+      color: #fff;
+      border-color: #047857;
+    }
+
+    .stage-dot.active {
+      background: #f59e0b;
+      color: #fff;
+      border-color: #b45309;
+      transform: scale(1.15);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-category {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 1px solid #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ÁREA DE CONTENIDO DIVIDIDA EN DOS COLUMNAS */
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    @media (max-width: 860px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* COLUMNA IZQUIERDA: EL LIBRO Y FRAGMENTO */
+    .book-display-panel {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 4px solid #fcd34d;
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .book-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px dashed #fcd34d;
+      padding-bottom: 8px;
+    }
+
+    .book-title-tag {
+      font-size: 1.2rem;
+      color: #92400e;
+      font-weight: 800;
+    }
+
+    .book-genre-pill {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      background: #fef3c7;
+      color: #b45309;
+      border-radius: 12px;
+      border: 1px solid #f59e0b;
+    }
+
+    .book-illustration-box {
+      width: 100%;
+      height: 180px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 3px solid #e5e7eb;
+      background: #f3f4f6;
+      position: relative;
+    }
+
+    
+
+    .book-text-snippet {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #374151;
+      background: #fffbeb;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      border-left: 5px solid #f59e0b;
+      font-style: normal;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .highlight-fact {
+      background: #fef08a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      color: #854d0e;
+      border-bottom: 2px solid #eab308;
+    }
+
+    /* COLUMNA DERECHA: LA BALANZA CAUSA-EFECTO Y TARJETAS */
+    .interactive-workshop-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: space-between;
+    }
+
+    /* CAJA FORMULA CAUSAL: CAUSA + CONECTOR + CONSECUENCIA */
+    .causal-formula-box {
+      background: #ffffff;
+      border: 3px solid #60a5fa;
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .formula-prompt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1e40af;
+    }
+
+    .formula-prompt .prompt-icon {
+      font-size: 1.35rem;
+    }
+
+    .formula-cards-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .formula-node {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .formula-node.cause-node {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      color: #1e3a8a;
+    }
+
+    .formula-node.target-slot {
+      background: #fdf2f8;
+      border: 2px dashed #ec4899;
+      color: #9d174d;
+      animation: pulseSlot 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseSlot {
+      0%, 100% { border-color: #ec4899; background: #fdf2f8; }
+      50% { border-color: #be185d; background: #fce7f3; }
+    }
+
+    .formula-node.effect-node {
+      background: #ecfdf5;
+      border: 2px solid #10b981;
+      color: #064e3b;
+    }
+
+    .formula-connector {
+      background: #fef3c7;
+      color: #b45309;
+      border: 2px solid #f59e0b;
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      white-space: nowrap;
+    }
+
+    /* LISTA DE OPCIONES / TARJETAS CAUSALES */
+    .options-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #4b5563;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .choice-card {
+      background: #ffffff;
+      border: 3px solid #e5e7eb;
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 0 #d1d5db;
+      transition: all 0.15s ease;
+      font-size: 1.05rem;
+      color: #1f2937;
+      font-weight: 600;
+      line-height: 1.35;
+      position: relative;
+    }
+
+    .choice-card:hover:not(.disabled) {
+      border-color: #f59e0b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #d97706;
+      background: #fffbeb;
+    }
+
+    .choice-card:active:not(.disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #d97706;
+    }
+
+    .choice-card .card-letter {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      border: 2px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #4b5563;
+      flex-shrink: 0;
+    }
+
+    .choice-card.correct {
+      background: #ecfdf5;
+      border-color: #10b981;
+      box-shadow: 0 4px 0 #047857;
+      color: #065f46;
+      animation: popSuccess 0.4s ease;
+    }
+
+    .choice-card.correct .card-letter {
+      background: #10b981;
+      border-color: #047857;
+      color: #fff;
+    }
+
+    .choice-card.incorrect {
+      background: #fef2f2;
+      border-color: #ef4444;
+      box-shadow: 0 4px 0 #b91c1c;
+      color: #991b1b;
+      animation: shakeWrong 0.4s ease;
+    }
+
+    .choice-card.incorrect .card-letter {
+      background: #ef4444;
+      border-color: #b91c1c;
+      color: #fff;
+    }
+
+    .choice-card.disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    @keyframes popSuccess {
+      0% { transform: scale(0.96); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shakeWrong {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* RETROALIMENTACIÓN FORMATIVA INMEDIATA */
+    .feedback-panel {
+      display: none;
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 1rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-panel.active {
+      display: flex;
+    }
+
+    .feedback-panel.success {
+      background: #d1fae5;
+      border: 3px solid #10b981;
+      color: #065f46;
+    }
+
+    .feedback-panel.try-again {
+      background: #fee2e2;
+      border: 3px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .feedback-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .feedback-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    /* PANTALLA 3: CARNET DE LECTOR / DIPLOMA FINAL */
+    #screen-results {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .carnet-diploma-card {
+      width: 100%;
+      max-width: 650px;
+      background: #ffffff;
+      border: 6px solid #b45309;
+      border-radius: var(--radius-md);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+      padding: 24px 30px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .carnet-header {
+      border-bottom: 3px dashed #f59e0b;
+      padding-bottom: 12px;
+    }
+
+    .carnet-header h2 {
+      color: #92400e;
+      font-size: 1.8rem;
+    }
+
+    .carnet-header p {
+      color: #6b7280;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .carnet-trophy-box {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: #fef3c7;
+      border: 4px solid #f59e0b;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    
+
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .stamp-box {
+      background: #fdf2f8;
+      border: 2px dashed #db2777;
+      border-radius: 12px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #9d174d;
+    }
+
+    .stamp-box .stamp-icon {
+      font-size: 1.5rem;
+    }
+
+    .results-summary-stats {
+      display: flex;
+      justify-content: space-around;
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .result-item h3 {
+      font-size: 1.4rem;
+      color: #166534;
+    }
+
+    .result-item p {
+      font-size: 0.85rem;
+      color: #374151;
+      font-weight: 700;
+    }
+
+    /* MODAL DE GUÍA DOCENTE Y AYUDA */
+    .modal-backdrop {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(3px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: var(--radius-md);
+      border: 5px solid #d97706;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalSlide 0.25s ease-out;
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      background: #78350f;
+      color: #fff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      color: #fef08a;
+    }
+
+    .btn-close-modal {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #374151;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-body h4 {
+      color: #92400e;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .modal-body ul {
+      margin-left: 20px;
+    }
+
+    .pedagogical-pill {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    /* EFECTOS VISUALES / CONFETI */
+    .confetti-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* ACCESIBILIDAD Y FOCO */
+    button:focus-visible, .choice-card:focus-visible {
+      outline: 4px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- CONTENEDOR DEL JUEGO EDUCATIVO -->
+  <div id="game-container" role="main" aria-label="Juego educativo Causa y Efecto en la Biblioteca">
+    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+    <!-- HEADER / CABECERA -->
+    <header>
+      <div class="header-branding">
+        <div class="header-logo-badge" title="Guardián de la Biblioteca">🦉</div>
+        <div class="header-title-box">
+          <h1>Nuestra Biblioteca</h1>
+          <p>Detectives de Causa y Efecto • 3° Primaria</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-pill" title="Estrellas ganadas">
+          <span class="icon">⭐</span>
+          <span id="stat-stars">0</span>
+        </div>
+        <div class="stat-pill" title="Misión actual">
+          <span class="icon">📖</span>
+          <span id="stat-progress">1 / 5</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <button id="btn-sound-toggle" class="btn-icon" title="Efectos de sonido (Activar/Silenciar)" aria-label="Silenciar o activar sonido">🔊</button>
+        <button id="btn-pedagogy" class="btn-icon" title="Guía Didáctica para el Maestro" aria-label="Abrir guía para el maestro">👩‍🏫</button>
+        <button id="btn-fullscreen" class="btn-icon" title="Pantalla completa (ideal para proyector)" aria-label="Pantalla completa">⛶</button>
+      </div>
+    </header>
+
+    <!-- PANTALLA 1: INTRODUCCIÓN -->
+    <section id="screen-intro" class="screen active" aria-labelledby="intro-title">
+      <div class="intro-banner">
+        <!-- RUTA LOCAL SOLICITADA -->
+        <img id="intro-banner-img" src="./recursos_juego/portada_biblioteca.webp" alt="Biblioteca escolar mágica">
+        <div class="image-fallback" id="intro-banner-fallback">
+          <span style="font-size: 50px;">📚✨🦉</span>
+          <p style="font-weight: 800; font-size: 1.2rem; margin-top: 8px;">Taller de Restauración de Cuentos</p>
+          <small>Nuestra Biblioteca Escolar</small>
+        </div>
+      </div>
+
+      <h2 id="intro-title" class="intro-title">¡El Gran Misterio de las Páginas Desordenadas!</h2>
+
+      <div class="intro-subtitle">
+        Un viento mágico sopló en la biblioteca y separó las <strong>causas</strong> de sus <strong>consecuencias</strong> en nuestros cuentos y leyendas favoritos. ¡Conviértete en detective de historias, descubre <em>qué provocó cada suceso</em> y devuelve la armonía a los libros!
+      </div>
+
+      <div class="intro-objective-tag">
+        <span>🎯 Meta del Detective (PDA):</span>
+        <span>Identificar la relación causa-consecuencia en la trama de cuentos y leyendas</span>
+      </div>
+
+      <div class="intro-buttons">
+        <button id="btn-start-game" class="btn-main">
+          <span>🔍 ¡Comenzar la Investigación!</span>
+        </button>
+        <button id="btn-open-guide-intro" class="btn-secondary">
+          <span>📘 Ver Cómo Jugar</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: JUEGO / RETO CAUSAL -->
+    <section id="screen-game" class="screen" aria-label="Zona de reto interactivo">
+      <!-- BARRA DE ETAPAS -->
+      <div class="story-progress-bar">
+        <div class="progress-stages" id="stages-indicator">
+          <!-- Generado dinámicamente con JS -->
+        </div>
+        <div class="badge-category" id="story-genre-badge">
+          <span>📜</span>
+          <span id="genre-text">Leyenda tradicional</span>
+        </div>
+      </div>
+
+      <!-- DISPOSICIÓN PRINCIPAL -->
+      <div class="game-layout">
+        <!-- COLUMNA IZQUIERDA: EL LIBRO -->
+        <div class="book-display-panel">
+          <div class="book-header">
+            <div>
+              <span id="book-number" style="font-size: 0.85rem; font-weight: 800; color: #b45309; text-transform: uppercase;">Libro 1 de 5</span>
+              <h3 id="book-title" class="book-title-tag">La Leyenda del Maíz</h3>
+            </div>
+            <span class="book-genre-pill" id="book-pill-type">Tradición Oral</span>
+          </div>
+
+          <div class="book-illustration-box">
+            <!-- RUTA LOCAL SOLICITADA -->
+            <img id="book-image" src="./recursos_juego/cuento_leyenda_maiz.webp" alt="Ilustración del cuento">
+            <div class="image-fallback" id="book-fallback">
+              <span id="book-fallback-icon" style="font-size: 44px;">🌽</span>
+              <p id="book-fallback-text" style="font-weight: 700; margin-top: 4px;">Fragmento Literario</p>
+            </div>
+          </div>
+
+          <div class="book-text-snippet" id="book-snippet" aria-live="polite">
+            <!-- Texto del fragmento con el suceso clave resaltado -->
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #6b7280; font-weight: bold;">
+            <span>💡 Pista: Pregúntate "¿Por qué pasó esto?"</span>
+            <button id="btn-read-aloud" class="btn-icon" style="width: auto; height: 32px; padding: 0 10px; font-size: 0.8rem;" title="Escuchar pista didáctica">
+              🔊 Leer en voz alta
+            </button>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: LA BALANZA CAUSA-EFECTO -->
+        <div class="interactive-workshop-panel">
+          <!-- FÓRMULA CAUSA-CONECTOR-EFECTO -->
+          <div class="causal-formula-box">
+            <div class="formula-prompt">
+              <span class="prompt-icon">🧩</span>
+              <span id="prompt-question-text">¿Qué provocó este acontecimiento?</span>
+            </div>
+
+            <div class="formula-cards-row">
+              <!-- CAUSA -->
+              <div class="formula-node" id="formula-cause-box">
+                <span style="font-size: 0.75rem; text-transform: uppercase; color: #3b82f6; font-weight: 900; margin-bottom: 2px;">⚡ CAUSA (¿Por qué?)</span>
+                <span id="formula-cause-text">¿?</span>
+              </div>
+
+              <!-- CONECTOR -->
+              <div class="formula-connector" id="formula-connector-badge">
+                PORQUE
+              </div>
+
+              <!-- CONSECUENCIA -->
+              <div class="formula-node" id="formula-effect-box">
+                <span style="font-size: 0.75rem; text-transform: uppercase; color: #10b981; font-weight: 900; margin-bottom: 2px;">🎯 CONSECUENCIA (¿Qué pasó?)</span>
+                <span id="formula-effect-text">¿?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SELECCIÓN DE TARJETAS -->
+          <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
+            <div class="options-title">
+              <span>👉 Elige la tarjeta que completa la historia con sentido:</span>
+            </div>
+
+            <div class="cards-container" id="cards-container">
+              <!-- Botones de opción generados por JS -->
+            </div>
+          </div>
+
+          <!-- RETROALIMENTACIÓN FORMATIVA -->
+          <div class="feedback-panel" id="feedback-panel">
+            <div class="feedback-content">
+              <span class="feedback-icon" id="feedback-icon">🎉</span>
+              <span id="feedback-text">¡Correcto! Identificaste la causa con exactitud.</span>
+            </div>
+            <button id="btn-next-challenge" class="btn-main" style="padding: 10px 24px; font-size: 1.1rem; display: none;">
+              Continuar ➔
+            </button>
+            <button id="btn-retry-challenge" class="btn-secondary" style="padding: 10px 20px; font-size: 1rem; display: none;">
+              Reintentar 🔄
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: CARNET DE LECTOR DETECTIVE (RESULTADOS) -->
+    <section id="screen-results" class="screen" aria-labelledby="results-title">
+      <div class="carnet-diploma-card">
+        <div class="carnet-header">
+          <span style="font-size: 2rem;">🏆</span>
+          <h2 id="results-title">¡Misión Cumplida en la Biblioteca!</h2>
+          <p>Has restaurado el sentido de todas las historias con lógica causal</p>
+        </div>
+
+        <div class="carnet-trophy-box">
+          <!-- RUTA LOCAL SOLICITADA -->
+          <img id="trophy-img" src="./recursos_juego/trofeo_carnet_maestro.webp" alt="Medalla dorada de lector detective">
+          <div class="image-fallback" id="trophy-fallback">
+            <span style="font-size: 50px;">🏅</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="color: #92400e; font-size: 1.05rem; margin-bottom: 6px;">Sellos de Cuentos Restaurados:</h4>
+          <div class="stamps-grid" id="stamps-grid">
+            <!-- Sellos generados por JS -->
+          </div>
+        </div>
+
+        <div class="results-summary-stats">
+          <div class="result-item">
+            <h3 id="final-stars-count">5 / 5</h3>
+            <p>Estrellas Doradas</p>
+          </div>
+          <div class="result-item">
+            <h3 id="final-accuracy-percent">100%</h3>
+            <p>Precisión Causal</p>
+          </div>
+          <div class="result-item">
+            <h3 id="final-rank-name">Maestro Lector</h3>
+            <p>Nivel de Detective</p>
+          </div>
+        </div>
+
+        <p style="font-size: 0.95rem; color: #4b5563; font-weight: bold; background: #fffbeb; padding: 8px; border-radius: 8px;">
+          🎉 <em>¡Felicidades! Ahora sabes que en todo cuento, cada hecho tiene una causa y provoca consecuencias en la trama.</em>
+        </p>
+
+        <div style="display: flex; gap: 14px; justify-content: center;">
+          <button id="btn-restart-game" class="btn-main">
+            🔄 Jugar otra vez
+          </button>
+          <button id="btn-print-certificate" class="btn-secondary">
+            🖨️ Imprimir Carnet
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL: GUÍA PEDAGÓGICA Y DIDÁCTICA PARA EL MAESTRO -->
+    <div id="modal-guide" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 id="modal-guide-title">👩‍🏫 Guía Didáctica y Orientación Pedagógica (3° Primaria)</h3>
+          <button id="btn-close-guide" class="btn-close-modal" aria-label="Cerrar modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="pedagogical-pill">
+            <strong>Proyecto de Aula:</strong> Nuestra biblioteca escolar<br>
+            <strong>Campo Formativo:</strong> Lenguajes (NEM)<br>
+            <strong>Contenido:</strong> Comprensión y producción de textos instructivos y narrativos (cuentos y leyendas)<br>
+            <strong>PDA:</strong> Identifica y explica relaciones de causa y consecuencia en la trama de cuentos y leyendas.
+          </div>
+
+          <h4>🎯 Propósito Didáctico</h4>
+          <p>
+            En 3° grado de primaria, los estudiantes transitan de una lectura meramente descriptiva hacia una comprensión analítica. Este recurso digital ayuda al alumnado a comprender que las tramas narrativas no son secuencias aisladas de hechos, sino un entramado donde <strong>una acción o motivo (Causa)</strong> desencadena directamente <strong>un nuevo suceso (Efecto o Consecuencia)</strong>.
+          </p>
+
+          <h4>🧭 Mediación Sugerida en el Aula (Uso con Proyector o Pantalla Táctil)</h4>
+          <ul>
+            <li><strong>Pregunta detonadora antes de elegir:</strong> "¿Qué tuvo que pasar <em>antes</em> para que ocurriera este hecho?" o "¿Qué pasó <em>después</em> a raíz de esto?".</li>
+            <li><strong>Trabajo cooperativo por filas o equipos:</strong> Proyecte el fragmento en gran formato. Pida a un equipo que lea en voz alta y a otro equipo que argumente cuál tarjeta es la causa verdadera usando el conector <em>"porque..."</em>.</li>
+            <li><strong>La Balanza Causal:</strong> Al acertar, haga notar a los niños cómo la fórmula en pantalla une las dos oraciones mediante conectores como <em>"PORQUE"</em> o <em>"POR LO TANTO"</em>.</li>
+          </ul>
+
+          <h4>📝 Adecuaciones e Inclusión</h4>
+          <p>
+            Incluye soporte de síntesis de voz nativa del navegador (botón de audio), alto contraste de colores, botones de gran tamaño para pantallas táctiles y retroalimentación formativa sin penalizaciones punitivas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT DEL JUEGO (LÓGICA, AUDIO SINTETIZADO, MANEJO DE ESTADO) -->
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* ========================================================
+       DATOS DE LAS HISTORIAS Y RELACIONES DE CAUSA Y EFECTO
+       Adaptados para 3° de primaria (Cuentos y Leyendas)
+       ======================================================== */
+    
+    /* ========================================================
+       CARGA INTELIGENTE DE RECURSOS CON FORMATOS MÚLTIPLES
+       Soporta automáticamente .webp, .png, .jpg y .jpeg
+       Oculta el fallback al cargar con éxito la imagen
+       ======================================================== */
+    function loadSmartImage(imgElem, fallbackElem, basePathOrUrl) {
+      if (!imgElem) return;
+
+      const cleanBase = basePathOrUrl.replace(/\.(webp|png|jpe?g)$/i, '');
+      const extensions = ['.webp', '.png', '.jpg', '.jpeg'];
+      let extIndex = 0;
+
+      imgElem.onload = function() {
+        imgElem.style.display = 'block';
+        if (fallbackElem) fallbackElem.style.display = 'none';
+      };
+
+      imgElem.onerror = function() {
+        extIndex++;
+        if (extIndex < extensions.length) {
+          imgElem.src = cleanBase + extensions[extIndex];
+        } else {
+          imgElem.style.display = 'none';
+          if (fallbackElem) fallbackElem.style.display = 'flex';
+        }
+      };
+
+      imgElem.src = cleanBase + extensions[0];
+
+      if (imgElem.complete && imgElem.naturalWidth > 0) {
+        imgElem.style.display = 'block';
+        if (fallbackElem) fallbackElem.style.display = 'none';
+      }
+    }
+
+    const STORIES_DATA = [
+      {
+        id: "maiz",
+        title: "La Leyenda del Maíz",
+        genre: "Leyenda Prehispánica",
+        image: "./recursos_juego/cuento_leyenda_maiz.webp",
+        iconFallback: "🌽",
+        // El fragmento literario
+        snippetHtml: "Antiguamente, los aztecas solo comían raíces y animales de caza porque el maíz estaba oculto detrás de unas altísimas montañas imposibles de escalar. Desesperados por el hambre de su pueblo, pidieron ayuda a Quetzalcóatl. El dios no intentó derribar las montañas; en cambio, <span class='highlight-fact'>Quetzalcóatl se convirtió en una pequeña hormiga negra</span> y cruzó por una diminuta grieta rocosa.",
+        // El reto causal
+        question: "¿Por qué Quetzalcóatl decidió convertirse en hormiga?",
+        type: "find_cause", // Buscar la causa
+        causeText: "Las montañas eran muy altas y solo una diminuta grieta permitía pasar",
+        connector: "POR LO TANTO",
+        effectText: "Quetzalcóatl se transformó en hormiga para cruzar la grieta y rescatar el grano",
+        options: [
+          {
+            id: "opt_a",
+            text: "Porque quería entrar por la grieta estrecha de la montaña que ningún gigante podía cruzar.",
+            isCorrect: true,
+            explanation: "¡Exacto! La grieta era tan estrecha que solo un insecto diminuto como una hormiga podía pasar sin tener que romper la montaña."
+          },
+          {
+            id: "opt_b",
+            text: "Porque quería esconderse de los humanos para no compartir el grano dorado con nadie.",
+            isCorrect: false,
+            explanation: "¡Cuidado! Quetzalcóatl era un dios bondadoso y su intención era precisamente ayudar a los humanos que pasaban hambre."
+          },
+          {
+            id: "opt_c",
+            text: "Porque le tenía miedo al frío de la noche en el valle de México.",
+            isCorrect: false,
+            explanation: "Esa no es la causa; el texto explica que el obstáculo eran las montañas altas y la única entrada era una diminuta grieta."
+          }
+        ],
+        stampName: "El Maíz Dorado"
+      },
+      {
+        id: "caperucita",
+        title: "Caperucita y el Sendero",
+        genre: "Cuento Clásico",
+        image: "./recursos_juego/cuento_caperucita.webp",
+        iconFallback: "🧺",
+        snippetHtml: "Antes de salir, la madre le advirtió: «Ve directo por el camino principal y no te detengas a hablar con extraños». Sin embargo, en el bosque, los cantos de los pájaros y las flores silvestres llamaron la atención de la niña. <span class='highlight-fact'>Caperucita desobedeció a su mamá y se apartó del sendero a cortar lirios</span>.",
+        question: "¿Qué CONSECUENCIA provocó que Caperucita se distrajera en el bosque?",
+        type: "find_effect", // Buscar la consecuencia
+        causeText: "Caperucita se apartó del sendero seguro a cortar flores",
+        connector: "EN CONSECUENCIA",
+        effectText: "¿Qué hecho provocó esto en la trama?",
+        options: [
+          {
+            id: "opt_a",
+            text: "El lobo aprovechó el tiempo para llegar antes a la casa de la abuelita.",
+            isCorrect: true,
+            explanation: "¡Muy bien! Como Caperucita perdió tiempo recogiendo flores, el lobo tomó el atajo rápido y llegó antes que ella."
+          },
+          {
+            id: "opt_b",
+            text: "La canasta de pastelillos se llenó mágicamente de deliciosas frutas.",
+            isCorrect: false,
+            explanation: "Eso no ocurrió en el cuento. Recuerda que desviarse del camino puso en peligro a Caperucita."
+          },
+          {
+            id: "opt_c",
+            text: "La mamá de Caperucita llegó volando para recoger las flores con ella.",
+            isCorrect: false,
+            explanation: "La mamá se había quedado en casa. Piensa en qué ventaja obtuvo el astuto lobo."
+          }
+        ],
+        stampName: "El Sendero del Bosque"
+      },
+      {
+        id: "conejo",
+        title: "El Conejo en la Luna",
+        genre: "Leyenda Tradicional",
+        image: "./recursos_juego/cuento_conejo_luna.webp",
+        iconFallback: "🌕",
+        snippetHtml: "El dios Quetzalcóatl bajó a la Tierra con forma humana. Tras caminar todo el día, llegó la noche y se sentó a la orilla del camino fatigado y muriendo de hambre. Un conejito que comía zacate se le acercó y, al ver que el viajero no comía nada, le ofreció su propio cuerpo como alimento. Conmovido por su inmenso amor y generosidad, <span class='highlight-fact'>el dios levantó al conejito tan alto que estampó su figura en la luna</span>.",
+        question: "¿Qué provocó que la silueta del conejo fuera estampada para siempre en la luna?",
+        type: "find_cause",
+        causeText: "El conejito demostró un noble sacrificio ofreciéndose para salvar al viajero",
+        connector: "POR LO TANTO",
+        effectText: "Quetzalcóatl lo grabó en la luna para que todos lo recordaran por siempre",
+        options: [
+          {
+            id: "opt_a",
+            text: "El conejito se ofreció noblemente para salvar la vida del dios hambriento.",
+            isCorrect: true,
+            explanation: "¡Excelente detective! La causa fue el noble corazón del conejo; el dios lo premió para que su ejemplo nunca fuera olvidado."
+          },
+          {
+            id: "opt_b",
+            text: "El conejito dio un salto accidental tan fuerte que chocó contra la luna.",
+            isCorrect: false,
+            explanation: "¡No fue un accidente! Fue un acto sagrado y agradecido de Quetzalcóatl en recompensa a su generosidad."
+          },
+          {
+            id: "opt_c",
+            text: "El dios quería deshacerse de los conejos porque comían demasiado zacate.",
+            isCorrect: false,
+            explanation: "Al contrario, el dios sintió profunda admiración y cariño por la bondad del conejito."
+          }
+        ],
+        stampName: "El Conejo Sagrado"
+      },
+      {
+        id: "cerditos",
+        title: "Los Tres Cerditos",
+        genre: "Cuento Clásico",
+        image: "./recursos_juego/cuento_tres_cerditos.webp",
+        iconFallback: "🪵",
+        snippetHtml: "El cerdito mediano tenía prisa por ir a cantar y tocar su flauta, así que recolectó ramas caídas y palos ligeros para armar su cabaña en solo unas horas. Cuando el lobo feroz llegó a la puerta, tomó aire profundamente y sopló con todas sus fuerzas. <span class='highlight-fact'>La casita de madera se derrumbó de inmediato y las tablas salieron volando</span>.",
+        question: "¿Cuál fue la CAUSA de que la casa del cerdito mediano se cayera tan fácil?",
+        type: "find_cause",
+        causeText: "El cerdito construyó con ramas frágiles por terminar rápido e ir a jugar",
+        connector: "COMO RESULTADO",
+        effectText: "El soplo del lobo destruyó la casa en un instante",
+        options: [
+          {
+            id: "opt_a",
+            text: "El cerdito usó ramas débiles sin esforzarse, solo para terminar rápido e irse a divertir.",
+            isCorrect: true,
+            explanation: "¡Brillante deducción! La causa fue la falta de esfuerzo y los materiales frágiles, lo que provocó que el viento la destruyera."
+          },
+          {
+            id: "opt_b",
+            text: "El lobo utilizó una excavadora de metal para demoler la construcción.",
+            isCorrect: false,
+            explanation: "En la historia clásica, el lobo solo usó la fuerza de su soplido."
+          },
+          {
+            id: "opt_c",
+            text: "La casa estaba hecha de cemento y piedras pesadas pero llovió mucho.",
+            isCorrect: false,
+            explanation: "Esa fue la casa del cerdito mayor, la cual resistió precisamente por ser de ladrillo y cemento."
+          }
+        ],
+        stampName: "La Casa del Bosque"
+      },
+      {
+        id: "cenzontle",
+        title: "El Canto del Cenzontle",
+        genre: "Leyenda Mexicana",
+        image: "./recursos_juego/cuento_canto_cenzontle.webp",
+        iconFallback: "🎶",
+        snippetHtml: "Cuando el Gran Creador repartió los cantos a las aves, el Cenzontle llegó tarde porque se quedó dormido en un laurel. Al ver que ya no quedaba ninguna voz nueva, el Cenzontle no se puso a llorar; con paciencia, se dedicó a escuchar y aprender las melodías de todas las demás aves del cielo. <span class='highlight-fact'>Por eso hoy en día el cenzontle canta cuatrocientas voces diferentes</span>.",
+        question: "¿Qué provocó que el cenzontle tenga hoy cuatrocientas melodías distintas?",
+        type: "find_cause",
+        causeText: "El cenzontle escuchó atentamente y aprendió a imitar el canto de todas las demás aves",
+        connector: "POR ESTA RAZÓN",
+        effectText: "El cenzontle puede cantar con cuatrocientas voces extraordinarias",
+        options: [
+          {
+            id: "opt_a",
+            text: "Escuchó con atención y practicó imitando los cantos de todas las aves del bosque.",
+            isCorrect: true,
+            explanation: "¡Extraordinario! Al quedarse sin canto propio, aprendió las voces de todas las aves, convirtiéndose en el ave de las cuatrocientas voces."
+          },
+          {
+            id: "opt_b",
+            text: "Se tragó un instrumento musical mágico que encontró flotando en un río.",
+            isCorrect: false,
+            explanation: "La leyenda destaca su talento de escuchar y aprender de los demás, no un instrumento mágico."
+          },
+          {
+            id: "opt_c",
+            text: "El Gran Creador le dio cuatrocientas voces como castigo por haber llegado tarde.",
+            isCorrect: false,
+            explanation: "No fue un castigo; cuando llegó ya no había cantos disponibles, así que él mismo decidió aprender los demás."
+          }
+        ],
+        stampName: "Las 400 Voces"
+      }
+    ];
+
+    /* ========================================================
+       SISTEMA DE AUDIO SINTETIZADO (WEB AUDIO API)
+       100% offline, sin dependencias ni archivos externos
+       ======================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+        gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      }
+
+      playSuccess() {
+        if (!this.enabled) return;
+        this.init();
+        // Secuencia armónica alegre (Do - Mi - Sol - Do agudo)
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            this.playTone(freq, 'triangle', 0.25, 0.18);
+          }, idx * 75);
+        });
+      }
+
+      playWrong() {
+        if (!this.enabled) return;
+        this.init();
+        // Tono descendente suave
+        this.playTone(280, 'sawtooth', 0.2, 0.12);
+        setTimeout(() => {
+          this.playTone(220, 'sawtooth', 0.3, 0.12);
+        }, 120);
+      }
+
+      playClick() {
+        this.playTone(600, 'sine', 0.08, 0.08);
+      }
+
+      playFanfare() {
+        if (!this.enabled) return;
+        this.init();
+        const melody = [
+          { f: 523.25, d: 0.15 },
+          { f: 659.25, d: 0.15 },
+          { f: 783.99, d: 0.2 },
+          { f: 1046.50, d: 0.5 }
+        ];
+        melody.forEach((note, i) => {
+          setTimeout(() => {
+            this.playTone(note.f, 'triangle', note.d, 0.22);
+          }, i * 160);
+        });
+      }
+    }
+
+    const sounds = new SoundEngine();
+
+    /* ========================================================
+       EFECTO DE CONFETI PARA CELEBRACIÓN
+       ======================================================== */
+    class ConfettiEffect {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.animating = false;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+      }
+
+      burst(count = 70) {
+        this.resize();
+        const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444'];
+        for (let i = 0; i < count; i++) {
+          this.particles.push({
+            x: this.canvas.width / 2 + (Math.random() - 0.5) * 200,
+            y: this.canvas.height / 3 + (Math.random() - 0.5) * 100,
+            w: Math.random() * 10 + 6,
+            h: Math.random() * 8 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 12,
+            vy: (Math.random() - 1.5) * 10,
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 10,
+            alpha: 1
+          });
+        }
+        if (!this.animating) {
+          this.animating = true;
+          this.loop();
+        }
+      }
+
+      loop() {
+        if (!this.animating) return;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // Gravedad
+          p.rotation += p.vRot;
+          p.alpha -= 0.012;
+
+          if (p.alpha <= 0 || p.y > this.canvas.height) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotation * Math.PI) / 180);
+          this.ctx.globalAlpha = p.alpha;
+          this.ctx.fillStyle = p.color;
+          this.ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          this.ctx.restore();
+        }
+
+        if (this.particles.length > 0) {
+          requestAnimationFrame(() => this.loop());
+        } else {
+          this.animating = false;
+        }
+      }
+    }
+
+    let confetti = null;
+
+    /* ========================================================
+       CONTROLADOR DEL ESTADO DEL JUEGO
+       ======================================================== */
+    const gameState = {
+      currentStoryIndex: 0,
+      stars: 0,
+      firstTryCorrectCount: 0,
+      attemptsInCurrentChallenge: 0,
+      completedStories: [],
+
+      reset() {
+        this.currentStoryIndex = 0;
+        this.stars = 0;
+        this.firstTryCorrectCount = 0;
+        this.attemptsInCurrentChallenge = 0;
+        this.completedStories = [];
+      }
+    };
+
+    /* ========================================================
+       INICIALIZACIÓN DE LA INTERFAZ
+       ======================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      confetti = new ConfettiEffect('confetti-canvas');
+
+      // Cargar portada y trofeo con detector inteligente de extensiones
+      loadSmartImage(
+        document.getElementById('intro-banner-img'),
+        document.getElementById('intro-banner-fallback'),
+        './recursos_juego/portada_biblioteca.webp'
+      );
+      loadSmartImage(
+        document.getElementById('trophy-img'),
+        document.getElementById('trophy-fallback'),
+        './recursos_juego/trofeo_carnet_maestro.webp'
+      );
+
+      // Botones de pantalla inicial
+      document.getElementById('btn-start-game').addEventListener('click', () => {
+        sounds.playClick();
+        startGame();
+      });
+
+      document.getElementById('btn-open-guide-intro').addEventListener('click', () => {
+        sounds.playClick();
+        togglePedagogyModal(true);
+      });
+
+      // Botones de cabecera
+      document.getElementById('btn-sound-toggle').addEventListener('click', (e) => {
+        const isSoundOn = sounds.toggle();
+        e.target.textContent = isSoundOn ? '🔊' : '🔇';
+        if (isSoundOn) sounds.playClick();
+      });
+
+      document.getElementById('btn-pedagogy').addEventListener('click', () => {
+        sounds.playClick();
+        togglePedagogyModal(true);
+      });
+
+      document.getElementById('btn-close-guide').addEventListener('click', () => {
+        sounds.playClick();
+        togglePedagogyModal(false);
+      });
+
+      document.getElementById('btn-fullscreen').addEventListener('click', toggleFullScreen);
+
+      // Botones de pantalla final
+      document.getElementById('btn-restart-game').addEventListener('click', () => {
+        sounds.playClick();
+        gameState.reset();
+        startGame();
+      });
+
+      document.getElementById('btn-print-certificate').addEventListener('click', () => {
+        window.print();
+      });
+
+      // Botón leer en voz alta (Síntesis de voz accesible)
+      document.getElementById('btn-read-aloud').addEventListener('click', readSnippetAloud);
+
+      // Botones de navegación en feedback
+      document.getElementById('btn-next-challenge').addEventListener('click', () => {
+        sounds.playClick();
+        advanceToNextStory();
+      });
+
+      document.getElementById('btn-retry-challenge').addEventListener('click', () => {
+        sounds.playClick();
+        resetChallengeOptions();
+      });
+
+      // Cerrar modal al hacer clic en fondo
+      document.getElementById('modal-guide').addEventListener('click', (e) => {
+        if (e.target.id === 'modal-guide') {
+          togglePedagogyModal(false);
+        }
+      });
+    });
+
+    /* ========================================================
+       FLUJO DE PANTALLAS
+       ======================================================== */
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+    }
+
+    function startGame() {
+      gameState.reset();
+      updateHeaderStats();
+      renderStageDots();
+      loadStory(0);
+      showScreen('screen-game');
+    }
+
+    function togglePedagogyModal(open) {
+      const modal = document.getElementById('modal-guide');
+      if (open) {
+        modal.classList.add('active');
+      } else {
+        modal.classList.remove('active');
+      }
+    }
+
+    function toggleFullScreen() {
+      sounds.playClick();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen no habilitado por el navegador:", err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function toggleResourcesTable() {
+      const box = document.getElementById('resources-table-box');
+      const ind = document.getElementById('toggle-indicator');
+      if (box.style.display === 'none') {
+        box.style.display = 'block';
+        ind.textContent = '[Ocultar tabla]';
+      } else {
+        box.style.display = 'none';
+        ind.textContent = '[Ver tabla]';
+      }
+    }
+
+    /* ========================================================
+       CARGA Y RENDERIZADO DEL RETO ACTUAL
+       ======================================================== */
+    function loadStory(index) {
+      gameState.currentStoryIndex = index;
+      gameState.attemptsInCurrentChallenge = 0;
+      const story = STORIES_DATA[index];
+
+      // Actualizar cabecera y barra de progreso
+      updateHeaderStats();
+      updateStageDots(index);
+
+      document.getElementById('genre-text').textContent = story.genre;
+      document.getElementById('book-number').textContent = `Libro ${index + 1} de ${STORIES_DATA.length}`;
+      document.getElementById('book-title').textContent = story.title;
+      document.getElementById('book-pill-type').textContent = story.genre;
+
+      // Imagen con carga inteligente y fallback reactivo
+      const imgElem = document.getElementById('book-image');
+      const fallbackElem = document.getElementById('book-fallback');
+      document.getElementById('book-fallback-icon').textContent = story.iconFallback;
+      document.getElementById('book-fallback-text').textContent = story.title;
+      loadSmartImage(imgElem, fallbackElem, story.image);
+
+      // Fragmento de texto
+      document.getElementById('book-snippet').innerHTML = story.snippetHtml;
+
+      // Pregunta y Balanza Causal
+      document.getElementById('prompt-question-text').textContent = story.question;
+      document.getElementById('formula-connector-badge').textContent = story.connector;
+
+      // Reconstruir completamente los nodos de la fórmula para garantizar estructura limpia
+      const causeBox = document.getElementById('formula-cause-box');
+      const effectBox = document.getElementById('formula-effect-box');
+
+      if (story.type === 'find_cause') {
+        // El alumno debe descubrir la Causa
+        causeBox.className = 'formula-node target-slot';
+        causeBox.innerHTML = `
+          <span style="font-size: 0.75rem; text-transform: uppercase; color: #ec4899; font-weight: 900; margin-bottom: 4px;">⚡ CAUSA (¿Por qué?)</span>
+          <span id="formula-cause-text" style="font-weight: 800;">¿Cuál fue la CAUSA?</span>
+        `;
+
+        effectBox.className = 'formula-node effect-node';
+        effectBox.innerHTML = `
+          <span style="font-size: 0.75rem; text-transform: uppercase; color: #047857; font-weight: 900; margin-bottom: 4px;">🎯 CONSECUENCIA (¿Qué pasó?)</span>
+          <span id="formula-effect-text" style="font-weight: 700;">${story.effectText}</span>
+        `;
+      } else {
+        // El alumno debe descubrir la Consecuencia
+        causeBox.className = 'formula-node cause-node';
+        causeBox.innerHTML = `
+          <span style="font-size: 0.75rem; text-transform: uppercase; color: #1e40af; font-weight: 900; margin-bottom: 4px;">⚡ CAUSA (¿Por qué?)</span>
+          <span id="formula-cause-text" style="font-weight: 700;">${story.causeText}</span>
+        `;
+
+        effectBox.className = 'formula-node target-slot';
+        effectBox.innerHTML = `
+          <span style="font-size: 0.75rem; text-transform: uppercase; color: #ec4899; font-weight: 900; margin-bottom: 4px;">🎯 CONSECUENCIA (¿Qué pasó?)</span>
+          <span id="formula-effect-text" style="font-weight: 800;">¿Cuál fue la CONSECUENCIA?</span>
+        `;
+      }
+
+      // Ocultar y resetear feedback previo por completo
+      const feedbackPanel = document.getElementById('feedback-panel');
+      feedbackPanel.className = 'feedback-panel';
+      document.getElementById('btn-next-challenge').style.display = 'none';
+      document.getElementById('btn-retry-challenge').style.display = 'none';
+
+      // Renderizar tarjetas de opciones nuevas y limpias para la nueva historia
+      renderOptionsCards(story);
+    }
+
+    function renderStageDots() {
+      const container = document.getElementById('stages-indicator');
+      container.innerHTML = '';
+      STORIES_DATA.forEach((s, idx) => {
+        const dot = document.createElement('div');
+        dot.className = 'stage-dot';
+        dot.id = `stage-dot-${idx}`;
+        dot.textContent = idx + 1;
+        container.appendChild(dot);
+      });
+    }
+
+    function updateStageDots(currentIdx) {
+      STORIES_DATA.forEach((_, idx) => {
+        const dot = document.getElementById(`stage-dot-${idx}`);
+        if (!dot) return;
+        dot.className = 'stage-dot';
+        if (idx < currentIdx) {
+          dot.classList.add('completed');
+          dot.textContent = '✓';
+        } else if (idx === currentIdx) {
+          dot.classList.add('active');
+          dot.textContent = idx + 1;
+        } else {
+          dot.textContent = idx + 1;
+        }
+      });
+    }
+
+    function renderOptionsCards(story) {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+
+      const letters = ['A', 'B', 'C'];
+      story.options.forEach((opt, idx) => {
+        const card = document.createElement('div');
+        card.className = 'choice-card';
+        card.id = `card-${opt.id}`;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Opción ${letters[idx]}: ${opt.text}`);
+
+        card.innerHTML = `
+          <div class="card-letter">${letters[idx]}</div>
+          <div style="flex: 1;">${opt.text}</div>
+        `;
+
+        card.addEventListener('click', () => handleOptionSelection(opt, card, story));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleOptionSelection(opt, card, story);
+          }
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function resetChallengeOptions() {
+      const story = STORIES_DATA[gameState.currentStoryIndex];
+      renderOptionsCards(story);
+      const feedbackPanel = document.getElementById('feedback-panel');
+      feedbackPanel.className = 'feedback-panel';
+      document.getElementById('btn-retry-challenge').style.display = 'none';
+    }
+
+    /* ========================================================
+       EVALUACIÓN DE RESPUESTA Y RETROALIMENTACIÓN
+       ======================================================== */
+    function handleOptionSelection(selectedOpt, cardElem, story) {
+      // Evitar clics si ya se evaluó positivamente en este turno
+      if (document.querySelector('.choice-card.correct')) return;
+
+      gameState.attemptsInCurrentChallenge++;
+      const allCards = document.querySelectorAll('.choice-card');
+      const feedbackPanel = document.getElementById('feedback-panel');
+      const feedbackIcon = document.getElementById('feedback-icon');
+      const feedbackText = document.getElementById('feedback-text');
+      const btnNext = document.getElementById('btn-next-challenge');
+      const btnRetry = document.getElementById('btn-retry-challenge');
+
+      if (selectedOpt.isCorrect) {
+        // RESPUESTA CORRECTA
+        sounds.playSuccess();
+        confetti.burst(55);
+        cardElem.classList.add('correct');
+
+        // Desactivar las demás tarjetas
+        allCards.forEach(c => {
+          if (c !== cardElem) c.classList.add('disabled');
+        });
+
+        // Actualizar la Balanza Causal con la respuesta elegida
+        if (story.type === 'find_cause') {
+          const causeBox = document.getElementById('formula-cause-box');
+          causeBox.className = 'formula-node cause-node';
+          causeBox.innerHTML = `
+            <span style="font-size: 0.75rem; text-transform: uppercase; color: #1e40af; font-weight: 900; margin-bottom: 4px;">⚡ CAUSA IDENTIFICADA</span>
+            <span style="color: #065f46; font-weight: 800;">${selectedOpt.text}</span>
+          `;
+        } else {
+          const effectBox = document.getElementById('formula-effect-box');
+          effectBox.className = 'formula-node effect-node';
+          effectBox.innerHTML = `
+            <span style="font-size: 0.75rem; text-transform: uppercase; color: #047857; font-weight: 900; margin-bottom: 4px;">🎯 CONSECUENCIA IDENTIFICADA</span>
+            <span style="color: #065f46; font-weight: 800;">${selectedOpt.text}</span>
+          `;
+        }
+
+        // Puntuación
+        if (gameState.attemptsInCurrentChallenge === 1) {
+          gameState.stars += 1;
+          gameState.firstTryCorrectCount += 1;
+        } else {
+          gameState.stars += 1; // Acierto con reintento guiado
+        }
+        updateHeaderStats();
+
+        // Mostrar feedback de éxito
+        feedbackPanel.className = 'feedback-panel active success';
+        feedbackIcon.textContent = '🌟';
+        feedbackText.innerHTML = `<strong>¡Brillante deducción!</strong> ${selectedOpt.explanation}`;
+        btnNext.style.display = 'inline-flex';
+        btnRetry.style.display = 'none';
+
+        gameState.completedStories.push(story);
+
+      } else {
+        // RESPUESTA INCORRECTA (Retroalimentación formativa y alentadora)
+        sounds.playWrong();
+        cardElem.classList.add('incorrect');
+        cardElem.classList.add('disabled');
+
+        feedbackPanel.className = 'feedback-panel active try-again';
+        feedbackIcon.textContent = '🧐';
+        feedbackText.innerHTML = `<strong>¡Casi lo logras!</strong> ${selectedOpt.explanation} <br><small>Recuerda: busca qué ocurrió <em>primero</em> que provocó este resultado.</small>`;
+        btnNext.style.display = 'none';
+        btnRetry.style.display = 'inline-flex';
+      }
+    }
+
+    function advanceToNextStory() {
+      const nextIndex = gameState.currentStoryIndex + 1;
+      if (nextIndex < STORIES_DATA.length) {
+        loadStory(nextIndex);
+      } else {
+        // Fin del juego -> Mostrar diploma
+        showResultsScreen();
+      }
+    }
+
+    function updateHeaderStats() {
+      document.getElementById('stat-stars').textContent = gameState.stars;
+      document.getElementById('stat-progress').textContent = `${gameState.currentStoryIndex + 1} / ${STORIES_DATA.length}`;
+    }
+
+    /* ========================================================
+       PANTALLA DE RESULTADOS / DIPLOMA
+       ======================================================== */
+    function showResultsScreen() {
+      sounds.playFanfare();
+      confetti.burst(120);
+
+      document.getElementById('final-stars-count').textContent = `${gameState.stars} / ${STORIES_DATA.length}`;
+      
+      const accuracy = Math.round((gameState.firstTryCorrectCount / STORIES_DATA.length) * 100);
+      document.getElementById('final-accuracy-percent').textContent = `${accuracy}%`;
+
+      let rank = "Detective Promesa";
+      if (accuracy >= 80) {
+        rank = "Gran Maestro Lector 🏅";
+      } else if (accuracy >= 50) {
+        rank = "Detective Experto 🔍";
+      }
+      document.getElementById('final-rank-name').textContent = rank;
+
+      // Llenar sellos en el carnet
+      const stampsGrid = document.getElementById('stamps-grid');
+      stampsGrid.innerHTML = '';
+      STORIES_DATA.forEach(s => {
+        const box = document.createElement('div');
+        box.className = 'stamp-box';
+        box.innerHTML = `
+          <span class="stamp-icon">🔖</span>
+          <span>${s.stampName}</span>
+          <span style="color: #10b981;">✓ Listo</span>
+        `;
+        stampsGrid.appendChild(box);
+      });
+
+      showScreen('screen-results');
+    }
+
+    /* ========================================================
+       ACCESIBILIDAD: SÍNTESIS DE VOZ NATIVA
+       ======================================================== */
+    function readSnippetAloud() {
+      if (!('speechSynthesis' in window)) {
+        alert("Tu navegador no soporta lectura por voz automática.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const story = STORIES_DATA[gameState.currentStoryIndex];
+      // Texto limpio sin etiquetas HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = story.snippetHtml;
+      const cleanSnippet = tempDiv.textContent || tempDiv.innerText || '';
+      
+      const fullSpeech = `${story.title}. ${cleanSnippet}. Pregunta: ${story.question}`;
+
+      const utterance = new SpeechSynthesisUtterance(fullSpeech);
+      utterance.lang = 'es-MX';
+      utterance.rate = 0.95; // Un poco más pausado para 3° de primaria
+      utterance.pitch = 1.05;
+
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
+

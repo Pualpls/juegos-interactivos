@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calaveritas en Nuestra Biblioteca - Rimas y Versos de Día de Muertos</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y PALETA DE COLOR: TRADICIÓN DE DÍA DE MUERTOS
+       ========================================================================== */
+    :root {
+      --morado-fondo: #1D062C;
+      --morado-superficie: #300C47;
+      --morado-card: #451363;
+      --morado-acento: #6A1E99;
+      --cempasuchil: #FF8800;
+      --cempasuchil-brillante: #FFAA00;
+      --amarillo-luz: #FFDF00;
+      --rosa-mexicano: #E4007C;
+      --rosa-vivo: #FF1A9B;
+      --turquesa: #00D2BA;
+      --verde-papel: #2CDA69;
+      --blanco-hueso: #FFFDF8;
+      --texto-oscuro: #1A0526;
+      --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+      --sombra-boton: 0 6px 18px rgba(0, 0, 0, 0.35);
+      --borde-radio: 22px;
+      --fuente-tamano-base: 18px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Trebuchet MS', 'Chalkboard SE', 'Comic Sans MS', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 15%, #4A126D 0%, var(--morado-fondo) 100%);
+      color: var(--blanco-hueso);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      font-size: var(--fuente-tamano-base);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       BARRAS SUPERIORES: PAPEL PICADO Y CONTROLES DE AULA (PROYECTOR)
+       ========================================================================== */
+    .papel-picado-guirnalda {
+      width: 100%;
+      height: 44px;
+      display: flex;
+      justify-content: space-around;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 5;
+    }
+
+    .banderin-picado {
+      width: 58px;
+      height: 42px;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 50% 100%, 0% 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      animation: balanceoPicado 3.2s ease-in-out infinite alternate;
+      transform-origin: top center;
+    }
+
+    .banderin-picado:nth-child(even) { animation-duration: 2.5s; animation-delay: 0.2s; }
+    .banderin-picado:nth-child(3n) { animation-duration: 3.6s; animation-delay: 0.4s; }
+
+    .bg-rosa { background-color: var(--rosa-mexicano); color: #fff; }
+    .bg-cempasuchil { background-color: var(--cempasuchil); color: #fff; }
+    .bg-turquesa { background-color: var(--turquesa); color: #111; }
+    .bg-verde { background-color: var(--verde-papel); color: #111; }
+    .bg-amarillo { background-color: var(--cempasuchil-brillante); color: #111; }
+
+    @keyframes balanceoPicado {
+      0% { transform: rotate(-3.5deg); }
+      100% { transform: rotate(3.5deg); }
+    }
+
+    .banner-recurso-container {
+      width: 100%;
+      max-height: 50px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .img-banner-recurso {
+      width: 100%;
+      max-height: 48px;
+      object-fit: cover;
+    }
+
+    /* BARRA DE HERRAMIENTAS Y MODO AULA / PROYECTOR */
+    .barra-aula {
+      width: 96%;
+      max-width: 1140px;
+      margin-top: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .titulo-badge-proyecto {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--cempasuchil-brillante);
+      font-size: 0.98rem;
+    }
+
+    .titulo-badge-proyecto .icono {
+      font-size: 1.35rem;
+    }
+
+    .controles-aula-grupo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-herramienta {
+      background: var(--morado-superficie);
+      color: var(--blanco-hueso);
+      border: 2px solid var(--cempasuchil);
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-herramienta:hover, .btn-herramienta:focus-visible {
+      background: var(--cempasuchil);
+      color: var(--texto-oscuro);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 136, 0, 0.4);
+      outline: none;
+    }
+
+    .btn-herramienta:active {
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       CANVAS FLOTANTE DE PAPEL PICADO
+       ========================================================================== */
+    #canvas-papel-picado {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL Y PANTALLAS
+       ========================================================================== */
+    .contenedor-principal {
+      width: 96%;
+      max-width: 1100px;
+      margin: 14px auto 30px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pantalla-juego {
+      width: 100%;
+      background: var(--morado-card);
+      border: 3px solid var(--cempasuchil);
+      border-radius: var(--borde-radio);
+      box-shadow: var(--sombra-card);
+      padding: clamp(16px, 4vw, 36px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      animation: animarEntrada 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .pantalla-juego.visible {
+      display: flex;
+    }
+
+    @keyframes animarEntrada {
+      from { opacity: 0; transform: scale(0.97) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ==========================================================================
+       VISTA 1: PANTALLA DE INICIO (BIENVENIDA)
+       ========================================================================== */
+    .encabezado-hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .encabezado-hero h1 {
+      font-size: clamp(1.9rem, 4.8vw, 3.2rem);
+      color: var(--cempasuchil-brillante);
+      text-shadow: 2px 2px 0px #000, 0 0 24px rgba(255, 170, 0, 0.6);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .encabezado-hero p.subtitulo {
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+      color: var(--turquesa);
+      font-weight: 600;
+    }
+
+    /* Marco gráfico con soporte de ruta local y fallback SVG */
+    .marco-ilustracion-cultural {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 14px 0 20px 0;
+      position: relative;
+    }
+
+    .contenedor-imagen-con-fallback {
+      width: min(100%, 340px);
+      height: 220px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 3px solid var(--rosa-mexicano);
+      box-shadow: 0 8px 25px rgba(228, 0, 124, 0.4);
+      background: #250638;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .contenedor-imagen-con-fallback img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .svg-respaldo-decorativo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #4A126D 0%, #200730 100%);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .svg-respaldo-decorativo svg {
+      width: 85px;
+      height: 85px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+
+    .svg-respaldo-decorativo span {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--cempasuchil-brillante);
+    }
+
+    /* Tarjeta didáctica del PDA */
+    .caja-pda-didactica {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 6px solid var(--turquesa);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      max-width: 820px;
+      text-align: left;
+    }
+
+    .caja-pda-didactica strong {
+      color: var(--turquesa);
+      font-size: 1.05rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .grupo-botones-hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-accion-grande {
+      padding: 15px 28px;
+      border-radius: 50px;
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 800;
+      border: 3px solid #FFFDF8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      touch-action: manipulation;
+      text-decoration: none;
+    }
+
+    .btn-accion-grande.jugar {
+      background: linear-gradient(135deg, var(--cempasuchil) 0%, #FF5500 100%);
+      color: #fff;
+    }
+
+    .btn-accion-grande.taller {
+      background: linear-gradient(135deg, var(--rosa-mexicano) 0%, #B80064 100%);
+      color: #fff;
+    }
+
+    .btn-accion-grande.guia {
+      background: linear-gradient(135deg, #1C7ED6 0%, #0B5394 100%);
+      color: #fff;
+    }
+
+    .btn-accion-grande:hover, .btn-accion-grande:focus-visible {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.55);
+      outline: none;
+    }
+
+    .btn-accion-grande:active {
+      transform: translateY(-1px) scale(0.99);
+    }
+
+    /* ==========================================================================
+       VISTA 2: PANTALLA DE JUEGO (DESAFÍO INTERACTIVO)
+       ========================================================================== */
+    .topbar-desafio {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.2);
+    }
+
+    .ronda-marcador {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--cempasuchil-brillante);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mini-calavera-icono {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
+
+    .ofrenda-barra-progreso {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 6px 16px;
+      border-radius: 30px;
+      border: 1px solid var(--cempasuchil);
+    }
+
+    .ofrenda-elementos {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item-ofrenda {
+      font-size: 1.45rem;
+      opacity: 0.28;
+      filter: grayscale(1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .item-ofrenda.ganado {
+      opacity: 1;
+      filter: grayscale(0);
+      transform: scale(1.2);
+      animation: reboteAltar 0.6s ease-out;
+    }
+
+    @keyframes reboteAltar {
+      0%, 100% { transform: scale(1.2); }
+      50% { transform: scale(1.55) translateY(-6px); }
+    }
+
+    /* TARJETA DE LA CALAVERITA LITERARIA */
+    .tarjeta-estrofa {
+      width: 100%;
+      max-width: 900px;
+      background: radial-gradient(circle at 50% 10%, #52167D 0%, #2A0844 100%);
+      border: 3px solid var(--cempasuchil-brillante);
+      border-radius: 24px;
+      padding: clamp(20px, 4vw, 38px);
+      box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.1), var(--sombra-card);
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .etiqueta-tema-estrofa {
+      position: absolute;
+      top: -18px;
+      right: 24px;
+      background: var(--rosa-mexicano);
+      color: #fff;
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .lista-versos {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 8px 0;
+    }
+
+    .verso-renglon {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+      font-weight: 600;
+      color: var(--blanco-hueso);
+      line-height: 1.45;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 10px 18px;
+      border-radius: 14px;
+      border-left: 6px solid var(--turquesa);
+      transition: all 0.3s ease;
+    }
+
+    .verso-renglon.objetivo {
+      border-left-color: var(--cempasuchil-brillante);
+      background: rgba(255, 136, 0, 0.2);
+    }
+
+    .num-linea {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--turquesa);
+      background: rgba(0, 210, 186, 0.2);
+      padding: 2px 8px;
+      border-radius: 8px;
+      margin-right: 6px;
+      display: inline-block;
+    }
+
+    .rima-subrayada {
+      background: linear-gradient(180deg, transparent 55%, rgba(255, 223, 0, 0.6) 55%);
+      color: #FFF275;
+      font-weight: 800;
+      border-radius: 4px;
+      padding: 0 4px;
+      box-shadow: 0 0 8px rgba(255, 223, 0, 0.4);
+    }
+
+    /* CASILLA O ZONA DE RESPUESTA INTERACTIVA */
+    .casilla-verso-vacia {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 175px;
+      min-height: 48px;
+      border: 3px dashed var(--cempasuchil-brillante);
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 14px;
+      padding: 4px 18px;
+      color: var(--cempasuchil-brillante);
+      font-weight: 800;
+      transition: all 0.25s ease;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    .casilla-verso-vacia.hover-activo {
+      border-color: var(--turquesa);
+      background: rgba(0, 210, 186, 0.28);
+      transform: scale(1.05);
+    }
+
+    .casilla-verso-vacia.ocupada {
+      border-style: solid;
+      border-color: var(--verde-papel);
+      background: rgba(44, 218, 105, 0.25);
+      color: #fff;
+    }
+
+    /* BANCO DE OPCIONES */
+    .seccion-banco-palabras {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .instruccion-banco {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--cempasuchil-brillante);
+      text-align: center;
+    }
+
+    .fichas-contenedor {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .ficha-palabra-boton {
+      background: linear-gradient(135deg, #511A79 0%, #310D4C 100%);
+      border: 3px solid var(--turquesa);
+      color: var(--blanco-hueso);
+      font-size: clamp(1.2rem, 3.2vw, 1.7rem);
+      font-weight: 800;
+      padding: 12px 28px;
+      border-radius: 50px;
+      cursor: grab;
+      box-shadow: var(--sombra-boton);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      touch-action: manipulation;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ficha-palabra-boton:hover, .ficha-palabra-boton:focus-visible {
+      transform: translateY(-4px) scale(1.06);
+      border-color: var(--cempasuchil-brillante);
+      box-shadow: 0 10px 24px rgba(255, 170, 0, 0.45);
+      outline: none;
+    }
+
+    .ficha-palabra-boton:active {
+      cursor: grabbing;
+      transform: scale(0.96);
+    }
+
+    .ficha-palabra-boton.arrastrando {
+      opacity: 0.4;
+      transform: scale(0.9);
+    }
+
+    .ficha-palabra-boton.deshabilitada {
+      opacity: 0.25;
+      pointer-events: none;
+      filter: grayscale(1);
+    }
+
+    /* BARRA DE AYUDAS DIDÁCTICAS */
+    .barra-ayudas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    /* PANEL DE RETROALIMENTACIÓN FORMATIVA */
+    .caja-feedback {
+      width: 100%;
+      max-width: 900px;
+      padding: 18px 24px;
+      border-radius: 18px;
+      margin-top: 14px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      animation: animarEntrada 0.3s ease-out;
+    }
+
+    .caja-feedback.acierto {
+      display: flex;
+      background: linear-gradient(135deg, rgba(20, 100, 50, 0.92) 0%, rgba(10, 60, 30, 0.96) 100%);
+      border: 3px solid var(--verde-papel);
+      box-shadow: 0 0 30px rgba(44, 218, 105, 0.45);
+    }
+
+    .caja-feedback.error {
+      display: flex;
+      background: linear-gradient(135deg, rgba(125, 20, 65, 0.92) 0%, rgba(70, 10, 35, 0.96) 100%);
+      border: 3px solid var(--rosa-mexicano);
+      box-shadow: 0 0 30px rgba(228, 0, 124, 0.45);
+    }
+
+    .feedback-encabezado {
+      font-size: 1.45rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedback-cuerpo {
+      font-size: 1.15rem;
+      line-height: 1.55;
+      max-width: 820px;
+    }
+
+    .feedback-cuerpo strong {
+      color: var(--cempasuchil-brillante);
+    }
+
+    /* ==========================================================================
+       VISTA 3: PANTALLA DE VICTORIA
+       ========================================================================== */
+    .contenedor-victoria {
+      text-align: center;
+      max-width: 840px;
+    }
+
+    .titulo-victoria {
+      font-size: clamp(2rem, 5.2vw, 3.2rem);
+      color: var(--cempasuchil-brillante);
+      margin-bottom: 12px;
+      text-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+    }
+
+    .subtitulo-victoria {
+      font-size: 1.25rem;
+      margin-bottom: 24px;
+      color: var(--blanco-hueso);
+    }
+
+    .tarjeta-altar-final {
+      background: rgba(0, 0, 0, 0.35);
+      border: 3px solid var(--turquesa);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .elementos-altar-final-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      font-size: 2.3rem;
+    }
+
+    .tarjeta-altar-imagen-wrapper {
+      max-width: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--cempasuchil);
+      margin: 10px 0;
+    }
+
+    .tarjeta-altar-imagen-wrapper img {
+      width: 100%;
+      display: block;
+    }
+
+    .caja-resumen-aprendizaje {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 18px 22px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .caja-resumen-aprendizaje ul {
+      margin-left: 24px;
+      margin-top: 8px;
+    }
+
+    /* ==========================================================================
+       VISTA 4: TALLER DEL POETA CALAVERA (PRODUCCIÓN DE VERSOS)
+       ========================================================================== */
+    .contenedor-taller {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .paso-taller {
+      background: rgba(0, 0, 0, 0.28);
+      border-radius: 16px;
+      padding: 18px 22px;
+      border-left: 5px solid var(--rosa-mexicano);
+    }
+
+    .paso-taller h3 {
+      color: var(--cempasuchil-brillante);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.25rem;
+    }
+
+    .opciones-taller-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-opcion-taller {
+      background: var(--morado-superficie);
+      border: 2px solid var(--turquesa);
+      color: var(--blanco-hueso);
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-opcion-taller.seleccionado {
+      background: var(--turquesa);
+      color: var(--texto-oscuro);
+      border-color: #fff;
+      font-weight: 800;
+      transform: scale(1.04);
+      box-shadow: 0 4px 14px rgba(0, 210, 186, 0.4);
+    }
+
+    .estrofa-generada-box {
+      background: radial-gradient(circle at 50% 10%, #53167D 0%, #290842 100%);
+      border: 3px solid var(--cempasuchil);
+      border-radius: 20px;
+      padding: 24px;
+      margin-top: 10px;
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.75;
+      text-align: center;
+      box-shadow: var(--sombra-card);
+    }
+
+    /* ==========================================================================
+       VISTA 5: GUÍA PEDAGÓGICA (DIDÁCTICA DE LA RIMA)
+       ========================================================================== */
+    .contenedor-guia {
+      width: 100%;
+      max-width: 900px;
+      line-height: 1.7;
+    }
+
+    .bloque-guia {
+      background: rgba(0, 0, 0, 0.28);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      border-left: 5px solid var(--cempasuchil);
+    }
+
+    .bloque-guia h3 {
+      color: var(--cempasuchil-brillante);
+      margin-bottom: 8px;
+      font-size: 1.3rem;
+    }
+
+    .cuadro-ejemplo-rima {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin: 12px 0;
+      font-size: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* ==========================================================================
+       MEDIA QUERIES (RESPONSIVIDAD MÓVIL Y TABLET)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .barra-aula {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .controles-aula-grupo {
+        justify-content: center;
+      }
+      .verso-renglon {
+        font-size: 1.15rem;
+      }
+      .ficha-palabra-boton {
+        font-size: 1.15rem;
+        padding: 10px 20px;
+      }
+      .casilla-verso-vacia {
+        min-width: 140px;
+        min-height: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       BANNER DECORATIVO DE PAPEL PICADO
+       ======================================================================== -->
+  <header class="papel-picado-guirnalda" aria-hidden="true">
+    <div class="banderin-picado bg-rosa">💀</div>
+    <div class="banderin-picado bg-cempasuchil">📖</div>
+    <div class="banderin-picado bg-turquesa">✨</div>
+    <div class="banderin-picado bg-verde">🌼</div>
+    <div class="banderin-picado bg-amarillo">📚</div>
+    <div class="banderin-picado bg-rosa">🕯️</div>
+    <div class="banderin-picado bg-cempasuchil">💀</div>
+    <div class="banderin-picado bg-turquesa">📖</div>
+    <div class="banderin-picado bg-verde">🌼</div>
+    <div class="banderin-picado bg-amarillo">✨</div>
+    <div class="banderin-picado bg-rosa">📚</div>
+    <div class="banderin-picado bg-cempasuchil">🕯️</div>
+    <div class="banderin-picado bg-turquesa">💀</div>
+    <div class="banderin-picado bg-verde">📖</div>
+  </header>
+
+  <!-- Imagen opcional de cenefa en ruta local (con fallback transparente) -->
+  <div class="banner-recurso-container">
+    <img class="img-banner-recurso" 
+         src="./recursos_juego/papel_picado_banner.png" 
+         alt="Cenefa de papel picado" 
+         onerror="this.style.display='none';">
+  </div>
+
+  <!-- ========================================================================
+       BARRA DE CONTROLES DE AULA (PROYECTOR Y ACCESIBILIDAD)
+       ======================================================================== -->
+  <nav class="barra-aula" aria-label="Herramientas del aula de 3°">
+    <div class="titulo-badge-proyecto">
+      <span class="icono">🏫📚</span>
+      <span>Proyecto: Nuestra Biblioteca Escolar | 3° de Primaria</span>
+    </div>
+    <div class="controles-aula-grupo">
+      <button class="btn-herramienta" id="btn-fuente-aumentar" title="Aumentar tamaño de letra para proyección">
+        <span>A+</span> Fuente
+      </button>
+      <button class="btn-herramienta" id="btn-fuente-disminuir" title="Disminuir tamaño de letra">
+        <span>A-</span> Fuente
+      </button>
+      <button class="btn-herramienta" id="btn-sonido-toggle" title="Activar o silenciar efectos sonoros">
+        <span id="icono-audio">🔔</span> Sonido
+      </button>
+      <button class="btn-herramienta" id="btn-modo-proyector" title="Modo pantalla completa para el proyector">
+        <span>⛶</span> Proyector
+      </button>
+      <button class="btn-herramienta" id="btn-regresar-menu" title="Volver al menú de inicio">
+        <span>🏠</span> Menú
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       CANVAS DE PAPEL PICADO / CONFETI
+       ======================================================================== -->
+  <canvas id="canvas-papel-picado"></canvas>
+
+  <!-- ========================================================================
+       CONTENEDOR DE PANTALLAS
+       ======================================================================== -->
+  <main class="contenedor-principal">
+
+    <!-- ----------------------------------------------------------------------
+         VISTA 1: PANTALLA DE INICIO (BIENVENIDA)
+         ---------------------------------------------------------------------- -->
+    <section class="pantalla-juego visible" id="vista-inicio" aria-labelledby="titulo-juego">
+      <div class="encabezado-hero">
+        <h1 id="titulo-juego">¡Calaveritas en Nuestra Biblioteca!</h1>
+        <p class="subtitulo">Rimas tradicionales y estrofas de cuatro versos para el Día de Muertos</p>
+      </div>
+
+      <!-- Ilustración Cultural con Fallback Elegante -->
+      <div class="marco-ilustracion-cultural">
+        <div class="contenedor-imagen-con-fallback">
+          <img src="./recursos_juego/catrina_lectora.png" 
+               alt="La Catrina leyendo un libro en la biblioteca escolar" 
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="svg-respaldo-decorativo" style="display: none;">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="42" fill="#FF8800" opacity="0.25"/>
+              <ellipse cx="50" cy="46" rx="28" ry="24" fill="#FFFDF9"/>
+              <circle cx="40" cy="44" r="5" fill="#3B1259"/>
+              <circle cx="60" cy="44" r="5" fill="#3B1259"/>
+              <polygon points="50,50 46,57 54,57" fill="#E4007C"/>
+              <path d="M40 63 Q50 67 60 63" stroke="#3B1259" stroke-width="3" stroke-linecap="round"/>
+              <rect x="22" y="16" width="56" height="10" rx="4" fill="#E4007C"/>
+              <circle cx="34" cy="18" r="6" fill="#FF8800"/>
+              <circle cx="50" cy="16" r="7" fill="#00D2BA"/>
+              <circle cx="66" cy="18" r="6" fill="#FF8800"/>
+              <!-- Libro abierto -->
+              <path d="M25 80 Q50 74 50 86 Q50 74 75 80 L75 92 Q50 86 50 96 Q50 86 25 92 Z" fill="#00D2BA"/>
+            </svg>
+            <span>La Catrina Lectora en la Biblioteca</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="caja-pda-didactica">
+        <strong>🎯 PDA de Lenguajes (3° Primaria):</strong>
+        <p>Reconoce y produce rimas, juegos de palabras y estrofas tradicionales de cuatro versos para completar calaveritas literarias sobre los libros y el cuidado de nuestra biblioteca escolar.</p>
+      </div>
+
+      <div class="grupo-botones-hero">
+        <button class="btn-accion-grande jugar" id="btn-comenzar-desafio">
+          <span>🎮</span> ¡Jugar Desafío de Rimas!
+        </button>
+        <button class="btn-accion-grande taller" id="btn-abrir-taller">
+          <span>✍️</span> Taller: Crea tu Calaverita
+        </button>
+        <button class="btn-accion-grande guia" id="btn-ver-guia">
+          <span>📖</span> ¿Qué es la Rima Consonante?
+        </button>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         VISTA 2: PANTALLA DE JUEGO (DESAFÍO INTERACTIVO)
+         ---------------------------------------------------------------------- -->
+    <section class="pantalla-juego" id="vista-desafio" aria-labelledby="ronda-actual-titulo">
+      <div class="topbar-desafio">
+        <div class="ronda-marcador">
+          <img class="mini-calavera-icono" 
+               src="./recursos_juego/calaverita_azucar_icono.png" 
+               alt="Icono calavera" 
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+          <span style="display:none;">💀</span>
+          <span id="texto-contador-ronda">Ronda 1 de 6</span>
+        </div>
+        <div class="ofrenda-barra-progreso" title="Elementos colocados en la ofrenda">
+          <span style="font-weight: 700; font-size: 0.95rem;">Ofrenda Escolar:</span>
+          <div class="ofrenda-elementos">
+            <span class="item-ofrenda" id="altar-0" title="Libro de cuentos">📖</span>
+            <span class="item-ofrenda" id="altar-1" title="Flor de cempasúchil">🌼</span>
+            <span class="item-ofrenda" id="altar-2" title="Veladora de lectura">🕯️</span>
+            <span class="item-ofrenda" id="altar-3" title="Pan de muerto">🥐</span>
+            <span class="item-ofrenda" id="altar-4" title="Calaverita de azúcar">💀</span>
+            <span class="item-ofrenda" id="altar-5" title="Corona de la Catrina">👑</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta Principal de la Calaverita Escolar -->
+      <article class="tarjeta-estrofa">
+        <div class="etiqueta-tema-estrofa" id="badge-tema-calaverita">
+          <span>📚</span> Biblioteca Escolar
+        </div>
+
+        <div class="lista-versos" id="contenedor-versos-juego">
+          <!-- Se inyectan los 4 versos dinámicamente -->
+        </div>
+
+        <!-- Barra de Ayudas del Verso -->
+        <div class="barra-ayudas">
+          <button class="btn-herramienta" id="btn-activar-pista" title="Resaltar las terminaciones fonéticas">
+            <span>💡</span> Pista de Rima
+          </button>
+          <button class="btn-herramienta" id="btn-reproducir-voz" title="Escuchar la estrofa leída en voz alta">
+            <span>🗣️</span> Escuchar Estrofa
+          </button>
+        </div>
+      </article>
+
+      <!-- Banco de Opciones Interactivas -->
+      <section class="seccion-banco-palabras">
+        <p class="instruccion-banco" id="texto-instruccion-banco">
+          👆 Elige o arrastra la palabra que rima en <strong>consonante</strong> para completar el verso 4:
+        </p>
+        <div class="fichas-contenedor" id="banco-fichas-palabras">
+          <!-- Opciones de respuesta generadas por JS -->
+        </div>
+      </section>
+
+      <!-- Panel de Retroalimentación Didáctica Inmediata -->
+      <div class="caja-feedback" id="caja-feedback-didactico" role="alert">
+        <div class="feedback-encabezado" id="feedback-encabezado-texto"></div>
+        <div class="feedback-cuerpo" id="feedback-cuerpo-texto"></div>
+        <button class="btn-accion-grande jugar" id="btn-avanzar-ronda" style="margin-top: 10px; display: none;">
+          Siguiente Estrofa ➡️
+        </button>
+        <button class="btn-accion-grande taller" id="btn-volver-intentar" style="margin-top: 10px; display: none;">
+          🔄 ¡Intentar de nuevo!
+        </button>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         VISTA 3: PANTALLA DE VICTORIA Y CIERRE
+         ---------------------------------------------------------------------- -->
+    <section class="pantalla-juego" id="vista-victoria">
+      <div class="contenedor-victoria">
+        <h2 class="titulo-victoria">🎉 ¡Felicidades, Gran Poeta de la Biblioteca! 🎉</h2>
+        <p class="subtitulo-victoria">
+          Has completado con éxito todas las estrofas tradicionales de cuatro versos. ¡La Catrina Lectora y Don Fermín están maravillados con tu talento poético!
+        </p>
+
+        <div class="tarjeta-altar-final">
+          <h3 style="color: var(--cempasuchil-brillante);">🌟 La Ofrenda de Nuestra Biblioteca está Completa 🌟</h3>
+          <div class="tarjeta-altar-imagen-wrapper">
+            <img src="./recursos_juego/ofrenda_libros.png" 
+                 alt="Ofrenda de libros de la biblioteca escolar" 
+                 onerror="this.style.display='none';">
+          </div>
+          <div class="elementos-altar-final-grid">
+            <span>📖</span><span>🌼</span><span>🕯️</span><span>🥐</span><span>💀</span><span>👑</span>
+          </div>
+          <p>Ofrendaste sabiduría, respeto, ritmo y rimas tradicionales.</p>
+        </div>
+
+        <div class="caja-resumen-aprendizaje">
+          <strong>🧠 Lo que aprendiste hoy sobre la Rima Consonante:</strong>
+          <ul>
+            <li>En las <strong>calaveritas literarias</strong> de 4 versos (cuartetas), las rimas crean la música y el juego de palabras.</li>
+            <li>En la <strong>rima consonante</strong>, coinciden exactamente las vocales y las consonantes a partir de la última vocal acentuada (ejemplo: <em>histori<strong>eta</strong></em> con <em>marion<strong>eta</strong></em>, o <em>aventu<strong>ra</strong></em> con <em>sepultu<strong>ra</strong></em>).</li>
+            <li>Si solo coinciden las vocales (como <em>grande</em> con <em>estante</em>), es una rima asonante.</li>
+          </ul>
+        </div>
+
+        <div class="grupo-botones-hero" style="margin-top: 24px;">
+          <button class="btn-accion-grande taller" id="btn-ir-taller-ganador">
+            <span>✍️</span> ¡Escribir Mi Propia Calaverita!
+          </button>
+          <button class="btn-accion-grande jugar" id="btn-jugar-de-nuevo">
+            <span>🔄</span> Volver a Jugar
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         VISTA 4: TALLER DEL POETA CALAVERA (PRODUCCIÓN DE VERSOS)
+         ---------------------------------------------------------------------- -->
+    <section class="pantalla-juego" id="vista-taller">
+      <h2 style="color: var(--cempasuchil-brillante); font-size: 2rem; margin-bottom: 8px;">
+        ✍️ Taller del Poeta: ¡Produce tu Calaverita de 4 Versos!
+      </h2>
+      <p style="color: var(--turquesa); margin-bottom: 20px; font-weight: 600;">
+        Proyecto: Nuestra Biblioteca Escolar
+      </p>
+
+      <div class="contenedor-taller">
+        <!-- Paso 1: Personaje o Motivo de la Biblioteca -->
+        <div class="paso-taller">
+          <h3><span>1️⃣</span> Elige a quién dedicas la calaverita en la biblioteca:</h3>
+          <div class="opciones-taller-flex" id="selector-personajes">
+            <button class="btn-opcion-taller seleccionado" data-personaje="catrina">A la Catrina Lectora 💀</button>
+            <button class="btn-opcion-taller" data-personaje="bibliotecario">A Don Fermín el Bibliotecario 👓</button>
+            <button class="btn-opcion-taller" data-personaje="estudiantes">A las niñas y niños lectores 👧👦</button>
+          </div>
+        </div>
+
+        <!-- Paso 2: Pareja de Rimas Consonantes -->
+        <div class="paso-taller">
+          <h3><span>2️⃣</span> Elige la terminación con Rima Consonante:</h3>
+          <div class="opciones-taller-flex" id="selector-rimas">
+            <button class="btn-opcion-taller seleccionado" data-rima="ura">lectura / aventura (-ura)</button>
+            <button class="btn-opcion-taller" data-rima="ante">estante / gigante (-ante)</button>
+            <button class="btn-opcion-taller" data-rima="ero">librero / compañero (-ero)</button>
+            <button class="btn-opcion-taller" data-rima="eca">biblioteca / muñeca (-eca)</button>
+          </div>
+        </div>
+
+        <!-- Paso 3: Nombre del autor o autora -->
+        <div class="paso-taller">
+          <h3><span>3️⃣</span> Tu nombre o grupo escolar:</h3>
+          <input type="text" id="campo-autor-escolar" value="Alumnos de 3° Grado" 
+                 style="width: 100%; max-width: 400px; padding: 10px 16px; border-radius: 12px; border: 2px solid var(--turquesa); background: #220B34; color: #fff; font-size: 1.1rem;">
+        </div>
+
+        <!-- Vista previa de la estrofa creada -->
+        <div class="estrofa-generada-box" id="caja-preview-taller">
+          <!-- Inyectado por JS -->
+        </div>
+
+        <div class="grupo-botones-hero">
+          <button class="btn-accion-grande jugar" id="btn-copiar-estrofa">
+            <span>📋</span> Copiar para el Periódico Mural
+          </button>
+          <button class="btn-accion-grande guia" id="btn-leer-en-voz-taller">
+            <span>🗣️</span> Escuchar Mi Calaverita
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         VISTA 5: GUÍA PEDAGÓGICA (DIDÁCTICA DE LA RIMA)
+         ---------------------------------------------------------------------- -->
+    <section class="pantalla-juego" id="vista-guia">
+      <h2 style="color: var(--cempasuchil-brillante); font-size: 2rem; margin-bottom: 12px;">
+        📖 Guía Didáctica: Rimas y Estrofas Tradicionales
+      </h2>
+
+      <div class="contenedor-guia">
+        <div class="bloque-guia">
+          <h3>1. ¿Qué es una estrofa tradicional de cuatro versos?</h3>
+          <p>
+            Una <strong>calaverita literaria</strong> tradicional se escribe en estrofas de cuatro renglones llamados <strong>versos</strong> (cuarteta o redondilla). Cada verso tiene ritmo y relata con humor cómo la Catrina o la calaca visita a maestros, alumnos y libros en nuestra biblioteca escolar.
+          </p>
+        </div>
+
+        <div class="bloque-guia">
+          <h3>2. ¿Cómo reconocer la Rima Consonante en 3° Grado?</h3>
+          <p>
+            Ocurre cuando, a partir de la última vocal acentuada de las palabras finales, <strong>coinciden exactamente todas las letras (tanto las vocales como las consonantes)</strong>.
+          </p>
+          <div class="cuadro-ejemplo-rima">
+            ⭐ <strong>biblio-t<span style="color:#FFF275; text-decoration: underline;">eca</span></strong> rima en consonante con <strong>muñ<span style="color:#FFF275; text-decoration: underline;">eca</span></strong> (-eca).<br>
+            ⭐ <strong>lec-t<span style="color:#FFF275; text-decoration: underline;">ura</span></strong> rima en consonante con <strong>aven-t<span style="color:#FFF275; text-decoration: underline;">ura</span></strong> (-ura).<br>
+            ⭐ <strong>es-t<span style="color:#FFF275; text-decoration: underline;">ante</span></strong> rima en consonante con <strong>gi-g<span style="color:#FFF275; text-decoration: underline;">ante</span></strong> (-ante).
+          </div>
+        </div>
+
+        <div class="bloque-guia">
+          <h3>3. Diferencia entre Rima Consonante y Asonante</h3>
+          <p>
+            Si únicamente se repiten las vocales y las consonantes son diferentes (por ejemplo: <em>estante</em> y <em>grande</em>, donde solo suena a-e), la rima es <strong>asonante</strong>. ¡En este juego aprendemos a buscar la rima <strong>consonante exacta</strong>!
+          </p>
+        </div>
+
+        <div class="grupo-botones-hero" style="margin-top: 20px;">
+          <button class="btn-accion-grande jugar" id="btn-volver-a-jugar-guia">
+            <span>🎮</span> ¡Poner en Práctica en el Juego!
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       LÓGICA JAVASCRIPT EMBEBIDA (MOTOR EDUCATIVO AUTOSUFICIENTE)
+       ======================================================================== -->
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* ==========================================================================
+       1. BANCO DE CALAVERITAS LITERARIAS (3° PRIMARIA - PROYECTO BIBLIOTECA)
+       ========================================================================== */
+    const BANCO_CALAVERITAS = [
+      {
+        id: 1,
+        tema: "La Catrina en la Biblioteca",
+        versos: [
+          { num: 1, texto: "La Catrina paseaba muy coqueta," },
+          { num: 2, texto: "buscando un gran rincón en la biblioteca." },
+          { num: 3, texto: "Halló un libro brillante y una historieta," },
+          { num: 4, texto: "y se puso a leer como una ", espacio: true }
+        ],
+        rima_esperada: "-eta",
+        opcion_correcta: "marioneta",
+        opciones: [
+          { palabra: "marioneta", tipo: "consonante", terminacion: "-eta" },
+          { palabra: "estrella", tipo: "asonante", explicacion: "Solo riman las vocales (e-a), pero las consonantes son distintas." },
+          { palabra: "calavera", tipo: "sin_rima", explicacion: "Tiene sentido con el tema pero no rima con 'historieta'." }
+        ],
+        explicacion_didactica: "¡Excelente oído poético! 'Historieta' y 'marioneta' riman en <strong>consonante</strong> porque terminan exactamente con las mismas letras: <strong>-eta</strong>."
+      },
+      {
+        id: 2,
+        tema: "El Libro Misterioso del Estante",
+        versos: [
+          { num: 1, texto: "En lo alto del librero más brillante," },
+          { num: 2, texto: "asomaba un gran libro fascinante." },
+          { num: 3, texto: "La calaca estiró el brazo en un instante," },
+          { num: 4, texto: "¡y despertó a un dragón muy ", espacio: true }
+        ],
+        rima_esperada: "-ante",
+        opcion_correcta: "gigante",
+        opciones: [
+          { palabra: "gigante", tipo: "consonante", terminacion: "-ante" },
+          { palabra: "grande", tipo: "asonante", explicacion: "Solo rima en las vocales (a-e); le faltan las consonantes para ser rima consonante completa." },
+          { palabra: "pesado", tipo: "sin_rima", explicacion: "No rima con 'instante'." }
+        ],
+        explicacion_didactica: "¡Muy bien observado! 'Instante' y 'gigante' tienen rima <strong>consonante</strong> porque coinciden todas las letras finales a partir de la vocal fuerte: <strong>-ante</strong>."
+      },
+      {
+        id: 3,
+        tema: "El Secreto de la Lectura",
+        versos: [
+          { num: 1, texto: "Don Fermín nos decía con dulzura," },
+          { num: 2, texto: "que leer enriquece nuestra cultura." },
+          { num: 3, texto: "La Catrina al viajar por la aventura," },
+          { num: 4, texto: "olvidó llevar a nadie a la ", espacio: true }
+        ],
+        rima_esperada: "-ura",
+        opcion_correcta: "sepultura",
+        opciones: [
+          { palabra: "sepultura", tipo: "consonante", terminacion: "-ura" },
+          { palabra: "cuna", tipo: "asonante", explicacion: "Solo coinciden las vocales (u-a)." },
+          { palabra: "tristeza", tipo: "sin_rima", explicacion: "Termina en -eza, no coincide con -ura." }
+        ],
+        explicacion_didactica: "¡Fabuloso! 'Aventura' y 'sepultura' riman en <strong>consonante</strong> con la terminación <strong>-ura</strong>, ¡el verso cobra vida y musicalidad!"
+      },
+      {
+        id: 4,
+        tema: "Risas entre los Cuentos",
+        versos: [
+          { num: 1, texto: "El silencio reinaba en los momentos," },
+          { num: 2, texto: "en que el viento traía mil portentos." },
+          { num: 3, texto: "La huesuda soltó risas y contentos," },
+          { num: 4, texto: "al abrir nuestro libro de ", espacio: true }
+        ],
+        rima_esperada: "-entos",
+        opcion_correcta: "cuentos",
+        opciones: [
+          { palabra: "cuentos", tipo: "consonante", terminacion: "-entos" },
+          { palabra: "sueños", tipo: "asonante", explicacion: "Termina en -eños; solo rima en vocales (e-o)." },
+          { palabra: "páginas", tipo: "sin_rima", explicacion: "No rima con 'contentos'." }
+        ],
+        explicacion_didactica: "¡Exacto! 'Contentos' y 'cuentos' forman una rima <strong>consonante</strong> perfecta porque coinciden tanto las vocales como las consonantes: <strong>-entos</strong>."
+      },
+      {
+        id: 5,
+        tema: "El Bibliotecario Escolar",
+        versos: [
+          { num: 1, texto: "Con paciencia cuidaba con esmero," },
+          { num: 2, texto: "cada tomo en su sitio del librero." },
+          { num: 3, texto: "La calaca le dijo: —¡Soy primero," },
+          { num: 4, texto: "préstame este poema, buen ", espacio: true }
+        ],
+        rima_esperada: "-ero",
+        opcion_correcta: "compañero",
+        opciones: [
+          { palabra: "compañero", tipo: "consonante", terminacion: "-ero" },
+          { palabra: "maestro", tipo: "asonante", explicacion: "Termina en -estro, solo rima asonante en e-o." },
+          { palabra: "amigo", tipo: "sin_rima", explicacion: "No rima con 'primero'." }
+        ],
+        explicacion_didactica: "¡Excelente! 'Primero' y 'compañero' riman en <strong>consonante</strong> con la terminación <strong>-ero</strong>. ¡Así honramos a quienes cuidan nuestra biblioteca!"
+      },
+      {
+        id: 6,
+        tema: "La Promesa de la Catrina",
+        versos: [
+          { num: 1, texto: "En las mesas con libros y cuadernos," },
+          { num: 2, texto: "se escuchaban relatos casi eternos." },
+          { num: 3, texto: "La Catrina juró en los días tiernos," },
+          { num: 4, texto: "visitar nuestra escuela en los ", espacio: true }
+        ],
+        rima_esperada: "-ernos",
+        opcion_correcta: "inviernos",
+        opciones: [
+          { palabra: "inviernos", tipo: "consonante", terminacion: "-ernos" },
+          { palabra: "tiempos", tipo: "asonante", explicacion: "Termina en -empos; es solo asonancia e-o." },
+          { palabra: "meses", tipo: "sin_rima", explicacion: "No rima con 'tiernos'." }
+        ],
+        explicacion_didactica: "¡Completaste la estrofa! 'Tiernos' e 'inviernos' riman en <strong>consonante</strong> en <strong>-ernos</strong>. ¡La Catrina volverá siempre a leer con nosotros en la biblioteca!"
+      }
+    ];
+
+    /* ==========================================================================
+       2. SINTETIZADOR DE AUDIO (WEB AUDIO API - SIN DEPENDENCIAS)
+       ========================================================================== */
+    class SintetizadorSonoro {
+      constructor() {
+        this.ctx = null;
+        this.silenciado = false;
+      }
+
+      asegurarContexto() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      emitirNota(freq, tiempoOffset, duracion, tipo = 'triangle', ganancia = 0.22) {
+        if (this.silenciado || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gainNode = this.ctx.createGain();
+          osc.type = tipo;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + tiempoOffset);
+
+          gainNode.gain.setValueAtTime(0, this.ctx.currentTime + tiempoOffset);
+          gainNode.gain.linearRampToValueAtTime(ganancia, this.ctx.currentTime + tiempoOffset + 0.02);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + tiempoOffset + duracion);
+
+          osc.connect(gainNode);
+          gainNode.connect(this.ctx.destination);
+
+          osc.start(this.ctx.currentTime + tiempoOffset);
+          osc.stop(this.ctx.currentTime + tiempoOffset + duracion);
+        } catch (e) {
+          console.warn('Audio desactivado', e);
+        }
+      }
+
+      sonarAcierto() {
+        this.asegurarContexto();
+        // Arpegio festivo tradicional mexicano (Do5, Mi5, Sol5, Do6)
+        const notas = [523.25, 659.25, 783.99, 1046.50];
+        notas.forEach((f, idx) => {
+          this.emitirNota(f, idx * 0.08, 0.35, 'sine', 0.25);
+        });
+      }
+
+      sonarErrorAmable() {
+        this.asegurarContexto();
+        this.emitirNota(392.00, 0, 0.22, 'triangle', 0.18); // Sol4
+        this.emitirNota(329.63, 0.14, 0.3, 'triangle', 0.18); // Mi4
+      }
+
+      sonarColocacion() {
+        this.asegurarContexto();
+        this.emitirNota(440, 0, 0.1, 'sine', 0.15); // La4
+      }
+
+      sonarFanfarriaVictoria() {
+        this.asegurarContexto();
+        const melodia = [
+          { f: 523.25, t: 0, d: 0.15 },
+          { f: 523.25, t: 0.15, d: 0.15 },
+          { f: 659.25, t: 0.3, d: 0.2 },
+          { f: 783.99, t: 0.52, d: 0.25 },
+          { f: 1046.50, t: 0.78, d: 0.6 }
+        ];
+        melodia.forEach(m => this.emitirNota(m.f, m.t, m.d, 'triangle', 0.28));
+      }
+
+      alternarSilencio() {
+        this.silenciado = !this.silenciado;
+        return this.silenciado;
+      }
+    }
+
+    const audioMotor = new SintetizadorSonoro();
+
+    /* ==========================================================================
+       3. EFECTO DE PAPEL PICADO / CONFETI EN CANVAS
+       ========================================================================== */
+    class AnimacionPapelPicado {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particulas = [];
+        this.activo = false;
+        this.paleta = ['#E4007C', '#FF8800', '#00D2BA', '#FFAA00', '#2CDA69', '#FFFDF8'];
+        this.ajustarDimensiones();
+        window.addEventListener('resize', () => this.ajustarDimensiones());
+      }
+
+      ajustarDimensiones() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      disparar(cantidad = 75) {
+        for (let i = 0; i < cantidad; i++) {
+          this.particulas.push({
+            x: Math.random() * this.canvas.width,
+            y: -20 - Math.random() * 50,
+            ancho: 12 + Math.random() * 16,
+            alto: 16 + Math.random() * 20,
+            color: this.paleta[Math.floor(Math.random() * this.paleta.length)],
+            velocidadY: 2 + Math.random() * 5,
+            velocidadX: (Math.random() - 0.5) * 3.5,
+            rotacion: Math.random() * 360,
+            velocidadRot: (Math.random() - 0.5) * 6,
+            oscilacion: Math.random() * Math.PI * 2
+          });
+        }
+        if (!this.activo) {
+          this.activo = true;
+          this.ciclo();
+        }
+      }
+
+      ciclo() {
+        if (!this.activo) return;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        for (let i = this.particulas.length - 1; i >= 0; i--) {
+          const p = this.particulas[i];
+          p.y += p.velocidadY;
+          p.x += Math.sin(p.oscilacion) * 2 + p.velocidadX;
+          p.oscilacion += 0.05;
+          p.rotacion += p.velocidadRot;
+
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotacion * Math.PI) / 180);
+          this.ctx.fillStyle = p.color;
+          // Simulación de banderín de papel picado recortado
+          this.ctx.fillRect(-p.ancho / 2, -p.alto / 2, p.ancho, p.alto);
+          this.ctx.restore();
+
+          if (p.y > this.canvas.height + 40) {
+            this.particulas.splice(i, 1);
+          }
+        }
+
+        if (this.particulas.length > 0) {
+          requestAnimationFrame(() => this.ciclo());
+        } else {
+          this.activo = false;
+        }
+      }
+    }
+
+    const efectoConfeti = new AnimacionPapelPicado('canvas-papel-picado');
+
+    /* ==========================================================================
+       4. ESTADO DE LA APLICACIÓN
+       ========================================================================== */
+    const estadoJuego = {
+      rondaIndice: 0,
+      totalRondas: BANCO_CALAVERITAS.length,
+      pistaEncendida: false,
+      palabraColocada: null,
+      tamanoFuenteBase: 18
+    };
+
+    /* ==========================================================================
+       5. NAVEGACIÓN ENTRE VISTAS
+       ========================================================================== */
+    function cambiarVista(idVista) {
+      document.querySelectorAll('.pantalla-juego').forEach(p => p.classList.remove('visible'));
+      const destino = document.getElementById(idVista);
+      if (destino) {
+        destino.classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    /* ==========================================================================
+       6. HERRAMIENTAS DE AULA Y PROYECCIÓN
+       ========================================================================== */
+    document.getElementById('btn-fuente-aumentar').addEventListener('click', () => {
+      if (estadoJuego.tamanoFuenteBase < 26) {
+        estadoJuego.tamanoFuenteBase += 2;
+        document.documentElement.style.setProperty('--fuente-tamano-base', estadoJuego.tamanoFuenteBase + 'px');
+      }
+    });
+
+    document.getElementById('btn-fuente-disminuir').addEventListener('click', () => {
+      if (estadoJuego.tamanoFuenteBase > 14) {
+        estadoJuego.tamanoFuenteBase -= 2;
+        document.documentElement.style.setProperty('--fuente-tamano-base', estadoJuego.tamanoFuenteBase + 'px');
+      }
+    });
+
+    document.getElementById('btn-sonido-toggle').addEventListener('click', () => {
+      const silenciado = audioMotor.alternarSilencio();
+      document.getElementById('icono-audio').textContent = silenciado ? '🔇' : '🔔';
+    });
+
+    document.getElementById('btn-modo-proyector').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.getElementById('btn-regresar-menu').addEventListener('click', () => {
+      cambiarVista('vista-inicio');
+    });
+
+    /* ==========================================================================
+       7. CARGA DE RONDAS Y MECÁNICA DE VERSOS DE CUATRO LÍNEAS
+       ========================================================================== */
+    function iniciarRonda(indice) {
+      estadoJuego.rondaIndice = indice;
+      estadoJuego.pistaEncendida = false;
+      estadoJuego.palabraColocada = null;
+
+      const datos = BANCO_CALAVERITAS[indice];
+      document.getElementById('texto-contador-ronda').textContent = `Ronda ${indice + 1} de ${estadoJuego.totalRondas}`;
+      document.getElementById('badge-tema-calaverita').innerHTML = `<span>📚</span> ${datos.tema}`;
+
+      // Resetear panel de feedback
+      const cajaFeedback = document.getElementById('caja-feedback-didactico');
+      cajaFeedback.className = 'caja-feedback';
+      cajaFeedback.style.display = 'none';
+      document.getElementById('btn-avanzar-ronda').style.display = 'none';
+      document.getElementById('btn-volver-intentar').style.display = 'none';
+
+      // Construcción de la cuarteta (estrofa de 4 versos)
+      const contenedorVersos = document.getElementById('contenedor-versos-juego');
+      contenedorVersos.innerHTML = '';
+
+      datos.versos.forEach(v => {
+        const renglon = document.createElement('div');
+        renglon.className = 'verso-renglon';
+        if (v.espacio) renglon.classList.add('objetivo');
+
+        const etiquetaNum = document.createElement('span');
+        etiquetaNum.className = 'num-linea';
+        etiquetaNum.textContent = `Línea ${v.num}`;
+        renglon.appendChild(etiquetaNum);
+
+        if (!v.espacio) {
+          const texto = document.createElement('span');
+          texto.className = 'cuerpo-verso';
+          texto.dataset.textoPuro = v.texto;
+          texto.textContent = v.texto;
+          renglon.appendChild(texto);
+        } else {
+          // Verso 4 con espacio para completar
+          const textoPrefijo = document.createElement('span');
+          textoPrefijo.textContent = v.texto;
+          renglon.appendChild(textoPrefijo);
+
+          const dropBox = document.createElement('div');
+          dropBox.className = 'casilla-verso-vacia';
+          dropBox.id = 'casilla-verso-vacia';
+          dropBox.innerHTML = '<span>[ Arrastra o toca aquí ]</span>';
+
+          // Eventos Drag and Drop nativos
+          dropBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropBox.classList.add('hover-activo');
+          });
+
+          dropBox.addEventListener('dragleave', () => {
+            dropBox.classList.remove('hover-activo');
+          });
+
+          dropBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropBox.classList.remove('hover-activo');
+            const palabra = e.dataTransfer.getData('text/plain');
+            if (palabra) {
+              asignarPalabra(palabra);
+            }
+          });
+
+          // Clic para retirar palabra si ya fue colocada
+          dropBox.addEventListener('click', () => {
+            if (estadoJuego.palabraColocada) {
+              removerPalabra();
+            }
+          });
+
+          renglon.appendChild(dropBox);
+
+          const puntoFinal = document.createElement('span');
+          puntoFinal.textContent = '.';
+          renglon.appendChild(puntoFinal);
+        }
+
+        contenedorVersos.appendChild(renglon);
+      });
+
+      // Generar banco de fichas con orden aleatorio
+      const bancoFichas = document.getElementById('banco-fichas-palabras');
+      bancoFichas.innerHTML = '';
+
+      const opcionesDesordenadas = [...datos.opciones].sort(() => Math.random() - 0.5);
+
+      opcionesDesordenadas.forEach(op => {
+        const botonFicha = document.createElement('button');
+        botonFicha.className = 'ficha-palabra-boton';
+        botonFicha.textContent = op.palabra;
+        botonFicha.draggable = true;
+        botonFicha.dataset.palabra = op.palabra;
+
+        // Soporte Drag and Drop
+        botonFicha.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', op.palabra);
+          botonFicha.classList.add('arrastrando');
+        });
+
+        botonFicha.addEventListener('dragend', () => {
+          botonFicha.classList.remove('arrastrando');
+        });
+
+        // Soporte Clic Directo (Crucial para proyectores y pantallas táctiles escolares)
+        botonFicha.addEventListener('click', () => {
+          asignarPalabra(op.palabra);
+        });
+
+        bancoFichas.appendChild(botonFicha);
+      });
+    }
+
+    /* ==========================================================================
+       8. COLOCACIÓN Y EVALUACIÓN PEDAGÓGICA DE LA RIMA
+       ========================================================================== */
+    function asignarPalabra(palabra) {
+      audioMotor.sonarColocacion();
+      estadoJuego.palabraColocada = palabra;
+
+      const casilla = document.getElementById('casilla-verso-vacia');
+      casilla.textContent = palabra;
+      casilla.classList.add('ocupada');
+
+      // Marcar ficha
+      document.querySelectorAll('.ficha-palabra-boton').forEach(f => {
+        if (f.dataset.palabra === palabra) {
+          f.classList.add('deshabilitada');
+        } else {
+          f.classList.remove('deshabilitada');
+        }
+      });
+
+      evaluarSeleccion(palabra);
+    }
+
+    function removerPalabra() {
+      estadoJuego.palabraColocada = null;
+      const casilla = document.getElementById('casilla-verso-vacia');
+      casilla.innerHTML = '<span>[ Arrastra o toca aquí ]</span>';
+      casilla.classList.remove('ocupada');
+      document.querySelectorAll('.ficha-palabra-boton').forEach(f => f.classList.remove('deshabilitada'));
+
+      const cajaFeedback = document.getElementById('caja-feedback-didactico');
+      cajaFeedback.style.display = 'none';
+    }
+
+    function evaluarSeleccion(palabra) {
+      const calaverita = BANCO_CALAVERITAS[estadoJuego.rondaIndice];
+      const panel = document.getElementById('caja-feedback-didactico');
+      const encabezado = document.getElementById('feedback-encabezado-texto');
+      const cuerpo = document.getElementById('feedback-cuerpo-texto');
+      const btnSiguiente = document.getElementById('btn-avanzar-ronda');
+      const btnReintentar = document.getElementById('btn-volver-intentar');
+
+      panel.style.display = 'flex';
+
+      if (palabra.toLowerCase() === calaverita.opcion_correcta.toLowerCase()) {
+        // ACIERTO: Rima Consonante
+        audioMotor.sonarAcierto();
+        efectoConfeti.disparar(55);
+        panel.className = 'caja-feedback acierto';
+        encabezado.innerHTML = '<span>🌟 ¡Rima Consonante Exacta! 🌟</span>';
+        cuerpo.innerHTML = calaverita.explicacion_didactica;
+
+        // Iluminar ofrenda
+        const iconoAltar = document.getElementById(`altar-${estadoJuego.rondaIndice}`);
+        if (iconoAltar) {
+          iconoAltar.classList.add('ganado');
+        }
+
+        btnSiguiente.style.display = 'inline-flex';
+        btnReintentar.style.display = 'none';
+        btnSiguiente.focus();
+
+        // Resaltar rimas en los versos
+        mostrarPistasVisuales();
+
+      } else {
+        // ERROR EDUCATIVO FORMATIVO
+        audioMotor.sonarErrorAmable();
+        panel.className = 'caja-feedback error';
+        encabezado.innerHTML = '<span>🔍 ¡Escucha y analiza el final!</span>';
+
+        const infoOpcion = calaverita.opciones.find(o => o.palabra === palabra);
+        const detalle = infoOpcion?.explicacion || "Esta palabra no rima en consonante con los versos de la calaverita.";
+
+        cuerpo.innerHTML = `Elegiste <strong>${palabra}</strong>. ${detalle}<br>
+        Recuerda que para lograr la <strong>rima consonante</strong>, deben coincidir todas las letras y sonidos desde la vocal tónica (debe terminar exactamente en <strong>${calaverita.rima_esperada}</strong>). ¡Inténtalo otra vez!`;
+
+        btnSiguiente.style.display = 'none';
+        btnReintentar.style.display = 'inline-flex';
+        btnReintentar.focus();
+      }
+    }
+
+    /* ==========================================================================
+       9. PISTAS VISUALES Y LECTURA EN VOZ ALTA
+       ========================================================================== */
+    function mostrarPistasVisuales() {
+      const calaverita = BANCO_CALAVERITAS[estadoJuego.rondaIndice];
+      const sufijo = calaverita.rima_esperada.replace('-', '');
+      const versosTexto = document.querySelectorAll('.verso-renglon .cuerpo-verso');
+
+      versosTexto.forEach(v => {
+        let textoOriginal = v.dataset.textoPuro;
+        const reg = new RegExp(`(${sufijo}[.,;:]?)$`, 'i');
+        textoOriginal = textoOriginal.replace(reg, `<span class="rima-subrayada">$1</span>`);
+        v.innerHTML = textoOriginal;
+      });
+      estadoJuego.pistaEncendida = true;
+    }
+
+    document.getElementById('btn-activar-pista').addEventListener('click', () => {
+      audioMotor.sonarColocacion();
+      if (!estadoJuego.pistaEncendida) {
+        mostrarPistasVisuales();
+      } else {
+        document.querySelectorAll('.verso-renglon .cuerpo-verso').forEach(v => {
+          v.textContent = v.dataset.textoPuro;
+        });
+        estadoJuego.pistaEncendida = false;
+      }
+    });
+
+    document.getElementById('btn-reproducir-voz').addEventListener('click', () => {
+      audioMotor.asegurarContexto();
+      if (!('speechSynthesis' in window)) {
+        alert('La síntesis de voz no está habilitada en este equipo.');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const calaverita = BANCO_CALAVERITAS[estadoJuego.rondaIndice];
+      let declamacion = '';
+
+      calaverita.versos.forEach(v => {
+        if (!v.espacio) {
+          declamacion += v.texto + ' \n';
+        } else {
+          const palabra = estadoJuego.palabraColocada || calaverita.opcion_correcta;
+          declamacion += v.texto + ' ' + palabra + '.\n';
+        }
+      });
+
+      const voz = new SpeechSynthesisUtterance(declamacion);
+      voz.lang = 'es-MX';
+      voz.rate = 0.88; // Velocidad pausada adecuada para 3° de primaria
+      voz.pitch = 1.05;
+      window.speechSynthesis.speak(voz);
+    });
+
+    /* ==========================================================================
+       10. CONTROLADORES DE BOTONES Y FLUJO
+       ========================================================================== */
+    document.getElementById('btn-avanzar-ronda').addEventListener('click', () => {
+      if (estadoJuego.rondaIndice + 1 < estadoJuego.totalRondas) {
+        iniciarRonda(estadoJuego.rondaIndice + 1);
+      } else {
+        // Victoria final
+        audioMotor.sonarFanfarriaVictoria();
+        efectoConfeti.disparar(120);
+        cambiarVista('vista-victoria');
+      }
+    });
+
+    document.getElementById('btn-volver-intentar').addEventListener('click', () => {
+      removerPalabra();
+    });
+
+    document.getElementById('btn-jugar-de-nuevo').addEventListener('click', () => {
+      document.querySelectorAll('.item-ofrenda').forEach(i => i.classList.remove('ganado'));
+      iniciarRonda(0);
+      cambiarVista('vista-desafio');
+    });
+
+    document.getElementById('btn-comenzar-desafio').addEventListener('click', () => {
+      audioMotor.asegurarContexto();
+      iniciarRonda(0);
+      cambiarVista('vista-desafio');
+    });
+
+    document.getElementById('btn-abrir-taller').addEventListener('click', () => {
+      refrescarTaller();
+      cambiarVista('vista-taller');
+    });
+
+    document.getElementById('btn-ir-taller-ganador').addEventListener('click', () => {
+      refrescarTaller();
+      cambiarVista('vista-taller');
+    });
+
+    document.getElementById('btn-ver-guia').addEventListener('click', () => {
+      cambiarVista('vista-guia');
+    });
+
+    document.getElementById('btn-volver-a-jugar-guia').addEventListener('click', () => {
+      iniciarRonda(0);
+      cambiarVista('vista-desafio');
+    });
+
+    /* ==========================================================================
+       11. TALLER DEL POETA: PRODUCCIÓN DE ESTROFAS DE 4 VERSOS
+       ========================================================================== */
+    const CONFIG_TALLER = {
+      personaje: 'catrina',
+      rima: 'ura'
+    };
+
+    const ESTROFAS_BIBLIOTECA = {
+      catrina: {
+        ura: [
+          "Llegó la Catrina con gran apostura,",
+          "a nuestra biblioteca con mucha premura.",
+          "Abrió un gran libro de hermosa aventura,",
+          "¡y halló en sus páginas pura dulzura!"
+        ],
+        ante: [
+          "La Catrina pasea muy elegante,",
+          "buscando en la biblioteca un libro brillante.",
+          "Leyó tantas páginas en solo un instante,",
+          "¡que sonrió como un ser fascinante!"
+        ],
+        ero: [
+          "Buscaba la flaca con mucho esmero,",
+          "un verso chistoso en aquel librero.",
+          "Nos dijo sonriendo: —¡Leer es primero,",
+          "¡para ser en el aula un buen compañero!"
+        ],
+        eca: [
+          "La Catrina vestida con falda coqueta,",
+          "llegó muy puntual a nuestra biblioteca.",
+          "Pidió que le dieran un cuento o historieta,",
+          "¡y se fue bailando como una marioneta!"
+        ]
+      },
+      bibliotecario: {
+        ura: [
+          "Don Fermín acomoda con gran ternura,",
+          "los tomos repletos de bella lectura.",
+          "La Catrina le dijo: —¡Qué hermosa cultura,",
+          "aquí en los estantes la magia perdura!"
+        ],
+        ante: [
+          "El buen bibliotecario siempre vigilante,",
+          "presta los volúmenes en todo instante.",
+          "La muerte le pide un cuento impactante,",
+          "¡donde venza un sabio a un fiero gigante!"
+        ],
+        ero: [
+          "Con sellos y fichas con fino esmero,",
+          "Don Fermín vigila cada libro entero.",
+          "La calaca grita: —¡Cuidar es primero,",
+          "los libros que leo con mi compañero!"
+        ],
+        eca: [
+          "Don Fermín sonríe en la biblioteca,",
+          "mientras una niña lee con su muñeca.",
+          "La calaca aprende que quien bien se educa,",
+          "¡viaja por el mundo sin salir de la biblioteca!"
+        ]
+      },
+      estudiantes: {
+        ura: [
+          "Niñas y niños con gran soltura,",
+          "descubren tesoros en cada lectura.",
+          "La flaca los mira con mucha cordura,",
+          "¡y aplaude su ingenio y su gran aventura!"
+        ],
+        ante: [
+          "En mesas de estudio con luz radiante,",
+          "leemos poemas de modo constante.",
+          "La Catrina asoma su rostro sonriente,",
+          "¡al ver que cada alumno es muy brillante!"
+        ],
+        ero: [
+          "Compartimos cuentos con gran esmero,",
+          "y libros que bajan de todo el librero.",
+          "La calaca aprende que el saber sincero,",
+          "¡hace más valioso a cada compañero!"
+        ],
+        eca: [
+          "En nuestro recreo de la biblioteca,",
+          "nadie se aburre ni nadie se queja.",
+          "La calaca baila, la risa no peca,",
+          "¡y juntos leemos de oreja a oreja!"
+        ]
+      }
+    };
+
+    function asociarBotonesTaller(contenedorId, propiedad) {
+      document.querySelectorAll(`#${contenedorId} .btn-opcion-taller`).forEach(b => {
+        b.addEventListener('click', () => {
+          document.querySelectorAll(`#${contenedorId} .btn-opcion-taller`).forEach(item => item.classList.remove('seleccionado'));
+          b.classList.add('seleccionado');
+          CONFIG_TALLER[propiedad] = b.dataset[propiedad];
+          refrescarTaller();
+        });
+      });
+    }
+
+    asociarBotonesTaller('selector-personajes', 'personaje');
+    asociarBotonesTaller('selector-rimas', 'rima');
+
+    document.getElementById('campo-autor-escolar').addEventListener('input', () => {
+      refrescarTaller();
+    });
+
+    function refrescarTaller() {
+      const versos = ESTROFAS_BIBLIOTECA[CONFIG_TALLER.personaje][CONFIG_TALLER.rima];
+      const autor = document.getElementById('campo-autor-escolar').value.trim() || 'Alumnos de 3° Grado';
+      const caja = document.getElementById('caja-preview-taller');
+
+      caja.innerHTML = `
+        <div style="color: var(--cempasuchil-brillante); font-size: 1.15rem; margin-bottom: 8px;">📜 Calaverita de Nuestra Biblioteca:</div>
+        <div>1. ${versos[0]}</div>
+        <div>2. ${versos[1]}</div>
+        <div>3. ${versos[2]}</div>
+        <div>4. ${versos[3]}</div>
+        <div style="margin-top: 16px; font-size: 1.05rem; color: var(--turquesa); font-style: italic;">
+          — Autor(a): <strong>${autor}</strong> (Rima consonante en -${CONFIG_TALLER.rima})
+        </div>
+      `;
+    }
+
+    document.getElementById('btn-copiar-estrofa').addEventListener('click', () => {
+      const versos = ESTROFAS_BIBLIOTECA[CONFIG_TALLER.personaje][CONFIG_TALLER.rima];
+      const autor = document.getElementById('campo-autor-escolar').value.trim() || 'Alumnos de 3°';
+      const texto = `📜 Calaverita Literaria - Nuestra Biblioteca 📚\n\n${versos.join('\n')}\n\n— Creada por: ${autor}\nProyecto: Rimas y versos tradicionales de Día de Muertos (3° Primaria)`;
+
+      navigator.clipboard.writeText(texto).then(() => {
+        audioMotor.sonarAcierto();
+        alert('¡Calaverita copiada al portapapeles! Lista para pegar e imprimir en el periódico mural escolar.');
+      }).catch(() => {
+        alert('Copia el texto directamente de la pantalla.');
+      });
+    });
+
+    document.getElementById('btn-leer-en-voz-taller').addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const versos = ESTROFAS_BIBLIOTECA[CONFIG_TALLER.personaje][CONFIG_TALLER.rima];
+      const declamacion = new SpeechSynthesisUtterance(versos.join('\n'));
+      declamacion.lang = 'es-MX';
+      declamacion.rate = 0.88;
+      window.speechSynthesis.speak(declamacion);
+    });
+
+  </script>
+</body>
+</html>

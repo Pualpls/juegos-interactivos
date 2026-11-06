@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>¡Dictado Silábico y Oraciones Ilustradas! - 8 Niveles de Alfabetización</title>
+  <style>
+    :root {
+      --bg-grad: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 50%, #fef3c7 100%);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --upper-red: #dc2626;
+      --punct-blue: #2563eb;
+      --text-scale: 1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', 'Trebuchet MS', sans-serif;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-grad);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Regla Bicolor Escolar: Solo la letra Mayúscula en rojo y signos en azul */
+    .bicolor-upper {
+      color: #dc2626 !important;
+      font-weight: 900;
+    }
+    .bicolor-punct {
+      color: #2563eb !important;
+      font-weight: 900;
+    }
+
+    /* Barra Superior Compacta para Proporción Horizontal 1:2 */
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.28rem 0.85rem;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 3px solid #cbd5e1;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .top-bar-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: calc(1.18rem * var(--text-scale));
+      font-weight: 900;
+      color: #1e1b4b;
+      white-space: nowrap;
+    }
+
+    .stats-and-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: nowrap;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: calc(0.84rem * var(--text-scale));
+      font-weight: 800;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .stat-pill.achieved { color: #047857; border-color: #6ee7b7; background: #ecfdf5; }
+    .stat-pill.remaining { color: #b45309; border-color: #fcd34d; background: #fffbeb; }
+
+    .tool-btn {
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 0.45rem;
+      cursor: pointer;
+    }
+    .tool-btn:hover { background: #f1f5f9; }
+
+    /* Fila de 8 Pestañas de Niveles Progresivos */
+    .level-tabs {
+      display: flex;
+      gap: 0.28rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .level-tab {
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 800;
+      font-size: calc(0.78rem * var(--text-scale));
+      padding: 0.22rem 0.55rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.14s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .level-tab:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+
+    .level-tab.active {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #312e81;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+    }
+
+    /* Layout Principal en 2 Columnas (1:2 Horizontal sin Scroll) */
+    .game-layout {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      max-width: 1580px;
+      margin: 0 auto;
+      padding: 0.35rem 0.85rem;
+      display: grid;
+      grid-template-columns: 1.08fr 1fr;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+
+    /* Columna Izquierda: Escenario de Dictado + Tarjeta Ilustrada + Ranuras */
+    .build-stage {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 0.75rem 1rem;
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .stage-header-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+
+    .stage-title {
+      font-size: calc(0.95rem * var(--text-scale));
+      font-weight: 900;
+      color: #312e81;
+      background: #e0e7ff;
+      padding: 0.18rem 0.68rem;
+      border-radius: 999px;
+      border: 2px solid #a5b4fc;
+      white-space: nowrap;
+    }
+
+    .context-sentence {
+      font-size: calc(0.98rem * var(--text-scale));
+      font-weight: 800;
+      color: #334155;
+      text-align: right;
+      line-height: 1.25;
+    }
+
+    /* Tarjeta Ilustrada a Color + Bocina */
+    .hero-visual-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.15rem;
+      width: 100%;
+      margin: 0.15rem 0;
+    }
+
+    .illustrated-card {
+      background: #ffffff;
+      border: 3.5px solid #93c5fd;
+      border-radius: 20px;
+      padding: 0.4rem;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 142px;
+      height: 142px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+
+    .illustrated-card.celebrating {
+      border-color: #10b981;
+      background: #ecfdf5;
+      transform: scale(1.05);
+      box-shadow: 0 8px 22px rgba(16, 185, 129, 0.3);
+    }
+
+    .illustrated-card img {
+      width: 124px;
+      height: 124px;
+      object-fit: contain;
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .celebration-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #10b981;
+      color: #ffffff;
+      border: 3px solid #ffffff;
+      border-radius: 999px;
+      padding: 0.12rem 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+      display: none;
+      animation: popBadge 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popBadge {
+      0% { transform: scale(0.4); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .audio-controls-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.38rem;
+    }
+
+    .main-speaker-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: 3px solid #312e81;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.35rem;
+      box-shadow: 0 5px 0 #312e81, 0 8px 18px rgba(79, 70, 229, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .main-speaker-btn:hover { transform: translateY(-2px) scale(1.04); }
+    .main-speaker-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #312e81; }
+
+    .speaker-label {
+      font-size: calc(0.88rem * var(--text-scale));
+      color: #312e81;
+      font-weight: 900;
+    }
+
+    .hint-btns-row {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .audio-hint-btn {
+      background: #f1f5f9;
+      border: 2px solid #94a3b8;
+      padding: 0.26rem 0.68rem;
+      border-radius: 999px;
+      font-size: calc(0.84rem * var(--text-scale));
+      font-weight: 800;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .audio-hint-btn:hover { background: #e2e8f0; border-color: #64748b; }
+
+    /* Zona de Ranuras de Sílabas o Palabras (Nivel 8) */
+    .slots-area-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 0.5rem 0.85rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .prompt-hint {
+      font-size: calc(0.86rem * var(--text-scale));
+      color: #475569;
+      font-weight: 800;
+    }
+
+    .slots-container {
+      display: flex;
+      gap: 0.6rem;
+      min-height: 72px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .syllable-slot {
+      min-width: 88px;
+      height: 68px;
+      padding: 0 0.6rem;
+      border-radius: 16px;
+      border: 3.5px dashed #64748b;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(1.95rem * var(--text-scale));
+      font-weight: 900;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .syllable-slot.word-slot {
+      min-width: 108px;
+      height: 62px;
+      font-size: calc(1.48rem * var(--text-scale));
+      padding: 0 0.75rem;
+    }
+
+    .syllable-slot .slot-num {
+      position: absolute;
+      top: 2px;
+      left: 7px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #94a3b8;
+    }
+
+    .syllable-slot.drag-over {
+      border-color: #2563eb;
+      background: #dbeafe;
+      transform: scale(1.06);
+    }
+
+    .syllable-slot.filled {
+      border-style: solid;
+      color: #ffffff;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2), 0 6px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .syllable-slot.filled.word-slot {
+      background: #ffffff !important;
+      border-color: #2563eb !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 0 #93c5fd;
+    }
+
+    .syllable-slot.filled .slot-num {
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .syllable-slot.filled.word-slot .slot-num {
+      color: #64748b;
+    }
+
+    /* Resaltado especial cuando se autocorrige una sílaba homófona (ej. ba -> va) */
+    .syllable-slot.ortho-corrected {
+      outline: 4px solid #f59e0b;
+      animation: pulseOrtho 0.6s ease-in-out infinite alternate;
+    }
+
+    .ortho-tag {
+      position: absolute;
+      bottom: -11px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 0 0.4rem;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+    }
+
+    @keyframes pulseOrtho {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    /* Botones de Acción y Retroalimentación */
+    .stage-footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .stage-actions {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      font-size: calc(0.95rem * var(--text-scale));
+      font-weight: 900;
+      padding: 0.42rem 1.15rem;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s;
+    }
+
+    .btn-check {
+      background: #10b981;
+      color: #ffffff;
+      border: 2px solid #047857;
+      box-shadow: 0 4px 0 #047857;
+    }
+    .btn-check:hover { background: #059669; }
+
+    .btn-clear {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 2px solid #f87171;
+      box-shadow: 0 4px 0 #ef4444;
+    }
+    .btn-clear:hover { background: #fecaca; }
+
+    .btn-next-now {
+      background: #f59e0b;
+      color: #ffffff;
+      border: 2px solid #b45309;
+      box-shadow: 0 4px 0 #b45309;
+      display: none;
+    }
+
+    .feedback-message {
+      font-size: calc(0.96rem * var(--text-scale));
+      font-weight: 900;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.2rem 0.7rem;
+      border-radius: 10px;
+      line-height: 1.25;
+    }
+    .feedback-success { color: #065f46; background: #d1fae5; border: 2px solid #34d399; }
+    .feedback-ortho { color: #92400e; background: #fef3c7; border: 2px solid #f59e0b; }
+    .feedback-error { color: #991b1b; background: #fee2e2; border: 2px solid #f87171; }
+
+    /* Columna Derecha: Banco de Sílabas / Palabras */
+    .syllables-bank-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 0.45rem 0.85rem;
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .bank-header {
+      text-align: center;
+      border-bottom: 2px dashed #e2e8f0;
+      padding-bottom: 0.2rem;
+    }
+
+    .bank-title {
+      font-size: calc(1.02rem * var(--text-scale));
+      font-weight: 900;
+      color: #1e1b4b;
+    }
+
+    .bank-subhint {
+      font-size: calc(0.78rem * var(--text-scale));
+      color: #475569;
+      font-weight: 800;
+    }
+
+    .families-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      gap: 0.22rem;
+      padding: 0.15rem 0;
+      overflow-y: hidden;
+    }
+
+    .family-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.12rem;
+    }
+
+    .family-label {
+      font-size: calc(0.74rem * var(--text-scale));
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .cards-grid-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.28rem;
+    }
+
+    .syllable-card {
+      width: 100%;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(1.22rem * var(--text-scale));
+      font-weight: 900;
+      color: #ffffff;
+      cursor: grab;
+      border: 2.5px solid rgba(0, 0, 0, 0.2);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.22);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      touch-action: none;
+    }
+
+    .syllable-card:hover { transform: translateY(-2px) scale(1.03); }
+    .syllable-card:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.22); }
+
+    /* Tarjetas de Palabras para el Nivel 8 (Oraciones con Mayúsculas en Rojo) */
+    .words-bank-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem;
+    }
+
+    .word-bank-card {
+      background: #ffffff;
+      border: 3px solid #3b82f6;
+      border-radius: 13px;
+      padding: 0.38rem 0.85rem;
+      font-size: calc(1.35rem * var(--text-scale));
+      font-weight: 900;
+      color: #0f172a;
+      cursor: grab;
+      box-shadow: 0 4px 0 #1d4ed8, 0 5px 12px rgba(37, 99, 235, 0.14);
+      white-space: nowrap;
+      touch-action: none;
+      transition: transform 0.12s ease;
+    }
+    .word-bank-card:hover { transform: translateY(-2px) scale(1.04); background: #eff6ff; }
+
+    /* Clon flotante durante arrastre Pointer Events (Linux / Touch / Mouse) */
+    .drag-ghost {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      min-width: 82px;
+      height: 58px;
+      padding: 0 0.8rem;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #ffffff;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+      border: 3px solid #ffffff;
+      transform: translate(-50%, -50%) scale(1.08);
+      white-space: nowrap;
+    }
+
+    /* Modal de Victoria de Nivel */
+    .win-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(4px);
+    }
+
+    .win-modal {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 1.6rem 1.5rem;
+      text-align: center;
+      max-width: 480px;
+      width: 92%;
+      border: 4px solid #facc15;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .win-modal img { width: 115px; height: 115px; object-fit: contain; }
+    .win-modal h2 { font-size: 1.9rem; color: #1e1b4b; }
+    .win-modal p { font-size: 1.1rem; color: #475569; font-weight: 700; }
+
+    .celebrate-btn {
+      background: #4f46e5;
+      color: #ffffff;
+      font-size: 1.08rem;
+      font-weight: 900;
+      padding: 0.65rem 1.5rem;
+      border-radius: 14px;
+      border: 2px solid #312e81;
+      box-shadow: 0 4px 0 #312e81;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      html, body { overflow-y: auto; height: auto; min-height: 100vh; }
+      .game-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra Superior con los 8 Niveles Graduales -->
+  <header class="top-bar">
+    <div class="top-bar-row1">
+      <div class="brand-title">
+        <span>🎧 ¡Dictado Silábico y Oraciones Ilustradas! 🧩</span>
+      </div>
+
+      <div class="stats-and-tools">
+        <div class="stat-pill achieved" title="Retos logrados en este nivel">
+          <span>✅ Logradas:</span>
+          <span id="achievedCount">0</span>
+        </div>
+        <div class="stat-pill remaining" title="Retos restantes en este nivel">
+          <span>⏳ Faltan:</span>
+          <span id="remainingCount">0</span>
+        </div>
+        <button class="tool-btn" onclick="adjustTextScale(-0.08)" title="Reducir letra">A-</button>
+        <button class="tool-btn" onclick="adjustTextScale(0.08)" title="Aumentar letra">A+</button>
+      </div>
+    </div>
+
+    <nav class="level-tabs" id="levelTabs">
+      <button class="level-tab active" data-level="1" onclick="selectLevel(1)">🟢 N1: M, S, P</button>
+      <button class="level-tab" data-level="2" onclick="selectLevel(2)">🟠 N2: L, T, D, N</button>
+      <button class="level-tab" data-level="3" onclick="selectLevel(3)">🔵 N3: C, B, V, F</button>
+      <button class="level-tab" data-level="4" onclick="selectLevel(4)">🟣 N4: G, J, R, Z</button>
+      <button class="level-tab" data-level="5" onclick="selectLevel(5)">🟡 N5: Inversas (al, es, ar...)</button>
+      <button class="level-tab" data-level="6" onclick="selectLevel(6)">🩷 N6: Diptongos (ue, ie, ia...)</button>
+      <button class="level-tab" data-level="7" onclick="selectLevel(7)">🩵 N7: Trabadas (pl, br, tr...)</button>
+      <button class="level-tab" data-level="8" onclick="selectLevel(8)">🌟 N8: Oraciones Bicolor</button>
+    </nav>
+  </header>
+
+  <!-- Escenario Principal en 2 Columnas -->
+  <main class="game-layout">
+    <!-- Columna Izquierda: Tarjeta Ilustrada a Color + Bocina + Ranuras -->
+    <section class="build-stage">
+      <div class="stage-header-row">
+        <div class="stage-title" id="stageTitle">Reto 1</div>
+        <div class="context-sentence" id="contextSentence"></div>
+      </div>
+
+      <div class="hero-visual-row">
+        <div class="illustrated-card" id="illustratedCard">
+          <span class="celebration-badge" id="celebrationBadge">🌟 ¡Bien!</span>
+          <img id="wordImage" src="" alt="Tarjeta ilustrada">
+        </div>
+
+        <div class="audio-controls-col">
+          <button class="main-speaker-btn" title="Toca para escuchar" onclick="speakTargetWord()">🔊</button>
+          <div class="speaker-label" id="speakerLabel">¡Escucha y observa el dibujo!</div>
+          <div class="hint-btns-row">
+            <button class="audio-hint-btn" id="btnSyllableAudio" onclick="speakTargetSyllables()">🗣️ Escuchar por sílabas</button>
+            <button class="audio-hint-btn" onclick="skipToNextWord()" title="Pasar este reto al final de la fila">🎲 Otro reto</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="slots-area-box">
+        <div class="prompt-hint" id="promptHint">
+          Arrastra o toca las sílabas del banco derecho para armar la palabra (toca una casilla para corregirla):
+        </div>
+        <div class="slots-container" id="slotsContainer"></div>
+      </div>
+
+      <div class="stage-footer">
+        <div class="stage-actions">
+          <button class="action-btn btn-check" id="btnCheck" onclick="checkWord()">✔️ Comprobar</button>
+          <button class="action-btn btn-clear" id="btnClear" onclick="clearSlots()">🗑️ Borrar</button>
+          <button class="action-btn btn-next-now" id="btnNextNow" onclick="advanceImmediately()">👉 Siguiente</button>
+        </div>
+        <div class="feedback-message" id="feedbackMessage"></div>
+      </div>
+    </section>
+
+    <!-- Columna Derecha: Banco de Sílabas o Palabras -->
+    <aside class="syllables-bank-card">
+      <div class="bank-header">
+        <div class="bank-title" id="bankTitle">🗂️ Banco de Sílabas</div>
+        <div class="bank-subhint" id="bankSubhint">Tócalas o arrástralas hacia las casillas:</div>
+      </div>
+
+      <div class="families-container" id="familiesContainer"></div>
+    </aside>
+  </main>
+
+  <!-- Modal de Victoria del Nivel -->
+  <div class="win-overlay" id="winOverlay">
+    <div class="win-modal">
+      <img src="./recursos_juego/trofeo_maestro_escritor.webp" alt="Trofeo" onerror="this.style.display='none'">
+      <h2>🎉 ¡Nivel Completado! 🌟</h2>
+      <p id="winModalText">¡Completaste todos los retos de este nivel en orden aleatorio!</p>
+      <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
+        <button class="celebrate-btn" onclick="restartCurrentLevel()">🔄 Repetir Nivel</button>
+        <button class="celebrate-btn" style="background:#059669; border-color:#065f46; box-shadow:0 4px 0 #065f46;" onclick="advanceToNextLevel()">🚀 Siguiente Nivel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* =========================================================================
+       FAMILIAS SILÁBICAS DIRECTAS, INVERSAS, DIPTONGOS Y TRABADAS
+       ========================================================================= */
+    const CONSONANT_FAMILIES = {
+      // Nivel 1: M, S, P
+      m: { label: '🟠 Familia de la M', bg: '#d97706', border: '#b45309', text: '#b45309', syllables: ['ma', 'me', 'mi', 'mo', 'mu'] },
+      s: { label: '🟢 Familia de la S', bg: '#059669', border: '#047857', text: '#047857', syllables: ['sa', 'se', 'si', 'so', 'su'] },
+      p: { label: '🔵 Familia de la P', bg: '#2563eb', border: '#1d4ed8', text: '#1d4ed8', syllables: ['pa', 'pe', 'pi', 'po', 'pu'] },
+      vocales: { label: '🟡 Vocales A, E, I, O, U', bg: '#ca8a04', border: '#a16207', text: '#a16207', syllables: ['a', 'e', 'i', 'o', 'u'] },
+
+      // Nivel 2: L, T, D, N
+      l: { label: '🟣 Familia de la L', bg: '#7c3aed', border: '#5b21b6', text: '#6d28d9', syllables: ['la', 'le', 'li', 'lo', 'lu'] },
+      t: { label: '🔴 Familia de la T', bg: '#e11d48', border: '#be123c', text: '#be123c', syllables: ['ta', 'te', 'ti', 'to', 'tu'] },
+      d: { label: '🩵 Familia de la D', bg: '#0891b2', border: '#0e7490', text: '#0e7490', syllables: ['da', 'de', 'di', 'do', 'du'] },
+      n: { label: '🟤 Familia de la N', bg: '#ea580c', border: '#c2410c', text: '#c2410c', syllables: ['na', 'ne', 'ni', 'no', 'nu'] },
+
+      // Nivel 3: C, B, V, F
+      c: { label: '🔷 Familia de la C', bg: '#1d4ed8', border: '#1e3a8a', text: '#1e40af', syllables: ['ca', 'ce', 'ci', 'co', 'cu'] },
+      b: { label: '🟩 Familia de la B', bg: '#16a34a', border: '#15803d', text: '#15803d', syllables: ['ba', 'be', 'bi', 'bo', 'bu'] },
+      v: { label: '🫑 Familia de la V', bg: '#0d9488', border: '#0f766e', text: '#0f766e', syllables: ['va', 've', 'vi', 'vo', 'vu'] },
+      f: { label: '🩷 Familia de la F', bg: '#db2777', border: '#9d174d', text: '#be185d', syllables: ['fa', 'fe', 'fi', 'fo', 'fu'] },
+      h: { label: '⚪ Familia de la H (muda)', bg: '#475569', border: '#334155', text: '#334155', syllables: ['ha', 'he', 'hi', 'ho', 'hu'] },
+      ll: { label: '🟪 Familia de la LL', bg: '#7e22ce', border: '#581c87', text: '#6b21a8', syllables: ['lla', 'lle', 'lli', 'llo', 'llu'] },
+
+      // Nivel 4: G, J, R, RR, Z
+      g: { label: '🟨 Familia de la G', bg: '#ca8a04', border: '#a16207', text: '#a16207', syllables: ['ga', 'ge', 'gi', 'go', 'gu'] },
+      j: { label: '🟧 Familia de la J', bg: '#ea580c', border: '#9a3412', text: '#c2410c', syllables: ['ja', 'je', 'ji', 'jo', 'ju'] },
+      r: { label: '🌹 Familia de la R', bg: '#dc2626', border: '#991b1b', text: '#b91c1c', syllables: ['ra', 're', 'ri', 'ro', 'ru'] },
+      rr: { label: '🌺 Familia de la RR fuerte', bg: '#b91c1c', border: '#7f1d1d', text: '#991b1b', syllables: ['rra', 'rre', 'rri', 'rro', 'rru'] },
+      z: { label: '💠 Familia de la Z', bg: '#4f46e5', border: '#3730a3', text: '#4338ca', syllables: ['za', 'ze', 'zi', 'zo', 'zu'] },
+
+      // Nivel 5: Sílabas Inversas y Mixtas
+      inv_l: { label: '🔄 Inversas con L (al, el, il, ol, ul)', bg: '#7c3aed', border: '#5b21b6', text: '#6d28d9', syllables: ['al', 'el', 'il', 'ol', 'ul'] },
+      inv_n: { label: '🔄 Inversas con N (an, en, in, on, un)', bg: '#ea580c', border: '#c2410c', text: '#c2410c', syllables: ['an', 'en', 'in', 'on', 'un'] },
+      inv_r: { label: '🔄 Inversas con R (ar, er, ir, or, ur)', bg: '#dc2626', border: '#991b1b', text: '#b91c1c', syllables: ['ar', 'er', 'ir', 'or', 'ur'] },
+      inv_s: { label: '🔄 Inversas con S (as, es, is, os, us)', bg: '#059669', border: '#047857', text: '#047857', syllables: ['as', 'es', 'is', 'os', 'us'] },
+      mix_1: { label: '🧩 Sílabas Mixtas (bar, cer, pas, pul, dul)', bg: '#2563eb', border: '#1d4ed8', text: '#1d4ed8', syllables: ['bar', 'cer', 'pas', 'pul', 'dul'] },
+      mix_2: { label: '🧩 Sílabas Mixtas (tor, man, cam, del, hor)', bg: '#0891b2', border: '#0e7490', text: '#0e7490', syllables: ['tor', 'man', 'cam', 'del', 'hor'] },
+      mix_3: { label: '🧩 Terminaciones con N/L (bol, tel, fin, lon, ton)', bg: '#db2777', border: '#9d174d', text: '#be185d', syllables: ['bol', 'tel', 'fin', 'lon', 'ton'] },
+      mix_4: { label: '🧩 Sílabas Mixtas (sec, fan, bon, tôn, mán)', bg: '#ca8a04', border: '#a16207', text: '#a16207', syllables: ['sec', 'fan', 'bon', 'ton', 'man'] },
+
+      // Nivel 6: Diptongos
+      dip_ue: { label: '🩷 Diptongos con UE (hue, fue, rue, bue, cue)', bg: '#db2777', border: '#9d174d', text: '#be185d', syllables: ['hue', 'fue', 'rue', 'bue', 'cue'] },
+      dip_ue2: { label: '🩷 Diptongos con UE (puer, duen, vier, muel, suel)', bg: '#e11d48', border: '#be123c', text: '#be123c', syllables: ['puer', 'duen', 'vier', 'muel', 'suel'] },
+      dip_ie: { label: '🟣 Diptongos con IE / IA (dien, cie, nie, pia, via)', bg: '#7c3aed', border: '#5b21b6', text: '#6d28d9', syllables: ['dien', 'cie', 'nie', 'pia', 'via'] },
+      dip_au: { label: '🟠 Diptongos con AU / EI / IO (jau, pei, rei, vion, cia)', bg: '#d97706', border: '#b45309', text: '#b45309', syllables: ['jau', 'pei', 'rei', 'vion', 'cia'] },
+
+      // Nivel 7: Sílabas Trabadas
+      tr_pl: { label: '🩵 Trabadas PL (pla, ple, pli, plo, plu)', bg: '#2563eb', border: '#1d4ed8', text: '#1d4ed8', syllables: ['pla', 'ple', 'pli', 'plo', 'plu'] },
+      tr_pr: { label: '🩵 Trabadas PR (pra, pre, pri, pro, pru)', bg: '#4f46e5', border: '#3730a3', text: '#4338ca', syllables: ['pra', 'pre', 'pri', 'pro', 'pru'] },
+      tr_bl: { label: '🩵 Trabadas BL (bla, ble, bli, blo, blu)', bg: '#0891b2', border: '#0e7490', text: '#0e7490', syllables: ['bla', 'ble', 'bli', 'blo', 'blu'] },
+      tr_br: { label: '🩵 Trabadas BR (bra, bre, bri, bro, bru)', bg: '#0d9488', border: '#0f766e', text: '#0f766e', syllables: ['bra', 'bre', 'bri', 'bro', 'bru'] },
+      tr_cl: { label: '🩵 Trabadas CL (cla, cle, cli, clo, clu)', bg: '#7c3aed', border: '#5b21b6', text: '#6d28d9', syllables: ['cla', 'cle', 'cli', 'clo', 'clu'] },
+      tr_cr: { label: '🩵 Trabadas CR (cra, cre, cri, cro, cru)', bg: '#9333ea', border: '#6b21a8', text: '#7e22ce', syllables: ['cra', 'cre', 'cri', 'cro', 'cru'] },
+      tr_fl: { label: '🩵 Trabadas FL (fla, fle, fli, flo, flu)', bg: '#db2777', border: '#9d174d', text: '#be185d', syllables: ['fla', 'fle', 'fli', 'flo', 'flu'] },
+      tr_fr: { label: '🩵 Trabadas FR (fra, fre, fri, fro, fru)', bg: '#e11d48', border: '#be123c', text: '#be123c', syllables: ['fra', 'fre', 'fri', 'fro', 'fru'] },
+      tr_gl: { label: '🩵 Trabadas GL (gla, gle, gli, glo, glu)', bg: '#059669', border: '#047857', text: '#047857', syllables: ['gla', 'gle', 'gli', 'glo', 'glu'] },
+      tr_gr: { label: '🩵 Trabadas GR (gra, gre, gri, gro, gru)', bg: '#16a34a', border: '#15803d', text: '#15803d', syllables: ['gra', 'gre', 'gri', 'gro', 'gru'] },
+      tr_tr: { label: '🩵 Trabadas TR (tra, tre, tri, tro, tru)', bg: '#ea580c', border: '#c2410c', text: '#c2410c', syllables: ['tra', 'tre', 'tri', 'tro', 'tru'] },
+      tr_dr: { label: '🩵 Trabadas DR (dra, dre, dri, dro, dru)', bg: '#dc2626', border: '#991b1b', text: '#b91c1c', syllables: ['dra', 'dre', 'dri', 'dro', 'dru'] },
+      tr_esp: { label: '🧩 Sílabas con R/L/N (prin, flau, trom, trac, can)', bg: '#ca8a04', border: '#a16207', text: '#a16207', syllables: ['prin', 'flau', 'trom', 'trac', 'can'] },
+      tr_esp2: { label: '🧩 Sílabas Finales (res, cha, tor, gon, lla)', bg: '#475569', border: '#334155', text: '#334155', syllables: ['res', 'cha', 'tor', 'gon', 'lla'] }
+    };
+
+    /* =========================================================================
+       NORMALIZADOR FONÉTICO PARA ACEPTAR Y EXPLICAR HOMÓFONOS (ej. baca -> vaca)
+       ========================================================================= */
+    function normalizePhoneticSyllable(s) {
+      if (!s) return '';
+      let clean = s.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // quitar tildes
+      // h muda al inicio de sílaba (ha->a, ho->o, hue->ue)
+      clean = clean.replace(/^h([aeiou])/, '$1');
+      // b y v suenan igual
+      clean = clean.replace(/^v/, 'b');
+      // ce, ci, za, ze, zi, zo, zu suenan como s en español de México
+      clean = clean.replace(/^ce/, 'se').replace(/^ci/, 'si');
+      clean = clean.replace(/^z/, 's');
+      // ge, gi suenan como je, ji
+      clean = clean.replace(/^ge/, 'je').replace(/^gi/, 'ji');
+      // ll y y suenan igual
+      clean = clean.replace(/^ll/, 'y');
+      return clean;
+    }
+
+    /* =========================================================================
+       BASE DE DATOS DE LOS NIVELES 1 AL 7 (145 PALABRAS ILUSTRADAS A COLOR)
+       ========================================================================= */
+    const WORDS_DB = [
+      // 🟢 NIVEL 1: Familias M, S y P (17 palabras)
+      { level: 1, text: 'sapo', syllables: ['sa', 'po'], families: ['m', 's', 'p'], img: 'ref_sapo.webp', hint: 'El ___ salta en el charco.' },
+      { level: 1, text: 'sopa', syllables: ['so', 'pa'], families: ['m', 's', 'p'], img: 'ref_sopa.webp', hint: 'Tomamos ___ calientita.' },
+      { level: 1, text: 'mesa', syllables: ['me', 'sa'], families: ['m', 's', 'p'], img: 'ref_mesa.webp', hint: 'Ponemos el plato en la ___.' },
+      { level: 1, text: 'puma', syllables: ['pu', 'ma'], families: ['m', 's', 'p'], img: 'ref_puma.webp', hint: 'El ___ vive en la montaña.' },
+      { level: 1, text: 'mapa', syllables: ['ma', 'pa'], families: ['m', 's', 'p'], img: 'ref_mapa.webp', hint: 'Buscamos el camino en el ___.' },
+      { level: 1, text: 'masa', syllables: ['ma', 'sa'], families: ['m', 's', 'p'], img: 'ref_masa.webp', hint: 'Amasamos la ___ para hacer tortillas.' },
+      { level: 1, text: 'suma', syllables: ['su', 'ma'], families: ['m', 's', 'p'], img: 'ref_suma.webp', hint: 'Resolvemos una ___ en el cuaderno.' },
+      { level: 1, text: 'pesa', syllables: ['pe', 'sa'], families: ['m', 's', 'p'], img: 'ref_pesa.webp', hint: 'Levantamos la ___ para hacer ejercicio.' },
+      { level: 1, text: 'piso', syllables: ['pi', 'so'], families: ['m', 's', 'p'], img: 'ref_piso.webp', hint: 'Barremos muy limpio el ___.' },
+      { level: 1, text: 'paso', syllables: ['pa', 'so'], families: ['m', 's', 'p'], img: 'ref_paso.webp', hint: 'Damos un ___ adelante al caminar.' },
+      { level: 1, text: 'pasa', syllables: ['pa', 'sa'], families: ['m', 's', 'p'], img: 'ref_pasa.webp', hint: 'La uva ___ es dulce y pequeña.' },
+      { level: 1, text: 'pipa', syllables: ['pi', 'pa'], families: ['m', 's', 'p'], img: 'ref_pipa.webp', hint: 'La ___ lleva agua a la colonia.' },
+      { level: 1, text: 'pomo', syllables: ['po', 'mo'], families: ['m', 's', 'p'], img: 'ref_pomo.webp', hint: 'Guardamos miel en el ___ de vidrio.' },
+      { level: 1, text: 'mimo', syllables: ['mi', 'mo'], families: ['m', 's', 'p'], img: 'ref_mimo.webp', hint: 'El ___ actúa con guantes blancos.' },
+      { level: 1, text: 'mamá', syllables: ['ma', 'ma'], displaySyllables: ['ma', 'má'], families: ['m', 's', 'p'], img: 'ref_mama.webp', hint: 'Mi ___ me da un abrazo.' },
+      { level: 1, text: 'papá', syllables: ['pa', 'pa'], displaySyllables: ['pa', 'pá'], families: ['m', 's', 'p'], img: 'ref_papa_padre.webp', hint: 'Mi ___ nos saluda contento.' },
+      { level: 1, text: 'papa', syllables: ['pa', 'pa'], families: ['m', 's', 'p'], img: 'ref_papa_verdura.webp', hint: 'La ___ es una verdura nutritiva.' },
+
+      // 🟠 NIVEL 2: Familias L, T, D y N (24 palabras)
+      { level: 2, text: 'pala', syllables: ['pa', 'la'], families: ['l', 't', 'd', 'p'], img: 'ref_pala.webp', hint: 'Cavamos la tierra con la ___.' },
+      { level: 2, text: 'pelo', syllables: ['pe', 'lo'], families: ['l', 't', 'n', 'p'], img: 'ref_pelo.webp', hint: 'Peinamos nuestro ___ con cepillo.' },
+      { level: 2, text: 'luna', syllables: ['lu', 'na'], families: ['l', 't', 'd', 'n'], img: 'ref_luna.webp', hint: 'La ___ brilla de noche en el cielo.' },
+      { level: 2, text: 'mano', syllables: ['ma', 'no'], families: ['l', 'n', 'd', 'm'], img: 'ref_mano.webp', hint: 'Lavamos cada ___ con agua y jabón.' },
+      { level: 2, text: 'mono', syllables: ['mo', 'no'], families: ['l', 't', 'n', 'm'], img: 'ref_mono.webp', hint: 'El ___ salta de rama en rama.' },
+      { level: 2, text: 'pato', syllables: ['pa', 'to'], families: ['l', 't', 'd', 'p'], img: 'ref_pato.webp', hint: 'El ___ nada contento en el lago.' },
+      { level: 2, text: 'dado', syllables: ['da', 'do'], families: ['l', 't', 'd', 'n'], img: 'ref_dado.webp', hint: 'Lanzamos el ___ en el juego de mesa.' },
+      { level: 2, text: 'dedo', syllables: ['de', 'do'], families: ['l', 't', 'd', 'n'], img: 'ref_dedo.webp', hint: 'Dejamos espacio con el ___ índice.' },
+      { level: 2, text: 'nido', syllables: ['ni', 'do'], families: ['l', 't', 'd', 'n'], img: 'ref_nido.webp', hint: 'El pajarito cuida su ___ en el árbol.' },
+      { level: 2, text: 'pino', syllables: ['pi', 'no'], families: ['l', 'd', 'n', 'p'], img: 'ref_pino.webp', hint: 'El ___ del bosque huele muy fresco.' },
+      { level: 2, text: 'lupa', syllables: ['lu', 'pa'], families: ['l', 't', 'd', 'p'], img: 'ref_lupa.webp', hint: 'Observamos insectos con la ___.' },
+      { level: 2, text: 'lata', syllables: ['la', 'ta'], families: ['l', 't', 'd', 'n'], img: 'ref_lata.webp', hint: 'Guardamos la ___ limpia para reciclar.' },
+      { level: 2, text: 'moto', syllables: ['mo', 'to'], families: ['l', 't', 'n', 'm'], img: 'ref_moto.webp', hint: 'La ___ roja tiene dos llantas.' },
+      { level: 2, text: 'topo', syllables: ['to', 'po'], families: ['l', 't', 'd', 'p'], img: 'ref_topo.webp', hint: 'El ___ cava túneles bajo la tierra.' },
+      { level: 2, text: 'dona', syllables: ['do', 'na'], families: ['l', 't', 'd', 'n'], img: 'ref_dona.webp', hint: 'La ___ tiene chispas de colores.' },
+      { level: 2, text: 'nudo', syllables: ['nu', 'do'], families: ['l', 't', 'd', 'n'], img: 'ref_nudo.webp', hint: 'Atamos la cuerda con un ___ firme.' },
+      { level: 2, text: 'tuna', syllables: ['tu', 'na'], families: ['l', 't', 'd', 'n'], img: 'ref_tuna.webp', hint: 'La ___ es una fruta verde del nopal.' },
+      { level: 2, text: 'tina', syllables: ['ti', 'na'], families: ['l', 't', 'd', 'n'], img: 'ref_tina.webp', hint: 'La ___ tiene agua y burbujas.' },
+      { level: 2, text: 'pelota', syllables: ['pe', 'lo', 'ta'], families: ['l', 't', 'd', 'p'], img: 'ref_pelota.webp', hint: 'Botamos la ___ en el patio escolar.' },
+      { level: 2, text: 'paleta', syllables: ['pa', 'le', 'ta'], families: ['l', 't', 'n', 'p'], img: 'ref_paleta.webp', hint: 'Comemos una ___ fresca de fruta.' },
+      { level: 2, text: 'tomate', syllables: ['to', 'ma', 'te'], families: ['l', 't', 'd', 'm'], img: 'ref_tomate.webp', hint: 'Cortamos ___ rojo para la ensalada.' },
+      { level: 2, text: 'maleta', syllables: ['ma', 'le', 'ta'], families: ['l', 't', 'n', 'm'], img: 'ref_maleta.webp', hint: 'Guardamos la ropa en la ___.' },
+      { level: 2, text: 'moneda', syllables: ['mo', 'ne', 'da'], families: ['t', 'd', 'n', 'm'], img: 'ref_moneda.webp', hint: 'Pagamos con una ___ dorada.' },
+
+      // 🔵 NIVEL 3: Familias C, B, V y F (21 palabras — Contraste B/V y C/S)
+      { level: 3, text: 'casa', syllables: ['ca', 'sa'], families: ['c', 'b', 'v', 's'], img: 'ref_casa.webp', hint: 'Llegamos temprano a nuestra ___.' },
+      { level: 3, text: 'cama', syllables: ['ca', 'ma'], families: ['c', 'b', 'f', 'm'], img: 'ref_cama.webp', hint: 'Tendemos la ___ al despertar.' },
+      { level: 3, text: 'copa', syllables: ['co', 'pa'], families: ['c', 'b', 'f', 'p'], img: 'ref_copa.webp', hint: 'El equipo ganó una ___ dorada.' },
+      { level: 3, text: 'cuna', syllables: ['cu', 'na'], families: ['c', 'b', 'f', 'n'], img: 'ref_cuna.webp', hint: 'El bebé descansa en su ___.' },
+      { level: 3, text: 'coco', syllables: ['co', 'co'], families: ['c', 'b', 'v', 'f'], img: 'ref_coco.webp', hint: 'Tomamos agua fresca de ___.' },
+      { level: 3, text: 'cubo', syllables: ['cu', 'bo'], families: ['c', 'b', 'v', 'f'], img: 'ref_cubo.webp', hint: 'Apilamos el ___ de colores.' },
+      { level: 3, text: 'bota', syllables: ['bo', 'ta'], families: ['b', 'v', 'c', 't'], img: 'ref_bota.webp', hint: 'Me pongo la ___ para la lluvia.' },
+      { level: 3, text: 'bote', syllables: ['bo', 'te'], families: ['b', 'v', 'f', 't'], img: 'ref_bote.webp', hint: 'Tiramos la basura dentro del ___.' },
+      { level: 3, text: 'bebé', syllables: ['be', 'be'], displaySyllables: ['be', 'bé'], families: ['b', 'v', 'c', 'f'], img: 'ref_bebe.webp', hint: 'El ___ sonríe contento.' },
+      { level: 3, text: 'boca', syllables: ['bo', 'ca'], families: ['b', 'v', 'c', 'f'], img: 'ref_boca.webp', hint: 'Cepillamos los dientes de la ___.' },
+      { level: 3, text: 'nube', syllables: ['nu', 'be'], families: ['b', 'v', 'n', 'f'], img: 'ref_nube.webp', hint: 'La ___ blanca flota en el cielo.' },
+      { level: 3, text: 'búho', syllables: ['bu', 'ho'], displaySyllables: ['bú', 'ho'], families: ['b', 'v', 'h', 'c'], img: 'ref_buho.webp', hint: 'El ___ abre sus ojos de noche.' },
+      { level: 3, text: 'vaca', syllables: ['va', 'ca'], families: ['v', 'b', 'c', 'f'], img: 'ref_vaca.webp', hint: 'La ___ come pasto verde en el campo.' },
+      { level: 3, text: 'vela', syllables: ['ve', 'la'], families: ['v', 'b', 'f', 'l'], img: 'ref_vela.webp', hint: 'Encendemos una ___ en el pastel.' },
+      { level: 3, text: 'vaso', syllables: ['va', 'so'], families: ['v', 'b', 's', 'c'], img: 'ref_vaso.webp', hint: 'Servimos agua simple en el ___.' },
+      { level: 3, text: 'foco', syllables: ['fo', 'co'], families: ['f', 'c', 'b', 'v'], img: 'ref_foco.webp', hint: 'El ___ ilumina todo el salón.' },
+      { level: 3, text: 'foca', syllables: ['fo', 'ca'], families: ['f', 'c', 'b', 'v'], img: 'ref_foca.webp', hint: 'La ___ nada y aplaude en el mar.' },
+      { level: 3, text: 'foto', syllables: ['fo', 'to'], families: ['f', 'c', 'b', 't'], img: 'ref_foto.webp', hint: 'Miramos una bonita ___ familiar.' },
+      { level: 3, text: 'sofá', syllables: ['so', 'fa'], displaySyllables: ['so', 'fá'], families: ['f', 's', 'c', 'b'], img: 'ref_sofa.webp', hint: 'Nos sentamos a leer en el ___.' },
+      { level: 3, text: 'camisa', syllables: ['ca', 'mi', 'sa'], families: ['c', 'm', 's', 'f'], img: 'ref_camisa.webp', hint: 'Abrochamos los botones de la ___.' },
+      { level: 3, text: 'cubeta', syllables: ['cu', 'be', 'ta'], families: ['c', 'b', 'v', 't'], img: 'ref_cubeta.webp', hint: 'Llenamos la ___ con agua limpia.' },
+      { level: 3, text: 'caballo', syllables: ['ca', 'ba', 'llo'], families: ['c', 'b', 'v', 'll'], img: 'ref_caballo.webp', hint: 'El ___ galopa rápido por el campo.' },
+
+      // 🟣 NIVEL 4: Familias G, J, R y Z (24 palabras — Abundantes palabras con J, G, R y Z)
+      { level: 4, text: 'jugo', syllables: ['ju', 'go'], families: ['j', 'g', 'r', 'z'], img: 'ref_jugo.webp', hint: 'Bebemos ___ natural de naranja.' },
+      { level: 4, text: 'caja', syllables: ['ca', 'ja'], families: ['j', 'g', 'c', 'z'], img: 'ref_caja.webp', hint: 'Guardamos los colores en la ___.' },
+      { level: 4, text: 'jarra', syllables: ['ja', 'rra'], families: ['j', 'g', 'rr', 'r'], img: 'ref_jarra.webp', hint: 'Servimos agua fresca de la ___.' },
+      { level: 4, text: 'jirafa', syllables: ['ji', 'ra', 'fa'], families: ['j', 'g', 'r', 'f'], img: 'ref_jirafa.webp', hint: 'La ___ tiene el cuello muy largo.' },
+      { level: 4, text: 'conejo', syllables: ['co', 'ne', 'jo'], families: ['j', 'g', 'c', 'n'], img: 'ref_conejo.webp', hint: 'El ___ blanco come zanahoria.' },
+      { level: 4, text: 'abeja', syllables: ['a', 'be', 'ja'], families: ['vocales', 'b', 'j', 'g'], img: 'ref_abeja.webp', hint: 'La ___ produce miel en su panal.' },
+      { level: 4, text: 'oveja', syllables: ['o', 've', 'ja'], families: ['vocales', 'v', 'b', 'j'], img: 'ref_oveja.webp', hint: 'La ___ tiene lana blanca y suave.' },
+      { level: 4, text: 'gato', syllables: ['ga', 'to'], families: ['g', 'j', 'r', 't'], img: 'ref_gato.webp', hint: 'El ___ maúlla y toma leche.' },
+      { level: 4, text: 'gota', syllables: ['go', 'ta'], families: ['g', 'j', 'z', 't'], img: 'ref_gota.webp', hint: 'Cayó una ___ de agua de la nube.' },
+      { level: 4, text: 'gusano', syllables: ['gu', 'sa', 'no'], families: ['g', 'j', 's', 'n'], img: 'ref_gusano.webp', hint: 'El ___ verde camina sobre la hoja.' },
+      { level: 4, text: 'galleta', syllables: ['ga', 'lle', 'ta'], families: ['g', 'j', 'll', 't'], img: 'ref_galleta.webp', hint: 'Comemos una ___ con chispas.' },
+      { level: 4, text: 'rana', syllables: ['ra', 'na'], families: ['r', 'j', 'g', 'n'], img: 'ref_rana.webp', hint: 'La ___ verde brinca junto al río.' },
+      { level: 4, text: 'rosa', syllables: ['ro', 'sa'], families: ['r', 'z', 's', 'j'], img: 'ref_rosa.webp', hint: 'En el jardín floreció una ___ roja.' },
+      { level: 4, text: 'pera', syllables: ['pe', 'ra'], families: ['r', 'p', 'g', 'j'], img: 'ref_pera.webp', hint: 'La ___ es una fruta jugosa y dulce.' },
+      { level: 4, text: 'toro', syllables: ['to', 'ro'], families: ['r', 't', 'g', 'z'], img: 'ref_toro.webp', hint: 'El ___ tiene cuernos fuertes.' },
+      { level: 4, text: 'loro', syllables: ['lo', 'ro'], families: ['r', 'l', 'g', 'j'], img: 'ref_loro.webp', hint: 'El ___ verde tiene plumas coloridas.' },
+      { level: 4, text: 'faro', syllables: ['fa', 'ro'], families: ['r', 'f', 'j', 'z'], img: 'ref_faro.webp', hint: 'El ___ alumbra a los barcos en el mar.' },
+      { level: 4, text: 'perro', syllables: ['pe', 'rro'], families: ['rr', 'r', 'p', 'j'], img: 'ref_perro.webp', hint: 'El ___ mueve la cola contento.' },
+      { level: 4, text: 'burro', syllables: ['bu', 'rro'], families: ['rr', 'r', 'b', 'v'], img: 'ref_burro.webp', hint: 'El ___ camina por el sendero.' },
+      { level: 4, text: 'corona', syllables: ['co', 'ro', 'na'], families: ['r', 'c', 'n', 'z'], img: 'ref_corona.webp', hint: 'La ___ dorada brilla mucho.' },
+      { level: 4, text: 'mariposa', syllables: ['ma', 'ri', 'po', 'sa'], families: ['m', 'r', 'p', 's'], img: 'ref_mariposa.webp', hint: 'La ___ vuela entre las flores.' },
+      { level: 4, text: 'taza', syllables: ['ta', 'za'], families: ['z', 's', 't', 'c'], img: 'ref_taza.webp', hint: 'Servimos té caliente en la ___.' },
+      { level: 4, text: 'zorro', syllables: ['zo', 'rro'], families: ['z', 's', 'rr', 'r'], img: 'ref_zorro.webp', hint: 'El ___ naranja vive en el bosque.' },
+      { level: 4, text: 'pozo', syllables: ['po', 'zo'], families: ['z', 's', 'p', 'g'], img: 'ref_pozo.webp', hint: 'Sacamos agua limpia del ___.' },
+      { level: 4, text: 'lazo', syllables: ['la', 'zo'], families: ['z', 's', 'l', 'r'], img: 'ref_lazo.webp', hint: 'Atamos el regalo con un ___ rojo.' },
+      { level: 4, text: 'zapato', syllables: ['za', 'pa', 'to'], families: ['z', 's', 'p', 't'], img: 'ref_zapato.webp', hint: 'Atamos las agujetas del ___.' },
+
+      // 🟡 NIVEL 5: Sílabas Inversas y Mixtas (al, el, an, en, in, ar, er, or, as, es, is...) (22 palabras)
+      { level: 5, text: 'árbol', syllables: ['ar', 'bol'], displaySyllables: ['ár', 'bol'], families: ['inv_r', 'mix_3', 'inv_l', 'r'], img: 'ref_arbol.webp', hint: 'El ___ nos da sombra fresca.' },
+      { level: 5, text: 'isla', syllables: ['is', 'la'], families: ['inv_s', 'l', 's', 'inv_l'], img: 'ref_isla.webp', hint: 'La ___ está rodeada de mar.' },
+      { level: 5, text: 'imán', syllables: ['i', 'man'], displaySyllables: ['i', 'mán'], families: ['vocales', 'mix_2', 'inv_n', 'm'], img: 'ref_iman.webp', hint: 'El ___ atrae los metales.' },
+      { level: 5, text: 'escoba', syllables: ['es', 'co', 'ba'], families: ['inv_s', 'c', 'b', 's'], img: 'ref_escoba.webp', hint: 'Barremos el salón con la ___.' },
+      { level: 5, text: 'espejo', syllables: ['es', 'pe', 'jo'], families: ['inv_s', 'p', 'j', 's'], img: 'ref_espejo.webp', hint: 'Nos miramos la cara en el ___.' },
+      { level: 5, text: 'espada', syllables: ['es', 'pa', 'da'], families: ['inv_s', 'p', 'd', 's'], img: 'ref_espada.webp', hint: 'El caballero guarda su ___.' },
+      { level: 5, text: 'antena', syllables: ['an', 'te', 'na'], families: ['inv_n', 't', 'n', 'inv_l'], img: 'ref_antena.webp', hint: 'La ___ recibe la señal de radio.' },
+      { level: 5, text: 'insecto', syllables: ['in', 'sec', 'to'], families: ['inv_n', 'mix_4', 't', 's'], img: 'ref_insecto.webp', hint: 'Observamos un pequeño ___ en la planta.' },
+      { level: 5, text: 'ardilla', syllables: ['ar', 'di', 'lla'], families: ['inv_r', 'd', 'll', 'r'], img: 'ref_ardilla.webp', hint: 'La ___ sube rápido al árbol.' },
+      { level: 5, text: 'barco', syllables: ['bar', 'co'], families: ['mix_1', 'c', 'b', 'inv_r'], img: 'ref_barco.webp', hint: 'El ___ navega sobre las olas.' },
+      { level: 5, text: 'cerdo', syllables: ['cer', 'do'], families: ['mix_1', 'd', 'c', 's'], img: 'ref_cerdo.webp', hint: 'El ___ rosado vive en la granja.' },
+      { level: 5, text: 'pulpo', syllables: ['pul', 'po'], families: ['mix_1', 'p', 'inv_l', 'l'], img: 'ref_pulpo.webp', hint: 'El ___ tiene ocho tentáculos.' },
+      { level: 5, text: 'dulce', syllables: ['dul', 'ce'], families: ['mix_1', 'c', 's', 'd'], img: 'ref_dulce.webp', hint: 'Compartimos un ___ de caramelo.' },
+      { level: 5, text: 'pastel', syllables: ['pas', 'tel'], families: ['mix_1', 'mix_3', 'p', 't'], img: 'ref_pastel.webp', hint: 'Partimos el ___ de cumpleaños.' },
+      { level: 5, text: 'delfín', syllables: ['del', 'fin'], displaySyllables: ['del', 'fín'], families: ['mix_2', 'mix_3', 'd', 'f'], img: 'ref_delfin.webp', hint: 'El ___ salta alegre en el océano.' },
+      { level: 5, text: 'balón', syllables: ['ba', 'lon'], displaySyllables: ['ba', 'lón'], families: ['b', 'mix_3', 'v', 'l'], img: 'ref_balon.webp', hint: 'Pateamos el ___ hacia la portería.' },
+      { level: 5, text: 'botón', syllables: ['bo', 'ton'], displaySyllables: ['bo', 'tón'], families: ['b', 'mix_3', 't', 'v'], img: 'ref_boton.webp', hint: 'Cosemos el ___ del suéter.' },
+      { level: 5, text: 'jabón', syllables: ['ja', 'bon'], displaySyllables: ['ja', 'bón'], families: ['j', 'mix_4', 'g', 'b'], img: 'ref_jabon.webp', hint: 'Nos lavamos las manos con ___.' },
+      { level: 5, text: 'ratón', syllables: ['ra', 'ton'], displaySyllables: ['ra', 'tón'], families: ['r', 'mix_4', 't', 'n'], img: 'ref_raton.webp', hint: 'El pequeño ___ corre veloz.' },
+      { level: 5, text: 'tortuga', syllables: ['tor', 'tu', 'ga'], families: ['mix_2', 't', 'g', 'r'], img: 'ref_tortuga.webp', hint: 'La ___ lleva su caparazón.' },
+      { level: 5, text: 'manzana', syllables: ['man', 'za', 'na'], families: ['mix_2', 'z', 's', 'n'], img: 'ref_manzana.webp', hint: 'Mordemos una ___ roja y crujiente.' },
+      { level: 5, text: 'campana', syllables: ['cam', 'pa', 'na'], families: ['mix_2', 'p', 'n', 'c'], img: 'ref_campana.webp', hint: 'Suena la ___ para salir al recreo.' },
+      { level: 5, text: 'hormiga', syllables: ['hor', 'mi', 'ga'], families: ['mix_2', 'm', 'g', 'j'], img: 'ref_hormiga.webp', hint: 'La ___ trabaja en equipo.' },
+      { level: 5, text: 'elefante', syllables: ['e', 'le', 'fan', 'te'], families: ['vocales', 'l', 'mix_4', 't'], img: 'ref_elefante.webp', hint: 'El ___ tiene una trompa larga.' },
+
+      // 🩷 NIVEL 6: Diptongos (ue, ie, ia, au, ei, io) con opciones rivales para descartar (17 palabras)
+      { level: 6, text: 'huevo', syllables: ['hue', 'vo'], families: ['dip_ue', 'dip_ie', 'v', 'b'], img: 'ref_huevo.webp', hint: 'Preparamos ___ para desayunar.' },
+      { level: 6, text: 'hueso', syllables: ['hue', 'so'], families: ['dip_ue', 'dip_ie', 's', 'c'], img: 'ref_hueso.webp', hint: 'El perrito cuida su ___.' },
+      { level: 6, text: 'fuego', syllables: ['fue', 'go'], families: ['dip_ue', 'dip_ie', 'g', 'f'], img: 'ref_fuego.webp', hint: 'La fogata tiene ___ brillante.' },
+      { level: 6, text: 'rueda', syllables: ['rue', 'da'], families: ['dip_ue', 'dip_ie', 'd', 'r'], img: 'ref_rueda.webp', hint: 'La ___ de la carreta gira.' },
+      { level: 6, text: 'puerta', syllables: ['puer', 'ta'], families: ['dip_ue2', 'tr_pr', 't', 'p'], img: 'ref_puerta.webp', hint: 'Abrimos la ___ del salón.' },
+      { level: 6, text: 'duende', syllables: ['duen', 'de'], families: ['dip_ue2', 'tr_dr', 'd', 'n'], img: 'ref_duende.webp', hint: 'El ___ del cuento lleva sombrero.' },
+      { level: 6, text: 'diente', syllables: ['dien', 'te'], families: ['dip_ie', 'dip_ue2', 't', 'd'], img: 'ref_diente.webp', hint: 'Cepillamos cada ___ después de comer.' },
+      { level: 6, text: 'cielo', syllables: ['cie', 'lo'], families: ['dip_ie', 'dip_ue', 'l', 'c'], img: 'ref_cielo.webp', hint: 'El ___ está despejado y azul.' },
+      { level: 6, text: 'nieve', syllables: ['nie', 've'], families: ['dip_ie', 'dip_ue', 'v', 'b'], img: 'ref_nieve.webp', hint: 'Hicimos un muñeco de ___.' },
+      { level: 6, text: 'piano', syllables: ['pia', 'no'], families: ['dip_ie', 'dip_au', 'n', 'p'], img: 'ref_piano.webp', hint: 'Tocamos una melodía en el ___.' },
+      { level: 6, text: 'lluvia', syllables: ['llu', 'via'], families: ['ll', 'dip_ie', 'dip_au', 'v'], img: 'ref_lluvia.webp', hint: 'La ___ riega las plantas del campo.' },
+      { level: 6, text: 'jaula', syllables: ['jau', 'la'], families: ['dip_au', 'dip_ue', 'l', 'j'], img: 'ref_jaula.webp', hint: 'La puerta de la ___ está abierta para que el ave vuele.' },
+      { level: 6, text: 'peine', syllables: ['pei', 'ne'], families: ['dip_au', 'dip_ie', 'n', 'p'], img: 'ref_peine.webp', hint: 'Acomodamos el cabello con el ___.' },
+      { level: 6, text: 'reina', syllables: ['rei', 'na'], families: ['dip_au', 'dip_ie', 'n', 'r'], img: 'ref_reina.webp', hint: 'La ___ del cuento usa corona.' },
+      { level: 6, text: 'avión', syllables: ['a', 'vion'], displaySyllables: ['a', 'vión'], families: ['vocales', 'dip_au', 'dip_ie', 'v'], img: 'ref_avion.webp', hint: 'El ___ vuela alto entre las nubes.' },
+      { level: 6, text: 'abuela', syllables: ['a', 'bue', 'la'], families: ['vocales', 'dip_ue', 'dip_ie', 'b'], img: 'ref_abuela.webp', hint: 'Nuestra ___ nos cuenta historias.' },
+      { level: 6, text: 'escuela', syllables: ['es', 'cue', 'la'], families: ['inv_s', 'dip_ue', 'dip_ie', 'c'], img: 'ref_escuela.webp', hint: 'Aprendemos juntos en la ___.' },
+      { level: 6, text: 'invierno', syllables: ['in', 'vier', 'no'], families: ['inv_n', 'dip_ue2', 'tr_br', 'v'], img: 'ref_invierno.webp', hint: 'Nos abrigamos bien durante el ___.' },
+
+      // 🩵 NIVEL 7: Sílabas Trabadas con Familias Rival/Confusoras de Sonido Similar (24 palabras)
+      { level: 7, text: 'plato', syllables: ['pla', 'to'], families: ['tr_pl', 'tr_pr', 'tr_bl', 't'], img: 'ref_plato.webp', hint: 'Servimos la comida en el ___.' },
+      { level: 7, text: 'pluma', syllables: ['plu', 'ma'], families: ['tr_pl', 'tr_pr', 'tr_bl', 'm'], img: 'ref_pluma.webp', hint: 'El ave tiene una ___ suave.' },
+      { level: 7, text: 'plátano', syllables: ['pla', 'ta', 'no'], displaySyllables: ['plá', 'ta', 'no'], families: ['tr_pl', 'tr_pr', 't', 'n'], img: 'ref_platano.webp', hint: 'Comemos un ___ amarillo.' },
+      { level: 7, text: 'planeta', syllables: ['pla', 'ne', 'ta'], families: ['tr_pl', 'tr_pr', 'n', 't'], img: 'ref_planeta.webp', hint: 'Cuidamos nuestro ___ Tierra.' },
+      { level: 7, text: 'princesa', syllables: ['prin', 'ce', 'sa'], families: ['tr_esp', 'tr_pr', 'tr_pl', 'c'], img: 'ref_princesa.webp', hint: 'La ___ del cuento vive en un castillo.' },
+      { level: 7, text: 'blusa', syllables: ['blu', 'sa'], families: ['tr_bl', 'tr_br', 'tr_pl', 's'], img: 'ref_blusa.webp', hint: 'Doblamos la ___ limpia.' },
+      { level: 7, text: 'bruja', syllables: ['bru', 'ja'], families: ['tr_br', 'tr_bl', 'tr_gr', 'j'], img: 'ref_bruja.webp', hint: 'La ___ del cuento vuela en escoba.' },
+      { level: 7, text: 'libro', syllables: ['li', 'bro'], families: ['l', 'tr_br', 'tr_bl', 'tr_dr'], img: 'ref_libro.webp', hint: 'Leemos un ___ en la biblioteca.' },
+      { level: 7, text: 'cebra', syllables: ['ce', 'bra'], families: ['c', 'tr_br', 'tr_bl', 'tr_gr'], img: 'ref_cebra.webp', hint: 'La ___ tiene rayas blancas y negras.' },
+      { level: 7, text: 'clavo', syllables: ['cla', 'vo'], families: ['tr_cl', 'tr_cr', 'tr_pl', 'v'], img: 'ref_clavo.webp', hint: 'Martillamos el ___ en la madera.' },
+      { level: 7, text: 'ancla', syllables: ['an', 'cla'], families: ['inv_n', 'tr_cl', 'tr_cr', 'tr_gl'], img: 'ref_ancla.webp', hint: 'El barco baja su ___ al fondo del mar.' },
+      { level: 7, text: 'bicicleta', syllables: ['bi', 'ci', 'cle', 'ta'], families: ['b', 'c', 'tr_cl', 'tr_cr'], img: 'ref_bicicleta.webp', hint: 'Pedaleamos la ___ en el parque.' },
+      { level: 7, text: 'cofre', syllables: ['co', 'fre'], families: ['c', 'tr_fr', 'tr_fl', 'tr_br'], img: 'ref_cofre.webp', hint: 'Abrieron el ___ del tesoro.' },
+      { level: 7, text: 'fresa', syllables: ['fre', 'sa'], families: ['tr_fr', 'tr_fl', 'tr_pr', 's'], img: 'ref_fresa.webp', hint: 'La ___ roja es una fruta dulce.' },
+      { level: 7, text: 'flores', syllables: ['flo', 'res'], families: ['tr_fl', 'tr_fr', 'tr_pl', 'tr_esp2'], img: 'ref_flor.webp', hint: 'Regamos las ___ de la maceta.' },
+      { level: 7, text: 'flecha', syllables: ['fle', 'cha'], families: ['tr_fl', 'tr_fr', 'tr_pl', 'tr_esp2'], img: 'ref_flecha.webp', hint: 'La ___ señala hacia la derecha.' },
+      { level: 7, text: 'flauta', syllables: ['flau', 'ta'], families: ['tr_esp', 'tr_fl', 'tr_fr', 't'], img: 'ref_flauta.webp', hint: 'Tocamos música con la ___.' },
+      { level: 7, text: 'globo', syllables: ['glo', 'bo'], families: ['tr_gl', 'tr_gr', 'tr_bl', 'b'], img: 'ref_globo.webp', hint: 'Inflamos un ___ de fiesta.' },
+      { level: 7, text: 'regla', syllables: ['re', 'gla'], families: ['r', 'tr_gl', 'tr_gr', 'tr_cl'], img: 'ref_regla.webp', hint: 'Trazamos líneas derechas con la ___.' },
+      { level: 7, text: 'tigre', syllables: ['ti', 'gre'], families: ['t', 'tr_gr', 'tr_gl', 'tr_dr'], img: 'ref_tigre.webp', hint: 'El ___ tiene rayas en su piel.' },
+      { level: 7, text: 'cangrejo', syllables: ['can', 'gre', 'jo'], families: ['tr_esp', 'tr_gr', 'tr_gl', 'j'], img: 'ref_cangrejo.webp', hint: 'El ___ camina por la arena.' },
+      { level: 7, text: 'trompo', syllables: ['trom', 'po'], families: ['tr_esp', 'tr_tr', 'tr_dr', 'p'], img: 'ref_trompo.webp', hint: 'Bailamos el ___ con la cuerda.' },
+      { level: 7, text: 'tractor', syllables: ['trac', 'tor'], families: ['tr_esp', 'tr_tr', 'tr_dr', 'tr_esp2'], img: 'ref_tractor.webp', hint: 'El ___ trabaja en la parcela.' },
+      { level: 7, text: 'estrella', syllables: ['es', 'tre', 'lla'], families: ['inv_s', 'tr_tr', 'tr_dr', 'll'], img: 'ref_estrella.webp', hint: 'Una ___ brilla en la noche.' },
+      { level: 7, text: 'dragón', syllables: ['dra', 'gon'], displaySyllables: ['dra', 'gón'], families: ['tr_dr', 'tr_tr', 'tr_gr', 'tr_esp2'], img: 'ref_dragon.webp', hint: 'El ___ verde aparece en el cuento.' },
+      { level: 7, text: 'cocodrilo', syllables: ['co', 'co', 'dri', 'lo'], families: ['c', 'tr_dr', 'tr_tr', 'l'], img: 'ref_cocodrilo.webp', hint: 'El ___ nada en la laguna.' }
+    ];
+
+    /* =========================================================================
+       🌟 NIVEL 8: 45 ORACIONES ILUSTRADAS CON CÓDIGO BICOLOR PARA ORDENAR
+       (Usa vocabulario de N1-N7 y nombres reales del grupo 3° "A")
+       ========================================================================= */
+    const SENTENCES_L8_DB = [
+      { words: ['El', 'sapo', 'salta', 'alto.'], img: 'ref_sapo.webp' },
+      { words: ['Mi', 'mamá', 'hace', 'sopa.'], img: 'ref_sopa.webp' },
+      { words: ['La', 'mesa', 'está', 'limpia.'], img: 'ref_mesa.webp' },
+      { words: ['El', 'puma', 'corre', 'rápido.'], img: 'ref_puma.webp' },
+      { words: ['Daniel', 'mira', 'el', 'mapa.'], img: 'ref_mapa.webp' },
+      { words: ['Gael', 'hace', 'una', 'suma.'], img: 'ref_suma.webp' },
+      { words: ['Dalary', 'barre', 'el', 'piso.'], img: 'ref_piso.webp' },
+      { words: ['Mi', 'papá', 'nos', 'saluda.'], img: 'ref_papa_padre.webp' },
+      { words: ['La', 'luna', 'brilla', 'mucho.'], img: 'ref_luna.webp' },
+      { words: ['El', 'mono', 'come', 'plátano.'], img: 'ref_mono.webp' },
+      { words: ['El', 'pato', 'nada', 'feliz.'], img: 'ref_pato.webp' },
+      { words: ['José', 'lanza', 'el', 'dado.'], img: 'ref_dado.webp' },
+      { words: ['El', 'nido', 'tiene', 'huevos.'], img: 'ref_nido.webp' },
+      { words: ['Keyla', 'usa', 'la', 'lupa.'], img: 'ref_lupa.webp' },
+      { words: ['La', 'moto', 'es', 'roja.'], img: 'ref_moto.webp' },
+      { words: ['El', 'topo', 'cava', 'tierra.'], img: 'ref_topo.webp' },
+      { words: ['Cristal', 'bota', 'la', 'pelota.'], img: 'ref_pelota.webp' },
+      { words: ['Aurora', 'come', 'una', 'paleta.'], img: 'ref_paleta.webp' },
+      { words: ['El', 'tomate', 'es', 'rojo.'], img: 'ref_tomate.webp' },
+      { words: ['La', 'casa', 'es', 'bonita.'], img: 'ref_casa.webp' },
+      { words: ['El', 'bebé', 'duerme', 'bien.'], img: 'ref_bebe.webp' },
+      { words: ['El', 'búho', 'mira', 'de', 'noche.'], img: 'ref_buho.webp' },
+      { words: ['La', 'vaca', 'come', 'pasto.'], img: 'ref_vaca.webp' },
+      { words: ['La', 'foca', 'aplaude', 'feliz.'], img: 'ref_foca.webp' },
+      { words: ['El', 'caballo', 'corre', 'libre.'], img: 'ref_caballo.webp' },
+      { words: ['Estrella', 'toma', 'jugo', 'fresco.'], img: 'ref_jugo.webp' },
+      { words: ['La', 'jirafa', 'es', 'alta.'], img: 'ref_jirafa.webp' },
+      { words: ['El', 'conejo', 'come', 'zanahoria.'], img: 'ref_conejo.webp' },
+      { words: ['La', 'abeja', 'hace', 'miel.'], img: 'ref_abeja.webp' },
+      { words: ['El', 'gato', 'toma', 'leche.'], img: 'ref_gato.webp' },
+      { words: ['La', 'rana', 'brinca', 'en', 'el', 'agua.'], img: 'ref_rana.webp' },
+      { words: ['El', 'perro', 'mueve', 'la', 'cola.'], img: 'ref_perro.webp' },
+      { words: ['La', 'mariposa', 'vuela', 'alto.'], img: 'ref_mariposa.webp' },
+      { words: ['El', 'árbol', 'da', 'sombra.'], img: 'ref_arbol.webp' },
+      { words: ['La', 'ardilla', 'sube', 'al', 'pino.'], img: 'ref_ardilla.webp' },
+      { words: ['El', 'barco', 'navega', 'en', 'el', 'mar.'], img: 'ref_barco.webp' },
+      { words: ['El', 'pulpo', 'vive', 'en', 'el', 'mar.'], img: 'ref_pulpo.webp' },
+      { words: ['El', 'delfín', 'salta', 'las', 'olas.'], img: 'ref_delfin.webp' },
+      { words: ['La', 'tortuga', 'camina', 'despacio.'], img: 'ref_tortuga.webp' },
+      { words: ['Jarol', 'come', 'una', 'manzana.'], img: 'ref_manzana.webp' },
+      { words: ['Coral', 'toca', 'el', 'piano.'], img: 'ref_piano.webp' },
+      { words: ['El', 'avión', 'vuela', 'muy', 'alto.'], img: 'ref_avion.webp' },
+      { words: ['Mi', 'abuela', 'cuenta', 'un', 'cuento.'], img: 'ref_abuela.webp' },
+      { words: ['Naomi', 'lee', 'un', 'libro.'], img: 'ref_libro.webp' },
+      { words: ['La', 'cebra', 'tiene', 'rayas', 'negras.'], img: 'ref_cebra.webp' },
+      { words: ['Alexander', 'baila', 'el', 'trompo.'], img: 'ref_trompo.webp' },
+      { words: ['El', 'cocodrilo', 'nada', 'en', 'el', 'río.'], img: 'ref_cocodrilo.webp' }
+    ];
+
+    /* =========================================================================
+       HELPER BICOLOR ESCOLAR: SOLO LA LETRA MAYÚSCULA EN ROJO Y PUNTUACIÓN EN AZUL
+       ========================================================================= */
+    function colorizeBicolor(str) {
+      if (!str) return '';
+      return String(str).split('').map(ch => {
+        if (/[A-ZÁÉÍÓÚÜÑ]/.test(ch)) return `<span class="bicolor-upper">${ch}</span>`;
+        if (/[.,¿?¡!:;]/.test(ch)) return `<span class="bicolor-punct">${ch}</span>`;
+        return ch;
+      }).join('');
+    }
+
+    function colorizeSentenceNoOrphan(str) {
+      if (!str) return '';
+      return String(str).split(/\s+/).map(token => {
+        if (token.includes('___')) {
+          const rendered = token.replace('___', '<span style="display:inline-block; min-width:48px; border-bottom:3px dashed #4f46e5; color:#4f46e5; margin:0 2px;">___</span>');
+          return `<span style="white-space:nowrap; display:inline-block;">${rendered}</span>`;
+        }
+        return `<span style="white-space:nowrap; display:inline-block;">${colorizeBicolor(token)}</span>`;
+      }).join(' ');
+    }
+
+    /* =========================================================================
+       ESTADO DEL JUEGO Y PRONUNCIACIÓN
+       ========================================================================= */
+    let currentLevel = 1;
+    let pendingWords = [];
+    let completedCount = 0;
+    let totalInLevel = 0;
+    let currentSlots = [];
+    let isTransitioning = false;
+    let pendingAdvanceTimer = null;
+    let currentTextScale = 1;
+
+    function adjustTextScale(delta) {
+      currentTextScale = Math.min(1.2, Math.max(0.85, currentTextScale + delta));
+      document.documentElement.style.setProperty('--text-scale', currentTextScale.toFixed(2));
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    let audioCtx = null;
+    let spanishVoice = null;
+    let currentUtterance = null;
+
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function loadVoices() {
+      if ('speechSynthesis' in window) {
+        const voices = window.speechSynthesis.getVoices();
+        spanishVoice = voices.find(v => v.lang === 'es-MX') ||
+                       voices.find(v => v.lang.startsWith('es-')) ||
+                       voices.find(v => v.lang.includes('es'));
+      }
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices();
+    }
+
+    function playSound(type) {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        if (type === 'click') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(820, now + 0.08);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(now); osc.stop(now + 0.08);
+        } else if (type === 'success') {
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            const t = now + (idx * 0.09);
+            gain.gain.setValueAtTime(0.24, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(t); osc.stop(t + 0.2);
+          });
+        } else if (type === 'error') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.frequency.setValueAtTime(185, now);
+          osc.frequency.linearRampToValueAtTime(125, now + 0.25);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(now); osc.stop(now + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    function speakText(text, rate = 0.85, onEndCallback = null) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        currentUtterance = utter;
+        utter.lang = spanishVoice ? spanishVoice.lang : 'es-MX';
+        if (spanishVoice) utter.voice = spanishVoice;
+        utter.rate = rate;
+
+        if (onEndCallback) {
+          let called = false;
+          const finish = () => {
+            if (!called) {
+              called = true;
+              onEndCallback();
+            }
+          };
+          utter.onend = finish;
+          utter.onerror = finish;
+          const fallbackTime = Math.max(1500, (text.length * 85) + 1100);
+          setTimeout(finish, fallbackTime);
+        }
+        window.speechSynthesis.speak(utter);
+      } else if (onEndCallback) {
+        setTimeout(onEndCallback, 900);
+      }
+    }
+
+    function getPhoneticReading(syl) {
+      const s = syl.toLowerCase();
+      const map = {
+        ma: 'má', me: 'mé', mi: 'mí', mo: 'mó', mu: 'mú',
+        sa: 'sá', se: 'sé', si: 'sí', so: 'só', su: 'sú',
+        pa: 'pá', pe: 'pé', pi: 'pí', po: 'pó', pu: 'pú',
+        la: 'lá', le: 'lé', li: 'lí', lo: 'ló', lu: 'lú',
+        ta: 'tá', te: 'té', ti: 'tí', to: 'tó', tu: 'tú',
+        da: 'dá', de: 'dé', di: 'dí', do: 'dó', du: 'dú',
+        na: 'ná', ne: 'né', ni: 'ní', no: 'nó', nu: 'nú',
+        ca: 'cá', ce: 'sé', ci: 'sí', co: 'có', cu: 'cú',
+        ba: 'bá', be: 'bé', bi: 'bí', bo: 'bó', bu: 'bú',
+        va: 'bá', ve: 'bé', vi: 'bí', vo: 'bó', vu: 'bú',
+        fa: 'fá', fe: 'fé', fi: 'fí', fo: 'fó', fu: 'fú',
+        ha: 'á', he: 'é', hi: 'í', ho: 'ó', hu: 'ú',
+        ga: 'gá', ge: 'jé', gi: 'jí', go: 'gó', gu: 'gú',
+        ja: 'já', je: 'jé', ji: 'jí', jo: 'jó', ju: 'jú',
+        ra: 'rá', re: 'ré', ri: 'rí', ro: 'ró', ru: 'rú',
+        rra: 'rrá', rre: 'rré', rri: 'rrí', rro: 'rró', rru: 'rrú',
+        za: 'sá', ze: 'sé', zi: 'sí', zo: 'só', zu: 'sú',
+        lla: 'yá', lle: 'yé', lli: 'yí', llo: 'yó', llu: 'yú'
+      };
+      return map[s] || s;
+    }
+
+    function speakSyllable(syl) {
+      speakText(getPhoneticReading(syl), 0.86);
+    }
+
+    function getCurrentWordObj() {
+      return pendingWords[0] || null;
+    }
+
+    function speakTargetWord() {
+      const wordObj = getCurrentWordObj();
+      if (!wordObj) return;
+      if (wordObj.isSentence) {
+        speakText(wordObj.fullSentence, 0.86);
+      } else {
+        speakText(wordObj.text, 0.84);
+      }
+    }
+
+    function speakTargetSyllables() {
+      const wordObj = getCurrentWordObj();
+      if (!wordObj) return;
+      if (wordObj.isSentence) {
+        speakText(wordObj.words.join('... '), 0.78);
+      } else {
+        const syls = wordObj.syllables.map(s => getPhoneticReading(s)).join(', ');
+        speakText(syls, 0.75);
+      }
+    }
+
+    /* =========================================================================
+       NAVEGACIÓN DE LOS 8 NIVELES (SIEMPRE EN ORDEN ALEATORIO)
+       ========================================================================= */
+    function selectLevel(lvl) {
+      if (pendingAdvanceTimer) {
+        clearTimeout(pendingAdvanceTimer);
+        pendingAdvanceTimer = null;
+      }
+      currentLevel = lvl;
+      document.querySelectorAll('.level-tab').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === lvl);
+      });
+
+      if (lvl === 8) {
+        pendingWords = shuffleArray(SENTENCES_L8_DB.map(item => ({
+          isSentence: true,
+          words: item.words,
+          fullSentence: item.words.join(' '),
+          img: item.img
+        })));
+      } else {
+        const filtered = WORDS_DB.filter(w => w.level === lvl);
+        pendingWords = shuffleArray(filtered);
+      }
+
+      completedCount = 0;
+      totalInLevel = pendingWords.length;
+      isTransitioning = false;
+      document.getElementById('winOverlay').style.display = 'none';
+      document.getElementById('btnNextNow').style.display = 'none';
+      updateStats();
+      loadCurrentWord(false);
+    }
+
+    function restartCurrentLevel() {
+      selectLevel(currentLevel);
+    }
+
+    function advanceToNextLevel() {
+      const next = currentLevel < 8 ? currentLevel + 1 : 1;
+      selectLevel(next);
+    }
+
+    function updateStats() {
+      document.getElementById('achievedCount').textContent = completedCount;
+      document.getElementById('remainingCount').textContent = pendingWords.length;
+    }
+
+    /* =========================================================================
+       CARGA DEL RETO ACTUAL (PALABRA POR SÍLABAS N1-N7 O ORACIÓN BICOLOR N8)
+       ========================================================================= */
+    function loadCurrentWord(autoPlay = true) {
+      if (pendingAdvanceTimer) {
+        clearTimeout(pendingAdvanceTimer);
+        pendingAdvanceTimer = null;
+      }
+      document.getElementById('btnNextNow').style.display = 'none';
+
+      const wordObj = getCurrentWordObj();
+      if (!wordObj) {
+        document.getElementById('winOverlay').style.display = 'flex';
+        return;
+      }
+
+      isTransitioning = false;
+
+      const imgEl = document.getElementById('wordImage');
+      imgEl.src = `./recursos_juego/${wordObj.img}`;
+      imgEl.alt = wordObj.isSentence ? wordObj.fullSentence : wordObj.text;
+
+      const cardEl = document.getElementById('illustratedCard');
+      cardEl.classList.remove('celebrating');
+      document.getElementById('celebrationBadge').style.display = 'none';
+
+      const fb = document.getElementById('feedbackMessage');
+      fb.className = 'feedback-message';
+      fb.innerHTML = '';
+
+      if (wordObj.isSentence) {
+        currentSlots = new Array(wordObj.words.length).fill(null);
+        document.getElementById('stageTitle').textContent = `Oración ${completedCount + 1} de ${totalInLevel} (${wordObj.words.length} palabras)`;
+        document.getElementById('contextSentence').innerHTML = `Fíjate en la <b style="color:#0f172a;">${colorizeBicolor('Mayúscula')}</b> roja y en el <b class="bicolor-punct">.</b> azul`;
+        document.getElementById('btnSyllableAudio').textContent = '🗣️ Escuchar palabra por palabra';
+        document.getElementById('promptHint').innerHTML = 'Arrastra o toca las tarjetas en orden para formar la oración (toca una casilla para devolver su palabra):';
+        document.getElementById('bankTitle').textContent = '🗂️ Palabras en Desorden (Mayúsculas en Rojo)';
+        document.getElementById('bankSubhint').textContent = 'Ordénalas desde la Mayúscula roja hasta el punto:';
+        renderSentenceSlots();
+        renderSentenceBank(wordObj);
+      } else {
+        currentSlots = new Array(wordObj.syllables.length).fill(null);
+        document.getElementById('stageTitle').textContent = `Palabra ${completedCount + 1} de ${totalInLevel} (${wordObj.syllables.length} sílabas)`;
+        document.getElementById('contextSentence').innerHTML = colorizeSentenceNoOrphan(wordObj.hint);
+        document.getElementById('btnSyllableAudio').textContent = '🗣️ Escuchar por sílabas';
+        document.getElementById('promptHint').innerHTML = 'Arrastra o toca las sílabas del banco derecho para armar la palabra (toca una casilla si deseas cambiarla):';
+        document.getElementById('bankTitle').textContent = '🗂️ Banco de Sílabas';
+        document.getElementById('bankSubhint').textContent = 'Tócalas o arrástralas hacia las casillas:';
+        renderSlots();
+        renderBankForWord(wordObj);
+      }
+
+      if (autoPlay) {
+        setTimeout(speakTargetWord, 220);
+      }
+    }
+
+    /* =========================================================================
+       RENDERIZADO DEL BANCO Y CASILLAS PARA NIVELES 1 AL 7 (SÍLABAS)
+       ========================================================================= */
+    function renderBankForWord(wordObj) {
+      const container = document.getElementById('familiesContainer');
+      const famKeys = wordObj.families || ['m', 's', 'p'];
+
+      container.innerHTML = famKeys.map(fKey => {
+        const fam = CONSONANT_FAMILIES[fKey];
+        if (!fam) return '';
+        return `
+          <div class="family-group">
+            <div class="family-label" style="color: ${fam.text};">${fam.label}</div>
+            <div class="cards-grid-row">
+              ${fam.syllables.map(syl => `
+                <button class="syllable-card" data-syl="${syl}" data-fam="${fKey}"
+                  style="background: ${fam.bg}; border-color: ${fam.border};">
+                  ${syl}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.syllable-card').forEach(card => {
+        attachSyllableCardInteraction(card);
+      });
+    }
+
+    function renderSlots() {
+      const container = document.getElementById('slotsContainer');
+      const wordObj = getCurrentWordObj();
+      if (!wordObj || wordObj.isSentence) return;
+
+      container.innerHTML = currentSlots.map((item, idx) => {
+        if (item) {
+          const fam = CONSONANT_FAMILIES[item.fam] || CONSONANT_FAMILIES.p;
+          const displayText = item.displayOverride || item.syllable;
+          const orthoClass = item.wasOrthoCorrected ? 'ortho-corrected' : '';
+          const orthoBadge = item.wasOrthoCorrected
+            ? `<span class="ortho-tag">✨ Se escribe "${displayText}"</span>`
+            : '';
+          return `
+            <div class="syllable-slot filled ${orthoClass}" data-slot-idx="${idx}"
+              style="background: ${fam.bg}; border-color: ${fam.border};"
+              onclick="removeSlot(${idx})" title="Toca para vaciar esta casilla">
+              <span class="slot-num">${idx + 1}</span>
+              <span>${displayText}</span>
+              ${orthoBadge}
+            </div>
+          `;
+        } else {
+          return `
+            <div class="syllable-slot" data-slot-idx="${idx}" title="Casilla ${idx + 1}">
+              <span class="slot-num">${idx + 1}</span>
+              <span>·</span>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    /* =========================================================================
+       RENDERIZADO DEL BANCO Y CASILLAS PARA EL NIVEL 8 (ORACIONES BICOLOR)
+       ========================================================================= */
+    function renderSentenceBank(wordObj) {
+      const container = document.getElementById('familiesContainer');
+      let indexedWords = wordObj.words.map((w, idx) => ({ text: w, idx }));
+      indexedWords = shuffleArray(indexedWords);
+      if (indexedWords.every((it, i) => it.idx === i) && indexedWords.length > 1) {
+        [indexedWords[0], indexedWords[1]] = [indexedWords[1], indexedWords[0]];
+      }
+
+      container.innerHTML = `
+        <div class="words-bank-grid" id="sentenceWordsBank">
+          ${indexedWords.map(w => `
+            <button class="word-bank-card" data-word-idx="${w.idx}" data-word="${w.text}">
+              <span style="white-space:nowrap;">${colorizeBicolor(w.text)}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      container.querySelectorAll('.word-bank-card').forEach(card => {
+        attachWordCardInteraction(card);
+      });
+    }
+
+    function renderSentenceSlots() {
+      const container = document.getElementById('slotsContainer');
+      const wordObj = getCurrentWordObj();
+      if (!wordObj || !wordObj.isSentence) return;
+
+      container.innerHTML = currentSlots.map((item, idx) => {
+        if (item) {
+          return `
+            <div class="syllable-slot word-slot filled" data-slot-idx="${idx}"
+              onclick="removeSlot(${idx})" title="Toca para devolver esta palabra">
+              <span class="slot-num">${idx + 1}</span>
+              <span style="white-space:nowrap;">${colorizeBicolor(item.word)}</span>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="syllable-slot word-slot" data-slot-idx="${idx}" title="Palabra ${idx + 1}">
+              <span class="slot-num">${idx + 1}</span>
+              <span>___</span>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    /* =========================================================================
+       INTERACCIÓN DUAL (CLIC + DRAG & DROP POINTER EVENTS COMPATIBLE CON LINUX)
+       ========================================================================= */
+    function attachSyllableCardInteraction(cardEl) {
+      let ghost = null;
+      let startX = 0;
+      let startY = 0;
+      let isDragging = false;
+
+      cardEl.addEventListener('pointerdown', (e) => {
+        if (isTransitioning) return;
+        if (e.button !== undefined && e.button !== 0) return;
+        e.preventDefault();
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+        cardEl.setPointerCapture(e.pointerId);
+
+        const onMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+          if (!isDragging && Math.hypot(dx, dy) > 8) {
+            isDragging = true;
+            const fam = CONSONANT_FAMILIES[cardEl.dataset.fam] || CONSONANT_FAMILIES.p;
+            ghost = document.createElement('div');
+            ghost.className = 'drag-ghost';
+            ghost.style.background = fam.bg;
+            ghost.textContent = cardEl.dataset.syl;
+            document.body.appendChild(ghost);
+          }
+          if (isDragging && ghost) {
+            ghost.style.left = `${ev.clientX}px`;
+            ghost.style.top = `${ev.clientY}px`;
+            document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+            const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
+            if (targetSlot) targetSlot.classList.add('drag-over');
+          }
+        };
+
+        const onUp = (ev) => {
+          cardEl.removeEventListener('pointermove', onMove);
+          cardEl.removeEventListener('pointerup', onUp);
+          cardEl.removeEventListener('pointercancel', onUp);
+          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+
+          if (ghost) {
+            ghost.remove();
+            ghost = null;
+          }
+
+          if (isDragging) {
+            const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
+            if (targetSlot && targetSlot.dataset.slotIdx !== undefined) {
+              placeSyllableInSlot(
+                cardEl.dataset.syl,
+                cardEl.dataset.fam,
+                parseInt(targetSlot.dataset.slotIdx, 10)
+              );
+            }
+          } else {
+            const firstEmpty = currentSlots.findIndex(s => s === null);
+            if (firstEmpty !== -1) {
+              placeSyllableInSlot(cardEl.dataset.syl, cardEl.dataset.fam, firstEmpty);
+            } else {
+              playSound('click');
+              speakSyllable(cardEl.dataset.syl);
+            }
+          }
+        };
+
+        cardEl.addEventListener('pointermove', onMove);
+        cardEl.addEventListener('pointerup', onUp);
+        cardEl.addEventListener('pointercancel', onUp);
+      });
+    }
+
+    function attachWordCardInteraction(cardEl) {
+      let ghost = null;
+      let startX = 0;
+      let startY = 0;
+      let isDragging = false;
+
+      cardEl.addEventListener('pointerdown', (e) => {
+        if (isTransitioning || cardEl.style.display === 'none') return;
+        if (e.button !== undefined && e.button !== 0) return;
+        e.preventDefault();
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+        cardEl.setPointerCapture(e.pointerId);
+
+        const onMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+          if (!isDragging && Math.hypot(dx, dy) > 8) {
+            isDragging = true;
+            ghost = document.createElement('div');
+            ghost.className = 'drag-ghost';
+            ghost.style.background = '#ffffff';
+            ghost.style.color = '#0f172a';
+            ghost.style.borderColor = '#2563eb';
+            ghost.innerHTML = colorizeBicolor(cardEl.dataset.word);
+            document.body.appendChild(ghost);
+          }
+          if (isDragging && ghost) {
+            ghost.style.left = `${ev.clientX}px`;
+            ghost.style.top = `${ev.clientY}px`;
+            document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+            const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
+            if (targetSlot) targetSlot.classList.add('drag-over');
+          }
+        };
+
+        const onUp = (ev) => {
+          cardEl.removeEventListener('pointermove', onMove);
+          cardEl.removeEventListener('pointerup', onUp);
+          cardEl.removeEventListener('pointercancel', onUp);
+          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+
+          if (ghost) {
+            ghost.remove();
+            ghost = null;
+          }
+
+          if (isDragging) {
+            const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
+            if (targetSlot && targetSlot.dataset.slotIdx !== undefined) {
+              placeWordInSentenceSlot(cardEl, parseInt(targetSlot.dataset.slotIdx, 10));
+            }
+          } else {
+            const firstEmpty = currentSlots.findIndex(s => s === null);
+            if (firstEmpty !== -1) {
+              placeWordInSentenceSlot(cardEl, firstEmpty);
+            }
+          }
+        };
+
+        cardEl.addEventListener('pointermove', onMove);
+        cardEl.addEventListener('pointerup', onUp);
+        cardEl.addEventListener('pointercancel', onUp);
+      });
+    }
+
+    function findSlotUnderPoint(x, y) {
+      const slots = document.querySelectorAll('.syllable-slot');
+      for (const slot of slots) {
+        const r = slot.getBoundingClientRect();
+        if (x >= r.left - 8 && x <= r.right + 8 && y >= r.top - 8 && y <= r.bottom + 8) {
+          return slot;
+        }
+      }
+      return null;
+    }
+
+    function placeSyllableInSlot(syllable, fam, slotIdx) {
+      if (isTransitioning) return;
+      const wordObj = getCurrentWordObj();
+      if (!wordObj || wordObj.isSentence || slotIdx < 0 || slotIdx >= currentSlots.length) return;
+
+      playSound('click');
+      currentSlots[slotIdx] = { syllable, fam };
+      renderSlots();
+
+      const allFilled = currentSlots.every(s => s !== null);
+      if (allFilled) {
+        setTimeout(checkWord, 250);
+      } else {
+        speakSyllable(syllable);
+      }
+    }
+
+    function placeWordInSentenceSlot(cardEl, slotIdx) {
+      if (isTransitioning) return;
+      const wordObj = getCurrentWordObj();
+      if (!wordObj || !wordObj.isSentence || slotIdx < 0 || slotIdx >= currentSlots.length) return;
+
+      // Si ya había una palabra en esa casilla, devolverla al banco primero
+      if (currentSlots[slotIdx] !== null) {
+        const prevBtn = document.querySelector(`.word-bank-card[data-word-idx="${currentSlots[slotIdx].wordIdx}"]`);
+        if (prevBtn) prevBtn.style.display = 'inline-flex';
+      }
+
+      playSound('click');
+      const wordText = cardEl.dataset.word;
+      const wordIdx = parseInt(cardEl.dataset.wordIdx, 10);
+      currentSlots[slotIdx] = { word: wordText, wordIdx };
+      cardEl.style.display = 'none';
+      renderSentenceSlots();
+
+      const allFilled = currentSlots.every(s => s !== null);
+      if (allFilled) {
+        setTimeout(checkWord, 250);
+      } else {
+        speakText(wordText.replace('.', ''), 0.9);
+      }
+    }
+
+    function removeSlot(index) {
+      if (isTransitioning) return;
+      const wordObj = getCurrentWordObj();
+      if (!wordObj || currentSlots[index] === null) return;
+
+      playSound('click');
+      if (wordObj.isSentence) {
+        const removed = currentSlots[index];
+        const btn = document.querySelector(`.word-bank-card[data-word-idx="${removed.wordIdx}"]`);
+        if (btn) btn.style.display = 'inline-flex';
+        currentSlots[index] = null;
+        renderSentenceSlots();
+      } else {
+        currentSlots[index] = null;
+        renderSlots();
+      }
+
+      const fb = document.getElementById('feedbackMessage');
+      fb.className = 'feedback-message';
+      fb.innerHTML = '';
+    }
+
+    function clearSlots() {
+      if (isTransitioning) return;
+      const wordObj = getCurrentWordObj();
+      if (!wordObj) return;
+      playSound('click');
+      currentSlots = new Array(wordObj.isSentence ? wordObj.words.length : wordObj.syllables.length).fill(null);
+
+      if (wordObj.isSentence) {
+        document.querySelectorAll('.word-bank-card').forEach(b => b.style.display = 'inline-flex');
+        renderSentenceSlots();
+      } else {
+        renderSlots();
+      }
+
+      const fb = document.getElementById('feedbackMessage');
+      fb.className = 'feedback-message';
+      fb.innerHTML = '';
+    }
+
+    function skipToNextWord() {
+      if (isTransitioning || pendingWords.length <= 1) return;
+      playSound('click');
+      const skipped = pendingWords.shift();
+      pendingWords.push(skipped);
+      loadCurrentWord(true);
+    }
+
+    function advanceImmediately() {
+      if (pendingAdvanceTimer) {
+        clearTimeout(pendingAdvanceTimer);
+        pendingAdvanceTimer = null;
+      }
+      document.getElementById('btnNextNow').style.display = 'none';
+      if (pendingWords.length === 0) {
+        document.getElementById('winOverlay').style.display = 'flex';
+        isTransitioning = false;
+      } else {
+        loadCurrentWord(true);
+      }
+    }
+
+    /* =========================================================================
+       VALIDACIÓN: EXACTO + ACEPTACIÓN DE HOMÓFONOS CON CORRECCIÓN VISUAL Y TIEMPO
+       ========================================================================= */
+    function checkWord() {
+      if (isTransitioning) return;
+      const feedback = document.getElementById('feedbackMessage');
+      const wordObj = getCurrentWordObj();
+      if (!wordObj) return;
+
+      if (currentSlots.some(s => s === null)) {
+        feedback.className = 'feedback-message feedback-error';
+        feedback.innerHTML = '⚠️ Completa todas las casillas antes de comprobar.';
+        playSound('error');
+        return;
+      }
+
+      // VALIDACIÓN DEL NIVEL 8 (ORACIONES CON CÓDIGO BICOLOR)
+      if (wordObj.isSentence) {
+        const formedSentence = currentSlots.map(s => s.word).join(' ');
+        if (formedSentence === wordObj.fullSentence) {
+          isTransitioning = true;
+          feedback.className = 'feedback-message feedback-success';
+          feedback.innerHTML = `🌟 ¡Oración perfecta! <i>"${colorizeSentenceNoOrphan(wordObj.fullSentence)}"</i> 🎉`;
+          playSound('success');
+          document.getElementById('illustratedCard').classList.add('celebrating');
+          document.getElementById('celebrationBadge').style.display = 'inline-block';
+
+          pendingWords.shift();
+          completedCount++;
+          updateStats();
+
+          speakText(`¡Muy bien! ${wordObj.fullSentence}`, 0.88, () => {
+            pendingAdvanceTimer = setTimeout(advanceImmediately, 650);
+          });
+        } else {
+          feedback.className = 'feedback-message feedback-error';
+          feedback.innerHTML = `❌ El orden aún no suena bien. Recuerda iniciar con la <b style="color:#0f172a;">${colorizeBicolor('Mayúscula')}</b> roja y terminar con el <b class="bicolor-punct">.</b> azul.`;
+          playSound('error');
+          speakText(formedSentence, 0.86);
+        }
+        return;
+      }
+
+      // VALIDACIÓN DE LOS NIVELES 1 AL 7 (PALABRAS POR SÍLABAS)
+      const userSyllables = currentSlots.map(s => s.syllable.toLowerCase());
+      const expectedSyllables = wordObj.syllables.map(s => s.toLowerCase());
+
+      const isExactMatch = userSyllables.every((s, i) => s === expectedSyllables[i]);
+      const isPhoneticMatch = userSyllables.every((s, i) =>
+        normalizePhoneticSyllable(s) === normalizePhoneticSyllable(expectedSyllables[i])
+      );
+
+      if (isExactMatch || isPhoneticMatch) {
+        isTransitioning = true;
+        playSound('success');
+
+        document.getElementById('illustratedCard').classList.add('celebrating');
+        document.getElementById('celebrationBadge').style.display = 'inline-block';
+
+        pendingWords.shift();
+        completedCount++;
+        updateStats();
+
+        if (isExactMatch) {
+          // Mostrar tildes ortográficas si la palabra las lleva (mamá, papá, bebé, sofá, árbol, delfín...)
+          currentSlots.forEach((slotItem, idx) => {
+            if (wordObj.displaySyllables && wordObj.displaySyllables[idx]) {
+              slotItem.displayOverride = wordObj.displaySyllables[idx];
+            }
+          });
+          renderSlots();
+
+          const tildeNote = wordObj.displaySyllables ? ' (con acento ortográfico)' : '';
+          feedback.className = 'feedback-message feedback-success';
+          feedback.innerHTML = `🌟 ¡Excelente! Formaste <strong>"${wordObj.text}"</strong>${tildeNote} 🎉`;
+
+          speakText(`¡Muy bien! ${wordObj.text}.`, 0.88, () => {
+            pendingAdvanceTimer = setTimeout(advanceImmediately, 600);
+          });
+        } else {
+          // SONIDO IGUAL PERO OTRA LETRA (ej. pusieron "ba-ca" en lugar de "va-ca", o "ta-sa" en lugar de "ta-za")
+          const diffs = [];
+          currentSlots.forEach((slotItem, idx) => {
+            const rightSyl = (wordObj.displaySyllables && wordObj.displaySyllables[idx])
+              ? wordObj.displaySyllables[idx]
+              : wordObj.syllables[idx];
+            if (slotItem.syllable.toLowerCase() !== wordObj.syllables[idx].toLowerCase()) {
+              diffs.push({ pusiste: slotItem.syllable, correcta: rightSyl });
+              slotItem.displayOverride = rightSyl;
+              slotItem.wasOrthoCorrected = true;
+              // Cambiar también al color de la familia correcta si existe
+              const rightFamKey = Object.keys(CONSONANT_FAMILIES).find(k =>
+                CONSONANT_FAMILIES[k].syllables.includes(wordObj.syllables[idx].toLowerCase())
+              );
+              if (rightFamKey) slotItem.fam = rightFamKey;
+            } else if (wordObj.displaySyllables && wordObj.displaySyllables[idx]) {
+              slotItem.displayOverride = wordObj.displaySyllables[idx];
+            }
+          });
+          renderSlots();
+
+          const diffExplain = diffs.map(d => `pusiste <b>"${d.pusiste}"</b> pero va con <b>"${d.correcta}"</b>`).join(' y ');
+          feedback.className = 'feedback-message feedback-ortho';
+          feedback.innerHTML = `✨ ¡Se te vale porque suena igual! Pero en <strong>"${wordObj.text}"</strong> ${diffExplain}. ¡Observa cómo la corregí en la casilla!`;
+          document.getElementById('btnNextNow').style.display = 'inline-flex';
+
+          const spokenExplain = diffs.map(d => `no va con ${d.pusiste}, se escribe con ${d.correcta}`).join(', ');
+          speakText(`¡Suena igual y se te vale! Pero en ${wordObj.text}, observa el cambio en la casilla.`, 0.86, () => {
+            // Les damos 3.4 segundos adicionales para ver con calma la sílaba corregida antes de pasar a la siguiente
+            pendingAdvanceTimer = setTimeout(advanceImmediately, 3400);
+          });
+        }
+      } else {
+        const formedRaw = userSyllables.join('');
+        feedback.className = 'feedback-message feedback-error';
+        feedback.innerHTML = `❌ Pusiste "<strong>${formedRaw}</strong>". Escucha de nuevo o toca una casilla para cambiarla.`;
+        playSound('error');
+        speakText(formedRaw, 0.85, () => {
+          setTimeout(() => {
+            if (!isTransitioning) speakTargetWord();
+          }, 420);
+        });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      selectLevel(1);
+    });
+  </script>
+</body>
+</html>

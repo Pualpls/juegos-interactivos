@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestra Biblioteca: El Gran Registro de Libros - Matemáticas 3° Primaria</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y TEMA PEDAGÓGICO
+       Colores oficiales del valor posicional escolar:
+       Amarillo = Centenas (100) | Rojo = Decenas (10) | Azul = Unidades (1)
+       ========================================================================== */
+    :root {
+      --bg-wood-dark: #3a1e10;
+      --bg-wood-warm: #542d17;
+      --bg-library: #fdfaf4;
+      --bg-paper: #ffffff;
+      --text-dark: #24292e;
+      --text-muted: #5c6b73;
+      
+      /* Colores posicionales normativos (alto contraste) */
+      --c-amarillo: #f1c40f;
+      --c-amarillo-dark: #b7950b;
+      --c-amarillo-light: #fef9e7;
+      
+      --c-rojo: #e74c3c;
+      --c-rojo-dark: #922b21;
+      --c-rojo-light: #fdedec;
+      
+      --c-azul: #2980b9;
+      --c-azul-dark: #1b4f72;
+      --c-azul-light: #ebf5fb;
+
+      --accent-green: #27ae60;
+      --accent-green-dark: #1e8449;
+      --accent-gold: #f39c12;
+      
+      --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 8px 24px rgba(58, 30, 16, 0.12);
+      --shadow-lg: 0 16px 40px rgba(58, 30, 16, 0.2);
+      
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-full: 9999px;
+      
+      --font-family: 'Segoe UI', system-ui, -apple-system, 'Trebuchet MS', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-library);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.45;
+    }
+
+    /* Fondo con imagen local de biblioteca y respaldo degradado */
+    .bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: 
+        linear-gradient(180deg, rgba(253, 250, 244, 0.93) 0%, rgba(253, 250, 244, 0.98) 100%),
+        url('./recursos_juego/fondo_biblioteca.webp') center/cover no-repeat;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       BARRA SUPERIOR (HEADER DE AULA / PANTALLA COMPLETA)
+       ========================================================================== */
+    header {
+      background: linear-gradient(135deg, var(--bg-wood-dark) 0%, var(--bg-wood-warm) 100%);
+      color: #fff;
+      padding: 12px 24px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mascot-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: var(--radius-full);
+      background: #fef9e7;
+      border: 3px solid #f1c40f;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mascot-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-text h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .brand-text .pda-tag {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #f9e79f;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-score {
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-full);
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f7dc6f;
+    }
+
+    .btn-icon {
+      background: rgba(255, 255, 255, 0.18);
+      border: none;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-icon:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(1.08);
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL Y PANTALLAS
+       ========================================================================== */
+    main {
+      flex: 1;
+      max-width: 1380px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .view-screen {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .view-screen.active {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------------- VISTA 1: MENÚ DE MISIONES ---------------- */
+    .hero-banner {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      border: 3px solid #e8d7c1;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .mascot-large {
+      width: 135px;
+      height: 135px;
+      border-radius: var(--radius-md);
+      background: #fef9e7;
+      border: 4px solid #f1c40f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .mascot-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-content h2 {
+      font-size: 1.85rem;
+      color: var(--bg-wood-dark);
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .hero-content p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .fichas-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .legend-chip.amarillo { background: var(--c-amarillo-light); color: var(--c-amarillo-dark); border: 2px solid var(--c-amarillo); }
+    .legend-chip.rojo { background: var(--c-rojo-light); color: var(--c-rojo-dark); border: 2px solid var(--c-rojo); }
+    .legend-chip.azul { background: var(--c-azul-light); color: var(--c-azul-dark); border: 2px solid var(--c-azul); }
+
+    .chip-mini-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.75rem;
+      overflow: hidden;
+    }
+
+    .chip-mini-icon.c { background: #f39c12; color: #fff; border: 2px solid #b7950b; }
+    .chip-mini-icon.d { background: #e74c3c; color: #fff; border: 2px solid #922b21; }
+    .chip-mini-icon.u { background: #3498db; color: #fff; border: 2px solid #1b4f72; }
+
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .mode-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      border: 3px solid #e8d7c1;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: #d4ac0d;
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .mode-card.m1 .mode-badge { background: #fef9e7; color: #b7950b; border: 1.5px solid #f1c40f; }
+    .mode-card.m2 .mode-badge { background: #eafaf1; color: #1e8449; border: 1.5px solid #27ae60; }
+    .mode-card.m3 .mode-badge { background: #fdedec; color: #922b21; border: 1.5px solid #e74c3c; }
+    .mode-card.m4 .mode-badge { background: #ebf5fb; color: #1b4f72; border: 1.5px solid #3498db; }
+
+    .mode-card h3 {
+      font-size: 1.35rem;
+      color: var(--bg-wood-dark);
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .mode-card p {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      flex: 1;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+
+    .btn-start-mode {
+      background: var(--bg-wood-dark);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s ease;
+    }
+
+    .mode-card:hover .btn-start-mode {
+      background: var(--bg-wood-warm);
+    }
+
+    /* ---------------- VISTA 2: TABLERO DE JUEGO PRINCIPAL ---------------- */
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 20px;
+      flex: 1;
+    }
+
+    @media (max-width: 1040px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .board-container {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 3px solid #e8d7c1;
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Banner con contexto bibliotecario */
+    .problem-banner {
+      background: linear-gradient(135deg, #fdf8f0 0%, #faedd9 100%);
+      border: 2px solid #e5c9a7;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      position: relative;
+    }
+
+    .problem-icon-wrapper {
+      width: 58px;
+      height: 58px;
+      background: #fff;
+      border-radius: var(--radius-md);
+      border: 2px solid #d4ac0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .problem-icon-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .problem-text {
+      flex: 1;
+    }
+
+    .problem-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #935116;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .problem-desc {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #3d2314;
+      line-height: 1.4;
+    }
+
+    /* Tablero de 3 Columnas: C - D - U */
+    .place-value-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      background: #f6efe2;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 2px solid #dfcfb2;
+      flex: 1;
+      min-height: 420px;
+    }
+
+    .column-pos {
+      background: #fff;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      border: 3px solid transparent;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .column-pos.col-c { border-color: var(--c-amarillo); }
+    .column-pos.col-d { border-color: var(--c-rojo); }
+    .column-pos.col-u { border-color: var(--c-azul); }
+
+    .column-header {
+      padding: 12px 10px;
+      text-align: center;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      position: relative;
+    }
+
+    .col-c .column-header { background: linear-gradient(180deg, #f39c12 0%, #d68910 100%); color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+    .col-d .column-header { background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%); color: #fff; }
+    .col-u .column-header { background: linear-gradient(180deg, #3498db 0%, #2980b9 100%); color: #fff; }
+
+    .col-header-token-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      margin-bottom: 2px;
+      border: 2px solid rgba(255,255,255,0.7);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      overflow: hidden;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .col-header-token-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .col-letter {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .col-name {
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      opacity: 0.95;
+    }
+
+    .col-value-badge {
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      margin-top: 2px;
+    }
+
+    /* Zona de llevadas / reserva */
+    .carried-zone {
+      background: #fafbfc;
+      border-bottom: 2px dashed #d5dbdb;
+      padding: 6px 8px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .carried-badge {
+      background: #fef9e7;
+      border: 2px solid #f1c40f;
+      color: #b7950b;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 800;
+      animation: bounceIn 0.3s ease;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Bandeja de fichas */
+    .chips-tray {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      justify-content: center;
+      gap: 8px;
+      overflow-y: auto;
+      max-height: 310px;
+      background: #fafaf8;
+    }
+
+    .column-footer {
+      padding: 12px;
+      background: #fdfdfd;
+      border-top: 2px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .count-indicator {
+      font-size: 1.65rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-c .count-indicator { color: var(--c-amarillo-dark); }
+    .col-d .count-indicator { color: var(--c-rojo-dark); }
+    .col-u .count-indicator { color: var(--c-azul-dark); }
+
+    .action-btn-group {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .btn-action-col {
+      flex: 1;
+      padding: 9px 4px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s;
+      touch-action: manipulation;
+    }
+
+    .btn-canjear {
+      background: #27ae60;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
+    }
+
+    .btn-canjear:hover:not(:disabled) {
+      background: #219653;
+      transform: scale(1.03);
+    }
+
+    .btn-canjear.highlight-pulse {
+      animation: pulseGreen 1.2s infinite alternate;
+    }
+
+    @keyframes pulseGreen {
+      from { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+      to { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+    }
+
+    .btn-desagrupar {
+      background: #e67e22;
+      color: #fff;
+    }
+
+    .btn-desagrupar:hover:not(:disabled) {
+      background: #d35400;
+      transform: scale(1.03);
+    }
+
+    .btn-action-col:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* ---------------- FICHAS INTERACTIVAS (TOKENS) ---------------- */
+    .chip {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-full);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), inset 0 2px 4px rgba(255,255,255,0.6);
+      transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 3px solid;
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    .chip:hover {
+      transform: scale(1.15) translateY(-2px);
+      z-index: 10;
+    }
+
+    .chip:active {
+      transform: scale(0.95);
+    }
+
+    .chip-c {
+      background: radial-gradient(circle at 30% 30%, #fef3c7, #f1c40f 70%, #d4ac0d);
+      border-color: #b7950b;
+      color: #78350f;
+      font-size: 0.82rem;
+    }
+
+    .chip-d {
+      background: radial-gradient(circle at 30% 30%, #fecaca, #e74c3c 70%, #b91c1c);
+      border-color: #991b1b;
+      color: #fff;
+      font-size: 0.82rem;
+    }
+
+    .chip-u {
+      background: radial-gradient(circle at 30% 30%, #bfdbfe, #3498db 70%, #1d4ed8);
+      border-color: #1e40af;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .chip-val {
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .chip-sub {
+      font-size: 0.6rem;
+      opacity: 0.9;
+      line-height: 1;
+    }
+
+    /* ---------------- PANEL LATERAL: CUADERNO & ALGORITMO ---------------- */
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .notebook-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 3px solid #e8d7c1;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background-image: radial-gradient(#e8d7c1 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    .notebook-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #e8d7c1;
+      padding-bottom: 10px;
+    }
+
+    .notebook-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--bg-wood-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Operación escrita en vertical */
+    .math-operation-box {
+      background: #fff;
+      border: 2px solid #e0c39e;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .vertical-calc {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1.25;
+      text-align: right;
+      display: inline-block;
+      min-width: 175px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+      padding: 2px 0;
+    }
+
+    .calc-digit {
+      width: 28px;
+      text-align: center;
+    }
+
+    .digit-c { color: var(--c-amarillo-dark); }
+    .digit-d { color: var(--c-rojo); }
+    .digit-u { color: var(--c-azul); }
+
+    .calc-carried-row {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      border-bottom: 1px dashed #d1d5db;
+      padding-bottom: 4px;
+      min-height: 26px;
+    }
+
+    .calc-carried-row span {
+      background: #fef9e7;
+      border-radius: 4px;
+      padding: 0 3px;
+      font-weight: 900;
+    }
+
+    .calc-op-line {
+      border-bottom: 3px solid var(--bg-wood-dark);
+      margin: 4px 0 6px 0;
+      width: 100%;
+    }
+
+    .calc-result-row {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--accent-green-dark);
+    }
+
+    /* Descomposición aditiva */
+    .expanded-form {
+      background: #fafaf8;
+      border: 2px solid #e5e7eb;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--bg-wood-dark);
+    }
+
+    .expanded-form span.c { color: var(--c-amarillo-dark); }
+    .expanded-form span.d { color: var(--c-rojo); }
+    .expanded-form span.u { color: var(--c-azul); }
+
+    /* Consejo de Don Mateo */
+    .mentor-advice {
+      background: #fdf8f0;
+      border-left: 4px solid var(--accent-gold);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: #542d17;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      line-height: 1.4;
+    }
+
+    .mentor-advice-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .mentor-advice strong {
+      color: #935116;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Botones de acción */
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-verify {
+      background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+      color: #fff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(39, 174, 96, 0.35);
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-verify:hover {
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(39, 174, 96, 0.45);
+    }
+
+    .btn-secondary {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 2px solid #d8b4fe;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #e9d5ff;
+    }
+
+    /* ---------------- HERRAMIENTAS DE TALLER LIBRE (PROYECTOR) ---------------- */
+    .workshop-tools {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: #fdf8f0;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 2px solid #ebd5b3;
+      margin-bottom: 8px;
+    }
+
+    .workshop-chip-adder {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-add-chip {
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-add-c { background: var(--c-amarillo-light); border-color: var(--c-amarillo-dark); color: var(--c-amarillo-dark); }
+    .btn-add-d { background: var(--c-rojo-light); border-color: var(--c-rojo-dark); color: var(--c-rojo-dark); }
+    .btn-add-u { background: var(--c-azul-light); border-color: var(--c-azul-dark); color: var(--c-azul-dark); }
+
+    .btn-add-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* ==========================================================================
+       MODAL DE SELLO OFICIAL DE CATALOGACIÓN
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(40, 20, 10, 0.78);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      border: 5px solid #d4ac0d;
+      max-width: 520px;
+      width: 100%;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .trophy-image-wrapper {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 16px auto;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eafaf1;
+      border: 4px dashed #27ae60;
+      transform: rotate(-8deg);
+      animation: stampDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .trophy-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes stampDrop {
+      0% { transform: scale(2.2) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+    }
+
+    .modal-card h2 {
+      font-size: 1.85rem;
+      color: #27ae60;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .modal-card p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .modal-details {
+      background: #fdf8f0;
+      border: 2px solid #ebd5b3;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+      text-align: left;
+      font-size: 1.05rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* ==========================================================================
+       AJUSTES PARA DISPOSITIVOS TÁCTILES Y PROYECTOR
+       ========================================================================== */
+    @media (max-width: 768px) {
+      header { padding: 10px 14px; }
+      .brand-text h1 { font-size: 1.15rem; }
+      .brand-text .pda-tag { display: none; }
+      main { padding: 12px; }
+      .place-value-table { gap: 8px; padding: 8px; min-height: 320px; }
+      .col-letter { font-size: 1.4rem; }
+      .chip { width: 40px; height: 40px; font-size: 0.78rem; }
+      .hero-banner { flex-direction: column; text-align: center; padding: 20px; }
+      .fichas-legend { justify-content: center; }
+    }
+
+    @media (min-width: 1440px) {
+      .place-value-table { min-height: 480px; }
+      .chip { width: 54px; height: 54px; font-size: 0.95rem; }
+      .vertical-calc { font-size: 2.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fondo Ilustrado de Biblioteca -->
+  <div class="bg-canvas"></div>
+
+  <!-- Encabezado del Proyecto Escolar -->
+  <header>
+    <div class="brand-container">
+      <div class="mascot-avatar" title="Don Mateo, el búho bibliotecario">
+        <!-- Referencia local de imagen con respaldo vectorial SVG -->
+        <img src="./recursos_juego/mascota_buho.webp" alt="Don Mateo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <svg style="display:none; width:85%; height:85%;" viewBox="0 0 24 24" fill="#3d2314">
+          <circle cx="12" cy="12" r="10" fill="#f9e79f" stroke="#b7950b" stroke-width="2"/>
+          <circle cx="9" cy="10" r="2.5" fill="#fff" stroke="#3d2314" stroke-width="1.5"/>
+          <circle cx="15" cy="10" r="2.5" fill="#fff" stroke="#3d2314" stroke-width="1.5"/>
+          <circle cx="9" cy="10" r="1" fill="#3d2314"/>
+          <circle cx="15" cy="10" r="1" fill="#3d2314"/>
+          <polygon points="12,12 10,14.5 14,14.5" fill="#e67e22"/>
+          <path d="M6 18 Q12 21 18 18" stroke="#3d2314" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Nuestra Biblioteca: El Gran Registro de Libros</h1>
+        <div class="pda-tag">Matemáticas 3° Primaria • Conteo, Agrupamiento y Valor Posicional</div>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <div class="badge-score" id="booksScoreBadge">
+        <span>📚</span>
+        <span id="registeredBooksCount">0</span> libros
+      </div>
+      <button class="btn-icon" id="soundToggleBtn" title="Activar/Desactivar Sonido">🔊</button>
+      <button class="btn-icon" id="fullscreenToggleBtn" title="Pantalla Completa para Proyector">⛶</button>
+      <button class="btn-icon" id="homeNavBtn" title="Menú Principal">🏠</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========================================================================
+         PANTALLA 1: MENÚ DE MISIONES Y PRESENTACIÓN PEDAGÓGICA
+         ======================================================================== -->
+    <section class="view-screen active" id="viewMenu">
+      <div class="hero-banner">
+        <div class="mascot-large">
+          <img src="./recursos_juego/mascota_buho.webp" alt="Don Mateo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <svg style="display:none; width:95px; height:95px;" viewBox="0 0 100 100">
+            <ellipse cx="50" cy="55" rx="35" ry="40" fill="#a0522d" stroke="#5a2e17" stroke-width="3"/>
+            <ellipse cx="50" cy="62" rx="24" ry="28" fill="#fdf8f0"/>
+            <circle cx="36" cy="40" r="14" fill="#f1c40f" stroke="#b7950b" stroke-width="2"/>
+            <circle cx="64" cy="40" r="14" fill="#f1c40f" stroke="#b7950b" stroke-width="2"/>
+            <circle cx="36" cy="40" r="6" fill="#2c3e50"/>
+            <circle cx="64" cy="40" r="6" fill="#2c3e50"/>
+            <polygon points="50,47 43,58 57,58" fill="#e67e22"/>
+            <path d="M26 24 L36 32 M74 24 L64 32" stroke="#5a2e17" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="hero-content">
+          <h2>¡Bienvenido(a) al Equipo de Bibliotecarios de 3° Grado!</h2>
+          <p>
+            En el proyecto escolar <strong>Nuestra Biblioteca</strong>, estamos catalogando los libros donados, nuevos paquetes y préstamos a los salones.
+            Para que no se pierda ningún ejemplar, representamos las cantidades con nuestro <strong>sistema de fichas de conteo y valor posicional</strong>.
+          </p>
+          <div class="fichas-legend">
+            <div class="legend-chip amarillo">
+              <div class="chip-mini-icon c">
+                <img src="./recursos_juego/ficha_amarilla.webp" alt="C" style="display:none;" onerror="this.style.display='none'">
+                <span>C</span>
+              </div>
+              <strong>Amarilla = 1 Centena (100 libros)</strong>
+            </div>
+            <div class="legend-chip rojo">
+              <div class="chip-mini-icon d">
+                <img src="./recursos_juego/ficha_roja.webp" alt="D" style="display:none;" onerror="this.style.display='none'">
+                <span>D</span>
+              </div>
+              <strong>Roja = 1 Decena (10 libros)</strong>
+            </div>
+            <div class="legend-chip azul">
+              <div class="chip-mini-icon u">
+                <img src="./recursos_juego/ficha_azul.webp" alt="U" style="display:none;" onerror="this.style.display='none'">
+                <span>U</span>
+              </div>
+              <strong>Azul = 1 Unidad (1 libro)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modes-grid">
+        <!-- Modo 1: Máquina de Canjes -->
+        <div class="mode-card m1" onclick="Game.startMission('canjes')">
+          <div class="mode-badge">Misión 1 • Agrupamiento</div>
+          <h3>La Máquina de Canjes</h3>
+          <p>Organiza lotes desordenados de fichas. Junta 10 azules para canjearlas por 1 roja (10), o 10 rojas para formar 1 amarilla (100).</p>
+          <button class="btn-start-mode">
+            <span>Iniciar Misión</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Modo 2: Donaciones (Suma con Agrupamiento) -->
+        <div class="mode-card m2" onclick="Game.startMission('suma')">
+          <div class="mode-badge">Misión 2 • Suma con Reserva</div>
+          <h3>Registro de Donaciones</h3>
+          <p>Llegan dos paquetes de libros donados. Súmalos con fichas y realiza los canjes cuando juntes 10 para completar el registro formal.</p>
+          <button class="btn-start-mode">
+            <span>Registrar Donaciones</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Modo 3: Préstamos a Salones (Resta con Desagrupamiento) -->
+        <div class="mode-card m3" onclick="Game.startMission('resta')">
+          <div class="mode-badge">Misión 3 • Resta con Préstamo</div>
+          <h3>Préstamos a Salones</h3>
+          <p>Los salones solicitan libros. Desagrupa centenas y decenas para retirar las fichas necesarias y saber cuántos libros quedan.</p>
+          <button class="btn-start-mode">
+            <span>Atender Préstamos</span>
+            <span>➔</span>
+          </button>
+        </div>
+
+        <!-- Modo 4: Taller Libre para Proyector -->
+        <div class="mode-card m4" onclick="Game.startMission('taller')">
+          <div class="mode-badge">Taller Libre • Proyector</div>
+          <h3>Pizarra Digital del Aula</h3>
+          <p>Espacio abierto para que el maestro o los alumnos representen cualquier número de hasta tres cifras, exploren y debatan en plenaria.</p>
+          <button class="btn-start-mode">
+            <span>Abrir Pizarra</span>
+            <span>➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         PANTALLA 2: TABLERO DE JUEGO Y VALOR POSICIONAL
+         ======================================================================== -->
+    <section class="view-screen" id="viewGame">
+      <div class="game-layout">
+        
+        <!-- Tablero de Valor Posicional -->
+        <div class="board-container">
+          
+          <!-- Enunciado del Problema contextualizado -->
+          <div class="problem-banner">
+            <div class="problem-icon-wrapper">
+              <img src="./recursos_juego/libro_abierto.webp" alt="Libro" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <span style="display:none; font-size:2rem;">📖</span>
+            </div>
+            <div class="problem-text">
+              <div class="problem-title" id="problemCategoryTitle">Registro de Biblioteca</div>
+              <div class="problem-desc" id="problemStatementText">Cargando situación...</div>
+            </div>
+          </div>
+
+          <!-- Barra de Herramientas para Taller Libre -->
+          <div class="workshop-tools" id="workshopBar" style="display: none;">
+            <div class="workshop-chip-adder">
+              <button class="btn-add-chip btn-add-c" onclick="Game.addChipToTray('C')">+100 (Amarilla)</button>
+              <button class="btn-add-chip btn-add-d" onclick="Game.addChipToTray('D')">+10 (Roja)</button>
+              <button class="btn-add-chip btn-add-u" onclick="Game.addChipToTray('U')">+1 (Azul)</button>
+            </div>
+            <button class="btn-secondary" onclick="Game.resetBoard()">🧹 Limpiar</button>
+            <button class="btn-secondary" onclick="Game.generateRandomNumberWorkshop()">🎲 Número Sorpresa</button>
+          </div>
+
+          <!-- Las Tres Columnas: C, D, U -->
+          <div class="place-value-table">
+            
+            <!-- COLUMNA CENTENAS (Amarillas) -->
+            <div class="column-pos col-c" id="colCentenas">
+              <div class="column-header">
+                <div class="col-header-token-icon">
+                  <img src="./recursos_juego/ficha_amarilla.webp" alt="100" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                  <span style="display:none; font-size:0.75rem; font-weight:900;">100</span>
+                </div>
+                <div class="col-letter">C</div>
+                <div class="col-name">Centenas</div>
+                <div class="col-value-badge">Vale 100</div>
+              </div>
+              <div class="carried-zone" id="carriedC">
+                <span class="carried-badge" id="carriedBadgeC" style="display:none;">+1 llevamos</span>
+              </div>
+              <div class="chips-tray" id="trayC" title="Fichas amarillas (100 cada una)"></div>
+              <div class="column-footer">
+                <div class="count-indicator">
+                  <span id="countC">0</span>
+                  <small style="font-size:0.8rem; font-weight:600;">(x100)</small>
+                </div>
+                <div class="action-btn-group">
+                  <button class="btn-action-col btn-desagrupar" id="btnDesagruparC" onclick="Game.desagrupar('C')" title="Desagrupar 1 Amarilla en 10 Rojas">
+                    <span>1 C ➔ 10 D</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMNA DECENAS (Rojas) -->
+            <div class="column-pos col-d" id="colDecenas">
+              <div class="column-header">
+                <div class="col-header-token-icon">
+                  <img src="./recursos_juego/ficha_roja.webp" alt="10" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                  <span style="display:none; font-size:0.75rem; font-weight:900;">10</span>
+                </div>
+                <div class="col-letter">D</div>
+                <div class="col-name">Decenas</div>
+                <div class="col-value-badge">Vale 10</div>
+              </div>
+              <div class="carried-zone" id="carriedD">
+                <span class="carried-badge" id="carriedBadgeD" style="display:none;">+1 llevamos</span>
+              </div>
+              <div class="chips-tray" id="trayD" title="Fichas rojas (10 cada una)"></div>
+              <div class="column-footer">
+                <div class="count-indicator">
+                  <span id="countD">0</span>
+                  <small style="font-size:0.8rem; font-weight:600;">(x10)</small>
+                </div>
+                <div class="action-btn-group">
+                  <button class="btn-action-col btn-canjear" id="btnCanjearD" onclick="Game.canjear('D')" title="Juntar 10 Rojas para formar 1 Amarilla">
+                    <span>10 D ➔ 1 C</span>
+                  </button>
+                  <button class="btn-action-col btn-desagrupar" id="btnDesagruparD" onclick="Game.desagrupar('D')" title="Desagrupar 1 Roja en 10 Azules">
+                    <span>1 D ➔ 10 U</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMNA UNIDADES (Azules) -->
+            <div class="column-pos col-u" id="colUnidades">
+              <div class="column-header">
+                <div class="col-header-token-icon">
+                  <img src="./recursos_juego/ficha_azul.webp" alt="1" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                  <span style="display:none; font-size:0.8rem; font-weight:900;">1</span>
+                </div>
+                <div class="col-letter">U</div>
+                <div class="col-name">Unidades</div>
+                <div class="col-value-badge">Vale 1</div>
+              </div>
+              <div class="carried-zone" id="carriedU">
+                <span style="opacity:0.4;">Unidades sueltas</span>
+              </div>
+              <div class="chips-tray" id="trayU" title="Fichas azules (1 cada una)"></div>
+              <div class="column-footer">
+                <div class="count-indicator">
+                  <span id="countU">0</span>
+                  <small style="font-size:0.8rem; font-weight:600;">(x1)</small>
+                </div>
+                <div class="action-btn-group">
+                  <button class="btn-action-col btn-canjear" id="btnCanjearU" onclick="Game.canjear('U')" title="Juntar 10 Azules para formar 1 Roja">
+                    <span>10 U ➔ 1 D</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Panel Lateral de Operación y Cuaderno de Registro -->
+        <aside class="side-panel">
+          
+          <div class="notebook-card">
+            <div class="notebook-header">
+              <div class="notebook-title">
+                <span>📋</span>
+                <span>Ficha de Registro</span>
+              </div>
+              <span id="stepProgressBadge" style="font-size:0.85rem; font-weight:800; color:#b7950b;">Reto 1</span>
+            </div>
+
+            <!-- Algoritmo vertical convencional escolar -->
+            <div class="math-operation-box" id="verticalCalcBox">
+              <div class="vertical-calc">
+                <div class="calc-row calc-carried-row" id="calcCarriedRow">
+                  <div class="calc-digit"></div>
+                  <div class="calc-digit"><span id="calcCarriedC"></span></div>
+                  <div class="calc-digit"><span id="calcCarriedD"></span></div>
+                  <div class="calc-digit"></div>
+                </div>
+                <div class="calc-row" id="calcNum1Row">
+                  <div class="calc-digit" id="calcOpSign"></div>
+                  <div class="calc-digit digit-c" id="calcN1_C">0</div>
+                  <div class="calc-digit digit-d" id="calcN1_D">0</div>
+                  <div class="calc-digit digit-u" id="calcN1_U">0</div>
+                </div>
+                <div class="calc-row" id="calcNum2Row">
+                  <div class="calc-digit" id="calcSignSymbol">+</div>
+                  <div class="calc-digit digit-c" id="calcN2_C">0</div>
+                  <div class="calc-digit digit-d" id="calcN2_D">0</div>
+                  <div class="calc-digit digit-u" id="calcN2_U">0</div>
+                </div>
+                <div class="calc-op-line"></div>
+                <div class="calc-row calc-result-row">
+                  <div class="calc-digit"></div>
+                  <div class="calc-digit digit-c" id="calcRes_C">?</div>
+                  <div class="calc-digit digit-d" id="calcRes_D">?</div>
+                  <div class="calc-digit digit-u" id="calcRes_U">?</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Descomposición aditiva visual -->
+            <div class="expanded-form" id="expandedFormDisplay">
+              Total representado en fichas:<br>
+              <strong style="font-size:1.45rem;" id="totalNumberDisplay">0 libros</strong><br>
+              <span id="expandedMathText">0 = 0 + 0 + 0</span>
+            </div>
+
+            <!-- Guía Pedagógica de Don Mateo -->
+            <div class="mentor-advice">
+              <span class="mentor-advice-icon">🦉</span>
+              <div id="mentorAdviceText">
+                <strong>Consejo de Don Mateo:</strong>
+                Revisa las columnas. Si tienes 10 o más fichas en una casilla, pulsa el botón verde para agruparlas.
+              </div>
+            </div>
+
+            <!-- Controles principales -->
+            <div class="controls-panel">
+              <button class="btn-verify" id="btnVerifySolution" onclick="Game.verifyCurrentStep()">
+                <span>✓ Validar Registro</span>
+              </button>
+              <button class="btn-secondary" onclick="Game.showHint()">
+                <span>💡 Pista del Bibliotecario</span>
+              </button>
+              <button class="btn-secondary" onclick="Game.returnToMenu()">
+                <span>↩ Cambiar de Misión</span>
+              </button>
+            </div>
+
+          </div>
+
+        </aside>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       MODAL DE FELICITACIÓN: SELLO OFICIAL DE CATALOGACIÓN
+       ======================================================================== -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-card">
+      <div class="trophy-image-wrapper">
+        <img src="./recursos_juego/trofeo_bibliotecario.webp" alt="Sello Oficial" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span style="display:none; font-size:3rem; color:#27ae60;">★</span>
+      </div>
+      <h2 id="modalTitle">¡Registro Catalogado con Éxito!</h2>
+      <p id="modalMessage">Has realizado los canjes y operaciones correctamente según las reglas del valor posicional.</p>
+      
+      <div class="modal-details" id="modalDetailsBox">
+        <!-- Detalles insertados dinámicamente -->
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-verify" onclick="Game.nextExercise()">
+          <span>Siguiente Reto ➔</span>
+        </button>
+        <button class="btn-secondary" onclick="Game.returnToMenu()">
+          <span>Menú Principal</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       LÓGICA JAVASCRIPT: MOTOR COMPLETO DEL JUEGO Y AUDIO SINTETIZADO
+       ======================================================================== -->
+  <script>
+    /* =========================================================================
+       BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
+       ========================================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = function() { return false; };
+
+    /* ==========================================================================
+       1. SISTEMA DE AUDIO WEB SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
+       ========================================================================== */
+    const SoundEngine = {
+      ctx: null,
+      enabled: true,
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+      },
+
+      playTone(freq, duration = 0.15, type = 'sine', gainVal = 0.25) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {}
+      },
+
+      click() {
+        this.playTone(400, 0.08, 'triangle', 0.15);
+      },
+
+      chipAdd() {
+        this.playTone(560, 0.1, 'sine', 0.22);
+      },
+
+      chipRemove() {
+        this.playTone(300, 0.12, 'sine', 0.2);
+      },
+
+      canjeGrouping() {
+        // Sonido ascendente de agrupación
+        if (!this.enabled) return;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 0.18, 'triangle', 0.3), idx * 75);
+        });
+      },
+
+      desagruparBreaking() {
+        // Sonido descendente de desagrupación
+        if (!this.enabled) return;
+        [1046.50, 783.99, 659.25, 523.25].forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 0.18, 'sine', 0.25), idx * 75);
+        });
+      },
+
+      successFanfare() {
+        // Fanfarria victoriosa de biblioteca
+        if (!this.enabled) return;
+        const notes = [
+          { f: 523.25, d: 0.15, t: 0 },
+          { f: 659.25, d: 0.15, t: 140 },
+          { f: 783.99, d: 0.2, t: 280 },
+          { f: 1046.50, d: 0.45, t: 440 }
+        ];
+        notes.forEach(n => {
+          setTimeout(() => this.playTone(n.f, n.d, 'triangle', 0.35), n.t);
+        });
+      },
+
+      hint() {
+        this.playTone(440, 0.25, 'sine', 0.18);
+      },
+
+      toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+    };
+
+    /* ==========================================================================
+       2. BANCO DE PROBLEMAS PEDAGÓGICOS (3° PRIMARIA)
+       ========================================================================== */
+    const LibraryStories = {
+      suma: [
+        {
+          donor1: "el grupo de 3°A",
+          donor2: "el grupo de 3°B",
+          n1: 148,
+          n2: 275,
+          category: "Cuentos y Leyendas",
+          text: "El salón de 3°A donó 148 libros y 3°B aportó 275 libros de cuentos. ¿Cuántos libros ingresaron en total a la biblioteca escolar?"
+        },
+        {
+          donor1: "la Asociación Escolar",
+          donor2: "la Supervisión de Zona",
+          n1: 256,
+          n2: 187,
+          category: "Enciclopedias de Ciencias",
+          text: "Recibimos un paquete de 256 libros de ciencias naturales y otro envío de 187 ejemplares. ¿Cuál es el total de libros por registrar?"
+        },
+        {
+          donor1: "la Biblioteca Municipal",
+          donor2: "los exalumnos",
+          n1: 364,
+          n2: 159,
+          category: "Novelas Juveniles y Poesía",
+          text: "Llegó un lote de 364 libros de leyendas y una caja con 159 novelas. ¿Cuántos nuevos ejemplares se sumaron a los estantes?"
+        },
+        {
+          donor1: "el turno matutino",
+          donor2: "el turno vespertino",
+          n1: 195,
+          n2: 238,
+          category: "Cómics y Fábulas",
+          text: "El turno matutino reunió 195 libros y el vespertino 238 cómics. ¿Cuántos libros de lectura ingresaron en total?"
+        }
+      ],
+      resta: [
+        {
+          context: "Préstamo de Cuentos Ilustrados",
+          n1: 342,
+          n2: 167,
+          text: "Había 342 libros de cuentos en el estante central. Los alumnos de 2° grado pidieron prestados 167 para su rincón de lectura. ¿Cuántos libros quedaron en el estante?"
+        },
+        {
+          context: "Préstamo para la Feria de Ciencias",
+          n1: 425,
+          n2: 188,
+          text: "Teníamos registrados 425 libros de experimentos y animales. Se prestaron 188 libros para las exposiciones de ciencias. ¿Cuántos libros quedaron en existencia?"
+        },
+        {
+          context: "Préstamo a las Aulas de Historia",
+          n1: 513,
+          n2: 276,
+          text: "El inventario contaba con 513 biografías e historias de México. Los maestros solicitaron 276 libros para sus proyectos. ¿Cuántos libros permanecen en la biblioteca?"
+        },
+        {
+          context: "Distribución de Libros de Arte",
+          n1: 431,
+          n2: 257,
+          text: "En la biblioteca había 431 libros de artes y música. Se prestaron 257 ejemplares para los talleres escolares. ¿Cuántos libros quedan registrados?"
+        }
+      ],
+      canjes: [
+        {
+          c: 1, d: 14, u: 16,
+          target: 256,
+          text: "Caja de devoluciones desordenada: hay 1 amarilla, 14 rojas y 16 azules. ¡Usa la máquina de canjes para agrupar de 10 en 10 y dejar la cantidad mínima de fichas!"
+        },
+        {
+          c: 2, d: 11, u: 15,
+          target: 325,
+          text: "Fichas mezcladas en el mostrador: tenemos 2 amarillas, 11 rojas y 15 azules. Canjea 10 azules por 1 roja, y 10 rojas por 1 amarilla para tener el registro exacto."
+        },
+        {
+          c: 0, d: 18, u: 12,
+          target: 192,
+          text: "Lote de clasificación sin centenas: 18 rojas y 12 azules. Canjea para obtener las centenas y decenas correspondientes según su valor posicional."
+        },
+        {
+          c: 3, d: 15, u: 18,
+          target: 468,
+          text: "Inventario semanal por organizar: 3 amarillas, 15 rojas y 18 azules. Realiza los canjes necesarios para dejar el inventario en orden."
+        }
+      ]
+    };
+
+    /* ==========================================================================
+       3. CONTROLADOR Y MECÁNICA DE JUEGO (GAME CONTROLLER)
+       ========================================================================== */
+    const Game = {
+      mode: 'menu',
+      currentExerciseIdx: 0,
+      totalBooksRegistered: 0,
+      
+      board: { C: 0, D: 0, U: 0 },
+      carried: { C: 0, D: 0 },
+      exerciseData: null,
+
+      init() {
+        this.bindEvents();
+        this.loadSavedScore();
+        this.updateBoardDisplay();
+      },
+
+      bindEvents() {
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+          const enabled = SoundEngine.toggle();
+          document.getElementById('soundToggleBtn').textContent = enabled ? '🔊' : '🔇';
+          SoundEngine.click();
+        });
+
+        document.getElementById('fullscreenToggleBtn').addEventListener('click', () => {
+          this.toggleFullscreen();
+          SoundEngine.click();
+        });
+
+        document.getElementById('homeNavBtn').addEventListener('click', () => {
+          this.returnToMenu();
+          SoundEngine.click();
+        });
+      },
+
+      toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          }
+        }
+      },
+
+      loadSavedScore() {
+        try {
+          const saved = sessionStorage.getItem('libros_biblioteca_score');
+          if (saved) {
+            this.totalBooksRegistered = parseInt(saved, 10) || 0;
+            document.getElementById('registeredBooksCount').textContent = this.totalBooksRegistered;
+          }
+        } catch (e) {}
+      },
+
+      addScore(pts) {
+        this.totalBooksRegistered += pts;
+        document.getElementById('registeredBooksCount').textContent = this.totalBooksRegistered;
+        try {
+          sessionStorage.setItem('libros_biblioteca_score', this.totalBooksRegistered);
+        } catch (e) {}
+      },
+
+      switchView(viewId) {
+        document.querySelectorAll('.view-screen').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      returnToMenu() {
+        this.mode = 'menu';
+        this.switchView('viewMenu');
+      },
+
+      startMission(modeName) {
+        SoundEngine.click();
+        this.mode = modeName;
+        this.currentExerciseIdx = 0;
+        this.switchView('viewGame');
+
+        const workshopBar = document.getElementById('workshopBar');
+        workshopBar.style.display = (modeName === 'taller') ? 'flex' : 'none';
+
+        this.setupCurrentExercise();
+      },
+
+      setupCurrentExercise() {
+        this.resetBoard();
+
+        if (this.mode === 'canjes') {
+          const list = LibraryStories.canjes;
+          this.exerciseData = list[this.currentExerciseIdx % list.length];
+          document.getElementById('problemCategoryTitle').textContent = "Misión 1: Máquina de Canjes y Agrupamiento";
+          document.getElementById('problemStatementText').textContent = this.exerciseData.text;
+          document.getElementById('stepProgressBadge').textContent = `Reto ${this.currentExerciseIdx + 1} de ${list.length}`;
+          
+          this.board.C = this.exerciseData.c;
+          this.board.D = this.exerciseData.d;
+          this.board.U = this.exerciseData.u;
+
+          this.setupVerticalCalcDisplay(null, null, 'canje');
+          this.setMentorAdvice("¡Revisa las columnas! Si tienes 10 o más fichas azules o rojas, haz clic en el botón verde de canje para agruparlas.");
+
+        } else if (this.mode === 'suma') {
+          const list = LibraryStories.suma;
+          this.exerciseData = list[this.currentExerciseIdx % list.length];
+          document.getElementById('problemCategoryTitle').textContent = `Misión 2: Donaciones • ${this.exerciseData.category}`;
+          document.getElementById('problemStatementText').textContent = this.exerciseData.text;
+          document.getElementById('stepProgressBadge').textContent = `Problema ${this.currentExerciseIdx + 1} de ${list.length}`;
+
+          // Para la suma con agrupamiento, colocamos inicialmente las fichas de ambos sumandos
+          const c1 = Math.floor(this.exerciseData.n1 / 100);
+          const d1 = Math.floor((this.exerciseData.n1 % 100) / 10);
+          const u1 = this.exerciseData.n1 % 10;
+
+          const c2 = Math.floor(this.exerciseData.n2 / 100);
+          const d2 = Math.floor((this.exerciseData.n2 % 100) / 10);
+          const u2 = this.exerciseData.n2 % 10;
+
+          this.board.C = c1 + c2;
+          this.board.D = d1 + d2;
+          this.board.U = u1 + u2;
+
+          this.setupVerticalCalcDisplay(this.exerciseData.n1, this.exerciseData.n2, '+');
+          this.setMentorAdvice(`Juntamos ambos paquetes de libros (${this.exerciseData.n1} + ${this.exerciseData.n2}). Empieza por las Unidades: ¿Hay 10 o más azules? ¡Agrupa con el botón verde!`);
+
+        } else if (this.mode === 'resta') {
+          const list = LibraryStories.resta;
+          this.exerciseData = list[this.currentExerciseIdx % list.length];
+          document.getElementById('problemCategoryTitle').textContent = `Misión 3: Préstamos a Salones • ${this.exerciseData.context}`;
+          document.getElementById('problemStatementText').textContent = this.exerciseData.text;
+          document.getElementById('stepProgressBadge').textContent = `Problema ${this.currentExerciseIdx + 1} de ${list.length}`;
+
+          this.board.C = Math.floor(this.exerciseData.n1 / 100);
+          this.board.D = Math.floor((this.exerciseData.n1 % 100) / 10);
+          this.board.U = this.exerciseData.n1 % 10;
+
+          this.setupVerticalCalcDisplay(this.exerciseData.n1, this.exerciseData.n2, '-');
+          this.setMentorAdvice(`Hay ${this.exerciseData.n1} libros y saldrán ${this.exerciseData.n2}. Fíjate si alcanzan las unidades para restar. Si no alcanzan, ¡desagrupa 1 decena en 10 unidades!`);
+
+        } else if (this.mode === 'taller') {
+          document.getElementById('problemCategoryTitle').textContent = "Pizarra Digital de Manipulación Libre";
+          document.getElementById('problemStatementText').textContent = "Usa los botones superiores para agregar fichas de centenas, decenas y unidades. Realiza canjes y observa la descomposición aditiva.";
+          document.getElementById('stepProgressBadge').textContent = "Modo Libre / Proyector";
+          
+          this.setupVerticalCalcDisplay(null, null, 'libre');
+          this.setMentorAdvice("¡Bienvenido al taller libre! Puedes usar esta pizarra para proponer retos a todo el grupo o comprobar cualquier número de tres cifras.");
+        }
+
+        this.renderAllChips();
+        this.updateBoardDisplay();
+      },
+
+      setupVerticalCalcDisplay(n1, n2, opType) {
+        const carriedRow = document.getElementById('calcCarriedRow');
+        const num1Row = document.getElementById('calcNum1Row');
+        const num2Row = document.getElementById('calcNum2Row');
+        const signEl = document.getElementById('calcSignSymbol');
+        const resC = document.getElementById('calcRes_C');
+        const resD = document.getElementById('calcRes_D');
+        const resU = document.getElementById('calcRes_U');
+
+        document.getElementById('calcCarriedC').textContent = '';
+        document.getElementById('calcCarriedD').textContent = '';
+
+        if (opType === '+') {
+          carriedRow.style.display = 'flex';
+          num1Row.style.display = 'flex';
+          num2Row.style.display = 'flex';
+          signEl.textContent = '+';
+
+          document.getElementById('calcN1_C').textContent = Math.floor(n1 / 100);
+          document.getElementById('calcN1_D').textContent = Math.floor((n1 % 100) / 10);
+          document.getElementById('calcN1_U').textContent = n1 % 10;
+
+          document.getElementById('calcN2_C').textContent = Math.floor(n2 / 100);
+          document.getElementById('calcN2_D').textContent = Math.floor((n2 % 100) / 10);
+          document.getElementById('calcN2_U').textContent = n2 % 10;
+
+          resC.textContent = '?';
+          resD.textContent = '?';
+          resU.textContent = '?';
+        } else if (opType === '-') {
+          carriedRow.style.display = 'flex';
+          num1Row.style.display = 'flex';
+          num2Row.style.display = 'flex';
+          signEl.textContent = '-';
+
+          document.getElementById('calcN1_C').textContent = Math.floor(n1 / 100);
+          document.getElementById('calcN1_D').textContent = Math.floor((n1 % 100) / 10);
+          document.getElementById('calcN1_U').textContent = n1 % 10;
+
+          document.getElementById('calcN2_C').textContent = Math.floor(n2 / 100);
+          document.getElementById('calcN2_D').textContent = Math.floor((n2 % 100) / 10);
+          document.getElementById('calcN2_U').textContent = n2 % 10;
+
+          resC.textContent = '?';
+          resD.textContent = '?';
+          resU.textContent = '?';
+        } else {
+          carriedRow.style.display = 'none';
+          num2Row.style.display = 'none';
+          signEl.textContent = '=';
+          document.getElementById('calcN1_C').textContent = 'C';
+          document.getElementById('calcN1_D').textContent = 'D';
+          document.getElementById('calcN1_U').textContent = 'U';
+          resC.textContent = '0';
+          resD.textContent = '0';
+          resU.textContent = '0';
+        }
+      },
+
+      setMentorAdvice(text) {
+        document.getElementById('mentorAdviceText').innerHTML = `<strong>Consejo de Don Mateo:</strong> ${text}`;
+      },
+
+      resetBoard() {
+        this.board = { C: 0, D: 0, U: 0 };
+        this.carried = { C: 0, D: 0 };
+        this.renderAllChips();
+        this.updateBoardDisplay();
+      },
+
+      addChipToTray(type) {
+        SoundEngine.chipAdd();
+        this.board[type]++;
+        this.renderAllChips();
+        this.updateBoardDisplay();
+      },
+
+      removeChip(type) {
+        if (this.board[type] > 0) {
+          SoundEngine.chipRemove();
+          this.board[type]--;
+          this.renderAllChips();
+          this.updateBoardDisplay();
+        }
+      },
+
+      createChipElement(type) {
+        const chip = document.createElement('div');
+        chip.className = `chip chip-${type.toLowerCase()}`;
+        chip.title = `Ficha ${type === 'C' ? 'Amarilla (100)' : type === 'D' ? 'Roja (10)' : 'Azul (1)'}. Toca para retirar.`;
+
+        const valSpan = document.createElement('span');
+        valSpan.className = 'chip-val';
+        valSpan.textContent = type === 'C' ? '100' : type === 'D' ? '10' : '1';
+
+        const subSpan = document.createElement('span');
+        subSpan.className = 'chip-sub';
+        subSpan.textContent = type;
+
+        chip.appendChild(valSpan);
+        chip.appendChild(subSpan);
+
+        chip.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.removeChip(type);
+        });
+
+        return chip;
+      },
+
+      renderAllChips() {
+        const trayC = document.getElementById('trayC');
+        const trayD = document.getElementById('trayD');
+        const trayU = document.getElementById('trayU');
+
+        trayC.innerHTML = '';
+        trayD.innerHTML = '';
+        trayU.innerHTML = '';
+
+        for (let i = 0; i < this.board.C; i++) {
+          trayC.appendChild(this.createChipElement('C'));
+        }
+        for (let i = 0; i < this.board.D; i++) {
+          trayD.appendChild(this.createChipElement('D'));
+        }
+        for (let i = 0; i < this.board.U; i++) {
+          trayU.appendChild(this.createChipElement('U'));
+        }
+      },
+
+      canjear(fromCol) {
+        if (fromCol === 'U') {
+          if (this.board.U < 10) {
+            SoundEngine.hint();
+            alert("Necesitas al menos 10 fichas azules para canjearlas por 1 roja (10).");
+            return;
+          }
+          SoundEngine.canjeGrouping();
+          this.board.U -= 10;
+          this.board.D += 1;
+          this.carried.D += 1;
+          this.showCarriedIndicator('D');
+          this.setMentorAdvice("¡Gran canje! 10 fichas azules se agruparon en 1 ficha roja para la columna de las Decenas.");
+        } else if (fromCol === 'D') {
+          if (this.board.D < 10) {
+            SoundEngine.hint();
+            alert("Necesitas al menos 10 fichas rojas para canjearlas por 1 amarilla (100).");
+            return;
+          }
+          SoundEngine.canjeGrouping();
+          this.board.D -= 10;
+          this.board.C += 1;
+          this.carried.C += 1;
+          this.showCarriedIndicator('C');
+          this.setMentorAdvice("¡Excelente! 10 fichas rojas se agruparon en 1 ficha amarilla para la columna de las Centenas.");
+        }
+
+        this.renderAllChips();
+        this.updateBoardDisplay();
+      },
+
+      desagrupar(fromCol) {
+        if (fromCol === 'D') {
+          if (this.board.D < 1) {
+            SoundEngine.hint();
+            alert("No hay fichas rojas en las decenas para desagrupar.");
+            return;
+          }
+          SoundEngine.desagruparBreaking();
+          this.board.D -= 1;
+          this.board.U += 10;
+          this.setMentorAdvice("Desagrupaste 1 ficha roja: ahora tienes 10 fichas azules más en las unidades para poder restar.");
+        } else if (fromCol === 'C') {
+          if (this.board.C < 1) {
+            SoundEngine.hint();
+            alert("No hay fichas amarillas en las centenas para desagrupar.");
+            return;
+          }
+          SoundEngine.desagruparBreaking();
+          this.board.C -= 1;
+          this.board.D += 10;
+          this.setMentorAdvice("Desagrupaste 1 ficha amarilla: ahora tienes 10 fichas rojas más en las decenas.");
+        }
+
+        this.renderAllChips();
+        this.updateBoardDisplay();
+      },
+
+      showCarriedIndicator(col) {
+        const badge = document.getElementById(`carriedBadge${col}`);
+        if (badge) {
+          badge.style.display = 'inline-block';
+          setTimeout(() => {
+            badge.style.display = 'none';
+          }, 3500);
+        }
+        const calcCarried = document.getElementById(`calcCarried${col}`);
+        if (calcCarried) {
+          calcCarried.textContent = '1';
+        }
+      },
+
+      updateBoardDisplay() {
+        document.getElementById('countC').textContent = this.board.C;
+        document.getElementById('countD').textContent = this.board.D;
+        document.getElementById('countU').textContent = this.board.U;
+
+        const btnCanjearU = document.getElementById('btnCanjearU');
+        const btnCanjearD = document.getElementById('btnCanjearD');
+        const btnDesagruparD = document.getElementById('btnDesagruparD');
+        const btnDesagruparC = document.getElementById('btnDesagruparC');
+
+        btnCanjearU.disabled = this.board.U < 10;
+        btnCanjearD.disabled = this.board.D < 10;
+        btnDesagruparD.disabled = this.board.D < 1;
+        btnDesagruparC.disabled = this.board.C < 1;
+
+        btnCanjearU.classList.toggle('highlight-pulse', this.board.U >= 10);
+        btnCanjearD.classList.toggle('highlight-pulse', this.board.D >= 10);
+
+        const valTotal = (this.board.C * 100) + (this.board.D * 10) + this.board.U;
+        document.getElementById('totalNumberDisplay').textContent = `${valTotal} libros`;
+
+        const cVal = this.board.C * 100;
+        const dVal = this.board.D * 10;
+        const uVal = this.board.U;
+        document.getElementById('expandedMathText').innerHTML = 
+          `<span class="c">${cVal}</span> + <span class="d">${dVal}</span> + <span class="u">${uVal}</span> = <strong>${valTotal}</strong>`;
+
+        if (this.mode === 'canjes' || this.mode === 'taller') {
+          document.getElementById('calcRes_C').textContent = this.board.C;
+          document.getElementById('calcRes_D').textContent = this.board.D;
+          document.getElementById('calcRes_U').textContent = this.board.U;
+        }
+      },
+
+      verifyCurrentStep() {
+        SoundEngine.click();
+        const totalActual = (this.board.C * 100) + (this.board.D * 10) + this.board.U;
+
+        if (this.mode === 'canjes') {
+          const target = this.exerciseData.target;
+          if (totalActual !== target) {
+            SoundEngine.hint();
+            alert(`El total de libros debe ser ${target}. Revisa tus fichas.`);
+            return;
+          }
+          if (this.board.U >= 10 || this.board.D >= 10) {
+            SoundEngine.hint();
+            this.setMentorAdvice("¡El número es correcto! Pero aún tienes 10 o más fichas en una columna. Realiza los canjes para dejar la cantidad mínima de fichas.");
+            alert("Aún puedes agrupar fichas de 10 en 10. ¡Haz los canjes para completar el reto!");
+            return;
+          }
+
+          this.triggerSuccessModal(
+            "¡Inventario Catalogado!",
+            `Has agrupado perfectamente las fichas para representar ${target} libros con ${this.board.C} centenas, ${this.board.D} decenas y ${this.board.U} unidades.`,
+            target
+          );
+
+        } else if (this.mode === 'suma') {
+          const esperado = this.exerciseData.n1 + this.exerciseData.n2;
+          if (totalActual !== esperado) {
+            SoundEngine.hint();
+            alert(`El total debe ser ${esperado}. Actualmente tienes ${totalActual}.`);
+            return;
+          }
+          if (this.board.U >= 10 || this.board.D >= 10) {
+            SoundEngine.hint();
+            this.setMentorAdvice("¡Tienes la suma total de libros! Pero en el algoritmo formal no podemos dejar 10 o más fichas en una misma casilla. Agrupa 10 azules en 1 roja o 10 rojas en 1 amarilla.");
+            alert("Recuerda la regla de oro: cuando juntas 10 fichas, ¡las canjeas y se llevan a la siguiente columna!");
+            return;
+          }
+
+          document.getElementById('calcRes_C').textContent = this.board.C;
+          document.getElementById('calcRes_D').textContent = this.board.D;
+          document.getElementById('calcRes_U').textContent = this.board.U;
+
+          this.triggerSuccessModal(
+            "¡Donación Registrada!",
+            `¡Excelente cálculo de suma con agrupamiento! Los dos salones aportaron ${this.exerciseData.n1} + ${this.exerciseData.n2} = <strong>${esperado} libros</strong>. El catálogo escolar está actualizado.`,
+            esperado
+          );
+
+        } else if (this.mode === 'resta') {
+          const esperado = this.exerciseData.n1 - this.exerciseData.n2;
+
+          if (totalActual === this.exerciseData.n1) {
+            SoundEngine.hint();
+            const uQuitar = this.exerciseData.n2 % 10;
+            const dQuitar = Math.floor((this.exerciseData.n2 % 100) / 10);
+            const cQuitar = Math.floor(this.exerciseData.n2 / 100);
+            alert(`Aún tienes los ${this.exerciseData.n1} libros iniciales. Para registrar el préstamo debes retirar ${this.exerciseData.n2} libros (${cQuitar} amarillas, ${dQuitar} rojas y ${uQuitar} azules). ¡Toca las fichas para retirarlas! Si no alcanzan, desagrupa.`);
+            this.setMentorAdvice(`Para prestar ${this.exerciseData.n2} libros, retira ${uQuitar} azules, ${dQuitar} rojas y ${cQuitar} amarillas haciendo clic sobre ellas.`);
+            return;
+          }
+
+          if (totalActual === esperado) {
+            if (this.board.U >= 10 || this.board.D >= 10) {
+              alert("Te quedan 10 o más fichas en una columna. Realiza los canjes correspondientes.");
+              return;
+            }
+
+            document.getElementById('calcRes_C').textContent = this.board.C;
+            document.getElementById('calcRes_D').textContent = this.board.D;
+            document.getElementById('calcRes_U').textContent = this.board.U;
+
+            this.triggerSuccessModal(
+              "¡Préstamo Asignado!",
+              `¡Cálculo de resta con desagrupamiento superado! Había ${this.exerciseData.n1} libros, salieron ${this.exerciseData.n2} y quedan exactamente <strong>${esperado} libros</strong> en los estantes.`,
+              esperado
+            );
+          } else {
+            SoundEngine.hint();
+            alert(`Revisa tus fichas: deben quedar ${esperado} libros. Actualmente tienes ${totalActual}.`);
+          }
+
+        } else if (this.mode === 'taller') {
+          SoundEngine.successFanfare();
+          alert(`¡Tablero Libre explorado! Representaste el número ${totalActual} (${this.board.C} centenas, ${this.board.D} decenas y ${this.board.U} unidades).`);
+        }
+      },
+
+      triggerSuccessModal(title, msg, numResult) {
+        SoundEngine.successFanfare();
+        this.addScore(1);
+
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').innerHTML = msg;
+
+        const c = Math.floor(numResult / 100);
+        const d = Math.floor((numResult % 100) / 10);
+        const u = numResult % 10;
+
+        document.getElementById('modalDetailsBox').innerHTML = `
+          <strong>Registro oficial en el inventario escolar:</strong><br>
+          • <strong>${c}</strong> Centenas (${c * 100} libros en fichas amarillas)<br>
+          • <strong>${d}</strong> Decenas (${d * 10} libros en fichas rojas)<br>
+          • <strong>${u}</strong> Unidades (${u} libros en fichas azules)<br>
+          <div style="margin-top:10px; font-weight:800; color:#27ae60; text-align:center; font-size:1.15rem;">
+            SELLO OFICIAL DE CATALOGACIÓN APROBADO 📖
+          </div>
+        `;
+
+        document.getElementById('successModal').classList.add('active');
+      },
+
+      nextExercise() {
+        document.getElementById('successModal').classList.remove('active');
+        this.currentExerciseIdx++;
+        this.setupCurrentExercise();
+      },
+
+      showHint() {
+        SoundEngine.hint();
+        if (this.mode === 'canjes') {
+          if (this.board.U >= 10) {
+            this.setMentorAdvice("¡Tienes 10 o más fichas azules! Pulsa el botón verde '10 U ➔ 1 D' para agruparlas.");
+          } else if (this.board.D >= 10) {
+            this.setMentorAdvice("¡Tienes 10 o más fichas rojas! Pulsa el botón verde '10 D ➔ 1 C' para agruparlas.");
+          } else {
+            this.setMentorAdvice("¡Tus fichas ya están en la forma mínima! Ahora pulsa 'Validar Registro'.");
+          }
+        } else if (this.mode === 'suma') {
+          const uSuma = (this.exerciseData.n1 % 10) + (this.exerciseData.n2 % 10);
+          if (this.board.U >= 10) {
+            this.setMentorAdvice(`Al juntar las unidades obtienes ${uSuma} azules. Recuerda que no podemos escribir más de 9 en una casilla: ¡agrupa 10 azules en 1 roja!`);
+          } else if (this.board.D >= 10) {
+            this.setMentorAdvice("En las decenas tienes 10 o más fichas rojas: ¡canjea 10 rojas por 1 amarilla para llevarla a las centenas!");
+          } else {
+            this.setMentorAdvice("Las fichas están correctamente agrupadas. Presiona 'Validar Registro' para sellar la ficha.");
+          }
+        } else if (this.mode === 'resta') {
+          const uSust = this.exerciseData.n2 % 10;
+          if (this.board.U < uSust) {
+            this.setMentorAdvice(`Debes restar ${uSust} unidades pero solo tienes ${this.board.U}. Desagrupa 1 ficha roja para tener 10 azules adicionales.`);
+          } else {
+            this.setMentorAdvice(`Haz clic sobre las fichas para retirar las que corresponden al préstamo (${this.exerciseData.n2} libros).`);
+          }
+        } else {
+          this.setMentorAdvice("En el taller libre puedes agregar o desagrupar fichas para explorar la composición aditiva de cualquier número.");
+        }
+      },
+
+      generateRandomNumberWorkshop() {
+        SoundEngine.click();
+        const randomNum = Math.floor(Math.random() * 850) + 50;
+        this.board.C = Math.floor(randomNum / 100);
+        this.board.D = Math.floor((randomNum % 100) / 10);
+        this.board.U = randomNum % 10;
+        this.renderAllChips();
+        this.updateBoardDisplay();
+        this.setMentorAdvice(`¡Número sorpresa: ${randomNum}! Observa cómo se representa con ${this.board.C} amarillas, ${this.board.D} rojas y ${this.board.U} azules.`);
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      Game.init();
+    });
+  </script>
+</body>
+</html>
