@@ -1061,6 +1061,15 @@
       }
     }
 
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
     /* =========================================================================
        MOTOR UNIVERSAL DE ARRASTRE POINTER EVENTS + TAP-TO-PLACE (LINUX / TOUCH)
        ========================================================================= */
@@ -2239,11 +2248,11 @@
           Toca o arrastra el conector adecuado para colocarlo en la ranura:
         </div>
         <div class="chips-bank" id="m6-bank" style="display: flex; flex-direction: column; gap: 0.85rem; width: 100%; max-width: 380px; margin: 0 auto;">
-          ${shuffledOptions.map(opt => `
-            <button class="draggable-chip connector-chip" data-connector="${opt}"
-              style="width: 100%; font-size: 1.25rem; font-weight: 800; padding: 0.75rem 1.2rem; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; cursor: pointer; text-align: center; box-shadow: 0 3px 0 #94a3b8; transition: transform 0.1s, border-color 0.15s;">
+          ${shuffledOptions.map((opt, i) => `
+            <div class="draggable-chip connector-chip" id="m6-chip-${i}" data-connector="${opt}"
+              style="width: 100%; font-size: 1.25rem; font-weight: 800; padding: 0.85rem 1.2rem; background: #ffffff; border: 2px solid #2563eb; border-radius: 12px; cursor: pointer; text-align: center; box-shadow: 0 3px 0 #93c5fd; transition: transform 0.1s, border-color 0.15s; user-select: none; display: flex; align-items: center; justify-content: center;">
               ${opt}
-            </button>
+            </div>
           `).join('')}
         </div>
       `;
@@ -2252,14 +2261,12 @@
       const dropSlot = document.getElementById('m6-drop-slot');
       document.querySelectorAll('#m6-bank .connector-chip').forEach(chip => {
         makePointerDraggable(chip, (dragged, zone) => {
-          if (zone.id === 'm6-drop-slot' || zone.closest('#m6-drop-slot') || zone.id === 'm6-sentence-zone' || zone.closest('#m6-sentence-zone')) {
-            selectM6Connector(dragged.dataset.connector);
-          }
+          selectM6Connector(dragged.dataset.connector);
         });
-        chip.onclick = () => {
-          if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
+        chip.addEventListener('click', (e) => {
+          e.preventDefault();
           selectM6Connector(chip.dataset.connector);
-        };
+        });
       });
     }
 
@@ -2276,6 +2283,15 @@
         slot.style.color = '#15803d';
         slot.innerHTML = `<span>✅ <b>${chosen}</b></span>`;
 
+        // Destacar la tarjeta correcta
+        document.querySelectorAll('#m6-bank .connector-chip').forEach(c => {
+          if (c.dataset.connector === chosen) {
+            c.style.background = '#dcfce7';
+            c.style.borderColor = '#16a34a';
+            c.style.boxShadow = '0 3px 0 #15803d';
+          }
+        });
+
         const fullSentence = `${m6CurrentItem.idea1} ${chosen} ${m6CurrentItem.idea2}`;
         showFeedback(true, `🎉 <b>¡Conector perfecto!</b> <i>"${chosen}"</i> une con sentido ambas ideas: <b>${m6CurrentItem.hint}</b>`);
         speakText(fullSentence);
@@ -2286,6 +2302,15 @@
         slot.innerHTML = `<span>❌ <b>${chosen}</b></span>`;
 
         showFeedback(false, `❌ <i>"${chosen}"</i> no une adecuadamente estas dos ideas. Observa la relación: ${m6CurrentItem.hint}. ¡Prueba con otro conector!`);
+
+        setTimeout(() => {
+          if (m6SelectedConnector === chosen && !challengeSolved) {
+            slot.style.border = '2px dashed #3b82f6';
+            slot.style.background = '#ffffff';
+            slot.style.color = '#1d4ed8';
+            slot.innerHTML = `<span style="color: #94a3b8; font-style: italic; font-size: 1.05rem;">¿Qué conector une mejor las dos ideas?</span>`;
+          }
+        }, 1800);
       }
     }
 
