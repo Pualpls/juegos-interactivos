@@ -962,6 +962,60 @@
             renderCurrentScenario();
         }
 
+        // GESTO TÁCTIL UNIVERSAL: DESLIZAR CON 2 DEDOS SEPARADOS A LA DERECHA
+        (function initTwoFingerSwipe() {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let isTwoFingerSwipe = false;
+            let triggered = false;
+
+            window.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    const t1 = e.touches[0];
+                    const t2 = e.touches[1];
+                    const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                    if (dist >= 30) {
+                        isTwoFingerSwipe = true;
+                        triggered = false;
+                        touchStartX = (t1.clientX + t2.clientX) / 2;
+                        touchStartY = (t1.clientY + t2.clientY) / 2;
+                    }
+                } else {
+                    isTwoFingerSwipe = false;
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isTwoFingerSwipe || triggered || e.touches.length !== 2) return;
+                const t1 = e.touches[0];
+                const t2 = e.touches[1];
+                const currentMidX = (t1.clientX + t2.clientX) / 2;
+                const currentMidY = (t1.clientY + t2.clientY) / 2;
+                const deltaX = currentMidX - touchStartX;
+                const deltaY = currentMidY - touchStartY;
+
+                if (deltaX > 75 && Math.abs(deltaY) < 110) {
+                    triggered = true;
+                    isTwoFingerSwipe = false;
+                    const modal = document.getElementById('feedback-modal');
+                    if (modal && modal.classList.contains('show')) {
+                        closeFeedbackModal();
+                    } else if (gameState.queue.length > 0) {
+                        const current = gameState.queue.shift();
+                        gameState.queue.push(current);
+                        renderCurrentScenario();
+                    }
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchend', (e) => {
+                if (e.touches.length < 2) {
+                    isTwoFingerSwipe = false;
+                    triggered = false;
+                }
+            }, { passive: true });
+        })();
+
         // Inicialización
         restartGame();
     </script>

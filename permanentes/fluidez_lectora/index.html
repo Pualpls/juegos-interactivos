@@ -1863,10 +1863,13 @@
             </p>
           </div>
           <div class="leaderboard-actions">
+            <button class="btn-action-sec" id="btnSyncFromSheet" style="background: #ecfdf5; border-color: #a7f3d0; color: #065f46; font-weight: 700;" title="Actualizar puntajes directamente desde la base de datos oficial de Google Sheets">
+              🔄 Actualizar de Google Sheets
+            </button>
             <button class="btn-action-sec" id="btnImportScoresModal" style="background: #fef3c7; border-color: #fde047; color: #92400e; font-weight: 700;" title="Restaurar o importar puntajes desde Netlify">
               📥 Migrar / Importar Puntajes
             </button>
-            <button class="btn-action-sec" id="btnCloudConfig" style="background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; font-weight: 700;" title="Configurar conexión con Google Sheets (PIN 1702)">
+            <button class="btn-action-sec" id="btnCloudConfig" style="background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; font-weight: 700;" title="Configuración de Google Sheets (Acceso Docente)">
               🌐 Conectar Nube (Google Sheets)
             </button>
             <button class="btn-action-sec" id="btnShareScoresLink" title="Copiar enlace con los puntajes para abrir en otro dispositivo">
@@ -1885,7 +1888,7 @@
             <span id="cloudStatusText" style="color: var(--text-muted); font-weight: 600;">Modo Local: los puntajes se guardan en la memoria de este navegador.</span>
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
-            <button class="btn-action-sec" id="btnSyncCloudNow" style="padding: 4px 12px; font-size: 0.78rem; display: none; background: #eff6ff; color: #1d4ed8; font-weight: 700;">🔒 Enviar a Google Sheets (PIN 1702)</button>
+            <button class="btn-action-sec" id="btnSyncCloudNow" style="padding: 4px 12px; font-size: 0.78rem; display: none; background: #eff6ff; color: #1d4ed8; font-weight: 700;">🔒 Enviar a Google Sheets</button>
           </div>
         </div>
 
@@ -2415,6 +2418,7 @@
       bindEvents();
       loadRecords();
       updateCloudStatus();
+      syncWithOfficialGoogleSheet(true);
     }
 
     function loadFontPreference() {
@@ -2426,35 +2430,11 @@
       } catch(e) {}
     }
 
+    const OFFICIAL_GSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1d2-f8tGZJK4Xo66MiluWO71YWX5Io6-njKfcCwQ9O8Y/export?format=csv&gid=0';
+
     const DEFAULT_PLATFORM_SCORES = [
       {
-        id: 'rec-profe-paul',
-        name: 'Profe Paul',
-        type: 'individual',
-        fichaId: 1,
-        fichaTitle: 'Ficha 1 (CV-CV)',
-        wordsRead: 60,
-        totalWords: 60,
-        timeSec: 26,
-        wpm: 138.5,
-        score: 1070,
-        date: '2026-10-21T16:37:00-06:00'
-      },
-      {
-        id: 'rec-quetzalcoatl',
-        name: 'Quetzalcoatl 🐲🪶',
-        type: 'individual',
-        fichaId: 1,
-        fichaTitle: 'Ficha 1 (CV-CV)',
-        wordsRead: 60,
-        totalWords: 60,
-        timeSec: 34,
-        wpm: 105.9,
-        score: 1030,
-        date: '2026-10-21T16:39:00-06:00'
-      },
-      {
-        id: 'rec-alumnos-mariana',
+        id: 'rec-mariana',
         name: 'Alumnos de la Maestra Mariana',
         type: 'team',
         fichaId: 1,
@@ -2464,35 +2444,331 @@
         timeSec: 53,
         wpm: 67.9,
         score: 935,
-        date: '2026-10-21T16:42:00-06:00'
+        date: '2026-10-21T16:42:28'
       },
       {
-        id: 'rec-bobo-esponja',
+        id: 'rec-bobo',
         name: 'Bobo Esponja 🧽',
         type: 'individual',
         fichaId: 1,
         fichaTitle: 'Ficha 1 (CV-CV)',
         wordsRead: 60,
         totalWords: 60,
-        timeSec: 91,
-        wpm: 39.6,
-        score: 745,
-        date: '2026-10-21T16:49:00-06:00'
+        timeSec: 13,
+        wpm: 276.9,
+        score: 80,
+        date: '2026-10-21T17:26:04'
+      },
+      {
+        id: 'rec-dalary',
+        name: 'Dalary Guadalupe Fajardo Alcala',
+        type: 'individual',
+        fichaId: 2,
+        fichaTitle: 'Ficha 2 (CV-CV)',
+        wordsRead: 17,
+        totalWords: 60,
+        timeSec: 101,
+        wpm: 10.1,
+        score: 170,
+        date: '2026-10-28T17:17:29'
+      },
+      {
+        id: 'rec-halcones',
+        name: 'Equipo Los Halcones',
+        type: 'team',
+        fichaId: 1,
+        fichaTitle: 'Ficha 1 (CV-CV)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 98,
+        wpm: 36.7,
+        score: 710,
+        date: '2026-10-21T16:38:04'
+      },
+      {
+        id: 'rec-estrella-1',
+        name: 'Estrella ⭐',
+        type: 'individual',
+        fichaId: 2,
+        fichaTitle: 'Ficha 2 (CV-CV)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 105,
+        wpm: 34.3,
+        score: 675,
+        date: '2026-10-22T14:24:50'
+      },
+      {
+        id: 'rec-estrella-coral',
+        name: 'Estrella ⭐ y Coral🪸',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 54,
+        totalWords: 60,
+        timeSec: 120,
+        wpm: 27.0,
+        score: 540,
+        date: '2026-11-05T18:18:15'
       },
       {
         id: 'rec-filemon',
-        name: 'Filemón el burro más orejón 🐴',
+        name: 'Filemón el burro más orejón 🫏',
         type: 'individual',
         fichaId: 1,
         fichaTitle: 'Ficha 1 (CV-CV)',
         wordsRead: 60,
         totalWords: 60,
-        timeSec: 110,
+        timeSec: 120,
         wpm: 32.7,
-        score: 650,
-        date: '2026-10-21T16:44:00-06:00'
+        score: 20,
+        date: '2026-10-21T16:44:56'
+      },
+      {
+        id: 'rec-iker-adriel',
+        name: 'Iker Adriel',
+        type: 'individual',
+        fichaId: 1,
+        fichaTitle: 'Ficha 1 (CV-CV)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 113,
+        wpm: 31.9,
+        score: 635,
+        date: '2026-10-22T14:22:06'
+      },
+      {
+        id: 'rec-iker-alex',
+        name: 'Iker Alexander 🤫⭐🐕',
+        type: 'individual',
+        fichaId: 3,
+        fichaTitle: 'Ficha 3 (CVC-CVC)',
+        wordsRead: 40,
+        totalWords: 60,
+        timeSec: 120,
+        wpm: 20.0,
+        score: 400,
+        date: '2026-11-04T18:19:57'
+      },
+      {
+        id: 'rec-ikers',
+        name: 'Ikers🌪️😈',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 31,
+        totalWords: 60,
+        timeSec: 120,
+        wpm: 15.5,
+        score: 310,
+        date: '2026-11-05T18:14:44'
+      },
+      {
+        id: 'rec-jarol',
+        name: 'Jarol🎃',
+        type: 'individual',
+        fichaId: 3,
+        fichaTitle: 'Ficha 3 (CVC-CVC)',
+        wordsRead: 47,
+        totalWords: 60,
+        timeSec: 120,
+        wpm: 23.5,
+        score: 470,
+        date: '2026-11-04T18:11:55'
+      },
+      {
+        id: 'rec-jose-manuel',
+        name: 'José Manuel ⭐',
+        type: 'individual',
+        fichaId: 3,
+        fichaTitle: 'Ficha 3 (CVC-CVC)',
+        wordsRead: 38,
+        totalWords: 60,
+        timeSec: 180,
+        wpm: 12.7,
+        score: 380,
+        date: '2026-11-04T18:16:20'
+      },
+      {
+        id: 'rec-keyla',
+        name: 'Keyla 🩷🥰',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 113,
+        wpm: 31.9,
+        score: 635,
+        date: '2026-11-05T19:18:36'
+      },
+      {
+        id: 'rec-loki',
+        name: 'Loki 🐶🤯',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 52,
+        wpm: 69.2,
+        score: 940,
+        date: '2026-11-05T18:24:55'
+      },
+      {
+        id: 'rec-tarahumaras',
+        name: 'Los Tarahumaras 🏃',
+        type: 'team',
+        fichaId: 1,
+        fichaTitle: 'Ficha 1 (CV-CV)',
+        wordsRead: 16,
+        totalWords: 60,
+        timeSec: 90,
+        wpm: 10.7,
+        score: 160,
+        date: '2026-10-28T17:13:54'
+      },
+      {
+        id: 'rec-naomi-keyla',
+        name: 'Naomi 🪻y Keyla🦄',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 38,
+        totalWords: 60,
+        timeSec: 120,
+        wpm: 19.0,
+        score: 380,
+        date: '2026-11-05T18:22:21'
+      },
+      {
+        id: 'rec-naomi',
+        name: 'Naomi🪻🌄',
+        type: 'individual',
+        fichaId: 3,
+        fichaTitle: 'Ficha 3 (CVC-CVC)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 76,
+        wpm: 47.4,
+        score: 820,
+        date: '2026-11-04T18:26:51'
+      },
+      {
+        id: 'rec-palomo',
+        name: 'Palomo 🐈',
+        type: 'individual',
+        fichaId: 4,
+        fichaTitle: 'Ficha 4 (CVC-CVC)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 99,
+        wpm: 36.4,
+        score: 705,
+        date: '2026-11-05T18:27:42'
+      },
+      {
+        id: 'rec-profe-paul',
+        name: 'Profe Paul',
+        type: 'team',
+        fichaId: 14,
+        fichaTitle: 'Ficha 14',
+        wordsRead: 7,
+        totalWords: 7,
+        timeSec: 12,
+        wpm: 35.0,
+        score: 1100,
+        date: '2026-10-21T16:31:47'
+      },
+      {
+        id: 'rec-quetzalcoatl',
+        name: 'Quetzalcoatl 🐍🪶',
+        type: 'team',
+        fichaId: 1,
+        fichaTitle: 'Ficha 1 (CV-CV)',
+        wordsRead: 60,
+        totalWords: 60,
+        timeSec: 31,
+        wpm: 116.1,
+        score: 1045,
+        date: '2026-10-21T16:36:01'
       }
     ];
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') {
+          inQuotes = !inQuotes;
+        } else if (c === ',' && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+        } else {
+          current += c;
+        }
+      }
+      result.push(current.trim());
+      return result;
+    }
+
+    async function syncWithOfficialGoogleSheet(silent = true) {
+      try {
+        const res = await fetch(OFFICIAL_GSHEET_CSV_URL);
+        if (!res.ok) return;
+        const csv = await res.text();
+        const lines = csv.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length <= 1) return;
+
+        let added = 0;
+        const existingKeys = new Set(state.scores.map(s => `${s.name}__${s.fichaId}__${s.timeSec}`));
+
+        for (let i = 1; i < lines.length; i++) {
+          const cols = parseCSVLine(lines[i]);
+          if (cols.length >= 8) {
+            const dateStr = cols[0];
+            const name = cols[1];
+            const tipo = cols[2];
+            const ficha = parseInt(cols[3], 10) || 1;
+            const leidas = parseInt(cols[4], 10) || 0;
+            const total = parseInt(cols[5], 10) || 60;
+            const segs = parseInt(cols[6], 10) || 0;
+            const ppm = parseFloat(cols[7]) || 0;
+            const pts = parseInt(cols[8], 10) || 0;
+
+            const key = `${name}__${ficha}__${segs}`;
+            if (!existingKeys.has(key)) {
+              existingKeys.add(key);
+              state.scores.push({
+                id: 'gsheet-' + Math.random().toString(36).substr(2, 9),
+                name,
+                type: tipo.toLowerCase().includes('equipo') ? 'team' : 'individual',
+                fichaId: ficha,
+                fichaTitle: `Ficha ${ficha}`,
+                wordsRead: leidas,
+                totalWords: total,
+                timeSec: segs,
+                wpm: ppm,
+                score: pts,
+                date: dateStr
+              });
+              added++;
+            }
+          }
+        }
+
+        if (added > 0 || !silent) {
+          saveScoresToStorage();
+          renderLeaderboardTable();
+          loadRecords();
+          if (!silent) alert(`✅ Sincronización exitosa: ${state.scores.length} registros cargados desde Google Sheets.`);
+        }
+      } catch(e) {
+        if (!silent) alert('No se pudo descargar la hoja en este momento. Se conservan los puntajes locales.');
+      }
+    }
 
     function loadSavedScores() {
       try {
@@ -2501,15 +2777,17 @@
         if (saved) {
           const parsed = JSON.parse(saved);
           list = Array.isArray(parsed)
-            ? parsed.filter(s => s && s.id !== 'sample-1' && s.id !== 'sample-2' && s.name !== 'Sofía Martínez' && s.name !== 'Equipo Los Halcones')
+            ? parsed.filter(s => s && s.id !== 'sample-1' && s.id !== 'sample-2' && s.name !== 'Sofía Martínez')
             : [];
         }
 
-        // Integrar los registros reales de la plataforma asegurando que nunca se pierdan
-        const existingNames = new Set(list.map(s => s.name));
+        // Integrar los registros reales oficiales garantizando que nunca se pierdan
+        const existingKeys = new Set(list.map(s => `${s.name}__${s.fichaId}__${s.timeSec}`));
         DEFAULT_PLATFORM_SCORES.forEach(defRec => {
-          if (!existingNames.has(defRec.name)) {
+          const key = `${defRec.name}__${defRec.fichaId}__${defRec.timeSec}`;
+          if (!existingKeys.has(key)) {
             list.push(defRec);
+            existingKeys.add(key);
           }
         });
 
@@ -2914,6 +3192,9 @@
 
       const btnShareLink = document.getElementById('btnShareScoresLink');
       if (btnShareLink) btnShareLink.addEventListener('click', shareScoresLink);
+
+      const btnSyncSheet = document.getElementById('btnSyncFromSheet');
+      if (btnSyncSheet) btnSyncSheet.addEventListener('click', () => syncWithOfficialGoogleSheet(false));
 
       const btnImportModal = document.getElementById('btnImportScoresModal');
       if (btnImportModal) btnImportModal.addEventListener('click', openImportScoresModal);
@@ -3562,9 +3843,11 @@
     // CLOUD SYNC & NETLIFY WEBHOOK (GOOGLE SHEETS)
     // ==========================================
 
+    const _SEC_ADMIN_KEY = atob('MTcwMg=='); // Clave secreta docente
+
     function openCloudModal() {
-      const pin = prompt('🔒 Ingresa el PIN docente (1702) para acceder a la configuración de Google Sheets:');
-      if (pin !== '1702') {
+      const pin = prompt('🔒 Ingresa el PIN docente de seguridad:');
+      if (pin !== _SEC_ADMIN_KEY) {
         if (pin !== null) alert('❌ PIN incorrecto. Acceso reservado para el docente.');
         return;
       }
@@ -3677,8 +3960,8 @@
         alert('No hay puntajes en el historial local para enviar.');
         return;
       }
-      const pin = prompt('🔒 Ingresa el PIN docente (1702) para enviar los registros a Google Sheets:');
-      if (pin !== '1702') {
+      const pin = prompt('🔒 Ingresa el PIN docente de seguridad:');
+      if (pin !== _SEC_ADMIN_KEY) {
         if (pin !== null) alert('❌ PIN incorrecto.');
         return;
       }

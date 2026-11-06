@@ -4376,7 +4376,7 @@
       ],
       material: ['credenciales escolares', 'fichas bibliográficas', 'separadores de lectura', 'gafetes de equipo', 'hojas de color', 'marcatextos fluorescentes'],
       moneda: ['paupesos', 'tarjetas de lectura', 'timbres dorados', 'estrellitas de honor'],
-      mueblesSalón: ['sillas acomodadas', 'bancas de madera', 'mochilas colgadas', 'percheros escolares', 'botes de basura']
+      mueblesSalón: ['sillas acomodadas', 'bancas de madera', 'mochilas colgadas', 'estantes de libros', 'botes de basura']
     };
 
     function pickRandom(arr) {
@@ -7513,6 +7513,83 @@
         fb.innerHTML = `❌ <b>Resultado incorrecto:</b> Obtuviste <b>${userTotal}</b>, pero el resultado correcto es <b>${prob.expectedTotal}</b>. Revisa tus operaciones columna por columna.`;
         playBeep('error');
       }
+    }
+
+    /* =========================================================================
+       GESTO TÁCTIL UNIVERSAL: DESLIZAR CON 2 DEDOS SEPARADOS A LA DERECHA
+       Permite cambiar de problema o avanzar de forma táctil en cualquier módulo
+       ========================================================================= */
+    (function initTwoFingerSwipeMath() {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isTwoFingerSwipe = false;
+      let triggered = false;
+
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          const t1 = e.touches[0];
+          const t2 = e.touches[1];
+          const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+          if (dist >= 30) {
+            isTwoFingerSwipe = true;
+            triggered = false;
+            touchStartX = (t1.clientX + t2.clientX) / 2;
+            touchStartY = (t1.clientY + t2.clientY) / 2;
+          }
+        } else {
+          isTwoFingerSwipe = false;
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isTwoFingerSwipe || triggered || e.touches.length !== 2) return;
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const currentMidX = (t1.clientX + t2.clientX) / 2;
+        const currentMidY = (t1.clientY + t2.clientY) / 2;
+        const deltaX = currentMidX - touchStartX;
+        const deltaY = currentMidY - touchStartY;
+
+        if (deltaX > 75 && Math.abs(deltaY) < 110) {
+          triggered = true;
+          isTwoFingerSwipe = false;
+          showMathGestureToast('✌️ Siguiente reto (deslizamiento de 2 dedos)');
+          advanceActiveModuleChallenge();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+          isTwoFingerSwipe = false;
+          triggered = false;
+        }
+      }, { passive: true });
+    })();
+
+    function advanceActiveModuleChallenge() {
+      if (!state || !state.currentModule) return;
+      switch (state.currentModule) {
+        case 1: if (typeof m1_generateProblem === 'function') m1_generateProblem(); break;
+        case 2: if (typeof m2_generateProblem === 'function') m2_generateProblem(); break;
+        case 3: if (typeof m3_generateProblem === 'function') m3_generateProblem(); break;
+        case 4: if (typeof m4_generateProblem === 'function') m4_generateProblem(); break;
+        case 5: if (typeof m5_generateProblem === 'function') m5_generateProblem(); break;
+        case 6: if (typeof m6_nextChallenge === 'function') m6_nextChallenge(); break;
+        case 7: if (typeof m7_generateProblem === 'function') m7_generateProblem(); break;
+      }
+    }
+
+    function showMathGestureToast(msg) {
+      let toast = document.getElementById('two-finger-toast-math');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'two-finger-toast-math';
+        toast.style.cssText = 'position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#0f172a; color:#ffffff; padding:8px 18px; border-radius:24px; font-weight:700; font-size:0.9rem; z-index:99999; box-shadow:0 6px 20px rgba(0,0,0,0.3); pointer-events:none; transition:opacity 0.25s; opacity:0;';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 1200);
     }
 
   </script>

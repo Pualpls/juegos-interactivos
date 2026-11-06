@@ -857,7 +857,7 @@
             <span>▶</span>
           </button>
           <button class="mod-btn" onclick="openModule(6)">
-            <div><span class="mod-num">M6</span>Ordenador de Oraciones (Armar con sentido)</div>
+            <div><span class="mod-num">M6</span>Conectores Lógicos (Unir ideas con sentido)</div>
             <span>▶</span>
           </button>
         </div>
@@ -939,8 +939,11 @@
       </div>
 
       <div class="feedback-banner" id="feedback-banner">
-        <span id="feedback-text"></span>
-        <button class="btn btn-success" onclick="nextChallenge()">Continuar ➡</button>
+        <button class="btn btn-success" id="btn-continue-banner" onclick="nextChallenge()" style="order: -1; font-size: 1.15rem; padding: 10px 24px; font-weight: 800; box-shadow: 0 4px 12px rgba(22,163,74,0.3); display: inline-flex; align-items: center; gap: 6px;">Continuar ➡</button>
+        <span id="feedback-text" style="flex: 1;"></span>
+        <div style="font-size: 0.8rem; color: #166534; font-weight: 700; opacity: 0.9; white-space: nowrap; display: flex; align-items: center; gap: 4px;">
+          <span>✌️ O desliza 2 dedos a la derecha</span>
+        </div>
       </div>
     </section>
   </main>
@@ -1338,32 +1341,176 @@
       { fragments: ['sa', 'lu', 'dar'], correct: 'saludar', sentence: 'Al llegar al salón debemos ___ con alegría.' }
     ];
 
-    // MÓDULO 6: BÁSCULA CONTADORA DE PALABRAS (SEPARAR ORACIÓN PEGADA Y CONTAR) — 24 ORACIONES
+    // MÓDULO 6: CONECTORES LÓGICOS PARA UNIR IDEAS — 24 RETOS
     const DATA_M6 = [
-      { words: ['El', 'sol', 'brilla', 'en', 'Sayula.'] },
-      { words: ['Los', 'perros', 'ladran', 'fuerte.'] },
-      { words: ['Mi', 'abuela', 'hace', 'tamales', 'ricos.'] },
-      { words: ['Hoy', 'leímos', 'un', 'libro', 'muy', 'bonito.'] },
-      { words: ['La', 'lluvia', 'moja', 'el', 'patio.'] },
-      { words: ['Las', 'mariposas', 'vuelan', 'alto.'] },
-      { words: ['El', 'maestro', 'revisa', 'la', 'tarea.'] },
-      { words: ['Yo', 'tomo', 'agua', 'simple', 'todos', 'los', 'días.'] },
-      { words: ['Mi', 'gato', 'negro', 'duerme', 'mucho.'] },
-      { words: ['Los', 'niños', 'juegan', 'futbol', 'en', 'la', 'cancha.'] },
-      { words: ['Mamá', 'compró', 'uvas', 'dulces.'] },
-      { words: ['El', 'reloj', 'marca', 'las', 'ocho.'] },
-      { words: ['Nosotros', 'cuidamos', 'las', 'plantas', 'del', 'jardín.'] },
-      { words: ['El', 'pájaro', 'canta', 'en', 'la', 'rama.'] },
-      { words: ['Brianna', 'tiene', 'una', 'mochila', 'azul.'] },
-      { words: ['Papá', 'lava', 'los', 'platos', 'limpios.'] },
-      { words: ['La', 'campana', 'suena', 'en', 'el', 'recreo.'] },
-      { words: ['El', 'conejo', 'salta', 'por', 'el', 'campo.'] },
-      { words: ['Mis', 'hermanos', 'arman', 'un', 'rompecabezas.'] },
-      { words: ['La', 'tortuga', 'camina', 'muy', 'despacio.'] },
-      { words: ['En', 'el', 'salón', 'hay', 'veinte', 'sillas.'] },
-      { words: ['El', 'viento', 'mueve', 'las', 'hojas', 'secas.'] },
-      { words: ['La', 'señora', 'Lupita', 'limpia', 'el', 'patio.'] },
-      { words: ['Los', 'peces', 'nadan', 'en', 'el', 'río.'] }
+      {
+        idea1: 'Llovió intensamente toda la tarde,',
+        correct: 'sin embargo,',
+        options: ['sin embargo,', 'por lo tanto,', 'debido a que', 'además,'],
+        idea2: 'pudimos terminar la maqueta a tiempo.',
+        hint: 'Une dos ideas contrarias (oposición): a pesar de la lluvia, lograron terminar.'
+      },
+      {
+        idea1: 'Estudiamos con mucha atención para el examen,',
+        correct: 'por lo tanto,',
+        options: ['por lo tanto,', 'sin embargo,', 'pero', 'aunque'],
+        idea2: 'todos obtuvimos una excelente calificación.',
+        hint: 'Indica la consecuencia directa de haber estudiado con atención.'
+      },
+      {
+        idea1: 'Nos pusimos suéter y bufanda abrigadora,',
+        correct: 'debido a que',
+        options: ['debido a que', 'por lo tanto,', 'sin embargo,', 'aunque'],
+        idea2: 'el aire de la mañana estaba muy frío.',
+        hint: 'Explica la causa o el motivo por el cual nos abrigamos.'
+      },
+      {
+        idea1: 'Preparamos una rica ensalada de frutas,',
+        correct: 'además,',
+        options: ['además,', 'pero', 'sin embargo,', 'por consiguiente,'],
+        idea2: 'servimos agua fresca de limón para todos.',
+        hint: 'Añade una acción complementaria (conector de suma o adición).'
+      },
+      {
+        idea1: 'Sonó el timbre para salir al recreo,',
+        correct: 'entonces,',
+        options: ['entonces,', 'sin embargo,', 'a pesar de que', 'porque'],
+        idea2: 'salimos ordenadamente al patio a jugar.',
+        hint: 'Muestra una acción que sucede inmediatamente después (tiempo y consecuencia).'
+      },
+      {
+        idea1: 'El piso del patio escolar estaba mojado,',
+        correct: 'por esta razón,',
+        options: ['por esta razón,', 'pero', 'aunque', 'ya que'],
+        idea2: 'caminamos con cuidado para no resbalar.',
+        hint: 'Indica el motivo por el cual se debe caminar con precaución.'
+      },
+      {
+        idea1: 'Llegamos puntuales a la escuela,',
+        correct: 'ya que',
+        options: ['ya que', 'sin embargo,', 'por lo tanto,', 'pero'],
+        idea2: 'salimos de casa con suficiente anticipación.',
+        hint: 'Explica la razón o causa que permitió llegar a tiempo.'
+      },
+      {
+        idea1: 'El problema matemático parecía muy difícil,',
+        correct: 'a pesar de ello,',
+        options: ['a pesar de ello,', 'porque', 'además,', 'es decir,'],
+        idea2: 'el equipo encontró la respuesta correcta.',
+        hint: 'Muestra que se superó la dificultad (conector de concesión).'
+      },
+      {
+        idea1: 'No encontramos cartulina azul en la papelería,',
+        correct: 'por consiguiente,',
+        options: ['por consiguiente,', 'porque', 'debido a que', 'ya que'],
+        idea2: 'usamos hojas blancas para dibujar el cartel.',
+        hint: 'Indica la solución o consecuencia ante la falta de cartulina.'
+      },
+      {
+        idea1: 'Lavamos muy bien las frutas con agua y jabón,',
+        correct: 'puesto que',
+        options: ['puesto que', 'sin embargo,', 'pero', 'no obstante,'],
+        idea2: 'así eliminamos microbios y cuidamos la salud.',
+        hint: 'Da la justificación o causa de una buena medida higiénica.'
+      },
+      {
+        idea1: 'Queríamos jugar futbol en el recreo,',
+        correct: 'pero',
+        options: ['pero', 'por lo tanto,', 'así que,', 'en consecuencia,'],
+        idea2: 'la lluvia sorpresiva nos impidió salir.',
+        hint: 'Conector que expresa un obstáculo o límite imprevisto.'
+      },
+      {
+        idea1: 'Ahorramos monedas durante varias semanas,',
+        correct: 'de modo que',
+        options: ['de modo que', 'pero', 'sin embargo,', 'a pesar de que'],
+        idea2: 'pudimos comprar libros para la biblioteca del salón.',
+        hint: 'Indica el resultado exitoso que se logró gracias al ahorro.'
+      },
+      {
+        idea1: 'Guardamos los colores en su lapicera,',
+        correct: 'de esta manera,',
+        options: ['de esta manera,', 'sin embargo,', 'pero', 'aunque'],
+        idea2: 'evitamos que se caigan y se rompan las puntas.',
+        hint: 'Indica el modo o manera en que cuidamos los útiles.'
+      },
+      {
+        idea1: 'Practicamos lectura en voz alta todos los días,',
+        correct: 'en consecuencia,',
+        options: ['en consecuencia,', 'pero', 'aunque', 'sin embargo,'],
+        idea2: 'nuestra fluidez y comprensión mejoraron notablemente.',
+        hint: 'Muestra el efecto positivo que produce la práctica constante.'
+      },
+      {
+        idea1: 'El cuento era bastante largo,',
+        correct: 'no obstante,',
+        options: ['no obstante,', 'porque', 'debido a que', 'ya que'],
+        idea2: 'todos los alumnos lo leyeron con mucho entusiasmo.',
+        hint: 'Conector formal de contraste: a pesar de su extensión, lo disfrutaron.'
+      },
+      {
+        idea1: 'Comemos despacio y masticamos muy bien,',
+        correct: 'porque',
+        options: ['porque', 'sin embargo,', 'por lo tanto,', 'aunque'],
+        idea2: 'eso ayuda a tener una digestión sana.',
+        hint: 'Explica el motivo biológico directo de masticar bien.'
+      },
+      {
+        idea1: 'Revisamos la redacción con el diccionario,',
+        correct: 'por eso,',
+        options: ['por eso,', 'pero', 'sin embargo,', 'a pesar de que'],
+        idea2: 'el periódico mural no tuvo ninguna falta de ortografía.',
+        hint: 'Indica la consecuencia favorable de consultar el diccionario.'
+      },
+      {
+        idea1: 'El día estaba nublado y frío,',
+        correct: 'aun así,',
+        options: ['aun así,', 'por lo tanto,', 'así que,', 'porque'],
+        idea2: 'hicimos los ejercicios físicos con mucha alegría.',
+        hint: 'Muestra perseverancia a pesar de las condiciones del clima.'
+      },
+      {
+        idea1: 'Separamos la basura orgánica e inorgánica,',
+        correct: 'así',
+        options: ['así', 'pero', 'sin embargo,', 'a pesar de que'],
+        idea2: 'mantenemos limpio el patio y cuidamos la naturaleza.',
+        hint: 'Indica la finalidad y el beneficio directo de separar la basura.'
+      },
+      {
+        idea1: 'El problema parecía complicado en el pizarrón,',
+        correct: 'sin embargo,',
+        options: ['sin embargo,', 'por lo tanto,', 'debido a que', 'además,'],
+        idea2: 'al usar fichas de colores fue sencillo resolverlo.',
+        hint: 'Muestra el contraste entre la primera impresión y el éxito con material concreto.'
+      },
+      {
+        idea1: 'Trabajamos en equipo con respeto y orden,',
+        correct: 'de tal forma que',
+        options: ['de tal forma que', 'pero', 'sin embargo,', 'a pesar de que'],
+        idea2: 'concluimos la actividad antes de que sonara la campana.',
+        hint: 'Indica el modo eficiente en que se logran las metas en equipo.'
+      },
+      {
+        idea1: 'Tomamos agua simple potable en el salón,',
+        correct: 'dado que',
+        options: ['dado que', 'sin embargo,', 'por lo tanto,', 'pero'],
+        idea2: 'hicimos mucho ejercicio y nuestro cuerpo necesita hidratarse.',
+        hint: 'Fundamenta la necesidad de tomar agua tras ejercitarse.'
+      },
+      {
+        idea1: 'Terminamos de colorear el mapa histórico,',
+        correct: 'de inmediato,',
+        options: ['de inmediato,', 'pero', 'sin embargo,', 'a pesar de que'],
+        idea2: 'lo pegamos en el cuaderno amarillo de trabajo.',
+        hint: 'Indica la acción siguiente sin perder tiempo.'
+      },
+      {
+        idea1: 'Apagamos las luces al salir al recreo,',
+        correct: 'con el fin de',
+        options: ['con el fin de', 'sin embargo,', 'pero', 'a pesar de que'],
+        idea2: 'ahorrar energía eléctrica en nuestra escuela.',
+        hint: 'Conector de propósito o finalidad ecológica.'
+      }
     ];
 
     // MÓDULO 7: GENERADOR COMBINATORIO DE COMAS Y PUNTOS AZULES (CON PISTA DE MAYÚSCULA INTERMEDIA)
@@ -2051,145 +2198,94 @@
     }
 
     /* =========================================================================
-       MÓDULO 6 (OPCIÓN 1B): ORDENADOR DE ORACIONES (ARMAR LA ORACIÓN EN ORDEN CON SENTIDO)
+       MÓDULO 6: CONECTORES LÓGICOS DE IDEAS (Oraciones y Conectores)
        ========================================================================= */
-    let m6SelectedWords = [];
+    let m6CurrentItem = null;
+    let m6SelectedConnector = null;
 
     function renderM6() {
-      document.getElementById('active-mod-title').textContent = 'Ordenador de Oraciones (Ordena las tarjetas para armar la oración)';
-      const rawItem = getRandomItemFromDeck('m6', DATA_M6);
-      // Aseguramos que la última palabra tenga su punto final azul adherido para no quedar huérfano
-      const targetWords = rawItem.words.map((w, idx) => {
-        if (idx === rawItem.words.length - 1 && !/[.!?]$/.test(w)) {
-          return w + '.';
-        }
-        return w;
-      });
-      const fullSentence = targetWords.join(' ');
-      activeChallengeData = { targetWords, fullSentence };
-      m6SelectedWords = [];
-      currentPromptAudioText = fullSentence;
+      document.getElementById('active-mod-title').textContent = 'Conectores Lógicos (Elige el conector que une mejor las dos ideas)';
+      m6CurrentItem = getRandomItemFromDeck('m6', DATA_M6);
+      m6SelectedConnector = null;
+      currentPromptAudioText = `${m6CurrentItem.idea1} ... ${m6CurrentItem.idea2}`;
 
       const pLeft = document.getElementById('panel-left-content');
       pLeft.innerHTML = `
-        <div style="font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
-          Las palabras de la oración se revolvieron. Arrastra o toca cada tarjeta en orden para armar la oración con sentido (fíjate en la <b style="color:#0f172a;"><span class="bicolor-upper">M</span>ayúscula</b> inicial y en el <b class="bicolor-punct">.</b> final):
+        <div style="font-size: 0.96rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem;">
+          Lee ambas ideas y analiza cuál conector expresa la relación correcta (causa, consecuencia, contraste, tiempo o modo):
         </div>
-        <div class="prompt-box" id="m6-sentence-zone" style="min-height: 108px; border: 3px dashed #2563eb; background: #eff6ff; gap: 0.5rem; padding: 0.85rem;"></div>
-        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-amber" onclick="speakText('${fullSentence}')">🔊 Escuchar Pista</button>
-          <button class="btn btn-secondary" onclick="resetM6Order()">🔄 Reiniciar Tarjetas</button>
-          <button class="btn btn-primary" onclick="validateM6Order()">✅ Comprobar Oración</button>
+        <div class="prompt-box" id="m6-sentence-zone" style="min-height: 120px; border: 3px dashed #2563eb; background: #eff6ff; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.75rem; align-items: stretch; justify-content: center; text-align: center;">
+          <div style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
+            ${colorizeSentenceNoOrphan(m6CurrentItem.idea1)}
+          </div>
+          <div id="m6-drop-slot" class="drop-slot" style="min-height: 48px; border: 2px dashed #3b82f6; background: #ffffff; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 800; color: #1d4ed8; padding: 6px 16px; margin: 0 auto; width: 85%; max-width: 420px; transition: all 0.2s;">
+            <span style="color: #94a3b8; font-style: italic; font-size: 1.05rem;">¿Qué conector une mejor las dos ideas?</span>
+          </div>
+          <div style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
+            ${colorizeSentenceNoOrphan(m6CurrentItem.idea2)}
+          </div>
+        </div>
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap; margin-top: 0.75rem;">
+          <button class="btn btn-amber" onclick="speakText('${m6CurrentItem.idea1} ... ${m6CurrentItem.idea2}')">🔊 Escuchar Ideas</button>
         </div>
       `;
 
-      // Barajar garantizando que no salga ya ordenada
-      let shuffled = targetWords.map((text, idx) => ({ text, idx }));
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      if (shuffled.every((item, i) => item.idx === i) && shuffled.length > 1) {
-        [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
-      }
+      // Barajar las 4 opciones
+      const shuffledOptions = shuffleArray(m6CurrentItem.options);
 
       const pRight = document.getElementById('panel-right-content');
       pRight.innerHTML = `
-        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700;">
-          Arrastra o toca las tarjetas de palabras para colocarlas en la oración (toca una palabra colocada si deseas regresarla):
+        <div style="font-size: 0.96rem; color: var(--text-muted); text-align:center; font-weight: 700; margin-bottom: 0.6rem;">
+          Toca o arrastra el conector adecuado para colocarlo en la ranura:
         </div>
-        <div class="chips-bank" id="m6-bank" style="gap: 0.75rem;">
-          ${shuffled.map(w => `
-            <div class="draggable-chip" data-word-idx="${w.idx}" data-word="${w.text}" style="white-space:nowrap; font-size:1.35rem; padding:0.45rem 0.9rem;">
-              <span style="white-space:nowrap;">${colorizeBicolor(w.text)}</span>
-            </div>
+        <div class="chips-bank" id="m6-bank" style="display: flex; flex-direction: column; gap: 0.85rem; width: 100%; max-width: 380px; margin: 0 auto;">
+          ${shuffledOptions.map(opt => `
+            <button class="draggable-chip connector-chip" data-connector="${opt}"
+              style="width: 100%; font-size: 1.25rem; font-weight: 800; padding: 0.75rem 1.2rem; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; cursor: pointer; text-align: center; box-shadow: 0 3px 0 #94a3b8; transition: transform 0.1s, border-color 0.15s;">
+              ${opt}
+            </button>
           `).join('')}
         </div>
       `;
 
-      renderM6SentenceZone();
-      document.querySelectorAll('#m6-bank .draggable-chip').forEach(chip => {
+      // Habilitar drag & drop y click directo
+      const dropSlot = document.getElementById('m6-drop-slot');
+      document.querySelectorAll('#m6-bank .connector-chip').forEach(chip => {
         makePointerDraggable(chip, (dragged, zone) => {
-          if (zone.id === 'm6-sentence-zone' || zone.closest('#m6-sentence-zone')) {
-            addM6Word(dragged);
+          if (zone.id === 'm6-drop-slot' || zone.closest('#m6-drop-slot') || zone.id === 'm6-sentence-zone' || zone.closest('#m6-sentence-zone')) {
+            selectM6Connector(dragged.dataset.connector);
           }
         });
         chip.onclick = () => {
           if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
-          clearSelectedChip();
-          addM6Word(chip);
+          selectM6Connector(chip.dataset.connector);
         };
       });
-
-      setTimeout(() => speakText(fullSentence), 250);
     }
 
-    function addM6Word(chipEl) {
-      if (chipEl.style.display === 'none') return;
-      m6SelectedWords.push({
-        text: chipEl.dataset.word,
-        idx: parseInt(chipEl.dataset.wordIdx, 10)
-      });
-      chipEl.style.display = 'none';
-      playBeep('pop');
-      hideFeedback();
-      renderM6SentenceZone();
-    }
+    function selectM6Connector(chosen) {
+      m6SelectedConnector = chosen;
+      const slot = document.getElementById('m6-drop-slot');
+      if (!slot) return;
 
-    function removeM6Word(posIdx) {
-      if (window._dragJustFinished && Date.now() < window._dragJustFinished) return;
-      const removed = m6SelectedWords.splice(posIdx, 1)[0];
-      if (removed) {
-        const chipEl = document.querySelector(`#m6-bank .draggable-chip[data-word-idx="${removed.idx}"]`);
-        if (chipEl) chipEl.style.display = 'inline-flex';
-      }
-      playBeep('pop');
-      hideFeedback();
-      renderM6SentenceZone();
-    }
+      const isCorrect = (chosen.trim().toLowerCase() === m6CurrentItem.correct.trim().toLowerCase());
 
-    function renderM6SentenceZone() {
-      const item = activeChallengeData;
-      const zone = document.getElementById('m6-sentence-zone');
-      if (!zone) return;
+      if (isCorrect) {
+        slot.style.border = '2px solid #16a34a';
+        slot.style.background = '#dcfce7';
+        slot.style.color = '#15803d';
+        slot.innerHTML = `<span>✅ <b>${chosen}</b></span>`;
 
-      if (m6SelectedWords.length === 0) {
-        zone.innerHTML = `<span style="color:#1e40af; font-size:1.05rem;">Arrastra o toca las tarjetas de la derecha para formar la oración aquí...</span>`;
-        return;
-      }
-
-      zone.innerHTML = m6SelectedWords.map((w, i) => `
-        <span onclick="removeM6Word(${i})" title="Toca para devolver esta palabra"
-          style="display:inline-flex; align-items:center; white-space:nowrap; background:#ffffff; border:2px solid #2563eb; color:#0f172a; padding:0.3rem 0.7rem; border-radius:0.55rem; font-size:1.42rem; font-weight:800; cursor:pointer; box-shadow:0 2px 0 #93c5fd;">
-          ${colorizeBicolor(w.text)}
-        </span>
-      `).join(' ');
-
-      if (m6SelectedWords.length === item.targetWords.length) {
-        validateM6Order();
-      }
-    }
-
-    function resetM6Order() {
-      m6SelectedWords = [];
-      document.querySelectorAll('#m6-bank .draggable-chip').forEach(c => c.style.display = 'inline-flex');
-      playBeep('pop');
-      hideFeedback();
-      renderM6SentenceZone();
-    }
-
-    function validateM6Order() {
-      const item = activeChallengeData;
-      if (m6SelectedWords.length < item.targetWords.length) {
-        showFeedback(false, `⚠️ Aún faltan tarjetas por colocar. Usa todas las palabras para completar la oración.`);
-        return;
-      }
-      const userSentence = m6SelectedWords.map(w => w.text).join(' ');
-      if (userSentence === item.fullSentence) {
-        showFeedback(true, `🎉 <b>¡Oración bien ordenada!</b> Formaste correctamente: <i>"${colorizeSentenceNoOrphan(item.fullSentence)}"</i>`);
-        speakText(item.fullSentence);
+        const fullSentence = `${m6CurrentItem.idea1} ${chosen} ${m6CurrentItem.idea2}`;
+        showFeedback(true, `🎉 <b>¡Conector perfecto!</b> <i>"${chosen}"</i> une con sentido ambas ideas: <b>${m6CurrentItem.hint}</b>`);
+        speakText(fullSentence);
       } else {
-        showFeedback(false, `❌ El orden de las palabras todavía no suena bien. Toca cualquier palabra de la caja azul para devolverla y acomódalas desde la <b style="color:#0f172a;"><span class="bicolor-upper">M</span>ayúscula</b> inicial hasta el <b class="bicolor-punct">.</b> final.`);
+        slot.style.border = '2px solid #dc2626';
+        slot.style.background = '#fee2e2';
+        slot.style.color = '#b91c1c';
+        slot.innerHTML = `<span>❌ <b>${chosen}</b></span>`;
+
+        showFeedback(false, `❌ <i>"${chosen}"</i> no une adecuadamente estas dos ideas. Observa la relación: ${m6CurrentItem.hint}. ¡Prueba con otro conector!`);
       }
     }
 
@@ -2920,6 +3016,72 @@
       } else {
         showFeedback(false, `❌ Con la letra "${letter}" no es correcto. Observa bien: ${item.hint}`);
       }
+    }
+
+    /* =========================================================================
+       GESTO TÁCTIL UNIVERSAL: DESLIZAR CON 2 DEDOS SEPARADOS A LA DERECHA
+       Permite cambiar de reto o avanzar de forma táctil sin tocar botones
+       ========================================================================= */
+    (function initTwoFingerSwipeGesture() {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isTwoFingerSwipe = false;
+      let gestureTriggered = false;
+
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          const t1 = e.touches[0];
+          const t2 = e.touches[1];
+          // Verificar que los dos dedos estén separados al menos 30px
+          const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+          if (dist >= 30) {
+            isTwoFingerSwipe = true;
+            gestureTriggered = false;
+            touchStartX = (t1.clientX + t2.clientX) / 2;
+            touchStartY = (t1.clientY + t2.clientY) / 2;
+          }
+        } else {
+          isTwoFingerSwipe = false;
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isTwoFingerSwipe || gestureTriggered || e.touches.length !== 2) return;
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+        const currentMidX = (t1.clientX + t2.clientX) / 2;
+        const currentMidY = (t1.clientY + t2.clientY) / 2;
+        const deltaX = currentMidX - touchStartX;
+        const deltaY = currentMidY - touchStartY;
+
+        // Deslizar hacia la derecha más de 75px con desviación vertical moderada
+        if (deltaX > 75 && Math.abs(deltaY) < 110) {
+          gestureTriggered = true;
+          isTwoFingerSwipe = false;
+          showGestureToast('✌️ Siguiente reto (deslizamiento de 2 dedos)');
+          nextChallenge();
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+          isTwoFingerSwipe = false;
+          gestureTriggered = false;
+        }
+      }, { passive: true });
+    })();
+
+    function showGestureToast(msg) {
+      let toast = document.getElementById('two-finger-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'two-finger-toast';
+        toast.style.cssText = 'position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#0f172a; color:#ffffff; padding:8px 18px; border-radius:24px; font-weight:700; font-size:0.9rem; z-index:99999; box-shadow:0 6px 20px rgba(0,0,0,0.3); pointer-events:none; transition:opacity 0.25s; opacity:0;';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 1200);
     }
 
     // Permitir abrir un módulo directo por parámetro URL (?modulo=N)
