@@ -30,6 +30,7 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none !important;
       user-select: none;
     }
 
@@ -638,6 +639,8 @@
   </div>
 
   <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
     // BANCO DE 8 ENIGMAS DE COMPRENSIÓN LECTORA
     const ENIGMAS = [
       {

@@ -28,6 +28,7 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none !important;
       user-select: none;
     }
 
@@ -573,6 +574,8 @@
   </div>
 
   <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
     // BANCO DE 10 TRAMOS DE CARRERAS DE DISCRIMINACIÓN RÁPIDA
     const LAPS = [
       {

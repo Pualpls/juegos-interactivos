@@ -29,6 +29,7 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none !important;
       user-select: none;
     }
 
@@ -564,6 +565,8 @@
   </div>
 
   <script>
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
     // BANCO DE PALABRAS ILUSTRADAS CON SÍLABAS Y DISTRACTORES
     const WORD_BANK = [
       {
