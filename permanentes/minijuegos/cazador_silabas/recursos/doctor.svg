@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" fill="#ffffff" rx="24"/>
+  <!-- Cabeza y Cabello -->
+  <circle cx="100" cy="70" r="32" fill="#fed7aa"/>
+  <path d="M68 65 C68 40 82 32 100 32 C118 32 132 40 132 65 C132 68 128 58 118 55 C105 52 95 55 82 58 C72 60 68 65 68 65 Z" fill="#334155"/>
+  <!-- Ojos y Sonrisa -->
+  <circle cx="90" cy="68" r="3.5" fill="#1e293b"/>
+  <circle cx="110" cy="68" r="3.5" fill="#1e293b"/>
+  <path d="M92 82 Q100 90 108 82" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Cuello y Cuerpo / Bata Blanca -->
+  <rect x="92" y="98" width="16" height="15" fill="#fed7aa"/>
+  <path d="M55 170 L60 115 C65 108 75 105 85 105 L115 105 C125 105 135 108 140 115 L145 170 Z" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/>
+  <polygon points="100,105 85,130 100,150 115,130" fill="#38bdf8"/>
+  <polygon points="97,118 103,118 102,145 98,145" fill="#0284c7"/>
+  <!-- Estetoscopio -->
+  <path d="M78 112 C78 140 95 155 100 155 C105 155 122 140 122 112" fill="none" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="100" cy="158" r="6" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+</svg>

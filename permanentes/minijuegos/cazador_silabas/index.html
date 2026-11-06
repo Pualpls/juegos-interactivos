@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>El Cazador de Sílabas · Minijuego de Alfabetización</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --amber: #f59e0b;
+      --rose: #ef4444;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --radius-xl: 1.25rem;
+      --radius-lg: 1rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Lexend', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BANNER DE PRODUCCIÓN */
+    .banner-produccion {
+      background: linear-gradient(90deg, #b91c1c 0%, #ea580c 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      box-shadow: 0 2px 10px rgba(234, 88, 12, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* HEADER */
+    header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-volver {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-volver:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(-3px);
+    }
+
+    h1 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stat-badge {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #e2e8f0;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+    }
+
+    /* BARRA DE PROGRESO */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8 0%, #10b981 100%);
+      transition: width 0.35s ease;
+    }
+
+    /* ÁREA DEL RETO CENTRAL */
+    .game-arena {
+      background: var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* IMAGEN ILUSTRADA DEL OBJETO */
+    .target-image-card {
+      width: 160px;
+      height: 160px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 0.75rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      border: 3px solid #60a5fa;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .target-image-card img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .target-image-card.success-pop {
+      animation: popJump 0.5s ease;
+      border-color: #10b981;
+    }
+
+    /* RANURAS DE SÍLABAS (DESTINO) */
+    .slots-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .syllable-slot {
+      min-width: 80px;
+      height: 65px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 3px dashed #64748b;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #38bdf8;
+      transition: all 0.25s ease;
+      padding: 0 0.75rem;
+    }
+
+    .syllable-slot.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+      animation: pulseSlot 1.2s infinite;
+    }
+
+    .syllable-slot.filled {
+      border: 3px solid #10b981;
+      background: #064e3b;
+      color: #a7f3d0;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+      transform: scale(1.05);
+    }
+
+    /* BURBUJAS DE SÍLABAS FLOTANTES (OPCIONES) */
+    .bubbles-section-title {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .bubbles-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      width: 100%;
+      min-height: 80px;
+    }
+
+    .syllable-bubble {
+      min-width: 75px;
+      height: 62px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border: 2px solid #60a5fa;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      padding: 0 1.15rem;
+    }
+
+    .syllable-bubble:hover, .syllable-bubble:active {
+      transform: translateY(-4px) scale(1.06);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.5);
+    }
+
+    .syllable-bubble.used {
+      opacity: 0.2;
+      pointer-events: none;
+      transform: scale(0.9);
+      filter: grayscale(1);
+    }
+
+    .syllable-bubble.error-shake {
+      animation: shake 0.4s ease;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+      border-color: #f87171 !important;
+    }
+
+    /* CONTROLES INFERIORES Y NAVEGACIÓN */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-audio {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.6rem 1.1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-audio:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #ffffff;
+      transform: scale(1.03);
+    }
+
+    /* BOTÓN CONTINUAR PRIORIZADO A LA IZQUIERDA */
+    .btn-continuar {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-lg);
+      border: 2px solid #34d399;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      animation: pulseGreen 1.4s infinite;
+      transition: all 0.2s ease;
+    }
+
+    .btn-continuar:hover {
+      transform: translateY(-2px) scale(1.04);
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    }
+
+    /* PISTA / FEEDBACK TEXT */
+    .feedback-msg {
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 26px;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    .feedback-msg.correct {
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .feedback-msg.wrong {
+      color: #f87171;
+    }
+
+    /* PANTALLA DE VICTORIA FINAL */
+    .victory-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .victory-card {
+      background: #1e293b;
+      border: 3px solid #10b981;
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .victory-card h2 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .victory-card p {
+      color: #cbd5e1;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .victory-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-primary {
+      background: var(--primary);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ANIMACIONES */
+    @keyframes pulseSlot {
+      0%, 100% { border-color: #38bdf8; }
+      50% { border-color: #93c5fd; }
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+    }
+
+    @keyframes popJump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15) rotate(3deg); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* GESTO DOS DEDOS HINT */
+    .gesture-hint {
+      font-size: 0.75rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    @media (max-width: 600px) {
+      .target-image-card { width: 130px; height: 130px; }
+      .syllable-slot { min-width: 65px; height: 55px; font-size: 1.45rem; }
+      .syllable-bubble { min-width: 65px; height: 55px; font-size: 1.45rem; }
+      .controls-bar { justify-content: center; }
+      .btn-continuar { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER DE PRODUCCIÓN -->
+  <div class="banner-produccion">
+    <span>⚠️</span>
+    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · En desarrollo activo · 12 desafíos de alfabetización</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-wrap">
+      <a href="../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
+      <div>
+        <h1>El Cazador de Sílabas</h1>
+        <p class="subtitle">Constructor de Palabras Ilustradas · 3° Primaria</p>
+      </div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-badge">
+        <span>⭐ Aciertos:</span>
+        <span id="scoreVal" style="color: #facc15;">0 / 12</span>
+      </div>
+      <div class="stat-badge">
+        <span>🧩 Reto:</span>
+        <span id="progressText" style="color: #38bdf8;">1 / 12</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ARENA -->
+  <main id="gameMain">
+    <div class="progress-bar-wrap">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <div class="game-arena">
+      <!-- Tarjeta de Imagen Ilustrada -->
+      <div class="target-image-card" id="imageCard">
+        <img id="targetImg" src="./recursos/vacuna.svg" alt="Palabra ilustrada">
+      </div>
+
+      <!-- Ranuras de destino para las sílabas -->
+      <div class="slots-container" id="slotsContainer">
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <!-- Feedback de voz y texto -->
+      <div class="feedback-msg" id="feedbackMsg">Toca las sílabas en orden para armar la palabra</div>
+
+      <!-- Burbujas flotantes de opciones -->
+      <div class="bubbles-section-title">Sílabas Disponibles:</div>
+      <div class="bubbles-container" id="bubblesContainer">
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <!-- Barra de controles -->
+      <div class="controls-bar">
+        <!-- Botón Continuar en la izquierda prioritario -->
+        <button class="btn-continuar" id="btnContinuar" onclick="nextWord()">
+          <span>Continuar ➔</span>
+        </button>
+
+        <button class="btn-audio" onclick="speakCurrentWord()">
+          <span>🔊</span>
+          <span>Escuchar palabra</span>
+        </button>
+
+        <span class="gesture-hint">✌️ Desliza 2 dedos a la derecha para continuar</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE VICTORIA -->
+  <div class="victory-modal" id="victoryModal">
+    <div class="victory-card">
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉🏆</div>
+      <h2>¡Misión Cumplida!</h2>
+      <p>Has cazado y construido todas las 12 palabras ilustradas con éxito. ¡Excelente dominio silábico y fonológico!</p>
+      <div class="victory-actions">
+        <button class="btn-action-primary" onclick="restartGame()">🔄 Jugar de Nuevo</button>
+        <a href="../../index.html" class="btn-action-primary" style="background: #10b981;">🏠 Volver al Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BANCO DE PALABRAS ILUSTRADAS CON SÍLABAS Y DISTRACTORES
+    const WORD_BANK = [
+      {
+        word: "vacuna",
+        syllables: ["va", "cu", "na"],
+        distractors: ["ba", "co"],
+        img: "./recursos/vacuna.svg",
+        hint: "Inyección preventiva para proteger nuestra salud"
+      },
+      {
+        word: "hueso",
+        syllables: ["hue", "so"],
+        distractors: ["ue", "zo"],
+        img: "./recursos/hueso.svg",
+        hint: "Parte dura del esqueleto que sostiene nuestro cuerpo"
+      },
+      {
+        word: "jarabe",
+        syllables: ["ja", "ra", "be"],
+        distractors: ["ga", "ve"],
+        img: "./recursos/jarabe.svg",
+        hint: "Medicina líquida para aliviar la tos y la garganta"
+      },
+      {
+        word: "jabón",
+        syllables: ["ja", "bón"],
+        distractors: ["bon", "ga"],
+        img: "./recursos/jabon.svg",
+        hint: "Espuma para lavar las manos y eliminar virus"
+      },
+      {
+        word: "corazón",
+        syllables: ["co", "ra", "zón"],
+        distractors: ["son", "ca"],
+        img: "./recursos/corazon.svg",
+        hint: "Músculo vital que bombea sangre a todo el cuerpo"
+      },
+      {
+        word: "músculo",
+        syllables: ["mús", "cu", "lo"],
+        distractors: ["mus", "lu"],
+        img: "./recursos/musculo.svg",
+        hint: "Tejido elástico que permite mover las articulaciones"
+      },
+      {
+        word: "cráneo",
+        syllables: ["crá", "ne", "o"],
+        distractors: ["cra", "no"],
+        img: "./recursos/craneo.svg",
+        hint: "Estructura ósea que protege nuestro cerebro"
+      },
+      {
+        word: "vendaje",
+        syllables: ["ven", "da", "je"],
+        distractors: ["ben", "ge"],
+        img: "./recursos/vendaje.svg",
+        hint: "Tira de tela para cubrir y proteger una lesión"
+      },
+      {
+        word: "termómetro",
+        syllables: ["ter", "mó", "me", "tro"],
+        distractors: ["tor", "to"],
+        img: "./recursos/termometro.svg",
+        hint: "Instrumento para medir la temperatura corporal"
+      },
+      {
+        word: "pulmón",
+        syllables: ["pul", "món"],
+        distractors: ["pol", "mon"],
+        img: "./recursos/pulmon.svg",
+        hint: "Órgano respiratorio que oxigena nuestro cuerpo"
+      },
+      {
+        word: "doctor",
+        syllables: ["doc", "tor"],
+        distractors: ["duc", "tur"],
+        img: "./recursos/doctor.svg",
+        hint: "Profesional de la salud que atiende a los enfermos"
+      },
+      {
+        word: "diente",
+        syllables: ["dien", "te"],
+        distractors: ["den", "ti"],
+        img: "./recursos/diente.svg",
+        hint: "Pieza blanca que usamos para masticar los alimentos"
+      }
+    ];
+
+    let currentIndex = 0;
+    let currentSlotIndex = 0;
+    let score = 0;
+    let isCompleted = false;
+
+    // WEB AUDIO API SINTETIZADO OFFLINE
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.12);
+      setTimeout(() => playTone(659.25, 'triangle', 0.12), 100);
+      setTimeout(() => playTone(783.99, 'triangle', 0.25), 200);
+    }
+
+    function playErrorSound() {
+      playTone(220, 'sawtooth', 0.25);
+    }
+
+    // SÍNTESIS DE VOZ OFFLINE (WEB SPEECH API)
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-MX';
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function speakCurrentWord() {
+      const item = WORD_BANK[currentIndex];
+      speakText(item.word);
+    }
+
+    // BARAJAR
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // CARGAR PALABRA
+    function loadWord(index) {
+      currentIndex = index;
+      currentSlotIndex = 0;
+      isCompleted = false;
+
+      const item = WORD_BANK[currentIndex];
+      document.getElementById('targetImg').src = item.img;
+      document.getElementById('imageCard').classList.remove('success-pop');
+      document.getElementById('btnContinuar').style.display = 'none';
+
+      document.getElementById('progressText').textContent = `${currentIndex + 1} / ${WORD_BANK.length}`;
+      document.getElementById('progressBar').style.width = `${((currentIndex) / WORD_BANK.length) * 100}%`;
+      document.getElementById('feedbackMsg').textContent = "Toca las sílabas en orden para armar la palabra";
+      document.getElementById('feedbackMsg').className = "feedback-msg";
+
+      // Renderizar slots
+      const slotsContainer = document.getElementById('slotsContainer');
+      slotsContainer.innerHTML = '';
+      item.syllables.forEach((syl, i) => {
+        const slot = document.createElement('div');
+        slot.className = `syllable-slot ${i === 0 ? 'active' : ''}`;
+        slot.id = `slot-${i}`;
+        slot.textContent = '·';
+        slotsContainer.appendChild(slot);
+      });
+
+      // Renderizar burbujas revueltas
+      const bubblesContainer = document.getElementById('bubblesContainer');
+      bubblesContainer.innerHTML = '';
+      const allBubbles = shuffle([...item.syllables, ...item.distractors]);
+      allBubbles.forEach((syl, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'syllable-bubble';
+        btn.textContent = syl;
+        btn.onclick = () => handleSyllableClick(syl, btn);
+        bubblesContainer.appendChild(btn);
+      });
+
+      // Anunciar por voz suave la palabra
+      setTimeout(() => {
+        speakText(item.word);
+      }, 350);
+    }
+
+    // MANEJAR TOQUE EN SÍLABA
+    function handleSyllableClick(selectedSyllable, btnEl) {
+      if (isCompleted) return;
+
+      const item = WORD_BANK[currentIndex];
+      const targetSyllable = item.syllables[currentSlotIndex];
+
+      // Pronunciar sílaba tocada
+      speakText(selectedSyllable);
+
+      if (selectedSyllable.toLowerCase() === targetSyllable.toLowerCase()) {
+        // Acierto
+        playTone(440 + currentSlotIndex * 80, 'sine', 0.15);
+        btnEl.classList.add('used');
+
+        const slot = document.getElementById(`slot-${currentSlotIndex}`);
+        slot.textContent = selectedSyllable;
+        slot.classList.remove('active');
+        slot.classList.add('filled');
+
+        currentSlotIndex++;
+
+        if (currentSlotIndex < item.syllables.length) {
+          // Siguiente ranura
+          const nextSlot = document.getElementById(`slot-${currentSlotIndex}`);
+          if (nextSlot) nextSlot.classList.add('active');
+        } else {
+          // ¡Palabra completada!
+          handleWordComplete();
+        }
+      } else {
+        // Error
+        playErrorSound();
+        btnEl.classList.add('error-shake');
+        setTimeout(() => btnEl.classList.remove('error-shake'), 450);
+
+        const feedback = document.getElementById('feedbackMsg');
+        feedback.textContent = `¡Casi! Busca el sonido "${targetSyllable}"`;
+        feedback.className = "feedback-msg wrong";
+      }
+    }
+
+    // COMPLETAR PALABRA
+    function handleWordComplete() {
+      isCompleted = true;
+      score++;
+      document.getElementById('scoreVal').textContent = `${score} / ${WORD_BANK.length}`;
+
+      playSuccessSound();
+      document.getElementById('imageCard').classList.add('success-pop');
+
+      const feedback = document.getElementById('feedbackMsg');
+      feedback.textContent = `¡Excelente! Formaste "${WORD_BANK[currentIndex].word.toUpperCase()}"`;
+      feedback.className = "feedback-msg correct";
+
+      // Pronunciar la palabra completa con entusiasmo
+      setTimeout(() => {
+        speakText(WORD_BANK[currentIndex].word);
+      }, 250);
+
+      // Mostrar botón continuar
+      document.getElementById('btnContinuar').style.display = 'inline-flex';
+    }
+
+    // SIGUIENTE PALABRA
+    function nextWord() {
+      if (currentIndex + 1 < WORD_BANK.length) {
+        loadWord(currentIndex + 1);
+      } else {
+        // Victoria
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('victoryModal').style.display = 'flex';
+      }
+    }
+
+    function restartGame() {
+      score = 0;
+      document.getElementById('scoreVal').textContent = `0 / ${WORD_BANK.length}`;
+      document.getElementById('victoryModal').style.display = 'none';
+      loadWord(0);
+    }
+
+    // DETECCIÓN DE GESTO CON DOS DEDOS DESLIZANDO A LA DERECHA
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let multiTouch = false;
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        multiTouch = true;
+        touchStartX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        touchStartY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      } else {
+        multiTouch = false;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (multiTouch && isCompleted) {
+        const changeX = e.changedTouches[0].clientX - touchStartX;
+        if (changeX > 60) {
+          nextWord();
+        }
+      }
+      multiTouch = false;
+    }, { passive: true });
+
+    // TECLADO: Barra espaciadora o Enter para avanzar si está completado
+    window.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && isCompleted) {
+        nextWord();
+      }
+    });
+
+    // INICIAR
+    window.addEventListener('DOMContentLoaded', () => {
+      loadWord(0);
+    });
+  </script>
+</body>
+</html>

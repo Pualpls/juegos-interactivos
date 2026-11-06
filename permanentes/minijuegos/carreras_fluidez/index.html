@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pista de Carreras de Fluidez · Minijuego de Velocidad Lectora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #ef4444;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --radius-xl: 1.25rem;
+      --radius-lg: 1rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Lexend', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BANNER DE PRODUCCIÓN */
+    .banner-produccion {
+      background: linear-gradient(90deg, #b91c1c 0%, #ea580c 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      box-shadow: 0 2px 10px rgba(234, 88, 12, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* HEADER */
+    header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-volver {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-volver:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(-3px);
+    }
+
+    h1 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stat-badge {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #e2e8f0;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* PISTA DE CARRERAS ANIMADA */
+    .racetrack-card {
+      background: #1e293b;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 1rem 1.25rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .track-road {
+      height: 75px;
+      background: #334155;
+      border-radius: var(--radius-lg);
+      position: relative;
+      border-top: 4px solid #ef4444;
+      border-bottom: 4px solid #ffffff;
+      box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* LÍNEA DISCONTINUA DE PISTA */
+    .track-dashes {
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, #ffffff 0, #ffffff 25px, transparent 25px, transparent 45px);
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+    }
+
+    /* META */
+    .track-finish-line {
+      position: absolute;
+      right: 12px;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      background: repeating-conic-gradient(#000000 0% 25%, #ffffff 0% 50%) 50% / 14px 14px;
+      border-left: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .track-flag-img {
+      position: absolute;
+      right: 38px;
+      top: 6px;
+      width: 38px;
+      height: 38px;
+      z-index: 6;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    /* EL BÓLIDO DEPORTIVO */
+    .racing-car {
+      position: absolute;
+      left: 10px;
+      width: 82px;
+      height: 50px;
+      transition: left 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 10;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    }
+
+    .racing-car img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .racing-car.turbo-boost {
+      animation: turboJolt 0.5s ease;
+    }
+
+    /* TARJETA DEL DESAFÍO LECTOR */
+    .challenge-arena {
+      background: var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .challenge-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.85rem;
+    }
+
+    .challenge-type-badge {
+      background: #f59e0b;
+      color: #78350f;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+    }
+
+    .challenge-prompt {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .challenge-context {
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    /* GRILLA DE PALABRAS CANDIDATAS */
+    .words-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .word-card-btn {
+      background: #0f172a;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      padding: 1.1rem 1.2rem;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .word-card-btn:hover, .word-card-btn:active {
+      background: #1e293b;
+      border-color: #38bdf8;
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.35);
+    }
+
+    .word-card-btn.correct {
+      background: #064e3b !important;
+      border-color: #10b981 !important;
+      color: #a7f3d0 !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+      transform: scale(1.05);
+    }
+
+    .word-card-btn.wrong {
+      background: #7f1d1d !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+      animation: shake 0.4s ease;
+    }
+
+    /* FEEDBACK Y CONTROLES INFERIORES */
+    .arena-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .feedback-box {
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 26px;
+    }
+
+    .feedback-box.correct { color: #34d399; font-weight: 700; }
+    .feedback-box.wrong { color: #f87171; }
+
+    /* BOTÓN CONTINUAR EN LA IZQUIERDA */
+    .btn-continuar {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-lg);
+      border: 2px solid #34d399;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      animation: pulseGreen 1.4s infinite;
+      transition: all 0.2s ease;
+    }
+
+    .btn-continuar:hover {
+      transform: translateY(-2px) scale(1.04);
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    }
+
+    .btn-audio {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.55rem 1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-audio:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    /* MODAL DE PODIO / VICTORIA */
+    .victory-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .victory-card {
+      background: #1e293b;
+      border: 3px solid #f59e0b;
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .victory-card h2 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 2.2rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .victory-card p {
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .btn-action-primary {
+      background: var(--primary);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @keyframes turboJolt {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15) rotate(-2deg); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    @media (max-width: 640px) {
+      .words-grid { grid-template-columns: 1fr; }
+      .word-card-btn { font-size: 1.25rem; padding: 0.9rem; }
+      .btn-continuar { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER DE PRODUCCIÓN -->
+  <div class="banner-produccion">
+    <span>⚠️</span>
+    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · En desarrollo activo · Pista rápida de discriminación léxica (10 tramos)</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-wrap">
+      <a href="../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
+      <div>
+        <h1>Pista de Carreras de Fluidez</h1>
+        <p class="subtitle">Discriminación Rápida y Agilidad Lectora · 3° Primaria</p>
+      </div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-badge">
+        <span>🏁 Tramo:</span>
+        <span id="lapVal" style="color: #facc15;">1 / 10</span>
+      </div>
+      <div class="stat-badge">
+        <span>⭐ Aciertos:</span>
+        <span id="scoreVal" style="color: #38bdf8;">0 / 10</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <!-- PISTA DE CARRERAS -->
+    <div class="racetrack-card">
+      <div class="track-header">
+        <span>🏁 Circuito Veloz Escolar</span>
+        <span id="trackDistance">Distancia: 10% hacia la meta</span>
+      </div>
+
+      <div class="track-road" id="trackRoad">
+        <div class="track-dashes"></div>
+
+        <!-- Bandera meta -->
+        <img src="./recursos/bandera_meta.svg" alt="Bandera a cuadros" class="track-flag-img">
+        <div class="track-finish-line"></div>
+
+        <!-- Bólido de carreras -->
+        <div class="racing-car" id="racingCar">
+          <img src="./recursos/auto_carreras.svg" alt="Auto de carreras">
+        </div>
+      </div>
+    </div>
+
+    <!-- ARENA DEL DESAFÍO -->
+    <div class="challenge-arena">
+      <div class="challenge-header">
+        <span class="challenge-type-badge" id="challengeBadge">Palabra Intrusa</span>
+        <span class="challenge-context" id="challengeContext">Campo semántico de la salud</span>
+      </div>
+
+      <div class="challenge-prompt" id="challengePrompt">
+        Toca la palabra que NO pertenece al grupo:
+      </div>
+
+      <!-- Tarjetas de palabras -->
+      <div class="words-grid" id="wordsGrid">
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <!-- Footer y controles -->
+      <div class="arena-footer">
+        <!-- Botón continuar en la izquierda prioritario -->
+        <button class="btn-continuar" id="btnContinuar" onclick="nextLap()">
+          <span>Acelerar al Siguiente Tramo ➔</span>
+        </button>
+
+        <div class="feedback-box" id="feedbackBox">Lee con atención cada opción</div>
+
+        <button class="btn-audio" onclick="speakChallengePrompt()">
+          <span>🔊</span>
+          <span>Escuchar Reto</span>
+        </button>
+
+        <span style="font-size: 0.75rem; color: #64748b;">✌️ Desliza 2 dedos a la derecha</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE PODIO -->
+  <div class="victory-modal" id="victoryModal">
+    <div class="victory-card">
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🏎️💨🏆</div>
+      <h2>¡Cruzaste la Meta en Primer Lugar!</h2>
+      <p>Has completado los 10 tramos con extraordinaria rapidez y precisión en discriminación lectora. ¡Eres un piloto estrella de la lectura!</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-action-primary" onclick="restartRace()">🔄 Correr Otra Carrera</button>
+        <a href="../../index.html" class="btn-action-primary" style="background: #10b981;">🏠 Volver al Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BANCO DE 10 TRAMOS DE CARRERAS DE DISCRIMINACIÓN RÁPIDA
+    const LAPS = [
+      {
+        type: "Palabra Intrusa",
+        context: "Campo semántico: El cuerpo y la salud",
+        prompt: "Toca la palabra intrusa que NO pertenece al cuidado del cuerpo:",
+        words: [
+          { text: "Vacuna", correct: false },
+          { text: "Jabón", correct: false },
+          { text: "Martillo", correct: true },
+          { text: "Jarabe", correct: false }
+        ],
+        hint: "'Martillo' es una herramienta de carpintería, no un elemento de salud."
+      },
+      {
+        type: "Ortografía Rápida",
+        context: "Uso de B y V",
+        prompt: "Toca la palabra que está escrita CORRECTAMENTE:",
+        words: [
+          { text: "bacuna", correct: false },
+          { text: "vacuna", correct: true },
+          { text: "bacunah", correct: false },
+          { text: "vakuna", correct: false }
+        ],
+        hint: "'Vacuna' se escribe siempre con V inicial."
+      },
+      {
+        type: "Rimas en Pista",
+        context: "Terminación y música del verso",
+        prompt: "Toca la palabra que NO rima con las demás:",
+        words: [
+          { text: "Canción", correct: false },
+          { text: "Corazón", correct: false },
+          { text: "Inyección", correct: false },
+          { text: "Esqueleto", correct: true }
+        ],
+        hint: "'Esqueleto' termina en -eto, mientras que las otras riman en -ón."
+      },
+      {
+        type: "Familia de Palabras",
+        context: "Raíz léxica",
+        prompt: "Toca la palabra que NO es de la familia de 'Diente':",
+        words: [
+          { text: "Dentista", correct: false },
+          { text: "Dientito", correct: false },
+          { text: "Dentífrico", correct: false },
+          { text: "Viento", correct: true }
+        ],
+        hint: "'Viento' es corriente de aire, no proviene de la raíz de diente."
+      },
+      {
+        type: "Sílabas Trabadas",
+        context: "Uso de BR y BL",
+        prompt: "Toca la palabra que está escrita CORRECTAMENTE:",
+        words: [
+          { text: "blazo", correct: false },
+          { text: "brazo", correct: true },
+          { text: "braso", correct: false },
+          { text: "vlazo", correct: false }
+        ],
+        hint: "La extremidad del cuerpo se escribe 'brazo' con BR y Z."
+      },
+      {
+        type: "Palabra Intrusa",
+        context: "El esqueleto humano",
+        prompt: "Toca la palabra intrusa que NO es un hueso:",
+        words: [
+          { text: "Cráneo", correct: false },
+          { text: "Costilla", correct: false },
+          { text: "Zápatilla", correct: true },
+          { text: "Fémur", correct: false }
+        ],
+        hint: "'Zapatilla' es calzado, los demás son huesos del cuerpo."
+      },
+      {
+        type: "Ortografía Rápida",
+        context: "Uso de H muda",
+        prompt: "Toca la palabra que está escrita CORRECTAMENTE:",
+        words: [
+          { text: "ueso", correct: false },
+          { text: "hueso", correct: true },
+          { text: "huezo", correct: false },
+          { text: "uezo", correct: false }
+        ],
+        hint: "'Hueso' se escribe con H inicial antes del diptongo ue y con S."
+      },
+      {
+        type: "Familia de Palabras",
+        context: "Raíz léxica de Salud",
+        prompt: "Toca la palabra que NO pertenece a la familia de 'Salud':",
+        words: [
+          { text: "Saludable", correct: false },
+          { text: "Saludito", correct: false },
+          { text: "Salado", correct: true },
+          { text: "Saludar", correct: false }
+        ],
+        hint: "'Salado' proviene de sal, no de salud."
+      },
+      {
+        type: "Discriminación Rápida",
+        context: "Hábitos invernales",
+        prompt: "Toca la palabra que NO protege contra el frío invernal:",
+        words: [
+          { text: "Bufanda", correct: false },
+          { text: "Suéter", correct: false },
+          { text: "Helado", correct: true },
+          { text: "Chamarra", correct: false }
+        ],
+        hint: "El helado es un alimento frío, los demás son prendas abrigadoras."
+      },
+      {
+        type: "Meta Final",
+        context: "Cuidado colectivo escolar",
+        prompt: "Toca la palabra escrita con MAYÚSCULA inicial correcta para un nombre propio:",
+        words: [
+          { text: "sayula", correct: false },
+          { text: "Sayula", correct: true },
+          { text: "SAYULA", correct: false },
+          { text: "sayuLa", correct: false }
+        ],
+        hint: "Los nombres propios inician con mayúscula y continúan en minúsculas."
+      }
+    ];
+
+    let currentLap = 0;
+    let score = 0;
+    let lapCompleted = false;
+
+    // WEB AUDIO API
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playEngineTurbo() {
+      // Simular acelerón de bólido
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(480, audioCtx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.4);
+    }
+
+    // TTS
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'es-MX';
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function speakChallengePrompt() {
+      const lap = LAPS[currentLap];
+      speakText(`${lap.prompt}`);
+    }
+
+    // ACTUALIZAR POSICIÓN DEL AUTO EN PISTA
+    function updateCarPosition() {
+      const road = document.getElementById('trackRoad');
+      const car = document.getElementById('racingCar');
+      const maxLeft = road.clientWidth - 110;
+      const progress = currentLap / (LAPS.length - 1);
+      const newLeft = 10 + progress * (maxLeft - 10);
+      car.style.left = `${newLeft}px`;
+
+      const distPercent = Math.round((currentLap / LAPS.length) * 100);
+      document.getElementById('trackDistance').textContent = `Distancia: ${distPercent}% hacia la meta`;
+    }
+
+    // CARGAR TRAMO
+    function loadLap(idx) {
+      currentLap = idx;
+      lapCompleted = false;
+      const lap = LAPS[currentLap];
+
+      document.getElementById('lapVal').textContent = `${currentLap + 1} / ${LAPS.length}`;
+      document.getElementById('challengeBadge').textContent = lap.type;
+      document.getElementById('challengeContext').textContent = lap.context;
+      document.getElementById('challengePrompt').textContent = lap.prompt;
+
+      const feedback = document.getElementById('feedbackBox');
+      feedback.textContent = "Lee con atención cada opción";
+      feedback.className = "feedback-box";
+
+      document.getElementById('btnContinuar').style.display = 'none';
+
+      // Renderizar palabras
+      const wordsGrid = document.getElementById('wordsGrid');
+      wordsGrid.innerHTML = '';
+      lap.words.forEach(w => {
+        const btn = document.createElement('button');
+        btn.className = 'word-card-btn';
+        btn.textContent = w.text;
+        btn.onclick = () => handleWordClick(w, btn);
+        wordsGrid.appendChild(btn);
+      });
+
+      updateCarPosition();
+
+      // Audio suave del reto
+      setTimeout(() => {
+        speakChallengePrompt();
+      }, 300);
+    }
+
+    // CLICK EN PALABRA
+    function handleWordClick(wordObj, btnEl) {
+      if (lapCompleted) return;
+
+      const lap = LAPS[currentLap];
+      const feedback = document.getElementById('feedbackBox');
+
+      if (wordObj.correct) {
+        // Acierto
+        lapCompleted = true;
+        score++;
+        document.getElementById('scoreVal').textContent = `${score} / ${LAPS.length}`;
+
+        playEngineTurbo();
+        const car = document.getElementById('racingCar');
+        car.classList.add('turbo-boost');
+        setTimeout(() => car.classList.remove('turbo-boost'), 500);
+
+        btnEl.classList.add('correct');
+        feedback.textContent = `¡Correcto! ${lap.hint}`;
+        feedback.className = "feedback-box correct";
+
+        // Mostrar botón continuar
+        document.getElementById('btnContinuar').style.display = 'inline-flex';
+
+        setTimeout(() => {
+          speakText(`¡Acelerón turbo! ${wordObj.text}`);
+        }, 200);
+      } else {
+        // Error
+        playTone(200, 'sawtooth', 0.25);
+        btnEl.classList.add('wrong');
+        setTimeout(() => btnEl.classList.remove('wrong'), 450);
+
+        feedback.textContent = "¡Cuidado en la curva! Vuelve a leer la palabra con atención.";
+        feedback.className = "feedback-box wrong";
+      }
+    }
+
+    // SIGUIENTE TRAMO
+    function nextLap() {
+      if (currentLap + 1 < LAPS.length) {
+        loadLap(currentLap + 1);
+      } else {
+        // Victoria
+        const road = document.getElementById('trackRoad');
+        const car = document.getElementById('racingCar');
+        car.style.left = `${road.clientWidth - 95}px`;
+        document.getElementById('trackDistance').textContent = "¡100% Cruzaste la Meta!";
+
+        playTone(523.25, 'triangle', 0.15);
+        setTimeout(() => playTone(659.25, 'triangle', 0.15), 150);
+        setTimeout(() => playTone(783.99, 'triangle', 0.35), 300);
+
+        document.getElementById('victoryModal').style.display = 'flex';
+      }
+    }
+
+    function restartRace() {
+      score = 0;
+      document.getElementById('scoreVal').textContent = `0 / ${LAPS.length}`;
+      document.getElementById('victoryModal').style.display = 'none';
+      loadLap(0);
+    }
+
+    // GESTO DOS DEDOS DESLIZAR A LA DERECHA
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let multiTouch = false;
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        multiTouch = true;
+        touchStartX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        touchStartY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      } else {
+        multiTouch = false;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (multiTouch && lapCompleted) {
+        const changeX = e.changedTouches[0].clientX - touchStartX;
+        if (changeX > 60) {
+          nextLap();
+        }
+      }
+      multiTouch = false;
+    }, { passive: true });
+
+    // TECLADO: Barra espaciadora o Enter para avanzar
+    window.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && lapCompleted) {
+        nextLap();
+      }
+    });
+
+    window.addEventListener('resize', updateCarPosition);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadLap(0);
+    });
+  </script>
+</body>
+</html>

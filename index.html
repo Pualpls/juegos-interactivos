@@ -171,6 +171,16 @@
       color: #064e3b;
     }
 
+    .tag-minijuegos {
+      background: #f43f5e;
+      color: #ffffff;
+    }
+
+    .game-card.minijuego-card {
+      border-top: 5px solid #f43f5e;
+      background: linear-gradient(to bottom, #ffffff 0%, #fff1f2 100%);
+    }
+
     /* BOTÓN TOGGLE YOUTUBE */
     .btn-yt-toggle {
       margin-left: auto;
@@ -480,6 +490,7 @@
     <nav class="filter-tabs" aria-label="Filtro de actividades">
       <button class="tab-btn active" onclick="filterCategory('todos')">🎮 Todos los Juegos</button>
       <button class="tab-btn" onclick="filterCategory('permanentes')">⭐ Juegos Permanentes</button>
+      <button class="tab-btn" onclick="filterCategory('minijuegos')">🧪 Minijuegos (En desarrollo)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-3')">❄️ Proyecto 3 (Noviembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-2')">🇲🇽 Proyecto 2 (Octubre)</button>
     </nav>
@@ -542,6 +553,56 @@
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Actividad ➔</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION: MINIJUEGOS DE ALFABETIZACIÓN Y LECTURA -->
+    <section class="section-block" id="sec-minijuegos">
+      <div class="section-title-wrap">
+        <span class="section-icon">🧪</span>
+        <h2 class="section-title">Minijuegos de Alfabetización y Lectura</h2>
+        <span class="section-tag tag-minijuegos">🛠️ En producción · Preliminar</span>
+      </div>
+
+      <div class="games-grid">
+        <!-- 1. CAZADOR DE SÍLABAS -->
+        <a class="game-card minijuego-card" href="permanentes/minijuegos/cazador_silabas/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🛠️ En producción · 12 Palabras</span>
+            <div class="card-icon">🏹</div>
+            <h3 class="card-title">El Cazador de Sílabas</h3>
+            <p class="card-desc">Constructor de palabras ilustradas con burbujas silábicas táctiles, distractores fonológicos y pronunciación de voz.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
+          </div>
+        </a>
+
+        <!-- 2. DETECTIVE DE ENIGMAS -->
+        <a class="game-card minijuego-card" href="permanentes/minijuegos/detective_enigmas/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🛠️ En producción · 8 Enigmas</span>
+            <div class="card-icon">🕵️‍♂️</div>
+            <h3 class="card-title">Detective de Enigmas</h3>
+            <p class="card-desc">Ruleta táctil giratoria de preguntas clave (¿Quién?, ¿Por qué?, ¿Dónde?, ¿Qué hacer?) con microlecturas y pistas textuales.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
+          </div>
+        </a>
+
+        <!-- 3. PISTA DE CARRERAS DE FLUIDEZ -->
+        <a class="game-card minijuego-card" href="permanentes/minijuegos/carreras_fluidez/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🛠️ En producción · 10 Tramos</span>
+            <div class="card-icon">🏎️</div>
+            <h3 class="card-title">Pista de Carreras de Fluidez</h3>
+            <p class="card-desc">Circuito interactivo donde el bólido escolar avanza con retos rápidos de palabra intrusa, ortografía y familias de palabras.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
           </div>
         </a>
       </div>
@@ -820,23 +881,33 @@
       event.target.classList.add('active');
 
       const secPermanentes = document.getElementById('sec-permanentes');
+      const secMinijuegos = document.getElementById('sec-minijuegos');
       const secP3 = document.getElementById('sec-proyecto-3');
       const secP2 = document.getElementById('sec-proyecto-2');
 
       if (cat === 'todos') {
         secPermanentes.style.display = 'block';
+        secMinijuegos.style.display = 'block';
         secP3.style.display = 'block';
         secP2.style.display = 'block';
       } else if (cat === 'permanentes') {
         secPermanentes.style.display = 'block';
+        secMinijuegos.style.display = 'block';
+        secP3.style.display = 'none';
+        secP2.style.display = 'none';
+      } else if (cat === 'minijuegos') {
+        secPermanentes.style.display = 'none';
+        secMinijuegos.style.display = 'block';
         secP3.style.display = 'none';
         secP2.style.display = 'none';
       } else if (cat === 'proyecto-3') {
         secPermanentes.style.display = 'none';
+        secMinijuegos.style.display = 'none';
         secP3.style.display = 'block';
         secP2.style.display = 'none';
       } else if (cat === 'proyecto-2') {
         secPermanentes.style.display = 'none';
+        secMinijuegos.style.display = 'none';
         secP3.style.display = 'none';
         secP2.style.display = 'block';
       }

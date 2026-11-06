@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="carBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="50%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#facc15"/>
+    </linearGradient>
+  </defs>
+  <!-- Sombra inferior -->
+  <ellipse cx="100" cy="105" rx="85" ry="10" fill="#0f172a" opacity="0.3"/>
+  <!-- Alerón trasero -->
+  <rect x="22" y="35" width="8" height="25" fill="#475569"/>
+  <rect x="14" y="30" width="24" height="8" rx="2" fill="#ef4444"/>
+  <!-- Carrocería deportiva -->
+  <path d="M25 75 L35 55 L70 50 L115 50 L155 65 L180 75 L180 88 L25 88 Z" fill="url(#carBody)" stroke="#b91c1c" stroke-width="3"/>
+  <!-- Cabina / Parabrisas con casco del piloto -->
+  <path d="M72 50 L88 32 L128 32 L142 50 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="3"/>
+  <circle cx="106" cy="42" r="11" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+  <rect x="104" y="38" width="12" height="6" rx="2" fill="#0f172a"/>
+  <!-- Número de carreras #3 -->
+  <circle cx="105" cy="72" r="14" fill="#ffffff" stroke="#b91c1c" stroke-width="2"/>
+  <text x="105" y="77" font-family="Fredoka, sans-serif" font-size="15" font-weight="bold" fill="#0f172a" text-anchor="middle">3</text>
+  <!-- Ruedas de carreras grandes -->
+  <g transform="translate(48, 88)">
+    <circle cx="0" cy="0" r="20" fill="#1e293b" stroke="#0f172a" stroke-width="3"/>
+    <circle cx="0" cy="0" r="10" fill="#94a3b8"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
+  </g>
+  <g transform="translate(152, 88)">
+    <circle cx="0" cy="0" r="20" fill="#1e293b" stroke="#0f172a" stroke-width="3"/>
+    <circle cx="0" cy="0" r="10" fill="#94a3b8"/>
+    <circle cx="0" cy="0" r="4" fill="#f8fafc"/>
+  </g>
+  <!-- Tubo de escape con fuego deportivo -->
+  <rect x="15" y="78" width="12" height="6" fill="#64748b"/>
+  <polygon points="15,81 5,75 8,81 2,86 15,84" fill="#f59e0b"/>
+</svg>

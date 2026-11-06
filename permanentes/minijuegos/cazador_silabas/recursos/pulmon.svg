@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" fill="#ffffff" rx="24"/>
+  <!-- Tráquea -->
+  <rect x="94" y="25" width="12" height="45" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+  <line x1="94" y1="35" x2="106" y2="35" stroke="#0284c7" stroke-width="2"/>
+  <line x1="94" y1="45" x2="106" y2="45" stroke="#0284c7" stroke-width="2"/>
+  <line x1="94" y1="55" x2="106" y2="55" stroke="#0284c7" stroke-width="2"/>
+  <!-- Pulmón Izquierdo -->
+  <path d="M92 70 C75 70 50 85 45 115 C40 145 55 168 85 165 C92 165 96 150 96 130 C96 100 95 78 92 70 Z" fill="#f472b6" stroke="#db2777" stroke-width="4"/>
+  <!-- Pulmón Derecho -->
+  <path d="M108 70 C125 70 150 85 155 115 C160 145 145 168 115 165 C108 165 104 150 104 130 C104 100 105 78 108 70 Z" fill="#f472b6" stroke="#db2777" stroke-width="4"/>
+  <!-- Bronquios -->
+  <path d="M100 68 L80 95 M80 95 L68 120 M80 95 L88 125" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M100 68 L120 95 M120 95 L132 120 M120 95 L112 125" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+</svg>

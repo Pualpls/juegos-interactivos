@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" fill="#ffffff" rx="24"/>
+  <g transform="rotate(35 100 100)">
+    <!-- Cabezas Izquierdas -->
+    <circle cx="50" cy="85" r="22" fill="#f8fafc" stroke="#cbd5e1" stroke-width="5"/>
+    <circle cx="50" cy="115" r="22" fill="#f8fafc" stroke="#cbd5e1" stroke-width="5"/>
+    <!-- Cabezas Derechas -->
+    <circle cx="150" cy="85" r="22" fill="#f8fafc" stroke="#cbd5e1" stroke-width="5"/>
+    <circle cx="150" cy="115" r="22" fill="#f8fafc" stroke="#cbd5e1" stroke-width="5"/>
+    <!-- Cuerpo central -->
+    <rect x="52" y="86" width="96" height="28" fill="#f8fafc"/>
+    <line x1="50" y1="86" x2="150" y2="86" stroke="#cbd5e1" stroke-width="5"/>
+    <line x1="50" y1="114" x2="150" y2="114" stroke="#cbd5e1" stroke-width="5"/>
+    <!-- Relleno para tapar uniones -->
+    <circle cx="50" cy="85" r="19" fill="#f8fafc"/>
+    <circle cx="50" cy="115" r="19" fill="#f8fafc"/>
+    <circle cx="150" cy="85" r="19" fill="#f8fafc"/>
+    <circle cx="150" cy="115" r="19" fill="#f8fafc"/>
+    <!-- Brillo -->
+    <ellipse cx="100" cy="94" rx="25" ry="4" fill="#ffffff"/>
+  </g>
+</svg>

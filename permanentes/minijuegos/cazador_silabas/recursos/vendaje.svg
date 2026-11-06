@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <rect width="200" height="200" fill="#ffffff" rx="24"/>
+  <!-- Rollo de venda elástica -->
+  <g transform="translate(15, 20)">
+    <!-- Tira desplegada -->
+    <path d="M70 120 C100 120 125 135 155 130 C162 128 165 118 158 112 C130 95 110 98 70 95 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="4"/>
+    <!-- Rollo cilíndrico -->
+    <ellipse cx="65" cy="100" rx="35" ry="45" fill="#fef9c3" stroke="#ca8a04" stroke-width="4"/>
+    <ellipse cx="65" cy="100" rx="14" ry="22" fill="#ca8a04"/>
+    <ellipse cx="65" cy="100" rx="8" ry="14" fill="#713f12"/>
+    <!-- Curitas cruzadas decorativas -->
+    <g transform="translate(110, 30) rotate(25)">
+      <rect x="0" y="10" width="45" height="18" rx="6" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+      <rect x="15" y="10" width="15" height="18" fill="#ffedd5"/>
+      <circle cx="22" cy="19" r="1.5" fill="#ea580c"/>
+    </g>
+    <g transform="translate(110, 30) rotate(-45)">
+      <rect x="-10" y="10" width="45" height="18" rx="6" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+      <rect x="5" y="10" width="15" height="18" fill="#ffedd5"/>
+      <circle cx="12" cy="19" r="1.5" fill="#ea580c"/>
+    </g>
+  </g>
+</svg>

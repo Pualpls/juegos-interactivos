@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <!-- Asta de la bandera -->
+  <line x1="30" y1="20" x2="30" y2="150" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="30" cy="18" r="6" fill="#f59e0b"/>
+  <!-- Bandera a cuadros ondeante -->
+  <g transform="translate(33, 22)">
+    <!-- Fila 1 -->
+    <rect x="0" y="0" width="18" height="15" fill="#0f172a"/>
+    <rect x="18" y="0" width="18" height="15" fill="#ffffff"/>
+    <rect x="36" y="0" width="18" height="15" fill="#0f172a"/>
+    <rect x="54" y="0" width="18" height="15" fill="#ffffff"/>
+    <rect x="72" y="0" width="18" height="15" fill="#0f172a"/>
+    <!-- Fila 2 -->
+    <rect x="0" y="15" width="18" height="15" fill="#ffffff"/>
+    <rect x="18" y="15" width="18" height="15" fill="#0f172a"/>
+    <rect x="36" y="15" width="18" height="15" fill="#ffffff"/>
+    <rect x="54" y="15" width="18" height="15" fill="#0f172a"/>
+    <rect x="72" y="15" width="18" height="15" fill="#ffffff"/>
+    <!-- Fila 3 -->
+    <rect x="0" y="30" width="18" height="15" fill="#0f172a"/>
+    <rect x="18" y="30" width="18" height="15" fill="#ffffff"/>
+    <rect x="36" y="30" width="18" height="15" fill="#0f172a"/>
+    <rect x="54" y="30" width="18" height="15" fill="#ffffff"/>
+    <rect x="72" y="30" width="18" height="15" fill="#0f172a"/>
+    <!-- Fila 4 -->
+    <rect x="0" y="45" width="18" height="15" fill="#ffffff"/>
+    <rect x="18" y="45" width="18" height="15" fill="#0f172a"/>
+    <rect x="36" y="45" width="18" height="15" fill="#ffffff"/>
+    <rect x="54" y="45" width="18" height="15" fill="#0f172a"/>
+    <rect x="72" y="45" width="18" height="15" fill="#ffffff"/>
+  </g>
+</svg>

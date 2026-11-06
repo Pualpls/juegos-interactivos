@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Detective de Enigmas · Minijuego de Comprensión Lectora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-card: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --amber: #f59e0b;
+      --amber-dark: #d97706;
+      --emerald: #10b981;
+      --purple: #8b5cf6;
+      --rose: #ef4444;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --radius-xl: 1.25rem;
+      --radius-lg: 1rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Lexend', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BANNER DE PRODUCCIÓN */
+    .banner-produccion {
+      background: linear-gradient(90deg, #b91c1c 0%, #ea580c 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      box-shadow: 0 2px 10px rgba(234, 88, 12, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* HEADER */
+    header {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-volver {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-volver:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(-3px);
+    }
+
+    h1 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stat-badge {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #e2e8f0;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%);
+      transition: width 0.35s ease;
+    }
+
+    /* DOS PANELES: LECTURA / RULETA Y PREGUNTAS */
+    .enigma-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.25rem;
+    }
+
+    /* TARJETA DEL CASO / EXPEDIENTE */
+    .case-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      border-left: 8px solid var(--amber);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .case-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      border-bottom: 2px dashed #e2e8f0;
+      padding-bottom: 0.75rem;
+    }
+
+    .case-tag {
+      background: #fef3c7;
+      color: #b45309;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .case-title {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 1.35rem;
+      color: #1e293b;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .case-text {
+      font-size: 1.12rem;
+      line-height: 1.7;
+      color: #334155;
+      background: #f8fafc;
+      padding: 1.2rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid #e2e8f0;
+      min-height: 130px;
+    }
+
+    .case-text mark {
+      background: #fef08a;
+      color: #854d0e;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 700;
+      animation: highlightGlow 1.2s infinite alternate;
+    }
+
+    .case-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f1f5f9;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* BOTÓN CONTINUAR EN LA IZQUIERDA */
+    .btn-continuar {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-lg);
+      border: 2px solid #34d399;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      animation: pulseGreen 1.4s infinite;
+      transition: all 0.2s ease;
+    }
+
+    .btn-continuar:hover {
+      transform: translateY(-2px) scale(1.04);
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    }
+
+    .btn-audio {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.55rem 1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-audio:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* PANEL DERECHO: RULETA Y PREGUNTAS */
+    .interaction-panel {
+      background: var(--bg-surface);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    /* CONTENEDOR DE LA RULETA */
+    .wheel-wrap {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      margin-bottom: 1rem;
+    }
+
+    .wheel-canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: transform 0.1s linear;
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 22px solid #ef4444;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      z-index: 10;
+    }
+
+    .btn-spin {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.6rem 1.4rem;
+      border-radius: 9999px;
+      border: 2px solid #fbbf24;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-spin:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.6);
+    }
+
+    .btn-spin:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    /* ZONA DE PREGUNTA */
+    .question-box {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid #38bdf8;
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .question-type-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      background: #38bdf8;
+      color: #0c4a6e;
+    }
+
+    .question-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .option-btn {
+      background: #1e293b;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-lg);
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .option-btn:hover {
+      background: #334155;
+      border-color: #38bdf8;
+      transform: translateX(3px);
+    }
+
+    .option-btn.correct {
+      background: #064e3b !important;
+      border-color: #10b981 !important;
+      color: #a7f3d0 !important;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+    }
+
+    .option-btn.wrong {
+      background: #7f1d1d !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+      animation: shake 0.4s ease;
+    }
+
+    /* FEEDBACK DE PREGUNTA */
+    .question-feedback {
+      font-size: 0.88rem;
+      font-weight: 600;
+      min-height: 22px;
+      text-align: center;
+    }
+
+    /* MODAL DE VICTORIA */
+    .victory-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .victory-card {
+      background: #1e293b;
+      border: 3px solid #f59e0b;
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .victory-card h2 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .victory-card p {
+      color: #cbd5e1;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .btn-action-primary {
+      background: var(--primary);
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.8); }
+    }
+
+    @keyframes highlightGlow {
+      from { box-shadow: 0 0 4px #facc15; }
+      to { box-shadow: 0 0 12px #facc15; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .enigma-layout { grid-template-columns: 1fr; }
+      .wheel-wrap { width: 160px; height: 160px; }
+      .case-text { min-height: auto; }
+      .btn-continuar { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BANNER DE PRODUCCIÓN -->
+  <div class="banner-produccion">
+    <span>⚠️</span>
+    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · En desarrollo activo · 8 enigmas y ruleta de inferencia</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-wrap">
+      <a href="../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
+      <div>
+        <h1>Detective de Enigmas</h1>
+        <p class="subtitle">Ruleta de Comprensión Lectora e Inferencia · 3° Primaria</p>
+      </div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-badge">
+        <span>🔍 Casos Resueltos:</span>
+        <span id="scoreVal" style="color: #facc15;">0 / 8</span>
+      </div>
+      <div class="stat-badge">
+        <span>📁 Expediente:</span>
+        <span id="progressText" style="color: #38bdf8;">1 / 8</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="progress-bar-wrap">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <div class="enigma-layout">
+      <!-- TARJETA DEL CASO (MICROLECTURA) -->
+      <section class="case-card">
+        <div>
+          <div class="case-header">
+            <span class="case-tag" id="caseCategory">Caso Escolar</span>
+            <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Expediente #<span id="caseNum">1</span></div>
+          </div>
+
+          <h2 class="case-title" id="caseTitle">El Misterio de la Mochila Abierta</h2>
+
+          <!-- Texto de la microlectura con pista -->
+          <div class="case-text" id="caseText">
+            <!-- Dinámico -->
+          </div>
+        </div>
+
+        <div class="case-footer">
+          <!-- Botón continuar en la izquierda prioritario -->
+          <button class="btn-continuar" id="btnContinuar" onclick="nextEnigma()">
+            <span>Continuar Caso ➔</span>
+          </button>
+
+          <button class="btn-audio" onclick="speakCaseText()">
+            <span>🔊</span>
+            <span>Leer Caso</span>
+          </button>
+
+          <span style="font-size: 0.75rem; color: #64748b;">✌️ Desliza 2 dedos a la derecha</span>
+        </div>
+      </section>
+
+      <!-- PANEL DE INTERACCIÓN: RULETA Y PREGUNTA -->
+      <section class="interaction-panel">
+        <!-- Ruleta -->
+        <div class="wheel-wrap">
+          <div class="wheel-pointer"></div>
+          <canvas id="wheelCanvas" width="220" height="220" class="wheel-canvas"></canvas>
+        </div>
+
+        <button class="btn-spin" id="btnSpin" onclick="spinWheel()">
+          <span>🎡</span>
+          <span>¡Girar Ruleta de Pistas!</span>
+        </button>
+
+        <!-- Caja de Pregunta -->
+        <div class="question-box" id="questionBox">
+          <div class="question-header">
+            <span class="question-type-badge" id="qTypeBadge">¿Quién?</span>
+            <h3 class="question-title" id="qTitle">¿Quién es el protagonista?</h3>
+          </div>
+
+          <div class="options-grid" id="optionsGrid">
+            <!-- Dinámico -->
+          </div>
+
+          <div class="question-feedback" id="qFeedback"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL DE VICTORIA -->
+  <div class="victory-modal" id="victoryModal">
+    <div class="victory-card">
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🕵️‍♂️🎉</div>
+      <h2>¡Maestro de la Deducción!</h2>
+      <p>Has resuelto con éxito los 8 casos del expediente escolar. Tu comprensión lectora y capacidad de inferencia son dignas de un verdadero detective.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-action-primary" onclick="restartGame()">🔄 Resolver de Nuevo</button>
+        <a href="../../index.html" class="btn-action-primary" style="background: #10b981;">🏠 Volver al Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BANCO DE 8 ENIGMAS DE COMPRENSIÓN LECTORA
+    const ENIGMAS = [
+      {
+        num: 1,
+        title: "El Termómetro Inquieto",
+        category: "Salud y Ciencias",
+        text: "Al volver del recreo, Sofía sentía las mejillas calientes y le dolía la garganta. El maestro Manuel sacó un termómetro limpio del botiquín escolar y midió su temperatura en la enfermería: marcaba 38.5 grados. De inmediato, el maestro avisó a su mamá y le pidió a Sofía que descansara mientras bebía pequeños sorbos de agua tibia.",
+        clue: "el maestro avisó a su mamá y le pidió a Sofía que descansara",
+        questionType: "¿Por qué?",
+        question: "¿Por qué el maestro Manuel decidió llamar a la mamá de Sofía?",
+        options: [
+          { text: "Porque Sofía tenía fiebre alta y dolor de garganta.", correct: true },
+          { text: "Porque quería felicitarla por terminar su tarea de ciencias.", correct: false },
+          { text: "Porque Sofía se había caído corriendo en el patio.", correct: false }
+        ]
+      },
+      {
+        num: 2,
+        title: "El Secreto del Jabón Espumoso",
+        category: "Hábitos Higiénicos",
+        text: "Antes de comer su refrigerio, Mateo notó que sus manos tenían restos de tierra por haber jugado fútbol en la cancha. En lugar de limpiarse con su suéter, fue directo a los lavamanos de la escuela, frotó sus palmas con jabón durante veinte segundos y enjuagó con abundante agua limpia.",
+        clue: "frotó sus palmas con jabón durante veinte segundos y enjuagó con abundante agua",
+        questionType: "¿Dónde / Cuándo?",
+        question: "¿En qué momento exacto decidió Mateo lavarse las manos con agua y jabón?",
+        options: [
+          { text: "Justo antes de comer su refrigerio, tras jugar en la cancha.", correct: true },
+          { text: "A la hora de la salida mientras esperaba el autobús escolar.", correct: false },
+          { text: "Durante la clase de educación física bajo el sol.", correct: false }
+        ]
+      },
+      {
+        num: 3,
+        title: "El Escudo en el Brazo",
+        category: "Vacunación",
+        text: "La doctora Elena visitó la escuela primaria con una hielera especial llena de vacunas contra la influenza. Al llegar al salón de 3° 'A', explicó a las niñas y niños que la vacuna enseña a nuestro cuerpo a fabricar defensas contra los virus invernales. Gael levantó la manga de su camisa con valentía y recibió su dosis sin derramar una sola lágrima.",
+        clue: "la vacuna enseña a nuestro cuerpo a fabricar defensas contra los virus",
+        questionType: "¿Quién?",
+        question: "¿Quién acudió a la escuela primaria con la hielera para proteger a los alumnos?",
+        options: [
+          { text: "La doctora Elena para aplicar las vacunas contra la influenza.", correct: true },
+          { text: "El conserje de la escuela con material de limpieza.", correct: false },
+          { text: "Un vendedor de nieves del centro de la comunidad.", correct: false }
+        ]
+      },
+      {
+        num: 4,
+        title: "El Hueso que Sonó 'Crack'",
+        category: "El Cuerpo Humano",
+        text: "Durante el partido de básquetbol, Diego saltó muy alto para encestar pero al caer apoyó el pie derecho en el borde de una banca. Sintió un dolor agudo en el tobillo y no pudo ponerse de pie. Sus compañeros no intentaron jalarle la pierna; se quedaron junto a él y llamaron con calma a la maestra de guardia.",
+        clue: "no intentaron jalarle la pierna; se quedaron junto a él y llamaron con calma a la maestra",
+        questionType: "¿Qué debemos hacer?",
+        question: "¿Qué acción correcta realizaron los compañeros de Diego ante la posible lesión?",
+        options: [
+          { text: "No moverlo bruscamente y pedir auxilio inmediato a la maestra.", correct: true },
+          { text: "Obligarlo a seguir jugando para ver si se le pasaba el dolor.", correct: false },
+          { text: "Jalarle el pie con fuerza para intentar acomodarlo ellos mismos.", correct: false }
+        ]
+      },
+      {
+        num: 5,
+        title: "El Tríptico Perdido de la Biblioteca",
+        category: "Lenguajes",
+        text: "En la mesa redonda de la biblioteca escolar, Mariana encontró un folleto doblado en tres partes iguales. Tenía en la portada un título llamativo sobre el cuidado de los libros, y en las páginas interiores incluía reglas claras y dibujos coloridos. Mariana supo al instante que era el tríptico informativo que su equipo debía exponer al día siguiente.",
+        clue: "un folleto doblado en tres partes iguales con portada y reglas interiores",
+        questionType: "¿Por qué?",
+        question: "¿Por qué supo Mariana que ese folleto era el tríptico que su equipo preparó?",
+        options: [
+          { text: "Porque estaba doblado en tres partes y contenía las reglas y dibujos del cuidado de libros.", correct: true },
+          { text: "Porque era un cuento largo de más de cien páginas sin ilustraciones.", correct: false },
+          { text: "Porque era el periódico mural pegado en la entrada de la dirección.", correct: false }
+        ]
+      },
+      {
+        num: 6,
+        title: "El Estornudo con Escudo",
+        category: "Salud y Prevención",
+        text: "En medio de la lectura compartida, a Camila le dio un cosquilleo repentino en la nariz. En una fracción de segundo, en vez de cubrirse con las palmas de las manos, flexionó el codo izquierdo y estornudó contra la parte interna de su brazo. Así evitó que las gotitas de saliva viajaran por el aire hacia sus compañeros.",
+        clue: "flexionó el codo izquierdo y estornudó contra la parte interna de su brazo",
+        questionType: "¿Qué debemos hacer?",
+        question: "¿Cuál fue la técnica de etiqueta respiratoria que aplicó Camila correctamente?",
+        options: [
+          { text: "Estornudo de etiqueta cubriéndose con el ángulo interno del codo.", correct: true },
+          { text: "Estornudar directamente al frente con las manos abiertas.", correct: false },
+          { text: "Aguantarse el estornudo tapándose la nariz con los dedos.", correct: false }
+        ]
+      },
+      {
+        num: 7,
+        title: "El Enigma de la Mochila Pesada",
+        category: "Salud Ocular y Postural",
+        text: "Javier caminaba inclinado hacia adelante todos los días al salir de la escuela porque sentía punzadas en la espalda baja. El maestro de educación física revisó su mochila y descubrió que cargaba juguetes, piedras del patio y libros de días que no le correspondían en el horario escolar. Le aconsejó llevar únicamente los cuadernos del día y ajustar los dos tirantes a la misma altura.",
+        clue: "llevar únicamente los cuadernos del día y ajustar los dos tirantes a la misma altura",
+        questionType: "¿Por qué?",
+        question: "¿Por qué Javier sentía punzadas en la espalda al salir de clases?",
+        options: [
+          { text: "Porque cargaba peso excesivo e innecesario con objetos ajenos al horario.", correct: true },
+          { text: "Porque la mochila estaba completamente vacía y ligera.", correct: false },
+          { text: "Porque usaba zapatos demasiado grandes para caminar.", correct: false }
+        ]
+      },
+      {
+        num: 8,
+        title: "El Rescate de los Libros Mojados",
+        category: "Convivencia Escolar",
+        text: "Una tarde de lluvia intensa, una ventana del aula se abrió por el viento y el agua comenzó a salpicar el estante de cuentos. Al entrar al salón a la mañana siguiente, Luis y Daniela vieron las gotas y, sin esperar a que nadie se los ordenara, tomaron franelas limpias, secaron las pastas con delicadeza y colocaron los libros parados para que se ventilaran.",
+        clue: "secaron las pastas con delicadeza y colocaron los libros parados para que se ventilaran",
+        questionType: "¿Quién?",
+        question: "¿Quiénes actuaron con iniciativa y cuidado para salvar los libros de la lluvia?",
+        options: [
+          { text: "Luis y Daniela secando las pastas y ventilando los libros con cuidado.", correct: true },
+          { text: "El director de la escuela desde su oficina particular.", correct: false },
+          { text: "Los niños de preescolar que iban pasando por el pasillo exterior.", correct: false }
+        ]
+      }
+    ];
+
+    let currentCaseIdx = 0;
+    let score = 0;
+    let isSpinning = false;
+    let caseSolved = false;
+
+    // SECTORES DE LA RULETA
+    const SECTORS = [
+      { label: "¿Quién?", color: "#2563eb", icon: "👤" },
+      { label: "¿Por qué?", color: "#f59e0b", icon: "❓" },
+      { label: "¿Dónde / Cuándo?", color: "#10b981", icon: "📍" },
+      { label: "¿Qué hacer?", color: "#8b5cf6", icon: "💡" }
+    ];
+
+    let currentRotation = 0;
+
+    // DIBUJAR RULETA
+    function drawWheel() {
+      const canvas = document.getElementById('wheelCanvas');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = w / 2 - 8;
+      const numSectors = SECTORS.length;
+      const arc = (2 * Math.PI) / numSectors;
+
+      ctx.clearRect(0, 0, w, h);
+
+      SECTORS.forEach((sec, i) => {
+        const startAngle = i * arc + currentRotation;
+        const endAngle = startAngle + arc;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = sec.color;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+
+        // Texto e ícono
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(startAngle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 13px Fredoka, sans-serif";
+        ctx.fillText(`${sec.icon} ${sec.label}`, r - 15, 5);
+        ctx.restore();
+      });
+
+      // Centro de la ruleta
+      ctx.beginPath();
+      ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+      ctx.fillStyle = "#0f172a";
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#f59e0b";
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 14px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("🔍", cx, cy);
+    }
+
+    // WEB AUDIO API
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.12) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playWheelClick() {
+      playTone(600, 'triangle', 0.04);
+    }
+
+    // TTS
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'es-MX';
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function speakCaseText() {
+      const c = ENIGMAS[currentCaseIdx];
+      speakText(`${c.title}. ${c.text}`);
+    }
+
+    // CARGAR ENIGMA
+    function loadEnigma(idx) {
+      currentCaseIdx = idx;
+      caseSolved = false;
+      const c = ENIGMAS[currentCaseIdx];
+
+      document.getElementById('caseNum').textContent = c.num;
+      document.getElementById('caseCategory').textContent = c.category;
+      document.getElementById('caseTitle').textContent = c.title;
+      document.getElementById('caseText').innerHTML = c.text;
+
+      document.getElementById('progressText').textContent = `${currentCaseIdx + 1} / ${ENIGMAS.length}`;
+      document.getElementById('progressBar').style.width = `${(currentCaseIdx / ENIGMAS.length) * 100}%`;
+
+      document.getElementById('questionBox').style.display = 'none';
+      document.getElementById('btnContinuar').style.display = 'none';
+      document.getElementById('btnSpin').disabled = false;
+      document.getElementById('btnSpin').innerHTML = '<span>🎡</span><span>¡Girar Ruleta de Pistas!</span>';
+
+      drawWheel();
+    }
+
+    // GIRAR RULETA
+    function spinWheel() {
+      if (isSpinning || caseSolved) return;
+      isSpinning = true;
+      document.getElementById('btnSpin').disabled = true;
+      document.getElementById('questionBox').style.display = 'none';
+
+      // Ángulo aleatorio + varias vueltas completas
+      const extraSpins = 4 + Math.random() * 3;
+      const targetRotation = currentRotation + extraSpins * 2 * Math.PI;
+      const duration = 2400; // ms
+      const startTime = performance.now();
+      const initialRotation = currentRotation;
+
+      function animateSpin(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Easing desaceleración cúbica
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentRotation = initialRotation + (targetRotation - initialRotation) * easeOut;
+
+        drawWheel();
+
+        if (Math.floor(currentRotation * 5) % 3 === 0) {
+          playWheelClick();
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animateSpin);
+        } else {
+          isSpinning = false;
+          onSpinFinished();
+        }
+      }
+
+      requestAnimationFrame(animateSpin);
+    }
+
+    // AL TERMINAR EL GIRO: MOSTRAR PREGUNTA
+    function onSpinFinished() {
+      playTone(587.33, 'sine', 0.2);
+      const c = ENIGMAS[currentCaseIdx];
+
+      const qBox = document.getElementById('questionBox');
+      const qBadge = document.getElementById('qTypeBadge');
+      const qTitle = document.getElementById('qTitle');
+      const optionsGrid = document.getElementById('optionsGrid');
+      const qFeedback = document.getElementById('qFeedback');
+
+      qBadge.textContent = c.questionType;
+      qTitle.textContent = c.question;
+      qFeedback.textContent = "Selecciona la deducción respaldada por el texto:";
+      qFeedback.style.color = "#94a3b8";
+
+      optionsGrid.innerHTML = '';
+      c.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<span style="color:#f59e0b;">●</span> <span>${opt.text}</span>`;
+        btn.onclick = () => handleOptionClick(opt, btn);
+        optionsGrid.appendChild(btn);
+      });
+
+      qBox.style.display = 'flex';
+
+      // Anunciar por voz la pregunta
+      setTimeout(() => {
+        speakText(c.question);
+      }, 250);
+    }
+
+    // SELECCIONAR OPCIÓN
+    function handleOptionClick(option, btnEl) {
+      if (caseSolved) return;
+
+      const c = ENIGMAS[currentCaseIdx];
+      const qFeedback = document.getElementById('qFeedback');
+
+      if (option.correct) {
+        // Correcto
+        caseSolved = true;
+        score++;
+        document.getElementById('scoreVal').textContent = `${score} / ${ENIGMAS.length}`;
+
+        playTone(523.25, 'triangle', 0.15);
+        setTimeout(() => playTone(659.25, 'triangle', 0.15), 120);
+        setTimeout(() => playTone(783.99, 'triangle', 0.3), 240);
+
+        btnEl.classList.add('correct');
+        qFeedback.textContent = "¡Correcto! Pista identificada con precisión.";
+        qFeedback.style.color = "#34d399";
+
+        // Resaltar la pista en el texto
+        const fullText = c.text;
+        const highlighted = fullText.replace(c.clue, `<mark>${c.clue}</mark>`);
+        document.getElementById('caseText').innerHTML = highlighted;
+
+        // Mostrar botón continuar
+        document.getElementById('btnContinuar').style.display = 'inline-flex';
+        document.getElementById('btnSpin').innerHTML = '<span>✅</span><span>Caso Resuelto</span>';
+
+        setTimeout(() => {
+          speakText("¡Excelente deducción detective! La pista ha sido confirmada.");
+        }, 300);
+      } else {
+        // Error
+        playTone(220, 'sawtooth', 0.25);
+        btnEl.classList.add('wrong');
+        setTimeout(() => btnEl.classList.remove('wrong'), 500);
+
+        qFeedback.textContent = "Revisa de nuevo la lectura del caso para encontrar la causa exacta.";
+        qFeedback.style.color = "#f87171";
+      }
+    }
+
+    // SIGUIENTE CASO
+    function nextEnigma() {
+      if (currentCaseIdx + 1 < ENIGMAS.length) {
+        loadEnigma(currentCaseIdx + 1);
+      } else {
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('victoryModal').style.display = 'flex';
+      }
+    }
+
+    function restartGame() {
+      score = 0;
+      document.getElementById('scoreVal').textContent = `0 / ${ENIGMAS.length}`;
+      document.getElementById('victoryModal').style.display = 'none';
+      loadEnigma(0);
+    }
+
+    // GESTO DOS DEDOS DESLIZAR A LA DERECHA
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let multiTouch = false;
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        multiTouch = true;
+        touchStartX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        touchStartY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      } else {
+        multiTouch = false;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (multiTouch && caseSolved) {
+        const changeX = e.changedTouches[0].clientX - touchStartX;
+        if (changeX > 60) {
+          nextEnigma();
+        }
+      }
+      multiTouch = false;
+    }, { passive: true });
+
+    // TECLADO: Barra espaciadora o Enter para avanzar
+    window.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && caseSolved) {
+        nextEnigma();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadEnigma(0);
+    });
+  </script>
+</body>
+</html>
