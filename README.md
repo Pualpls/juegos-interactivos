@@ -34,3 +34,4 @@ El portal interactivo completo está disponible en GitHub Pages:
 * **Tecnología:** HTML5, Vanilla JavaScript y CSS moderno.
 * **100% Offline y Estático:** Sin backend, sin dependencias externas pesadas, sin rastreadores ni publicidad.
 * **Optimizado para Pantalla Táctil:** Diseñado para pantalla táctil Computerland del aula.
+

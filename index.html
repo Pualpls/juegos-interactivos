@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Portal de Juegos Interactivos · 3° Primaria</title>
+  <title>Portal de Juegos y Recursos Interactivos · 3° Primaria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
@@ -131,8 +131,9 @@
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 1.25rem;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.6rem;
       border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
     }
 
     .section-icon {
@@ -170,6 +171,144 @@
       color: #064e3b;
     }
 
+    /* BOTÓN TOGGLE YOUTUBE */
+    .btn-yt-toggle {
+      margin-left: auto;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.42rem 0.95rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-yt-toggle:hover {
+      background: rgba(239, 68, 68, 0.35);
+      border-color: #ef4444;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .btn-yt-toggle.open {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+    }
+
+    .yt-svg {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .yt-arrow {
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+
+    /* DRAWER DE VIDEOS SUGERIDOS */
+    .yt-drawer {
+      background: rgba(15, 23, 42, 0.92);
+      border: 2px solid rgba(239, 68, 68, 0.35);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.25s ease;
+    }
+
+    .yt-drawer-header {
+      margin-bottom: 1rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .yt-videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 0.95rem;
+    }
+
+    .yt-video-card {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .yt-video-card:hover {
+      background: #334155;
+      border-color: #ef4444;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .yt-card-icon {
+      font-size: 1.85rem;
+      flex-shrink: 0;
+    }
+
+    .yt-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .yt-card-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .yt-card-channel {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .yt-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 3px;
+    }
+
+    .tag-ciencias { background: #dbeafe; color: #1e40af; }
+    .tag-mate { background: #fef3c7; color: #92400e; }
+    .tag-humano { background: #d1fae5; color: #065f46; }
+    .tag-lenguajes { background: #fce7f3; color: #9d174d; }
+    .tag-civica { background: #ede9fe; color: #5b21b6; }
+
+    .yt-card-btn {
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #ef4444;
+      color: #ffffff;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    /* GRID DE JUEGOS */
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -313,11 +452,17 @@
       margin-top: 2rem;
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 640px) {
       h1 { font-size: 1.7rem; }
       .games-grid { grid-template-columns: 1fr; }
       .filter-tabs { gap: 0.5rem; }
       .tab-btn { font-size: 0.88rem; padding: 0.6rem 1rem; }
+      .btn-yt-toggle { width: 100%; justify-content: center; margin-left: 0; }
     }
   </style>
 </head>
@@ -408,6 +553,103 @@
         <span class="section-icon">❄️</span>
         <h2 class="section-title">Proyecto 3: Salud, Autocuidado y Cuerpo Humano</h2>
         <span class="section-tag tag-project3">Noviembre 2026</span>
+        <button class="btn-yt-toggle" onclick="toggleYtDrawer('p3')" title="Ver videos educativos sugeridos para este proyecto">
+          <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Videos Sugeridos</span>
+          <span class="yt-arrow" id="arrow-p3">▼</span>
+        </button>
+      </div>
+
+      <!-- DRAWER DE VIDEOS SUGERIDOS PROYECTO 3 -->
+      <div class="yt-drawer" id="yt-drawer-p3" style="display: none;">
+        <div class="yt-drawer-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.4rem;">🎬</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff;">Cápsulas y Videos Sugeridos · Proyecto 3</h3>
+              <p style="font-size: 0.8rem; color: #94a3b8;">Contenido oficial verificado para proyectar en el aula y complementar las sesiones formativas</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="yt-videos-grid">
+          <!-- Video 1 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Smile+and+Learn+Espanol+Las+vacunas+y+como+nos+protegen" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">💉</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-ciencias">Ciencias · Salud</span>
+              <h4 class="yt-card-title">Las vacunas y cómo nos protegen</h4>
+              <p class="yt-card-channel">Smile and Learn · Sesión 2 (PP1)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 2 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Aula365+El+sistema+locomotor+para+ninos" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🦴</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-ciencias">Anatomía · Biomecánica</span>
+              <h4 class="yt-card-title">El sistema locomotor para niños</h4>
+              <p class="yt-card-channel">Aula365 · Sesión 4 (PP2)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 3 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Smile+and+Learn+Toma+de+decisiones+responsables+para+ninos" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">⚖️</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-humano">De lo Humano y lo Comunitario</span>
+              <h4 class="yt-card-title">Toma de decisiones responsables</h4>
+              <p class="yt-card-channel">Smile and Learn · Sesión 6 (PP3)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 4 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Daniel+Carreon+Suma+llevando+super+facil" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">➕</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-mate">Pensamiento Matemático</span>
+              <h4 class="yt-card-title">Suma llevando súper fácil</h4>
+              <p class="yt-card-channel">Daniel Carreón · Sesión PM 5</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 5 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Daniel+Carreon+Resta+prestando+super+facil" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">➖</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-mate">Pensamiento Matemático</span>
+              <h4 class="yt-card-title">Resta prestando súper fácil</h4>
+              <p class="yt-card-channel">Daniel Carreón · Sesión PM 8</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 6 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=El+triptico+y+sus+partes+para+ninos" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">📄</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-lenguajes">Lenguajes · Textos Expositivos</span>
+              <h4 class="yt-card-title">El tríptico y sus partes para niños</h4>
+              <p class="yt-card-channel">Cápsula Didáctica · Sesión 9 (PP4)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <!-- Video 7 -->
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=La+Revolucion+Mexicana+para+ninos+primaria" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🇲🇽</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-civica">Fecha Cívica Oficial</span>
+              <h4 class="yt-card-title">116° Aniversario de la Revolución Mexicana</h4>
+              <p class="yt-card-channel">Cápsula Histórica · 20 de Noviembre</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+        </div>
       </div>
 
       <div class="games-grid">
@@ -430,7 +672,7 @@
             <span class="card-badge badge-blue">De lo Humano y lo Comunitario</span>
             <div class="card-icon">🚦</div>
             <h3 class="card-title">Semáforo de Decisiones y Riesgos</h3>
-            <p class="card-desc">Clasificación interactiva en semáforo (Verde, Amarillo, Rojo) ante situaciones de riesgo y autocuidado en la escuela y el hogar.</p>
+            <p class="card-desc">Clasificación interactiva en semáforo (Verde, Amarillo, Rojo) con 20 situaciones reales, justificaciones educativas y orden aleatorio.</p>
           </div>
           <div class="card-action">
             <span class="action-btn">Abrir Semáforo ➔</span>
@@ -458,6 +700,56 @@
         <span class="section-icon">🇲🇽</span>
         <h2 class="section-title">Proyecto 2: Comunidad, Tradiciones y Pluriculturalidad</h2>
         <span class="section-tag tag-project2">Octubre 2026</span>
+        <button class="btn-yt-toggle" onclick="toggleYtDrawer('p2')" title="Ver videos sugeridos para este proyecto">
+          <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Videos Sugeridos</span>
+          <span class="yt-arrow" id="arrow-p2">▼</span>
+        </button>
+      </div>
+
+      <!-- DRAWER DE VIDEOS SUGERIDOS PROYECTO 2 -->
+      <div class="yt-drawer" id="yt-drawer-p2" style="display: none;">
+        <div class="yt-drawer-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.4rem;">🎬</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff;">Cápsulas y Videos Sugeridos · Proyecto 2</h3>
+              <p style="font-size: 0.8rem; color: #94a3b8;">Tradiciones, identidad pluricultural y nutrición</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="yt-videos-grid">
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Pueblos+indigenas+de+Mexico+para+ninos" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🗺️</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-civica">Sociedades y Culturas</span>
+              <h4 class="yt-card-title">Pueblos originarios y lenguas de México</h4>
+              <p class="yt-card-channel">Cápsula Pluricultural</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Como+escribir+una+calaverita+literaria+primaria" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">💀</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-lenguajes">Lenguajes · Poesía</span>
+              <h4 class="yt-card-title">Cómo escribir una calaverita literaria</h4>
+              <p class="yt-card-channel">Taller de Rimas y Tradición</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Tradicion+del+Dia+de+Muertos+en+Mexico+primaria" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🕯️</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-civica">Tradiciones Mexicanas</span>
+              <h4 class="yt-card-title">El significado del Día de Muertos</h4>
+              <p class="yt-card-channel">Cápsula Cultural</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+        </div>
       </div>
 
       <div class="games-grid">
@@ -524,7 +816,6 @@
 
   <script>
     function filterCategory(cat) {
-      // Actualizar botones
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
 
@@ -548,6 +839,24 @@
         secPermanentes.style.display = 'none';
         secP3.style.display = 'none';
         secP2.style.display = 'block';
+      }
+    }
+
+    function toggleYtDrawer(proj) {
+      const drawer = document.getElementById(`yt-drawer-${proj}`);
+      const arrow = document.getElementById(`arrow-${proj}`);
+      const btn = event.currentTarget;
+      if (!drawer) return;
+
+      const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
+      if (isHidden) {
+        drawer.style.display = 'block';
+        if (arrow) arrow.textContent = '▲';
+        if (btn) btn.classList.add('open');
+      } else {
+        drawer.style.display = 'none';
+        if (arrow) arrow.textContent = '▼';
+        if (btn) btn.classList.remove('open');
       }
     }
   </script>

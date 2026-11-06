@@ -459,6 +459,61 @@
       animation: modalSlide 0.25s ease;
     }
 
+    .setup-modal-compact {
+      max-width: 820px !important;
+      padding: 16px 22px !important;
+      max-height: 94vh !important;
+      overflow-y: hidden !important;
+    }
+    .compact-modal-header {
+      margin-bottom: 10px !important;
+      padding-bottom: 6px !important;
+    }
+    .compact-modal-header h3 {
+      font-size: 1.15rem !important;
+    }
+    .setup-grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .compact-group {
+      margin-bottom: 10px !important;
+    }
+    .compact-group .config-label {
+      font-size: 0.82rem !important;
+      margin-bottom: 4px !important;
+    }
+    .compact-options {
+      gap: 6px !important;
+    }
+    .compact-options .option-btn {
+      padding: 6px 8px !important;
+      border-radius: 10px !important;
+    }
+    .compact-options .opt-icon {
+      font-size: 1.1rem !important;
+      margin-bottom: 2px !important;
+    }
+    .compact-options .opt-title {
+      font-size: 0.85rem !important;
+    }
+    .compact-options.four-col {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    .compact-input {
+      padding: 8px 12px !important;
+      font-size: 0.88rem !important;
+    }
+    @media (max-width: 700px) {
+      .setup-modal-compact {
+        overflow-y: auto !important;
+      }
+      .setup-grid-layout {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     @keyframes modalSlide {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -1808,7 +1863,10 @@
             </p>
           </div>
           <div class="leaderboard-actions">
-            <button class="btn-action-sec" id="btnCloudConfig" style="background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; font-weight: 700;" title="Configurar conexión con Google Sheets o Netlify">
+            <button class="btn-action-sec" id="btnImportScoresModal" style="background: #fef3c7; border-color: #fde047; color: #92400e; font-weight: 700;" title="Restaurar o importar puntajes desde Netlify">
+              📥 Migrar / Importar Puntajes
+            </button>
+            <button class="btn-action-sec" id="btnCloudConfig" style="background: #e0f2fe; border-color: #7dd3fc; color: #0369a1; font-weight: 700;" title="Configurar conexión con Google Sheets (PIN 1702)">
               🌐 Conectar Nube (Google Sheets)
             </button>
             <button class="btn-action-sec" id="btnShareScoresLink" title="Copiar enlace con los puntajes para abrir en otro dispositivo">
@@ -1827,7 +1885,7 @@
             <span id="cloudStatusText" style="color: var(--text-muted); font-weight: 600;">Modo Local: los puntajes se guardan en la memoria de este navegador.</span>
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
-            <button class="btn-action-sec" id="btnSyncCloudNow" style="padding: 4px 12px; font-size: 0.78rem; display: none; background: #eff6ff; color: #1d4ed8; font-weight: 700;">🔄 Enviar a Google Sheets</button>
+            <button class="btn-action-sec" id="btnSyncCloudNow" style="padding: 4px 12px; font-size: 0.78rem; display: none; background: #eff6ff; color: #1d4ed8; font-weight: 700;">🔒 Enviar a Google Sheets (PIN 1702)</button>
           </div>
         </div>
 
@@ -1882,8 +1940,8 @@
 
   <!-- SETUP / CONFIG MODAL -->
   <div class="modal-overlay" id="setupModal">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content setup-modal-compact">
+      <div class="modal-header compact-modal-header">
         <div>
           <h3 id="modalFichaTitle">Configurar Lectura - Ficha 1</h3>
           <p id="modalFichaSubtitle">Palabras bisílabas con sílabas directas (CV-CV)</p>
@@ -1891,163 +1949,128 @@
         <button class="btn-close" id="btnCloseModal">✕</button>
       </div>
 
-      <!-- TIPO DE PARTICIPANTE -->
-      <div class="config-group">
-        <label class="config-label">👥 Modalidad de Participación:</label>
-        <div class="options-grid">
-          <div class="option-btn selected" data-parttype="individual" id="optPartIndividual">
-            <span class="opt-icon">👤</span>
-            <span class="opt-title">Alumno</span>
-            <span class="opt-sub">Individual</span>
-          </div>
-          <div class="option-btn" data-parttype="team" id="optPartTeam">
-            <span class="opt-icon">👥</span>
-            <span class="opt-title">Equipo</span>
-            <span class="opt-sub">Competencia Grupal</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- NOMBRE DEL ALUMNO O EQUIPO -->
-      <div class="config-group">
-        <label class="config-label" for="txtStudentName" id="lblParticipantName">👤 Nombre del Alumno:</label>
-        <input type="text" class="input-field" id="txtStudentName" placeholder="Ej. Daniel / Naomi (o Los calabaza 🎃)" autocomplete="off">
-        <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;" id="quickTeamSuggestions">
-          <!-- Suggestion pills for teams -->
-        </div>
-      </div>
-
-      <!-- ORDEN DE LAS PALABRAS -->
-      <div class="config-group">
-        <label class="config-label">🔀 Orden de Presentación de las Palabras:</label>
-        <div class="config-helper">Para evitar memorización espacial y evaluar decodificación real:</div>
-        <div class="options-grid">
-          <div class="option-btn selected" data-order="random" id="optOrderRandom">
-            <span class="opt-icon">🎲</span>
-            <span class="opt-title">Aleatorio</span>
-            <span class="opt-sub">Mezcla las palabras</span>
-          </div>
-          <div class="option-btn" data-order="original" id="optOrderOriginal">
-            <span class="opt-icon">📋</span>
-            <span class="opt-title">Original</span>
-            <span class="opt-sub">Orden de la ficha</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- MODO DE AVANCE -->
-      <div class="config-group">
-        <label class="config-label">🕹️ Modo de Avance:</label>
-        <div class="config-helper">Control manual del docente o ritmo automático programado:</div>
-        <div class="options-grid">
-          <div class="option-btn selected" data-advance="manual" id="optAdvanceManual">
-            <span class="opt-icon">🖱️</span>
-            <span class="opt-title">Manual</span>
-            <span class="opt-sub">Docente / Teclado</span>
-          </div>
-          <div class="option-btn" data-advance="auto" id="optAdvanceAuto">
-            <span class="opt-icon">⏱️</span>
-            <span class="opt-title">Automático</span>
-            <span class="opt-sub">Taquistoscopio</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Velocidad por palabra / oración (solo si es Auto) -->
-      <div class="config-group" id="autoSpeedGroup" style="display: none;">
-        <label class="config-label" id="autoSpeedLabel">⚡ Tiempo por palabra (Modo Automático):</label>
-        <div class="config-helper" id="autoSpeedHelper" style="display: none; margin-bottom: 8px;"></div>
-        <div class="options-grid" id="autoSpeedGrid">
-          <div class="option-btn" data-speed="3.0">
-            <span class="opt-icon">🐢</span>
-            <span class="opt-title">3.0 seg</span>
-            <span class="opt-sub">Muy fácil</span>
-          </div>
-          <div class="option-btn selected" data-speed="2.0">
-            <span class="opt-icon">🎯</span>
-            <span class="opt-title">2.0 seg</span>
-            <span class="opt-sub">Meta oficial</span>
-          </div>
-          <div class="option-btn" data-speed="1.5">
-            <span class="opt-icon">⚡</span>
-            <span class="opt-title">1.5 seg</span>
-            <span class="opt-sub">Rápido</span>
-          </div>
-          <div class="option-btn" data-speed="1.0">
-            <span class="opt-icon">🚀</span>
-            <span class="opt-title">1.0 seg</span>
-            <span class="opt-sub">Experto</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Límite de Tiempo Global de la Sesión -->
-      <div class="config-group">
-        <label class="config-label">⏳ Tiempo Límite de la Prueba:</label>
-        <div class="config-helper">El objetivo reglamentario es leer las 60 palabras en 2 minutos o menos:</div>
-        <div class="options-grid">
-          <div class="option-btn data-timelimit" data-timelimit="180">
-            <span class="opt-icon">🌱</span>
-            <span class="opt-title">3:00 min</span>
-            <span class="opt-sub">Apoyo</span>
-          </div>
-          <div class="option-btn selected" data-timelimit="120">
-            <span class="opt-icon">⭐</span>
-            <span class="opt-title">2:00 min</span>
-            <span class="opt-sub">Meta Oficial</span>
-          </div>
-          <div class="option-btn" data-timelimit="90">
-            <span class="opt-icon">🔥</span>
-            <span class="opt-title">1:30 min</span>
-            <span class="opt-sub">Desafío</span>
-          </div>
-          <div class="option-btn" data-timelimit="0">
-            <span class="opt-icon">♾️</span>
-            <span class="opt-title">Libre</span>
-            <span class="opt-sub">Sin límite</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Opciones de Sonido y Ritmo -->
-      <div class="config-group">
-        <label class="config-label">🔊 Efectos de Sonido:</label>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <label class="toggle-row">
-            <div class="toggle-info">
-              <span class="toggle-title">⏰ Sonido de Tic-Tac (segundo a segundo)</span>
-              <span class="toggle-desc">Ayuda a sentir el paso del tiempo en tiempo real con ritmo constante</span>
+      <div class="setup-grid-layout">
+        <!-- COLUMNA IZQUIERDA: PARTICIPANTE Y FORMATO -->
+        <div class="setup-col">
+          <!-- TIPO DE PARTICIPANTE -->
+          <div class="config-group compact-group">
+            <label class="config-label">👥 Modalidad de Participación:</label>
+            <div class="options-grid compact-options">
+              <div class="option-btn selected" data-parttype="individual" id="optPartIndividual">
+                <span class="opt-icon">👤</span>
+                <span class="opt-title">Alumno</span>
+              </div>
+              <div class="option-btn" data-parttype="team" id="optPartTeam">
+                <span class="opt-icon">👥</span>
+                <span class="opt-title">Equipo</span>
+              </div>
             </div>
-            <input type="checkbox" id="chkTickSound" checked>
-          </label>
-          <label class="toggle-row">
-            <div class="toggle-info">
-              <span class="toggle-title">🔔 Clic al cambiar de palabra</span>
-              <span class="toggle-desc">Confirma auditivamente cuando se valida y avanza a la siguiente palabra</span>
+          </div>
+
+          <!-- NOMBRE DEL ALUMNO O EQUIPO -->
+          <div class="config-group compact-group">
+            <label class="config-label" for="txtStudentName" id="lblParticipantName">👤 Nombre del Alumno:</label>
+            <input type="text" class="input-field compact-input" id="txtStudentName" placeholder="Ej. Daniel / Naomi (o Los calabaza 🎃)" autocomplete="off">
+            <div style="display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;" id="quickTeamSuggestions"></div>
+          </div>
+
+          <!-- FORMATO DE VISUALIZACIÓN -->
+          <div class="config-group compact-group">
+            <label class="config-label">🎴 Formato de Visualización:</label>
+            <div class="options-grid compact-options">
+              <div class="option-btn selected" data-viewformat="card">
+                <span class="opt-icon">🎴</span>
+                <span class="opt-title">Tarjeta Gigante</span>
+              </div>
+              <div class="option-btn" data-viewformat="grid">
+                <span class="opt-icon">📑</span>
+                <span class="opt-title">Ficha Completa</span>
+              </div>
             </div>
-            <input type="checkbox" id="chkClickSound" checked>
-          </label>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: TIEMPO, AVANCE Y SONIDOS -->
+        <div class="setup-col">
+          <!-- LÍMITE DE TIEMPO -->
+          <div class="config-group compact-group">
+            <label class="config-label">⏳ Tiempo Límite:</label>
+            <div class="options-grid compact-options four-col">
+              <div class="option-btn data-timelimit" data-timelimit="180">
+                <span class="opt-icon">🌱</span>
+                <span class="opt-title">3 min</span>
+              </div>
+              <div class="option-btn selected" data-timelimit="120">
+                <span class="opt-icon">⭐</span>
+                <span class="opt-title">2 min</span>
+              </div>
+              <div class="option-btn" data-timelimit="90">
+                <span class="opt-icon">🔥</span>
+                <span class="opt-title">1:30</span>
+              </div>
+              <div class="option-btn" data-timelimit="0">
+                <span class="opt-icon">♾️</span>
+                <span class="opt-title">Libre</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODO DE AVANCE Y ORDEN -->
+          <div class="config-group compact-group">
+            <label class="config-label">🕹️ Avance y Orden:</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+              <div class="options-grid compact-options">
+                <div class="option-btn selected" data-advance="manual" id="optAdvanceManual" style="padding: 6px 4px;">
+                  <span class="opt-icon">🖱️</span>
+                  <span class="opt-title" style="font-size: 0.8rem;">Manual</span>
+                </div>
+                <div class="option-btn" data-advance="auto" id="optAdvanceAuto" style="padding: 6px 4px;">
+                  <span class="opt-icon">⏱️</span>
+                  <span class="opt-title" style="font-size: 0.8rem;">Auto</span>
+                </div>
+              </div>
+              <div class="options-grid compact-options">
+                <div class="option-btn selected" data-order="random" id="optOrderRandom" style="padding: 6px 4px;">
+                  <span class="opt-icon">🎲</span>
+                  <span class="opt-title" style="font-size: 0.8rem;">Azar</span>
+                </div>
+                <div class="option-btn" data-order="original" id="optOrderOriginal" style="padding: 6px 4px;">
+                  <span class="opt-icon">📋</span>
+                  <span class="opt-title" style="font-size: 0.8rem;">Ficha</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VELOCIDAD AUTO (OCULTA POR DEFECTO) -->
+          <div class="config-group compact-group" id="autoSpeedGroup" style="display: none;">
+            <label class="config-label" id="autoSpeedLabel">⚡ Segundos por palabra:</label>
+            <div class="options-grid compact-options four-col" id="autoSpeedGrid">
+              <div class="option-btn" data-speed="3.0"><span class="opt-title">3s</span></div>
+              <div class="option-btn selected" data-speed="2.0"><span class="opt-title">2s</span></div>
+              <div class="option-btn" data-speed="1.5"><span class="opt-title">1.5s</span></div>
+              <div class="option-btn" data-speed="1.0"><span class="opt-title">1s</span></div>
+            </div>
+          </div>
+
+          <!-- EFECTOS DE SONIDO -->
+          <div class="config-group compact-group" style="margin-bottom: 0;">
+            <label class="config-label">🔊 Efectos de Sonido:</label>
+            <div style="display: flex; gap: 14px; font-size: 0.84rem; background: #f8fafc; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);">
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="chkTickSound" checked style="accent-color: var(--primary);">
+                <span>⏰ Tic-Tac</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="chkClickSound" checked style="accent-color: var(--primary);">
+                <span>🔔 Clic palabra</span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Modo de Presentación Visual -->
-      <div class="config-group">
-        <label class="config-label">🎴 Formato de Visualización:</label>
-        <div class="options-grid">
-          <div class="option-btn selected" data-viewformat="card">
-            <span class="opt-icon">🎴</span>
-            <span class="opt-title">Tarjeta Gigante</span>
-            <span class="opt-sub">1 palabra a la vez</span>
-          </div>
-          <div class="option-btn" data-viewformat="grid">
-            <span class="opt-icon">📑</span>
-            <span class="opt-title">Ficha Completa</span>
-            <span class="opt-sub">Cuadrícula guiada</span>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-start-game" id="btnLaunchGame">
+      <button class="btn-start-game compact-start-btn" id="btnLaunchGame" style="margin-top: 14px; padding: 12px; font-size: 1.05rem;">
         ▶️ Comenzar Lectura
       </button>
     </div>
@@ -2892,6 +2915,9 @@
       const btnShareLink = document.getElementById('btnShareScoresLink');
       if (btnShareLink) btnShareLink.addEventListener('click', shareScoresLink);
 
+      const btnImportModal = document.getElementById('btnImportScoresModal');
+      if (btnImportModal) btnImportModal.addEventListener('click', openImportScoresModal);
+
       // Keyboard
       window.addEventListener('keydown', (e) => {
         if (!state.isPlaying) return;
@@ -3537,6 +3563,11 @@
     // ==========================================
 
     function openCloudModal() {
+      const pin = prompt('🔒 Ingresa el PIN docente (1702) para acceder a la configuración de Google Sheets:');
+      if (pin !== '1702') {
+        if (pin !== null) alert('❌ PIN incorrecto. Acceso reservado para el docente.');
+        return;
+      }
       const txt = document.getElementById('txtCloudSyncUrl');
       const chk = document.getElementById('chkAutoCloudSync');
       if (txt) txt.value = state.cloudSyncUrl || '';
@@ -3646,6 +3677,11 @@
         alert('No hay puntajes en el historial local para enviar.');
         return;
       }
+      const pin = prompt('🔒 Ingresa el PIN docente (1702) para enviar los registros a Google Sheets:');
+      if (pin !== '1702') {
+        if (pin !== null) alert('❌ PIN incorrecto.');
+        return;
+      }
       if (!confirm(`Se enviarán ${state.scores.length} registros a tu Google Sheet. ¿Continuar?`)) return;
 
       let sentCount = 0;
@@ -3658,6 +3694,42 @@
           }
         }, idx * 300);
       });
+    }
+
+    function openImportScoresModal() {
+      const input = prompt('📋 Pega aquí el enlace de compartir o el código copiado desde Netlify:\n\n(Tip: En tu página anterior de Netlify entra a "Puntajes", presiona "Compartir Enlace" y pega ese texto aquí para restaurar todo):');
+      if (!input) return;
+      importScoresFromText(input.trim());
+    }
+
+    function importScoresFromText(text) {
+      try {
+        let jsonStr = text;
+        if (text.includes('scores=')) {
+          const b64 = text.split('scores=')[1].split('&')[0];
+          jsonStr = decodeURIComponent(atob(b64).split('').map(c => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+        }
+        const imported = JSON.parse(jsonStr);
+        if (Array.isArray(imported) && imported.length > 0) {
+          const existingIds = new Set(state.scores.map(s => s.id));
+          let added = 0;
+          imported.forEach(item => {
+            if (!existingIds.has(item.id)) {
+              state.scores.push(item);
+              added++;
+            }
+          });
+          saveScoresToStorage();
+          renderLeaderboardTable();
+          alert(`✅ ¡Éxito! Se restauraron e integraron ${added} registros a tu tabla de puntajes en GitHub Pages.`);
+        } else {
+          alert('⚠️ No se encontraron registros válidos en el texto ingresado.');
+        }
+      } catch(e) {
+        alert('❌ Error al procesar los puntajes: ' + e.message);
+      }
     }
 
     function copyScriptCode() {
