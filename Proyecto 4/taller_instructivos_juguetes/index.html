@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Taller de Juguetes · 3° "A"</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #ffffff;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f59e0b;
+      --emerald: #16a34a;
+      --rose: #e11d48;
+      --purple: #7c3aed;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Lexend', 'Fredoka', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      color: #fff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.9rem;
+      background: rgba(245, 158, 11, 0.2);
+      border: 2px solid #f59e0b;
+      border-radius: 0.75rem;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .student-pill {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #e0f2fe;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .score-pill {
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.75rem 1rem 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      padding: 0.55rem 1.2rem;
+      border-radius: 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #93c5fd;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.75rem 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .workspace {
+      background: var(--bg-panel);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.35rem;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      border: 3px solid #e2e8f0;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px dashed #cbd5e1;
+    }
+
+    .panel-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge-step {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    /* MODO 1: ESTRUCTURA DEL INSTRUCTIVO */
+    .instructivo-sheet {
+      background: #ffffff;
+      border: 2px solid #94a3b8;
+      border-radius: 0.85rem;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    .slot-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0.65rem;
+      align-items: center;
+      padding: 0.55rem 0.75rem;
+      border-radius: 0.75rem;
+      border: 2px dashed #94a3b8;
+      background: #f1f5f9;
+      min-height: 62px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .slot-row.active-slot {
+      border-color: var(--primary);
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .slot-row.filled-slot {
+      border-style: solid;
+      border-color: var(--emerald);
+      background: #f0fdf4;
+    }
+
+    .slot-label {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #334155;
+      background: #e2e8f0;
+      padding: 0.35rem 0.55rem;
+      border-radius: 0.5rem;
+      text-align: center;
+    }
+
+    .slot-content {
+      font-size: 0.92rem;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .option-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-left: 6px solid var(--primary);
+      border-radius: 0.8rem;
+      padding: 0.75rem 0.95rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.18s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .option-card:hover {
+      transform: translateX(4px);
+      border-color: var(--primary);
+      background: #f8fafc;
+    }
+
+    .option-card.used {
+      opacity: 0.35;
+      pointer-events: none;
+      border-left-color: #94a3b8;
+    }
+
+    /* MODO 2: VERBOS EN INFINITIVO E IMPERATIVO */
+    .sentence-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.9rem;
+      padding: 1.1rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.15rem;
+      line-height: 1.55;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .blank-pill {
+      display: inline-block;
+      min-width: 130px;
+      padding: 0.15rem 0.65rem;
+      margin: 0 0.25rem;
+      border-bottom: 3px solid var(--primary);
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-weight: 800;
+      border-radius: 0.45rem;
+      text-align: center;
+    }
+
+    .verb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.7rem;
+    }
+
+    .verb-btn {
+      background: #ffffff;
+      border: 2px solid #94a3b8;
+      border-radius: 0.85rem;
+      padding: 0.8rem 0.9rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+    }
+
+    .verb-btn:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .verb-btn.correct {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #14532d;
+    }
+
+    .verb-btn.wrong {
+      background: #ffe4e6;
+      border-color: #e11d48;
+      color: #881337;
+    }
+
+    /* MODO 3: ORDENADOR DE PASOS */
+    .step-item {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.8rem;
+      padding: 0.65rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.94rem;
+      font-weight: 600;
+      transition: all 0.18s;
+    }
+
+    .step-item:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feedback-bar {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.8rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border: 2px solid #7dd3fc;
+    }
+
+    .feedback-bar.ok {
+      background: #dcfce7;
+      color: #14532d;
+      border-color: #4ade80;
+    }
+
+    .feedback-bar.err {
+      background: #ffe4e6;
+      color: #881337;
+      border-color: #fda4af;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.55rem 1.15rem;
+      border-radius: 0.65rem;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-dark);
+    }
+
+    .red-cap {
+      color: #dc2626;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">📋</div>
+      <div class="brand-text">
+        <h1>Taller de Juguetes <span style="background:#22c55e; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:999px; vertical-align:middle;">v4.2</span></h1>
+        <p>Instructivos y Materiales · 3° "A"</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <div class="student-pill" onclick="nextStudent()" title="Toca para elegir otro alumno participante">
+        <span>👧👦 Turno:</span>
+        <span id="currentStudent">Keyla</span>
+        <span>🔄</span>
+      </div>
+      <div class="score-pill">Aciertos: <span id="scoreVal">0</span></div>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" id="tab1" onclick="setMode(1)">🧩 1. Partes del Instructivo</button>
+    <button class="tab-btn" id="tab2" onclick="setMode(2)">✍️ 2. Verbos en Infinitivo e Imperativo</button>
+    <button class="tab-btn" id="tab3" onclick="setMode(3)">🔢 3. Ordenar el Procedimiento</button>
+  </nav>
+
+  <main>
+    <div class="workspace" id="gameArea"></div>
+  </main>
+
+  <script>
+    window.addEventListener('contextmenu', e => e.preventDefault(), true);
+    document.addEventListener('contextmenu', e => e.preventDefault(), true);
+
+    const students = [
+      "Keyla", "Jarol", "Daniel", "José Manuel", "Alexander",
+      "Jesús", "Adriel", "Gael", "Naomi", "Brianna",
+      "Dalary", "Estrella", "Yamileth", "Aurora"
+    ];
+    let studentIdx = 0;
+    let score = 0;
+    let currentMode = 1;
+
+    function playTone(freq = 520, duration = 0.14, type = 'sine') {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function nextStudent() {
+      studentIdx = (studentIdx + 1) % students.length;
+      document.getElementById('currentStudent').textContent = students[studentIdx];
+      playTone(600, 0.08);
+    }
+
+    function addScore(pts) {
+      score += pts;
+      document.getElementById('scoreVal').textContent = score;
+    }
+
+    // DATOS MODO 1: ESTRUCTURA DE UN INSTRUCTIVO
+    const m1Challenges = [
+      {
+        name: "Avioncito con broche de madera y abatelenguas",
+        img: "juguete_avioncito.png",
+        slots: [
+          { key: "titulo", label: "1. Título", expected: "Avioncito con broche de madera y abatelenguas." },
+          { key: "materiales", label: "2. Materiales", expected: "• 1 broche de madera para ropa, 3 abatelenguas, pegamento blanco y regla." },
+          { key: "procedimiento", label: "3. Procedimiento", expected: "1. Medir el centro de dos abatelenguas. 2. Pegar las alas arriba y abajo del broche. 3. Colocar la hélice trasera." },
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_avioncito.png' alt='Avioncito' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Esquema visual de los abatelenguas cruzados sobre el broche de madera.</span></div>" }
+        ]
+      },
+      {
+        name: "Barquito de papiroflexia con papel reciclado",
+        img: "juguete_barquito.png",
+        slots: [
+          { key: "titulo", label: "1. Título", expected: "Barquito de papel reciclado (papiroflexia)." },
+          { key: "materiales", label: "2. Materiales", expected: "• 1 hoja de papel reciclado tamaño carta, regla de 30 cm y colores." },
+          { key: "procedimiento", label: "3. Procedimiento", expected: "1. Doblar la hoja a la mitad. 2. Formar dos triángulos superiores. 3. Subir las pestañas y abrir el casco del barco." },
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_barquito.png' alt='Barquito' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Ilustración con los pliegues simétricos de la hoja para formar el barquito.</span></div>" }
+        ]
+      },
+      {
+        name: "Piñata tradicional con engrudo y periódico",
+        img: "juguete_pinata.png",
+        slots: [
+          { key: "titulo", label: "1. Título", expected: "Piñata tradicional de estrella con engrudo." },
+          { key: "materiales", label: "2. Materiales", expected: "• 1 globo grande, tiras de papel periódico, engrudo, cartoncillo, papel de China y mecate." },
+          { key: "procedimiento", label: "3. Procedimiento", expected: "1. Inflar el globo. 2. Pegar tres capas de tiras con engrudo. 3. Dejar secar al sol y unir los conos decorados." },
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_pinata.png' alt='Piñata' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Ilustración de la esfera con sus conos de cartoncillo y flecos de colores.</span></div>" }
+        ]
+      }
+    ];
+    let m1Idx = 0;
+    let selectedSlotKey = "titulo";
+    let m1Filled = {};
+
+    // DATOS MODO 2: VERBOS EN INFINITIVO / IMPERATIVO Y CONECTORES
+    const m2Questions = [
+      {
+        context: "Instructivo del avioncito reciclado (Verbo en infinitivo terminado en -ir):",
+        img: "instrumento_regla.png",
+        sentence: "Paso 1: <span class='blank-pill' id='m2Blank'>¿ ?</span> con la regla de 30 cm la mitad exacta del abatelenguas antes de aplicar el pegamento.",
+        options: ["Medir", "Medimos", "Midieron", "Midiendo"],
+        answer: "Medir",
+        explain: "Los verbos en infinitivo terminan en -ar, -er, -ir. 'Medir' termina en -ir."
+      },
+      {
+        context: "Instructivo de papiroflexia (Verbo en infinitivo terminado en -ar frente a verbos conjugados):",
+        img: "accion_doblar.png",
+        sentence: "Paso 2: <span class='blank-pill' id='m2Blank'>¿ ?</span> la hoja por la mitad marcando bien el pliegue con los dedos.",
+        options: ["Doblar", "Doblé", "Doblaron", "Doblábamos"],
+        answer: "Doblar",
+        explain: "'Doblar' es un verbo en infinitivo (-ar) que sirve como instrucción general, a diferencia de 'Doblé' o 'Doblaron' que están conjugados en pasado."
+      },
+      {
+        context: "Instructivo de la piñata tradicional (Conector de orden cronológico inicial):",
+        img: "material_globo.png",
+        sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> infla el globo a buen tamaño y hazle un nudo firme; después cubre su superficie con tiras y engrudo.",
+        options: ["Primero,", "Finalmente,", "Después,", "Al final,"],
+        answer: "Primero,",
+        explain: "'Primero,' es el conector secuencial que indica el paso inicial antes de 'después cubre...'."
+      },
+      {
+        context: "Uso de la coma en lista de materiales:",
+        img: "material_periodico.png",
+        sentence: "Materiales necesarios: papel periódico<span class='blank-pill' id='m2Blank'>¿ ?</span> engrudo, cartoncillo, tijeras y papel de China.",
+        options: [", (coma)", ": (dos puntos)", ". (punto)", "y (conjunción)"],
+        answer: ", (coma)",
+        explain: "La coma separa los elementos intermedios de una enumeración o lista de materiales sin repetir 'y'."
+      },
+      {
+        context: "Instructivo en modo imperativo (orden directa):",
+        img: "accion_pegar.png",
+        sentence: "Paso 4: <span class='blank-pill' id='m2Blank'>¿ ?</span> los conos de cartoncillo alrededor de la piñata seca y decóralos con tiras de papel.",
+        options: ["Pega", "Pegaron", "Pegando", "Pegábamos"],
+        answer: "Pega",
+        explain: "'Pega' está en modo imperativo, dando una indicación directa al lector del instructivo."
+      },
+      {
+        context: "Conector para el último paso del instructivo:",
+        img: "juguete_pinata.png",
+        sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> amarra el mecate resistente en la parte superior y cuelga la piñata para la posada.",
+        options: ["Finalmente,", "Antes de,", "Primero,", "Mientras,"],
+        answer: "Finalmente,",
+        explain: "'Finalmente,' señala el último paso cronológico del instructivo."
+      }
+    ];
+    let m2Idx = 0;
+
+    // DATOS MODO 3: ORDENAR PASOS
+    const m3Challenges = [
+      {
+        title: "Armar el avioncito con broche de madera y abatelenguas",
+        img: "juguete_avioncito.png",
+        steps: [
+          "Reunir 1 broche de madera para ropa, 3 abatelenguas, regla y pegamento blanco.",
+          "Medir con la regla la mitad de dos abatelenguas y marcar el centro con lápiz.",
+          "Pegar un abatelenguas arriba y otro abajo en la punta del broche para formar las alas.",
+          "Pegar medio abatelenguas en la parte trasera del broche para formar el alerón de la cola.",
+          "Dejar secar el pegamento durante cinco minutos y probar el equilibrio del avioncito."
+        ]
+      },
+      {
+        title: "Elaborar una figura de papiroflexia con hoja reciclada",
+        img: "juguete_barquito.png",
+        steps: [
+          "Colocar una hoja de papel reciclado sobre la mesa y medir sus lados con la regla.",
+          "Doblar la hoja por la mitad a lo largo y desdoblar para marcar la línea guía del centro.",
+          "Llevar las dos esquinas superiores hacia la línea central formando un triángulo simétrico.",
+          "Doblar hacia arriba las pestañas inferiores de ambos lados y asegurar las esquinas.",
+          "Abrir con cuidado el centro de la figura y jalar las puntas laterales para formar el barquito."
+        ]
+      },
+      {
+        title: "Construir la piñata tradicional en equipo",
+        img: "juguete_pinata.png",
+        steps: [
+          "Inflar el globo resistente y preparar las tiras de papel periódico de 25 cm con el engrudo.",
+          "Pegar tres capas cruzadas de tiras de periódico con engrudo dejando libre la boquilla.",
+          "Colgar el globo cubierto al sol durante dos días hasta que el cascarón quede duro y seco.",
+          "Formar los conos con cartoncillo reciclado y adherirlos con tiras de periódico alrededor.",
+          "Vestir la piñata con flecos de papel de China de colores y amarrar la cuerda de soporte."
+        ]
+      }
+    ];
+    let m3Idx = 0;
+    let m3Shuffled = [];
+    let m3UserOrder = [];
+
+    function setMode(m) {
+      currentMode = m;
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i + 1 === m);
+      });
+      if (m === 1) initMode1();
+      if (m === 2) initMode2();
+      if (m === 3) initMode3();
+    }
+
+    function initMode1() {
+      m1Filled = {};
+      selectedSlotKey = "titulo";
+      renderMode1();
+    }
+
+    function renderMode1() {
+      const ch = m1Challenges[m1Idx];
+      const area = document.getElementById('gameArea');
+      const shuffledOptions = [...ch.slots].sort((a, b) => a.expected.localeCompare(b.expected));
+
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">
+                <img src="img/${ch.img}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;padding:2px;">
+                <span>📄 Hoja del Instructivo (${m1Idx + 1}/${m1Challenges.length})</span>
+              </div>
+              <span class="badge-step">${ch.name}</span>
+            </div>
+            <div class="instructivo-sheet">
+              ${ch.slots.map(s => {
+                const val = m1Filled[s.key];
+                const isSel = selectedSlotKey === s.key && !val;
+                return `
+                  <div class="slot-row ${isSel ? 'active-slot' : ''} ${val ? 'filled-slot' : ''}" onclick="selectSlot('${s.key}')">
+                    <div class="slot-label">${s.label}</div>
+                    <div class="slot-content">${val ? val : '<span style="color:#64748b;">Toca aquí y luego elige su contenido a la derecha ➔</span>'}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          <div class="feedback-bar" id="m1Feedback">
+            <span>Selecciona una sección del instructivo y toca la tarjeta que le corresponde.</span>
+            <button class="btn-action" onclick="nextM1()">Siguiente Instructivo ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🗂️ Tarjetas Desordenadas</div>
+              <span class="badge-step">Toca la tarjeta correcta</span>
+            </div>
+            <div class="options-list">
+              ${shuffledOptions.map(opt => {
+                const isUsed = Object.values(m1Filled).includes(opt.expected);
+                return `
+                  <div class="option-card ${isUsed ? 'used' : ''}" onclick="tryFillSlot('${opt.key}')">
+                    ${opt.expected}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectSlot(key) {
+      if (m1Filled[key]) return;
+      selectedSlotKey = key;
+      renderMode1();
+    }
+
+    function tryFillSlot(optKey) {
+      const ch = m1Challenges[m1Idx];
+      const slotObj = ch.slots.find(s => s.key === selectedSlotKey);
+      const fb = document.getElementById('m1Feedback');
+      if (!slotObj) return;
+
+      if (optKey === selectedSlotKey) {
+        m1Filled[selectedSlotKey] = slotObj.expected;
+        addScore(10);
+        playTone(680, 0.16);
+        const nextEmpty = ch.slots.find(s => !m1Filled[s.key]);
+        if (nextEmpty) selectedSlotKey = nextEmpty.key;
+        renderMode1();
+        const fbNew = document.getElementById('m1Feedback');
+        if (Object.keys(m1Filled).length === ch.slots.length) {
+          fbNew.className = "feedback-bar ok";
+          fbNew.querySelector('span').textContent = "¡Instructivo completo! Todas sus partes están en el orden correcto.";
+          nextStudent();
+        } else {
+          fbNew.className = "feedback-bar ok";
+          fbNew.querySelector('span').textContent = "¡Correcto! Continúa con la siguiente sección del instructivo.";
+        }
+      } else {
+        playTone(240, 0.2, 'sawtooth');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Observa con cuidado: ¿esa tarjeta es el título, los materiales, el procedimiento o el diagrama?";
+      }
+    }
+
+    function nextM1() {
+      m1Idx = (m1Idx + 1) % m1Challenges.length;
+      initMode1();
+    }
+
+    function initMode2() {
+      renderMode2();
+    }
+
+    function renderMode2() {
+      const q = m2Questions[m2Idx];
+      const area = document.getElementById('gameArea');
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">✍️ Verbos, Conectores y Comas (${m2Idx + 1}/${m2Questions.length})</div>
+              <span class="badge-step">Lenguajes · 3° "A"</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:0.65rem;">
+              <img src="img/${q.img}" alt="" style="width:68px;height:68px;object-fit:contain;border-radius:10px;border:2px solid #cbd5e1;background:#fff;padding:4px;flex-shrink:0;">
+              <p style="font-size:0.95rem; color:#475569; font-weight:700;">${q.context}</p>
+            </div>
+            <div class="sentence-card">${q.sentence}</div>
+          </div>
+          <div class="feedback-bar" id="m2Feedback">
+            <span>Elige la opción que completa correctamente la instrucción.</span>
+            <button class="btn-action" onclick="nextM2()">Siguiente Reto ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🎯 Opciones Disponibles</div>
+              <span class="badge-step">Infinitivo (-ar, -er, -ir) e Imperativo</span>
+            </div>
+            <div class="verb-grid">
+              ${q.options.map(opt => `
+                <button class="verb-btn" onclick="checkM2(this, '${opt}')">${opt}</button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkM2(btn, chosen) {
+      const q = m2Questions[m2Idx];
+      const fb = document.getElementById('m2Feedback');
+      if (chosen === q.answer) {
+        btn.classList.add('correct');
+        document.getElementById('m2Blank').textContent = chosen;
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = "¡Muy bien! " + q.explain;
+        addScore(10);
+        playTone(720, 0.16);
+        nextStudent();
+      } else {
+        btn.classList.add('wrong');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Revisa la terminación del verbo o el signo que pide el instructivo.";
+        playTone(230, 0.2, 'sawtooth');
+      }
+    }
+
+    function nextM2() {
+      m2Idx = (m2Idx + 1) % m2Questions.length;
+      renderMode2();
+    }
+
+    function initMode3() {
+      const ch = m3Challenges[m3Idx];
+      m3UserOrder = [];
+      m3Shuffled = ch.steps.map((text, idx) => ({ text, origIdx: idx }))
+        .sort((a, b) => a.text.localeCompare(b.text));
+      renderMode3();
+    }
+
+    function renderMode3() {
+      const ch = m3Challenges[m3Idx];
+      const area = document.getElementById('gameArea');
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">
+                <img src="img/${ch.img}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;padding:2px;">
+                <span>🔢 Pasos Ordenados (Del 1 al 5)</span>
+              </div>
+              <span class="badge-step">${ch.title}</span>
+            </div>
+            <div class="options-list">
+              ${[0, 1, 2, 3, 4].map(i => {
+                const step = m3UserOrder[i];
+                return `
+                  <div class="step-item" style="background:${step ? '#f0fdf4' : '#f1f5f9'}; border-color:${step ? '#16a34a' : '#cbd5e1'};">
+                    <div class="step-num">${i + 1}</div>
+                    <div>${step ? step.text : '<span style="color:#64748b;">Esperando el paso ' + (i + 1) + '...</span>'}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          <div class="feedback-bar" id="m3Feedback">
+            <span>Toca a la derecha el paso número ${m3UserOrder.length + 1} en orden cronológico.</span>
+            <button class="btn-action" onclick="nextM3()">Cambiar Juguete / Piñata ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🔀 Pasos por Ordenar</div>
+              <span class="badge-step">Toca en secuencia 1 → 5</span>
+            </div>
+            <div class="options-list">
+              ${m3Shuffled.map((item, idx) => {
+                const alreadyPicked = m3UserOrder.some(u => u.origIdx === item.origIdx);
+                return `
+                  <div class="option-card ${alreadyPicked ? 'used' : ''}" onclick="pickStepM3(${item.origIdx})">
+                    ${item.text}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function pickStepM3(origIdx) {
+      const expectedIdx = m3UserOrder.length;
+      const ch = m3Challenges[m3Idx];
+      const fb = document.getElementById('m3Feedback');
+      if (origIdx === expectedIdx) {
+        m3UserOrder.push({ origIdx, text: ch.steps[origIdx] });
+        addScore(10);
+        playTone(660, 0.14);
+        renderMode3();
+        const fbNew = document.getElementById('m3Feedback');
+        if (m3UserOrder.length === 5) {
+          fbNew.className = "feedback-bar ok";
+          fbNew.querySelector('span').textContent = "¡Procedimiento ordenado del 1 al 5 con total claridad!";
+          nextStudent();
+        } else {
+          fbNew.className = "feedback-bar ok";
+          fbNew.querySelector('span').textContent = "¡Paso correcto! Ahora busca el paso " + (m3UserOrder.length + 1) + ".";
+        }
+      } else {
+        playTone(230, 0.2, 'sawtooth');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Piensa qué debemos hacer primero antes de ese paso.";
+      }
+    }
+
+    function nextM3() {
+      m3Idx = (m3Idx + 1) % m3Challenges.length;
+      initMode3();
+    }
+
+    initMode1();
+  </script>
+</body>
+</html>
+

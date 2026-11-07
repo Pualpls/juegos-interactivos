@@ -291,16 +291,27 @@
       position: absolute;
       top: 10px;
       height: 70px;
-      border-radius: 8px;
       cursor: grab;
       touch-action: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-      border: 2px solid rgba(0,0,0,0.15);
-      transition: box-shadow 0.2s;
+      padding: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .draggable-object:active {
+      cursor: grabbing;
+    }
+
+    .draggable-object img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
     }
 
     .draggable-object:active {
@@ -971,7 +982,11 @@
       if (n === 1) renderStation1();
       if (n === 2) renderStation2();
       if (n === 3) renderStation3();
-      if (n === 4) renderStation4();
+      if (n === 4) {
+        shuffleChallenges();
+        s4Idx = 0;
+        renderStation4();
+      }
     }
 
     /* ========================================================
@@ -979,46 +994,39 @@
        ======================================================== */
     const s1Objects = [
       {
-        name: "Lápiz escolar de madera",
-        img: "objeto_lapiz.png",
+        name: "Lápiz escolar",
+        img: "regla_lapiz.png",
         cm: 14,
         options: [14, 11, 16, 12],
         note: "El lápiz mide 14 cm de la punta al borrador."
       },
       {
         name: "Abatelenguas de madera",
-        img: "objeto_abatelenguas.png",
+        img: "regla_abatelenguas.png",
         cm: 15,
         options: [15, 13, 17, 10],
         note: "El abatelenguas mide 15 cm de largo."
       },
       {
-        name: "Crayola de cera azul",
-        img: "objeto_crayola.png",
+        name: "Crayola azul",
+        img: "regla_crayon.png",
         cm: 8,
         options: [8, 6, 10, 5],
         note: "La crayola mide 8 cm de largo."
       },
       {
-        name: "Goma de borrar escolar",
-        img: "objeto_borrador.png",
+        name: "Goma de borrar",
+        img: "regla_goma.png",
         cm: 5,
         options: [5, 4, 7, 3],
-        note: "El borrador mide 5 cm de longitud."
+        note: "La goma mide 5 cm de longitud."
       },
       {
-        name: "Barquito de papel (Papiroflexia)",
-        img: "juguete_barquito.png",
-        cm: 10,
-        options: [10, 8, 12, 14],
-        note: "El barquito mide 10 cm de proa a popa."
-      },
-      {
-        name: "Avioncito con broche y abatelenguas",
-        img: "juguete_avioncito.png",
-        cm: 12,
-        options: [12, 9, 15, 14],
-        note: "Las alas del avioncito miden 12 cm de envergadura."
+        name: "Clip metálico",
+        img: "regla_clip.png",
+        cm: 3,
+        options: [3, 2, 5, 4],
+        note: "El clip mide 3 cm de longitud."
       }
     ];
 
@@ -1043,8 +1051,7 @@
         <div class="ruler-container">
           <div class="ruler-bench" id="rulerBench">
             <div class="object-placement-zone" id="placementZone">
-              <div class="draggable-object" id="dragObj" 
-                   style="left: ${s1ObjectOffsetPx}px; width: ${objWidthPx}px; background: rgba(248,250,252,0.92);">
+              <div class="draggable-object" id="dragObj" style="left: ${s1ObjectOffsetPx}px; width: ${objWidthPx}px;">
                 <div class="start-edge-marker">◀ Extremo Inicial</div>
                 <img src="img/${item.img}" alt="${item.name}">
                 <div class="end-edge-marker">Fin ▶</div>
@@ -1242,11 +1249,11 @@
         tip: "250 gramos es la cuarta parte de un kilogramo."
       },
       {
-        name: "Olla de barro con ponche caliente",
+        name: "Ponche artesanal de granada de Sayula",
         img: "posada_ponche.png",
-        targetGrams: 1500,
-        display: "1.5 kilogramos (1,500 g)",
-        tip: "1,500 gramos = 1 kg (1,000 g) + 500 g."
+        targetGrams: 1000,
+        display: "1 kilogramo (1,000 g)",
+        tip: "1 kilogramo (1,000 g) es la masa tradicional de una botella de ponche de Sayula."
       }
     ];
 
@@ -1368,9 +1375,10 @@
           box.innerHTML = `<span style="font-size:0.75rem;color:#64748b;font-weight:700;">(Platillo vacío)</span>`;
         } else {
           box.innerHTML = placedWeights.map((w, idx) => `
-            <div class="placed-weight-mini" onclick="removeWeight(${idx})" title="Toca para quitar">
-              <span>${w.label}</span>
-              <span style="font-size:0.6rem;color:#ef4444;">✕</span>
+            <div class="placed-weight-mini" onclick="removeWeight(${idx})" title="Toca para quitar" style="display:flex; align-items:center; gap:4px; padding:2px 6px; background:#fff; border:1.5px solid #cbd5e1; border-radius:6px; cursor:pointer;">
+              <img src="img/${w.img}" alt="${w.label}" style="height:26px; width:auto; object-fit:contain;">
+              <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">${w.label}</span>
+              <span style="font-size:0.6rem; color:#ef4444; font-weight:900;">✕</span>
             </div>
           `).join('');
         }
@@ -1520,8 +1528,8 @@
           <div class="property-card" style="border-color:#34d399;">
             <img src="img/instrumento_regla.png" alt="Regla">
             <div>
-              <h3>📏 LONGITUD (Tamaño)</h3>
-              <p>Mide distancias y dimensiones. Unidades: <strong>centímetros (cm)</strong>, <strong>metros (m)</strong> y <strong>kilómetros (km)</strong>.</p>
+              <h3>📏 LONGITUD</h3>
+              <p>Mide dimensiones, alturas y distancias. Unidades: <strong>centímetros (cm)</strong>, <strong>metros (m)</strong> y <strong>kilómetros (km)</strong> con regla o metro.</p>
             </div>
           </div>
         </div>
@@ -1587,68 +1595,75 @@
     /* ========================================================
        DATOS Y LOGICA: ESTACION 4 (¿cm, m o km? UNIDAD OPTIMA)
        ======================================================== */
-    const s4Challenges = [
+    let s4Challenges = [
       {
-        target: "El largo de un lápiz escolar de grafito",
-        context: "Útil escolar pequeño de estuche",
+        target: "El largo de un lápiz",
+        context: "Útil escolar de estuche",
         unit: "cm",
         exp: "Los lápices miden entre 10 y 18 centímetros (cm); la regla es el instrumento ideal."
       },
       {
-        target: "El ancho del pizarrón blanco del salón de clases",
-        context: "Mobiliario escolar grande del aula",
+        target: "El ancho del pizarrón",
+        context: "Mobiliario escolar del aula",
         unit: "m",
         exp: "Un pizarrón mide entre 2 y 3 metros (m); usar una regla de 30 cm sería impráctico."
       },
       {
-        target: "La distancia por carretera de Sayula a Guadalajara",
-        context: "Trayecto interurbano entre ciudades de Jalisco",
+        target: "La distancia en carretera de Sayula a Guadalajara",
+        context: "Trayecto entre ciudades",
         unit: "km",
         exp: "Las distancias entre ciudades y carreteras se miden en kilómetros (km); son más de 100 km."
       },
       {
-        target: "El grosor de una moneda de 10 pesos",
+        target: "El grosor de una moneda",
         context: "Objeto pequeño de bolsillo",
         unit: "cm",
         exp: "Una moneda mide unos cuantos milímetros o menos de medio centímetro (cm)."
       },
       {
-        target: "La altura de la puerta del salón de 3° grado",
-        context: "Elemento arquitectónico del aula",
+        target: "La altura de la puerta del salón",
+        context: "Elemento del aula",
         unit: "m",
         exp: "Las puertas escolares miden aproximadamente 2 metros (m) de altura."
       },
       {
-        target: "El largo de la cancha deportiva escolar",
-        context: "Espacio exterior para recreo y educación física",
+        target: "El largo de la cancha escolar",
+        context: "Espacio para educación física",
         unit: "m",
         exp: "Las canchas deportivas miden entre 20 y 28 metros (m) de largo."
       },
       {
-        target: "La longitud de un abatelenguas de madera",
-        context: "Material escolar para manualidades y juguetes",
+        target: "El largo de un abatelenguas",
+        context: "Material para manualidades",
         unit: "cm",
         exp: "Un abatelenguas mide exactamente 15 centímetros (cm)."
       },
       {
-        target: "La distancia de viaje desde Sayula hasta la playa de Manzanillo",
-        context: "Viaje largo por autopista en autobús o automóvil",
+        target: "La distancia de viaje a la playa",
+        context: "Viaje por autopista",
         unit: "km",
         exp: "Para grandes distancias geográficas y viajes por carretera usamos kilómetros (km)."
       },
       {
-        target: "La estatura de un alumno o alumna de 3° de primaria",
-        context: "Medición antropométrica de crecimiento",
+        target: "La estatura de un alumno o alumna",
+        context: "Medición de crecimiento",
         unit: "m",
         exp: "En 3° grado la estatura promedio se expresa en metros y centímetros (ejemplo: 1.25 m)."
       },
       {
-        target: "El tamaño de una goma de borrar escolar",
+        target: "El largo de una goma de borrar",
         context: "Útil escolar pequeño",
         unit: "cm",
         exp: "Las gomas de borrar miden entre 4 y 6 centímetros (cm)."
       }
     ];
+
+    function shuffleChallenges() {
+      for (let i = s4Challenges.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [s4Challenges[i], s4Challenges[j]] = [s4Challenges[j], s4Challenges[i]];
+      }
+    }
 
     let s4Idx = 0;
 
@@ -1672,22 +1687,22 @@
             <p class="unit-challenge-context">Elige la unidad más práctica de las tres opciones siguientes:</p>
           </div>
 
-          <!-- Las 3 Opciones Obligatorias: cm, m o km -->
+          <!-- Las 3 Opciones Obligatorias: cm, m o km con Ilustraciones IA -->
           <div class="unit-buttons-grid" id="unitGrid">
             <button class="unit-choice-btn" onclick="checkUnitChoice('cm', this)">
-              <span class="u-icon">📏</span>
+              <img src="img/unit_cm.png" alt="Centímetros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
               <span class="u-title">Centímetros (cm)</span>
               <span class="u-desc">Para objetos pequeños del aula usando la regla escolar.</span>
             </button>
 
             <button class="unit-choice-btn" onclick="checkUnitChoice('m', this)">
-              <span class="u-icon">📐</span>
+              <img src="img/unit_m.png" alt="Metros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
               <span class="u-title">Metros (m)</span>
               <span class="u-desc">Para cosas grandes, personas y salones usando metro o flexómetro.</span>
             </button>
 
             <button class="unit-choice-btn" onclick="checkUnitChoice('km', this)">
-              <span class="u-icon">🛣️</span>
+              <img src="img/unit_km.png" alt="Kilómetros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
               <span class="u-title">Kilómetros (km)</span>
               <span class="u-desc">Para distancias grandes entre pueblos, ciudades y carreteras.</span>
             </button>
