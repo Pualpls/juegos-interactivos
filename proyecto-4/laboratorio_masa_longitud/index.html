@@ -918,6 +918,9 @@
   </main>
 
   <script>
+    window.addEventListener('contextmenu', e => e.preventDefault(), true);
+    document.addEventListener('contextmenu', e => e.preventDefault(), true);
+
     // LISTA OFICIAL DE LOS 14 ALUMNOS ACTIVOS (CRISTAL DADA DE BAJA)
     const students = [
       "Alexander", "Brianna", "Dalary", "Daniel", "Estrella",
