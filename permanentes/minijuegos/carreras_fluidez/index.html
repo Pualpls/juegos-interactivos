@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Pista de Carreras de Fluidez · Minijuego de Velocidad Lectora</title>
+  <title>Pista de Carreras de Fluidez · Minijuego de Comprensión Lectora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
@@ -75,26 +75,6 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-    }
-
-    .btn-volver {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #cbd5e1;
-      padding: 0.45rem 0.9rem;
-      border-radius: 9999px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .btn-volver:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
     }
 
     h1 {
@@ -227,10 +207,10 @@
     /* VEHÍCULOS RASTER PNG */
     .car-sprite {
       position: absolute;
-      left: 60px;
+      left: 50px;
       width: 95px;
       height: 48px;
-      transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: left 0.45s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 10;
       filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
     }
@@ -280,55 +260,54 @@
 
     .challenge-prompt {
       font-family: 'Fredoka', cursive, sans-serif;
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: #ffffff;
-      line-height: 1.35;
+      line-height: 1.45;
     }
 
     .challenge-context {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: #94a3b8;
     }
 
-    /* OPCIONES DE PALABRAS */
+    /* OPCIONES DE COMPRENSIÓN */
     .words-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
     }
 
     .word-card-btn {
       background: #0f172a;
       border: 2px solid rgba(255, 255, 255, 0.18);
       color: #ffffff;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.45rem;
-      font-weight: 700;
-      padding: 1.1rem 1.2rem;
+      font-family: 'Lexend', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 1rem 1.25rem;
       border-radius: var(--radius-lg);
       cursor: pointer;
       transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
+      gap: 0.85rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      text-align: center;
+      text-align: left;
     }
 
     .word-card-btn:hover {
       border-color: #38bdf8;
       background: #1e293b;
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.3);
+      transform: translateX(4px);
+      box-shadow: 0 6px 14px rgba(56, 189, 248, 0.25);
     }
 
     .word-card-btn.correct-turbo {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       border-color: #34d399;
       color: #ffffff;
-      transform: scale(1.04);
+      transform: scale(1.02);
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
     }
 
@@ -356,7 +335,27 @@
       color: #94a3b8;
     }
 
-    /* TABLA DE RÉCORDS */
+    .btn-audio-speak {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-audio-speak:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    /* BARRA DE RÉCORDS */
     .records-panel {
       background: rgba(15, 23, 42, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -388,7 +387,7 @@
       color: #ffffff;
     }
 
-    /* MODAL DE PODIO / FIN DE CARRERA */
+    /* MODAL DE PODIO / FIN DE CARRERA (SIN BOTÓN PORTAL) */
     .podium-modal {
       display: none;
       position: fixed;
@@ -470,8 +469,8 @@
 
     @keyframes nitroShake {
       0%, 100% { transform: scale(1) translateX(0); }
-      25% { transform: scale(1.08) translateX(6px); }
-      75% { transform: scale(1.04) translateX(3px); }
+      25% { transform: scale(1.06) translateX(4px); }
+      75% { transform: scale(1.03) translateX(2px); }
     }
 
     @keyframes shake {
@@ -481,8 +480,8 @@
     }
 
     @media (max-width: 700px) {
-      .words-grid { grid-template-columns: 1fr; }
       .car-sprite { width: 75px; height: 38px; }
+      .word-card-btn { font-size: 1rem; padding: 0.85rem 1rem; }
     }
   </style>
 </head>
@@ -491,16 +490,16 @@
   <!-- BANNER DE PRODUCCIÓN -->
   <div class="banner-produccion">
     <span>⚠️</span>
-    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · Competencia multicoche contrarreloj · 30 retos de fluidez lectora</span>
+    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · Circuito de comprensión lectora (Fase 4 NEM) · Ritmo pedagógico pausado</span>
   </div>
 
-  <!-- HEADER -->
+  <!-- HEADER (SIN BOTÓN PORTAL) -->
   <header>
     <div class="brand-wrap">
-      <a href="../../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
+      <span style="font-size: 1.8rem; margin-right: 0.25rem;">🏎️</span>
       <div>
         <h1>Pista de Carreras de Fluidez</h1>
-        <p class="subtitle">Competencia de Lectura Rápida · 3° Primaria</p>
+        <p class="subtitle">Circuito de Lectura Comprensiva · 3° Primaria</p>
       </div>
     </div>
 
@@ -510,8 +509,8 @@
         <span id="raceTimer" style="color: #38bdf8;">00:00</span>
       </div>
       <div class="stat-badge">
-        <span>⚡ Velocímetro:</span>
-        <span id="speedVal" style="color: #facc15;">0 km/h</span>
+        <span>⚡ Velocidad:</span>
+        <span id="speedVal" style="color: #facc15;">45 km/h</span>
       </div>
       <div class="stat-badge">
         <span>⭐ Puntos:</span>
@@ -562,8 +561,8 @@
     <!-- ÁREA DEL DESAFÍO LECTOR -->
     <section class="challenge-arena">
       <div class="challenge-header">
-        <span class="challenge-type-badge" id="challengeType">Lectura Rápida</span>
-        <span id="challengeCounter" style="font-size: 0.9rem; font-weight: 700; color: #94a3b8;">Reto 1 / 30</span>
+        <span class="challenge-type-badge" id="challengeType">Causa y Consecuencia</span>
+        <span id="challengeCounter" style="font-size: 0.9rem; font-weight: 700; color: #94a3b8;">Reto 1 / 25</span>
       </div>
 
       <div>
@@ -576,9 +575,9 @@
       </div>
 
       <div class="challenge-footer">
-        <p class="feedback-text" id="feedbackText">¡Lee rápido y toca la opción correcta para activar el Turbo!</p>
-        <button class="btn-volver" style="background: rgba(255,255,255,0.08);" onclick="speakCurrentPrompt()">
-          <span>🔊 Escuchar reto</span>
+        <p class="feedback-text" id="feedbackText">Lee con calma y selecciona la opción que completa la situación con sentido lógico:</p>
+        <button class="btn-audio-speak" onclick="speakCurrentPrompt()">
+          <span>🔊 Escuchar lectura</span>
         </button>
       </div>
     </section>
@@ -596,7 +595,7 @@
     </section>
   </main>
 
-  <!-- MODAL DE PODIO / FIN DE CARRERA -->
+  <!-- MODAL DE PODIO / FIN DE CARRERA (SIN BOTÓN PORTAL) -->
   <div class="podium-modal" id="podiumModal">
     <div class="podium-card">
       <div style="font-size: 3.5rem; margin-bottom: 0.5rem;" id="podiumIcon">🏆</div>
@@ -604,13 +603,12 @@
       <p id="podiumDesc" style="color: #cbd5e1; font-size: 1.05rem; margin-bottom: 1.5rem;">Resumen de la carrera...</p>
 
       <div style="margin-bottom: 1.5rem;">
-        <input type="text" id="pilotNameInput" placeholder="Nombre o Equipo del piloto" style="width: 80%; padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid #ef4444; background: #0f172a; color: #ffffff; font-size: 1rem; text-align: center;">
+        <input type="text" id="pilotNameInput" placeholder="Nombre o Equipo del alumno" style="width: 80%; padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid #ef4444; background: #0f172a; color: #ffffff; font-size: 1rem; text-align: center;">
       </div>
 
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
         <button class="btn-action-primary" onclick="saveRaceRecord()">💾 Guardar Récord</button>
         <button class="btn-action-primary" style="background: #3b82f6;" onclick="restartRace()">🔄 Correr Otra Vez</button>
-        <a href="../../../index.html" class="btn-action-primary" style="background: #10b981;">🏠 Portal</a>
       </div>
     </div>
   </div>
@@ -623,7 +621,7 @@
       <input type="password" id="pinInput" class="pin-input" maxlength="6" placeholder="••••">
       <div style="display: flex; gap: 0.75rem; justify-content: center;">
         <button class="btn-action-primary" style="padding: 0.6rem 1.2rem; font-size: 0.95rem;" onclick="verifyPin()">Ingresar</button>
-        <button class="btn-volver" onclick="closePinModal()">Cancelar</button>
+        <button class="btn-audio-speak" onclick="closePinModal()">Cancelar</button>
       </div>
       <p id="pinError" style="font-size: 0.82rem; color: #f87171; margin-top: 0.5rem; display: none;">Código no válido</p>
     </div>
@@ -632,102 +630,43 @@
   <script>
     document.addEventListener('contextmenu', e => e.preventDefault());
 
-    // BANCO DE 30 RETOS DE VELOCIDAD LECTORA Y FLUIDEZ
+    // BANCO DE 25 DESAFÍOS DE COMPRENSIÓN LECTORA Y RELACIONES LÓGICAS (FASE 4 NEM)
+    // Causa-Consecuencia, Problema-Solución, Textos Expositivos, Instructivos y Conectores
     const ALL_CHALLENGES = [
       {
-        type: "Completar Oración",
-        prompt: "Las vacunas enseñan al cuerpo a fabricar defensas llamadas...",
-        context: "Salud y prevención biológica",
+        type: "Causa y Consecuencia",
+        prompt: "Si una niña corre por el patio escolar con las agujetas desabrochadas, la consecuencia más probable es...",
+        context: "Prevención de accidentes en el entorno escolar",
         options: [
-          { text: "anticuerpos", correct: true },
-          { text: "pasteles", correct: false },
-          { text: "tornillos", correct: false }
+          { text: "tropezar y sufrir una lesión en una articulación", correct: true },
+          { text: "ganar un trofeo de velocidad en el recreo", correct: false },
+          { text: "hacer que sus tenis se vuelvan más limpios", correct: false }
         ]
       },
       {
-        type: "Antónimo Rápido",
-        prompt: "¿Cuál es el antónimo de 'ACELERAR'?",
-        context: "Velocidad y movimiento",
+        type: "Problema y Solución",
+        prompt: "Problema: Un compañero presenta fiebre alta de 38.5 grados en el salón. ¿Cuál es la solución preventiva?",
+        context: "Protocolo de salud escolar y botiquín",
         options: [
-          { text: "frenar", correct: true },
-          { text: "correr", correct: false },
-          { text: "volar", correct: false }
+          { text: "avisar al docente y acudir a la enfermería escolar a descansar", correct: true },
+          { text: "ponerse a jugar básquetbol en la cancha bajo el sol", correct: false },
+          { text: "comer alimentos helados en el patio de recreo", correct: false }
         ]
       },
       {
-        type: "Sinónimo Preciso",
-        prompt: "¿Cuál palabra significa lo mismo que 'FRACTURA'?",
-        context: "El cuerpo humano y huesos",
+        type: "Textos Expositivos",
+        prompt: "Los huesos forman el esqueleto para sostener el cuerpo y cumplen la función vital de...",
+        context: "Aparato locomotor y protección ósea",
         options: [
-          { text: "quebradura", correct: true },
-          { text: "limpieza", correct: false },
-          { text: "estiramiento", correct: false }
-        ]
-      },
-      {
-        type: "Rima Consonante",
-        prompt: "¿Qué palabra rima exactamente con 'PULMÓN'?",
-        context: "Fonética y poesía infantil",
-        options: [
-          { text: "corazón", correct: true },
-          { text: "pierna", correct: false },
-          { text: "cabeza", correct: false }
-        ]
-      },
-      {
-        type: "Ortografía b / v",
-        prompt: "Completa correctamente: 'El doctor me puso una ___acuna'.",
-        context: "Mecánica de la escritura",
-        options: [
-          { text: "v", correct: true },
-          { text: "b", correct: false },
-          { text: "w", correct: false }
-        ]
-      },
-      {
-        type: "Familia Léxica",
-        prompt: "¿Qué palabra pertenece a la familia de 'HUESO'?",
-        context: "Vocabulario del sistema óseo",
-        options: [
-          { text: "huesero", correct: true },
-          { text: "huevera", correct: false },
-          { text: "huella", correct: false }
-        ]
-      },
-      {
-        type: "Lectura Comprensiva",
-        prompt: "Para evitar el contagio de gripe, debemos estornudar en...",
-        context: "Etiqueta respiratoria",
-        options: [
-          { text: "el codo interno", correct: true },
-          { text: "las palmas abiertas", correct: false },
-          { text: "el aire libre", correct: false }
-        ]
-      },
-      {
-        type: "Antónimo Rápido",
-        prompt: "¿Cuál es el contrario directo de 'ARTICULADO'?",
-        context: "Movimiento y rigidez",
-        options: [
-          { text: "rígido", correct: true },
-          { text: "flexible", correct: false },
-          { text: "suave", correct: false }
-        ]
-      },
-      {
-        type: "Completar Oración",
-        prompt: "El órgano encargado de bombear sangre a todo el organismo es...",
-        context: "Aparatos y sistemas",
-        options: [
-          { text: "el corazón", correct: true },
-          { text: "el codo", correct: false },
-          { text: "la uña", correct: false }
+          { text: "proteger órganos delicados como el cerebro, pulmones y corazón", correct: true },
+          { text: "transportar el aire exterior directamente hacia los ojos", correct: false },
+          { text: "digerir las frutas y verduras del refrigerio escolar", correct: false }
         ]
       },
       {
         type: "Conectores Lógicos",
-        prompt: "Mateo tenía tierra en las manos; ______, se lavó con agua y jabón.",
-        context: "Cohesión textual",
+        prompt: "El pasillo escolar tenía el piso recién trapeado; ________, los alumnos caminaron despacio por la orilla seca.",
+        context: "Cohesión textual y relaciones de causa",
         options: [
           { text: "por lo tanto", correct: true },
           { text: "sin embargo nunca", correct: false },
@@ -735,203 +674,213 @@
         ]
       },
       {
-        type: "Ortografía c / s / z",
-        prompt: "Selecciona la grafía correcta: 'La herida se cubrió con un venda___e'.",
-        context: "Terminaciones ortográficas",
+        type: "Causa y Consecuencia",
+        prompt: "Al frotar las palmas de las manos con agua y jabón durante veinte segundos, el resultado higiénico es...",
+        context: "Hábitos de higiene y salud preventiva",
         options: [
-          { text: "j (vendaje)", correct: true },
-          { text: "g (vendage)", correct: false },
-          { text: "ll (vendalle)", correct: false }
+          { text: "eliminar virus y bacterias antes de ingerir alimentos", correct: true },
+          { text: "manchar el uniforme escolar de diferentes colores", correct: false },
+          { text: "gastar el agua sin lograr ninguna limpieza", correct: false }
         ]
       },
       {
-        type: "Sinónimo Veloz",
-        prompt: "¿Cuál es el sinónimo de 'PREVENCIÓN'?",
-        context: "Cuidado de la salud",
+        type: "Problema y Solución",
+        prompt: "Problema: Las plantas del huerto escolar tienen hojas marchitas y tierra seca. ¿Qué acción se debe realizar?",
+        context: "Cuidado de seres vivos y naturaleza",
         options: [
-          { text: "cuidado anticipado", correct: true },
-          { text: "descuido total", correct: false },
-          { text: "accidente grave", correct: false }
+          { text: "humedecer la tierra suavemente en las raíces usando una regadera", correct: true },
+          { text: "arrancarlas de la tierra y dejarlas sobre el pavimento caliente", correct: false },
+          { text: "cubrirlas con bolsas de plástico oscuro sin ventilación", correct: false }
         ]
       },
       {
-        type: "Lectura Crítica",
-        prompt: "En caso de una quemadura leve, lo primero que se debe aplicar es...",
-        context: "Primeros auxilios",
+        type: "Textos Expositivos",
+        prompt: "El tríptico es un folleto informativo de gran utilidad en la comunidad escolar porque...",
+        context: "Estructura y función de textos expositivos",
         options: [
-          { text: "agua limpia y fresca", correct: true },
-          { text: "manteca caliente", correct: false },
-          { text: "tierra del jardín", correct: false }
+          { text: "organiza datos breves en tres caras con títulos llamativos e imágenes", correct: true },
+          { text: "es una narración ficticia de más de cien páginas sin dibujos", correct: false },
+          { text: "sirve como cuaderno para anotar cuentas matemáticas del día", correct: false }
         ]
       },
       {
-        type: "Rima Consonante",
-        prompt: "¿Qué palabra rima con 'MEDICINA'?",
-        context: "Lenguajes y ritmo",
+        type: "Textos Instructivos",
+        prompt: "Al escuchar la alarma sísmica en la escuela, la indicación primordial del procedimiento de seguridad es...",
+        context: "Protección civil y simulacros escolares",
         options: [
-          { text: "vitamina", correct: true },
-          { text: "doctor", correct: false },
-          { text: "pastilla", correct: false }
+          { text: "no correr, no gritar y caminar en orden hacia el punto de reunión", correct: true },
+          { text: "empujar en la puerta para salir antes que todos los compañeros", correct: false },
+          { text: "esconderse debajo de los pupitres a oscuras y esperar", correct: false }
         ]
       },
       {
-        type: "Completar Oración",
-        prompt: "El folleto informativo doblado en tres partes iguales se denomina...",
-        context: "Textos expositivos",
+        type: "Alimentación Sana",
+        prompt: "El Plato del Bien Comer recomienda que las verduras y frutas de temporada se consuman en...",
+        context: "Porciones y grupos de alimentos para el bienestar",
         options: [
-          { text: "tríptico", correct: true },
-          { text: "enciclopedia", correct: false },
-          { text: "novela", correct: false }
+          { text: "porciones abundantes todos los días", correct: true },
+          { text: "cantidades mínimas una vez al mes", correct: false },
+          { text: "sustituidas por frituras empaquetadas y refrescos", correct: false }
         ]
       },
       {
-        type: "Antónimo Rápido",
-        prompt: "¿Cuál es el antónimo de 'SALUDABLE'?",
-        context: "Alimentación y hábitos",
+        type: "Causa y Consecuencia",
+        prompt: "Cuando una persona aplica el estornudo de etiqueta cubriéndose con el ángulo interno del codo...",
+        context: "Etiqueta respiratoria y cuidado colectivo",
         options: [
-          { text: "dañino", correct: true },
-          { text: "nutritivo", correct: false },
-          { text: "fresco", correct: false }
+          { text: "evita que las gotitas de saliva viajen por el aire hacia los demás", correct: true },
+          { text: "hace que el sonido del estornudo sea más escandaloso", correct: false },
+          { text: "llena sus palmas de microbios con los que saluda", correct: false }
         ]
       },
       {
-        type: "Ortografía Acentual",
-        prompt: "¿Cuál de las siguientes palabras lleva tilde correctamente?",
-        context: "Acentuación ortográfica",
+        type: "Convivencia Escolar",
+        prompt: "Un compañero no trajo lápiz para realizar su trabajo escolar. La actitud solidaria y empática es...",
+        context: "Prácticas equitativas y apoyo mutuo",
         options: [
-          { text: "termómetro", correct: true },
-          { text: "termometro", correct: false },
-          { text: "termometró", correct: false }
+          { text: "prestarle un lápiz de repuesto con amabilidad y respeto", correct: true },
+          { text: "burlarse de su olvido frente a todo el grupo", correct: false },
+          { text: "esconder los materiales para que nadie pueda utilizarlos", correct: false }
         ]
       },
       {
-        type: "Ciencias y Hábitos",
-        prompt: "Para mantener dientes fuertes y sin caries debemos cepillarlos...",
-        context: "Higiene bucal",
+        type: "Salud Bucal",
+        prompt: "Para proteger la dentadura contra las caries y bacterias, los especialistas indican que se debe...",
+        context: "Higiene personal y prevención bucal",
         options: [
-          { text: "tres veces al día", correct: true },
-          { text: "una vez al mes", correct: false },
-          { text: "solo en vacaciones", correct: false }
+          { text: "cepillar dientes y muelas después de cada comida con agua limpia", correct: true },
+          { text: "consumir caramelos pegajosos justo antes de ir a dormir", correct: false },
+          { text: "enjuagarse únicamente con refrescos gaseosos azucarados", correct: false }
         ]
       },
       {
-        type: "Comprensión Rápida",
-        prompt: "Los mosquitos del dengue depositan sus huevecillos en recipientes con...",
-        context: "Prevención sanitaria",
+        type: "Prevención Sanitaria",
+        prompt: "Para evitar la proliferación de mosquitos transmisores del dengue en la escuela y el hogar, se debe...",
+        context: "Medidas sanitarias y comunitarias",
         options: [
-          { text: "agua estancada", correct: true },
-          { text: "arena seca", correct: false },
-          { text: "harina de trigo", correct: false }
+          { text: "voltear y lavar cubetas, llantas y recipientes que acumulen agua", correct: true },
+          { text: "dejar charcos con agua estancada en el patio trasero", correct: false },
+          { text: "llenar botes destapados con agua de lluvia al aire libre", correct: false }
         ]
       },
       {
-        type: "Sinónimo Preciso",
-        prompt: "¿Cuál palabra es sinónimo de 'VIGOR'?",
-        context: "Energía y nutrición",
+        type: "Textos Descriptivos",
+        prompt: "Los músculos se diferencian de los huesos porque son tejidos blandos y elásticos con la capacidad de...",
+        context: "Aparato locomotor y movimiento corporal",
         options: [
-          { text: "energía", correct: true },
-          { text: "cansancio", correct: false },
-          { text: "apatía", correct: false }
+          { text: "contraerse y estirarse para mover las articulaciones del cuerpo", correct: true },
+          { text: "mantenerse totalmente duros sin doblarse jamás", correct: false },
+          { text: "romperse cada vez que damos un paso al caminar", correct: false }
         ]
       },
       {
-        type: "Completar Oración",
-        prompt: "Los huesos forman el esqueleto y se unen entre sí mediante...",
-        context: "Aparato locomotor",
+        type: "Cuidado del Entorno",
+        prompt: "Separar los residuos escolares permite que los restos de fruta y cáscaras se utilicen para...",
+        context: "Materia orgánica y sustentabilidad",
         options: [
-          { text: "articulaciones", correct: true },
-          { text: "grapas de metal", correct: false },
-          { text: "cintas adhesivas", correct: false }
+          { text: "elaborar composta orgánica que sirve de abono para las plantas", correct: true },
+          { text: "quemar el plástico en las banquetas del vecindario", correct: false },
+          { text: "dejar la basura tirada en el suelo del salón de clases", correct: false }
         ]
       },
       {
-        type: "Ortografía ll / y",
-        prompt: "Completa la palabra correcta: 'La doctora colocó una pasti___a'.",
-        context: "Norma gráfica",
+        type: "Seguridad Vial",
+        prompt: "Al trasladarse en bicicleta hacia la escuela, utilizar casco protector abrochado es indispensable porque...",
+        context: "Protección física en trayectos diarios",
         options: [
-          { text: "ll (pastilla)", correct: true },
-          { text: "y (pastiya)", correct: false },
-          { text: "i (pastiia)", correct: false }
+          { text: "amortigua impactos y protege la cabeza y el cerebro ante caídas", correct: true },
+          { text: "permite pedalear con los ojos cerrados en las avenidas", correct: false },
+          { text: "sirve como canasta para cargar las frutas del recreo", correct: false }
         ]
       },
       {
-        type: "Educación Vial",
-        prompt: "Al andar en bicicleta, el implemento básico para proteger la cabeza es...",
-        context: "Seguridad infantil",
+        type: "Textos Instructivos",
+        prompt: "Al revisar el reglamento de la biblioteca escolar, una regla esencial para preservar los libros es...",
+        context: "Cuidado de recursos y acervo común",
         options: [
-          { text: "el casco protector", correct: true },
-          { text: "una gorra de tela", correct: false },
-          { text: "un moño decorativo", correct: false }
+          { text: "manipular las páginas con manos limpias y colocarlos en su estante", correct: true },
+          { text: "recortar las portadas de los cuentos que nos parezcan bonitas", correct: false },
+          { text: "doblar y rayar las hojas con marcadores de tinta fuerte", correct: false }
         ]
       },
       {
-        type: "Rima Consonante",
-        prompt: "¿Cuál palabra rima con 'CALISTENIA'?",
-        context: "Actividad física y ritmo",
+        type: "Salud Postural",
+        prompt: "Para proteger la espalda y evitar desviaciones en la columna al cargar la mochila, lo adecuado es...",
+        context: "Ergonomía y cuidado del cuerpo infantil",
         options: [
-          { text: "academia", correct: true },
-          { text: "carrera", correct: false },
-          { text: "salto", correct: false }
+          { text: "ajustar ambos tirantes a la misma altura y llevar solo lo necesario", correct: true },
+          { text: "cargar la mochila colgada de un solo hombro con peso desmedido", correct: false },
+          { text: "llenarla de piedras y objetos pesados que no se usan en clase", correct: false }
         ]
       },
       {
-        type: "Completar Oración",
-        prompt: "En caso de incendio o sismo en la escuela, debemos evacuar...",
-        context: "Protección civil",
+        type: "Conectores Lógicos",
+        prompt: "Las verduras aportan vitaminas y fibra; ________, las golosinas ultraprocesadas carecen de nutrientes.",
+        context: "Comparación y contraste en textos informativos",
         options: [
-          { text: "sin correr y en calma", correct: true },
-          { text: "empujando en la puerta", correct: false },
-          { text: "gritando con desespero", correct: false }
+          { text: "en cambio", correct: true },
+          { text: "por qué no", correct: false },
+          { text: "siempre igual", correct: false }
         ]
       },
       {
-        type: "Antónimo Rápido",
-        prompt: "¿Cuál es el antónimo de 'CONTAGIOSO'?",
-        context: "Enfermedades y vacunas",
+        type: "Vacunación y Salud",
+        prompt: "Las vacunas son preparaciones médicas preventivas cuyo beneficio directo en la niñez es...",
+        context: "Sistema inmunitario y defensas biológicas",
         options: [
-          { text: "inofensivo", correct: true },
-          { text: "peligroso", correct: false },
-          { text: "viral", correct: false }
+          { text: "enseñar al organismo a defenderse de virus y bacterias peligrosas", correct: true },
+          { text: "debilitar los músculos para que los niños no tengan energía", correct: false },
+          { text: "reemplazar el agua potable por medicamentos costosos", correct: false }
         ]
       },
       {
-        type: "Alimentación Balanceada",
-        prompt: "El grupo de alimentos que aporta más vitaminas y agua natural es...",
-        context: "Plato del Bien Comer",
+        type: "Problema y Solución",
+        prompt: "Problema: Un alumno extravió su suéter escolar en una jardinera del patio. ¿Qué se debe hacer?",
+        context: "Honestidad y convivencia en el aula",
         options: [
-          { text: "frutas y verduras", correct: true },
-          { text: "refrescos embotellados", correct: false },
-          { text: "chicharrones fritos", correct: false }
+          { text: "revisar la etiqueta con nombre y entregarlo al maestro de guardia", correct: true },
+          { text: "guardárselo en la mochila para llevárselo a casa a escondidas", correct: false },
+          { text: "pisotearlo en el lodo para que nadie pueda recuperarlo", correct: false }
         ]
       },
       {
-        type: "Sinónimo Veloz",
-        prompt: "¿Cuál es el sinónimo de 'SOLIDARIO'?",
-        context: "Valores escolares",
+        type: "Salud Visual",
+        prompt: "Si una niña o niño entrecierra constantemente los ojos para ver el pizarrón, la acción preventiva es...",
+        context: "Detección temprana y salud visual",
         options: [
-          { text: "generoso", correct: true },
-          { text: "egoísta", correct: false },
-          { text: "solitario", correct: false }
+          { text: "acudir al centro de salud para una valoración con el optometrista", correct: true },
+          { text: "acercarse corriendo a tapar las letras de los demás alumnos", correct: false },
+          { text: "dejar de trabajar y no realizar los ejercicios escolares", correct: false }
         ]
       },
       {
-        type: "Lectura Reflexiva",
-        prompt: "Los desechos orgánicos como cáscaras de plátano sirven para elaborar...",
-        context: "Medio ambiente y huerto",
+        type: "Textos Discontinuos",
+        prompt: "En un croquis del aula o de la escuela, las flechas y señalamientos verdes se colocan para...",
+        context: "Representaciones del espacio escolar",
         options: [
-          { text: "composta vegetal", correct: true },
-          { text: "plásticos duros", correct: false },
-          { text: "pilas alcalinas", correct: false }
+          { text: "mostrar las rutas de evacuación hacia zonas seguras del patio", correct: true },
+          { text: "confundir a los visitantes para que no encuentren los salones", correct: false },
+          { text: "adornar las paredes sin ningún propósito informativo", correct: false }
         ]
       },
       {
-        type: "Meta de Lectura",
-        prompt: "Leer con fluidez significa comprender las palabras con...",
-        context: "Habilidad lectora",
+        type: "Causa y Consecuencia",
+        prompt: "Dormir entre ocho y diez horas cada noche permite a las niñas y niños...",
+        context: "Descanso, energía y concentración",
         options: [
-          { text: "ritmo, entonación y claridad", correct: true },
-          { text: "prisa sin entender nada", correct: false },
-          { text: "voz baja casi inaudible", correct: false }
+          { text: "despertar con energía, buen ánimo y atención para aprender en clase", correct: true },
+          { text: "sentir somnolencia y olvidar cómo hablar con sus amigos", correct: false },
+          { text: "perder el apetito y no querer desayunar nada nutritivo", correct: false }
+        ]
+      },
+      {
+        type: "Convivencia Escolar",
+        prompt: "Cuando varios equipos necesitan usar el mismo material en el aula, la regla armónica es...",
+        context: "Diálogo, acuerdos y resolución pacífica",
+        options: [
+          { text: "acordar turnos respetuosos y compartir los recursos equitativamente", correct: true },
+          { text: "arrebatar los materiales a la fuerza y esconderlos", correct: false },
+          { text: "discutir a gritos hasta que alguien se quede sin trabajar", correct: false }
         ]
       }
     ];
@@ -939,19 +888,18 @@
     let activeChallenges = [];
     let currentChallengeIdx = 0;
     let score = 0;
-    let raceSpeed = 0;
+    let raceSpeed = 45;
     let raceActive = false;
     let raceFinished = false;
 
-    // POSICIONES EN LA PISTA (en porcentaje de 0% a 90%)
+    // POSICIONES EN LA PISTA (0% a 85%)
     let playerPos = 5;
     let rival1Pos = 5;
     let rival2Pos = 5;
 
-    // TEMPORIZADORES
+    // TEMPORIZADORES (RITMO LENTO Y PAUSADO)
     let raceInterval = null;
     let clockInterval = null;
-    let raceStartTime = 0;
     let totalSeconds = 0;
 
     // WEB AUDIO API
@@ -976,9 +924,9 @@
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(550, audioCtx.currentTime + 0.35);
-      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
@@ -992,14 +940,14 @@
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = 'es-MX';
-        u.rate = 1.0;
+        u.rate = 0.95;
         window.speechSynthesis.speak(u);
       }
     }
 
     function speakCurrentPrompt() {
       const c = activeChallenges[currentChallengeIdx];
-      speakText(c.prompt);
+      speakText(`${c.type}. ${c.prompt}`);
     }
 
     // BARAJAR
@@ -1012,33 +960,32 @@
       return a;
     }
 
-    // INICIAR CARRERA
+    // INICIAR CARRERA (RITMO TRANQUILO Y SOSTENIDO)
     function startRace() {
       activeChallenges = shuffle([...ALL_CHALLENGES]);
       currentChallengeIdx = 0;
       score = 0;
-      raceSpeed = 40;
+      raceSpeed = 45;
       playerPos = 5;
       rival1Pos = 5;
       rival2Pos = 5;
       raceActive = true;
       raceFinished = false;
+      totalSeconds = 0;
 
       updateCarPositions();
       loadChallenge(0);
 
-      raceStartTime = performance.now();
       if (clockInterval) clearInterval(clockInterval);
       clockInterval = setInterval(updateClock, 1000);
 
-      // Bucle de avance continuo para los rivales
+      // RIVALES AVANZAN DE FORMA MUCHO MÁS LENTA: cada 3.5 segundos avanzan ~1.1%
       if (raceInterval) clearInterval(raceInterval);
-      raceInterval = setInterval(tickRivals, 900);
+      raceInterval = setInterval(tickRivals, 3500);
 
       loadBestRecordDisplay();
     }
 
-    // ACTUALIZAR RELOJ
     function updateClock() {
       if (!raceActive) return;
       totalSeconds++;
@@ -1047,20 +994,20 @@
       document.getElementById('raceTimer').textContent = `${m}:${s}`;
     }
 
-    // AVANCE CONTINUO DE LOS RIVALES
+    // AVANCE TRANQUILO DE RIVALES
     function tickRivals() {
       if (!raceActive || raceFinished) return;
 
-      // Rivales avanzan entre 1.5% y 3.2% en cada tick
-      rival1Pos += 1.6 + Math.random() * 1.5;
-      rival2Pos += 1.4 + Math.random() * 1.7;
+      // Avance sereno: da tiempo amplio (15 a 20 seg) para leer cada caso
+      rival1Pos += 0.9 + Math.random() * 0.6;
+      rival2Pos += 0.8 + Math.random() * 0.7;
 
       updateCarPositions();
       updatePositionBadge();
       checkFinishLine();
     }
 
-    // ACTUALIZAR GRÁFICA DE POSICIONES
+    // ACTUALIZAR POSICIÓN GRÁFICA DE LOS AUTOS
     function updateCarPositions() {
       const trackWidth = document.getElementById('trackRoadways').clientWidth - 110;
       const pPx = Math.min((playerPos / 100) * trackWidth + 40, trackWidth);
@@ -1075,7 +1022,7 @@
       document.getElementById('scoreVal').textContent = `${score}`;
     }
 
-    // CALCULAR POSICIÓN (1°, 2°, 3°)
+    // ACTUALIZAR BADGE DE POSICIÓN
     function updatePositionBadge() {
       let pos = 1;
       if (rival1Pos > playerPos) pos++;
@@ -1083,21 +1030,20 @@
 
       const b = document.getElementById('positionBadge');
       if (pos === 1) {
-        b.textContent = "Posición: 1° Lugar (Líder)";
+        b.textContent = "Posición: 1° Lugar (Líder de la Pista)";
         b.style.color = "#facc15";
       } else if (pos === 2) {
-        b.textContent = "Posición: 2° Lugar (Acelera)";
+        b.textContent = "Posición: 2° Lugar (Buen avance)";
         b.style.color = "#e2e8f0";
       } else {
-        b.textContent = "Posición: 3° Lugar (¡Usa el Turbo!)";
+        b.textContent = "Posición: 3° Lugar (Lee con calma)";
         b.style.color = "#f87171";
       }
     }
 
-    // CARGAR DESAFÍO
+    // CARGAR DESAFÍO PEDAGÓGICO
     function loadChallenge(idx) {
       if (idx >= activeChallenges.length) {
-        // Si se terminan las preguntas, recircular barajando de nuevo
         activeChallenges = shuffle([...ALL_CHALLENGES]);
         currentChallengeIdx = 0;
       } else {
@@ -1109,7 +1055,7 @@
       document.getElementById('challengeCounter').textContent = `Reto ${currentChallengeIdx + 1} / ${activeChallenges.length}`;
       document.getElementById('challengePrompt').textContent = c.prompt;
       document.getElementById('challengeContext').textContent = c.context;
-      document.getElementById('feedbackText').textContent = "¡Lee rápido y toca la opción correcta para activar el Turbo!";
+      document.getElementById('feedbackText').textContent = "Lee con calma y selecciona la opción que completa la situación con sentido lógico:";
       document.getElementById('feedbackText').style.color = "#94a3b8";
 
       const grid = document.getElementById('wordsGrid');
@@ -1119,13 +1065,13 @@
       shuffledOpts.forEach((opt) => {
         const btn = document.createElement('button');
         btn.className = 'word-card-btn';
-        btn.innerHTML = `<span>⚡</span> <span>${opt.text}</span>`;
+        btn.innerHTML = `<span style="color:#f59e0b; font-size:1.3rem;">●</span> <span>${opt.text}</span>`;
         btn.onclick = () => handleAnswer(opt, btn);
         grid.appendChild(btn);
       });
     }
 
-    // MANEJAR RESPUESTA
+    // MANEJAR RESPUESTA CON NITRO SOSTENIDO
     function handleAnswer(opt, btnEl) {
       if (!raceActive || raceFinished) return;
 
@@ -1133,17 +1079,17 @@
       allBtns.forEach(b => b.disabled = true);
 
       if (opt.correct) {
-        // TURBO BOOST
-        score += 150;
-        raceSpeed = Math.min(raceSpeed + 25, 180);
-        playerPos += 13.5; // Gran impulso hacia adelante
+        // ACIERTO: IMPULSO POSITIVO Y TURBO
+        score += 120;
+        raceSpeed = Math.min(raceSpeed + 8, 75);
+        playerPos += 11.2; // ~8 aciertos cruzan la meta completa
 
         playEngineRev();
         document.getElementById('carPlayer').classList.add('nitro-boost');
         setTimeout(() => document.getElementById('carPlayer').classList.remove('nitro-boost'), 450);
 
         btnEl.classList.add('correct-turbo');
-        document.getElementById('feedbackText').textContent = "¡TURBO ACTIVADO! Gran lectura rápida (+150 pts)";
+        document.getElementById('feedbackText').textContent = "¡Excelente deducción! Tu bólido avanza en la pista (+120 pts)";
         document.getElementById('feedbackText').style.color = "#34d399";
 
         updateCarPositions();
@@ -1152,16 +1098,16 @@
         if (!checkFinishLine()) {
           setTimeout(() => {
             loadChallenge(currentChallengeIdx + 1);
-          }, 450);
+          }, 600);
         }
       } else {
-        // ERROR: FRENADA
-        raceSpeed = Math.max(raceSpeed - 20, 30);
-        playerPos = Math.max(playerPos - 3, 2);
+        // ERROR: FRENADA LEVE SIN PRECIPITACIÓN
+        raceSpeed = Math.max(raceSpeed - 6, 35);
+        playerPos = Math.max(playerPos - 1.5, 2);
 
         playTone(200, 'sawtooth', 0.25);
         btnEl.classList.add('wrong-slow');
-        document.getElementById('feedbackText').textContent = "¡Frenada! Error de lectura, concéntrate y vuelve a intentar.";
+        document.getElementById('feedbackText').textContent = "Respuesta inexacta. Lee detenidamente la consigna y reflexiona antes de contestar.";
         document.getElementById('feedbackText').style.color = "#f87171";
 
         updateCarPositions();
@@ -1170,11 +1116,11 @@
         setTimeout(() => {
           allBtns.forEach(b => b.disabled = false);
           btnEl.classList.remove('wrong-slow');
-        }, 900);
+        }, 1200);
       }
     }
 
-    // VERIFICAR CRUCE DE META (85% de la pista)
+    // VERIFICAR META (85%)
     function checkFinishLine() {
       const finishThreshold = 85;
 
@@ -1185,7 +1131,7 @@
       return false;
     }
 
-    // FIN DE CARRERA
+    // FINALIZAR CARRERA
     function finishRace() {
       raceActive = false;
       raceFinished = true;
@@ -1204,24 +1150,24 @@
       if (finalPlace === 1) {
         icon.textContent = "🥇🏆";
         title.textContent = "¡1er Lugar! ¡Campeón de la Pista!";
-        desc.textContent = `¡Impresionante velocidad y comprensión lectora! Superaste a ambos bólidos en ${document.getElementById('raceTimer').textContent} con ${score} puntos.`;
+        desc.textContent = `¡Gran comprensión lectora! Has completado el circuito con calma y precisión en ${document.getElementById('raceTimer').textContent} alcanzando ${score} puntos.`;
       } else if (finalPlace === 2) {
         icon.textContent = "🥈🏁";
         title.textContent = "¡2do Lugar! ¡Medalla de Plata!";
-        desc.textContent = `¡Gran carrera! Estuviste muy cerca del líder. Tiempo: ${document.getElementById('raceTimer').textContent} · Puntaje: ${score} pts.`;
+        desc.textContent = `¡Muy buen esfuerzo! Llegaste a la meta con ${score} puntos en ${document.getElementById('raceTimer').textContent}.`;
       } else {
         icon.textContent = "🥉🚗";
-        title.textContent = "¡3er Lugar! ¡Medalla de Bronce!";
-        desc.textContent = `¡Completaste el circuito! Con más práctica de lectura ganarás el oro. Tiempo: ${document.getElementById('raceTimer').textContent} · Puntaje: ${score} pts.`;
+        title.textContent = "¡3er Lugar! ¡Circuito Concluido!";
+        desc.textContent = `¡Completaste toda la pista! Con más lectura tranquila ganarás el primer puesto. Tiempo: ${document.getElementById('raceTimer').textContent} · Puntos: ${score}.`;
       }
 
       modal.style.display = 'flex';
     }
 
-    // GUARDAR RÉCORD
+    // REGISTRO DE RÉCORDS
     function saveRaceRecord() {
       const input = document.getElementById('pilotNameInput');
-      const pilotName = (input.value || "Piloto Escolar").trim();
+      const pilotName = (input.value || "Piloto de 3°").trim();
       const record = {
         name: pilotName,
         score: score,
@@ -1234,7 +1180,7 @@
         let records = JSON.parse(localStorage.getItem(key) || '[]');
         records.push(record);
         records.sort((a, b) => b.score - a.score);
-        records = records.slice(0, 10); // Conservar top 10
+        records = records.slice(0, 10);
         localStorage.setItem(key, JSON.stringify(records));
       } catch (e) {
         console.error(e);
@@ -1265,7 +1211,7 @@
       startRace();
     }
 
-    // GESTIÓN CON CÓDIGO DOCENTE (PIN SECRETO PROTEGIDO MEDIANTE BASE64)
+    // ACCESO DOCENTE CONFIDENCIAL
     function openPinModal() {
       document.getElementById('pinInput').value = '';
       document.getElementById('pinError').style.display = 'none';
@@ -1279,13 +1225,12 @@
 
     function verifyPin() {
       const entered = document.getElementById('pinInput').value.trim();
-      // Verificación interna confidencial
       if (entered === atob('MTcwMg==')) {
         closePinModal();
-        if (confirm("Acceso docente concedido. ¿Deseas restablecer y vaciar la tabla de récords de esta pantalla?")) {
+        if (confirm("Acceso docente concedido. ¿Deseas restablecer la tabla de récords escolares?")) {
           localStorage.removeItem('pista_carreras_records_v1');
           loadBestRecordDisplay();
-          alert("Tabla de récords escolar restablecida con éxito.");
+          alert("Tabla de récords escolares restablecida con éxito.");
         }
       } else {
         document.getElementById('pinError').style.display = 'block';
