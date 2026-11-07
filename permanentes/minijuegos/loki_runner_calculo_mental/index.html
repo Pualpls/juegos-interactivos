@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Loki Runner · Aventura de Cálculo Mental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-sky-top: #1e3a8a;
+      --bg-sky-bottom: #38bdf8;
+      --road-color: #1e293b;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --amber: #f59e0b;
+      --amber-dark: #d97706;
+      --emerald: #10b981;
+      --rose: #ef4444;
+      --purple: #8b5cf6;
+      --text-main: #0f172a;
+      --text-light: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Lexend', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: #0f172a;
+      color: var(--text-light);
+    }
+
+    /* CONTENEDOR PRINCIPAL DEL JUEGO */
+    #app-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* VISTAS */
+    .view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* -------------------------------------------------------------
+       VISTA 1: MENÚ DE NIVELES / MAPA DE ESTRATEGIAS
+       ------------------------------------------------------------- */
+    #view-menu {
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 100%);
+      overflow-y: auto;
+      padding: 1rem 1.25rem 3rem 1.25rem;
+      z-index: 20;
+    }
+
+    .menu-header {
+      max-width: 1100px;
+      margin: 0 auto 1.25rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .loki-badge-img {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.45);
+      border: 3px solid #f59e0b;
+      background: #ffffff;
+      object-fit: cover;
+    }
+
+    .menu-title h1 {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      color: #fbbf24;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .menu-title p {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .menu-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #f8fafc;
+    }
+
+    .stat-pill img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    /* FILTROS DE MUNDOS */
+    .world-tabs {
+      max-width: 1100px;
+      margin: 0 auto 1.25rem auto;
+      display: flex;
+      gap: 0.6rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .world-tab-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid transparent;
+      color: #94a3b8;
+      padding: 0.55rem 1.1rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .world-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+
+    /* GRID DE NIVELES */
+    .levels-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .level-card {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border-radius: 1.1rem;
+      padding: 1.1rem 1.15rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      border: 3px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card:hover {
+      transform: translateY(-3px);
+      border-color: #3b82f6;
+    }
+
+    .level-card.featured {
+      border-color: #f59e0b;
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .card-num-badge {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .card-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+    }
+
+    .tag-sisat { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .tag-base { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .tag-salto { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: #0f172a;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .card-example {
+      display: inline-block;
+      font-size: 0.86rem;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.25rem 0.55rem;
+      border-radius: 0.4rem;
+      font-family: monospace;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.35;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-top: 0.4rem;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .btn-play-tutorial {
+      flex: 1;
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      border-radius: 0.65rem;
+      padding: 0.55rem 0.65rem;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
+      transition: background 0.15s;
+    }
+
+    .btn-play-tutorial:hover { background: #059669; }
+
+    .btn-play-run {
+      flex: 1;
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 0.65rem;
+      padding: 0.55rem 0.65rem;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.35);
+      transition: background 0.15s;
+    }
+
+    .btn-play-run:hover { background: #1d4ed8; }
+
+    .btn-explain {
+      background: #f8fafc;
+      color: #475569;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 0.55rem;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+
+    .btn-explain:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+
+    /* -------------------------------------------------------------
+       VISTA 2: ESCENARIO 3D SUBWAY SURFERS (CANVAS RUNNER)
+       ------------------------------------------------------------- */
+    #view-game {
+      background: #000;
+      z-index: 10;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    /* HUD SUPERIOR */
+    .game-hud-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.6rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      z-index: 30;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+
+    .hud-row-meta {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+
+    .hud-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: auto;
+    }
+
+    .hud-lives {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      padding: 0.25rem 0.65rem;
+      font-size: 1.15rem;
+      letter-spacing: 0.15rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .hud-score-box {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1.5px solid #f59e0b;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #fbbf24;
+      font-size: 0.95rem;
+    }
+
+    .hud-score-box img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    .hud-mode-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04rem;
+    }
+
+    .mode-tutorial { background: #059669; color: #fff; }
+    .mode-carrera { background: #2563eb; color: #fff; }
+
+    .hud-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: auto;
+    }
+
+    .hud-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 0.35rem 0.65rem;
+      border-radius: 0.55rem;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 0.15s;
+    }
+
+    .hud-btn:hover { background: rgba(255, 255, 255, 0.25); }
+
+    /* TARJETA DE OPERACIÓN MATEMÁTICA EN CABECERA */
+    .hud-math-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 3px solid #f59e0b;
+      box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
+      border-radius: 1.1rem;
+      padding: 0.5rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      pointer-events: auto;
+      max-width: 90vw;
+      animation: pulseBorder 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseBorder {
+      0%, 100% { border-color: #f59e0b; box-shadow: 0 4px 18px rgba(245, 158, 11, 0.3); }
+      50% { border-color: #60a5fa; box-shadow: 0 4px 22px rgba(96, 165, 250, 0.45); }
+    }
+
+    .hud-strategy-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+    }
+
+    .hud-math-problem {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.06rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hud-math-hint {
+      font-size: 0.8rem;
+      color: #fde047;
+      font-weight: 600;
+      margin-top: -0.15rem;
+    }
+
+    /* CONTROLES TÁCTILES INFERIORES */
+    .game-touch-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      z-index: 30;
+      background: linear-gradient(0deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+
+    .touch-btn {
+      pointer-events: auto;
+      width: 130px;
+      height: 72px;
+      border-radius: 1.1rem;
+      background: rgba(30, 41, 59, 0.85);
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: transform 0.1s, background 0.1s;
+    }
+
+    .touch-btn:active {
+      transform: scale(0.94);
+      background: #2563eb;
+      border-color: #60a5fa;
+    }
+
+    .touch-btn-sub {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .touch-center-hint {
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-trick-floating {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+      transition: transform 0.1s;
+    }
+
+    .btn-trick-floating:active { transform: scale(0.95); }
+
+    /* TOAST DE FEEDBACK PEDAGÓGICO */
+    #feedback-toast {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 3px solid #10b981;
+      padding: 0.65rem 1.4rem;
+      border-radius: 1rem;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 45;
+      text-align: center;
+      max-width: 85vw;
+    }
+
+    #feedback-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #feedback-toast.error {
+      border-color: #ef4444;
+      background: rgba(153, 27, 27, 0.95);
+    }
+
+    /* -------------------------------------------------------------
+       MODALES: EXPLICACIÓN, VICTORIA, GAME OVER
+       ------------------------------------------------------------- */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 1.35rem;
+      padding: 1.6rem 1.8rem;
+      max-width: 580px;
+      width: 100%;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      border: 4px solid #3b82f6;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .modal-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid #f59e0b;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .modal-title h2 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      color: #0f172a;
+      line-height: 1.15;
+    }
+
+    .modal-title p {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .trick-box {
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      border-radius: 0.85rem;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .trick-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .trick-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .trick-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .step-badge {
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .trick-formula {
+      background: #e0f2fe;
+      border: 1.5px solid #7dd3fc;
+      border-radius: 0.6rem;
+      padding: 0.6rem 0.85rem;
+      font-family: monospace;
+      font-weight: 800;
+      color: #0369a1;
+      font-size: 1.05rem;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .btn-modal {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .btn-modal-green { background: #10b981; color: #fff; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); }
+    .btn-modal-green:hover { background: #059669; }
+
+    .btn-modal-blue { background: #2563eb; color: #fff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); }
+    .btn-modal-blue:hover { background: #1d4ed8; }
+
+    .btn-modal-secondary { background: #e2e8f0; color: #334155; }
+    .btn-modal-secondary:hover { background: #cbd5e1; }
+
+    /* ESTILOS DE VICTORIA */
+    .victory-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+
+    .victory-trophy-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(245, 158, 11, 0.5));
+      animation: floatTrophy 2s ease-in-out infinite;
+    }
+
+    @keyframes floatTrophy {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .victory-stars {
+      display: flex;
+      gap: 0.35rem;
+      font-size: 2rem;
+      color: #f59e0b;
+    }
+
+    .victory-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin: 0.5rem 0;
+    }
+
+    .v-stat-card {
+      background: #f1f5f9;
+      border-radius: 0.75rem;
+      padding: 0.65rem;
+      text-align: center;
+    }
+
+    .v-stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+    .v-stat-card b { display: block; font-size: 1.25rem; color: #0f172a; font-family: var(--font-display); }
+
+    /* MEDIA QUERIES PARA PANTALLAS TÁCTILES Y COMPACTAS */
+    @media (max-height: 700px) {
+      .hud-math-problem { font-size: 1.75rem; }
+      .hud-math-card { padding: 0.35rem 1.2rem; }
+      .touch-btn { height: 60px; width: 110px; font-size: 1rem; }
+      .menu-header { margin-bottom: 0.75rem; }
+      .world-tabs { margin-bottom: 0.75rem; }
+      .levels-grid { gap: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- =============================================================
+         VISTA 1: MENÚ DE NIVELES / MAPA DE ESTRATEGIAS
+         ============================================================= -->
+    <div id="view-menu" class="view active">
+      <div class="menu-header">
+        <div class="menu-brand">
+          <img src="recursos/loki_avatar.png" alt="Loki" class="loki-badge-img">
+          <div class="menu-title">
+            <h1>LOKI RUNNER</h1>
+            <p>Aventura de Cálculo Mental · Escuela Primaria Federal "José Clemente Orozco" · 3° "A"</p>
+          </div>
+        </div>
+
+        <div class="menu-stats">
+          <div class="stat-pill" title="Huesos conseguidos">
+            <img src="recursos/hueso_transparente.png" alt="Hueso">
+            <span id="global-bones-count">0</span>
+          </div>
+          <div class="stat-pill" title="Estrellas doradas">
+            <span style="color:#fbbf24; font-size:1.15rem;">⭐</span>
+            <span id="global-stars-count">0 / 60</span>
+          </div>
+          <button class="hud-btn" id="btn-toggle-sound" onclick="toggleSound()">🔊 Sonido</button>
+        </div>
+      </div>
+
+      <!-- TABS DE MUNDOS -->
+      <div class="world-tabs">
+        <button class="world-tab-btn active" onclick="switchWorld(1)">🟢 Mundo 1: Decenas y Base (#1 - #7)</button>
+        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2: Retos SiSAT Oficial (#8 - #14)</button>
+        <button class="world-tab-btn" onclick="switchWorld(3)">🟣 Mundo 3: Maestría y Trucos (#15 - #20)</button>
+      </div>
+
+      <!-- GRID DE TARJETAS DE NIVEL -->
+      <div class="levels-grid" id="levels-container">
+        <!-- Renderizado dinámico vía JavaScript -->
+      </div>
+    </div>
+
+    <!-- =============================================================
+         VISTA 2: ESCENARIO 3D SUBWAY SURFERS (CANVAS)
+         ============================================================= -->
+    <div id="view-game" class="view">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- HUD SUPERIOR -->
+      <div class="game-hud-top">
+        <div class="hud-row-meta">
+          <div class="hud-badge-group">
+            <div class="hud-lives" id="hud-lives" title="Vidas de Loki">❤️❤️❤️</div>
+            <div class="hud-score-box">
+              <img src="recursos/hueso_transparente.png" alt="Huesos">
+              <span id="hud-bones-progress">0 / 10</span>
+            </div>
+            <span class="hud-mode-badge mode-tutorial" id="hud-speed-badge">🐢 Tutorial (Lento)</span>
+          </div>
+
+          <div class="hud-btn-group">
+            <button class="hud-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Leer la operación en voz alta">🔊 Voz</button>
+            <button class="hud-btn" onclick="openExplanationFromGame()" title="Pausar y repasar el truco mental">💡 Truco</button>
+            <button class="hud-btn" onclick="togglePauseGame()" id="btn-pause" title="Pausar partida">⏸️</button>
+            <button class="hud-btn" onclick="exitToMenu()" title="Volver al menú">🏠 Salir</button>
+          </div>
+        </div>
+
+        <!-- TARJETA CENTRAL DE LA OPERACIÓN -->
+        <div class="hud-math-card" id="hud-math-card">
+          <span class="hud-strategy-title" id="hud-strategy-title">Estrategia #6 · Restar 10</span>
+          <div class="hud-math-problem" id="hud-math-problem">28 − 10 = ?</div>
+          <div class="hud-math-hint" id="hud-math-hint">¡Esquiva las trampas e impacta directamente la correcta!</div>
+        </div>
+      </div>
+
+      <!-- TOAST DE RETROALIMENTACIÓN FLOTANTE -->
+      <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
+
+      <!-- CONTROLES TÁCTILES INFERIORES -->
+      <div class="game-touch-controls">
+        <button class="touch-btn" id="btn-touch-left" onpointerdown="handleTouchLeft(event)">
+          <span>◀ IZQ</span>
+          <span class="touch-btn-sub">Mover Carril</span>
+        </button>
+
+        <div class="touch-center-hint">
+          <button class="btn-trick-floating" onclick="openExplanationFromGame()">
+            <span>💡</span> Ver Explicación del Truco
+          </button>
+        </div>
+
+        <button class="touch-btn" id="btn-touch-right" onpointerdown="handleTouchRight(event)">
+          <span>DER ▶</span>
+          <span class="touch-btn-sub">Mover Carril</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- =============================================================
+         MODAL 1: EXPLICACIÓN Y TUTORIAL DEL TRUCO MENTAL
+         ============================================================= -->
+    <div id="modal-tutorial" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <img src="recursos/loki_avatar.png" alt="Loki" class="modal-avatar">
+          <div class="modal-title">
+            <h2 id="modal-tut-strategy-name">Estrategia #6: Restar 10</h2>
+            <p id="modal-tut-grade-tag">Consolidación Fase 4 · SiSAT Oficial</p>
+          </div>
+        </div>
+
+        <div class="trick-box">
+          <div class="trick-title">
+            <span>💡</span> <span id="modal-tut-trick-heading">El Secreto de Loki:</span>
+          </div>
+
+          <div class="trick-steps" id="modal-tut-steps">
+            <!-- Pasos pedagógicos inyectados -->
+          </div>
+
+          <div class="trick-formula" id="modal-tut-formula">
+            Ejemplo: 28 − 10 = 18
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-modal btn-modal-green" onclick="startGameWithMode('tutorial')">
+            <span>🐢</span> Modo Práctica (Lento)
+          </button>
+          <button class="btn-modal btn-modal-blue" onclick="startGameWithMode('normal')">
+            <span>⚡</span> Modo Carrera (Normal)
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="closeTutorialModal()">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================================
+         MODAL 2: VICTORIA (10 ACIERTOS)
+         ============================================================= -->
+    <div id="modal-victory" class="modal-overlay">
+      <div class="modal-card">
+        <div class="victory-hero">
+          <img src="recursos/trofeo_transparente.png" alt="Trofeo" class="victory-trophy-img">
+          <h2 style="font-family:var(--font-display); font-size:1.75rem; color:#f59e0b; margin-top:0.35rem;">
+            ¡MISIÓN CUMPLIDA!
+          </h2>
+          <p style="font-size:0.95rem; color:#475569; font-weight:600;">
+            ¡Loki dominó esta estrategia y completó los 10 aciertos!
+          </p>
+          <div class="victory-stars" id="victory-stars-display">⭐⭐⭐</div>
+        </div>
+
+        <div class="victory-stats-grid">
+          <div class="v-stat-card">
+            <span>Tiempo de Carrera</span>
+            <b id="victory-stat-time">01:14</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Vidas Restantes</span>
+            <b id="victory-stat-lives">3 / 3</b>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-modal btn-modal-green" onclick="playNextLevel()">
+            <span>▶</span> Siguiente Nivel
+          </button>
+          <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
+            <span>🔄</span> Repetir Nivel
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="exitToMenu()">
+            <span>🏠</span> Volver al Menú
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================================
+         MODAL 3: FIN DE PARTIDA / INTENTO AGOTADO
+         ============================================================= -->
+    <div id="modal-gameover" class="modal-overlay">
+      <div class="modal-card" style="border-color:#ef4444;">
+        <div class="victory-hero">
+          <img src="recursos/loki_avatar.png" alt="Loki" style="width:80px; height:80px; border-radius:50%; border:3px solid #ef4444;">
+          <h2 style="font-family:var(--font-display); font-size:1.6rem; color:#ef4444; margin-top:0.35rem;">
+            ¡Ánimo! Casi lo logras
+          </h2>
+          <p style="font-size:0.92rem; color:#475569; font-weight:600;" id="gameover-message">
+            El cálculo mental se entrena con paciencia. ¡Prueba el Modo Lento para dominar el truco!
+          </p>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-modal btn-modal-green" onclick="startGameWithMode('tutorial')">
+            <span>🐢</span> Probar en Modo Lento
+          </button>
+          <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
+            <span>🔄</span> Reintentar Normal
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="exitToMenu()">
+            <span>🏠</span> Menú de Niveles
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =============================================================
+       LÓGICA DEL JUEGO Y CATÁLOGO DE 20 ESTRATEGIAS
+       ============================================================= -->
+  <script>
+    /* =============================================================
+       1. BLOQUEO UNIVERSAL DE MENÚS CONTEXTUALES Y LONG-PRESS
+       ============================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    /* =============================================================
+       2. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
+       ============================================================= */
+    const STRATEGIES = [
+      {
+        id: 1, world: 1, grade: '2°', tag: 'Consolidación',
+        name: 'Puente a la decena',
+        desc: 'Completar 10 para sumar fácil en 1 y 2 cifras.',
+        example: '27 + 6 = 33',
+        heading: 'Completar la decena amiga',
+        steps: [
+          'Mira cuánto le falta al primer número para llegar a la siguiente decena cerrada.',
+          'Descompón el segundo sumando en dos partes: la que completa el 10 y lo que sobra.',
+          'Suma la decena limpia más el sobrante sin necesidad de contar con los dedos.'
+        ],
+        formula: '27 + 6 ➔ (27 + 3) + 3 = 30 + 3 = 33',
+        generate: () => {
+          const a = [8, 9, 17, 18, 27, 28, 37, 48, 57, 68][Math.floor(Math.random() * 10)];
+          const falta = 10 - (a % 10);
+          const sobra = Math.floor(Math.random() * 4) + 2;
+          const b = falta + sobra;
+          const exp = a + b;
+          return {
+            qText: `${a} + ${b} = ?`,
+            expected: exp,
+            distractors: [exp - 2, exp + 10],
+            hint: `Descompón ${b} en (${falta} y ${sobra}) ➔ completa a ${a + falta} + ${sobra} = ${exp}`
+          };
+        }
+      },
+      {
+        id: 2, world: 1, grade: '2°', tag: 'Base',
+        name: 'Suma reiterada / Conteo a saltos',
+        desc: 'Sumas de sumandos iguales como base de la multiplicación.',
+        example: '4 + 4 + 4 = 12',
+        heading: 'Saltos rítmicos iguales',
+        steps: [
+          'Reconoce cuántas veces se repite el mismo número.',
+          'Cuenta a saltos rápidos: 4, 8, 12... como una canción de ritmo.',
+          'Equivale a multiplicar las veces por el sumando.'
+        ],
+        formula: '4 + 4 + 4 = 3 × 4 = 12',
+        generate: () => {
+          const n = [3, 4, 5, 6][Math.floor(Math.random() * 4)];
+          const times = [3, 4, 5][Math.floor(Math.random() * 3)];
+          const exp = n * times;
+          const terms = Array(times).fill(n);
+          return {
+            qText: `${terms.join(' + ')} = ?`,
+            expected: exp,
+            distractors: [exp + n, exp - n > 0 ? exp - n : exp + 2 * n],
+            hint: `${times} saltos de ${n} ➔ ${times} × ${n} = ${exp}`
+          };
+        }
+      },
+      {
+        id: 3, world: 1, grade: '2°', tag: 'tag-sisat',
+        name: 'Adición de decenas netas (SiSAT)',
+        desc: 'Sumar decenas cerradas en 2 y 3 cifras.',
+        example: '40 + 30 = 70 o 120 + 30 = 150',
+        heading: 'Sumar solo la columna roja de Decenas',
+        steps: [
+          'Identifica los números de decenas delanteros (4 y 3).',
+          'Suma solo las decenas: 4 + 3 = 7 decenas.',
+          'El 0 de las unidades se queda exactamente igual en su lugar: 70.'
+        ],
+        formula: '40 + 30 ➔ (4 + 3) decenas = 7 decenas = 70',
+        generate: () => {
+          const is3 = Math.random() > 0.5;
+          const d1 = is3 ? (Math.floor(Math.random() * 15) + 11) * 10 : (Math.floor(Math.random() * 6) + 3) * 10;
+          const d2 = (Math.floor(Math.random() * 5) + 2) * 10;
+          const exp = d1 + d2;
+          return {
+            qText: `${d1} + ${d2} = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 10],
+            hint: `Suma ${d1/10} + ${d2/10} = ${exp/10} decenas ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 4, world: 1, grade: '2°', tag: 'tag-sisat',
+        name: 'Sustracción de decenas netas (SiSAT)',
+        desc: 'Restar decenas cerradas en 2 y 3 cifras.',
+        example: '80 − 30 = 50 o 160 − 40 = 120',
+        heading: 'Retroceso de decenas puras',
+        steps: [
+          'Enfócate en la cantidad de decenas que tienes y las que vas a quitar.',
+          'A 8 decenas le quitas 3 decenas y te quedan 5 decenas.',
+          'Conserva el cero final de las unidades.'
+        ],
+        formula: '80 − 30 ➔ 8 dec − 3 dec = 5 decenas = 50',
+        generate: () => {
+          const is3 = Math.random() > 0.5;
+          const d1 = is3 ? (Math.floor(Math.random() * 15) + 14) * 10 : (Math.floor(Math.random() * 5) + 5) * 10;
+          const d2 = (Math.floor(Math.random() * 3) + 2) * 10;
+          const exp = d1 - d2;
+          return {
+            qText: `${d1} − ${d2} = ?`,
+            expected: exp,
+            distractors: [exp + 20, exp - 10],
+            hint: `${d1/10} decenas − ${d2/10} decenas = ${exp/10} decenas ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 5, world: 1, grade: '2°/3°', tag: 'tag-sisat',
+        name: 'Sumar 10 a cualquier número (SiSAT)',
+        desc: 'Aumentar una decena exacta sin tocar unidades.',
+        example: '68 + 10 = 78 o 145 + 10 = 155',
+        heading: 'El salto de la decena mágica',
+        steps: [
+          '¡Las unidades no se tocan! En 68, el 8 se queda exactamente igual.',
+          'Solo aumenta 1 en la posición de las decenas: el 6 pasa a ser 7.',
+          '¡Resultado instantáneo en menos de dos segundos!'
+        ],
+        formula: '68 + 10 ➔ (6 dec + 1) y 8 unidades = 78',
+        generate: () => {
+          const pool = [28, 35, 47, 54, 68, 73, 86, 92, 134, 145, 178, 235];
+          const n = pool[Math.floor(Math.random() * pool.length)];
+          const exp = n + 10;
+          return {
+            qText: `${n} + 10 = ?`,
+            expected: exp,
+            distractors: [n + 20, exp - 1],
+            hint: `Sube 1 a la decena de ${n} sin mover las unidades ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 6, world: 1, grade: '2°/3°', tag: 'tag-sisat',
+        name: 'Restar 10 a cualquier número (SiSAT)',
+        desc: 'Quitar una decena exacta sin tocar unidades.',
+        example: '28 − 10 = 18 o 87 − 10 = 77',
+        heading: 'Retroceder 1 decena sin tocar unidades',
+        steps: [
+          '¡Las unidades quedan intactas! En 28, el 8 se mantiene fijo.',
+          'A las decenas (2) quítale una (1): queda 1 decena.',
+          'Une la decena y las unidades: ¡18!'
+        ],
+        formula: '28 − 10 ➔ (2 dec − 1) y 8 unidades = 18',
+        generate: () => {
+          const pool = [28, 35, 47, 54, 68, 73, 87, 92, 135, 148, 175, 235];
+          const n = pool[Math.floor(Math.random() * pool.length)];
+          const exp = n - 10;
+          return {
+            qText: `${n} − 10 = ?`,
+            expected: exp,
+            distractors: [n + 10, exp - 10 > 0 ? exp - 10 : exp + 2],
+            hint: `Bájale 1 a la decena de ${n} sin mover las unidades ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 7, world: 1, grade: '2°', tag: 'tag-sisat',
+        name: 'Complemento a 10 y 100 netos',
+        desc: 'Parejas cerradas que forman 10 o 100.',
+        example: '10 − 4 = 6 o 100 − 30 = 70',
+        heading: 'Los amigos inseparables de la base',
+        steps: [
+          'Aprende de memoria las parejas de 10: (1 y 9), (2 y 8), (3 y 7), (4 y 6), (5 y 5).',
+          'Para llegar a 100, es lo mismo multiplicado por 10: 30 necesita a 70.',
+          'Si a 100 le quitas 30, su amigo complementario es 70.'
+        ],
+        formula: '100 − 30 = 70 porque 30 + 70 = 100',
+        generate: () => {
+          const is100 = Math.random() > 0.4;
+          if (is100) {
+            const dec = (Math.floor(Math.random() * 7) + 2) * 10;
+            const exp = 100 - dec;
+            return {
+              qText: `100 − ${dec} = ?`,
+              expected: exp,
+              distractors: [exp + 10, exp - 10],
+              hint: `El amigo de ${dec} para llegar a 100 es ${exp}`
+            };
+          } else {
+            const u = Math.floor(Math.random() * 7) + 2;
+            const exp = 10 - u;
+            return {
+              qText: `10 − ${u} = ?`,
+              expected: exp,
+              distractors: [exp + 2, exp > 2 ? exp - 2 : exp + 3],
+              hint: `El amigo de ${u} para llegar a 10 es ${exp}`
+            };
+          }
+        }
+      },
+
+      /* MUNDO 2: DESAFÍOS SISAT 3° */
+      {
+        id: 8, world: 2, grade: '3°', tag: 'tag-sisat',
+        name: 'Complemento a 100 con unidades (SiSAT)',
+        desc: 'Restar a 100 números con decenas y unidades.',
+        example: '100 − 35 = 65 o 100 − 48 = 52',
+        heading: 'El truco del 90 y el 10',
+        steps: [
+          'Las unidades deben sumar 10: si termina en 5, el amigo es 5 (5 + 5 = 10).',
+          'Las decenas deben completar 9: al 3 le faltan 6 para 9.',
+          'Une decenas y unidades: ¡65!'
+        ],
+        formula: '100 − 35 ➔ Decenas a 9 (6), Unidades a 10 (5) = 65',
+        generate: () => {
+          const pool = [25, 35, 45, 55, 65, 38, 48, 52, 64, 76];
+          const n = pool[Math.floor(Math.random() * pool.length)];
+          const exp = 100 - n;
+          return {
+            qText: `100 − ${n} = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 10],
+            hint: `Unidades completan 10 y decenas completan 9 ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 9, world: 2, grade: '2°/3°', tag: 'tag-sisat',
+        name: 'Dobles y Mitades (SiSAT)',
+        desc: 'Calcular el doble o la mitad de números.',
+        example: 'Doble de 25 = 50 o Mitad de 60 = 30',
+        heading: 'Duplicar o repartir en 2 partes exactas',
+        steps: [
+          'Para el doble de 25: Doble de 20 (40) + Doble de 5 (10) = 50.',
+          'Para la mitad de 60: mitad de 6 decenas = 3 decenas = 30.',
+          'Descompón en decenas y unidades para no equivocarte.'
+        ],
+        formula: 'Doble de 25 = 25 + 25 = 50 | Mitad de 60 = 30',
+        generate: () => {
+          const isDoble = Math.random() > 0.5;
+          if (isDoble) {
+            const n = [15, 25, 35, 40, 45, 50, 75][Math.floor(Math.random() * 7)];
+            const exp = n * 2;
+            return {
+              qText: `Doble de ${n} = ?`,
+              expected: exp,
+              distractors: [exp + 10, exp - 10],
+              hint: `Suma ${n} + ${n} ➔ ${exp}`
+            };
+          } else {
+            const n = [40, 60, 80, 100, 120, 160][Math.floor(Math.random() * 6)];
+            const exp = n / 2;
+            return {
+              qText: `Mitad de ${n} = ?`,
+              expected: exp,
+              distractors: [exp + 10, exp - 10],
+              hint: `Reparte ${n} entre 2 ➔ ${exp}`
+            };
+          }
+        }
+      },
+      {
+        id: 10, world: 2, grade: '2°/3°', tag: 'tag-sisat',
+        name: '¿Cuánto le falta para llegar? (SiSAT)',
+        desc: 'Calcular el salto o complemento hacia la meta.',
+        example: '¿Cuánto le falta a 35 para 50? = 15',
+        heading: 'Salto en dos etapas hacia la meta',
+        steps: [
+          'Paso 1: Salto a la decena más cercana (de 35 a 40 faltan 5).',
+          'Paso 2: Salto de la decena a la meta (de 40 a 50 faltan 10).',
+          'Une los dos saltos: 5 + 10 = ¡15!'
+        ],
+        formula: 'De 35 a 50 ➔ +5 (llega a 40) +10 (llega a 50) = 15',
+        generate: () => {
+          const base = [25, 35, 45, 65, 75][Math.floor(Math.random() * 5)];
+          const meta = base + [15, 20, 25, 30][Math.floor(Math.random() * 4)];
+          const exp = meta - base;
+          return {
+            qText: `¿A ${base} cuánto para ${meta}?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 5],
+            hint: `De ${base} a la decena + el resto hasta ${meta} ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 11, world: 2, grade: '3°', tag: 'tag-sisat',
+        name: 'Cruzar la centena con decenas (SiSAT)',
+        desc: 'Sumar o restar decenas netas pasando 100.',
+        example: '150 + 80 = 230 o 260 − 70 = 190',
+        heading: 'Pensar en centenas y decenas unidas',
+        steps: [
+          'Trata las cantidades como decenas: 15 decenas + 8 decenas.',
+          '15 + 8 = 23 decenas.',
+          'Coloca el cero de unidades: ¡230!'
+        ],
+        formula: '150 + 80 ➔ 15 dec + 8 dec = 23 dec = 230',
+        generate: () => {
+          const isAdd = Math.random() > 0.5;
+          if (isAdd) {
+            const a = (Math.floor(Math.random() * 8) + 12) * 10;
+            const b = (Math.floor(Math.random() * 4) + 6) * 10;
+            const exp = a + b;
+            return {
+              qText: `${a} + ${b} = ?`,
+              expected: exp,
+              distractors: [exp + 20, exp - 10],
+              hint: `${a/10} decenas + ${b/10} decenas = ${exp/10} dec ➔ ${exp}`
+            };
+          } else {
+            const a = (Math.floor(Math.random() * 6) + 21) * 10;
+            const b = (Math.floor(Math.random() * 4) + 5) * 10;
+            const exp = a - b;
+            return {
+              qText: `${a} − ${b} = ?`,
+              expected: exp,
+              distractors: [exp + 20, exp - 10],
+              hint: `${a/10} decenas − ${b/10} decenas = ${exp/10} dec ➔ ${exp}`
+            };
+          }
+        }
+      },
+      {
+        id: 12, world: 2, grade: '3°', tag: 'tag-sisat',
+        name: 'Suma de terminados en 5 (SiSAT)',
+        desc: 'Redondear unidades con 5 para formar decenas.',
+        example: '35 + 25 = 60 o 45 + 35 = 80',
+        heading: 'Emparejar los dos cincos en un diez',
+        steps: [
+          'Paso 1: Los dos 5 de las unidades se abrazan y forman 10 (5 + 5 = 10).',
+          'Paso 2: Suma las decenas: 30 + 20 = 50.',
+          'Paso 3: Añade la nueva decena formada: 50 + 10 = ¡60!'
+        ],
+        formula: '35 + 25 ➔ (30 + 20) + (5 + 5) = 50 + 10 = 60',
+        generate: () => {
+          const d1 = (Math.floor(Math.random() * 5) + 2) * 10 + 5;
+          const d2 = (Math.floor(Math.random() * 4) + 1) * 10 + 5;
+          const exp = d1 + d2;
+          return {
+            qText: `${d1} + ${d2} = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 10],
+            hint: `Los dos 5 forman 10 ➔ súmalo a las decenas = ${exp}`
+          };
+        }
+      },
+      {
+        id: 13, world: 2, grade: '2°/3°', tag: 'tag-sisat',
+        name: 'Suma y resta de centenas netas (SiSAT)',
+        desc: 'Operar centenas cerradas directamente.',
+        example: '500 + 400 = 900 o 800 − 300 = 500',
+        heading: 'Operar en la escala de cientos',
+        steps: [
+          'Trabaja únicamente con el dígito de las centenas (5 y 4).',
+          '5 + 4 = 9 centenas.',
+          'Agrega los dos ceros: ¡900!'
+        ],
+        formula: '500 + 400 ➔ 5 cen + 4 cen = 9 centenas = 900',
+        generate: () => {
+          const isAdd = Math.random() > 0.5;
+          if (isAdd) {
+            const a = (Math.floor(Math.random() * 4) + 2) * 100;
+            const b = (Math.floor(Math.random() * 4) + 2) * 100;
+            const exp = a + b;
+            return {
+              qText: `${a} + ${b} = ?`,
+              expected: exp,
+              distractors: [exp + 100, exp - 100],
+              hint: `${a/100} centenas + ${b/100} centenas = ${exp/100} centenas ➔ ${exp}`
+            };
+          } else {
+            const a = (Math.floor(Math.random() * 4) + 5) * 100;
+            const b = (Math.floor(Math.random() * 3) + 1) * 100;
+            const exp = a - b;
+            return {
+              qText: `${a} − ${b} = ?`,
+              expected: exp,
+              distractors: [exp + 100, exp - 100],
+              hint: `${a/100} centenas − ${b/100} centenas = ${exp/100} centenas ➔ ${exp}`
+            };
+          }
+        }
+      },
+      {
+        id: 14, world: 2, grade: '3°', tag: 'tag-sisat',
+        name: 'Multiplicar por 10 (SiSAT)',
+        desc: 'Agregar un cero a la derecha en 2 y 3 cifras.',
+        example: '25 × 10 = 250 o 48 × 10 = 480',
+        heading: 'El salto de valor posicional',
+        steps: [
+          'Al multiplicar cualquier número por 10, cada cifra sube un puesto de valor.',
+          'Las unidades pasan a decenas, y las decenas a centenas.',
+          'El resultado es el mismo número con un 0 al final: 25 ➔ 250.'
+        ],
+        formula: '25 × 10 ➔ 25 decenas = 250',
+        generate: () => {
+          const pool = [14, 25, 36, 48, 52, 65, 74, 88, 93];
+          const n = pool[Math.floor(Math.random() * pool.length)];
+          const exp = n * 10;
+          return {
+            qText: `${n} × 10 = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 20],
+            hint: `Agrega un 0 al final de ${n} ➔ ${exp}`
+          };
+        }
+      },
+
+      /* MUNDO 3: MAESTRÍA Y TRUCOS AVANZADOS */
+      {
+        id: 15, world: 3, grade: '3°', tag: 'tag-sisat',
+        name: 'Tablas de multiplicar básicas (SiSAT)',
+        desc: 'Multiplicaciones fundamentales del SiSAT.',
+        example: '4 × 8 = 32 o 7 × 6 = 42',
+        heading: 'Agilidad en las tablas nucleares',
+        steps: [
+          'Recurre a las tablas clave: 4 × 8 = 32, 6 × 7 = 42, 8 × 7 = 56.',
+          'Apóyate en dobles conocidos o conteo rítmico.',
+          '¡Responde con seguridad sin dudar!'
+        ],
+        formula: '6 × 7 = 42 | 4 × 8 = 32 | 8 × 7 = 56',
+        generate: () => {
+          const pairs = [
+            [4, 8, 32], [7, 6, 42], [8, 7, 56], [6, 8, 48],
+            [9, 6, 54], [7, 7, 49], [8, 8, 64], [9, 8, 72]
+          ];
+          const [f1, f2, exp] = pairs[Math.floor(Math.random() * pairs.length)];
+          return {
+            qText: `${f1} × ${f2} = ?`,
+            expected: exp,
+            distractors: [exp + f1, exp - f2],
+            hint: `Tabla del ${f1}: ${f1} veces ${f2} = ${exp}`
+          };
+        }
+      },
+      {
+        id: 16, world: 3, grade: '3°', tag: 'tag-salto',
+        name: 'Compensación aditiva (+9 y +19)',
+        desc: 'Sumar 10 o 20 y restar 1.',
+        example: '46 + 9 = 55 (46 + 10 − 1)',
+        heading: 'Suma la decena redonda y descuenta 1',
+        steps: [
+          'Sumar 9 es difícil, ¡pero sumar 10 es facilísimo!',
+          'Primero suma 10: 46 + 10 = 56.',
+          'Luego compensa restando el 1 que agregaste de más: 56 − 1 = ¡55!'
+        ],
+        formula: '46 + 9 ➔ (46 + 10) − 1 = 56 − 1 = 55',
+        generate: () => {
+          const is19 = Math.random() > 0.5;
+          const n = [34, 45, 56, 67, 73, 82][Math.floor(Math.random() * 6)];
+          const add = is19 ? 19 : 9;
+          const exp = n + add;
+          return {
+            qText: `${n} + ${add} = ?`,
+            expected: exp,
+            distractors: [exp + 2, exp - 10],
+            hint: `Suma ${add + 1} y réstale 1 ➔ (${n} + ${add + 1}) − 1 = ${exp}`
+          };
+        }
+      },
+      {
+        id: 17, world: 3, grade: '3°', tag: 'tag-salto',
+        name: 'Compensación sustractiva (−9 y −19)',
+        desc: 'Restar 10 o 20 y sumar 1.',
+        example: '54 − 9 = 45 (54 − 10 + 1)',
+        heading: 'Resta la decena redonda y devuelve 1',
+        steps: [
+          'Restar 9 se hace en dos pasos rápidos:',
+          'Paso 1: Quítale una decena completa (54 − 10 = 44).',
+          'Paso 2: Como quitaste uno de más, regrésalo sumándolo: 44 + 1 = ¡45!'
+        ],
+        formula: '54 − 9 ➔ (54 − 10) + 1 = 44 + 1 = 45',
+        generate: () => {
+          const is19 = Math.random() > 0.5;
+          const n = [44, 53, 62, 75, 84, 91][Math.floor(Math.random() * 6)];
+          const sub = is19 ? 19 : 9;
+          const exp = n - sub;
+          return {
+            qText: `${n} − ${sub} = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 2],
+            hint: `Resta ${sub + 1} y súmale 1 ➔ (${n} − ${sub + 1}) + 1 = ${exp}`
+          };
+        }
+      },
+      {
+        id: 18, world: 3, grade: '2°', tag: 'Base',
+        name: 'Desprender la unidad suelta',
+        desc: 'Aislar y quitar la unidad para dejar decena limpia.',
+        example: '76 − 6 = 70 o 148 − 8 = 140',
+        heading: 'Aterrizar en la decena redonda',
+        steps: [
+          'Observa la unidad suelta del número (el 6 en 76).',
+          'Al restarle exactamente esa misma unidad, se cancela a cero.',
+          'Queda la decena neta limpia de forma instantánea: 70.'
+        ],
+        formula: '76 − 6 ➔ 70 | 148 − 8 ➔ 140',
+        generate: () => {
+          const is3 = Math.random() > 0.5;
+          const u = Math.floor(Math.random() * 6) + 3;
+          const base = is3 ? (Math.floor(Math.random() * 10) + 11) * 10 + u : (Math.floor(Math.random() * 6) + 3) * 10 + u;
+          const exp = base - u;
+          return {
+            qText: `${base} − ${u} = ?`,
+            expected: exp,
+            distractors: [exp + 10, exp - 10],
+            hint: `Cancela la unidad ${u} y aterriza en la decena limpia ➔ ${exp}`
+          };
+        }
+      },
+      {
+        id: 19, world: 3, grade: '3°', tag: 'tag-salto',
+        name: 'Doble del doble (Multiplicar ×4)',
+        desc: 'Duplicar dos veces seguidas para la tabla del 4.',
+        example: '4 × 6 = 24 (6 ➔ 12 ➔ 24)',
+        heading: 'Multiplicar por 4 en dos saltos dobles',
+        steps: [
+          'Multiplicar por 4 es simplemente sacar el doble dos veces.',
+          'Primer salto: Doble de 6 = 12.',
+          'Segundo salto: Doble de 12 = ¡24!'
+        ],
+        formula: '4 × 6 ➔ Doble de 6 (12) ➔ Doble de 12 = 24',
+        generate: () => {
+          const n = [5, 6, 7, 8, 9, 12, 15][Math.floor(Math.random() * 7)];
+          const exp = n * 4;
+          return {
+            qText: `4 × ${n} = ?`,
+            expected: exp,
+            distractors: [exp + 4, exp - 4],
+            hint: `Doble de ${n} (${n*2}) ➔ Doble de ${n*2} = ${exp}`
+          };
+        }
+      },
+      {
+        id: 20, world: 3, grade: '3°', tag: 'tag-salto',
+        name: 'Multiplicación rápida (×9 y ×11)',
+        desc: 'Multiplicar por 10 y ajustar unidades.',
+        example: '9 × 7 = 63 (70 − 7) u 11 × 6 = 66',
+        heading: 'Apoyarse en la tabla del 10',
+        steps: [
+          'Para × 9: Multiplica por 10 y resta una vez el número: 10 × 7 = 70 ➔ 70 − 7 = 63.',
+          'Para × 11: Multiplica por 10 y suma una vez el número: 10 × 6 = 60 ➔ 60 + 6 = 66.',
+          '¡Estrategia veloz para no memorizar a ciegas!'
+        ],
+        formula: '9 × 7 = 70 − 7 = 63 | 11 × 6 = 60 + 6 = 66',
+        generate: () => {
+          const is11 = Math.random() > 0.5;
+          const mult = is11 ? 11 : 9;
+          const n = [4, 5, 6, 7, 8][Math.floor(Math.random() * 5)];
+          const exp = mult * n;
+          return {
+            qText: `${mult} × ${n} = ?`,
+            expected: exp,
+            distractors: [exp + (is11 ? -11 : 9), exp + (is11 ? 11 : -9)],
+            hint: is11 ? `(10 × ${n}) + ${n} = ${n*10} + ${n} = ${exp}` : `(10 × ${n}) − ${n} = ${n*10} − ${n} = ${exp}`
+          };
+        }
+      }
+    ];
+
+    /* =============================================================
+       3. ESTADO GLOBAL DEL JUEGO
+       ============================================================= */
+    const gameState = {
+      currentLevelId: 6,
+      currentWorld: 1,
+      speedMode: 'tutorial', // 'tutorial' (lento) o 'normal' (carrera)
+      gameActive: false,
+      gamePaused: false,
+      lives: 3,
+      correctCount: 0,
+      targetGoal: 10,
+      currentProblem: null,
+      soundEnabled: true,
+      voiceSpeechEnabled: true,
+      startTime: 0,
+      totalSeconds: 0,
+      userStars: {}, // { levelId: stars }
+      totalBones: 0
+    };
+
+    // Cargar progreso de localStorage
+    try {
+      const savedStars = localStorage.getItem('loki_runner_stars');
+      if (savedStars) gameState.userStars = JSON.parse(savedStars);
+      const savedBones = localStorage.getItem('loki_runner_bones');
+      if (savedBones) gameState.totalBones = parseInt(savedBones, 10) || 0;
+    } catch(e) {}
+
+    /* =============================================================
+       4. AUDIO SINTETIZADO OFFLINE (WEB AUDIO API)
+       ============================================================= */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, duration, type='sine', gainVal=0.15) {
+      if (!gameState.soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function soundLaneSwitch() {
+      playTone(420, 0.08, 'triangle', 0.12);
+    }
+
+    function soundCorrectHit() {
+      if (!gameState.soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        // Acorde alegre de campanas: C5, E5, G5, C6
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+          setTimeout(() => playTone(f, 0.22, 'sine', 0.14), i * 50);
+        });
+      } catch(e) {}
+    }
+
+    function soundWrongHit() {
+      if (!gameState.soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        // Sonido de golpe sordo
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.3);
+      } catch(e) {}
+    }
+
+    function soundVictoryFanfare() {
+      if (!gameState.soundEnabled) return;
+      const notes = [
+        { f: 523.25, d: 0.15 }, { f: 659.25, d: 0.15 }, { f: 783.99, d: 0.15 },
+        { f: 1046.50, d: 0.4 }, { f: 880.00, d: 0.2 }, { f: 1046.50, d: 0.6 }
+      ];
+      let delay = 0;
+      notes.forEach(n => {
+        setTimeout(() => playTone(n.f, n.d, 'triangle', 0.2), delay);
+        delay += (n.d * 1000) * 0.85;
+      });
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      const btn = document.getElementById('btn-toggle-sound');
+      if (btn) btn.textContent = gameState.soundEnabled ? '🔊 Sonido' : '🔇 Mudo';
+    }
+
+    function toggleVoiceSpeech() {
+      gameState.voiceSpeechEnabled = !gameState.voiceSpeechEnabled;
+      const btn = document.getElementById('btn-voice-toggle');
+      if (btn) {
+        btn.textContent = gameState.voiceSpeechEnabled ? '🔊 Voz' : '🔇 Voz off';
+      }
+    }
+
+    function speakProblem(text) {
+      if (!gameState.voiceSpeechEnabled || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        let clean = text.replace('−', ' menos ').replace('+', ' más ').replace('×', ' por ').replace('?', '');
+        const utter = new SpeechSynthesisUtterance(clean);
+        utter.lang = 'es-MX';
+        utter.rate = 1.0;
+        window.speechSynthesis.speak(utter);
+      } catch(e) {}
+    }
+
+    /* =============================================================
+       5. NAVEGACIÓN ENTRE VISTAS Y RENDER DE NIVELES
+       ============================================================= */
+    function renderLevels() {
+      const container = document.getElementById('levels-container');
+      container.innerHTML = '';
+
+      const filtered = STRATEGIES.filter(s => s.world === gameState.currentWorld);
+
+      filtered.forEach(strat => {
+        const stars = gameState.userStars[strat.id] || 0;
+        const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+        const isFeatured = strat.id === 6; // Restar 10 destacado
+
+        const card = document.createElement('div');
+        card.className = `level-card ${isFeatured ? 'featured' : ''}`;
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <span class="card-num-badge">Nivel ${strat.id}</span>
+              <span class="card-tag ${strat.tag}">${strat.name.includes('SiSAT') ? '⭐ SiSAT Oficial' : strat.grade}</span>
+            </div>
+            <h3 class="card-title" style="margin-top:0.4rem;">${strat.name}</h3>
+            <span class="card-example">${strat.example}</span>
+            <p class="card-desc" style="margin-top:0.35rem;">${strat.desc}</p>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#64748b;">Récord:</span>
+              <span style="font-size:0.95rem; color:#f59e0b;">${starStr}</span>
+            </div>
+
+            <div class="card-actions">
+              <div class="btn-row">
+                <button class="btn-play-tutorial" onclick="openTutorialModal(${strat.id}, 'tutorial')" title="Velocidad reducida para aprender el truco">
+                  <span>🐢</span> Práctica Lenta
+                </button>
+                <button class="btn-play-run" onclick="openTutorialModal(${strat.id}, 'normal')" title="Velocidad normal tipo carrera">
+                  <span>⚡</span> Carrera
+                </button>
+              </div>
+              <button class="btn-explain" onclick="openTutorialModal(${strat.id}, 'preview')">
+                <span>💡</span> Ver Explicación del Truco
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Actualizar contadores globales
+      document.getElementById('global-bones-count').textContent = gameState.totalBones;
+      let totalStars = 0;
+      Object.values(gameState.userStars).forEach(s => totalStars += s);
+      document.getElementById('global-stars-count').textContent = `${totalStars} / 60`;
+    }
+
+    function switchWorld(wNum) {
+      gameState.currentWorld = wNum;
+      document.querySelectorAll('.world-tab-btn').forEach((b, idx) => {
+        b.classList.toggle('active', (idx + 1) === wNum);
+      });
+      renderLevels();
+    }
+
+    /* =============================================================
+       6. MODAL DE TUTORIAL Y EXPLICACIÓN
+       ============================================================= */
+    function openTutorialModal(stratId, mode) {
+      gameState.currentLevelId = stratId;
+      const strat = STRATEGIES.find(s => s.id === stratId);
+      if (!strat) return;
+
+      document.getElementById('modal-tut-strategy-name').textContent = `#${strat.id}: ${strat.name}`;
+      document.getElementById('modal-tut-grade-tag').textContent = `${strat.grade} Grado · Fase 4 NEM`;
+      document.getElementById('modal-tut-trick-heading').textContent = strat.heading;
+
+      const stepsContainer = document.getElementById('modal-tut-steps');
+      stepsContainer.innerHTML = '';
+      strat.steps.forEach((step, idx) => {
+        const item = document.createElement('div');
+        item.className = 'trick-step-item';
+        item.innerHTML = `<span class="step-badge">Paso ${idx + 1}</span> <span>${step}</span>`;
+        stepsContainer.appendChild(item);
+      });
+
+      document.getElementById('modal-tut-formula').textContent = strat.formula;
+
+      document.getElementById('modal-tutorial').classList.add('active');
+    }
+
+    function closeTutorialModal() {
+      document.getElementById('modal-tutorial').classList.remove('active');
+    }
+
+    function openExplanationFromGame() {
+      if (gameState.gameActive) {
+        gameState.gamePaused = true;
+      }
+      openTutorialModal(gameState.currentLevelId, 'preview');
+    }
+
+    /* =============================================================
+       7. MOTOR 3D SUBWAY SURFERS (CANVAS RUNNER)
+       ============================================================= */
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Recursos gráficos precargados
+    const IMAGES = {
+      lokiAvatar: new Image(),
+      lokiCutout: new Image(),
+      bone: new Image(),
+      trophy: new Image(),
+      trees: new Image()
+    };
+    IMAGES.lokiAvatar.src = 'recursos/loki_avatar.png';
+    IMAGES.lokiCutout.src = 'recursos/loki_avatar.png'; // Fallback seguro
+    IMAGES.bone.src = 'recursos/hueso_transparente.png';
+    IMAGES.trophy.src = 'recursos/trofeo_transparente.png';
+    IMAGES.trees.src = 'recursos/bosque_transparente.png';
+
+    // Geometría del mundo 3D
+    const WORLD = {
+      lanes: [-1, 0, 1], // Izquierda, Centro, Derecha
+      laneWidth: 160,    // Separación horizontal en world units
+      cameraFov: 240,
+      cameraHeight: 180,
+      horizonY: 0,
+      roadLength: 1200,
+      speed: 7.5,        // Unidades Z por frame
+      baseSpeed: 7.5
+    };
+
+    // Estado del Jugador (Loki)
+    const player = {
+      lane: 0,           // -1, 0, 1
+      worldX: 0,         // Coordenada continua interpolada
+      tilt: 0,           // Inclinación al girar
+      runCycle: 0,       // Animación de patas y orejas
+      jumpY: 0,
+      isInvulnerable: false,
+      invulnerableTimer: 0,
+      celebrateTimer: 0,
+      stumbleTimer: 0
+    };
+
+    // Obstáculos / Vallas en pista
+    let roadWaves = [];
+    let roadsideTrees = [];
+    let roadZOffset = 0;
+    let particles = [];
+    let animFrameId = null;
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.scale(dpr, dpr);
+      WORLD.horizonY = window.innerHeight * 0.36;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // INICIAR PARTIDA
+    function startGameWithMode(mode) {
+      closeTutorialModal();
+      document.getElementById('modal-victory').classList.remove('active');
+      document.getElementById('modal-gameover').classList.remove('active');
+
+      gameState.speedMode = mode;
+      gameState.gameActive = true;
+      gameState.gamePaused = false;
+      gameState.lives = 3;
+      gameState.correctCount = 0;
+      gameState.startTime = Date.now();
+
+      // Ajustar velocidad según modo
+      if (mode === 'tutorial') {
+        WORLD.baseSpeed = 5.2; // Velocidad reducida ~40% para pensar con calma
+        document.getElementById('hud-speed-badge').textContent = '🐢 Tutorial (Lento)';
+        document.getElementById('hud-speed-badge').className = 'hud-mode-badge mode-tutorial';
+      } else {
+        WORLD.baseSpeed = 8.5; // Velocidad normal de carrera
+        document.getElementById('hud-speed-badge').textContent = '⚡ Carrera (Normal)';
+        document.getElementById('hud-speed-badge').className = 'hud-mode-badge mode-carrera';
+      }
+      WORLD.speed = WORLD.baseSpeed;
+
+      // Reiniciar jugador
+      player.lane = 0;
+      player.worldX = 0;
+      player.tilt = 0;
+      player.runCycle = 0;
+      player.jumpY = 0;
+      player.isInvulnerable = false;
+      player.celebrateTimer = 0;
+      player.stumbleTimer = 0;
+
+      // Inicializar árboles de los lados
+      roadsideTrees = [];
+      for (let z = 100; z < WORLD.roadLength; z += 180) {
+        roadsideTrees.push({ x: -1.75, z: z, type: 0 });
+        roadsideTrees.push({ x: 1.75, z: z + 90, type: 0 });
+      }
+
+      roadWaves = [];
+      particles = [];
+
+      // Cambiar de vista
+      document.getElementById('view-menu').classList.remove('active');
+      document.getElementById('view-game').classList.add('active');
+      resizeCanvas();
+
+      // Generar primer problema
+      spawnNewMathChallenge();
+
+      // Arrancar loop
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      lastFrameTime = performance.now();
+      animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function spawnNewMathChallenge() {
+      const strat = STRATEGIES.find(s => s.id === gameState.currentLevelId);
+      if (!strat) return;
+
+      const challenge = strat.generate();
+      gameState.currentProblem = challenge;
+
+      // Actualizar HUD
+      document.getElementById('hud-strategy-title').textContent = `Estrategia #${strat.id} · ${strat.name}`;
+      document.getElementById('hud-math-problem').textContent = challenge.qText;
+      document.getElementById('hud-math-hint').textContent = challenge.hint || '¡Impacta la respuesta correcta!';
+      updateHudCounters();
+
+      // Hablar si está activado
+      speakProblem(challenge.qText);
+
+      // Crear oleada de 3 vallas con las opciones (1 correcta, 2 distractores)
+      // Barajadas aleatoriamente con Fisher-Yates
+      const rawOptions = [
+        { val: challenge.expected, isCorrect: true },
+        { val: challenge.distractors[0], isCorrect: false },
+        { val: challenge.distractors[1], isCorrect: false }
+      ];
+
+      // Fisher-Yates
+      for (let i = rawOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rawOptions[i], rawOptions[j]] = [rawOptions[j], rawOptions[i]];
+      }
+
+      // Asignar carriles: -1 (izq), 0 (centro), 1 (der)
+      const lanes = [-1, 0, 1];
+      const hurdles = rawOptions.map((opt, idx) => ({
+        lane: lanes[idx],
+        value: opt.val,
+        isCorrect: opt.isCorrect,
+        hit: false
+      }));
+
+      // Distancia de aparición según modo
+      const spawnZ = gameState.speedMode === 'tutorial' ? 1200 : 950;
+      roadWaves.push({
+        z: spawnZ,
+        hurdles: hurdles,
+        evaluated: false
+      });
+    }
+
+    function updateHudCounters() {
+      // Vidas
+      const hearts = '❤️'.repeat(Math.max(0, gameState.lives)) + '🖤'.repeat(Math.max(0, 3 - gameState.lives));
+      document.getElementById('hud-lives').textContent = hearts;
+
+      // Huesos
+      document.getElementById('hud-bones-progress').textContent = `${gameState.correctCount} / ${gameState.targetGoal}`;
+    }
+
+    /* =============================================================
+       8. CONTROLES (TOUCH, TECLADO, SWIPE)
+       ============================================================= */
+    function movePlayerLeft() {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      if (player.lane > -1) {
+        player.lane--;
+        soundLaneSwitch();
+      }
+    }
+
+    function movePlayerRight() {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      if (player.lane < 1) {
+        player.lane++;
+        soundLaneSwitch();
+      }
+    }
+
+    function handleTouchLeft(e) {
+      if (e) e.preventDefault();
+      movePlayerLeft();
+    }
+
+    function handleTouchRight(e) {
+      if (e) e.preventDefault();
+      movePlayerRight();
+    }
+
+    // Soporte de Teclado
+    window.addEventListener('keydown', (e) => {
+      if (!gameState.gameActive) return;
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        movePlayerLeft();
+      } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        movePlayerRight();
+      } else if (e.key === 'p' || e.key === 'P' || e.key === ' ') {
+        togglePauseGame();
+      }
+    });
+
+    // Toque directo en carril en canvas
+    canvas.addEventListener('pointerdown', (e) => {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const third = rect.width / 3;
+
+      if (clickX < third) {
+        if (player.lane !== -1) { player.lane = -1; soundLaneSwitch(); }
+      } else if (clickX > third * 2) {
+        if (player.lane !== 1) { player.lane = 1; soundLaneSwitch(); }
+      } else {
+        if (player.lane !== 0) { player.lane = 0; soundLaneSwitch(); }
+      }
+    });
+
+    function togglePauseGame() {
+      if (!gameState.gameActive) return;
+      gameState.gamePaused = !gameState.gamePaused;
+      document.getElementById('btn-pause').textContent = gameState.gamePaused ? '▶️' : '⏸️';
+    }
+
+    function exitToMenu() {
+      gameState.gameActive = false;
+      gameState.gamePaused = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      document.getElementById('view-game').classList.remove('active');
+      document.getElementById('modal-victory').classList.remove('active');
+      document.getElementById('modal-gameover').classList.remove('active');
+      document.getElementById('modal-tutorial').classList.remove('active');
+      document.getElementById('view-menu').classList.add('active');
+      renderLevels();
+    }
+
+    /* =============================================================
+       9. BUCLE PRINCIPAL DE JUEGO (GAME LOOP)
+       ============================================================= */
+    let lastFrameTime = performance.now();
+
+    function gameLoop(now) {
+      const dt = Math.min((now - lastFrameTime) / 1000, 0.1);
+      lastFrameTime = now;
+
+      if (gameState.gameActive && !gameState.gamePaused) {
+        updateGame(dt);
+      }
+
+      renderGame();
+
+      if (gameState.gameActive) {
+        animFrameId = requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function updateGame(dt) {
+      // 1. Suavizar movimiento horizontal del jugador hacia el carril meta
+      const targetX = player.lane * WORLD.laneWidth;
+      const diffX = targetX - player.worldX;
+      player.worldX += diffX * 0.18;
+      player.tilt = diffX * 0.05;
+
+      // 2. Animación de carrera
+      player.runCycle += dt * (WORLD.speed * 1.5);
+      player.jumpY = Math.abs(Math.sin(player.runCycle * 2)) * 10;
+
+      // 3. Timers especiales
+      if (player.isInvulnerable) {
+        player.invulnerableTimer -= dt;
+        if (player.invulnerableTimer <= 0) player.isInvulnerable = false;
+      }
+      if (player.celebrateTimer > 0) player.celebrateTimer -= dt;
+      if (player.stumbleTimer > 0) player.stumbleTimer -= dt;
+
+      // 4. Avance de carretera y árboles
+      roadZOffset += WORLD.speed;
+      if (roadZOffset > 80) roadZOffset -= 80;
+
+      roadsideTrees.forEach(t => {
+        t.z -= WORLD.speed;
+        if (t.z < 20) t.z += WORLD.roadLength;
+      });
+
+      // 5. Avance de oleadas de vallas y detección de colisión
+      for (let i = roadWaves.length - 1; i >= 0; i--) {
+        const wave = roadWaves[i];
+        wave.z -= WORLD.speed;
+
+        // Detección de colisión cuando la valla llega a la altura de Loki (Z ~ 30 a 0)
+        if (!wave.evaluated && wave.z <= 40 && wave.z >= -20) {
+          // Buscar si hay una valla en el carril de Loki
+          const collidedHurdle = wave.hurdles.find(h => h.lane === player.lane);
+
+          if (collidedHurdle) {
+            wave.evaluated = true;
+            collidedHurdle.hit = true;
+
+            if (collidedHurdle.isCorrect) {
+              handleCorrectHit(collidedHurdle.value);
+            } else {
+              handleWrongHit(collidedHurdle.value);
+            }
+          }
+        }
+
+        // Si la valla pasó completamente de largo sin colisionar
+        if (!wave.evaluated && wave.z < -40) {
+          wave.evaluated = true;
+          handleMissedWave();
+        }
+
+        // Eliminar oleadas viejas y spawnear la siguiente
+        if (wave.z < -80) {
+          roadWaves.splice(i, 1);
+          if (gameState.gameActive && gameState.correctCount < gameState.targetGoal) {
+            spawnNewMathChallenge();
+          }
+        }
+      }
+
+      // 6. Actualizar partículas
+      for (let p = particles.length - 1; p >= 0; p--) {
+        const pt = particles[p];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.vy += 0.25; // Gravedad
+        pt.alpha -= dt * 1.5;
+        if (pt.alpha <= 0) particles.splice(p, 1);
+      }
+    }
+
+    /* =============================================================
+       10. EVENTOS DE IMPACTO Y RETROALIMENTACIÓN
+       ============================================================= */
+    function showToast(text, isError=false) {
+      const toast = document.getElementById('feedback-toast');
+      toast.textContent = text;
+      toast.className = isError ? 'show error' : 'show';
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.className = '';
+      }, 1800);
+    }
+
+    function handleCorrectHit(val) {
+      gameState.correctCount++;
+      gameState.totalBones++;
+      player.celebrateTimer = 0.6;
+      soundCorrectHit();
+      showToast(`¡Excelente! ${val} es correcto 🦴`, false);
+      updateHudCounters();
+
+      // Guardar huesos totales
+      try { localStorage.setItem('loki_runner_bones', gameState.totalBones); } catch(e) {}
+
+      // Generar partículas doradas
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      for (let i = 0; i < 24; i++) {
+        particles.push({
+          x: screenW * 0.5 + (player.worldX * 0.8),
+          y: screenH * 0.78 - player.jumpY,
+          vx: (Math.random() - 0.5) * 10,
+          vy: -Math.random() * 8 - 4,
+          color: ['#fbbf24', '#f59e0b', '#38bdf8', '#ffffff'][Math.floor(Math.random() * 4)],
+          size: Math.random() * 7 + 4,
+          alpha: 1.0
+        });
+      }
+
+      // ¿Superó el nivel?
+      if (gameState.correctCount >= gameState.targetGoal) {
+        triggerVictory();
+      }
+    }
+
+    function handleWrongHit(val) {
+      if (player.isInvulnerable) return;
+
+      gameState.lives--;
+      player.stumbleTimer = 0.5;
+      player.isInvulnerable = true;
+      player.invulnerableTimer = 1.2;
+      soundWrongHit();
+
+      const expected = gameState.currentProblem ? gameState.currentProblem.expected : '';
+      showToast(`¡Cuidado! ${val} es trampa. La correcta es ${expected}`, true);
+      updateHudCounters();
+
+      // Partículas de choque
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      for (let i = 0; i < 16; i++) {
+        particles.push({
+          x: screenW * 0.5 + (player.worldX * 0.8),
+          y: screenH * 0.78,
+          vx: (Math.random() - 0.5) * 8,
+          vy: -Math.random() * 6 - 2,
+          color: ['#ef4444', '#991b1b', '#64748b'][Math.floor(Math.random() * 3)],
+          size: Math.random() * 6 + 3,
+          alpha: 1.0
+        });
+      }
+
+      // ¿Se quedó sin vidas?
+      if (gameState.lives <= 0) {
+        triggerGameOver();
+      }
+    }
+
+    function handleMissedWave() {
+      const expected = gameState.currentProblem ? gameState.currentProblem.expected : '';
+      showToast(`¡Se te pasó! La respuesta correcta era ${expected}`, false);
+    }
+
+    function triggerVictory() {
+      gameState.gameActive = false;
+      soundVictoryFanfare();
+
+      const totalSec = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
+
+      document.getElementById('victory-stat-time').textContent = `${m}:${s}`;
+      document.getElementById('victory-stat-lives').textContent = `${gameState.lives} / 3`;
+
+      // Calcular estrellas (3 estrellas = 3 vidas, 2 = 2 vidas, 1 = 1 vida)
+      const starsEarned = Math.max(1, gameState.lives);
+      document.getElementById('victory-stars-display').textContent = '⭐'.repeat(starsEarned);
+
+      // Guardar récord si es mejor
+      const prevStars = gameState.userStars[gameState.currentLevelId] || 0;
+      if (starsEarned > prevStars) {
+        gameState.userStars[gameState.currentLevelId] = starsEarned;
+        try { localStorage.setItem('loki_runner_stars', JSON.stringify(gameState.userStars)); } catch(e) {}
+      }
+
+      setTimeout(() => {
+        document.getElementById('modal-victory').classList.add('active');
+      }, 500);
+    }
+
+    function triggerGameOver() {
+      gameState.gameActive = false;
+      setTimeout(() => {
+        document.getElementById('modal-gameover').classList.add('active');
+      }, 400);
+    }
+
+    function restartCurrentLevel() {
+      startGameWithMode(gameState.speedMode);
+    }
+
+    function playNextLevel() {
+      if (gameState.currentLevelId < STRATEGIES.length) {
+        gameState.currentLevelId++;
+        openTutorialModal(gameState.currentLevelId, gameState.speedMode);
+      } else {
+        exitToMenu();
+      }
+    }
+
+    /* =============================================================
+       11. RENDERIZADOR 3D EN CANVAS
+       ============================================================= */
+    function project3D(xWorld, zWorld) {
+      const fov = WORLD.cameraFov;
+      const zClamped = Math.max(1, zWorld);
+      const scale = fov / (fov + zClamped);
+
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+
+      const screenX = (screenW * 0.5) + (xWorld * scale);
+      const screenY = WORLD.horizonY + ((screenH - WORLD.horizonY) * 0.88 * scale);
+
+      return { x: screenX, y: screenY, scale: scale };
+    }
+
+    function renderGame() {
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const horizon = WORLD.horizonY;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. CIELO Y HORIZONTE CON GRADIENTE
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
+      skyGrad.addColorStop(0, '#0c1a30');
+      skyGrad.addColorStop(0.65, '#1e3a8a');
+      skyGrad.addColorStop(1, '#60a5fa');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, W, horizon);
+
+      // Nubes suaves lejanas
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.beginPath();
+      ctx.arc(W * 0.22, horizon * 0.45, 45, 0, Math.PI * 2);
+      ctx.arc(W * 0.27, horizon * 0.40, 60, 0, Math.PI * 2);
+      ctx.arc(W * 0.32, horizon * 0.46, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(W * 0.72, horizon * 0.55, 55, 0, Math.PI * 2);
+      ctx.arc(W * 0.78, horizon * 0.50, 70, 0, Math.PI * 2);
+      ctx.arc(W * 0.84, horizon * 0.56, 50, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Silueta de Colinas de Sayula en horizonte
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.moveTo(0, horizon);
+      ctx.quadraticCurveTo(W * 0.25, horizon - 35, W * 0.5, horizon - 15);
+      ctx.quadraticCurveTo(W * 0.75, horizon - 45, W, horizon);
+      ctx.lineTo(W, horizon);
+      ctx.lineTo(0, horizon);
+      ctx.fill();
+
+      // 2. PRADERA LATERAL (CÉSPED VERDE)
+      const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
+      grassGrad.addColorStop(0, '#15803d');
+      grassGrad.addColorStop(1, '#14532d');
+      ctx.fillStyle = grassGrad;
+      ctx.fillRect(0, horizon, W, H - horizon);
+
+      // 3. CARRETERA 3D (TRAPECIO EN PERSPECTIVA)
+      const pFarLeft = project3D(-WORLD.laneWidth * 1.8, WORLD.roadLength);
+      const pFarRight = project3D(WORLD.laneWidth * 1.8, WORLD.roadLength);
+      const pNearLeft = project3D(-WORLD.laneWidth * 1.9, 0);
+      const pNearRight = project3D(WORLD.laneWidth * 1.9, 0);
+
+      // Asfalto principal
+      const roadGrad = ctx.createLinearGradient(0, horizon, 0, H);
+      roadGrad.addColorStop(0, '#334155');
+      roadGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = roadGrad;
+
+      ctx.beginPath();
+      ctx.moveTo(pNearLeft.x, pNearLeft.y);
+      ctx.lineTo(pFarLeft.x, pFarLeft.y);
+      ctx.lineTo(pFarRight.x, pFarRight.y);
+      ctx.lineTo(pNearRight.x, pNearRight.y);
+      ctx.closePath();
+      ctx.fill();
+
+      // 4. BORDES / GUARNICIONES 3D EN MOVIMIENTO (RUMBLE STRIPS)
+      const segmentsCount = 20;
+      const segLength = WORLD.roadLength / segmentsCount;
+
+      for (let s = 0; s < segmentsCount; s++) {
+        const z1 = ((s * segLength) - roadZOffset + WORLD.roadLength) % WORLD.roadLength;
+        const z2 = z1 + segLength * 0.5;
+        if (z2 < z1) continue;
+
+        const pL1 = project3D(-WORLD.laneWidth * 1.85, z1);
+        const pL2 = project3D(-WORLD.laneWidth * 1.85, z2);
+        const pR1 = project3D(WORLD.laneWidth * 1.85, z1);
+        const pR2 = project3D(WORLD.laneWidth * 1.85, z2);
+
+        // Color alternado rojo y blanco
+        ctx.fillStyle = (s % 2 === 0) ? '#dc2626' : '#ffffff';
+
+        // Borde izquierdo
+        const curbW1 = 12 * pL1.scale;
+        const curbW2 = 12 * pL2.scale;
+        ctx.beginPath();
+        ctx.moveTo(pL1.x - curbW1, pL1.y);
+        ctx.lineTo(pL2.x - curbW2, pL2.y);
+        ctx.lineTo(pL2.x + curbW2, pL2.y);
+        ctx.lineTo(pL1.x + curbW1, pL1.y);
+        ctx.fill();
+
+        // Borde derecho
+        ctx.beginPath();
+        ctx.moveTo(pR1.x - curbW1, pR1.y);
+        ctx.lineTo(pR2.x - curbW2, pR2.y);
+        ctx.lineTo(pR2.x + curbW2, pR2.y);
+        ctx.lineTo(pR1.x + curbW1, pR1.y);
+        ctx.fill();
+      }
+
+      // 5. LÍNEAS DIVISORIAS DE CARRILES (BLANCAS DISCONTINUAS)
+      [-0.6, 0.6].forEach(laneBorder => {
+        for (let s = 0; s < segmentsCount; s++) {
+          if (s % 2 !== 0) continue;
+          const z1 = ((s * segLength) - roadZOffset + WORLD.roadLength) % WORLD.roadLength;
+          const z2 = z1 + segLength * 0.5;
+          if (z2 < z1) continue;
+
+          const p1 = project3D(WORLD.laneWidth * laneBorder, z1);
+          const p2 = project3D(WORLD.laneWidth * laneBorder, z2);
+
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
+          ctx.lineWidth = Math.max(1.5, 6 * p1.scale);
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      });
+
+      // 6. ÁRBOLES EN EL PAISAJE LATERAL (ORDENADOS POR PROFUNDIDAD Z DESCENDENTE)
+      const sortedTrees = [...roadsideTrees].sort((a, b) => b.z - a.z);
+      sortedTrees.forEach(t => {
+        const pt = project3D(t.x * WORLD.laneWidth, t.z);
+        if (pt.scale > 0 && IMAGES.trees.complete) {
+          const treeW = 180 * pt.scale;
+          const treeH = 180 * pt.scale;
+          ctx.drawImage(IMAGES.trees, pt.x - treeW * 0.5, pt.y - treeH * 0.85, treeW, treeH);
+        }
+      });
+
+      // 7. OLEADAS DE VALLAS CON RESPUESTAS (ORDENADAS POR Z)
+      const sortedWaves = [...roadWaves].sort((a, b) => b.z - a.z);
+
+      sortedWaves.forEach(wave => {
+        if (wave.z > 0 && wave.z < WORLD.roadLength) {
+          wave.hurdles.forEach(hurdle => {
+            renderHurdle(hurdle, wave.z);
+          });
+        }
+      });
+
+      // 8. JUGADOR (LOKI) EN PRIMER PLANO (Z = 0)
+      renderLokiPlayer();
+
+      // 9. PARTÍCULAS
+      particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    // RENDERIZADO NEUTRAL DE VALLA (CERO GIVEAWAYS DE COLOR O ICONO)
+    function renderHurdle(hurdle, z) {
+      const p = project3D(hurdle.lane * WORLD.laneWidth, z);
+      const scale = p.scale;
+      if (scale <= 0.05) return;
+
+      const archW = 130 * scale;
+      const archH = 95 * scale;
+      const archX = p.x - archW * 0.5;
+      const archY = p.y - archH;
+
+      ctx.save();
+
+      // Sombra en el asfalto bajo la valla
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y - 2, archW * 0.45, 8 * scale, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Postes verticales de madera neutral
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(archX + 4 * scale, archY, 14 * scale, archH);
+      ctx.fillRect(archX + archW - 18 * scale, archY, 14 * scale, archH);
+
+      // Travesaño superior
+      ctx.fillStyle = '#92400e';
+      ctx.fillRect(archX, archY, archW, 20 * scale);
+
+      // Placa central neutral con el número (FONDO IDÉNTICO PARA TODAS)
+      const plateW = archW * 0.78;
+      const plateH = archH * 0.62;
+      const plateX = p.x - plateW * 0.5;
+      const plateY = archY + 12 * scale;
+
+      // Fondo blanco crema idéntico
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#b45309';
+      ctx.lineWidth = Math.max(1, 3 * scale);
+
+      ctx.beginPath();
+      ctx.roundRect(plateX, plateY, plateW, plateH, 6 * scale);
+      ctx.fill();
+      ctx.stroke();
+
+      // Número grande y legible en color oscuro idéntico
+      ctx.fillStyle = '#0f172a';
+      ctx.font = `bold ${Math.max(10, 28 * scale)}px 'Fredoka', cursive, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(hurdle.value, p.x, plateY + plateH * 0.52);
+
+      ctx.restore();
+    }
+
+    // RENDERIZADO DEL PERRO LOKI (ANIMADO 3D CON PATAS, OREJAS Y COLLAR)
+    function renderLokiPlayer() {
+      const p = project3D(player.worldX, 15);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+
+      const playerSize = 110;
+      const posX = p.x;
+      const posY = H * 0.86 - player.jumpY;
+
+      ctx.save();
+      ctx.translate(posX, posY);
+      ctx.rotate(player.tilt);
+
+      // Efecto de invulnerabilidad (parpadeo)
+      if (player.isInvulnerable && Math.floor(Date.now() / 80) % 2 === 0) {
+        ctx.globalAlpha = 0.35;
+      }
+
+      // 1. Sombra elíptica en el suelo que pulsa con el salto
+      ctx.save();
+      ctx.scale(1, 0.32);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.beginPath();
+      const shadowRadius = 45 - (player.jumpY * 0.4);
+      ctx.arc(0, (player.jumpY * 2.8) + 115, Math.max(20, shadowRadius), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Cola amigable moviéndose
+      const tailAngle = Math.sin(player.runCycle * 1.8) * 0.45;
+      ctx.save();
+      ctx.translate(-28, 15);
+      ctx.rotate(tailAngle);
+      ctx.strokeStyle = '#36141a';
+      ctx.lineWidth = 10;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(-15, -15, -22, -30);
+      ctx.stroke();
+      ctx.restore();
+
+      // 3. Patas traseras y delanteras en ciclo de carrera
+      const legPhase1 = Math.sin(player.runCycle * 2.2);
+      const legPhase2 = Math.cos(player.runCycle * 2.2);
+
+      // Pata trasera izquierda y delantera derecha
+      ctx.fillStyle = '#4a1c24';
+      ctx.beginPath();
+      ctx.ellipse(-22 + legPhase1 * 12, 42, 9, 15, legPhase1 * 0.3, 0, Math.PI * 2);
+      ctx.ellipse(22 - legPhase1 * 12, 42, 9, 15, -legPhase1 * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Patas con calcetín café claro/tan de Loki
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.ellipse(-22 + legPhase1 * 12, 52, 7, 7, 0, 0, Math.PI * 2);
+      ctx.ellipse(22 - legPhase1 * 12, 52, 7, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4. Cuerpo de caricatura atlético
+      ctx.fillStyle = '#4a1c24';
+      ctx.beginPath();
+      ctx.roundRect(-36, -10, 72, 60, 24);
+      ctx.fill();
+
+      // Pecho blanco característico de Loki
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.ellipse(0, 18, 16, 22, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 5. Collar rojo a cuadros
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.roundRect(-26, -12, 52, 12, 5);
+      ctx.fill();
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(0, -6, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 6. Cabeza de Loki (Avatar oficial recortado o badge circular)
+      if (IMAGES.lokiAvatar.complete) {
+        const headSize = 82;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(0, -45, headSize * 0.5, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(IMAGES.lokiAvatar, -headSize * 0.5, -45 - headSize * 0.5, headSize, headSize);
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+
+    /* =============================================================
+       12. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       ============================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLevels();
+    });
+
+  </script>
+</body>
+</html>
