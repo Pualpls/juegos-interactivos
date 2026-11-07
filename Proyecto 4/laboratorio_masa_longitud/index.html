@@ -6,10 +6,10 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Masa y Longitud · 3° "A"</title>
+  <title>Laboratorio de Mediciones: Longitud, Masa, Capacidad y Temperatura · 3° "A"</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #0f172a;
@@ -35,7 +35,7 @@
     }
 
     body {
-      font-family: 'Lexend', 'Fredoka', system-ui, sans-serif;
+      font-family: 'Lexend', 'Fredoka', 'Segoe UI', system-ui, sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: var(--text-main);
       min-height: 100vh;
@@ -44,7 +44,6 @@
       overflow-x: hidden;
     }
 
-    /* HEADER */
     header {
       background: rgba(15, 23, 42, 0.95);
       color: #fff;
@@ -64,8 +63,8 @@
     }
 
     .brand-icon {
-      font-size: 1.8rem;
-      background: rgba(2, 132, 199, 0.2);
+      font-size: 1.9rem;
+      background: rgba(2, 132, 199, 0.25);
       border: 2px solid #38bdf8;
       border-radius: 0.75rem;
       width: 46px;
@@ -102,71 +101,68 @@
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .student-pill:hover {
-      background: #0369a1;
     }
 
     .score-pill {
-      background: #dcfce7;
-      color: #14532d;
-      border: 2px solid #22c55e;
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
       padding: 0.4rem 0.9rem;
       border-radius: 999px;
       font-weight: 800;
       font-size: 0.92rem;
     }
 
-    /* TABS */
     .nav-tabs {
       display: flex;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.65rem;
       padding: 0.75rem 1rem 0.25rem;
       flex-wrap: wrap;
     }
 
     .tab-btn {
-      background: rgba(30, 41, 59, 0.85);
+      background: rgba(30, 41, 59, 0.9);
       color: #cbd5e1;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      padding: 0.55rem 1.1rem;
-      border-radius: 0.85rem;
-      font-size: 0.92rem;
+      border: 2px solid #475569;
+      padding: 0.55rem 1.15rem;
+      border-radius: 0.75rem;
       font-weight: 700;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      background: #334155;
+      color: #fff;
     }
 
     .tab-btn.active {
-      background: var(--primary);
+      background: #0284c7;
       color: #ffffff;
-      border-color: #7dd3fc;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45);
+      border-color: #38bdf8;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
     }
 
-    /* MAIN WORKSPACE */
     main {
       flex: 1;
-      max-width: 1360px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 0.75rem 1rem 1.25rem;
+      padding: 0.75rem 1rem 1.5rem;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
     }
 
     .workspace {
-      background: var(--bg-panel);
+      width: 100%;
+      max-width: 980px;
+      background: #ffffff;
       border-radius: 1.25rem;
-      padding: 1.15rem 1.35rem;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       border: 3px solid #e2e8f0;
-      flex: 1;
+      padding: 1.25rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -176,83 +172,34 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.6rem;
       border-bottom: 2px dashed #cbd5e1;
       flex-wrap: wrap;
       gap: 0.5rem;
     }
 
     .panel-title {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .badge-info {
       background: #e0f2fe;
       color: #0369a1;
-      font-size: 0.82rem;
       font-weight: 800;
-      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
       border-radius: 999px;
+      border: 1px solid #7dd3fc;
     }
 
-    /* BOTONES DE ACCION */
-    .btn-action {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1.25rem;
-      border-radius: 0.75rem;
-      font-size: 0.95rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: transform 0.15s;
-    }
-
-    .btn-action:hover {
-      transform: translateY(-2px);
-    }
-
-    .feedback-bar {
-      background: #f1f5f9;
-      border: 2px solid #cbd5e1;
-      border-radius: 0.9rem;
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: #334155;
-    }
-
-    .feedback-bar.ok {
-      background: #dcfce7;
-      border-color: #22c55e;
-      color: #14532d;
-    }
-
-    .feedback-bar.warn {
-      background: #fef3c7;
-      border-color: #f59e0b;
-      color: #92400e;
-    }
-
-    .feedback-bar.err {
-      background: #fee2e2;
-      border-color: #ef4444;
-      color: #991b1b;
-    }
-
-    /* ========================================================
-       ESTACION 1: REGLA GRADUADA Y ALINEACION EN EL 0
-       ======================================================== */
+    /* =========================================================
+       ESTACIÓN 1: REGLA HASTA 30 CM (SIN CAJA AZUL, SIN TEXTO MADERA)
+       ========================================================= */
     .ruler-container {
       background: #f8fafc;
       border: 2px solid #cbd5e1;
@@ -267,8 +214,8 @@
 
     .ruler-bench {
       position: relative;
-      width: 820px;
-      height: 190px;
+      width: 870px;
+      height: 220px;
       background: #ffffff;
       border: 2px solid #e2e8f0;
       border-radius: 0.85rem;
@@ -276,30 +223,119 @@
       box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: space-between;
     }
 
-    /* Riel donde se coloca el objeto sobre la regla */
+    /* Regla Física de 30 cm */
+    .physical-ruler {
+      position: relative;
+      width: 840px;
+      height: 64px;
+      background: linear-gradient(to bottom, #fef08a 0%, #fde047 100%);
+      border: 2px solid #ca8a04;
+      border-radius: 6px;
+      display: flex;
+      align-items: flex-start;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      margin: 0 auto;
+    }
+
+    /* Margen físico inicial (deadzone sin texto) */
+    .ruler-deadzone {
+      width: 30px;
+      height: 100%;
+      border-right: 2px solid #ca8a04;
+      background: rgba(202, 138, 4, 0.12);
+    }
+
+    .zero-alignment-guide {
+      position: absolute;
+      top: 0;
+      left: 30px;
+      width: 2px;
+      height: 100%;
+      background: #dc2626;
+      z-index: 10;
+    }
+
+    .ruler-scale {
+      position: relative;
+      width: 780px;
+      height: 100%;
+      display: flex;
+    }
+
+    .cm-tick {
+      position: absolute;
+      top: 0;
+      height: 24px;
+      border-left: 2px solid #713f12;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #713f12;
+      padding-left: 2px;
+      padding-top: 26px;
+    }
+
+    .cm-tick.half {
+      height: 14px;
+      border-left: 1.5px solid #a16207;
+      padding-top: 0;
+    }
+
+    /* Zona de colocación y arrastre */
     .object-placement-zone {
       position: relative;
-      width: 800px;
-      height: 90px;
-      margin-bottom: 6px;
+      width: 840px;
+      height: 120px;
+      margin: 0 auto;
+      background: #f1f5f9;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .vertical-zero-laser {
+      position: absolute;
+      top: 0;
+      left: 30px;
+      width: 2px;
+      height: 100%;
+      background: rgba(220, 38, 38, 0.5);
+      border-left: 2px dashed #dc2626;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .zero-target-badge {
+      position: absolute;
+      top: 4px;
+      left: 34px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 1px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: 6;
     }
 
     .draggable-object {
       position: absolute;
-      top: 10px;
+      top: 25px;
       height: 70px;
       cursor: grab;
       touch-action: none;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 0;
       background: transparent !important;
       border: none !important;
       box-shadow: none !important;
+      z-index: 10;
     }
 
     .draggable-object:active {
@@ -311,129 +347,7 @@
       height: 100%;
       object-fit: fill;
       pointer-events: none;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
-    }
-
-    .draggable-object:active {
-      cursor: grabbing;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
-    .draggable-object img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      pointer-events: none;
-    }
-
-    .draggable-object .start-edge-marker {
-      position: absolute;
-      left: 0;
-      top: -18px;
-      background: #ef4444;
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 4px;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .draggable-object .end-edge-marker {
-      position: absolute;
-      right: 0;
-      bottom: -18px;
-      background: #0284c7;
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 4px;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    /* LA REGLA FISICA */
-    .physical-ruler {
-      position: relative;
-      width: 800px;
-      height: 60px;
-      background: linear-gradient(to bottom, #fef08a 0%, #fde047 100%);
-      border: 2px solid #ca8a04;
-      border-radius: 6px;
-      display: flex;
-      align-items: flex-start;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    }
-
-    /* Borde fisico antes del 0 (margen real de fabrica) */
-    .ruler-deadzone {
-      width: 40px;
-      height: 100%;
-      border-right: 2px solid #ca8a04;
-      background: rgba(202, 138, 4, 0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: #854d0e;
-      text-align: center;
-      line-height: 1.1;
-      padding: 2px;
-    }
-
-    /* Raya Verde de Inicio en el 0 */
-    .zero-alignment-guide {
-      position: absolute;
-      left: 40px;
-      top: -110px;
-      bottom: 0;
-      width: 3px;
-      background: #16a34a;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .zero-alignment-guide::before {
-      content: '▲ RAYA DEL 0 (Inicio exacto)';
-      position: absolute;
-      top: 0;
-      left: -80px;
-      background: #16a34a;
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-
-    /* Marcas graduadas en cm (cada 1 cm = 30px) */
-    .ruler-scale {
-      position: relative;
-      width: 760px;
-      height: 100%;
-      display: flex;
-    }
-
-    .cm-tick {
-      position: absolute;
-      top: 0;
-      height: 24px;
-      border-left: 2px solid #713f12;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #713f12;
-      padding-left: 3px;
-      padding-top: 26px;
-    }
-
-    .cm-tick.half {
-      height: 14px;
-      border-left: 1.5px solid #a16207;
-      padding-top: 0;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
     }
 
     .ruler-controls-row {
@@ -441,53 +355,79 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      max-width: 820px;
+      max-width: 870px;
       gap: 0.75rem;
       flex-wrap: wrap;
     }
 
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 820px;
+    .btn-action {
+      background: #0284c7;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 0.55rem 1rem;
+      border-radius: 0.65rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
     }
 
-    .btn-cm-choice {
+    .btn-action:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .ruler-choices-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 870px;
+    }
+
+    @media (max-width: 680px) {
+      .ruler-choices-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .ruler-choice-btn {
       background: #ffffff;
       border: 2px solid #cbd5e1;
       border-radius: 0.75rem;
-      padding: 0.75rem;
+      padding: 0.85rem;
       font-size: 1.15rem;
       font-weight: 800;
       color: #1e293b;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
       text-align: center;
     }
 
-    .btn-cm-choice:hover:not(:disabled) {
+    .ruler-choice-btn:hover {
       border-color: #0284c7;
       background: #f0f9ff;
-      transform: translateY(-2px);
     }
 
-    .btn-cm-choice.correct {
+    .ruler-choice-btn.correct {
       background: #dcfce7 !important;
-      border-color: #22c55e !important;
-      color: #14532d !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
     }
 
-    .btn-cm-choice.wrong {
+    .ruler-choice-btn.wrong {
       background: #fee2e2 !important;
       border-color: #ef4444 !important;
-      color: #991b1b !important;
+      color: #b91c1c !important;
+      opacity: 0.65;
     }
 
-    /* ========================================================
-       ESTACION 2: BALANZA MECANICA OSCILANTE CON PESAS ANTIGUAS
-       ======================================================== */
+    /* =========================================================
+       ESTACIÓN 2: BALANZA (ALTURA 360PX, CERO DESBORDAMIENTO)
+       ========================================================= */
     .scale-stage-box {
       background: #f8fafc;
       border: 2px solid #cbd5e1;
@@ -499,46 +439,32 @@
       gap: 1rem;
     }
 
-    /* Estructura visual de la Balanza */
     .scale-visual-container {
       position: relative;
       width: 100%;
-      max-width: 680px;
-      height: 270px;
+      max-width: 720px;
+      height: 360px;
       background: #ffffff;
       border: 2px solid #e2e8f0;
       border-radius: 1rem;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      padding-bottom: 20px;
+      padding-bottom: 25px;
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
-      overflow: hidden;
+      overflow: visible;
     }
 
-    /* Base y Columna central de la balanza */
     .scale-base-pillar {
       position: absolute;
-      bottom: 20px;
+      bottom: 25px;
       left: 50%;
       transform: translateX(-50%);
       width: 32px;
-      height: 175px;
+      height: 220px;
       background: linear-gradient(to right, #475569, #64748b, #334155);
       border-radius: 6px;
       z-index: 2;
-    }
-
-    .scale-base-pillar::after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      left: -44px;
-      width: 120px;
-      height: 20px;
-      background: linear-gradient(to bottom, #334155, #1e293b);
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
     .scale-fulcrum-pivot {
@@ -555,10 +481,9 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
-    /* Brazo transversal basculante */
     .scale-crossbeam {
       position: absolute;
-      top: 82px;
+      top: 115px;
       left: 50%;
       width: 480px;
       height: 12px;
@@ -571,20 +496,18 @@
       z-index: 3;
     }
 
-    /* Aguja marcadora central */
     .scale-needle {
       position: absolute;
       bottom: 10px;
       left: 50%;
       width: 4px;
-      height: 48px;
+      height: 52px;
       margin-left: -2px;
       background: #dc2626;
       border-radius: 2px;
       transform-origin: 50% 100%;
     }
 
-    /* Conjuntos colgantes de platillos (izquierdo y derecho) */
     .scale-pan-assembly {
       position: absolute;
       top: 8px;
@@ -596,16 +519,16 @@
     }
 
     .scale-pan-assembly.left {
-      left: -10px;
+      left: -5px;
     }
 
     .scale-pan-assembly.right {
-      right: -10px;
+      right: -5px;
     }
 
     .scale-chains {
-      width: 140px;
-      height: 75px;
+      width: 130px;
+      height: 55px;
       position: relative;
     }
 
@@ -614,18 +537,19 @@
       position: absolute;
       top: 0;
       width: 2px;
-      height: 75px;
-      background: #94a3b8;
+      height: 100%;
+      background: #64748b;
     }
-    .scale-chains::before { left: 15px; transform: rotate(18deg); }
-    .scale-chains::after { right: 15px; transform: rotate(-18deg); }
+
+    .scale-chains::before { left: 10px; transform: rotate(18deg); transform-origin: top left; }
+    .scale-chains::after { right: 10px; transform: rotate(-18deg); transform-origin: top right; }
 
     .scale-plate {
-      width: 170px;
-      min-height: 70px;
-      background: linear-gradient(to bottom, #f1f5f9, #cbd5e1);
+      width: 175px;
+      min-height: 85px;
+      background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
       border: 2px solid #94a3b8;
-      border-radius: 0 0 85px 85px;
+      border-radius: 0 0 88px 88px;
       box-shadow: 0 6px 14px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
@@ -636,213 +560,233 @@
     }
 
     .scale-plate.balanced {
-      background: linear-gradient(to bottom, #dcfce7, #86efac);
       border-color: #22c55e;
-      box-shadow: 0 0 18px rgba(34, 197, 94, 0.45);
+      background: linear-gradient(to bottom, #f0fdf4, #dcfce7);
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.45);
     }
 
-    /* Banco de Pesas Tradicionales */
-    .weights-bank {
+    .placed-weights-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      max-width: 160px;
+      max-height: 90px;
+      overflow-y: auto;
+      padding: 2px;
+    }
+
+    .placed-weight-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 6px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .placed-weight-mini:hover {
+      border-color: #ef4444;
+      background: #fee2e2;
+    }
+
+    .brass-weight-shelf {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
       width: 100%;
+      max-width: 720px;
+    }
+
+    .weight-btn {
       background: #ffffff;
       border: 2px solid #e2e8f0;
-      border-radius: 1rem;
-      padding: 0.85rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .weights-bank-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #334155;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .weights-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .weight-card-btn {
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
       border-radius: 0.75rem;
-      padding: 0.6rem 0.4rem;
+      padding: 0.6rem 0.85rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.35rem;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
+      min-width: 90px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .weight-card-btn:hover {
-      border-color: #0284c7;
-      background: #f0f9ff;
+    .weight-btn:hover {
+      border-color: #f59e0b;
       transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(245, 158, 11, 0.2);
     }
 
-    .weight-card-btn img {
+    .weight-btn img {
+      height: 48px;
+      width: auto;
       object-fit: contain;
     }
 
-    .weight-card-btn .w-label {
+    .weight-btn span {
       font-size: 0.85rem;
       font-weight: 800;
       color: #0f172a;
     }
 
-    .weight-card-btn .w-sub {
+    /* =========================================================
+       ESTACIÓN 3: ¿MASA, LONGITUD, CAPACIDAD O TEMPERATURA?
+       ========================================================= */
+    .prop-situation-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 640px) {
+      .prop-situation-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    .prop-situation-img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      padding: 6px;
+      flex-shrink: 0;
+    }
+
+    .prop-situation-text {
+      flex: 1;
+    }
+
+    .prop-situation-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+
+    /* Grid de las 4 Propiedades Interactivas */
+    .properties-interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 860px) {
+      .properties-interactive-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .properties-interactive-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .property-interactive-card {
+      background: #ffffff;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 1rem;
+      padding: 1rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+
+    .property-interactive-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+
+    .property-interactive-card img {
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .property-interactive-card .p-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .property-interactive-card .p-instrument {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #0284c7;
+    }
+
+    .property-interactive-card .p-units {
       font-size: 0.72rem;
       color: #64748b;
       font-weight: 600;
     }
 
-    /* Pesas colocadas en el platillo derecho */
-    .placed-weights-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-      align-items: center;
-      justify-content: center;
-      max-width: 150px;
+    .property-interactive-card.correct {
+      background: #f0fdf4 !important;
+      border-color: #22c55e !important;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.45) !important;
     }
 
-    .placed-weight-mini {
-      background: #fff;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 2px 4px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #b45309;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 2px;
+    .property-interactive-card.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      opacity: 0.6;
     }
 
-    .placed-weight-mini:hover {
-      background: #fee2e2;
-      border-color: #ef4444;
-      color: #ef4444;
-    }
-
-    /* ========================================================
-       ESTACION 3: ¿MASA O LONGITUD? (CON IMAGENES REFERENCIALES)
-       ======================================================== */
-    .property-reference-banner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    @media (max-width: 700px) {
-      .property-reference-banner {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .property-card {
-      background: #ffffff;
-      border: 2px solid #cbd5e1;
-      border-radius: 1rem;
-      padding: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-    }
-
-    .property-card img {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      padding: 4px;
-      flex-shrink: 0;
-    }
-
-    .property-card h3 {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #0f172a;
-    }
-
-    .property-card p {
-      font-size: 0.82rem;
-      color: #64748b;
-      margin-top: 2px;
-      font-weight: 600;
-    }
-
-    /* ========================================================
-       ESTACION 4: ¿cm, m o km? (UNIDAD OPTIMA DE LONGITUD)
-       ======================================================== */
+    /* =========================================================
+       ESTACIÓN 4: ¿CM, M O KM?
+       ========================================================= */
     .unit-selection-arena {
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      border-radius: 1rem;
-      padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
       align-items: center;
     }
 
     .unit-challenge-card {
       background: #ffffff;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #cbd5e1;
       border-radius: 1rem;
       padding: 1.25rem;
-      max-width: 740px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
-
-    .unit-challenge-badge {
-      display: inline-block;
-      background: #f3e8ff;
-      color: #7c3aed;
-      font-size: 0.82rem;
-      font-weight: 800;
-      padding: 0.3rem 0.85rem;
-      border-radius: 999px;
-      margin-bottom: 0.6rem;
-    }
-
-    .unit-challenge-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #0f172a;
-      line-height: 1.45;
-    }
-
-    .unit-challenge-context {
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 600;
-      margin-top: 0.35rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .unit-buttons-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
-      max-width: 740px;
       width: 100%;
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 640px) {
       .unit-buttons-grid {
         grid-template-columns: 1fr;
       }
@@ -850,92 +794,144 @@
 
     .unit-choice-btn {
       background: #ffffff;
-      border: 3px solid #cbd5e1;
+      border: 2.5px solid #cbd5e1;
       border-radius: 1rem;
-      padding: 1.15rem 0.85rem;
+      padding: 1.15rem 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
       text-align: center;
     }
 
-    .unit-choice-btn:hover:not(:disabled) {
+    .unit-choice-btn:hover {
       border-color: #0284c7;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 18px rgba(2, 132, 199, 0.15);
-    }
-
-    .unit-choice-btn .u-icon {
-      font-size: 2.2rem;
-    }
-
-    .unit-choice-btn .u-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #0f172a;
-    }
-
-    .unit-choice-btn .u-desc {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-weight: 600;
-      line-height: 1.25;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(2, 132, 199, 0.15);
     }
 
     .unit-choice-btn.correct {
-      background: #dcfce7 !important;
+      background: #f0fdf4 !important;
       border-color: #22c55e !important;
-      color: #14532d !important;
+      color: #15803d !important;
     }
 
     .unit-choice-btn.wrong {
-      background: #fee2e2 !important;
+      background: #fef2f2 !important;
       border-color: #ef4444 !important;
-      color: #991b1b !important;
+      opacity: 0.6;
+    }
+
+    /* Barra de Feedback Global */
+    .feedback-bar {
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.15rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      min-height: 52px;
+    }
+
+    .feedback-bar.ok {
+      background: #dcfce7;
+      color: #15803d;
+      border: 2px solid #86efac;
+    }
+
+    .feedback-bar.err {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 2px solid #fca5a5;
+    }
+
+    .feedback-bar.warn {
+      background: #fef3c7;
+      color: #b45309;
+      border: 2px solid #fde68a;
+    }
+
+    .feedback-bar.info {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 2px solid #7dd3fc;
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="brand">
       <div class="brand-icon">⚖️</div>
       <div class="brand-text">
-        <h1>Masa y Longitud <span style="background:#22c55e; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:999px; vertical-align:middle;">v4.2</span></h1>
-        <p>La Regla, la Balanza y las Unidades · 3° "A"</p>
+        <h1>Laboratorio de Mediciones: Longitud, Masa, Capacidad y Temperatura</h1>
+        <p>Proyecto 4 · 3° Grado de Primaria · NEM</p>
       </div>
     </div>
+
     <div class="top-controls">
-      <div class="student-pill" onclick="nextStudent()" title="Toca para rotar turno">
-        <span>Turno:</span>
-        <strong id="currentStudent">Alexander</strong>
-        <span>🔄</span>
-      </div>
-      <div class="score-pill">Aciertos: <span id="scoreVal">0</span></div>
+      <div class="student-pill" onclick="nextStudent()" id="studentBadge">👤 Turno: Alexander</div>
+      <div class="score-pill">⭐ <span id="scoreVal">0</span> pts</div>
     </div>
   </header>
 
-  <!-- PESTAÑAS -->
   <nav class="nav-tabs">
-    <button class="tab-btn active" id="tab1" onclick="setStation(1)">📏 1. Medir con Regla (Iniciar en 0)</button>
-    <button class="tab-btn" id="tab2" onclick="setStation(2)">⚖️ 2. Equilibrar Balanza (g y kg)</button>
-    <button class="tab-btn" id="tab3" onclick="setStation(3)">🔍 3. ¿Masa o Longitud?</button>
-    <button class="tab-btn" id="tab4" onclick="setStation(4)">📐 4. ¿cm, m o km?</button>
+    <button class="tab-btn active" onclick="setStation(1, this)">📏 1. Medir con Regla (30 cm)</button>
+    <button class="tab-btn" onclick="setStation(2, this)">⚖️ 2. Equilibrar Balanza (g y kg)</button>
+    <button class="tab-btn" onclick="setStation(3, this)">🔍 3. ¿Qué propiedad medimos?</button>
+    <button class="tab-btn" onclick="setStation(4, this)">📐 4. ¿cm, m o km?</button>
   </nav>
 
   <main>
-    <div class="workspace" id="stationArea"></div>
+    <div class="workspace" id="stationArea">
+      <!-- Contenido dinamico de cada estacion -->
+    </div>
   </main>
 
   <script>
     window.addEventListener('contextmenu', e => e.preventDefault(), true);
     document.addEventListener('contextmenu', e => e.preventDefault(), true);
 
-    // LISTA OFICIAL DE LOS 14 ALUMNOS ACTIVOS (CRISTAL DADA DE BAJA)
+    // Audio Context
+    let audioCtx = null;
+    function playTone(freq, duration = 0.12, type = 'sine') {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      playTone(523.25, 0.1);
+      setTimeout(() => playTone(659.25, 0.1), 100);
+      setTimeout(() => playTone(783.99, 0.18), 200);
+    }
+
+    // Fisher-Yates Shuffle
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // 14 Alumnos
     const students = [
       "Alexander", "Brianna", "Dalary", "Daniel", "Estrella",
       "Gael", "Jarol", "Jesús", "José Manuel", "Keyla",
@@ -945,128 +941,103 @@
     let score = 0;
     let currentStation = 1;
 
-    // SONIDO WEB AUDIO API
-    function playTone(freq = 540, duration = 0.14, type = 'sine') {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.14, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
-      } catch(e) {}
-    }
-
-    function playSuccessChime() {
-      playTone(523, 0.12);
-      setTimeout(() => playTone(659, 0.14), 110);
-      setTimeout(() => playTone(784, 0.22), 220);
-    }
-
     function nextStudent() {
       studentIdx = (studentIdx + 1) % students.length;
-      document.getElementById('currentStudent').textContent = students[studentIdx];
-      playTone(480, 0.08);
+      document.getElementById('studentBadge').textContent = `👤 Turno: ${students[studentIdx]}`;
+      playTone(440, 0.08);
     }
 
-    function setStation(n) {
-      currentStation = n;
-      document.querySelectorAll('.tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', i + 1 === n);
-      });
-      if (n === 1) renderStation1();
-      if (n === 2) renderStation2();
-      if (n === 3) renderStation3();
-      if (n === 4) {
-        shuffleChallenges();
-        s4Idx = 0;
-        renderStation4();
-      }
+    function setStation(stationNum, btn) {
+      currentStation = stationNum;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      playTone(392, 0.08);
+
+      if (stationNum === 1) renderStation1();
+      else if (stationNum === 2) renderStation2();
+      else if (stationNum === 3) renderStation3();
+      else if (stationNum === 4) renderStation4();
     }
 
-    /* ========================================================
-       DATOS Y LOGICA: ESTACION 1 (REGLA GRADUADA Y ALINEACION EN 0)
-       ======================================================== */
-    const s1Objects = [
-      {
-        name: "Lápiz escolar",
-        img: "regla_lapiz.png",
-        cm: 14,
-        options: [14, 11, 16, 12],
-        note: "El lápiz mide 14 cm de la punta al borrador."
-      },
-      {
-        name: "Abatelenguas de madera",
-        img: "regla_abatelenguas.png",
-        cm: 15,
-        options: [15, 13, 17, 10],
-        note: "El abatelenguas mide 15 cm de largo."
-      },
-      {
-        name: "Crayola azul",
-        img: "regla_crayon.png",
-        cm: 8,
-        options: [8, 6, 10, 5],
-        note: "La crayola mide 8 cm de largo."
-      },
-      {
-        name: "Goma de borrar",
-        img: "regla_goma.png",
-        cm: 5,
-        options: [5, 4, 7, 3],
-        note: "La goma mide 5 cm de longitud."
-      },
-      {
-        name: "Clip metálico",
-        img: "regla_clip.png",
-        cm: 3,
-        options: [3, 2, 5, 4],
-        note: "El clip mide 3 cm de longitud."
-      }
+    /* =========================================================
+       ESTACIÓN 1: MEDIR CON REGLA (0 A 30 CM, 14 OBJETOS)
+       ========================================================= */
+    const CM_TO_PX = 26; // 1 cm = 26 px. 30 cm = 780 px.
+    const DEADZONE_PX = 30; // Margen fisico de la regla antes del 0 cm
+
+    // 14 Objetos variados con recorte transparente perfecto
+    const baseS1Objects = [
+      { name: "Clip metálico", img: "regla_clip.png", cm: 3, note: "El clip mide exactamente 3 cm de longitud." },
+      { name: "Sacapuntas escolar", img: "regla_sacapuntas.png", cm: 4, note: "El sacapuntas plástico mide 4 cm de longitud." },
+      { name: "Goma de borrar", img: "regla_goma.png", cm: 5, note: "La goma de borrar mide 5 cm de longitud." },
+      { name: "Llave metálica", img: "regla_llave.png", cm: 6, note: "La llave mide 6 cm de la base a la punta." },
+      { name: "Broche de madera", img: "regla_broche.png", cm: 7, note: "La pinza o broche de madera mide 7 cm de longitud." },
+      { name: "Crayola azul", img: "regla_crayon.png", cm: 8, note: "La crayola mide 8 cm de longitud." },
+      { name: "Pegamento en barra", img: "regla_pegamento.png", cm: 9, note: "El pegamento en barra mide 9 cm de largo." },
+      { name: "Cuchara pequeña", img: "regla_cuchara.png", cm: 11, note: "La cuchara de postre mide 11 cm de largo." },
+      { name: "Tijeras escolares", img: "regla_tijeras.png", cm: 12, note: "Las tijeras escolares miden 12 cm de la punta al mango." },
+      { name: "Marcador de pizarrón", img: "regla_marcador.png", cm: 13, note: "El marcador para pizarrón mide 13 cm de largo." },
+      { name: "Lápiz escolar", img: "regla_lapiz.png", cm: 14, note: "El lápiz mide 14 cm de la punta del grafito al borrador." },
+      { name: "Abatelenguas de madera", img: "regla_abatelenguas.png", cm: 15, note: "El abatelenguas de madera mide 15 cm de largo." },
+      { name: "Pincel escolar", img: "regla_pincel.png", cm: 18, note: "El pincel escolar mide 18 cm de cerda a mango." },
+      { name: "Popote reusable", img: "regla_popote.png", cm: 22, note: "El popote mide 22 cm de largo." }
     ];
 
+    let s1Objects = shuffleArray(baseS1Objects);
     let s1Idx = 0;
-    let s1ObjectOffsetPx = 0; // Posicion x del objeto
-    const ZERO_POS_PX = 40;   // Pixeles exactos donde está la raya del 0
-    const CM_TO_PX = 28;      // Cada 1 cm = 28 px
+    let s1ObjectOffsetPx = 0; // Inicia a la izquierda (desalineado)
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
 
     function renderStation1() {
       const item = s1Objects[s1Idx];
       const objWidthPx = item.cm * CM_TO_PX;
-      // Inicia desalineado (a la izquierda, en el borde de madera x=0) para obligar a colocarlo
+      // Inicia desalineado a la izquierda (x=0) para que el alumno deba colocarlo
       s1ObjectOffsetPx = 0;
+
+      // Generar 4 opciones aleatorias (la correcta + 3 distractores razonables)
+      const distractors = new Set();
+      const offsets = [-3, -2, -1, 1, 2, 3];
+      shuffleArray(offsets).forEach(off => {
+        const val = item.cm + off;
+        if (val > 0 && val <= 30 && val !== item.cm && distractors.size < 3) {
+          distractors.add(val);
+        }
+      });
+      // Fallback si faltan distractores
+      [2, 5, 10, 16, 20].forEach(fallback => {
+        if (fallback !== item.cm && distractors.size < 3) distractors.add(fallback);
+      });
+      const s1Choices = shuffleArray([item.cm, ...Array.from(distractors)]);
 
       const area = document.getElementById('stationArea');
       area.innerHTML = `
         <div class="panel-header">
-          <div class="panel-title">📏 Estación 1: Medición con Regla (${s1Idx + 1}/${s1Objects.length})</div>
-          <span class="badge-info">Regla de 3° Primaria</span>
+          <div class="panel-title">📏 Estación 1: Medición con Regla de 30 cm (${s1Idx + 1}/${s1Objects.length})</div>
+          <span class="badge-info">Alinear al 0 cm</span>
         </div>
 
         <div class="ruler-container">
           <div class="ruler-bench" id="rulerBench">
-            <div class="object-placement-zone" id="placementZone">
-              <div class="draggable-object" id="dragObj" style="left: ${s1ObjectOffsetPx}px; width: ${objWidthPx}px;">
-                <div class="start-edge-marker">◀ Extremo Inicial</div>
-                <img src="img/${item.img}" alt="${item.name}">
-                <div class="end-edge-marker">Fin ▶</div>
+            <!-- Regla Física Graduada hasta 30 cm -->
+            <div class="physical-ruler">
+              <div class="ruler-deadzone"></div>
+              <div class="zero-alignment-guide" title="Línea del 0 cm"></div>
+              <div class="ruler-scale">
+                ${Array.from({length: 31}, (_, i) => `
+                  <div class="cm-tick" style="left: ${i * CM_TO_PX}px;">${i}</div>
+                  ${i < 30 ? `<div class="cm-tick half" style="left: ${i * CM_TO_PX + CM_TO_PX/2}px;"></div>` : ''}
+                `).join('')}
               </div>
             </div>
 
-            <!-- Regla Fisica -->
-            <div class="physical-ruler">
-              <div class="ruler-deadzone">Borde madera</div>
-              <div class="zero-alignment-guide"></div>
-              <div class="ruler-scale">
-                ${Array.from({length: 26}, (_, i) => `
-                  <div class="cm-tick" style="left: ${i * CM_TO_PX}px;">${i}</div>
-                  ${i < 25 ? `<div class="cm-tick half" style="left: ${i * CM_TO_PX + CM_TO_PX/2}px;"></div>` : ''}
-                `).join('')}
+            <!-- Zona de Colocación y Arrastre del Objeto -->
+            <div class="object-placement-zone" id="placementZone">
+              <div class="vertical-zero-laser"></div>
+              <div class="zero-target-badge">Línea del 0 cm</div>
+              <div class="draggable-object" id="dragObj" style="left: ${s1ObjectOffsetPx}px; width: ${objWidthPx}px;" title="Arrastra para colocar al 0 cm">
+                <img src="img/${item.img}" alt="${item.name}">
               </div>
             </div>
           </div>
@@ -1074,29 +1045,29 @@
           <div class="ruler-controls-row">
             <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
               <button class="btn-action" style="background:#16a34a;" onclick="snapToZero()">🎯 Alinear al 0 cm</button>
-              <button class="btn-action" style="background:#64748b;" onclick="resetObjectPos()">↺ Al borde inicial</button>
-              <span id="alignmentStatus" style="font-size:0.9rem; font-weight:700; color:#b45309;">
-                ⚠️ Objeto en el borde de madera. ¡Muévelo a la raya verde del 0!
-              </span>
+              <button class="btn-action" style="background:#64748b;" onclick="resetObjectPos()">↺ Al inicio</button>
+            </div>
+            <div id="alignmentStatus" style="font-size:0.88rem; font-weight:800; color:#b45309;">
+              ⚠️ El objeto no está alineado con el 0 cm. Arrástralo hasta la raya roja.
             </div>
           </div>
 
-          <!-- Opciones de Medida -->
-          <div style="width:100%; max-width:820px; margin-top:0.5rem;">
-            <p style="font-weight:800; font-size:1.05rem; color:#1e293b; margin-bottom:0.6rem;">
-              ¿Cuántos centímetros (cm) mide "${item.name}"?
+          <!-- Opciones Aleatorias de Medición (Fisher-Yates) -->
+          <div style="width:100%; max-width:870px;">
+            <p style="font-weight:800; color:#1e293b; margin-bottom:0.5rem; font-size:1rem;">
+              ¿Cuánto mide de longitud el <strong>${item.name}</strong>?
             </p>
-            <div class="options-grid" id="cmOptionsGrid">
-              ${item.options.map(val => `
-                <button class="btn-cm-choice" onclick="checkS1Choice(${val}, this)">${val} cm</button>
+            <div class="ruler-choices-grid" id="s1ChoicesBox">
+              ${s1Choices.map(c => `
+                <button class="ruler-choice-btn" onclick="checkS1Choice(${c}, ${item.cm}, this)">${c} cm</button>
               `).join('')}
             </div>
           </div>
-        </div>
 
-        <div class="feedback-bar warn" id="s1Feedback">
-          <span>Arrastra o toca "🎯 Alinear al 0 cm" para colocar el extremo izquierdo exactamente en la raya verde del 0.</span>
-          <button class="btn-action" id="s1NextBtn" style="display:none;" onclick="nextS1()">Siguiente Objeto ➔</button>
+          <div class="feedback-bar info" id="s1Feedback" style="width:100%; max-width:870px;">
+            <span>Coloca el extremo inicial del objeto exactamente en la raya del <strong>0 cm</strong> y observa hasta qué número llega.</span>
+            <button class="btn-action" id="s1NextBtn" style="display:none; background:#7c3aed;" onclick="nextS1()">Siguiente Objeto ➔</button>
+          </div>
         </div>
       `;
 
@@ -1104,170 +1075,137 @@
     }
 
     function initDragEvents() {
-      const el = document.getElementById('dragObj');
-      const zone = document.getElementById('placementZone');
-      if (!el || !zone) return;
+      const dragObj = document.getElementById('dragObj');
+      const placementZone = document.getElementById('placementZone');
+      if (!dragObj || !placementZone) return;
 
-      let startX = 0;
-      let initialLeft = 0;
-      let isDragging = false;
-
-      function onPointerDown(e) {
-        isDragging = true;
-        startX = e.clientX || (e.touches && e.touches[0].clientX);
-        initialLeft = s1ObjectOffsetPx;
-        el.setPointerCapture && el.setPointerCapture(e.pointerId);
-      }
-
-      function onPointerMove(e) {
-        if (!isDragging) return;
-        const currentX = e.clientX || (e.touches && e.touches[0].clientX);
-        const dx = currentX - startX;
-        let newLeft = Math.max(0, Math.min(zone.clientWidth - el.clientWidth, initialLeft + dx));
-        s1ObjectOffsetPx = newLeft;
-        el.style.left = `${newLeft}px`;
-        checkAlignment();
-      }
-
-      function onPointerUp(e) {
-        isDragging = false;
-        // Snap magnético si está cerca de la raya del 0 (dentro de 12px)
-        if (Math.abs(s1ObjectOffsetPx - ZERO_POS_PX) < 14) {
-          snapToZero();
-        }
-      }
-
-      el.addEventListener('pointerdown', onPointerDown);
+      dragObj.addEventListener('pointerdown', onPointerDown);
       window.addEventListener('pointermove', onPointerMove);
       window.addEventListener('pointerup', onPointerUp);
     }
 
+    function onPointerDown(e) {
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartOffset = s1ObjectOffsetPx;
+      const dragObj = document.getElementById('dragObj');
+      if (dragObj) dragObj.setPointerCapture(e.pointerId);
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX;
+      let newOffset = dragStartOffset + dx;
+      // Límites de arrastre
+      newOffset = Math.max(0, Math.min(newOffset, 840 - s1Objects[s1Idx].cm * CM_TO_PX));
+      s1ObjectOffsetPx = newOffset;
+
+      const dragObj = document.getElementById('dragObj');
+      if (dragObj) dragObj.style.left = `${newOffset}px`;
+
+      checkAlignment();
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      // Si está a menos de 12 px del 0 cm, engancha automáticamente
+      if (Math.abs(s1ObjectOffsetPx - DEADZONE_PX) < 14) {
+        snapToZero();
+      }
+    }
+
     function snapToZero() {
-      s1ObjectOffsetPx = ZERO_POS_PX;
-      const el = document.getElementById('dragObj');
-      if (el) el.style.left = `${ZERO_POS_PX}px`;
-      playTone(600, 0.1);
+      s1ObjectOffsetPx = DEADZONE_PX;
+      const dragObj = document.getElementById('dragObj');
+      if (dragObj) dragObj.style.left = `${DEADZONE_PX}px`;
+      playTone(600, 0.08);
       checkAlignment();
     }
 
     function resetObjectPos() {
       s1ObjectOffsetPx = 0;
-      const el = document.getElementById('dragObj');
-      if (el) el.style.left = `0px`;
+      const dragObj = document.getElementById('dragObj');
+      if (dragObj) dragObj.style.left = `0px`;
+      playTone(300, 0.08);
       checkAlignment();
     }
 
     function checkAlignment() {
       const status = document.getElementById('alignmentStatus');
-      const fb = document.getElementById('s1Feedback');
-      const diff = Math.abs(s1ObjectOffsetPx - ZERO_POS_PX);
-
-      if (diff <= 3) {
-        status.innerHTML = `<span style="color:#16a34a;">✅ ¡Extremo alineado exactamente en el 0 cm!</span>`;
-        fb.className = "feedback-bar ok";
-        fb.querySelector('span').textContent = `¡Perfecto! El extremo izquierdo está en el 0. Ahora lee en la regla hasta qué número llega el extremo derecho.`;
-      } else if (s1ObjectOffsetPx < ZERO_POS_PX) {
-        status.innerHTML = `<span style="color:#dc2626;">⚠️ Estás midiendo desde el borde de madera (${ZERO_POS_PX - s1ObjectOffsetPx} px antes del 0).</span>`;
-        fb.className = "feedback-bar warn";
-        fb.querySelector('span').textContent = `Recuerda: la medición NO empieza en el borde de madera de la regla, sino en la raya verde del 0.`;
+      if (!status) return;
+      const diff = Math.abs(s1ObjectOffsetPx - DEADZONE_PX);
+      if (diff <= 2) {
+        status.style.color = "#16a34a";
+        status.textContent = "✅ ¡Alineado correctamente al 0 cm! Ahora lee el número donde termina el objeto.";
+      } else if (s1ObjectOffsetPx < DEADZONE_PX) {
+        status.style.color = "#b45309";
+        status.textContent = `⚠️ Empieza antes del 0 cm (en el margen). Muévelo ${DEADZONE_PX - Math.round(s1ObjectOffsetPx)} px a la derecha.`;
       } else {
-        status.innerHTML = `<span style="color:#b45309;">⚠️ El objeto está adelantado después del 0. Arrástralo a la izquierda hacia la raya verde.</span>`;
-        fb.className = "feedback-bar warn";
-        fb.querySelector('span').textContent = `Coloca el objeto con su extremo izquierdo justo en la raya del 0.`;
+        status.style.color = "#b45309";
+        status.textContent = `⚠️ Empieza después del 0 cm. Muévelo ${Math.round(s1ObjectOffsetPx) - DEADZONE_PX} px a la izquierda.`;
       }
     }
 
-    function checkS1Choice(selectedCm, btn) {
-      const item = s1Objects[s1Idx];
-      const isAligned = Math.abs(s1ObjectOffsetPx - ZERO_POS_PX) <= 6;
+    function checkS1Choice(chosen, correct, btn) {
       const fb = document.getElementById('s1Feedback');
+      const nextBtn = document.getElementById('s1NextBtn');
+      const item = s1Objects[s1Idx];
 
-      if (!isAligned) {
-        fb.className = "feedback-bar warn";
-        fb.querySelector('span').textContent = "⚠️ Primero alinea el objeto en la raya del 0 cm antes de responder para medir con precisión.";
-        playTone(280, 0.2, 'sawtooth');
-        return;
-      }
+      // Desactivar todos los botones de opciones
+      document.querySelectorAll('.ruler-choice-btn').forEach(b => b.disabled = true);
 
-      document.querySelectorAll('.btn-cm-choice').forEach(b => b.disabled = true);
-
-      if (selectedCm === item.cm) {
+      if (chosen === correct) {
         btn.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = `✨ ¡Excelente! ${item.note} (+100 pts)`;
+        playSuccessChime();
         score += 100;
         document.getElementById('scoreVal').textContent = score;
-        fb.className = "feedback-bar ok";
-        fb.querySelector('span').textContent = `¡Correcto! ${item.note} (+100 pts)`;
-        document.getElementById('s1NextBtn').style.display = 'inline-flex';
-        playSuccessChime();
       } else {
         btn.classList.add('wrong');
+        // Resaltar el correcto
+        document.querySelectorAll('.ruler-choice-btn').forEach(b => {
+          if (b.textContent.includes(`${correct} cm`)) b.classList.add('correct');
+        });
         fb.className = "feedback-bar err";
-        fb.querySelector('span').textContent = `No coincide. Observa con calma el número exacto donde termina el extremo derecho.`;
+        fb.querySelector('span').textContent = `Iniciando exactamente en el 0 cm, el objeto llega al ${correct} cm (no al ${chosen} cm). ${item.note}`;
         playTone(220, 0.25, 'sawtooth');
-        setTimeout(() => {
-          document.querySelectorAll('.btn-cm-choice').forEach(b => b.disabled = false);
-          btn.classList.remove('wrong');
-        }, 1200);
       }
+
+      nextBtn.style.display = "inline-flex";
     }
 
     function nextS1() {
       s1Idx = (s1Idx + 1) % s1Objects.length;
+      if (s1Idx === 0) s1Objects = shuffleArray(baseS1Objects);
       renderStation1();
     }
 
-    /* ========================================================
-       DATOS Y LOGICA: ESTACION 2 (BALANZA OSCILANTE CON PESAS ANTIGUAS)
-       ======================================================== */
-    const s2Objects = [
-      {
-        name: "Bolsa de mandarinas y guayabas para el ponche",
-        img: "pares_fruta.png",
-        targetGrams: 1000,
-        display: "1 kilogramo (1,000 g)",
-        tip: "1 kilogramo equivale a 1,000 gramos. Puedes usar una pesa de 1 kg o dos pesas de 500 g."
-      },
-      {
-        name: "Piñata tradicional de cartón y periódico",
-        img: "juguete_pinata.png",
-        targetGrams: 750,
-        display: "750 gramos",
-        tip: "750 gramos se logran sumando una pesa de 500 g y una pesa de 250 g."
-      },
-      {
-        name: "Paquete de colaciones y dulces para aguinaldos",
-        img: "posada_aguinaldo.png",
-        targetGrams: 500,
-        display: "Medio kilogramo (500 g)",
-        tip: "Medio kilogramo son 500 gramos exactos."
-      },
-      {
-        name: "Avioncito de madera y juguetes del taller",
-        img: "juguete_avioncito.png",
-        targetGrams: 250,
-        display: "Un cuarto de kilo (250 g)",
-        tip: "250 gramos es la cuarta parte de un kilogramo."
-      },
-      {
-        name: "Ponche artesanal de granada de Sayula",
-        img: "posada_ponche.png",
-        targetGrams: 1000,
-        display: "1 kilogramo (1,000 g)",
-        tip: "1 kilogramo (1,000 g) es la masa tradicional de una botella de ponche de Sayula."
-      }
+    /* =========================================================
+       ESTACIÓN 2: EQUILIBRAR BALANZA (ALTURA 360PX, CERO DESBORDAMIENTO)
+       ========================================================= */
+    const baseS2Objects = [
+      { name: "Bolsa de mandarinas", img: "pares_fruta.png", display: "1 kilogramo (1,000 g)", targetGrams: 1000, tip: "1 kg equivale a 1,000 gramos." },
+      { name: "Bolsa de tejocotes", img: "pares_fruta.png", display: "500 gramos (medio kilo)", targetGrams: 500, tip: "500 gramos es la mitad de 1 kilogramo." },
+      { name: "Bolsa de colaciones", img: "posada_aguinaldo.png", display: "250 gramos (un cuarto de kilo)", targetGrams: 250, tip: "250 gramos es la cuarta parte de 1 kilogramo." },
+      { name: "Caja de dulces", img: "juguete_pinata.png", display: "750 gramos (tres cuartos)", targetGrams: 750, tip: "750 g = 500 g + 250 g." },
+      { name: "Mecate enrollado", img: "pares_nudo.png", display: "350 gramos", targetGrams: 350, tip: "350 g = 250 g + 100 g." },
+      { name: "Frasco de engrudo", img: "material_engrudo.png", display: "600 gramos", targetGrams: 600, tip: "600 g = 500 g + 100 g." },
+      { name: "Paquete de barquitos", img: "pares_nave.png", display: "150 gramos", targetGrams: 150, tip: "150 g = 100 g + 50 g." }
     ];
 
-    // Pesas tradicionales de latón (con imágenes IA)
-    const weightCatalog = [
-      { id: "w1000", grams: 1000, label: "1 kg", sub: "1,000 g", img: "pesa_1kg.png", w: 46 },
-      { id: "w500",  grams: 500,  label: "500 g", sub: "1/2 kg",  img: "pesa_500g.png", w: 40 },
-      { id: "w250",  grams: 250,  label: "250 g", sub: "1/4 kg",  img: "pesa_250g.png", w: 34 },
-      { id: "w100",  grams: 100,  label: "100 g", sub: "Latón",   img: "pesa_100g.png", w: 28 },
-      { id: "w50",   grams: 50,   label: "50 g",  sub: "Mini",    img: "pesa_50g.png",  w: 24 }
-    ];
-
+    let s2Objects = shuffleArray(baseS2Objects);
     let s2Idx = 0;
-    let placedWeights = []; // Arreglo de pesas colocadas en el platillo derecho
+    let placedWeights = [];
+
+    const weightCatalog = [
+      { grams: 1000, label: "1 kg", img: "pesa_1kg.png" },
+      { grams: 500, label: "500 g", img: "pesa_500g.png" },
+      { grams: 250, label: "250 g", img: "pesa_250g.png" },
+      { grams: 100, label: "100 g", img: "pesa_100g.png" },
+      { grams: 50, label: "50 g", img: "pesa_50g.png" }
+    ];
 
     function renderStation2() {
       const obj = s2Objects[s2Idx];
@@ -1281,7 +1219,7 @@
         </div>
 
         <div class="scale-stage-box">
-          <!-- Balanza Visual -->
+          <!-- Balanza Visual Ampliada a 360px de Altura -->
           <div class="scale-visual-container">
             <!-- Base fija -->
             <div class="scale-base-pillar">
@@ -1292,7 +1230,7 @@
             <div class="scale-crossbeam" id="scaleBeam">
               <div class="scale-needle" id="scaleNeedle"></div>
 
-              <!-- Platillo Izquierdo (Objeto a pesar) -->
+              <!-- Platillo Izquierdo (Objeto) -->
               <div class="scale-pan-assembly left" id="leftAssembly">
                 <div class="scale-chains"></div>
                 <div class="scale-plate" id="leftPlate">
@@ -1302,72 +1240,73 @@
                 </div>
               </div>
 
-              <!-- Platillo Derecho (Pesas de latón) -->
+              <!-- Platillo Derecho (Pesas) -->
               <div class="scale-pan-assembly right" id="rightAssembly">
                 <div class="scale-chains"></div>
                 <div class="scale-plate" id="rightPlate">
                   <div class="placed-weights-container" id="placedWeightsBox">
                     <span style="font-size:0.75rem;color:#64748b;font-weight:700;">(Platillo vacío)</span>
                   </div>
-                  <span style="font-size:0.72rem;font-weight:900;color:#b45309;margin-top:4px;" id="rightGramsLabel">
-                    Pesas: 0 g
-                  </span>
+                  <span style="font-size:0.72rem;font-weight:900;color:#b45309;margin-top:2px;" id="rightGramsLabel">Pesas: 0 g</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Banco de Pesas Tradicionales -->
-          <div class="weights-bank">
-            <div class="weights-bank-title">
-              <span>🪙 Banco de Pesas Tradicionales de Latón (Toca para colocar en el platillo)</span>
-              <button class="btn-action" style="padding:0.35rem 0.75rem;font-size:0.8rem;background:#ef4444;" onclick="clearWeights()">Vaciar platillo</button>
-            </div>
-            <div class="weights-grid">
+          <!-- Estante de Pesas de Latón -->
+          <div style="width:100%; max-width:720px; text-align:center;">
+            <p style="font-weight:800; font-size:0.95rem; color:#1e293b; margin-bottom:0.5rem;">
+              Pesas de Latón (Toca para colocar en el platillo):
+            </p>
+            <div class="brass-weight-shelf">
               ${weightCatalog.map(w => `
-                <button class="weight-card-btn" onclick="addWeight(${w.grams}, '${w.label}', '${w.img}')">
-                  <img src="img/${w.img}" alt="${w.label}" style="width:${w.w + 12}px;height:${w.w + 12}px;">
-                  <span class="w-label">${w.label}</span>
-                  <span class="w-sub">${w.sub}</span>
+                <button class="weight-btn" onclick="addWeight(${w.grams})">
+                  <img src="img/${w.img}" alt="${w.label}">
+                  <span>${w.label}</span>
                 </button>
               `).join('')}
+              <button class="btn-action" style="background:#64748b; height:auto; padding:0.6rem 0.9rem;" onclick="clearWeights()">
+                🗑️ Vaciar
+              </button>
             </div>
           </div>
-        </div>
 
-        <div class="feedback-bar warn" id="s2Feedback">
-          <span>El platillo izquierdo pesa más (${obj.targetGrams} g) y la balanza está inclinada a la izquierda. Agrega pesas de latón al platillo derecho.</span>
-          <button class="btn-action" id="s2NextBtn" style="display:none;" onclick="nextS2()">Siguiente Pesaje ➔</button>
+          <!-- Feedback de Equilibrio -->
+          <div class="feedback-bar warn" id="s2Feedback" style="width:100%; max-width:720px;">
+            <span>Coloca pesas de latón en el platillo derecho hasta igualar los <strong>${obj.targetGrams} g</strong>.</span>
+            <button class="btn-action" id="s2NextBtn" style="display:none; background:#7c3aed;" onclick="nextS2()">Siguiente Objeto ➔</button>
+          </div>
         </div>
       `;
 
       updateScalePhysics();
     }
 
-    function addWeight(grams, label, img) {
-      placedWeights.push({ grams, label, img });
-      playTone(440 + grams/5, 0.09);
+    function addWeight(grams) {
+      const item = weightCatalog.find(w => w.grams === grams);
+      if (!item) return;
+      placedWeights.push(item);
+      playTone(400 + placedWeights.length * 50, 0.08);
       updateScalePhysics();
     }
 
     function removeWeight(idx) {
       placedWeights.splice(idx, 1);
-      playTone(320, 0.08);
+      playTone(300, 0.08);
       updateScalePhysics();
     }
 
     function clearWeights() {
       placedWeights = [];
-      playTone(260, 0.1);
+      playTone(250, 0.1);
       updateScalePhysics();
     }
 
     function updateScalePhysics() {
       const target = s2Objects[s2Idx].targetGrams;
       const currentRight = placedWeights.reduce((acc, w) => acc + w.grams, 0);
-      const diff = target - currentRight; // Si diff > 0, izquierda es más pesada
+      const diff = target - currentRight;
 
-      // Renderizar miniaturas de pesas en platillo derecho
       const box = document.getElementById('placedWeightsBox');
       const label = document.getElementById('rightGramsLabel');
       if (box && label) {
@@ -1375,22 +1314,21 @@
           box.innerHTML = `<span style="font-size:0.75rem;color:#64748b;font-weight:700;">(Platillo vacío)</span>`;
         } else {
           box.innerHTML = placedWeights.map((w, idx) => `
-            <div class="placed-weight-mini" onclick="removeWeight(${idx})" title="Toca para quitar" style="display:flex; align-items:center; gap:4px; padding:2px 6px; background:#fff; border:1.5px solid #cbd5e1; border-radius:6px; cursor:pointer;">
-              <img src="img/${w.img}" alt="${w.label}" style="height:26px; width:auto; object-fit:contain;">
+            <div class="placed-weight-mini" onclick="removeWeight(${idx})" title="Toca para quitar">
+              <img src="img/${w.img}" alt="${w.label}" style="height:22px; width:auto; object-fit:contain;">
               <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">${w.label}</span>
-              <span style="font-size:0.6rem; color:#ef4444; font-weight:900;">✕</span>
+              <span style="font-size:0.75rem; color:#ef4444; font-weight:900;">✕</span>
             </div>
           `).join('');
         }
         label.textContent = `Pesas: ${currentRight} g ${currentRight >= 1000 ? '(' + (currentRight/1000) + ' kg)' : ''}`;
       }
 
-      // Calcular ángulo de inclinación (-16° a +16°)
-      // Si diff > 0 (pesa más izq), el brazo izquierdo baja -> rotación antihoraria (negativa)
-      const maxAngle = 16;
+      // Ángulo de inclinación seguro (-10° a +10°) para que los platillos nunca desborden
+      const maxAngle = 10;
       let angle = 0;
       if (diff !== 0) {
-        angle = Math.max(-maxAngle, Math.min(maxAngle, (diff / 800) * maxAngle));
+        angle = Math.max(-maxAngle, Math.min(maxAngle, (diff / 700) * maxAngle));
       }
 
       const beam = document.getElementById('scaleBeam');
@@ -1401,19 +1339,16 @@
       const needle = document.getElementById('scaleNeedle');
 
       if (beam && leftAssembly && rightAssembly) {
-        // El brazo rota
         beam.style.transform = `rotate(${-angle}deg)`;
-        // Los platillos contrarrotan para permanecer siempre horizontales
         leftAssembly.style.transform = `rotate(${angle}deg)`;
         rightAssembly.style.transform = `rotate(${angle}deg)`;
-        needle.style.transform = `rotate(${angle * 0.8}deg)`;
+        if (needle) needle.style.transform = `rotate(${angle * 0.8}deg)`;
       }
 
       const fb = document.getElementById('s2Feedback');
       const nextBtn = document.getElementById('s2NextBtn');
 
       if (diff === 0) {
-        // EQUILIBRIO PERFECTO
         if (leftPlate) leftPlate.classList.add('balanced');
         if (rightPlate) rightPlate.classList.add('balanced');
         fb.className = "feedback-bar ok";
@@ -1432,244 +1367,228 @@
           fb.querySelector('span').textContent = `La balanza está inclinada a la izquierda. Faltan ${diff} g para equilibrar el objeto.`;
         } else {
           fb.className = "feedback-bar err";
-          fb.querySelector('span').textContent = `¡Te pasaste de peso! El platillo derecho pesa ${-diff} g más que el objeto. Toca una pesa para quitarla.`;
+          fb.querySelector('span').textContent = `¡Te pasaste de peso! El platillo derecho tiene ${-diff} g más. Toca una pesa para quitarla.`;
         }
       }
     }
 
     function nextS2() {
       s2Idx = (s2Idx + 1) % s2Objects.length;
+      if (s2Idx === 0) s2Objects = shuffleArray(baseS2Objects);
       renderStation2();
     }
 
-    /* ========================================================
-       DATOS Y LOGICA: ESTACION 3 (¿MASA O LONGITUD?)
-       ======================================================== */
-    const s3Questions = [
+    /* =========================================================
+       ESTACIÓN 3: ¿QUÉ PROPIEDAD MEDIMOS? (MASA, LONGITUD, CAPACIDAD, TEMPERATURA)
+       ========================================================= */
+    const baseS3Questions = [
       {
-        q: "Al inflar los globos para la piñata, queremos saber cuánto mide su contorno alrededor para que todos los conos queden simétricos.",
-        prop: "Longitud",
-        unit: "Centímetros (cm) · Regla o cinta",
+        q: "Al inflar los globos para la piñata, medimos con un mecate o cinta alrededor de cada uno para que todos los conos queden del mismo tamaño.",
+        prop: "longitud",
         img: "material_globo.png",
-        opts: [
-          "Propiedad: Longitud · Instrumento: Cinta métrica (cm)",
-          "Propiedad: Masa · Instrumento: Balanza (kg)",
-          "Propiedad: Capacidad · Instrumento: Vaso medidor",
-          "Propiedad: Masa · Instrumento: Regla (g)"
-        ],
-        ans: "Propiedad: Longitud · Instrumento: Cinta métrica (cm)",
-        exp: "El contorno o tamaño de un objeto es una longitud y se mide en centímetros (cm)."
+        exp: "El contorno o tamaño de un cuerpo es una LONGITUD y se mide con cinta métrica o regla en centímetros (cm)."
       },
       {
         q: "La comisión compró 2 kilogramos de cañas, 1 kilogramo de tejocotes y 500 gramos de guayabas en el mercado local.",
-        prop: "Masa",
-        unit: "Kilogramos (kg) y gramos (g) · Balanza",
+        prop: "masa",
         img: "pares_fruta.png",
-        opts: [
-          "Propiedad: Masa · Instrumento: Balanza (g y kg)",
-          "Propiedad: Longitud · Instrumento: Metro (m)",
-          "Propiedad: Longitud · Instrumento: Balanza (cm)",
-          "Propiedad: Tiempo · Instrumento: Reloj"
-        ],
-        ans: "Propiedad: Masa · Instrumento: Balanza (g y kg)",
-        exp: "La cantidad de materia o peso de los alimentos es masa y se mide con balanza en gramos y kilogramos."
+        exp: "La cantidad de materia que tienen los alimentos es su MASA (peso) y se mide en gramos (g) y kilogramos (kg) con balanza."
       },
       {
-        q: "Para armar el avioncito de juguete, necesitamos marcar con un lápiz el centro exacto de un abatelenguas de madera.",
-        prop: "Longitud",
-        unit: "Centímetros (cm) · Regla escolar",
+        q: "Para preparar el ponche de frutas tradicional, la familia llenó la olla grande con 12 litros de agua.",
+        prop: "capacidad",
+        img: "posada_ponche.png",
+        exp: "La cantidad de líquido que cabe dentro de un recipiente es la CAPACIDAD y se mide en litros (L) y mililitros (ml) con jarra o vaso medidor."
+      },
+      {
+        q: "La mamá de Estrella verificó con el termómetro de cocina que el agua del ponche alcanzara los 100 °C para saber que ya estaba hirviendo.",
+        prop: "temperatura",
+        img: "instrumento_temperatura.png",
+        exp: "El nivel de calor o frío de un líquido o cuerpo es la TEMPERATURA y se mide en grados Celsius (°C) con un termómetro."
+      },
+      {
+        q: "Para armar el avioncito de juguete, necesitamos marcar con un lápiz exactamente 15 centímetros en un abatelenguas de madera.",
+        prop: "longitud",
         img: "juguete_avioncito.png",
-        opts: [
-          "Propiedad: Longitud · Instrumento: Regla graduada (cm)",
-          "Propiedad: Masa · Instrumento: Balanza de platillos (g)",
-          "Propiedad: Masa · Instrumento: Metro (kg)",
-          "Propiedad: Volumen · Instrumento: Báscula"
-        ],
-        ans: "Propiedad: Longitud · Instrumento: Regla graduada (cm)",
-        exp: "Para objetos pequeños del aula usamos la regla graduada en centímetros (cm), iniciando siempre desde el 0."
+        exp: "La distancia de un punto a otro sobre un objeto es una LONGITUD y se mide en centímetros (cm) con la regla escolar."
       },
       {
-        q: "Queremos comprobar por qué la piñata pesa más cuando tiene el engrudo húmedo que cuando ya se secó al sol en el patio.",
-        prop: "Masa",
-        unit: "Gramos (g) · Balanza",
+        q: "En la mesa de salud escolar, el maestro revisó si un compañero tenía 38 °C de fiebre antes de comenzar el festejo.",
+        prop: "temperatura",
+        img: "instrumento_temperatura.png",
+        exp: "La fiebre o calor corporal es la TEMPERATURA del cuerpo humano y se mide con un termómetro clínico en grados Celsius (°C)."
+      },
+      {
+        q: "Repartieron vasos pequeños de 250 mililitros de ponche caliente a las niñas y niños invitados a la posada.",
+        prop: "capacidad",
+        img: "pares_vaso.png",
+        exp: "El volumen de líquido que cabe en un vaso es la CAPACIDAD y se mide en mililitros (ml) o litros (L) con recipientes graduados."
+      },
+      {
+        q: "El comité pesó en la balanza las bolsas de mandarinas para comprobar que cada una tuviera exactamente 1 kilogramo.",
+        prop: "masa",
+        img: "instrumento_balanza.png",
+        exp: "La masa de los objetos se determina colocando el cuerpo en un platillo y pesas en el otro hasta que la balanza quede en equilibrio."
+      },
+      {
+        q: "Midieron con un flexómetro 4 metros de mecate resistente para colgar la piñata de siete picos en el patio.",
+        prop: "longitud",
+        img: "pares_nudo.png",
+        exp: "El largo de una cuerda o mecate es una LONGITUD y se mide con flexómetro o metro en metros (m)."
+      },
+      {
+        q: "Para preparar la mezcla de engrudo, agregaron 500 mililitros de agua tibia sobre la harina de trigo.",
+        prop: "capacidad",
         img: "material_engrudo.png",
-        opts: [
-          "Propiedad: Masa · Instrumento: Balanza (g)",
-          "Propiedad: Longitud · Instrumento: Regla (cm)",
-          "Propiedad: Longitud · Instrumento: Balanza (m)",
-          "Propiedad: Temperatura · Instrumento: Termómetro"
-        ],
-        ans: "Propiedad: Masa · Instrumento: Balanza (g)",
-        exp: "El peso o pesadez del engrudo húmedo frente al seco corresponde a la masa."
+        exp: "Los líquidos necesarios para las recetas se miden por su CAPACIDAD en mililitros (ml) usando una jarra medidora."
       }
     ];
 
+    let s3Questions = shuffleArray(baseS3Questions);
     let s3Idx = 0;
+
+    // Catálogo de las 4 Propiedades con sus ilustraciones
+    const propertyCatalog = [
+      {
+        id: "masa",
+        title: "⚖️ Masa (Peso)",
+        instrument: "Balanza o báscula",
+        units: "Gramos (g) y kilogramos (kg)",
+        img: "instrumento_balanza.png"
+      },
+      {
+        id: "longitud",
+        title: "📏 Longitud",
+        instrument: "Regla, metro o cinta",
+        units: "cm, metros (m) y km",
+        img: "instrumento_regla.png"
+      },
+      {
+        id: "capacidad",
+        title: "🥛 Capacidad",
+        instrument: "Jarra o vaso medidor",
+        units: "Litros (L) y mililitros (ml)",
+        img: "instrumento_capacidad.png"
+      },
+      {
+        id: "temperatura",
+        title: "🌡️ Temperatura",
+        instrument: "Termómetro",
+        units: "Grados Celsius (°C)",
+        img: "instrumento_temperatura.png"
+      }
+    ];
 
     function renderStation3() {
       const item = s3Questions[s3Idx];
       const area = document.getElementById('stationArea');
 
+      // Las 4 opciones de propiedades ordenadas de forma dinámica
+      const displayedProps = shuffleArray(propertyCatalog);
+
       area.innerHTML = `
         <div class="panel-header">
-          <div class="panel-title">🔍 Estación 3: ¿Masa o Longitud? (${s3Idx + 1}/${s3Questions.length})</div>
-          <span class="badge-info">Conceptos Clave de 3°</span>
+          <div class="panel-title">🔍 Estación 3: ¿Qué propiedad medimos? (${s3Idx + 1}/${s3Questions.length})</div>
+          <span class="badge-info">Masa · Longitud · Capacidad · Temperatura</span>
         </div>
 
-        <!-- Banners Referenciales de Cada Propiedad -->
-        <div class="property-reference-banner">
-          <div class="property-card" style="border-color:#38bdf8;">
-            <img src="img/instrumento_balanza.png" alt="Balanza">
-            <div>
-              <h3>⚖️ MASA (Peso)</h3>
-              <p>Mide cuánta materia tiene un cuerpo. Unidades: <strong>gramos (g)</strong> y <strong>kilogramos (kg)</strong> con balanza.</p>
+        <!-- Tarjeta de Situación del Proyecto -->
+        <div class="prop-situation-card">
+          <img src="img/${item.img}" alt="" class="prop-situation-img">
+          <div class="prop-situation-text">
+            <span class="badge-info" style="margin-bottom:0.4rem; display:inline-block;">Situación del Proyecto</span>
+            <div class="prop-situation-title">"${item.q}"</div>
+            <p style="font-size:0.9rem; font-weight:800; color:#0284c7; margin-top:0.4rem;">
+              ¿Cuál de las 4 propiedades medimos y con qué instrumento?
+            </p>
+          </div>
+        </div>
+
+        <!-- Las 4 Opciones Seleccionables (Interactiva) -->
+        <div class="properties-interactive-grid" id="propGrid">
+          ${displayedProps.map(p => `
+            <div class="property-interactive-card" onclick="checkPropertyChoice('${p.id}', '${item.prop}', this)">
+              <img src="img/${p.img}" alt="${p.title}">
+              <div class="p-title">${p.title}</div>
+              <div class="p-instrument">🔧 ${p.instrument}</div>
+              <div class="p-units">📐 ${p.units}</div>
             </div>
-          </div>
-          <div class="property-card" style="border-color:#34d399;">
-            <img src="img/instrumento_regla.png" alt="Regla">
-            <div>
-              <h3>📏 LONGITUD</h3>
-              <p>Mide dimensiones, alturas y distancias. Unidades: <strong>centímetros (cm)</strong>, <strong>metros (m)</strong> y <strong>kilómetros (km)</strong> con regla o metro.</p>
-            </div>
-          </div>
+          `).join('')}
         </div>
 
-        <div style="background:#fff; border:2px solid #cbd5e1; border-radius:1rem; padding:1.25rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
-          <img src="img/${item.img}" alt="" style="width:110px;height:110px;object-fit:contain;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;padding:6px;flex-shrink:0;">
-          <div style="flex:1; min-width:260px;">
-            <span class="badge-info" style="margin-bottom:0.5rem;display:inline-block;">Situación del Proyecto</span>
-            <p style="font-size:1.1rem;font-weight:700;color:#0f172a;line-height:1.5;">${item.q}</p>
-          </div>
-        </div>
-
-        <div style="margin-top:0.75rem;">
-          <p style="font-weight:800; font-size:1rem; color:#334155; margin-bottom:0.6rem;">
-            Selecciona la opción que identifica correctamente la propiedad e instrumento:
-          </p>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;" id="s3OptsGrid">
-            ${item.opts.map(opt => `
-              <button class="btn-cm-choice" style="font-size:0.95rem;text-align:left;padding:0.9rem;" onclick="checkS3Choice('${opt}', this)">
-                ${opt}
-              </button>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="feedback-bar" id="s3Feedback" style="margin-top:0.75rem;">
-          <span>Lee la situación y decide si se trata de pesar (masa) o de medir tamaño (longitud).</span>
-          <button class="btn-action" id="s3NextBtn" style="display:none;" onclick="nextS3()">Siguiente Pregunta ➔</button>
+        <div class="feedback-bar info" id="s3Feedback" style="margin-top:0.5rem;">
+          <span>Observa la situación y selecciona la tarjeta de la propiedad que corresponde medir.</span>
+          <button class="btn-action" id="s3NextBtn" style="display:none; background:#7c3aed;" onclick="nextS3()">Siguiente Situación ➔</button>
         </div>
       `;
     }
 
-    function checkS3Choice(selected, btn) {
-      const item = s3Questions[s3Idx];
+    function checkPropertyChoice(chosenId, correctId, cardEl) {
       const fb = document.getElementById('s3Feedback');
-      document.querySelectorAll('#s3OptsGrid button').forEach(b => b.disabled = true);
+      const nextBtn = document.getElementById('s3NextBtn');
+      const item = s3Questions[s3Idx];
 
-      if (selected === item.ans) {
-        btn.classList.add('correct');
+      // Bloquear tarjetas
+      document.querySelectorAll('.property-interactive-card').forEach(c => c.style.pointerEvents = 'none');
+
+      if (chosenId === correctId) {
+        cardEl.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = `✨ ¡Correcto! ${item.exp} (+100 pts)`;
+        playSuccessChime();
         score += 100;
         document.getElementById('scoreVal').textContent = score;
-        fb.className = "feedback-bar ok";
-        fb.querySelector('span').textContent = `¡Excelente! ${item.exp} (+100 pts)`;
-        document.getElementById('s3NextBtn').style.display = 'inline-flex';
-        playSuccessChime();
       } else {
-        btn.classList.add('wrong');
+        cardEl.classList.add('wrong');
+        // Resaltar la tarjeta correcta
+        document.querySelectorAll('.property-interactive-card').forEach(c => {
+          if (c.innerHTML.includes(propertyCatalog.find(p => p.id === correctId).title)) {
+            c.classList.add('correct');
+          }
+        });
         fb.className = "feedback-bar err";
-        fb.querySelector('span').textContent = `Respuesta inexacta. Recuerda: longitud mide tamaños (cm, m); masa mide peso (g, kg).`;
+        fb.querySelector('span').textContent = `¡Cuidado! ${item.exp}`;
         playTone(220, 0.25, 'sawtooth');
-        setTimeout(() => {
-          document.querySelectorAll('#s3OptsGrid button').forEach(b => b.disabled = false);
-          btn.classList.remove('wrong');
-        }, 1200);
       }
+
+      nextBtn.style.display = 'inline-flex';
     }
 
     function nextS3() {
       s3Idx = (s3Idx + 1) % s3Questions.length;
+      if (s3Idx === 0) s3Questions = shuffleArray(baseS3Questions);
       renderStation3();
     }
 
-    /* ========================================================
-       DATOS Y LOGICA: ESTACION 4 (¿cm, m o km? UNIDAD OPTIMA)
-       ======================================================== */
-    let s4Challenges = [
-      {
-        target: "El largo de un lápiz",
-        context: "Útil escolar de estuche",
-        unit: "cm",
-        exp: "Los lápices miden entre 10 y 18 centímetros (cm); la regla es el instrumento ideal."
-      },
-      {
-        target: "El ancho del pizarrón",
-        context: "Mobiliario escolar del aula",
-        unit: "m",
-        exp: "Un pizarrón mide entre 2 y 3 metros (m); usar una regla de 30 cm sería impráctico."
-      },
-      {
-        target: "La distancia en carretera de Sayula a Guadalajara",
-        context: "Trayecto entre ciudades",
-        unit: "km",
-        exp: "Las distancias entre ciudades y carreteras se miden en kilómetros (km); son más de 100 km."
-      },
-      {
-        target: "El grosor de una moneda",
-        context: "Objeto pequeño de bolsillo",
-        unit: "cm",
-        exp: "Una moneda mide unos cuantos milímetros o menos de medio centímetro (cm)."
-      },
-      {
-        target: "La altura de la puerta del salón",
-        context: "Elemento del aula",
-        unit: "m",
-        exp: "Las puertas escolares miden aproximadamente 2 metros (m) de altura."
-      },
-      {
-        target: "El largo de la cancha escolar",
-        context: "Espacio para educación física",
-        unit: "m",
-        exp: "Las canchas deportivas miden entre 20 y 28 metros (m) de largo."
-      },
-      {
-        target: "El largo de un abatelenguas",
-        context: "Material para manualidades",
-        unit: "cm",
-        exp: "Un abatelenguas mide exactamente 15 centímetros (cm)."
-      },
-      {
-        target: "La distancia de viaje a la playa",
-        context: "Viaje por autopista",
-        unit: "km",
-        exp: "Para grandes distancias geográficas y viajes por carretera usamos kilómetros (km)."
-      },
-      {
-        target: "La estatura de un alumno o alumna",
-        context: "Medición de crecimiento",
-        unit: "m",
-        exp: "En 3° grado la estatura promedio se expresa en metros y centímetros (ejemplo: 1.25 m)."
-      },
-      {
-        target: "El largo de una goma de borrar",
-        context: "Útil escolar pequeño",
-        unit: "cm",
-        exp: "Las gomas de borrar miden entre 4 y 6 centímetros (cm)."
-      }
+    /* =========================================================
+       ESTACIÓN 4: ¿CM, M O KM? (ALEATORIZACIÓN DE SITUACIONES Y BOTONES)
+       ========================================================= */
+    const baseS4Challenges = [
+      { target: "Largo de un lápiz de madera", correct: "cm", context: "Objeto pequeño escolar", why: "Un lápiz mide unos 14 a 18 cm; usar metros o kilómetros sería absurdo." },
+      { target: "Largo de la cancha de fútbol de la escuela", correct: "m", context: "Espacio escolar amplio", why: "Una cancha mide unos 50 metros; en centímetros el número sería enorme." },
+      { target: "Distancia en carretera entre Sayula y Guadalajara", correct: "km", context: "Distancia geográfica entre ciudades", why: "La distancia entre ciudades se mide en kilómetros (km); son más de 100 km." },
+      { target: "Grosor de una goma de borrar", correct: "cm", context: "Útil escolar pequeño", why: "El grosor de una goma se mide en centímetros (o milímetros)." },
+      { target: "Altura de la puerta del salón de clases", correct: "m", context: "Construcción del aula", why: "Una puerta mide aproximadamente 2 metros de altura." },
+      { target: "Distancia que recorre un camión de carga por la autopista", correct: "km", context: "Trayecto de transporte intermunicipal", why: "Los viajes intermunicipales en carretera se miden en kilómetros." },
+      { target: "Largo del abatelenguas para el avioncito de juguete", correct: "cm", context: "Pieza de taller manual", why: "Un abatelenguas mide unos 15 centímetros de largo." },
+      { target: "Largo de la barda perimetral de la primaria", correct: "m", context: "Perímetro del terreno escolar", why: "Las bardas escolares se miden en metros (por ejemplo, 60 m)." }
     ];
 
-    function shuffleChallenges() {
-      for (let i = s4Challenges.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [s4Challenges[i], s4Challenges[j]] = [s4Challenges[j], s4Challenges[i]];
-      }
-    }
-
+    let s4Challenges = shuffleArray(baseS4Challenges);
     let s4Idx = 0;
+
+    const unitButtonsData = [
+      { unit: "cm", label: "Centímetros (cm)", img: "unit_cm.png", desc: "Para objetos pequeños del aula usando la regla escolar." },
+      { unit: "m", label: "Metros (m)", img: "unit_m.png", desc: "Para salones, patios, canchas y personas usando el metro." },
+      { unit: "km", label: "Kilómetros (km)", img: "unit_km.png", desc: "Para carreteras, viajes y distancias entre pueblos o ciudades." }
+    ];
 
     function renderStation4() {
       const item = s4Challenges[s4Idx];
       const area = document.getElementById('stationArea');
+
+      // Botones aleatorizados (Fisher-Yates) para no tener orden predecible
+      const randomizedButtons = shuffleArray(unitButtonsData);
 
       area.innerHTML = `
         <div class="panel-header">
@@ -1679,74 +1598,67 @@
 
         <div class="unit-selection-arena">
           <div class="unit-challenge-card">
-            <span class="unit-challenge-badge">${item.context}</span>
-            <h2 class="unit-challenge-title">¿Cuál unidad es la más óptima para medir:</h2>
-            <div style="font-size:1.35rem; font-weight:900; color:#0284c7; margin-top:0.4rem;">
+            <span class="badge-info">${item.context}</span>
+            <h2 style="font-size:1.15rem; font-weight:800; color:#1e293b; margin-top:0.4rem;">¿Cuál unidad es la más práctica y óptima para medir:</h2>
+            <div style="font-size:1.35rem; font-weight:900; color:#0284c7; margin:0.4rem 0;">
               "${item.target}"?
             </div>
-            <p class="unit-challenge-context">Elige la unidad más práctica de las tres opciones siguientes:</p>
+            <p style="font-size:0.88rem; color:#64748b; font-weight:600;">Selecciona la unidad de longitud más conveniente:</p>
           </div>
 
-          <!-- Las 3 Opciones Obligatorias: cm, m o km con Ilustraciones IA -->
+          <!-- Botones Aleatorizados de cm, m o km con Ilustraciones IA -->
           <div class="unit-buttons-grid" id="unitGrid">
-            <button class="unit-choice-btn" onclick="checkUnitChoice('cm', this)">
-              <img src="img/unit_cm.png" alt="Centímetros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
-              <span class="u-title">Centímetros (cm)</span>
-              <span class="u-desc">Para objetos pequeños del aula usando la regla escolar.</span>
-            </button>
-
-            <button class="unit-choice-btn" onclick="checkUnitChoice('m', this)">
-              <img src="img/unit_m.png" alt="Metros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
-              <span class="u-title">Metros (m)</span>
-              <span class="u-desc">Para cosas grandes, personas y salones usando metro o flexómetro.</span>
-            </button>
-
-            <button class="unit-choice-btn" onclick="checkUnitChoice('km', this)">
-              <img src="img/unit_km.png" alt="Kilómetros" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
-              <span class="u-title">Kilómetros (km)</span>
-              <span class="u-desc">Para distancias grandes entre pueblos, ciudades y carreteras.</span>
-            </button>
+            ${randomizedButtons.map(u => `
+              <button class="unit-choice-btn" onclick="checkUnitChoice('${u.unit}', '${item.correct}', this)">
+                <img src="img/${u.img}" alt="${u.label}" style="width:78px; height:78px; object-fit:contain; border-radius:12px; border:2px solid #cbd5e1; background:#fff; padding:4px;">
+                <span style="font-size:1.05rem; font-weight:900; color:#0f172a;">${u.label}</span>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600;">${u.desc}</span>
+              </button>
+            `).join('')}
           </div>
-        </div>
 
-        <div class="feedback-bar" id="s4Feedback">
-          <span>Reflexiona: ¿es algo pequeño (cm), un espacio o cosa grande (m), o una distancia carretera (km)?</span>
-          <button class="btn-action" id="s4NextBtn" style="display:none;" onclick="nextS4()">Siguiente Reto ➔</button>
+          <div class="feedback-bar info" id="s4Feedback" style="width:100%;">
+            <span>Analiza el tamaño del objeto o distancia para elegir la unidad que exprese la medida de forma más sencilla.</span>
+            <button class="btn-action" id="s4NextBtn" style="display:none; background:#7c3aed;" onclick="nextS4()">Siguiente Reto ➔</button>
+          </div>
         </div>
       `;
     }
 
-    function checkUnitChoice(selectedUnit, btn) {
-      const item = s4Challenges[s4Idx];
+    function checkUnitChoice(chosenUnit, correctUnit, btn) {
       const fb = document.getElementById('s4Feedback');
-      document.querySelectorAll('#unitGrid button').forEach(b => b.disabled = true);
+      const nextBtn = document.getElementById('s4NextBtn');
+      const item = s4Challenges[s4Idx];
 
-      if (selectedUnit === item.unit) {
+      document.querySelectorAll('.unit-choice-btn').forEach(b => b.disabled = true);
+
+      if (chosenUnit === correctUnit) {
         btn.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = `✨ ¡Exacto! ${item.why} (+100 pts)`;
+        playSuccessChime();
         score += 100;
         document.getElementById('scoreVal').textContent = score;
-        fb.className = "feedback-bar ok";
-        fb.querySelector('span').textContent = `¡Correcto! ${item.exp} (+100 pts)`;
-        document.getElementById('s4NextBtn').style.display = 'inline-flex';
-        playSuccessChime();
       } else {
         btn.classList.add('wrong');
+        document.querySelectorAll('.unit-choice-btn').forEach(b => {
+          if (b.innerHTML.includes(`'${correctUnit}'`)) b.classList.add('correct');
+        });
         fb.className = "feedback-bar err";
-        fb.querySelector('span').textContent = `Opción no óptima. Reflexiona sobre la escala: ${item.exp}`;
+        fb.querySelector('span').textContent = `La unidad más práctica es ${correctUnit.toUpperCase()}. ${item.why}`;
         playTone(220, 0.25, 'sawtooth');
-        setTimeout(() => {
-          document.querySelectorAll('#unitGrid button').forEach(b => b.disabled = false);
-          btn.classList.remove('wrong');
-        }, 1300);
       }
+
+      nextBtn.style.display = 'inline-flex';
     }
 
     function nextS4() {
       s4Idx = (s4Idx + 1) % s4Challenges.length;
+      if (s4Idx === 0) s4Challenges = shuffleArray(baseS4Challenges);
       renderStation4();
     }
 
-    // Inicializar en la Estación 1
+    // Inicializar en Estacion 1
     renderStation1();
   </script>
 </body>
