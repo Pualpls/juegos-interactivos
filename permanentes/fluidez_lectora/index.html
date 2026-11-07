@@ -1818,6 +1818,9 @@
 
             <!-- Menú de Botones Principales Prioritarios -->
             <div class="results-buttons" style="margin-top: 0; justify-content: flex-start; gap: 8px;">
+              <button class="btn-action-sec" id="btnUploadScoreTeacher" onclick="uploadCurrentScoreDocente()" style="background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; font-weight: 800; padding: 10px 16px; font-size: 0.95rem;" title="Requiere PIN docente. Evita que los alumnos hagan trampa registrando puntajes no supervisados.">
+                🔒 Subir a Google Sheets (Docente)
+              </button>
               <button class="btn-action-main" id="btnViewInLeaderboard" style="background: linear-gradient(135deg, #d97706, #b45309); padding: 10px 16px; font-size: 0.95rem; font-weight: 800;">
                 🏆 Ver en Tabla de Puntajes
               </button>
@@ -3592,10 +3595,10 @@
       state.scores.push(newScoreRecord);
       saveScoresToStorage();
 
-      // Envío automático a Google Sheets si la nube está conectada
-      if (state.cloudSyncUrl && state.autoCloudSync) {
-        sendScoreToCloud(newScoreRecord);
-      }
+      // SEGURIDAD PEDAGÓGICA ANTITRAMPA:
+      // Queda estrictamente PROHIBIDO el envío automático de puntajes a Google Sheets.
+      // Únicamente el docente puede subir puntajes mediante autenticación explícita con PIN.
+      state.lastCompletedRecord = newScoreRecord;
 
       if (fullComplete && (state.timeLimit === 0 || state.timerRemaining >= 0)) {
         sfx.playSuccess();
@@ -3845,7 +3848,28 @@
 
     const _SEC_ADMIN_KEY = atob('MTcwMg=='); // Clave secreta docente
 
-    function openCloudModal() {
+        // SUBIDA EXCLUSIVA CON PIN DOCENTE (ANTITRAMPA)
+    function uploadCurrentScoreDocente() {
+      if (!state.lastCompletedRecord) {
+        alert("No hay ningún puntaje de lectura reciente para enviar.");
+        return;
+      }
+      if (!state.cloudSyncUrl) {
+        alert("Primero conecta la URL de tu Webhook de Google Sheets en 'Conectar Nube'.");
+        openCloudModal();
+        return;
+      }
+      const pin = prompt("🔒 CONTROL DOCENTE OBLIGATORIO\n\nIngresa el PIN docente para validar y subir este puntaje a Google Sheets:\n(Los alumnos no pueden subir puntajes directamente para evitar trampas)");
+      if (pin !== _SEC_ADMIN_KEY) {
+        if (pin !== null) alert("❌ PIN incorrecto. Acceso reservado exclusivamente para el docente.");
+        return;
+      }
+      sendScoreToCloud(state.lastCompletedRecord);
+      showCloudToast("☁️ Puntaje verificado y subido exitosamente a Google Sheets.");
+      alert(`✅ Puntaje de ${state.lastCompletedRecord.name} (${state.lastCompletedRecord.score} pts) validado y registrado en Google Sheets.`);
+    }
+
+function openCloudModal() {
       const pin = prompt('🔒 Ingresa el PIN docente de seguridad:');
       if (pin !== _SEC_ADMIN_KEY) {
         if (pin !== null) alert('❌ PIN incorrecto. Acceso reservado para el docente.');
@@ -3867,9 +3891,9 @@
       const autoSync = document.getElementById('chkAutoCloudSync').checked;
 
       state.cloudSyncUrl = url;
-      state.autoCloudSync = autoSync;
+      state.autoCloudSync = false;
       localStorage.setItem('lector_cloud_sync_url', url);
-      localStorage.setItem('lector_auto_cloud_sync', autoSync ? 'true' : 'false');
+      localStorage.setItem('lector_auto_cloud_sync', 'false');
 
       updateCloudStatus();
       closeCloudModal();
