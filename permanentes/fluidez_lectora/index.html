@@ -1818,8 +1818,11 @@
 
             <!-- Menú de Botones Principales Prioritarios -->
             <div class="results-buttons" style="margin-top: 0; justify-content: flex-start; gap: 8px;">
-              <button class="btn-action-sec" id="btnUploadScoreTeacher" onclick="uploadCurrentScoreDocente()" style="background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; font-weight: 800; padding: 10px 16px; font-size: 0.95rem;" title="Requiere PIN docente. Evita que los alumnos hagan trampa registrando puntajes no supervisados.">
-                🔒 Subir a Google Sheets (Docente)
+              <div id="resVerificationStatus" style="background:#fef3c7; color:#92400e; padding:8px 12px; border-radius:8px; font-weight:800; font-size:0.85rem; border:1.5px solid #fde68a; margin:10px 0; text-align:center;">
+                ⚠️ Puntaje provisional en pantalla. Requiere validación docente con PIN para registrarse oficialmente en el tablero y Google Sheets.
+              </div>
+              <button class="btn-action-sec" id="btnUploadScoreTeacher" onclick="uploadCurrentScoreDocente()" style="background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; font-weight: 800; padding: 10px 16px; font-size: 0.95rem; width: 100%; justify-content: center;" title="Requiere PIN docente. Valida el puntaje, actualiza el tablero y lo envía a Google Sheets.">
+                🔒 Validar y Guardar con PIN (Docente)
               </button>
               <button class="btn-action-main" id="btnViewInLeaderboard" style="background: linear-gradient(135deg, #d97706, #b45309); padding: 10px 16px; font-size: 0.95rem; font-weight: 800;">
                 🏆 Ver en Tabla de Puntajes
@@ -2177,14 +2180,82 @@
             <li>Reemplaza todo el código que aparezca por este script:</li>
           </ol>
           <div style="position: relative; margin: 8px 0;">
-            <pre style="background: #1e293b; color: #e2e8f0; padding: 10px 12px; border-radius: 8px; font-size: 0.78rem; overflow-x: auto; font-family: monospace;" id="codeGoogleScript">function doPost(e) {
+            <pre style="background: #1e293b; color: #e2e8f0; padding: 10px 12px; border-radius: 8px; font-size: 0.78rem; overflow-x: auto; font-family: monospace;" id="codeGoogleScript">function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var rows = [];
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][1]) {
+      rows.push({
+        date: data[i][0],
+        name: data[i][1],
+        type: data[i][2],
+        fichaId: data[i][3],
+        wordsRead: data[i][4],
+        totalWords: data[i][5],
+        timeSec: data[i][6],
+        wpm: data[i][7],
+        score: data[i][8]
+      });
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify(rows)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(["Fecha", "Participante", "Tipo", "Ficha", "Palabras Leídas", "Total Palabras", "Segundos", "PPM", "Puntos"]);
   }
   var d = JSON.parse(e.postData.contents);
-  sheet.appendRow([new Date(), d.name, d.type, d.fichaId, d.wordsRead, d.totalWords, d.timeSec, d.wpm, d.score]);
-  return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);
+
+  // Sincronización en lote completo (sync_all): reemplaza y consolida la hoja entera
+  if (d.action === 'sync_all' && Array.isArray(d.records)) {
+    var header = ["Fecha", "Participante", "Tipo", "Ficha", "Palabras Leídas", "Total Palabras", "Segundos", "PPM", "Puntos"];
+    sheet.clearContents();
+    sheet.appendRow(header);
+    var rows = [];
+    for (var k = 0; k < d.records.length; k++) {
+      var r = d.records[k];
+      rows.push([new Date(r.date || new Date()), r.name, r.type === 'team' ? 'Equipo' : 'Alumno', r.fichaId, r.wordsRead, r.totalWords || 60, r.timeSec, r.wpm, r.score]);
+    }
+    if (rows.length > 0) {
+      sheet.getRange(2, 1, rows.length, 9).setValues(rows);
+    }
+    return ContentService.createTextOutput(JSON.stringify({status:"ok", count: rows.length})).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Registro individual: busca y actualiza en el lugar, eliminando duplicados
+  var data = sheet.getDataRange().getValues();
+  var matchIdx = -1;
+  var rowsToDelete = [];
+  var targetName = String(d.name).trim().toLowerCase();
+  var targetFicha = String(d.fichaId).trim();
+
+  for (var i = 1; i < data.length; i++) {
+    var rowName = String(data[i][1]).trim().toLowerCase();
+    var rowFicha = String(data[i][3]).trim();
+    if (rowName === targetName && rowFicha === targetFicha) {
+      if (matchIdx === -1) {
+        matchIdx = i + 1;
+      } else {
+        rowsToDelete.push(i + 1);
+      }
+    }
+  }
+
+  if (matchIdx !== -1) {
+    sheet.getRange(matchIdx, 1, 1, 9).setValues([[new Date(), d.name, d.type, d.fichaId, d.wordsRead, d.totalWords, d.timeSec, d.wpm, d.score]]);
+  } else {
+    sheet.appendRow([new Date(), d.name, d.type, d.fichaId, d.wordsRead, d.totalWords, d.timeSec, d.wpm, d.score]);
+  }
+
+  // Eliminar filas duplicadas residuales de abajo hacia arriba
+  for (var j = rowsToDelete.length - 1; j >= 0; j--) {
+    sheet.deleteRow(rowsToDelete[j]);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({status:"ok", updated: (matchIdx !== -1)})).setMimeType(ContentService.MimeType.JSON);
 }</pre>
             <button class="btn-action-sec" id="btnCopyScriptCode" style="position: absolute; top: 6px; right: 6px; padding: 4px 8px; font-size: 0.72rem; background: rgba(255,255,255,0.15); color: white; border: none; cursor: pointer;">📋 Copiar Código</button>
           </div>
@@ -2421,7 +2492,6 @@
       bindEvents();
       loadRecords();
       updateCloudStatus();
-      syncWithOfficialGoogleSheet(true);
     }
 
     function loadFontPreference() {
@@ -2719,15 +2789,21 @@
 
     async function syncWithOfficialGoogleSheet(silent = true) {
       try {
-        const res = await fetch(OFFICIAL_GSHEET_CSV_URL);
-        if (!res.ok) return;
+        const cacheBuster = `&_nocache=${Date.now()}`;
+        const res = await fetch(OFFICIAL_GSHEET_CSV_URL + cacheBuster, { cache: 'no-store' });
+        if (!res.ok) {
+          if (!silent) alert('No se pudo conectar con Google Sheets en este momento.');
+          return;
+        }
         const csv = await res.text();
         const lines = csv.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        if (lines.length <= 1) return;
+        if (lines.length <= 1) {
+          if (!silent) alert('La hoja de Google Sheets está vacía.');
+          return;
+        }
 
-        let added = 0;
-        const existingKeys = new Set(state.scores.map(s => `${s.name}__${s.fichaId}__${s.timeSec}`));
-
+        // Agrupar registros de Google Sheets por Alumno + Ficha quedándonos con el mejor puntaje
+        const sheetBest = new Map();
         for (let i = 1; i < lines.length; i++) {
           const cols = parseCSVLine(lines[i]);
           if (cols.length >= 8) {
@@ -2741,36 +2817,77 @@
             const ppm = parseFloat(cols[7]) || 0;
             const pts = parseInt(cols[8], 10) || 0;
 
-            const key = `${name}__${ficha}__${segs}`;
-            if (!existingKeys.has(key)) {
-              existingKeys.add(key);
-              state.scores.push({
-                id: 'gsheet-' + Math.random().toString(36).substr(2, 9),
-                name,
-                type: tipo.toLowerCase().includes('equipo') ? 'team' : 'individual',
-                fichaId: ficha,
-                fichaTitle: `Ficha ${ficha}`,
-                wordsRead: leidas,
-                totalWords: total,
-                timeSec: segs,
-                wpm: ppm,
-                score: pts,
-                date: dateStr
-              });
-              added++;
+            const rec = {
+              id: 'gsheet-' + i,
+              name,
+              type: tipo.toLowerCase().includes('equipo') ? 'team' : 'individual',
+              fichaId: ficha,
+              fichaTitle: `Ficha ${ficha}`,
+              wordsRead: leidas,
+              totalWords: total,
+              timeSec: segs,
+              wpm: ppm,
+              score: pts,
+              date: dateStr,
+              verified: true
+            };
+
+            const k = getScoreKey(name, ficha);
+            if (!sheetBest.has(k)) {
+              sheetBest.set(k, rec);
+            } else {
+              const cur = sheetBest.get(k);
+              if (rec.score > cur.score || (rec.score === cur.score && rec.timeSec < cur.timeSec)) {
+                sheetBest.set(k, rec);
+              }
             }
           }
         }
 
-        if (added > 0 || !silent) {
-          saveScoresToStorage();
-          renderLeaderboardTable();
-          loadRecords();
-          if (!silent) alert(`✅ Sincronización exitosa: ${state.scores.length} registros cargados desde Google Sheets.`);
-        }
+        // Fusionar respetando registros locales verificados
+        sheetBest.forEach((sheetRec, k) => {
+          const localIdx = state.scores.findIndex(s => getScoreKey(s.name, s.fichaId) === k);
+          if (localIdx === -1) {
+            state.scores.push(sheetRec);
+          } else {
+            const localRec = state.scores[localIdx];
+            if (sheetRec.score > localRec.score) {
+              state.scores[localIdx] = sheetRec;
+            }
+          }
+        });
+
+        deduplicateScores();
+        saveScoresToStorage();
+        renderLeaderboardTable();
+        loadRecords();
+
+        if (!silent) alert(`✅ Sincronización exitosa: ${state.scores.length} registros oficiales consolidados desde Google Sheets.`);
       } catch(e) {
         if (!silent) alert('No se pudo descargar la hoja en este momento. Se conservan los puntajes locales.');
       }
+    }
+
+    function getScoreKey(name, fichaId) {
+      const clean = (name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+      return `${clean}__f${fichaId}`;
+    }
+
+    function deduplicateScores() {
+      const bestMap = new Map();
+      state.scores.forEach(s => {
+        if (!s || !s.name) return;
+        const k = getScoreKey(s.name, s.fichaId);
+        if (!bestMap.has(k)) {
+          bestMap.set(k, s);
+        } else {
+          const cur = bestMap.get(k);
+          if (s.score > cur.score || (s.score === cur.score && s.timeSec < cur.timeSec)) {
+            bestMap.set(k, s);
+          }
+        }
+      });
+      state.scores = Array.from(bestMap.values());
     }
 
     function loadSavedScores() {
@@ -2784,20 +2901,16 @@
             : [];
         }
 
-        // Integrar los registros reales oficiales garantizando que nunca se pierdan
-        const existingKeys = new Set(list.map(s => `${s.name}__${s.fichaId}__${s.timeSec}`));
-        DEFAULT_PLATFORM_SCORES.forEach(defRec => {
-          const key = `${defRec.name}__${defRec.fichaId}__${defRec.timeSec}`;
-          if (!existingKeys.has(key)) {
-            list.push(defRec);
-            existingKeys.add(key);
-          }
-        });
+        if (list.length === 0) {
+          list = [...DEFAULT_PLATFORM_SCORES];
+        }
 
         state.scores = list;
+        deduplicateScores();
         saveScoresToStorage();
       } catch(e) {
         state.scores = [...DEFAULT_PLATFORM_SCORES];
+        deduplicateScores();
       }
     }
 
@@ -3197,7 +3310,14 @@
       if (btnShareLink) btnShareLink.addEventListener('click', shareScoresLink);
 
       const btnSyncSheet = document.getElementById('btnSyncFromSheet');
-      if (btnSyncSheet) btnSyncSheet.addEventListener('click', () => syncWithOfficialGoogleSheet(false));
+      if (btnSyncSheet) btnSyncSheet.addEventListener('click', () => {
+        const pin = prompt("🔒 CONTROL DOCENTE OBLIGATORIO\n\nIngresa el PIN docente para sincronizar y actualizar puntajes desde Google Sheets:");
+        if (pin !== _SEC_ADMIN_KEY) {
+          if (pin !== null) alert("❌ PIN incorrecto. Acceso reservado para el docente.");
+          return;
+        }
+        syncWithOfficialGoogleSheet(false);
+      });
 
       const btnImportModal = document.getElementById('btnImportScoresModal');
       if (btnImportModal) btnImportModal.addEventListener('click', openImportScoresModal);
@@ -3576,8 +3696,6 @@
       const wpm = (wordsRead / timeSpentMin).toFixed(1);
       const scorePoints = calculatePoints(wordsRead, state.totalItems, timeSpentSec, state.timeLimit, isSentenceFicha);
 
-      saveRecord(state.currentFichaId, wordsRead, timeSpentSec);
-
       const pName = state.participantName || (state.participantType === 'team' ? 'Equipo Sin Nombre' : 'Alumno Sin Nombre');
       const newScoreRecord = {
         id: 'rec-' + Date.now(),
@@ -3590,14 +3708,13 @@
         timeSec: timeSpentSec,
         wpm: parseFloat(wpm),
         score: scorePoints,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        verified: false
       };
-      state.scores.push(newScoreRecord);
-      saveScoresToStorage();
 
-      // SEGURIDAD PEDAGÓGICA ANTITRAMPA:
-      // Queda estrictamente PROHIBIDO el envío automático de puntajes a Google Sheets.
-      // Únicamente el docente puede subir puntajes mediante autenticación explícita con PIN.
+      // SEGURIDAD PEDAGÓGICA ANTITRAMPA ESTRICTA:
+      // Los puntajes provisionales NO se guardan en el historial ni en Google Sheets automáticamente.
+      // Solo el docente mediante autenticación con PIN puede validar y consolidar el puntaje oficial.
       state.lastCompletedRecord = newScoreRecord;
 
       if (fullComplete && (state.timeLimit === 0 || state.timerRemaining >= 0)) {
@@ -3851,22 +3968,58 @@
         // SUBIDA EXCLUSIVA CON PIN DOCENTE (ANTITRAMPA)
     function uploadCurrentScoreDocente() {
       if (!state.lastCompletedRecord) {
-        alert("No hay ningún puntaje de lectura reciente para enviar.");
+        alert("No hay ningún puntaje de lectura reciente para validar.");
         return;
       }
-      if (!state.cloudSyncUrl) {
-        alert("Primero conecta la URL de tu Webhook de Google Sheets en 'Conectar Nube'.");
-        openCloudModal();
+      if (state.lastCompletedRecord.verified) {
+        alert("Este puntaje ya fue validado y registrado en el tablero oficial.");
         return;
       }
-      const pin = prompt("🔒 CONTROL DOCENTE OBLIGATORIO\n\nIngresa el PIN docente para validar y subir este puntaje a Google Sheets:\n(Los alumnos no pueden subir puntajes directamente para evitar trampas)");
+      const pin = prompt("🔒 CONTROL DOCENTE OBLIGATORIO\n\nIngresa el PIN docente para validar este puntaje, actualizar el tablero oficial y enviarlo a Google Sheets:\n(Solo el docente con PIN puede registrar puntajes oficiales)");
       if (pin !== _SEC_ADMIN_KEY) {
         if (pin !== null) alert("❌ PIN incorrecto. Acceso reservado exclusivamente para el docente.");
         return;
       }
-      sendScoreToCloud(state.lastCompletedRecord);
-      showCloudToast("☁️ Puntaje verificado y subido exitosamente a Google Sheets.");
-      alert(`✅ Puntaje de ${state.lastCompletedRecord.name} (${state.lastCompletedRecord.score} pts) validado y registrado en Google Sheets.`);
+
+      state.lastCompletedRecord.verified = true;
+
+      // 1. Actualizar y reemplazar registro previo en state.scores por (Alumno, Ficha)
+      const targetKey = getScoreKey(state.lastCompletedRecord.name, state.lastCompletedRecord.fichaId);
+      const existingIdx = state.scores.findIndex(s => getScoreKey(s.name, s.fichaId) === targetKey);
+      if (existingIdx !== -1) {
+        state.scores[existingIdx] = { ...state.lastCompletedRecord };
+      } else {
+        state.scores.push({ ...state.lastCompletedRecord });
+      }
+      saveScoresToStorage();
+      renderLeaderboardTable();
+
+      // 2. Actualizar récord personal de la ficha
+      saveRecord(state.lastCompletedRecord.fichaId, state.lastCompletedRecord.wordsRead, state.lastCompletedRecord.timeSec);
+      loadRecords();
+
+      // 3. Enviar a Google Sheets
+      if (state.cloudSyncUrl) {
+        sendScoreToCloud(state.lastCompletedRecord);
+      }
+
+      // 4. Actualizar estado visual en el modal
+      const statusEl = document.getElementById('resVerificationStatus');
+      if (statusEl) {
+        statusEl.style.background = '#dcfce7';
+        statusEl.style.color = '#15803d';
+        statusEl.style.borderColor = '#86efac';
+        statusEl.innerHTML = '✅ Puntaje oficial validado y registrado en el tablero.';
+      }
+      const btnEl = document.getElementById('btnUploadScoreTeacher');
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.style.opacity = '0.7';
+        btnEl.innerHTML = '✅ Puntaje Validado y Registrado';
+      }
+
+      showCloudToast("☁️ Puntaje validado, guardado en el tablero y enviado a Google Sheets.");
+      alert(`✅ Puntaje de ${state.lastCompletedRecord.name} (${state.lastCompletedRecord.score} pts) validado y actualizado exitosamente.`);
     }
 
 function openCloudModal() {
@@ -3936,7 +4089,7 @@ function openCloudModal() {
         method: 'POST',
         mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain;charset=utf-8'
         },
         body: JSON.stringify(payload)
       })
@@ -3984,22 +4137,47 @@ function openCloudModal() {
         alert('No hay puntajes en el historial local para enviar.');
         return;
       }
-      const pin = prompt('🔒 Ingresa el PIN docente de seguridad:');
+      const pin = prompt('🔒 CONTROL DOCENTE OBLIGATORIO\n\nIngresa el PIN docente para enviar los puntajes a Google Sheets:');
       if (pin !== _SEC_ADMIN_KEY) {
-        if (pin !== null) alert('❌ PIN incorrecto.');
+        if (pin !== null) alert('❌ PIN incorrecto. Acceso reservado exclusivamente para el docente.');
         return;
       }
-      if (!confirm(`Se enviarán ${state.scores.length} registros a tu Google Sheet. ¿Continuar?`)) return;
+      if (!confirm(`Se enviarán y actualizarán ${state.scores.length} registros oficiales en Google Sheets reemplazando datos antiguos. ¿Continuar?`)) return;
 
-      let sentCount = 0;
-      state.scores.forEach((rec, idx) => {
-        setTimeout(() => {
-          sendScoreToCloud(rec);
-          sentCount++;
-          if (sentCount === state.scores.length) {
-            showCloudToast(`✅ Se enviaron los ${sentCount} puntajes a Google Sheets.`);
-          }
-        }, idx * 300);
+      deduplicateScores();
+      saveScoresToStorage();
+
+      // Enviar paquete consolidado limpio con action sync_all
+      const syncAllPayload = {
+        action: 'sync_all',
+        records: state.scores
+      };
+
+      fetch(state.cloudSyncUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(syncAllPayload)
+      })
+      .then(() => {
+        showCloudToast(`✅ ${state.scores.length} registros oficiales sincronizados en Google Sheets.`);
+        alert(`✅ Sincronización exitosa: Se actualizaron y reemplazaron los ${state.scores.length} registros oficiales en Google Sheets.`);
+      })
+      .catch(err => {
+        console.warn('Error en syncAll:', err);
+        // Fallback uno a uno
+        let sentCount = 0;
+        state.scores.forEach((rec, idx) => {
+          setTimeout(() => {
+            sendScoreToCloud(rec);
+            sentCount++;
+            if (sentCount === state.scores.length) {
+              showCloudToast(`✅ Se enviaron los ${sentCount} puntajes a Google Sheets.`);
+            }
+          }, idx * 250);
+        });
       });
     }
 
