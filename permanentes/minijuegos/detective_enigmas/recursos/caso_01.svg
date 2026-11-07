@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <defs>
+        <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#eff6ff"/>
+          <stop offset="100%" stop-color="#dbeafe"/>
+        </linearGradient>
+      </defs>
+      <rect width="240" height="240" rx="24" fill="url(#bg1)"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff" opacity="0.9"/>
+      <!-- Botiquín / Enfermería -->
+      <rect x="75" y="80" width="90" height="70" rx="12" fill="#ef4444"/>
+      <rect x="110" y="90" width="20" height="50" fill="#ffffff"/>
+      <rect x="95" y="105" width="50" height="20" fill="#ffffff"/>
+      <!-- Termómetro clínico con mercurio rojo -->
+      <rect x="145" y="60" width="16" height="100" rx="8" fill="#e2e8f0" stroke="#334155" stroke-width="3" transform="rotate(25 153 110)"/>
+      <circle cx="178" cy="155" r="14" fill="#dc2626"/>
+      <line x1="140" y1="80" x2="174" y2="150" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+      <text x="120" y="200" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#1e40af" text-anchor="middle">Termómetro y Fiebre (38.5°)</text>
+    </svg>

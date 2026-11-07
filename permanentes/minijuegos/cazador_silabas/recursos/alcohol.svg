@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#eff6ff"/>
+      <!-- Frasco de alcohol etílico -->
+      <rect x="65" y="70" width="70" height="95" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="4"/>
+      <rect x="80" y="45" width="40" height="25" rx="4" fill="#3b82f6"/>
+      <!-- Etiqueta con cruz azul -->
+      <rect x="75" y="90" width="50" height="50" rx="6" fill="#dbeafe"/>
+      <rect x="95" y="98" width="10" height="34" fill="#2563eb"/>
+      <rect x="83" y="110" width="34" height="10" fill="#2563eb"/>
+    </svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#eff6ff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Gafas infantiles -->
+      <circle cx="85" cy="115" r="30" fill="#dbeafe" stroke="#2563eb" stroke-width="6"/>
+      <circle cx="155" cy="115" r="30" fill="#dbeafe" stroke="#2563eb" stroke-width="6"/>
+      <line x1="115" y1="115" x2="125" y2="115" stroke="#2563eb" stroke-width="6"/>
+      <line x1="55" y1="115" x2="35" y2="105" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/>
+      <line x1="185" y1="115" x2="205" y2="105" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#1e40af" text-anchor="middle">Salud Visual y Respeto</text>
+    </svg>

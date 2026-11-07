@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#fdf2f8"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Brazo en ángulo de 90° (codo flexionado) -->
+      <path d="M50 150 L110 85 L185 105" stroke="#f472b6" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <!-- Destellos de protección / escudo verde -->
+      <circle cx="110" cy="85" r="28" fill="#10b981" opacity="0.3"/>
+      <path d="M100 85 L108 93 L122 75" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#9d174d" text-anchor="middle">Estornudo de Etiqueta</text>
+    </svg>

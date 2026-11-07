@@ -181,6 +181,60 @@
       background: linear-gradient(to bottom, #ffffff 0%, #fff1f2 100%);
     }
 
+    /* ACORDEÓN DESPLEGABLE DE PROYECTOS MENSUALES */
+    .proyectos-accordion-container {
+      text-align: center;
+      margin: 2rem 0 1.5rem 0;
+      padding: 1.25rem 0;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-toggle-proyectos {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(59, 130, 246, 0.25) 100%);
+      border: 2px solid #3b82f6;
+      color: #93c5fd;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 0.85rem 1.8rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-toggle-proyectos:hover {
+      background: #2563eb;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-toggle-proyectos.open {
+      background: #1d4ed8;
+      color: #ffffff;
+      border-color: #60a5fa;
+    }
+
+    .proyectos-btn-arrow {
+      font-size: 0.9rem;
+      transition: transform 0.25s ease;
+    }
+
+    .btn-toggle-proyectos.open .proyectos-btn-arrow {
+      transform: rotate(180deg);
+    }
+
+    .proyectos-hint {
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+
     /* BOTÓN TOGGLE YOUTUBE */
     .btn-yt-toggle {
       margin-left: auto;
@@ -608,6 +662,19 @@
       </div>
     </section>
 
+    <!-- BOTÓN DESPLEGABLE DE PROYECTOS MENSUALES (OCULTOS POR DEFECTO PARA EVITAR SCROLL) -->
+    <div class="proyectos-accordion-container">
+      <button id="btnToggleProyectos" class="btn-toggle-proyectos" onclick="toggleProyectosMensuales()">
+        <span class="proyectos-btn-icon">📁</span>
+        <span id="proyectosBtnText">Ver Proyectos de Aula Mensuales (Proyecto 3 y Proyecto 2)</span>
+        <span id="proyectosArrow" class="proyectos-btn-arrow">▼</span>
+      </button>
+      <p class="proyectos-hint">Toca aquí para desplegar o esconder los proyectos de aula de meses anteriores</p>
+    </div>
+
+    <!-- CONTENEDOR COLAPSABLE DE PROYECTOS MENSUALES -->
+    <div id="container-proyectos-mensuales" style="display: none;">
+
     <!-- SECTION: PROYECTO 3 -->
     <section class="section-block" id="sec-proyecto-3">
       <div class="section-title-wrap">
@@ -867,6 +934,8 @@
         </a>
       </div>
     </section>
+    </div>
+    <!-- FIN CONTENEDOR COLAPSABLE DE PROYECTOS MENSUALES -->
 
     <!-- FOOTER -->
     <footer>
@@ -876,38 +945,77 @@
   </div>
 
   <script>
+    let proyectosVisible = false;
+
+    function toggleProyectosMensuales(forceState) {
+      const container = document.getElementById('container-proyectos-mensuales');
+      const btn = document.getElementById('btnToggleProyectos');
+      const arrow = document.getElementById('proyectosArrow');
+      const text = document.getElementById('proyectosBtnText');
+      if (!container) return;
+
+      if (forceState !== undefined) {
+        proyectosVisible = forceState;
+      } else {
+        proyectosVisible = !proyectosVisible;
+      }
+
+      if (proyectosVisible) {
+        container.style.display = 'block';
+        if (btn) btn.classList.add('open');
+        if (arrow) arrow.textContent = '▲';
+        if (text) text.textContent = 'Ocultar Proyectos de Aula Mensuales';
+      } else {
+        container.style.display = 'none';
+        if (btn) btn.classList.remove('open');
+        if (arrow) arrow.textContent = '▼';
+        if (text) text.textContent = 'Ver Proyectos de Aula Mensuales (Proyecto 3 y Proyecto 2)';
+      }
+    }
+
     function filterCategory(cat) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if (event && event.target) event.target.classList.add('active');
 
       const secPermanentes = document.getElementById('sec-permanentes');
       const secMinijuegos = document.getElementById('sec-minijuegos');
+      const accordionWrap = document.querySelector('.proyectos-accordion-container');
+      const containerProyectos = document.getElementById('container-proyectos-mensuales');
       const secP3 = document.getElementById('sec-proyecto-3');
       const secP2 = document.getElementById('sec-proyecto-2');
 
       if (cat === 'todos') {
         secPermanentes.style.display = 'block';
         secMinijuegos.style.display = 'block';
+        if (accordionWrap) accordionWrap.style.display = 'block';
         secP3.style.display = 'block';
         secP2.style.display = 'block';
+        // En "todos", los proyectos mensuales permanecen colapsados tras el botón por defecto para evitar scroll
+        if (containerProyectos && !proyectosVisible) {
+          containerProyectos.style.display = 'none';
+        }
       } else if (cat === 'permanentes') {
         secPermanentes.style.display = 'block';
         secMinijuegos.style.display = 'block';
-        secP3.style.display = 'none';
-        secP2.style.display = 'none';
+        if (accordionWrap) accordionWrap.style.display = 'none';
+        if (containerProyectos) containerProyectos.style.display = 'none';
       } else if (cat === 'minijuegos') {
         secPermanentes.style.display = 'none';
         secMinijuegos.style.display = 'block';
-        secP3.style.display = 'none';
-        secP2.style.display = 'none';
+        if (accordionWrap) accordionWrap.style.display = 'none';
+        if (containerProyectos) containerProyectos.style.display = 'none';
       } else if (cat === 'proyecto-3') {
         secPermanentes.style.display = 'none';
         secMinijuegos.style.display = 'none';
+        if (accordionWrap) accordionWrap.style.display = 'none';
+        if (containerProyectos) containerProyectos.style.display = 'block';
         secP3.style.display = 'block';
         secP2.style.display = 'none';
       } else if (cat === 'proyecto-2') {
         secPermanentes.style.display = 'none';
         secMinijuegos.style.display = 'none';
+        if (accordionWrap) accordionWrap.style.display = 'none';
+        if (containerProyectos) containerProyectos.style.display = 'block';
         secP3.style.display = 'none';
         secP2.style.display = 'block';
       }

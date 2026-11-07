@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#eff6ff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Mochila ergonómica -->
+      <rect x="75" y="70" width="90" height="95" rx="18" fill="#3b82f6"/>
+      <rect x="90" y="95" width="60" height="45" rx="8" fill="#1d4ed8"/>
+      <!-- Asa superior -->
+      <path d="M100 70 Q120 45 140 70" stroke="#1e3a8a" stroke-width="6" fill="none"/>
+      <!-- Dos tirantes ajustados -->
+      <path d="M85 75 Q70 115 80 160" stroke="#f59e0b" stroke-width="6" fill="none"/>
+      <path d="M155 75 Q170 115 160 160" stroke="#f59e0b" stroke-width="6" fill="none"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#1e40af" text-anchor="middle">Mochila Ligera y Postura</text>
+    </svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#ecfdf5"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Punto de reunión verde -->
+      <circle cx="120" cy="115" r="48" fill="#10b981"/>
+      <!-- Cuatro flechas convergiendo al centro -->
+      <path d="M120 75 L120 95 M120 95 L112 87 M120 95 L128 87" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M120 155 L120 135 M120 135 L112 143 M120 135 L128 143" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M80 115 L100 115 M100 115 L92 107 M100 115 L92 123" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M160 115 L140 115 M140 115 L148 107 M140 115 L148 123" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="120" cy="115" r="8" fill="#ffffff"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">Zona de Seguridad y Calma</text>
+    </svg>

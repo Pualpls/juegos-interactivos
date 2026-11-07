@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#ecfdf5"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Barra de jabón con burbujas -->
+      <rect x="65" y="115" width="110" height="50" rx="25" fill="#10b981"/>
+      <rect x="75" y="122" width="90" height="20" rx="10" fill="#34d399" opacity="0.6"/>
+      <!-- Burbujas -->
+      <circle cx="85" cy="85" r="16" fill="#67e8f9" opacity="0.75" stroke="#0891b2" stroke-width="2"/>
+      <circle cx="145" cy="75" r="22" fill="#67e8f9" opacity="0.8" stroke="#0891b2" stroke-width="2.5"/>
+      <circle cx="175" cy="95" r="12" fill="#67e8f9" opacity="0.7" stroke="#0891b2" stroke-width="2"/>
+      <!-- Gotas de agua limpia -->
+      <path d="M120 40 C120 40 100 65 100 78 A20 20 0 0 0 140 78 C140 65 120 40 120 40 Z" fill="#38bdf8"/>
+      <text x="120" y="200" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#065f46" text-anchor="middle">Lavado de Manos (20 seg)</text>
+    </svg>

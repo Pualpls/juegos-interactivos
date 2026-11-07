@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#f0fdf4"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Plato dividido en 3 secciones -->
+      <circle cx="120" cy="115" r="55" fill="#ffffff" stroke="#cbd5e1" stroke-width="5"/>
+      <!-- Sección Verde: Verduras y frutas -->
+      <path d="M120 115 L120 60 A55 55 0 0 1 170 140 Z" fill="#22c55e" opacity="0.85"/>
+      <!-- Sección Amarilla: Cereales -->
+      <path d="M120 115 L170 140 A55 55 0 0 1 70 140 Z" fill="#eab308" opacity="0.85"/>
+      <!-- Sección Roja: Leguminosas y alimentos de origen animal -->
+      <path d="M120 115 L70 140 A55 55 0 0 1 120 60 Z" fill="#ef4444" opacity="0.85"/>
+      <circle cx="120" cy="115" r="8" fill="#ffffff"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#15803d" text-anchor="middle">Plato del Bien Comer</text>
+    </svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#f0fdf4"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Escudo protector -->
+      <path d="M120 45 L180 75 L180 130 C180 170 120 195 120 195 C120 195 60 170 60 130 L60 75 Z" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+      <!-- Jeringa con dosis protectora -->
+      <g transform="rotate(-35 120 120)">
+        <rect x="105" y="70" width="30" height="75" rx="5" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+        <rect x="110" y="85" width="20" height="40" fill="#38bdf8" opacity="0.8"/>
+        <line x1="120" y1="50" x2="120" y2="70" stroke="#0f172a" stroke-width="4"/>
+        <line x1="120" y1="145" x2="120" y2="175" stroke="#64748b" stroke-width="4"/>
+        <rect x="110" y="175" width="20" height="6" fill="#0f172a"/>
+      </g>
+      <text x="120" y="215" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#1e40af" text-anchor="middle">Vacuna y Escudo Inmune</text>
+    </svg>

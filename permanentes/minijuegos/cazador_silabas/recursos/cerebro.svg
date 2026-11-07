@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#fdf2f8"/>
+      <!-- Silueta de cerebro rosado -->
+      <path d="M60 110 C50 90 65 65 95 65 C100 55 125 55 135 65 C155 60 165 85 160 105 C170 120 160 145 140 145 C135 155 110 155 95 145 C75 150 60 130 60 110 Z" fill="#f472b6" stroke="#db2777" stroke-width="4"/>
+      <!-- Circunvoluciones -->
+      <path d="M85 85 Q100 95 90 115 Q115 110 115 135 M135 85 Q120 95 130 115" stroke="#be185d" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>

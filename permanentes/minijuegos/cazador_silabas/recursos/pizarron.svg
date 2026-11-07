@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#f8fafc"/>
+      <!-- Marco de madera -->
+      <rect x="30" y="55" width="140" height="90" rx="6" fill="#b45309"/>
+      <!-- Fondo verde pizarrón -->
+      <rect x="38" y="63" width="124" height="74" rx="3" fill="#15803d"/>
+      <text x="100" y="105" font-family="Fredoka, sans-serif" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">A B C</text>
+      <!-- Gis y borrador -->
+      <rect x="130" y="138" width="20" height="6" fill="#fef08a"/>
+    </svg>

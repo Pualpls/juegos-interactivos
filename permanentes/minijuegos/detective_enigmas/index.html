@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Detective de Enigmas · Minijuego de Comprensión Lectora</title>
+  <title>Detective de Enigmas · Minijuego de Comprensión</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
@@ -11,16 +11,13 @@
     :root {
       --bg-body: #0f172a;
       --bg-surface: #1e293b;
-      --bg-card: #ffffff;
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
-      --amber: #f59e0b;
-      --amber-dark: #d97706;
       --emerald: #10b981;
+      --amber: #f59e0b;
       --purple: #8b5cf6;
       --rose: #ef4444;
-      --text-dark: #0f172a;
-      --text-muted: #64748b;
+      --text-muted: #94a3b8;
       --radius-xl: 1.25rem;
       --radius-lg: 1rem;
     }
@@ -99,34 +96,31 @@
     .btn-volver:hover {
       background: rgba(255, 255, 255, 0.2);
       color: #ffffff;
-      transform: translateX(-3px);
     }
 
     h1 {
       font-family: 'Fredoka', cursive, sans-serif;
-      font-size: 1.35rem;
-      font-weight: 700;
+      font-size: 1.45rem;
       color: #ffffff;
-      line-height: 1.2;
     }
 
     .subtitle {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: #94a3b8;
     }
 
     .header-stats {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1.25rem;
     }
 
     .stat-badge {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 0.4rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -137,16 +131,17 @@
     /* MAIN CONTAINER */
     main {
       flex: 1;
-      max-width: 1000px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       padding: 1.25rem 1rem 2rem 1rem;
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+      position: relative;
     }
 
-    /* PROGRESS BAR */
+    /* BARRA DE PROGRESO */
     .progress-bar-wrap {
       width: 100%;
       height: 10px;
@@ -162,11 +157,12 @@
       transition: width 0.35s ease;
     }
 
-    /* DOS PANELES: LECTURA / RULETA Y PREGUNTAS */
-    .enigma-layout {
+    /* LAYOUT DE DOS COLUMNAS */
+    .game-layout {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 1.25rem;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
     }
 
     /* TARJETA DEL CASO / EXPEDIENTE */
@@ -187,9 +183,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       border-bottom: 2px dashed #e2e8f0;
-      padding-bottom: 0.75rem;
+      padding-bottom: 0.65rem;
     }
 
     .case-tag {
@@ -212,15 +208,35 @@
       gap: 0.5rem;
     }
 
-    .case-text {
-      font-size: 1.12rem;
-      line-height: 1.7;
-      color: #334155;
+    /* ILUSTRACIÓN DEL CASO */
+    .case-img-wrap {
+      width: 100%;
+      height: 140px;
       background: #f8fafc;
-      padding: 1.2rem;
       border-radius: var(--radius-lg);
       border: 1px solid #e2e8f0;
-      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+    }
+
+    .case-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .case-text {
+      font-size: 1.08rem;
+      line-height: 1.65;
+      color: #334155;
+      background: #f8fafc;
+      padding: 1.1rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid #e2e8f0;
+      min-height: 120px;
     }
 
     .case-text mark {
@@ -301,34 +317,34 @@
       position: relative;
     }
 
-    /* CONTENEDOR DE LA RULETA */
+    /* CONTENEDOR DE LA RULETA AMPLIADA (290px) */
     .wheel-wrap {
       position: relative;
-      width: 190px;
-      height: 190px;
-      margin-bottom: 1rem;
+      width: 290px;
+      height: 290px;
+      margin-bottom: 1.25rem;
     }
 
     .wheel-canvas {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
       cursor: pointer;
       transition: transform 0.1s linear;
     }
 
     .wheel-pointer {
       position: absolute;
-      top: -8px;
+      top: -12px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
-      border-left: 12px solid transparent;
-      border-right: 12px solid transparent;
-      border-top: 22px solid #ef4444;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 28px solid #ef4444;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
       z-index: 10;
     }
 
@@ -336,84 +352,82 @@
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
       color: #ffffff;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      padding: 0.6rem 1.4rem;
+      padding: 0.75rem 1.6rem;
       border-radius: 9999px;
       border: 2px solid #fbbf24;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
       margin-bottom: 1rem;
     }
 
-    .btn-spin:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.6);
+    .btn-spin:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
     }
 
     .btn-spin:disabled {
       opacity: 0.5;
-      pointer-events: none;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    /* ZONA DE PREGUNTA */
+    /* CAJA DE PREGUNTA DERIVADA DE LA RULETA */
     .question-box {
       width: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      border: 2px solid #38bdf8;
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid #3b82f6;
       border-radius: var(--radius-lg);
-      padding: 1rem;
+      padding: 1.15rem;
       display: none;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.85rem;
       animation: fadeIn 0.3s ease;
     }
 
-    .question-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .question-type-badge {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      background: #38bdf8;
-      color: #0c4a6e;
-    }
-
-    .question-title {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
+    .q-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: #3b82f6;
       color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+    }
+
+    .q-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.12rem;
+      color: #ffffff;
+      line-height: 1.4;
     }
 
     .options-grid {
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
+      margin-top: 0.4rem;
     }
 
     .option-btn {
       background: #1e293b;
       border: 2px solid rgba(255, 255, 255, 0.15);
-      color: #e2e8f0;
+      color: #f1f5f9;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
       padding: 0.75rem 1rem;
       border-radius: var(--radius-lg);
-      font-family: 'Lexend', sans-serif;
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
       text-align: left;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      transition: all 0.15s ease;
       display: flex;
       align-items: center;
       gap: 0.65rem;
@@ -421,33 +435,24 @@
 
     .option-btn:hover {
       background: #334155;
-      border-color: #38bdf8;
-      transform: translateX(3px);
+      border-color: #60a5fa;
+      transform: translateX(4px);
     }
 
     .option-btn.correct {
-      background: #064e3b !important;
-      border-color: #10b981 !important;
-      color: #a7f3d0 !important;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+      background: #065f46;
+      border-color: #34d399;
+      color: #ffffff;
     }
 
     .option-btn.wrong {
-      background: #7f1d1d !important;
-      border-color: #ef4444 !important;
-      color: #fca5a5 !important;
+      background: #991b1b;
+      border-color: #f87171;
+      color: #ffffff;
       animation: shake 0.4s ease;
     }
 
-    /* FEEDBACK DE PREGUNTA */
-    .question-feedback {
-      font-size: 0.88rem;
-      font-weight: 600;
-      min-height: 22px;
-      text-align: center;
-    }
-
-    /* MODAL DE VICTORIA */
+    /* MODAL DE VICTORIA FINAL */
     .victory-modal {
       display: none;
       position: fixed;
@@ -485,12 +490,19 @@
       line-height: 1.5;
     }
 
+    .victory-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     .btn-action-primary {
-      background: var(--primary);
-      color: #ffffff;
+      background: var(--amber);
+      color: #0f172a;
       font-family: 'Fredoka', sans-serif;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 700;
       padding: 0.75rem 1.4rem;
       border-radius: var(--radius-lg);
       border: none;
@@ -504,8 +516,13 @@
     }
 
     @keyframes highlightGlow {
-      from { box-shadow: 0 0 4px #facc15; }
-      to { box-shadow: 0 0 12px #facc15; }
+      from { background: #fef08a; }
+      to { background: #fde047; box-shadow: 0 0 8px #facc15; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes shake {
@@ -514,15 +531,9 @@
       40%, 80% { transform: translateX(6px); }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      .enigma-layout { grid-template-columns: 1fr; }
-      .wheel-wrap { width: 160px; height: 160px; }
-      .case-text { min-height: auto; }
+    @media (max-width: 900px) {
+      .game-layout { grid-template-columns: 1fr; }
+      .wheel-wrap { width: 250px; height: 250px; }
       .btn-continuar { width: 100%; justify-content: center; }
     }
   </style>
@@ -532,75 +543,79 @@
   <!-- BANNER DE PRODUCCIÓN -->
   <div class="banner-produccion">
     <span>⚠️</span>
-    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · En desarrollo activo · 8 enigmas y ruleta de inferencia</span>
+    <span>VERSIÓN PRELIMINAR EN PRODUCCIÓN · 20 casos de investigación con ruleta grande de 4 sectores y orden aleatorio</span>
   </div>
 
   <!-- HEADER -->
   <header>
     <div class="brand-wrap">
-      <a href="../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
+      <a href="../../../index.html" class="btn-volver" title="Regresar al Portal de Juegos">⬅ Portal</a>
       <div>
         <h1>Detective de Enigmas</h1>
-        <p class="subtitle">Ruleta de Comprensión Lectora e Inferencia · 3° Primaria</p>
+        <p class="subtitle">Ruleta de Comprensión y Evidencia Textual · 3° Primaria</p>
       </div>
     </div>
 
     <div class="header-stats">
       <div class="stat-badge">
-        <span>🔍 Casos Resueltos:</span>
-        <span id="scoreVal" style="color: #facc15;">0 / 8</span>
+        <span>⭐ Puntos:</span>
+        <span id="scoreVal" style="color: #facc15;">0 / 20</span>
       </div>
       <div class="stat-badge">
-        <span>📁 Expediente:</span>
-        <span id="progressText" style="color: #38bdf8;">1 / 8</span>
+        <span>🔍 Caso:</span>
+        <span id="progressText" style="color: #38bdf8;">1 / 20</span>
       </div>
     </div>
   </header>
 
   <!-- MAIN -->
-  <main>
+  <main id="gameMain">
     <div class="progress-bar-wrap">
       <div class="progress-fill" id="progressBar"></div>
     </div>
 
-    <div class="enigma-layout">
-      <!-- TARJETA DEL CASO (MICROLECTURA) -->
-      <section class="case-card">
+    <div class="game-layout">
+      <!-- COLUMNA 1: CASO / EXPEDIENTE -->
+      <section class="case-card" id="caseCard">
         <div>
           <div class="case-header">
-            <span class="case-tag" id="caseCategory">Caso Escolar</span>
-            <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Expediente #<span id="caseNum">1</span></div>
+            <span class="case-tag" id="caseCategory">Salud Escolar</span>
+            <span style="font-size: 0.85rem; font-weight: 700; color: #64748b;">EXPEDIENTE #<span id="caseNum">1</span></span>
           </div>
 
-          <h2 class="case-title" id="caseTitle">El Misterio de la Mochila Abierta</h2>
+          <div class="case-img-wrap">
+            <img id="caseImg" src="./recursos/caso_01.svg" alt="Ilustración del caso">
+          </div>
 
-          <!-- Texto de la microlectura con pista -->
+          <h2 class="case-title">
+            <span>📋</span>
+            <span id="caseTitle">Título del caso</span>
+          </h2>
+
           <div class="case-text" id="caseText">
-            <!-- Dinámico -->
+            Texto del caso...
           </div>
         </div>
 
         <div class="case-footer">
-          <!-- Botón continuar en la izquierda prioritario -->
-          <button class="btn-continuar" id="btnContinuar" onclick="nextEnigma()">
-            <span>Continuar Caso ➔</span>
+          <!-- BOTÓN CONTINUAR A LA IZQUIERDA -->
+          <button class="btn-continuar" id="btnContinuar" onclick="nextCase()">
+            <span>Continuar</span>
+            <span style="font-size: 1.25rem;">➔</span>
           </button>
 
           <button class="btn-audio" onclick="speakCaseText()">
-            <span>🔊</span>
-            <span>Leer Caso</span>
+            <span>🔊 Escuchar expediente</span>
           </button>
-
-          <span style="font-size: 0.75rem; color: #64748b;">✌️ Desliza 2 dedos a la derecha</span>
         </div>
       </section>
 
-      <!-- PANEL DE INTERACCIÓN: RULETA Y PREGUNTA -->
+      <!-- COLUMNA 2: RULETA Y PREGUNTA -->
       <section class="interaction-panel">
         <!-- Ruleta -->
         <div class="wheel-wrap">
           <div class="wheel-pointer"></div>
-          <canvas id="wheelCanvas" width="220" height="220" class="wheel-canvas"></canvas>
+          <canvas id="wheelCanvas" class="wheel-canvas" width="290" height="290" onclick="spinWheel()"></canvas>
         </div>
 
         <button class="btn-spin" id="btnSpin" onclick="spinWheel()">
@@ -608,18 +623,15 @@
           <span>¡Girar Ruleta de Pistas!</span>
         </button>
 
-        <!-- Caja de Pregunta -->
+        <!-- Caja de Pregunta (se revela tras el giro) -->
         <div class="question-box" id="questionBox">
-          <div class="question-header">
-            <span class="question-type-badge" id="qTypeBadge">¿Quién?</span>
-            <h3 class="question-title" id="qTitle">¿Quién es el protagonista?</h3>
-          </div>
+          <span class="q-badge" id="qTypeBadge">¿Quién?</span>
+          <h3 class="q-title" id="qTitle">Pregunta derivada del giro...</h3>
+          <p id="qFeedback" style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Selecciona la deducción respaldada por el texto:</p>
 
           <div class="options-grid" id="optionsGrid">
-            <!-- Dinámico -->
+            <!-- Botones de opciones -->
           </div>
-
-          <div class="question-feedback" id="qFeedback"></div>
         </div>
       </section>
     </div>
@@ -628,12 +640,12 @@
   <!-- MODAL DE VICTORIA -->
   <div class="victory-modal" id="victoryModal">
     <div class="victory-card">
-      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🕵️‍♂️🎉</div>
-      <h2>¡Maestro de la Deducción!</h2>
-      <p>Has resuelto con éxito los 8 casos del expediente escolar. Tu comprensión lectora y capacidad de inferencia son dignas de un verdadero detective.</p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <button class="btn-action-primary" onclick="restartGame()">🔄 Resolver de Nuevo</button>
-        <a href="../../index.html" class="btn-action-primary" style="background: #10b981;">🏠 Volver al Portal</a>
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🕵️‍♂️🏅</div>
+      <h2>¡Investigación Concluida!</h2>
+      <p>Has resuelto los enigmas con rigor deductivo y evidencia textual. ¡Eres un Detective Maestro de la Lectura!</p>
+      <div class="victory-actions">
+        <button class="btn-action-primary" onclick="restartGame()">🔄 Nuevos Enigmas</button>
+        <a href="../../../index.html" class="btn-action-primary" style="background: #10b981; color: #ffffff;">🏠 Volver al Portal</a>
       </div>
     </div>
   </div>
@@ -641,138 +653,928 @@
   <script>
     document.addEventListener('contextmenu', e => e.preventDefault());
 
-    // BANCO DE 8 ENIGMAS DE COMPRENSIÓN LECTORA
-    const ENIGMAS = [
+    // BANCO DE 20 CASOS EDUCATIVOS. CADA UNO POSEE 4 PREGUNTAS VINCULADAS A CADA SECTOR DE LA RULETA:
+    // quien, porque, donde_cuando, que_hacer.
+    const ALL_CASES = [
       {
         num: 1,
-        title: "El Termómetro Inquieto",
-        category: "Salud y Ciencias",
+        title: "El Termómetro en la Enfermería",
+        category: "Salud Escolar",
+        img: "./recursos/caso_01.svg",
         text: "Al volver del recreo, Sofía sentía las mejillas calientes y le dolía la garganta. El maestro Manuel sacó un termómetro limpio del botiquín escolar y midió su temperatura en la enfermería: marcaba 38.5 grados. De inmediato, el maestro avisó a su mamá y le pidió a Sofía que descansara mientras bebía pequeños sorbos de agua tibia.",
-        clue: "el maestro avisó a su mamá y le pidió a Sofía que descansara",
-        questionType: "¿Por qué?",
-        question: "¿Por qué el maestro Manuel decidió llamar a la mamá de Sofía?",
-        options: [
-          { text: "Porque Sofía tenía fiebre alta y dolor de garganta.", correct: true },
-          { text: "Porque quería felicitarla por terminar su tarea de ciencias.", correct: false },
-          { text: "Porque Sofía se había caído corriendo en el patio.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quién atendió a Sofía y le midió la temperatura con el termómetro del botiquín?",
+            clue: "El maestro Manuel sacó un termómetro limpio del botiquín escolar y midió su temperatura",
+            options: [
+              { text: "El maestro Manuel en la enfermería escolar.", correct: true },
+              { text: "El conserje de la escuela mientras limpiaba el patio.", correct: false },
+              { text: "Un compañero de primer grado que iba pasando.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué el maestro Manuel decidió avisar de inmediato a la mamá de Sofía?",
+            clue: "marcaba 38.5 grados. De inmediato, el maestro avisó a su mamá",
+            options: [
+              { text: "Porque el termómetro marcaba 38.5 grados de fiebre y le dolía la garganta.", correct: true },
+              { text: "Porque quería felicitarla por terminar su dibujo de ciencias.", correct: false },
+              { text: "Porque Sofía se había ganado un premio de puntualidad.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué momento y lugar se detectó el malestar de Sofía?",
+            clue: "Al volver del recreo... midió su temperatura en la enfermería",
+            options: [
+              { text: "Al volver del recreo, en la enfermería escolar.", correct: true },
+              { text: "A la hora de entrada en la puerta principal de la calle.", correct: false },
+              { text: "Durante la noche mientras dormía en su recámara.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué indicaciones de cuidado inmediato le dio el maestro a Sofía?",
+            clue: "le pidió a Sofía que descansara mientras bebía pequeños sorbos de agua tibia",
+            options: [
+              { text: "Descansar tranquilamente y beber pequeños sorbos de agua tibia.", correct: true },
+              { text: "Ponerse a correr en la cancha bajo el sol para sudar.", correct: false },
+              { text: "Comer paletas heladas de limón en el patio de recreo.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 2,
         title: "El Secreto del Jabón Espumoso",
         category: "Hábitos Higiénicos",
+        img: "./recursos/caso_02.svg",
         text: "Antes de comer su refrigerio, Mateo notó que sus manos tenían restos de tierra por haber jugado fútbol en la cancha. En lugar de limpiarse con su suéter, fue directo a los lavamanos de la escuela, frotó sus palmas con jabón durante veinte segundos y enjuagó con abundante agua limpia.",
-        clue: "frotó sus palmas con jabón durante veinte segundos y enjuagó con abundante agua",
-        questionType: "¿Dónde / Cuándo?",
-        question: "¿En qué momento exacto decidió Mateo lavarse las manos con agua y jabón?",
-        options: [
-          { text: "Justo antes de comer su refrigerio, tras jugar en la cancha.", correct: true },
-          { text: "A la hora de la salida mientras esperaba el autobús escolar.", correct: false },
-          { text: "Durante la clase de educación física bajo el sol.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quién demostró un correcto hábito higiénico lavándose las manos?",
+            clue: "Mateo notó que sus manos tenían restos de tierra",
+            options: [
+              { text: "Mateo, tras jugar en la cancha de fútbol.", correct: true },
+              { text: "El árbitro del partido de básquetbol.", correct: false },
+              { text: "El cocinero de la cooperativa escolar.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué era urgente que Mateo se lavara las manos en ese momento?",
+            clue: "Antes de comer su refrigerio, Mateo notó que sus manos tenían restos de tierra",
+            options: [
+              { text: "Porque iba a comer su refrigerio y tenía tierra de la cancha.", correct: true },
+              { text: "Porque quería mojarse la cara por diversión.", correct: false },
+              { text: "Porque se le había manchado la suela del zapato.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Durante cuánto tiempo y dónde se frotó las palmas con jabón?",
+            clue: "fue directo a los lavamanos de la escuela, frotó sus palmas con jabón durante veinte segundos",
+            options: [
+              { text: "Durante veinte segundos en los lavamanos de la escuela.", correct: true },
+              { text: "Solo dos segundos en un charco del patio.", correct: false },
+              { text: "Cinco minutos bajo la regadera de su casa.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué acción correcta realizó en lugar de frotarse con la ropa?",
+            clue: "frotó sus palmas con jabón durante veinte segundos y enjuagó con abundante agua limpia",
+            options: [
+              { text: "Usar jabón, frotar palmas veinte segundos y enjuagar con agua limpia.", correct: true },
+              { text: "Limpiarse rápidamente contra la tela de su suéter escolar.", correct: false },
+              { text: "Sacudirse las manos con el aire sin usar agua ni jabón.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 3,
         title: "El Escudo en el Brazo",
         category: "Vacunación",
+        img: "./recursos/caso_03.svg",
         text: "La doctora Elena visitó la escuela primaria con una hielera especial llena de vacunas contra la influenza. Al llegar al salón de 3° 'A', explicó a las niñas y niños que la vacuna enseña a nuestro cuerpo a fabricar defensas contra los virus invernales. Gael levantó la manga de su camisa con valentía y recibió su dosis sin derramar una sola lágrima.",
-        clue: "la vacuna enseña a nuestro cuerpo a fabricar defensas contra los virus",
-        questionType: "¿Quién?",
-        question: "¿Quién acudió a la escuela primaria con la hielera para proteger a los alumnos?",
-        options: [
-          { text: "La doctora Elena para aplicar las vacunas contra la influenza.", correct: true },
-          { text: "El conserje de la escuela con material de limpieza.", correct: false },
-          { text: "Un vendedor de nieves del centro de la comunidad.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quién acudió a la primaria a vacunar a los alumnos de 3° 'A'?",
+            clue: "La doctora Elena visitó la escuela primaria con una hielera especial",
+            options: [
+              { text: "La doctora Elena con la hielera especial de vacunas.", correct: true },
+              { text: "Un fotógrafo del periódico municipal.", correct: false },
+              { text: "El chofer del transporte escolar.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué explicó la doctora que son vitales las vacunas contra la influenza?",
+            clue: "la vacuna enseña a nuestro cuerpo a fabricar defensas contra los virus invernales",
+            options: [
+              { text: "Porque enseñan a nuestro cuerpo a producir defensas contra los virus.", correct: true },
+              { text: "Porque cambian el color de la sangre a azul.", correct: false },
+              { text: "Porque hacen que crezcamos diez centímetros en una tarde.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué lugar exacto del cuerpo recibió Gael la dosis preventiva?",
+            clue: "Gael levantó la manga de su camisa con valentía y recibió su dosis",
+            options: [
+              { text: "En el brazo, levantando la manga de su camisa.", correct: true },
+              { text: "En la punta del pie izquierdo.", correct: false },
+              { text: "En la palma de la mano derecha.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué actitud positiva mostró Gael al momento de recibir la inyección?",
+            clue: "levantó la manga de su camisa con valentía y recibió su dosis sin derramar una sola lágrima",
+            options: [
+              { text: "Valentía y tranquilidad, cooperando sin llorar.", correct: true },
+              { text: "Salir corriendo y esconderse detrás del pizarrón.", correct: false },
+              { text: "Gritar y empujar a sus compañeros de banca.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 4,
         title: "El Hueso que Sonó 'Crack'",
         category: "El Cuerpo Humano",
+        img: "./recursos/caso_04.svg",
         text: "Durante el partido de básquetbol, Diego saltó muy alto para encestar pero al caer apoyó el pie derecho en el borde de una banca. Sintió un dolor agudo en el tobillo y no pudo ponerse de pie. Sus compañeros no intentaron jalarle la pierna; se quedaron junto a él y llamaron con calma a la maestra de guardia.",
-        clue: "no intentaron jalarle la pierna; se quedaron junto a él y llamaron con calma a la maestra",
-        questionType: "¿Qué debemos hacer?",
-        question: "¿Qué acción correcta realizaron los compañeros de Diego ante la posible lesión?",
-        options: [
-          { text: "No moverlo bruscamente y pedir auxilio inmediato a la maestra.", correct: true },
-          { text: "Obligarlo a seguir jugando para ver si se le pasaba el dolor.", correct: false },
-          { text: "Jalarle el pie con fuerza para intentar acomodarlo ellos mismos.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿A quién llamaron los compañeros con calma para auxiliar a Diego?",
+            clue: "se quedaron junto a él y llamaron con calma a la maestra de guardia",
+            options: [
+              { text: "A la maestra de guardia encargada del patio.", correct: true },
+              { text: "A un alumno de preescolar que jugaba en el arenero.", correct: false },
+              { text: "Al repartidor de agua de la tienda de la esquina.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué Diego no pudo ponerse de pie tras encestar la canasta?",
+            clue: "al caer apoyó el pie derecho en el borde de una banca. Sintió un dolor agudo en el tobillo",
+            options: [
+              { text: "Porque al caer apoyó el pie en el borde y sintió dolor agudo en el tobillo.", correct: true },
+              { text: "Porque se le había desabrochado la cinta del tenis.", correct: false },
+              { text: "Porque tenía ganas de sentarse a descansar en el pasto.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Dónde y durante qué actividad ocurrió el accidente de Diego?",
+            clue: "Durante el partido de básquetbol... en el borde de una banca",
+            options: [
+              { text: "En la cancha, durante un partido de básquetbol.", correct: true },
+              { text: "En la cocina, durante la clase de preparación de alimentos.", correct: false },
+              { text: "En la biblioteca, leyendo cuentos en silencio.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Cuál fue la respuesta correcta de primeros auxilios de sus compañeros?",
+            clue: "Sus compañeros no intentaron jalarle la pierna; se quedaron junto a él y llamaron",
+            options: [
+              { text: "No moverlo ni jalarle la pierna, acompañarlo y pedir ayuda adulta.", correct: true },
+              { text: "Jalarle el pie con fuerza para ver si se acomodaba solo.", correct: false },
+              { text: "Obligarlo a seguir corriendo en el partido a la fuerza.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 5,
-        title: "El Tríptico Perdido de la Biblioteca",
+        title: "El Tríptico de la Biblioteca",
         category: "Lenguajes",
+        img: "./recursos/caso_05.svg",
         text: "En la mesa redonda de la biblioteca escolar, Mariana encontró un folleto doblado en tres partes iguales. Tenía en la portada un título llamativo sobre el cuidado de los libros, y en las páginas interiores incluía reglas claras y dibujos coloridos. Mariana supo al instante que era el tríptico informativo que su equipo debía exponer al día siguiente.",
-        clue: "un folleto doblado en tres partes iguales con portada y reglas interiores",
-        questionType: "¿Por qué?",
-        question: "¿Por qué supo Mariana que ese folleto era el tríptico que su equipo preparó?",
-        options: [
-          { text: "Porque estaba doblado en tres partes y contenía las reglas y dibujos del cuidado de libros.", correct: true },
-          { text: "Porque era un cuento largo de más de cien páginas sin ilustraciones.", correct: false },
-          { text: "Porque era el periódico mural pegado en la entrada de la dirección.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quién descubrió el folleto informativo sobre la mesa redonda?",
+            clue: "Mariana encontró un folleto doblado en tres partes iguales",
+            options: [
+              { text: "Mariana, miembro del equipo escolar.", correct: true },
+              { text: "El policía municipal de tránsito.", correct: false },
+              { text: "Un cartero que entregaba correspondencia.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué supo Mariana que ese documento era un tríptico?",
+            clue: "un folleto doblado en tres partes iguales. Tenía en la portada un título... y páginas interiores",
+            options: [
+              { text: "Porque estaba doblado en tres partes iguales con portada y páginas interiores.", correct: true },
+              { text: "Porque era un libro encuadernado de trescientas páginas.", correct: false },
+              { text: "Porque era una hoja volante enrollada con una liga.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Dónde encontró Mariana el tríptico informativo?",
+            clue: "En la mesa redonda de la biblioteca escolar, Mariana encontró un folleto",
+            options: [
+              { text: "En la mesa redonda de la biblioteca escolar.", correct: true },
+              { text: "Tirado en el suelo de la portería de fútbol.", correct: false },
+              { text: "Dentro del cajón del escritorio de la dirección.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué propósito tenía el tríptico que debían cumplir Mariana y su equipo?",
+            clue: "era el tríptico informativo que su equipo debía exponer al día siguiente",
+            options: [
+              { text: "Exponerlo al día siguiente ante el grupo escolar.", correct: true },
+              { text: "Romperlo para hacer confeti de papel.", correct: false },
+              { text: "Doblarlo en avioncito y lanzarlo por la ventana.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 6,
         title: "El Estornudo con Escudo",
         category: "Salud y Prevención",
+        img: "./recursos/caso_06.svg",
         text: "En medio de la lectura compartida, a Camila le dio un cosquilleo repentino en la nariz. En una fracción de segundo, en vez de cubrirse con las palmas de las manos, flexionó el codo izquierdo y estornudó contra la parte interna de su brazo. Así evitó que las gotitas de saliva viajaran por el aire hacia sus compañeros.",
-        clue: "flexionó el codo izquierdo y estornudó contra la parte interna de su brazo",
-        questionType: "¿Qué debemos hacer?",
-        question: "¿Cuál fue la técnica de etiqueta respiratoria que aplicó Camila correctamente?",
-        options: [
-          { text: "Estornudo de etiqueta cubriéndose con el ángulo interno del codo.", correct: true },
-          { text: "Estornudar directamente al frente con las manos abiertas.", correct: false },
-          { text: "Aguantarse el estornudo tapándose la nariz con los dedos.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quién aplicó la etiqueta respiratoria al sentir el cosquilleo?",
+            clue: "a Camila le dio un cosquilleo repentino en la nariz",
+            options: [
+              { text: "Camila durante la lectura compartida.", correct: true },
+              { text: "El director de la escuela al micrófono.", correct: false },
+              { text: "El chofer del camión repartidor.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es fundamental estornudar en el ángulo del codo y no en la mano?",
+            clue: "Así evitó que las gotitas de saliva viajaran por el aire hacia sus compañeros",
+            options: [
+              { text: "Para no llenar las manos de saliva ni dispersar microbios en el aire.", correct: true },
+              { text: "Porque así suena más fuerte el estornudo.", correct: false },
+              { text: "Para ensuciar la manga del suéter a propósito.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué momento preciso sintió Camila la necesidad de estornudar?",
+            clue: "En medio de la lectura compartida, a Camila le dio un cosquilleo",
+            options: [
+              { text: "En medio de la lectura compartida en el aula.", correct: true },
+              { text: "A la medianoche mientras miraba las estrellas.", correct: false },
+              { text: "Al cruzar la calle por el paso peatonal.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué técnica corporal exacta ejecutó Camila correctamente?",
+            clue: "flexionó el codo izquierdo y estornudó contra la parte interna de su brazo",
+            options: [
+              { text: "Flexionar el codo y estornudar en la parte interna del brazo.", correct: true },
+              { text: "Poner ambas palmas abiertas frente a la boca.", correct: false },
+              { text: "Estornudar al frente sin taparse de ninguna manera.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 7,
-        title: "El Enigma de la Mochila Pesada",
-        category: "Salud Ocular y Postural",
-        text: "Javier caminaba inclinado hacia adelante todos los días al salir de la escuela porque sentía punzadas en la espalda baja. El maestro de educación física revisó su mochila y descubrió que cargaba juguetes, piedras del patio y libros de días que no le correspondían en el horario escolar. Le aconsejó llevar únicamente los cuadernos del día y ajustar los dos tirantes a la misma altura.",
-        clue: "llevar únicamente los cuadernos del día y ajustar los dos tirantes a la misma altura",
-        questionType: "¿Por qué?",
-        question: "¿Por qué Javier sentía punzadas en la espalda al salir de clases?",
-        options: [
-          { text: "Porque cargaba peso excesivo e innecesario con objetos ajenos al horario.", correct: true },
-          { text: "Porque la mochila estaba completamente vacía y ligera.", correct: false },
-          { text: "Porque usaba zapatos demasiado grandes para caminar.", correct: false }
-        ]
+        title: "La Mochila Equilibrada",
+        category: "Salud Postural",
+        img: "./recursos/caso_07.svg",
+        text: "Javier caminaba inclinado hacia adelante todos los días al salir de la escuela porque sentía punzadas en la espalda baja. El maestro de educación física revisó su mochila y descubrió que cargaba piedras del patio y libros de días pasados. Le aconsejó llevar solo los útiles del horario escolar y usar siempre los dos tirantes ajustados a la misma altura.",
+        questions: {
+          quien: {
+            question: "¿Quién orientó a Javier para proteger su columna y su espalda?",
+            clue: "El maestro de educación física revisó su mochila y descubrió",
+            options: [
+              { text: "El maestro de educación física de la escuela.", correct: true },
+              { text: "El vendedor de periódicos del kiosco.", correct: false },
+              { text: "Un compañero que iba en bicicleta.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué a Javier le dolía la espalda al caminar con su mochila?",
+            clue: "cargaba piedras del patio y libros de días pasados",
+            options: [
+              { text: "Porque cargaba peso excesivo e inútil ajeno a las clases del día.", correct: true },
+              { text: "Porque su mochila estaba vacía y no pesaba nada.", correct: false },
+              { text: "Porque caminaba sin zapatos en el pavimento caliente.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué momento del día notaba Javier con mayor fuerza el dolor de espalda?",
+            clue: "Javier caminaba inclinado hacia adelante todos los días al salir de la escuela",
+            options: [
+              { text: "Todos los días a la hora de salida de la escuela.", correct: true },
+              { text: "Únicamente cuando estaba dormido en su cama.", correct: false },
+              { text: "Solamente los fines de semana en la alberca.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué dos consejos ergonómicos debe aplicar Javier para cuidar su espalda?",
+            clue: "llevar solo los útiles del horario escolar y usar siempre los dos tirantes ajustados",
+            options: [
+              { text: "Llevar solo los útiles del horario y usar ambos tirantes ajustados.", correct: true },
+              { text: "Colgarse la mochila con un solo dedo de la mano izquierda.", correct: false },
+              { text: "Llenar la mochila con juguetes pesados y cajas de cartón.", correct: false }
+            ]
+          }
+        }
       },
       {
         num: 8,
-        title: "El Rescate de los Libros Mojados",
-        category: "Convivencia Escolar",
+        title: "El Rescate de los Libros",
+        category: "Cuidado de Materiales",
+        img: "./recursos/caso_08.svg",
         text: "Una tarde de lluvia intensa, una ventana del aula se abrió por el viento y el agua comenzó a salpicar el estante de cuentos. Al entrar al salón a la mañana siguiente, Luis y Daniela vieron las gotas y, sin esperar a que nadie se los ordenara, tomaron franelas limpias, secaron las pastas con delicadeza y colocaron los libros parados para que se ventilaran.",
-        clue: "secaron las pastas con delicadeza y colocaron los libros parados para que se ventilaran",
-        questionType: "¿Quién?",
-        question: "¿Quiénes actuaron con iniciativa y cuidado para salvar los libros de la lluvia?",
-        options: [
-          { text: "Luis y Daniela secando las pastas y ventilando los libros con cuidado.", correct: true },
-          { text: "El director de la escuela desde su oficina particular.", correct: false },
-          { text: "Los niños de preescolar que iban pasando por el pasillo exterior.", correct: false }
-        ]
+        questions: {
+          quien: {
+            question: "¿Quiénes actuaron con iniciativa para secar y salvar los libros?",
+            clue: "Luis y Daniela vieron las gotas y, sin esperar a que nadie se los ordenara",
+            options: [
+              { text: "Luis y Daniela con franelas limpias.", correct: true },
+              { text: "Los niños de segundo que pasaban corriendo.", correct: false },
+              { text: "El presidente municipal desde su oficina.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué se mojaron los libros del estante del salón de clases?",
+            clue: "una ventana del aula se abrió por el viento y el agua comenzó a salpicar",
+            options: [
+              { text: "Porque una ventana se abrió con el viento durante una lluvia fuerte.", correct: true },
+              { text: "Porque alguien derramó un vaso de leche con chocolate.", correct: false },
+              { text: "Porque los libros se estaban lavando con manguera.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Cuándo descubrieron la situación Luis y Daniela?",
+            clue: "Al entrar al salón a la mañana siguiente, Luis y Daniela vieron las gotas",
+            options: [
+              { text: "A la mañana siguiente al entrar al salón de clases.", correct: true },
+              { text: "En plenas vacaciones de verano en la playa.", correct: false },
+              { text: "El domingo por la noche desde su casa.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Cómo colocaron los libros húmedos para lograr que se secaran bien?",
+            clue: "secaron las pastas con delicadeza y colocaron los libros parados para que se ventilaran",
+            options: [
+              { text: "Secar pastas con delicadeza y colocarlos parados para ventilación.", correct: true },
+              { text: "Amontonarlos mojados unos sobre otros en un rincón oscuro.", correct: false },
+              { text: "Tirarlos a la basura de inmediato creyendo que no servían.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 9,
+        title: "El Misterio del Agua Estancada",
+        category: "Prevención Sanitaria",
+        img: "./recursos/caso_09.svg",
+        text: "En el patio trasero de la escuela, el comité de salud escolar descubrió dos llantas viejas y una cubeta rota llenas de agua de lluvia. La maestra Laura explicó que los mosquitos transmisores del dengue buscan agua limpia estancada para poner sus huevecillos. Con guantes de jardinería, voltearon todos los recipientes y los guardaron bajo techo.",
+        questions: {
+          quien: {
+            question: "¿Quién explicó al comité cómo se reproducen los mosquitos del dengue?",
+            clue: "La maestra Laura explicó que los mosquitos transmisores del dengue",
+            options: [
+              { text: "La maestra Laura junto con el comité de salud escolar.", correct: true },
+              { text: "Un astronauta de la estación espacial.", correct: false },
+              { text: "El árbitro de fútbol del estadio.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es peligroso dejar cubetas y llantas con agua acumulada?",
+            clue: "los mosquitos transmisores del dengue buscan agua limpia estancada para poner sus huevecillos",
+            options: [
+              { text: "Porque se convierten en criaderos de mosquitos transmisores del dengue.", correct: true },
+              { text: "Porque el agua se convierte en hielo congelado.", correct: false },
+              { text: "Porque las llantas viejas pueden salir rodando solas.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Dónde se encontraban los recipientes que acumulaban agua de lluvia?",
+            clue: "En el patio trasero de la escuela, el comité de salud escolar descubrió",
+            options: [
+              { text: "En el patio trasero de la escuela primaria.", correct: true },
+              { text: "Dentro del salón de maestros sobre la mesa.", correct: false },
+              { text: "En la biblioteca escolar sobre los escritorios.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué acción preventiva ejecutó el equipo para erradicar el riesgo?",
+            clue: "voltearon todos los recipientes y los guardaron bajo techo",
+            options: [
+              { text: "Voltear los recipientes, vaciar el agua y guardarlos bajo techo.", correct: true },
+              { text: "Echarles más agua limpia para que se llenaran hasta el borde.", correct: false },
+              { text: "Dejarlos abiertos al sol para que se acumule más lluvia.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 10,
+        title: "La Lonchera Saludable",
+        category: "Alimentación Sana",
+        img: "./recursos/caso_10.svg",
+        text: "Al sonar la campana del recreo, Valeria sacó de su mochila un recipiente hermético con trozos de jícama con limón, una manzana fresca y su termo de agua simple purificada. Mientras otros compañeros comían frituras con colorante que dejaban sus dedos manchados, Valeria sintió mucha energía y jugó felizmente sin pesadez estomacal.",
+        questions: {
+          quien: {
+            question: "¿Quién llevó un refrigerio balanceado y nutritivo a la escuela?",
+            clue: "Valeria sacó de su mochila un recipiente hermético con trozos de jícama",
+            options: [
+              { text: "Valeria con su manzana, jícama y agua simple.", correct: true },
+              { text: "El vendedor ambulante de golosinas de la reja.", correct: false },
+              { text: "Un payaso de fiesta infantil.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué Valeria tenía energía y jugó feliz sin pesadez estomacal?",
+            clue: "Valeria sintió mucha energía y jugó felizmente sin pesadez estomacal",
+            options: [
+              { text: "Porque consumió frutas frescas hidratantes y agua natural sin exceso de grasa.", correct: true },
+              { text: "Porque comió tres bolsas de papas fritas muy picantes.", correct: false },
+              { text: "Porque tomó dos refrescos con mucha azúcar embotellada.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué momento del día escolar abrió Valeria su lonchera?",
+            clue: "Al sonar la campana del recreo, Valeria sacó de su mochila",
+            options: [
+              { text: "Al sonar la campana a la hora del recreo escolar.", correct: true },
+              { text: "En plena ceremonia cívica mientras saludaban la bandera.", correct: false },
+              { text: "A las dos de la mañana en el patio vacío.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué alimentos forman una lonchera escolar recomendada para crecer sanos?",
+            clue: "trozos de jícama con limón, una manzana fresca y su termo de agua simple",
+            options: [
+              { text: "Frutas o verduras frescas, cereales integrales y agua simple potable.", correct: true },
+              { text: "Frituras empaquetadas, refrescos gaseosos y dulces gomosos.", correct: false },
+              { text: "Galletas ultraprocesadas con relleno de crema artificial.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 11,
+        title: "La Alarma del Simulacro",
+        category: "Protección Civil",
+        img: "./recursos/caso_11.svg",
+        text: "A las diez de la mañana, la alarma sísmica sonó en toda la primaria. El grupo de 3° 'B' no corrió ni gritó; se levantaron en orden, colocaron sus manos sobre la nuca y caminaron por la ruta de evacuación hasta el círculo verde marcado en el patio central. Todos permanecieron atentos a la lista de asistencia del profesor.",
+        questions: {
+          quien: {
+            question: "¿Quién pasó lista a los alumnos en el patio tras la alarma?",
+            clue: "Todos permanecieron atentos a la lista de asistencia del profesor",
+            options: [
+              { text: "El profesor del grupo con su lista de asistencia.", correct: true },
+              { text: "El conductor del camión de bomberos.", correct: false },
+              { text: "Un transeúnte de la banqueta de enfrente.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es obligatorio practicar simulacros escolares periódicamente?",
+            clue: "caminaron por la ruta de evacuación hasta el círculo verde... no corrió ni gritó",
+            options: [
+              { text: "Para saber cómo reaccionar con calma y seguridad en una emergencia real.", correct: true },
+              { text: "Para perder tiempo de clases y no hacer examen.", correct: false },
+              { text: "Para hacer ruido con sirenas en todo el vecindario.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿A qué lugar seguro se dirigieron los estudiantes al evacuar el aula?",
+            clue: "hasta el círculo verde marcado en el patio central",
+            options: [
+              { text: "Al círculo verde de seguridad marcado en el patio central.", correct: true },
+              { text: "A encerrarse debajo de las mesas del comedor.", correct: false },
+              { text: "Hacia la calle transitada donde pasan los autos.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Cuáles son las tres reglas clave que aplicó el grupo durante el desalojo?",
+            clue: "no corrió ni gritó; se levantaron en orden... caminaron por la ruta de evacuación",
+            options: [
+              { text: "No correr, no gritar, no empujar y caminar en orden.", correct: true },
+              { text: "Correr a toda velocidad y empujar a los demás en la puerta.", correct: false },
+              { text: "Gritar con fuerza y buscar pertenencias olvidadas.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 12,
+        title: "El Préstamo Solidario",
+        category: "Convivencia Escolar",
+        img: "./recursos/caso_12.svg",
+        text: "Durante la clase de matemáticas, a Rodrigo se le rompió la punta de su lápiz justo cuando iban a resolver los problemas de conteo. Como su sacapuntas se había quedado en casa, se sintió preocupado. Andrea vio su apuro y, con una sonrisa, le prestó su lápiz de repuesto recién afilado. Rodrigo le dio las gracias de corazón y pudo terminar su trabajo a tiempo.",
+        questions: {
+          quien: {
+            question: "¿Quién demostró empatía y solidaridad prestando su material de trabajo?",
+            clue: "Andrea vio su apuro y, con una sonrisa, le prestó su lápiz de repuesto",
+            options: [
+              { text: "Andrea con su lápiz de repuesto afilado.", correct: true },
+              { text: "El conserje desde el pasillo central.", correct: false },
+              { text: "El inspector escolar de la zona.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué Rodrigo estaba preocupado al inicio de la actividad?",
+            clue: "se le rompió la punta de su lápiz... su sacapuntas se había quedado en casa",
+            options: [
+              { text: "Porque se le rompió la punta y no traía sacapuntas para resolver la lección.", correct: true },
+              { text: "Porque no le gustaba jugar en el recreo con sus amigos.", correct: false },
+              { text: "Porque había perdido su cuaderno de dibujos de dinosaurios.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Durante cuál asignatura escolar ocurrió esta muestra de compañerismo?",
+            clue: "Durante la clase de matemáticas, a Rodrigo se le rompió la punta",
+            options: [
+              { text: "Durante la clase de matemáticas en el salón.", correct: true },
+              { text: "En la salida hacia el autobús escolar.", correct: false },
+              { text: "En una visita dominical al zoológico.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué acción de respeto y gratitud realizó Rodrigo al recibir el lápiz?",
+            clue: "Rodrigo le dio las gracias de corazón y pudo terminar su trabajo a tiempo",
+            options: [
+              { text: "Agradecer de corazón y aprovechar el tiempo para terminar su trabajo.", correct: true },
+              { text: "Guardarse el lápiz ajeno en la bolsa sin devolverlo nunca.", correct: false },
+              { text: "Romper la punta del lápiz prestado a propósito.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 13,
+        title: "El Huerto y la Planta Sedienta",
+        category: "Ciencias Naturales",
+        img: "./recursos/caso_13.svg",
+        text: "En el huerto escolar, las plántulas de jitomate tenían las hojas caídas y la tierra de las macetas estaba seca y agrietada por el sol de mediodía. Fernando y Paola llenaron dos regaderas con agua limpia y humedecieron la raíz con suavidad. Al día siguiente, las hojas lucían verdes, firmes y llenas de vida.",
+        questions: {
+          quien: {
+            question: "¿Quiénes acudieron al huerto escolar a regar las plántulas de jitomate?",
+            clue: "Fernando y Paola llenaron dos regaderas con agua limpia",
+            options: [
+              { text: "Fernando y Paola con regaderas de agua.", correct: true },
+              { text: "Los pájaros del árbol más alto del patio.", correct: false },
+              { text: "El jardinero del parque del centro del pueblo.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué las hojas de las plantas estaban caídas y marchitas?",
+            clue: "la tierra de las macetas estaba seca y agrietada por el sol de mediodía",
+            options: [
+              { text: "Porque la tierra estaba seca y agrietada por la falta de agua y el calor.", correct: true },
+              { text: "Porque las plantas estaban durmiendo una siesta.", correct: false },
+              { text: "Porque tenían demasiada agua en las raíces.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué espacio de la escuela se encuentra el cultivo de jitomates?",
+            clue: "En el huerto escolar, las plántulas de jitomate tenían las hojas caídas",
+            options: [
+              { text: "En el huerto escolar de la primaria.", correct: true },
+              { text: "En la azotea de la casa del maestro.", correct: false },
+              { text: "Debajo del escritorio de la dirección.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Cómo debe realizarse el riego para nutrir a la planta sin maltratarla?",
+            clue: "humedecieron la raíz con suavidad. Al día siguiente, las hojas lucían verdes",
+            options: [
+              { text: "Humedecer la tierra y las raíces con suavidad usando regadera.", correct: true },
+              { text: "Arrojar cubetazos de agua hirviendo sobre las hojas.", correct: false },
+              { text: "Arrancar la planta de la tierra y ponerla en el pavimento seco.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 14,
+        title: "Los Lentes Nuevos de Rodrigo",
+        category: "Salud Visual",
+        img: "./recursos/caso_14.svg",
+        text: "Rodrigo entrecerraba los ojos cada vez que intentaba copiar los ejercicios del pizarrón. Su papá lo llevó con el optometrista del centro de salud, quien le adaptó unos lentes con armazón azul. Al regresar a clases, Rodrigo leyó con total claridad hasta las letras más pequeñas y sus compañeros elogiaron lo bien que se veía.",
+        questions: {
+          quien: {
+            question: "¿Quién revisó la vista de Rodrigo y le adaptó los lentes adecuados?",
+            clue: "el optometrista del centro de salud, quien le adaptó unos lentes",
+            options: [
+              { text: "El optometrista del centro de salud.", correct: true },
+              { text: "El carpintero de la mueblería comunitaria.", correct: false },
+              { text: "El dueño de la panadería de la esquina.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué Rodrigo entrecerraba los ojos al mirar hacia el pizarrón?",
+            clue: "Rodrigo entrecerraba los ojos cada vez que intentaba copiar los ejercicios",
+            options: [
+              { text: "Porque tenía problemas de agudeza visual y veía las letras borrosas.", correct: true },
+              { text: "Porque tenía mucho sueño y no quería trabajar.", correct: false },
+              { text: "Porque la luz del salón estaba completamente apagada.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿A qué lugar asistió Rodrigo para recibir su diagnóstico visual?",
+            clue: "Su papá lo llevó con el optometrista del centro de salud",
+            options: [
+              { text: "Al centro de salud con el especialista optometrista.", correct: true },
+              { text: "A la feria del pueblo a los juegos mecánicos.", correct: false },
+              { text: "Al estadio municipal de béisbol.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué actitud de respeto demostraron sus compañeros ante sus lentes nuevos?",
+            clue: "sus compañeros elogiaron lo bien que se veía",
+            options: [
+              { text: "Respeto, apoyo y elogios positivos sin burlas.", correct: true },
+              { text: "Esconderle los lentes para que no pudiera ver.", correct: false },
+              { text: "Ponerle apodos molestos durante el recreo.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 15,
+        title: "El Letrero de Piso Mojado",
+        category: "Seguridad Escolar",
+        img: "./recursos/caso_15.svg",
+        text: "Al terminar de trapear el pasillo de la dirección, Don Tomás colocó un cono amarillo brillante con la figura de una persona resbalando. Emilio venía corriendo entusiasmado hacia su salón, pero al ver el cono amarillo disminuyó su velocidad y caminó despacio por la orilla seca, evitando una aparatosa caída.",
+        questions: {
+          quien: {
+            question: "¿Quién colocó el señalamiento preventivo de piso mojado en el pasillo?",
+            clue: "Don Tomás colocó un cono amarillo brillante con la figura de una persona resbalando",
+            options: [
+              { text: "Don Tomás, tras terminar de trapear el piso del pasillo.", correct: true },
+              { text: "Un policía federal de carreteras.", correct: false },
+              { text: "El profesor de educación física desde la cancha.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué era fundamental colocar el cono preventivo amarillo?",
+            clue: "terminar de trapear el pasillo... figura de una persona resbalando",
+            options: [
+              { text: "Para advertir que el piso estaba húmedo y evitar caídas peligrosas.", correct: true },
+              { text: "Para adornar el pasillo como si fuera un cumpleaños.", correct: false },
+              { text: "Para apartar un lugar de estacionamiento para bicicletas.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué espacio de la escuela se encontraba recién trapeado el suelo?",
+            clue: "Al terminar de trapear el pasillo de la dirección",
+            options: [
+              { text: "En el pasillo principal frente a la dirección escolar.", correct: true },
+              { text: "En el pasto natural de la cancha de fútbol.", correct: false },
+              { text: "En la biblioteca dentro del estante de libros.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué decisión inteligente tomó Emilio al divisar el cono de advertencia?",
+            clue: "disminuyó su velocidad y caminó despacio por la orilla seca",
+            options: [
+              { text: "Frenar su carrera y caminar despacio por la orilla seca.", correct: true },
+              { text: "Patear el cono amarillo y salir patinando en el agua.", correct: false },
+              { text: "Correr con más fuerza para ver si lograba no caerse.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 16,
+        title: "El Casco de la Bicicleta",
+        category: "Seguridad Vial",
+        img: "./recursos/caso_16.svg",
+        text: "Todas las mañanas, Jimena llega a la escuela en su bicicleta roja. Antes de pedalear una sola cuadra, ajusta la correa de su casco protector hasta escuchar el 'clic' de seguridad. Su hermano mayor le recordó que el casco protege el cráneo y el cerebro ante cualquier tropiezo imprevisto con piedras o baches.",
+        questions: {
+          quien: {
+            question: "¿Quién usa responsablemente su bicicleta y casco todas las mañanas?",
+            clue: "Jimena llega a la escuela en su bicicleta roja",
+            options: [
+              { text: "Jimena, cuidando siempre su seguridad.", correct: true },
+              { text: "El repartidor de pizzas en motocicleta.", correct: false },
+              { text: "El vigilante nocturno del almacén.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es indispensable abrocharse el casco protector al andar en bici?",
+            clue: "el casco protege el cráneo y el cerebro ante cualquier tropiezo imprevisto",
+            options: [
+              { text: "Porque amortigua los golpes y protege el cráneo y el cerebro.", correct: true },
+              { text: "Porque sirve para que el peinado no se despeine con el viento.", correct: false },
+              { text: "Porque hace que la bicicleta avance al doble de velocidad.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Cuándo y cómo verifica Jimena que el casco está correctamente colocado?",
+            clue: "Antes de pedalear una sola cuadra, ajusta la correa... hasta escuchar el 'clic'",
+            options: [
+              { text: "Antes de pedalear, ajustando la correa hasta escuchar el clic seguro.", correct: true },
+              { text: "Después de llegar a la escuela cuando ya guardó la bici.", correct: false },
+              { text: "Solo cuando la policía la detiene en la esquina.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué regla de vialidad debe seguir un ciclista escolar en el camino?",
+            clue: "ajusta la correa de su casco... ante cualquier tropiezo imprevisto con piedras o baches",
+            options: [
+              { text: "Usar casco ajustado, ir por su carril y estar atento a piedras o baches.", correct: true },
+              { text: "Manejar sin manos en el manubrio mirando hacia atrás.", correct: false },
+              { text: "Cerrar los ojos al cruzar avenidas con semáforos.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 17,
+        title: "El Semáforo del Plato",
+        category: "Nutrición y Salud",
+        img: "./recursos/caso_17.svg",
+        text: "En la clase de Ciencias, la maestra dibujó el Plato del Bien Comer en el pizarrón: un sector verde abundante para verduras y frutas, uno amarillo para cereales como tortilla y avena, y uno rojo moderado para frijoles, lentejas y carnes. Los alumnos armaron un menú escolar balanceado para toda la semana.",
+        questions: {
+          quien: {
+            question: "¿Quién orientó la clase sobre el Plato del Bien Comer y sus porciones?",
+            clue: "la maestra dibujó el Plato del Bien Comer en el pizarrón",
+            options: [
+              { text: "La maestra de Ciencias ante todo el grupo escolar.", correct: true },
+              { text: "El chofer de un camión repartidor de frituras.", correct: false },
+              { text: "Un cantante famoso en un anuncio de televisión.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué el plato divide los alimentos en tres grupos diferenciados?",
+            clue: "un sector verde abundante... uno amarillo para cereales... y uno rojo moderado",
+            options: [
+              { text: "Para orientar las porciones adecuadas que requiere nuestro cuerpo para crecer sano.", correct: true },
+              { text: "Para que la comida tenga colores bonitos en las fotos.", correct: false },
+              { text: "Para prohibir que las personas coman alimentos calientes.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué espacio y contexto se construyó el menú escolar saludable?",
+            clue: "En la clase de Ciencias... Los alumnos armaron un menú escolar balanceado",
+            options: [
+              { text: "En el aula escolar durante la clase de Ciencias Naturales.", correct: true },
+              { text: "En la taquería del centro mientras cenaban tacos.", correct: false },
+              { text: "En el cine viendo una película de dibujos animados.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué grupo de alimentos debe consumirse en mayor abundancia según el plato?",
+            clue: "un sector verde abundante para verduras y frutas",
+            options: [
+              { text: "Verduras y frutas frescas de temporada (sector verde).", correct: true },
+              { text: "Dulces, caramelos y frituras con mucha sal.", correct: false },
+              { text: "Carnes rojas fritas tres veces al día en cada comida.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 18,
+        title: "El Suéter Extraviado",
+        category: "Valores y Honestidad",
+        img: "./recursos/caso_18.svg",
+        text: "Al terminar el recreo, Samuel encontró un suéter azul marino olvidado en una jardinera del patio. En lugar de ignorarlo o quedárselo, revisó la etiqueta interior donde estaba escrito con marcador el nombre 'Esteban 3° B'. Samuel fue directamente con el maestro de guardia y entregó la prenda, logrando que Esteban lo recuperara de inmediato.",
+        questions: {
+          quien: {
+            question: "¿Quién actuó con honestidad al encontrar el suéter en el patio?",
+            clue: "Samuel encontró un suéter azul marino olvidado... fue directamente con el maestro",
+            options: [
+              { text: "Samuel, entregando la prenda al maestro de guardia.", correct: true },
+              { text: "Un perro que entró al patio persiguiendo una pelota.", correct: false },
+              { text: "El chofer del taxi que pasaba por la calle.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es tan importante marcar con nombre las prendas escolares?",
+            clue: "revisó la etiqueta interior donde estaba escrito con marcador el nombre 'Esteban 3° B'",
+            options: [
+              { text: "Para identificar rápidamente al dueño si la prenda se olvida o extravía.", correct: true },
+              { text: "Para que el suéter se vuelva más abrigador en invierno.", correct: false },
+              { text: "Para que nadie pueda lavarlo con agua y jabón.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿Dónde fue localizada la prenda olvidada tras el recreo?",
+            clue: "Samuel encontró un suéter azul marino olvidado en una jardinera del patio",
+            options: [
+              { text: "En una jardinera del patio de la escuela tras el recreo.", correct: true },
+              { text: "En el techo de los baños de los maestros.", correct: false },
+              { text: "Enterrado bajo la arena de la cancha de voleibol.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Qué valor cívico aplicó Samuel al entregar el suéter en vez de ocultarlo?",
+            clue: "entregó la prenda, logrando que Esteban lo recuperara de inmediato",
+            options: [
+              { text: "Honestidad y empatía por los bienes de sus compañeros.", correct: true },
+              { text: "Egoísmo y falta de interés por las pertenencias ajenas.", correct: false },
+              { text: "Ignorancia sin preocuparse por los demás alumnos.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 19,
+        title: "El Cepillado de Tres Minutos",
+        category: "Salud Bucal",
+        img: "./recursos/caso_19.svg",
+        text: "Después de desayunar, Regina fue al baño de la escuela con su cepillo dental y un vaso pequeño con agua. Siguiendo las indicaciones del dentista escolar, cepilló sus dientes superiores hacia abajo, los inferiores hacia arriba y las muelas en círculos durante tres minutos completos, evitando el uso excesivo de agua de la llave.",
+        questions: {
+          quien: {
+            question: "¿Quién cuidó sus dientes con la técnica correcta de cepillado?",
+            clue: "Regina fue al baño de la escuela con su cepillo dental",
+            options: [
+              { text: "Regina con su cepillo y vaso con agua.", correct: true },
+              { text: "El fontanero que arreglaba una tubería rota.", correct: false },
+              { text: "El vendedor de paletas de dulce de la plaza.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es aconsejable usar un vaso con agua en vez de dejar la llave abierta?",
+            clue: "un vaso pequeño con agua... evitando el uso excesivo de agua de la llave",
+            options: [
+              { text: "Para no desperdiciar litros de agua limpia potable.", correct: true },
+              { text: "Porque el agua de la llave está prohibida para los niños.", correct: false },
+              { text: "Porque el vaso hace que los dientes se blanqueen solos.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué momento del día escolar realizó Regina su higiene dental?",
+            clue: "Después de desayunar, Regina fue al baño de la escuela",
+            options: [
+              { text: "Después de desayunar su refrigerio en la escuela.", correct: true },
+              { text: "Justo a media noche mientras dormía en su recámara.", correct: false },
+              { text: "Antes de salir corriendo a jugar fútbol bajo el sol.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿Cómo se deben cepillar los dientes y muelas según la técnica profesional?",
+            clue: "dientes superiores hacia abajo, los inferiores hacia arriba y las muelas en círculos",
+            options: [
+              { text: "Dientes de arriba hacia abajo, los de abajo hacia arriba y muelas en círculos.", correct: true },
+              { text: "Frotar con fuerza de izquierda a derecha sin tocar las encías.", correct: false },
+              { text: "Morder el cepillo durante cinco segundos sin usar pasta.", correct: false }
+            ]
+          }
+        }
+      },
+      {
+        num: 20,
+        title: "Los Botes de Colores",
+        category: "Cuidado del Medio Ambiente",
+        img: "./recursos/caso_20.svg",
+        text: "En la cooperativa escolar se colocaron dos botes de basura rotulados: uno verde para restos de fruta y cáscaras orgánicas, y uno azul para botellas de plástico y cartón inorgánico limpio. Carlos terminó su plátano y depositó la cáscara en el bote verde, explicando a sus compañeros que con esos desechos orgánicos prepararán composta para las plantas del huerto.",
+        questions: {
+          quien: {
+            question: "¿Quién explicó la importancia de la composta al tirar su cáscara de plátano?",
+            clue: "Carlos terminó su plátano y depositó la cáscara en el bote verde, explicando a sus compañeros",
+            options: [
+              { text: "Carlos, enseñando a sus compañeros con el ejemplo.", correct: true },
+              { text: "El recolector de metales pesados del municipio.", correct: false },
+              { text: "El guardia de seguridad de la entrada escolar.", correct: false }
+            ]
+          },
+          porque: {
+            question: "¿Por qué es valioso separar la materia orgánica de los envases inorgánicos?",
+            clue: "con esos desechos orgánicos prepararán composta para las plantas del huerto",
+            options: [
+              { text: "Porque la materia orgánica se transforma en abono natural y el plástico se recicla.", correct: true },
+              { text: "Porque los botes de basura se ven más decorativos en el patio.", correct: false },
+              { text: "Para que la basura huela más fuerte durante los días de calor.", correct: false }
+            ]
+          },
+          donde_cuando: {
+            question: "¿En qué lugar de la escuela se instalaron los botes rotulados?",
+            clue: "En la cooperativa escolar se colocaron dos botes de basura rotulados",
+            options: [
+              { text: "En el área de la cooperativa escolar de la primaria.", correct: true },
+              { text: "En la copa del árbol más frondoso del jardín.", correct: false },
+              { text: "Dentro del casillero del profesor de música.", correct: false }
+            ]
+          },
+          que_hacer: {
+            question: "¿En cuál contenedor se deben depositar las cáscaras de fruta y restos de comida?",
+            clue: "uno verde para restos de fruta y cáscaras orgánicas",
+            options: [
+              { text: "En el bote verde destinado a residuos orgánicos biodegradables.", correct: true },
+              { text: "En el bote azul de botellas de plástico y metales.", correct: false },
+              { text: "Tiradas en el piso del patio de recreo para que se sequen.", correct: false }
+            ]
+          }
+        }
       }
     ];
 
+    let activeCases = [];
     let currentCaseIdx = 0;
     let score = 0;
     let isSpinning = false;
     let caseSolved = false;
 
-    // SECTORES DE LA RULETA
+    // SECTORES DE LA RULETA (4 SECTORES BIEN DEFINIDOS)
     const SECTORS = [
-      { label: "¿Quién?", color: "#2563eb", icon: "👤" },
-      { label: "¿Por qué?", color: "#f59e0b", icon: "❓" },
-      { label: "¿Dónde / Cuándo?", color: "#10b981", icon: "📍" },
-      { label: "¿Qué hacer?", color: "#8b5cf6", icon: "💡" }
+      { key: "quien", label: "¿Quién?", color: "#2563eb", icon: "👤" },
+      { key: "porque", label: "¿Por qué?", color: "#f59e0b", icon: "❓" },
+      { key: "donde_cuando", label: "¿Dónde / Cuándo?", color: "#10b981", icon: "📍" },
+      { key: "que_hacer", label: "¿Qué hacer?", color: "#8b5cf6", icon: "💡" }
     ];
 
     let currentRotation = 0;
 
-    // DIBUJAR RULETA
+    // DIBUJAR RULETA (RADIO GRANDE 290px)
     function drawWheel() {
       const canvas = document.getElementById('wheelCanvas');
       const ctx = canvas.getContext('2d');
@@ -780,7 +1582,7 @@
       const h = canvas.height;
       const cx = w / 2;
       const cy = h / 2;
-      const r = w / 2 - 8;
+      const r = w / 2 - 10;
       const numSectors = SECTORS.length;
       const arc = (2 * Math.PI) / numSectors;
 
@@ -796,32 +1598,34 @@
         ctx.closePath();
         ctx.fillStyle = sec.color;
         ctx.fill();
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 4;
         ctx.strokeStyle = "#ffffff";
         ctx.stroke();
 
-        // Texto e ícono
+        // Texto e ícono grande y legible
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(startAngle + arc / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 13px Fredoka, sans-serif";
-        ctx.fillText(`${sec.icon} ${sec.label}`, r - 15, 5);
+        ctx.font = "bold 16px Fredoka, sans-serif";
+        ctx.shadowColor = "rgba(0,0,0,0.6)";
+        ctx.shadowBlur = 4;
+        ctx.fillText(`${sec.icon} ${sec.label}`, r - 22, 6);
         ctx.restore();
       });
 
-      // Centro de la ruleta
+      // Centro de la ruleta (buje metálico)
       ctx.beginPath();
-      ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+      ctx.arc(cx, cy, 32, 0, 2 * Math.PI);
       ctx.fillStyle = "#0f172a";
       ctx.fill();
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 5;
       ctx.strokeStyle = "#f59e0b";
       ctx.stroke();
 
       ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 14px sans-serif";
+      ctx.font = "bold 20px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText("🔍", cx, cy);
@@ -860,23 +1664,34 @@
     }
 
     function speakCaseText() {
-      const c = ENIGMAS[currentCaseIdx];
+      const c = activeCases[currentCaseIdx];
       speakText(`${c.title}. ${c.text}`);
+    }
+
+    // BARAJAR
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
     // CARGAR ENIGMA
     function loadEnigma(idx) {
       currentCaseIdx = idx;
       caseSolved = false;
-      const c = ENIGMAS[currentCaseIdx];
+      const c = activeCases[currentCaseIdx];
 
       document.getElementById('caseNum').textContent = c.num;
       document.getElementById('caseCategory').textContent = c.category;
       document.getElementById('caseTitle').textContent = c.title;
+      document.getElementById('caseImg').src = c.img;
       document.getElementById('caseText').innerHTML = c.text;
 
-      document.getElementById('progressText').textContent = `${currentCaseIdx + 1} / ${ENIGMAS.length}`;
-      document.getElementById('progressBar').style.width = `${(currentCaseIdx / ENIGMAS.length) * 100}%`;
+      document.getElementById('progressText').textContent = `${currentCaseIdx + 1} / ${activeCases.length}`;
+      document.getElementById('progressBar').style.width = `${(currentCaseIdx / activeCases.length) * 100}%`;
 
       document.getElementById('questionBox').style.display = 'none';
       document.getElementById('btnContinuar').style.display = 'none';
@@ -886,30 +1701,53 @@
       drawWheel();
     }
 
-    // GIRAR RULETA
+    // GIRAR RULETA CON CONVERGENCIA EXACTA AL SECTOR
+    let chosenSectorIdx = 0;
+
     function spinWheel() {
       if (isSpinning || caseSolved) return;
       isSpinning = true;
       document.getElementById('btnSpin').disabled = true;
       document.getElementById('questionBox').style.display = 'none';
 
-      // Ángulo aleatorio + varias vueltas completas
-      const extraSpins = 4 + Math.random() * 3;
-      const targetRotation = currentRotation + extraSpins * 2 * Math.PI;
-      const duration = 2400; // ms
+      // 1. Elegir un sector objetivo aleatorio entre los 4 sectores
+      chosenSectorIdx = Math.floor(Math.random() * SECTORS.length);
+
+      const numSectors = SECTORS.length;
+      const arc = (2 * Math.PI) / numSectors;
+
+      // El puntero está en la parte superior (12 en punto = 3*PI/2 = -PI/2)
+      // Para que el sector `chosenSectorIdx` quede bajo el puntero, su ángulo central debe alinearse con 3*PI/2
+      // midAngle = (chosenSectorIdx + 0.5) * arc + targetRotation = 3*PI/2
+      // targetRotation = 3*PI/2 - (chosenSectorIdx + 0.5) * arc
+      const targetBase = (3 * Math.PI / 2) - ((chosenSectorIdx + 0.5) * arc);
+
+      // Variación sutil dentro del sector (+- 20% del arco) para naturalidad visual
+      const offset = (Math.random() - 0.5) * (arc * 0.4);
+
+      // Calcular número de vueltas completas hacia adelante (entre 4 y 6 vueltas)
+      const currentFullSpins = Math.floor(currentRotation / (2 * Math.PI));
+      const extraSpins = 4 + Math.floor(Math.random() * 2);
+      let targetRotation = (currentFullSpins + extraSpins) * (2 * Math.PI) + targetBase + offset;
+
+      while (targetRotation <= currentRotation + 3 * (2 * Math.PI)) {
+        targetRotation += (2 * Math.PI);
+      }
+
+      const duration = 2600; // ms
       const startTime = performance.now();
       const initialRotation = currentRotation;
 
       function animateSpin(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        // Easing desaceleración cúbica
+        // Desaceleración cúbica suave
         const easeOut = 1 - Math.pow(1 - progress, 3);
         currentRotation = initialRotation + (targetRotation - initialRotation) * easeOut;
 
         drawWheel();
 
-        if (Math.floor(currentRotation * 5) % 3 === 0) {
+        if (Math.floor(currentRotation * 6) % 2 === 0) {
           playWheelClick();
         }
 
@@ -924,10 +1762,12 @@
       requestAnimationFrame(animateSpin);
     }
 
-    // AL TERMINAR EL GIRO: MOSTRAR PREGUNTA
+    // AL TERMINAR EL GIRO: MOSTRAR LA PREGUNTA EXACTA DEL SECTOR DONDE PARÓ
     function onSpinFinished() {
       playTone(587.33, 'sine', 0.2);
-      const c = ENIGMAS[currentCaseIdx];
+      const c = activeCases[currentCaseIdx];
+      const sector = SECTORS[chosenSectorIdx];
+      const qData = c.questions[sector.key];
 
       const qBox = document.getElementById('questionBox');
       const qBadge = document.getElementById('qTypeBadge');
@@ -935,77 +1775,91 @@
       const optionsGrid = document.getElementById('optionsGrid');
       const qFeedback = document.getElementById('qFeedback');
 
-      qBadge.textContent = c.questionType;
-      qTitle.textContent = c.question;
+      qBadge.textContent = `${sector.icon} ${sector.label}`;
+      qBadge.style.background = sector.color;
+      qTitle.textContent = qData.question;
       qFeedback.textContent = "Selecciona la deducción respaldada por el texto:";
       qFeedback.style.color = "#94a3b8";
 
+      // Barajar opciones de respuesta
+      const shuffledOptions = shuffle(qData.options);
+
       optionsGrid.innerHTML = '';
-      c.options.forEach((opt, index) => {
+      shuffledOptions.forEach((opt) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
         btn.innerHTML = `<span style="color:#f59e0b;">●</span> <span>${opt.text}</span>`;
-        btn.onclick = () => handleOptionClick(opt, btn);
+        btn.onclick = () => handleOptionClick(opt, btn, qData);
         optionsGrid.appendChild(btn);
       });
 
       qBox.style.display = 'flex';
+      qBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-      // Anunciar por voz la pregunta
+      // Locución de la pregunta
       setTimeout(() => {
-        speakText(c.question);
-      }, 250);
+        speakText(qData.question);
+      }, 200);
     }
 
-    // SELECCIONAR OPCIÓN
-    function handleOptionClick(option, btnEl) {
+    // MANEJAR SELECCIÓN DE RESPUESTA
+    function handleOptionClick(opt, btnEl, qData) {
       if (caseSolved) return;
 
-      const c = ENIGMAS[currentCaseIdx];
-      const qFeedback = document.getElementById('qFeedback');
+      const c = activeCases[currentCaseIdx];
+      const allBtns = document.querySelectorAll('.option-btn');
+      allBtns.forEach(b => b.disabled = true);
 
-      if (option.correct) {
-        // Correcto
+      if (opt.correct) {
+        // Acierto
         caseSolved = true;
         score++;
-        document.getElementById('scoreVal').textContent = `${score} / ${ENIGMAS.length}`;
+        document.getElementById('scoreVal').textContent = `${score} / ${activeCases.length}`;
 
-        playTone(523.25, 'triangle', 0.15);
-        setTimeout(() => playTone(659.25, 'triangle', 0.15), 120);
-        setTimeout(() => playTone(783.99, 'triangle', 0.3), 240);
+        playTone(523.25, 'sine', 0.12);
+        setTimeout(() => playTone(659.25, 'sine', 0.25), 100);
 
         btnEl.classList.add('correct');
-        qFeedback.textContent = "¡Correcto! Pista identificada con precisión.";
+        const qFeedback = document.getElementById('qFeedback');
+        qFeedback.textContent = "¡Deducción correcta! Pista verificada en el expediente.";
         qFeedback.style.color = "#34d399";
 
         // Resaltar la pista en el texto
-        const fullText = c.text;
-        const highlighted = fullText.replace(c.clue, `<mark>${c.clue}</mark>`);
-        document.getElementById('caseText').innerHTML = highlighted;
+        highlightClueInText(qData.clue);
 
         // Mostrar botón continuar
         document.getElementById('btnContinuar').style.display = 'inline-flex';
-        document.getElementById('btnSpin').innerHTML = '<span>✅</span><span>Caso Resuelto</span>';
-
-        setTimeout(() => {
-          speakText("¡Excelente deducción detective! La pista ha sido confirmada.");
-        }, 300);
       } else {
         // Error
         playTone(220, 'sawtooth', 0.25);
         btnEl.classList.add('wrong');
-        setTimeout(() => btnEl.classList.remove('wrong'), 500);
 
-        qFeedback.textContent = "Revisa de nuevo la lectura del caso para encontrar la causa exacta.";
+        const qFeedback = document.getElementById('qFeedback');
+        qFeedback.textContent = "Deducción incorrecta. Revisa el texto y vuelve a intentarlo.";
         qFeedback.style.color = "#f87171";
+
+        setTimeout(() => {
+          allBtns.forEach(b => b.disabled = false);
+          btnEl.classList.remove('wrong');
+        }, 1200);
+      }
+    }
+
+    // RESALTAR PISTA
+    function highlightClueInText(clue) {
+      const c = activeCases[currentCaseIdx];
+      if (c.text.includes(clue)) {
+        const highlighted = c.text.replace(clue, `<mark>${clue}</mark>`);
+        document.getElementById('caseText').innerHTML = highlighted;
       }
     }
 
     // SIGUIENTE CASO
-    function nextEnigma() {
-      if (currentCaseIdx + 1 < ENIGMAS.length) {
+    function nextCase() {
+      if (currentCaseIdx + 1 < activeCases.length) {
         loadEnigma(currentCaseIdx + 1);
       } else {
+        // Victoria
         document.getElementById('progressBar').style.width = '100%';
         document.getElementById('victoryModal').style.display = 'flex';
       }
@@ -1013,12 +1867,13 @@
 
     function restartGame() {
       score = 0;
-      document.getElementById('scoreVal').textContent = `0 / ${ENIGMAS.length}`;
+      activeCases = shuffle([...ALL_CASES]);
+      document.getElementById('scoreVal').textContent = `0 / ${activeCases.length}`;
       document.getElementById('victoryModal').style.display = 'none';
       loadEnigma(0);
     }
 
-    // GESTO DOS DEDOS DESLIZAR A LA DERECHA
+    // GESTO DE DOS DEDOS DESLIZANDO A LA DERECHA
     let touchStartX = 0;
     let touchStartY = 0;
     let multiTouch = false;
@@ -1037,20 +1892,22 @@
       if (multiTouch && caseSolved) {
         const changeX = e.changedTouches[0].clientX - touchStartX;
         if (changeX > 60) {
-          nextEnigma();
+          nextCase();
         }
       }
       multiTouch = false;
     }, { passive: true });
 
-    // TECLADO: Barra espaciadora o Enter para avanzar
     window.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && caseSolved) {
-        nextEnigma();
+        nextCase();
       }
     });
 
+    // INICIAR CON CASOS BARAJADOS
     window.addEventListener('DOMContentLoaded', () => {
+      activeCases = shuffle([...ALL_CASES]);
+      document.getElementById('scoreVal').textContent = `0 / ${activeCases.length}`;
       loadEnigma(0);
     });
   </script>

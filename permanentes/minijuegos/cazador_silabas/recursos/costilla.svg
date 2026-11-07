@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#f8fafc"/>
+      <!-- Columna central -->
+      <line x1="100" y1="40" x2="100" y2="160" stroke="#94a3b8" stroke-width="12" stroke-linecap="round"/>
+      <!-- Arcos costales -->
+      <path d="M95 65 Q60 70 65 95 M105 65 Q140 70 135 95" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M95 90 Q50 95 55 120 M105 90 Q150 95 145 120" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M95 115 Q55 120 60 140 M105 115 Q145 120 140 140" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" fill="none"/>
+    </svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#fffbeb"/>
+      <!-- Curita / apósito adhesivo -->
+      <g transform="rotate(35 100 100)">
+        <rect x="40" y="75" width="120" height="50" rx="25" fill="#fcd34d" stroke="#d97706" stroke-width="3"/>
+        <rect x="80" y="75" width="40" height="50" fill="#fef3c7"/>
+        <circle cx="60" cy="100" r="2.5" fill="#d97706"/>
+        <circle cx="70" cy="100" r="2.5" fill="#d97706"/>
+        <circle cx="130" cy="100" r="2.5" fill="#d97706"/>
+        <circle cx="140" cy="100" r="2.5" fill="#d97706"/>
+      </g>
+    </svg>

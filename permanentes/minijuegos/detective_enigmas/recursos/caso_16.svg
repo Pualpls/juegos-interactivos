@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#f0f9ff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Casco protector ciclista -->
+      <path d="M65 125 Q120 50 175 125 Q145 135 120 135 Q95 135 65 125 Z" fill="#0284c7" stroke="#0369a1" stroke-width="3"/>
+      <!-- Correa del casco -->
+      <path d="M85 125 L115 160 L145 125" stroke="#0f172a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="115" cy="160" r="5" fill="#f59e0b"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#0369a1" text-anchor="middle">Casco de Seguridad Vial</text>
+    </svg>

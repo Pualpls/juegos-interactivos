@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#f0fdfa"/>
+      <circle cx="100" cy="100" r="60" fill="#ffffff" stroke="#0d9488" stroke-width="6"/>
+      <circle cx="100" cy="100" r="50" fill="#ccfbf1"/>
+      <!-- Aguja imantada norte rojo, sur azul -->
+      <polygon points="100,55 108,100 92,100" fill="#ef4444"/>
+      <polygon points="100,145 108,100 92,100" fill="#3b82f6"/>
+      <circle cx="100" cy="100" r="6" fill="#0f172a"/>
+      <text x="100" y="48" font-family="Fredoka, sans-serif" font-size="12" font-weight="700" fill="#ef4444" text-anchor="middle">N</text>
+    </svg>

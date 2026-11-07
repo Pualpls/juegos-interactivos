@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#f0fdf4"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Bote verde Orgánico -->
+      <rect x="70" y="95" width="40" height="65" rx="6" fill="#16a34a"/>
+      <rect x="66" y="88" width="48" height="8" rx="3" fill="#15803d"/>
+      <text x="90" y="135" font-family="Fredoka, sans-serif" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">ORG</text>
+      <!-- Bote azul Inorgánico -->
+      <rect x="130" y="95" width="40" height="65" rx="6" fill="#2563eb"/>
+      <rect x="126" y="88" width="48" height="8" rx="3" fill="#1d4ed8"/>
+      <text x="150" y="135" font-family="Fredoka, sans-serif" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">INORG</text>
+      <!-- Flechas de reciclaje arriba -->
+      <circle cx="120" cy="65" r="14" fill="#86efac"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#15803d" text-anchor="middle">Separación de Residuos</text>
+    </svg>

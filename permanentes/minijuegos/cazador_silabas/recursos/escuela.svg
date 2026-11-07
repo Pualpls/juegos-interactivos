@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#eff6ff"/>
+      <!-- Fachada de escuela con reloj -->
+      <rect x="45" y="85" width="110" height="80" rx="6" fill="#f1f5f9" stroke="#334155" stroke-width="3"/>
+      <!-- Tejado triangular con campana/reloj -->
+      <polygon points="100,45 40,85 160,85" fill="#dc2626"/>
+      <circle cx="100" cy="72" r="10" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+      <!-- Puerta y ventanas -->
+      <rect x="88" y="125" width="24" height="40" rx="3" fill="#b45309"/>
+      <rect x="58" y="100" width="18" height="18" fill="#38bdf8"/>
+      <rect x="124" y="100" width="18" height="18" fill="#38bdf8"/>
+    </svg>

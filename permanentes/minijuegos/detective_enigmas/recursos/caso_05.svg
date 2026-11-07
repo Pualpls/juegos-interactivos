@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#faf5ff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Tríptico de 3 paneles -->
+      <g transform="translate(45, 60)">
+        <polygon points="0,15 45,0 45,95 0,110" fill="#c084fc" stroke="#6b21a8" stroke-width="2"/>
+        <polygon points="45,0 105,5 105,100 45,95" fill="#e9d5ff" stroke="#6b21a8" stroke-width="2"/>
+        <polygon points="105,5 150,20 150,115 105,100" fill="#a855f7" stroke="#6b21a8" stroke-width="2"/>
+        <!-- Líneas de texto simuladas -->
+        <line x1="55" y1="25" x2="95" y2="28" stroke="#6b21a8" stroke-width="3" stroke-linecap="round"/>
+        <line x1="55" y1="40" x2="95" y2="43" stroke="#6b21a8" stroke-width="3" stroke-linecap="round"/>
+        <line x1="55" y1="55" x2="85" y2="58" stroke="#6b21a8" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#6b21a8" text-anchor="middle">Tríptico Escolar Informativo</text>
+    </svg>

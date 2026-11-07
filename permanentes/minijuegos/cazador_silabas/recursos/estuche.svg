@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#faf5ff"/>
+      <!-- Lapicera / estuche de útiles -->
+      <rect x="40" y="80" width="120" height="55" rx="16" fill="#a855f7" stroke="#7e22ce" stroke-width="4"/>
+      <!-- Cierre cremallera -->
+      <line x1="40" y1="95" x2="160" y2="95" stroke="#facc15" stroke-width="4" stroke-dasharray="4,4"/>
+      <circle cx="55" cy="95" r="7" fill="#eab308"/>
+    </svg>

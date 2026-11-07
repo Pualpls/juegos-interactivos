@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#faf5ff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Suéter escolar tejido -->
+      <path d="M85 75 L120 90 L155 75 L180 110 L155 120 L150 165 L90 165 L85 120 L60 110 Z" fill="#7c3aed"/>
+      <path d="M105 75 Q120 95 135 75" fill="#5b21b6"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#6d28d9" text-anchor="middle">Objetos Extraviados</text>
+    </svg>

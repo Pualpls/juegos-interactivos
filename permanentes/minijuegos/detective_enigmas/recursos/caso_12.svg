@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#fefce8"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Dos lápices cruzados con corazón solidario -->
+      <g transform="rotate(45 120 115)">
+        <polygon points="115,50 125,50 120,30" fill="#f59e0b"/>
+        <rect x="115" y="50" width="10" height="90" fill="#fbbf24"/>
+        <rect x="115" y="140" width="10" height="15" fill="#f43f5e"/>
+      </g>
+      <g transform="rotate(-45 120 115)">
+        <polygon points="115,50 125,50 120,30" fill="#3b82f6"/>
+        <rect x="115" y="50" width="10" height="90" fill="#60a5fa"/>
+        <rect x="115" y="140" width="10" height="15" fill="#ef4444"/>
+      </g>
+      <circle cx="120" cy="115" r="16" fill="#ef4444"/>
+      <path d="M112 115 L120 123 L128 110" stroke="#ffffff" stroke-width="3" fill="none"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#854d0e" text-anchor="middle">Solidaridad y Convivencia</text>
+    </svg>

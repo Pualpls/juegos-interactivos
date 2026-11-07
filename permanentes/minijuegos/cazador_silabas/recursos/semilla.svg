@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <rect width="200" height="200" rx="20" fill="#fffbeb"/>
+      <!-- Semilla germinando con primer brote -->
+      <path d="M100 70 C70 100 75 140 100 145 C125 140 130 100 100 70 Z" fill="#92400e" stroke="#78350f" stroke-width="3"/>
+      <!-- Brote verde -->
+      <path d="M100 75 Q115 50 130 55 Q135 68 115 72 Z" fill="#22c55e"/>
+    </svg>

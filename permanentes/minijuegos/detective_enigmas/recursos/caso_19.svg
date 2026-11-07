@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+      <rect width="240" height="240" rx="24" fill="#ecfeff"/>
+      <circle cx="120" cy="120" r="85" fill="#ffffff"/>
+      <!-- Diente sano y reluciente -->
+      <path d="M100 85 C80 85 75 105 75 120 C75 140 85 165 95 165 C105 165 110 145 120 145 C130 145 135 165 145 165 C155 165 165 140 165 120 C165 105 160 85 140 85 C130 85 125 92 120 92 C115 92 110 85 100 85 Z" fill="#ffffff" stroke="#06b6d4" stroke-width="4"/>
+      <!-- Destello de limpieza -->
+      <path d="M155 80 L160 90 L170 95 L160 100 L155 110 L150 100 L140 95 L150 90 Z" fill="#facc15"/>
+      <text x="120" y="205" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#0891b2" text-anchor="middle">Higiene y Salud Bucal</text>
+    </svg>
