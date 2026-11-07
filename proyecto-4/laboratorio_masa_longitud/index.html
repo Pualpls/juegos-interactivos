@@ -467,6 +467,7 @@
     const s1Items = [
       {
         name: "🪵 Broche de madera para el cuerpo del avioncito",
+        img: "juguete_avioncito.png",
         cm: 7,
         color: "#b45309",
         options: ["7 cm", "12 cm", "7 m", "15 cm"],
@@ -475,6 +476,7 @@
       },
       {
         name: "✈️ Abatelenguas de madera para las alas del avión",
+        img: "juguete_avioncito.png",
         cm: 15,
         color: "#0284c7",
         options: ["15 cm", "25 cm", "15 m", "10 cm"],
@@ -483,6 +485,7 @@
       },
       {
         name: "📄 Ancho de la hoja reciclada para papiroflexia",
+        img: "juguete_barquito.png",
         cm: 21,
         color: "#7c3aed",
         options: ["21 cm", "30 cm", "14 cm", "21 kg"],
@@ -491,6 +494,7 @@
       },
       {
         name: "🎉 Cono de cartoncillo para pico de la piñata",
+        img: "juguete_pinata.png",
         cm: 25,
         color: "#db2777",
         options: ["25 cm", "18 cm", "25 m", "30 cm"],
@@ -499,6 +503,7 @@
       },
       {
         name: "📰 Tira larga de papel periódico para pegar con engrudo",
+        img: "material_periodico.png",
         cm: 28,
         color: "#475569",
         options: ["28 cm", "20 cm", "28 kg", "15 cm"],
@@ -512,24 +517,28 @@
     const s2Items = [
       {
         name: "🍍 Bolsa de tejocotes y guayabas para el ponche",
+        img: "pares_fruta.png",
         targetGrams: 1000,
         displayWeight: "1 kilogramo (1,000 g)",
         note: "1 kilogramo (1 kg) equivale a 1,000 gramos (por ejemplo, dos pesas de 500 g o una pesa de 1 kg)."
       },
       {
         name: "🍬 Bolsa de colaciones y dulces para rellenar la piñata",
+        img: "posada_aguinaldo.png",
         targetGrams: 750,
         displayWeight: "750 gramos",
         note: "Sumando una pesa de 500 g y una de 250 g equilibramos los 750 gramos de dulces."
       },
       {
         name: "🥣 Recipiente con engrudo húmedo recién preparado",
+        img: "material_engrudo.png",
         targetGrams: 600,
         displayWeight: "600 gramos",
         note: "Con una pesa de 500 g y una de 100 g logramos 600 g y los dos platillos quedan a la misma altura."
       },
       {
         name: "🪅 Piñata terminada rellena de fruta y cacahuates",
+        img: "juguete_pinata.png",
         targetGrams: 1500,
         displayWeight: "1 kilogramo y medio (1,500 g)",
         note: "Una pesa de 1 kg (1,000 g) más una de 500 g suman 1,500 gramos."
@@ -542,6 +551,7 @@
     const s3Questions = [
       {
         q: "Queremos saber qué tan larga es la cuerda (mecate) para colgar la piñata en el patio de la escuela.",
+        img: "pares_nudo.png",
         opts: [
           "Propiedad: Longitud · Instrumento: Metro (m)",
           "Propiedad: Masa · Instrumento: Balanza (kg)",
@@ -553,6 +563,7 @@
       },
       {
         q: "Queremos comprobar por qué la piñata pesa más cuando tiene el engrudo húmedo que cuando ya se secó al sol.",
+        img: "instrumento_balanza.png",
         opts: [
           "Propiedad: Masa · Instrumento: Balanza (g y kg)",
           "Propiedad: Longitud · Instrumento: Regla (cm)",
@@ -564,6 +575,7 @@
       },
       {
         q: "Necesitamos marcar exactamente la mitad de un abatelenguas de 14 cm para pegarlo centrado en el broche de madera.",
+        img: "instrumento_regla.png",
         opts: [
           "Propiedad: Longitud · Instrumento: Regla en centímetros (7 cm)",
           "Propiedad: Masa · Instrumento: Balanza en kilogramos (7 kg)",
@@ -575,6 +587,7 @@
       },
       {
         q: "La comisión de la posada compró 2 kilogramos de cañas y 1 kilogramo de naranjas en el mercado local.",
+        img: "pares_fruta.png",
         opts: [
           "Propiedad: Masa · Unidad básica: Kilogramo (kg)",
           "Propiedad: Longitud · Unidad básica: Metro (m)",
@@ -613,7 +626,10 @@
               <div class="panel-title">📏 Mesa de Medición (${s1Idx + 1}/${s1Items.length})</div>
               <span class="badge-info">Alineado en la marca del 0</span>
             </div>
-            <p style="font-weight:700; margin-bottom:0.65rem; color:#334155;">Objeto a medir: ${item.name}</p>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:0.65rem;">
+              <img src="img/${item.img}" alt="" style="width:62px;height:62px;object-fit:contain;border-radius:10px;border:2px solid #cbd5e1;background:#fff;padding:3px;flex-shrink:0;">
+              <p style="font-weight:700; color:#334155;">Objeto a medir: ${item.name}</p>
+            </div>
             <div class="ruler-stage">
               <div style="padding: 0 12px;">
                 <div class="object-bar" style="width: ${pct}%; background: ${item.color};">
@@ -693,12 +709,12 @@
             <div class="scale-box">
               <div class="pans-row">
                 <div class="pan-col" style="transform: translateY(${leftShift}px); border-color:${isBalanced ? '#16a34a' : '#94a3b8'};">
-                  <div style="font-size:1.75rem;">📦</div>
+                  <div><img src="img/${item.img}" alt="" style="width:72px;height:72px;object-fit:contain;border-radius:8px;background:#fff;border:1.5px solid #cbd5e1;padding:3px;"></div>
                   <div style="font-weight:800; font-size:0.92rem; margin-top:0.25rem;">${item.name}</div>
                   <div style="color:#0369a1; font-weight:900; margin-top:0.25rem;">Masa: ${item.displayWeight}</div>
                 </div>
                 <div class="pan-col" style="transform: translateY(${rightShift}px); border-color:${isBalanced ? '#16a34a' : '#94a3b8'};">
-                  <div style="font-size:1.75rem;">🏋️</div>
+                  <div><img src="img/instrumento_balanza.png" alt="" style="width:72px;height:72px;object-fit:contain;border-radius:8px;background:#fff;border:1.5px solid #cbd5e1;padding:3px;"></div>
                   <div style="font-weight:800; font-size:0.92rem; margin-top:0.25rem;">Platillo de Pesas</div>
                   <div style="color:${isBalanced ? '#16a34a' : '#b45309'}; font-weight:900; margin-top:0.25rem;">
                     Acumulado: ${currentPanGrams} g ${currentPanGrams >= 1000 ? '(' + (currentPanGrams/1000) + ' kg)' : ''}
@@ -772,8 +788,9 @@
               <div class="panel-title">🔍 Situación del Taller (${s3Idx + 1}/${s3Questions.length})</div>
               <span class="badge-info">Instrumentos y Unidades</span>
             </div>
-            <div style="background:#fff; border:2px solid #cbd5e1; border-radius:0.9rem; padding:1.15rem; font-size:1.12rem; font-weight:700; line-height:1.5;">
-              ${q.q}
+            <div style="background:#fff; border:2px solid #cbd5e1; border-radius:0.9rem; padding:1.15rem; font-size:1.12rem; font-weight:700; line-height:1.5; display:flex; align-items:center; gap:14px;">
+              <img src="img/${q.img}" alt="" style="width:78px;height:78px;object-fit:contain;border-radius:10px;border:2px solid #e2e8f0;background:#f8fafc;padding:4px;flex-shrink:0;">
+              <div>${q.q}</div>
             </div>
           </div>
           <div class="feedback-bar" id="s3Feedback">
@@ -825,3 +842,4 @@
   </script>
 </body>
 </html>
+

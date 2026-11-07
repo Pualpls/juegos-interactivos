@@ -509,29 +509,32 @@
     const m1Challenges = [
       {
         name: "Avioncito con broche de madera y abatelenguas",
+        img: "juguete_avioncito.png",
         slots: [
           { key: "titulo", label: "1. Título", expected: "Avioncito con broche de madera y abatelenguas." },
           { key: "materiales", label: "2. Materiales", expected: "• 1 broche de madera para ropa, 3 abatelenguas, pegamento blanco y regla." },
           { key: "procedimiento", label: "3. Procedimiento", expected: "1. Medir el centro de dos abatelenguas. 2. Pegar las alas arriba y abajo del broche. 3. Colocar la hélice trasera." },
-          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "[Esquema visual de los abatelenguas cruzados sobre el broche de madera]" }
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_avioncito.png' alt='Avioncito' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Esquema visual de los abatelenguas cruzados sobre el broche de madera.</span></div>" }
         ]
       },
       {
         name: "Barquito de papiroflexia con papel reciclado",
+        img: "juguete_barquito.png",
         slots: [
           { key: "titulo", label: "1. Título", expected: "Barquito de papel reciclado (papiroflexia)." },
           { key: "materiales", label: "2. Materiales", expected: "• 1 hoja de papel reciclado tamaño carta, regla de 30 cm y colores." },
           { key: "procedimiento", label: "3. Procedimiento", expected: "1. Doblar la hoja a la mitad. 2. Formar dos triángulos superiores. 3. Subir las pestañas y abrir el casco del barco." },
-          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "[Ilustración con flechas de los pliegues simétricos de la hoja]" }
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_barquito.png' alt='Barquito' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Ilustración con los pliegues simétricos de la hoja para formar el barquito.</span></div>" }
         ]
       },
       {
         name: "Piñata tradicional con engrudo y periódico",
+        img: "juguete_pinata.png",
         slots: [
           { key: "titulo", label: "1. Título", expected: "Piñata tradicional de estrella con engrudo." },
           { key: "materiales", label: "2. Materiales", expected: "• 1 globo grande, tiras de papel periódico, engrudo, cartoncillo, papel de China y mecate." },
           { key: "procedimiento", label: "3. Procedimiento", expected: "1. Inflar el globo. 2. Pegar tres capas de tiras con engrudo. 3. Dejar secar al sol y unir los conos decorados." },
-          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "[Dibujo de la esfera con sus conos de cartoncillo y flecos de colores]" }
+          { key: "diagrama", label: "4. Diagrama / Dibujo", expected: "<div style='display:flex;align-items:center;gap:10px;'><img src='img/juguete_pinata.png' alt='Piñata' style='width:54px;height:54px;object-fit:contain;border-radius:6px;border:1px solid #cbd5e1;background:#fff;'><span>Ilustración de la esfera con sus conos de cartoncillo y flecos de colores.</span></div>" }
         ]
       }
     ];
@@ -543,6 +546,7 @@
     const m2Questions = [
       {
         context: "Instructivo del avioncito reciclado (Verbo en infinitivo terminado en -ir):",
+        img: "instrumento_regla.png",
         sentence: "Paso 1: <span class='blank-pill' id='m2Blank'>¿ ?</span> con la regla de 30 cm la mitad exacta del abatelenguas antes de aplicar el pegamento.",
         options: ["Medir", "Medimos", "Midieron", "Midiendo"],
         answer: "Medir",
@@ -550,6 +554,7 @@
       },
       {
         context: "Instructivo de papiroflexia (Verbo en infinitivo terminado en -ar):",
+        img: "accion_doblar.png",
         sentence: "Paso 2: <span class='blank-pill' id='m2Blank'>¿ ?</span> las dos esquinas superiores hacia la línea central marcando bien el pliegue.",
         options: ["Doblar", "Doblamos", "Doblaron", "Doblado"],
         answer: "Doblar",
@@ -557,6 +562,7 @@
       },
       {
         context: "Instructivo de la piñata tradicional (Conector de orden cronológico):",
+        img: "material_globo.png",
         sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> infla el globo a buen tamaño y hazle un nudo firme; después cubre su superficie con tiras y engrudo.",
         options: ["Primero,", "Finalmente,", "Nunca,", "Ayer,"],
         answer: "Primero,",
@@ -564,6 +570,7 @@
       },
       {
         context: "Uso de la coma en lista de materiales:",
+        img: "material_periodico.png",
         sentence: "Materiales necesarios: papel periódico<span class='blank-pill' id='m2Blank'>¿ ?</span> engrudo, cartoncillo, tijeras y papel de China.",
         options: [", (coma)", "y", ". (punto)", "¿ (pregunta)"],
         answer: ", (coma)",
@@ -571,6 +578,7 @@
       },
       {
         context: "Instructivo en modo imperativo (orden directa):",
+        img: "accion_pegar.png",
         sentence: "Paso 4: <span class='blank-pill' id='m2Blank'>¿ ?</span> los conos de cartoncillo alrededor de la piñata seca y decóralos con tiras de papel.",
         options: ["Pega", "Pegaron", "Pegando", "Pegábamos"],
         answer: "Pega",
@@ -578,6 +586,7 @@
       },
       {
         context: "Conector para el último paso del instructivo:",
+        img: "juguete_pinata.png",
         sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> amarra el mecate resistente en la parte superior y cuelga la piñata para la posada.",
         options: ["Finalmente,", "Antes de,", "Primero,", "Mientras,"],
         answer: "Finalmente,",
@@ -590,6 +599,7 @@
     const m3Challenges = [
       {
         title: "Armar el avioncito con broche de madera y abatelenguas",
+        img: "juguete_avioncito.png",
         steps: [
           "Reunir 1 broche de madera para ropa, 3 abatelenguas, regla y pegamento blanco.",
           "Medir con la regla la mitad de dos abatelenguas y marcar el centro con lápiz.",
@@ -600,6 +610,7 @@
       },
       {
         title: "Elaborar una figura de papiroflexia con hoja reciclada",
+        img: "juguete_barquito.png",
         steps: [
           "Colocar una hoja de papel reciclado sobre la mesa y medir sus lados con la regla.",
           "Doblar la hoja por la mitad a lo largo y desdoblar para marcar la línea guía del centro.",
@@ -610,6 +621,7 @@
       },
       {
         title: "Construir la piñata tradicional en equipo",
+        img: "juguete_pinata.png",
         steps: [
           "Inflar el globo resistente y preparar las tiras de papel periódico de 25 cm con el engrudo.",
           "Pegar tres capas cruzadas de tiras de periódico con engrudo dejando libre la boquilla.",
@@ -648,7 +660,10 @@
         <div class="panel-box">
           <div>
             <div class="panel-header">
-              <div class="panel-title">📄 Hoja del Instructivo (${m1Idx + 1}/${m1Challenges.length})</div>
+              <div class="panel-title">
+                <img src="img/${ch.img}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;padding:2px;">
+                <span>📄 Hoja del Instructivo (${m1Idx + 1}/${m1Challenges.length})</span>
+              </div>
               <span class="badge-step">${ch.name}</span>
             </div>
             <div class="instructivo-sheet">
@@ -745,7 +760,10 @@
               <div class="panel-title">✍️ Verbos, Conectores y Comas (${m2Idx + 1}/${m2Questions.length})</div>
               <span class="badge-step">Lenguajes · 3° "A"</span>
             </div>
-            <p style="font-size:0.92rem; color:#475569; margin-bottom:0.65rem; font-weight:700;">${q.context}</p>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:0.65rem;">
+              <img src="img/${q.img}" alt="" style="width:68px;height:68px;object-fit:contain;border-radius:10px;border:2px solid #cbd5e1;background:#fff;padding:4px;flex-shrink:0;">
+              <p style="font-size:0.95rem; color:#475569; font-weight:700;">${q.context}</p>
+            </div>
             <div class="sentence-card">${q.sentence}</div>
           </div>
           <div class="feedback-bar" id="m2Feedback">
@@ -809,7 +827,10 @@
         <div class="panel-box">
           <div>
             <div class="panel-header">
-              <div class="panel-title">🔢 Pasos Ordenados (Del 1 al 5)</div>
+              <div class="panel-title">
+                <img src="img/${ch.img}" alt="" style="width:48px;height:48px;object-fit:contain;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;padding:2px;">
+                <span>🔢 Pasos Ordenados (Del 1 al 5)</span>
+              </div>
               <span class="badge-step">${ch.title}</span>
             </div>
             <div class="options-list">
@@ -885,3 +906,4 @@
   </script>
 </body>
 </html>
+

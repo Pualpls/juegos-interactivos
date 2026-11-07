@@ -360,6 +360,7 @@
     const tab1Data = [
       {
         title: "Proceso de transformación del papel y el engrudo",
+        img: "lectura2_pinata.png",
         prompt: "Al describir en orden cronológico cómo elaboramos la piñata del salón, ¿qué ocurrió después de pegar las capas húmedas de periódico y dejarlas dos días al sol?",
         options: [
           "El agua del engrudo se evaporó y el papel periódico formó un cascarón ligero, seco y resistente.",
@@ -372,6 +373,7 @@
       },
       {
         title: "Descripción cronológica de la posada en la comunidad",
+        img: "lectura3_posada.png",
         prompt: "Elige la oración que describe en orden cronológico cómo se organiza una posada tradicional entre las familias y vecinos:",
         options: [
           "Primero los vecinos acuerdan las comisiones, después adornan el patio y preparan el ponche, y finalmente conviven y parten la piñata.",
@@ -384,6 +386,7 @@
       },
       {
         title: "Proceso de armado del avioncito reciclado",
+        img: "juguete_avioncito.png",
         prompt: "¿Cuál de las siguientes descripciones explica con claridad cómo se construyó el avioncito en el aula?",
         options: [
           "Primero medimos con la regla la mitad de los abatelenguas, después los pegamos de forma simétrica sobre el broche de madera y finalmente colocamos la cola.",
@@ -400,6 +403,7 @@
     const tab2Data = [
       {
         title: "Uso de la coma en enumeraciones (Frutas del ponche)",
+        img: "posada_ponche.png",
         prompt: "¿Cuál de las siguientes oraciones utiliza correctamente las comas para enumerar los ingredientes del ponche y las mayúsculas en rojo?",
         options: [
           "<span class='red-cap'>E</span>n la olla del ponche pusimos tejocotes, guayabas, cañas, manzanas y canela.",
@@ -412,6 +416,7 @@
       },
       {
         title: "Mayúsculas en nombres propios y al inicio de oración",
+        img: "juguete_pinata.png",
         prompt: "Identifica la oración descriptiva que tiene correctamente marcadas las mayúsculas en rojo y el punto final:",
         options: [
           "<span class='red-cap'>D</span>urante diciembre, las familias de <span class='red-cap'>S</span>ayula elaboran piñatas coloridas para convivir en armonía.",
@@ -424,6 +429,7 @@
       },
       {
         title: "Comas en la lista de materiales del taller",
+        img: "material_engrudo.png",
         prompt: "Selecciona el texto donde se emplea correctamente la coma para enumerar los materiales de nuestro equipo:",
         options: [
           "<span class='red-cap'>N</span>uestro equipo utilizó papel periódico, engrudo, cartoncillo, tijeras, regla y papel de <span class='red-cap'>C</span>hina.",
@@ -440,6 +446,7 @@
     const tab3Data = [
       {
         title: "Trabajo equitativo y ayuda mutua en el taller de piñatas",
+        img: "lectura2_pinata.png",
         prompt: "En el equipo 2, dos compañeros quieren pegar todas las tiras de periódico ellos solos y no dejan participar a los demás. ¿Qué acuerdo comunitario resuelve la situación con justicia?",
         options: [
           "Repartir roles equitativos (medir tiras, aplicar engrudo, pegar capas y cuidar el orden) rotando los turnos para que todas y todos participen.",
@@ -452,6 +459,7 @@
       },
       {
         title: "Inclusión y trato digno (3 de Diciembre)",
+        img: "posada_aguinaldo.png",
         prompt: "Al organizar el juego de lanzamiento de avioncitos y la quiebra de la piñata, ¿cómo garantizamos la inclusión de todas las niñas y los niños del grupo?",
         options: [
           "Acordar reglas claras, respetar el turno y el espacio de cada compañero, y adaptar la distancia o brindar apoyo para que nadie quede excluido.",
@@ -464,6 +472,7 @@
       },
       {
         title: "Reciprocidad y cuidado del aula tras el taller",
+        img: "pares_bandera.png",
         prompt: "Al terminar de decorar las piñatas con papel de China, quedaron recortes de papel y gotas de engrudo en las mesas. ¿Qué acción demuestra responsabilidad comunitaria?",
         options: [
           "Colaborar entre todos los integrantes del grupo para recolectar los recortes reutilizables, limpiar las mesas y dejar el salón ordenado.",
@@ -496,7 +505,10 @@
               <div class="panel-title">📌 ${item.title} (${idx + 1}/${dataArr.length})</div>
               <span class="badge-info">Tablero ${tabNum}</span>
             </div>
-            <div class="story-box">${item.prompt}</div>
+            <div class="story-box" style="display:flex;align-items:center;gap:14px;">
+              <img src="img/${item.img}" alt="" style="width:92px;height:92px;object-fit:contain;border-radius:10px;border:2px solid #cbd5e1;background:#f8fafc;padding:4px;flex-shrink:0;">
+              <div>${item.prompt}</div>
+            </div>
           </div>
           <div class="feedback-bar" id="boardFeedback">
             <span>Lee con atención las cuatro opciones de la derecha y toca la correcta.</span>
@@ -551,3 +563,4 @@
   </script>
 </body>
 </html>
+
