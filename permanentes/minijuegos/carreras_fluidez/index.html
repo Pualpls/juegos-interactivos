@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Pista de Carreras de Fluidez · Minijuego de Comprensión Lectora</title>
+  <title>Carrera de Lectura · 3° "A"</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
@@ -210,7 +210,7 @@
       left: 50px;
       width: 95px;
       height: 48px;
-      transition: left 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: left 0.95s linear;
       z-index: 10;
       filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
     }
@@ -222,6 +222,7 @@
     }
 
     .car-sprite.nitro-boost {
+      transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
       animation: nitroShake 0.4s ease;
     }
 
@@ -498,8 +499,8 @@
     <div class="brand-wrap">
       <span style="font-size: 1.8rem; margin-right: 0.25rem;">🏎️</span>
       <div>
-        <h1>Pista de Carreras de Fluidez</h1>
-        <p class="subtitle">Circuito de Lectura Comprensiva · 3° Primaria</p>
+        <h1>Carrera de Lectura</h1>
+        <p class="subtitle">Lectura y Comprensión · 3° "A"</p>
       </div>
     </div>
 
@@ -516,7 +517,11 @@
         <span>⭐ Puntos:</span>
         <span id="scoreVal" style="color: #34d399;">0</span>
       </div>
+      <button id="musicToggleBtn" onclick="toggleMusic()" class="stat-badge" style="cursor:pointer; background:rgba(239,68,68,0.25); border-color:#ef4444; color:#fff;">
+        🎵 Música: ON
+      </button>
     </div>
+    <audio id="bgMusic" src="recursos/musica_carreras.mp3" loop preload="auto"></audio>
   </header>
 
   <!-- MAIN -->
@@ -885,6 +890,25 @@
       }
     ];
 
+    let musicEnabled = true;
+
+    function toggleMusic() {
+      const audio = document.getElementById('bgMusic');
+      const btn = document.getElementById('musicToggleBtn');
+      musicEnabled = !musicEnabled;
+      if (musicEnabled) {
+        audio.play().catch(() => {});
+        btn.textContent = '🎵 Música: ON';
+        btn.style.background = 'rgba(239, 68, 68, 0.25)';
+        btn.style.borderColor = '#ef4444';
+      } else {
+        audio.pause();
+        btn.textContent = '🔇 Música: OFF';
+        btn.style.background = 'rgba(100, 116, 139, 0.25)';
+        btn.style.borderColor = '#64748b';
+      }
+    }
+
     let activeChallenges = [];
     let currentChallengeIdx = 0;
     let score = 0;
@@ -980,18 +1004,32 @@
       clockInterval = setInterval(updateClock, 1000);
 
       // RIVALES AVANZAN DE FORMA MUCHO MÁS LENTA: cada 3.5 segundos avanzan ~1.1%
-      if (raceInterval) clearInterval(raceInterval);
-      raceInterval = setInterval(tickRivals, 3500);
+      // Avance continuo gestionado en updateClock cada 1 segundo
 
       loadBestRecordDisplay();
+      if (musicEnabled) {
+        const audio = document.getElementById('bgMusic');
+        audio.currentTime = 0;
+        audio.volume = 0.65;
+        audio.play().catch(() => {});
+      }
     }
 
     function updateClock() {
-      if (!raceActive) return;
+      if (!raceActive || raceFinished) return;
       totalSeconds++;
       const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
       const s = String(totalSeconds % 60).padStart(2, '0');
       document.getElementById('raceTimer').textContent = `${m}:${s}`;
+
+      // Avance constante de todos los carritos en tics continuos de 1 segundo
+      playerPos += 0.55;
+      rival1Pos += 0.48 + Math.random() * 0.16;
+      rival2Pos += 0.44 + Math.random() * 0.20;
+
+      updateCarPositions();
+      updatePositionBadge();
+      checkFinishLine();
     }
 
     // AVANCE TRANQUILO DE RIVALES
@@ -1135,6 +1173,8 @@
     function finishRace() {
       raceActive = false;
       raceFinished = true;
+      const audio = document.getElementById('bgMusic');
+      if (audio) audio.pause();
       clearInterval(raceInterval);
       clearInterval(clockInterval);
 
