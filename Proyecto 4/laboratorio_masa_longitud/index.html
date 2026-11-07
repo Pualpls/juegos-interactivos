@@ -198,7 +198,7 @@
     }
 
     /* =========================================================
-       ESTACIÓN 1: REGLA HASTA 30 CM (SIN CAJA AZUL, SIN TEXTO MADERA)
+       ESTACIÓN 1: REGLA HASTA 30 CM PEGADA AL BANCO CON RAYAS HACIA ABAJO
        ========================================================= */
     .ruler-container {
       background: #f8fafc;
@@ -215,121 +215,121 @@
     .ruler-bench {
       position: relative;
       width: 870px;
-      height: 220px;
       background: #ffffff;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #cbd5e1;
       border-radius: 0.85rem;
-      padding: 10px;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+      padding: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Regla Física de 30 cm */
+    /* Regla Física de 30 cm pegada directamente al cuadro de objetos */
     .physical-ruler {
       position: relative;
       width: 840px;
-      height: 64px;
-      background: linear-gradient(to bottom, #fef08a 0%, #fde047 100%);
+      height: 70px;
+      background: linear-gradient(to bottom, #fef9c3 0%, #fde047 100%);
       border: 2px solid #ca8a04;
-      border-radius: 6px;
+      border-bottom: 2px solid #854d0e;
+      border-radius: 8px 8px 0 0;
       display: flex;
-      align-items: flex-start;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      align-items: flex-end;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       margin: 0 auto;
+      z-index: 2;
     }
 
-    /* Margen físico inicial (deadzone sin texto) */
+    /* Margen físico inicial (deadzone de madera de 30px) */
     .ruler-deadzone {
+      position: absolute;
+      left: 0;
+      bottom: 0;
       width: 30px;
       height: 100%;
       border-right: 2px solid #ca8a04;
-      background: rgba(202, 138, 4, 0.12);
-    }
-
-    .zero-alignment-guide {
-      position: absolute;
-      top: 0;
-      left: 30px;
-      width: 2px;
-      height: 100%;
-      background: #dc2626;
-      z-index: 10;
+      background: rgba(202, 138, 4, 0.15);
     }
 
     .ruler-scale {
-      position: relative;
+      position: absolute;
+      left: 30px;
+      bottom: 0;
       width: 780px;
       height: 100%;
       display: flex;
     }
 
+    /* Rayas de centímetros orientadas HACIA ABAJO tocando el borde inferior */
     .cm-tick {
       position: absolute;
-      top: 0;
-      height: 24px;
+      bottom: 0;
+      height: 26px;
       border-left: 2px solid #713f12;
-      font-size: 0.72rem;
+      pointer-events: none;
+    }
+
+    .cm-tick .tick-num {
+      position: absolute;
+      bottom: 28px;
+      left: -10px;
+      width: 20px;
+      text-align: center;
+      font-size: 0.76rem;
       font-weight: 800;
       color: #713f12;
-      padding-left: 2px;
-      padding-top: 26px;
+      user-select: none;
     }
 
+    /* Rayas de medio centímetro */
     .cm-tick.half {
-      height: 14px;
+      height: 16px;
       border-left: 1.5px solid #a16207;
-      padding-top: 0;
     }
 
-    /* Zona de colocación y arrastre */
+    /* Rayas milimétricas finas */
+    .cm-tick.milli {
+      height: 9px;
+      border-left: 1px solid rgba(161, 98, 7, 0.55);
+    }
+
+    /* Zona de colocación y arrastre pegada directamente debajo de la regla */
     .object-placement-zone {
       position: relative;
       width: 840px;
-      height: 120px;
+      height: 105px;
       margin: 0 auto;
-      background: #f1f5f9;
-      border: 2px dashed #94a3b8;
-      border-radius: 8px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
     }
 
-    .vertical-zero-laser {
+    .deadzone-guide-slot {
       position: absolute;
       top: 0;
-      left: 30px;
-      width: 2px;
+      left: 0;
+      width: 30px;
       height: 100%;
-      background: rgba(220, 38, 38, 0.5);
-      border-left: 2px dashed #dc2626;
+      background: rgba(203, 213, 225, 0.3);
+      border-right: 1px dashed #cbd5e1;
       pointer-events: none;
-      z-index: 5;
-    }
-
-    .zero-target-badge {
-      position: absolute;
-      top: 4px;
-      left: 34px;
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: #dc2626;
-      background: #fee2e2;
-      padding: 1px 6px;
-      border-radius: 4px;
-      pointer-events: none;
-      z-index: 6;
     }
 
     .draggable-object {
       position: absolute;
-      top: 25px;
-      height: 70px;
+      top: 0;
+      height: 75px;
       cursor: grab;
       touch-action: none;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: flex-start;
       padding: 0;
       background: transparent !important;
@@ -345,9 +345,10 @@
     .draggable-object img {
       width: 100%;
       height: 100%;
-      object-fit: fill;
+      object-fit: contain;
+      object-position: left top;
       pointer-events: none;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
     }
 
     .ruler-controls-row {
@@ -1020,22 +1021,27 @@
 
         <div class="ruler-container">
           <div class="ruler-bench" id="rulerBench">
-            <!-- Regla Física Graduada hasta 30 cm -->
+            <!-- Regla Física Graduada hasta 30 cm con rayas hacia abajo pegada al cuadro -->
             <div class="physical-ruler">
               <div class="ruler-deadzone"></div>
-              <div class="zero-alignment-guide" title="Línea del 0 cm"></div>
               <div class="ruler-scale">
-                ${Array.from({length: 31}, (_, i) => `
-                  <div class="cm-tick" style="left: ${i * CM_TO_PX}px;">${i}</div>
-                  ${i < 30 ? `<div class="cm-tick half" style="left: ${i * CM_TO_PX + CM_TO_PX/2}px;"></div>` : ''}
-                `).join('')}
+                ${Array.from({length: 31}, (_, i) => {
+                  let html = `<div class="cm-tick" style="left: ${i * CM_TO_PX}px;"><span class="tick-num">${i}</span></div>`;
+                  if (i < 30) {
+                    for (let m = 1; m < 10; m++) {
+                      const mPos = i * CM_TO_PX + (m * CM_TO_PX / 10);
+                      const isHalf = (m === 5);
+                      html += `<div class="cm-tick ${isHalf ? 'half' : 'milli'}" style="left: ${mPos}px;"></div>`;
+                    }
+                  }
+                  return html;
+                }).join('')}
               </div>
             </div>
 
-            <!-- Zona de Colocación y Arrastre del Objeto -->
+            <!-- Zona de Colocación y Arrastre del Objeto Pegada Directamente a la Regla -->
             <div class="object-placement-zone" id="placementZone">
-              <div class="vertical-zero-laser"></div>
-              <div class="zero-target-badge">Línea del 0 cm</div>
+              <div class="deadzone-guide-slot"></div>
               <div class="draggable-object" id="dragObj" style="left: ${s1ObjectOffsetPx}px; width: ${objWidthPx}px;" title="Arrastra para colocar al 0 cm">
                 <img src="img/${item.img}" alt="${item.name}">
               </div>
@@ -1044,11 +1050,10 @@
 
           <div class="ruler-controls-row">
             <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
-              <button class="btn-action" style="background:#16a34a;" onclick="snapToZero()">🎯 Alinear al 0 cm</button>
-              <button class="btn-action" style="background:#64748b;" onclick="resetObjectPos()">↺ Al inicio</button>
+              <button class="btn-action" style="background:#64748b;" onclick="resetObjectPos()">↺ Reiniciar posición</button>
             </div>
-            <div id="alignmentStatus" style="font-size:0.88rem; font-weight:800; color:#b45309;">
-              ⚠️ El objeto no está alineado con el 0 cm. Arrástralo hasta la raya roja.
+            <div id="alignmentStatus" style="font-size:0.88rem; font-weight:800; color:#64748b;">
+              👉 <strong>Arrastra el objeto</strong> con el dedo o ratón hasta que su punta izquierda coincida con la raya del <strong>0 cm</strong> de la regla.
             </div>
           </div>
 
@@ -1065,7 +1070,7 @@
           </div>
 
           <div class="feedback-bar info" id="s1Feedback" style="width:100%; max-width:870px;">
-            <span>Coloca el extremo inicial del objeto exactamente en la raya del <strong>0 cm</strong> y observa hasta qué número llega.</span>
+            <span>Coloca el extremo inicial del objeto exactamente en la raya del <strong>0 cm</strong> y observa con las rayitas hasta qué número llega.</span>
             <button class="btn-action" id="s1NextBtn" style="display:none; background:#7c3aed;" onclick="nextS1()">Siguiente Objeto ➔</button>
           </div>
         </div>
@@ -1109,17 +1114,13 @@
     function onPointerUp(e) {
       if (!isDragging) return;
       isDragging = false;
-      // Si está a menos de 12 px del 0 cm, engancha automáticamente
-      if (Math.abs(s1ObjectOffsetPx - DEADZONE_PX) < 14) {
-        snapToZero();
+      // Enganche sutil únicamente si el alumno lo coloca casi exacto (menos de 5 px)
+      if (Math.abs(s1ObjectOffsetPx - DEADZONE_PX) <= 4) {
+        s1ObjectOffsetPx = DEADZONE_PX;
+        const dragObj = document.getElementById('dragObj');
+        if (dragObj) dragObj.style.left = `${DEADZONE_PX}px`;
+        playTone(600, 0.08);
       }
-    }
-
-    function snapToZero() {
-      s1ObjectOffsetPx = DEADZONE_PX;
-      const dragObj = document.getElementById('dragObj');
-      if (dragObj) dragObj.style.left = `${DEADZONE_PX}px`;
-      playTone(600, 0.08);
       checkAlignment();
     }
 
@@ -1137,13 +1138,10 @@
       const diff = Math.abs(s1ObjectOffsetPx - DEADZONE_PX);
       if (diff <= 2) {
         status.style.color = "#16a34a";
-        status.textContent = "✅ ¡Alineado correctamente al 0 cm! Ahora lee el número donde termina el objeto.";
-      } else if (s1ObjectOffsetPx < DEADZONE_PX) {
-        status.style.color = "#b45309";
-        status.textContent = `⚠️ Empieza antes del 0 cm (en el margen). Muévelo ${DEADZONE_PX - Math.round(s1ObjectOffsetPx)} px a la derecha.`;
+        status.innerHTML = "✅ <strong>¡Alineado en el 0 cm!</strong> Observa con atención el número de la raya donde termina el objeto.";
       } else {
-        status.style.color = "#b45309";
-        status.textContent = `⚠️ Empieza después del 0 cm. Muévelo ${Math.round(s1ObjectOffsetPx) - DEADZONE_PX} px a la izquierda.`;
+        status.style.color = "#64748b";
+        status.innerHTML = "👉 <strong>Arrastra el objeto</strong> con el dedo o ratón hasta que su punta izquierda coincida con la raya del <strong>0 cm</strong> de la regla.";
       }
     }
 
@@ -1186,13 +1184,22 @@
        ESTACIÓN 2: EQUILIBRAR BALANZA (ALTURA 360PX, CERO DESBORDAMIENTO)
        ========================================================= */
     const baseS2Objects = [
-      { name: "Bolsa de mandarinas", img: "pares_fruta.png", display: "1 kilogramo (1,000 g)", targetGrams: 1000, tip: "1 kg equivale a 1,000 gramos." },
-      { name: "Bolsa de tejocotes", img: "pares_fruta.png", display: "500 gramos (medio kilo)", targetGrams: 500, tip: "500 gramos es la mitad de 1 kilogramo." },
-      { name: "Bolsa de colaciones", img: "posada_aguinaldo.png", display: "250 gramos (un cuarto de kilo)", targetGrams: 250, tip: "250 gramos es la cuarta parte de 1 kilogramo." },
-      { name: "Caja de dulces", img: "juguete_pinata.png", display: "750 gramos (tres cuartos)", targetGrams: 750, tip: "750 g = 500 g + 250 g." },
-      { name: "Mecate enrollado", img: "pares_nudo.png", display: "350 gramos", targetGrams: 350, tip: "350 g = 250 g + 100 g." },
-      { name: "Frasco de engrudo", img: "material_engrudo.png", display: "600 gramos", targetGrams: 600, tip: "600 g = 500 g + 100 g." },
-      { name: "Paquete de barquitos", img: "pares_nave.png", display: "150 gramos", targetGrams: 150, tip: "150 g = 100 g + 50 g." }
+      { img: "pares_fruta.png", weightLabel: "1 kg", targetGrams: 1000 },
+      { img: "pares_fruta.png", weightLabel: "500 g", targetGrams: 500 },
+      { img: "posada_aguinaldo.png", weightLabel: "250 g", targetGrams: 250 },
+      { img: "juguete_pinata.png", weightLabel: "750 g", targetGrams: 750 },
+      { img: "pares_nudo.png", weightLabel: "350 g", targetGrams: 350 },
+      { img: "material_engrudo.png", weightLabel: "600 g", targetGrams: 600 },
+      { img: "pares_nave.png", weightLabel: "150 g", targetGrams: 150 },
+      { img: "material_periodico.png", weightLabel: "800 g", targetGrams: 800 },
+      { img: "juguete_avioncito.png", weightLabel: "200 g", targetGrams: 200 },
+      { img: "pares_vaso.png", weightLabel: "450 g", targetGrams: 450 },
+      { img: "posada_aguinaldo.png", weightLabel: "300 g", targetGrams: 300 },
+      { img: "posada_ponche.png", weightLabel: "1.5 kg", targetGrams: 1500 },
+      { img: "objeto_borrador.png", weightLabel: "100 g", targetGrams: 100 },
+      { img: "material_globo.png", weightLabel: "50 g", targetGrams: 50 },
+      { img: "objeto_abatelenguas.png", weightLabel: "400 g", targetGrams: 400 },
+      { img: "material_periodico.png", weightLabel: "2 kg", targetGrams: 2000 }
     ];
 
     let s2Objects = shuffleArray(baseS2Objects);
@@ -1234,9 +1241,8 @@
               <div class="scale-pan-assembly left" id="leftAssembly">
                 <div class="scale-chains"></div>
                 <div class="scale-plate" id="leftPlate">
-                  <img src="img/${obj.img}" alt="" style="width:58px;height:58px;object-fit:contain;background:#fff;border-radius:8px;padding:3px;border:1px solid #cbd5e1;">
-                  <span style="font-size:0.75rem;font-weight:800;color:#0f172a;margin-top:2px;text-align:center;">${obj.name.split(' ')[0]}</span>
-                  <span style="font-size:0.7rem;font-weight:900;color:#0284c7;">Masa: ${obj.display}</span>
+                  <img src="img/${obj.img}" alt="" style="width:62px;height:62px;object-fit:contain;background:#fff;border-radius:10px;padding:4px;border:1.5px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,0.06);">
+                  <span style="font-size:0.88rem;font-weight:900;color:#0f172a;margin-top:5px;background:#f8fafc;padding:3px 10px;border-radius:6px;border:1px solid #cbd5e1;">${obj.weightLabel}</span>
                 </div>
               </div>
 
@@ -1273,7 +1279,7 @@
 
           <!-- Feedback de Equilibrio -->
           <div class="feedback-bar warn" id="s2Feedback" style="width:100%; max-width:720px;">
-            <span>Coloca pesas de latón en el platillo derecho hasta igualar los <strong>${obj.targetGrams} g</strong>.</span>
+            <span>Coloca pesas de latón en el platillo derecho hasta igualar los <strong>${obj.weightLabel}</strong> (${obj.targetGrams} g).</span>
             <button class="btn-action" id="s2NextBtn" style="display:none; background:#7c3aed;" onclick="nextS2()">Siguiente Objeto ➔</button>
           </div>
         </div>
@@ -1348,11 +1354,12 @@
       const fb = document.getElementById('s2Feedback');
       const nextBtn = document.getElementById('s2NextBtn');
 
+      const curObj = s2Objects[s2Idx];
       if (diff === 0) {
         if (leftPlate) leftPlate.classList.add('balanced');
         if (rightPlate) rightPlate.classList.add('balanced');
         fb.className = "feedback-bar ok";
-        fb.querySelector('span').textContent = `✨ ¡Balanza en perfecto equilibrio! Has igualado exactamente la masa: ${target} g. ${s2Objects[s2Idx].tip} (+100 pts)`;
+        fb.querySelector('span').textContent = `✨ ¡Balanza en perfecto equilibrio! Lograste igualar exactamente los ${curObj.weightLabel} (${target} g). (+100 pts)`;
         if (nextBtn) nextBtn.style.display = 'inline-flex';
         score += 100;
         document.getElementById('scoreVal').textContent = score;
@@ -1364,7 +1371,7 @@
 
         if (diff > 0) {
           fb.className = "feedback-bar warn";
-          fb.querySelector('span').textContent = `La balanza está inclinada a la izquierda. Faltan ${diff} g para equilibrar el objeto.`;
+          fb.querySelector('span').textContent = `La balanza está inclinada a la izquierda. Faltan ${diff} g para equilibrar los ${curObj.weightLabel}.`;
         } else {
           fb.className = "feedback-bar err";
           fb.querySelector('span').textContent = `¡Te pasaste de peso! El platillo derecho tiene ${-diff} g más. Toca una pesa para quitarla.`;
@@ -1564,14 +1571,30 @@
        ESTACIÓN 4: ¿CM, M O KM? (ALEATORIZACIÓN DE SITUACIONES Y BOTONES)
        ========================================================= */
     const baseS4Challenges = [
-      { target: "Largo de un lápiz de madera", correct: "cm", context: "Objeto pequeño escolar", why: "Un lápiz mide unos 14 a 18 cm; usar metros o kilómetros sería absurdo." },
-      { target: "Largo de la cancha de fútbol de la escuela", correct: "m", context: "Espacio escolar amplio", why: "Una cancha mide unos 50 metros; en centímetros el número sería enorme." },
-      { target: "Distancia en carretera entre Sayula y Guadalajara", correct: "km", context: "Distancia geográfica entre ciudades", why: "La distancia entre ciudades se mide en kilómetros (km); son más de 100 km." },
-      { target: "Grosor de una goma de borrar", correct: "cm", context: "Útil escolar pequeño", why: "El grosor de una goma se mide en centímetros (o milímetros)." },
-      { target: "Altura de la puerta del salón de clases", correct: "m", context: "Construcción del aula", why: "Una puerta mide aproximadamente 2 metros de altura." },
-      { target: "Distancia que recorre un camión de carga por la autopista", correct: "km", context: "Trayecto de transporte intermunicipal", why: "Los viajes intermunicipales en carretera se miden en kilómetros." },
-      { target: "Largo del abatelenguas para el avioncito de juguete", correct: "cm", context: "Pieza de taller manual", why: "Un abatelenguas mide unos 15 centímetros de largo." },
-      { target: "Largo de la barda perimetral de la primaria", correct: "m", context: "Perímetro del terreno escolar", why: "Las bardas escolares se miden en metros (por ejemplo, 60 m)." }
+      { target: "Largo de un lápiz escolar con borrador", correct: "cm", context: "Útil escolar", why: "Un lápiz mide entre 14 y 18 cm; expresarlo en metros o kilómetros no es práctico." },
+      { target: "Largo de la cancha de fútbol o basquetbol", correct: "m", context: "Espacio deportivo escolar", why: "Una cancha mide decenas de metros (por ejemplo 28 m o 50 m); en centímetros el número sería gigantesco." },
+      { target: "Distancia en carretera entre Sayula y Guadalajara", correct: "km", context: "Trayecto geográfico interurbano", why: "Las distancias entre municipios o ciudades se miden en kilómetros (son más de 100 km)." },
+      { target: "Grosor de una goma de borrar", correct: "cm", context: "Objeto pequeño", why: "El grosor de una goma es muy pequeño y se mide en centímetros." },
+      { target: "Altura de la puerta del salón de clases", correct: "m", context: "Construcción del aula", why: "Una puerta estándar mide aproximadamente 2 metros de altura." },
+      { target: "Distancia que recorre un camión de carga en la autopista", correct: "km", context: "Viaje de transporte", why: "Los viajes intermunicipales en carretera abarcan muchos kilómetros." },
+      { target: "Largo de un abatelenguas de madera", correct: "cm", context: "Material de manualidades", why: "Un abatelenguas mide unos 15 centímetros de largo." },
+      { target: "Largo de la barda perimetral de la escuela", correct: "m", context: "Construcción escolar", why: "El perímetro de una escuela se mide en metros (por ejemplo, 60 m)." },
+      { target: "Longitud de un clip metálico", correct: "cm", context: "Objeto de papelería", why: "Un clip mide unos 3 a 5 centímetros de longitud." },
+      { target: "Ancho del pizarrón blanco del aula", correct: "m", context: "Mobiliario del salón", why: "Un pizarrón escolar suele medir entre 2 y 4 metros de ancho." },
+      { target: "Trayecto que recorre un tren de pasajeros", correct: "km", context: "Transporte ferroviario", why: "Las vías férreas conectan regiones separadas por cientos de kilómetros." },
+      { target: "Largo de una crayola azul", correct: "cm", context: "Material de dibujo", why: "Una crayola mide unos 8 centímetros de largo." },
+      { target: "Largo de un autobús escolar de pasajeros", correct: "m", context: "Vehículo de transporte", why: "Un autobús mide aproximadamente 10 a 12 metros de largo." },
+      { target: "Distancia que vuela un avión entre dos estados", correct: "km", context: "Vuelo aéreo", why: "Los vuelos aéreos cubren distancias de cientos o miles de kilómetros." },
+      { target: "Largo de una cuchara sopera", correct: "cm", context: "Utensilio de cocina", why: "Una cuchara mide entre 15 y 20 centímetros." },
+      { target: "Altura de un árbol frondoso del patio escolar", correct: "m", context: "Naturaleza en la escuela", why: "Los árboles del patio miden entre 4 y 8 metros de altura." },
+      { target: "Longitud de una carretera federal", correct: "km", context: "Infraestructura vial", why: "Las carreteras federales se miden en kilómetros a lo largo del país." },
+      { target: "Ancho de un sacapuntas escolar", correct: "cm", context: "Útil escolar pequeño", why: "Un sacapuntas de bolsillo mide aproximadamente 3 a 4 cm." },
+      { target: "Largo del mecate para colgar una piñata tradicional", correct: "m", context: "Festejo tradicional", why: "Para cruzar el patio y colgar una piñata se usan de 5 a 10 metros de mecate." },
+      { target: "Recorrido total de una carrera atlética de maratón", correct: "km", context: "Competencia deportiva", why: "Una carrera de maratón cubre una distancia oficial de 42 kilómetros." },
+      { target: "Largo de unas tijeras escolares de punta redonda", correct: "cm", context: "Herramienta escolar", why: "Unas tijeras escolares miden unos 12 o 13 cm." },
+      { target: "Profundidad de una alberca semiolímpica", correct: "m", context: "Instalación deportiva", why: "La profundidad de una alberca se mide en metros (por ejemplo, 2 metros)." },
+      { target: "Distancia desde el municipio hasta la costa del mar", correct: "km", context: "Geografía regional", why: "Los trayectos hacia playas o costas se expresan en kilómetros." },
+      { target: "Largo de la pantalla de un teléfono celular", correct: "cm", context: "Dispositivo electrónico", why: "La pantalla de un teléfono inteligente mide entre 14 y 16 centímetros." }
     ];
 
     let s4Challenges = shuffleArray(baseS4Challenges);
