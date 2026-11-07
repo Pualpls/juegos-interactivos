@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Carrera de Lectura · 3° "A"</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -892,6 +895,30 @@
 
     let musicEnabled = true;
 
+    function tryPlayMusic() {
+      if (!musicEnabled) return;
+      const audio = document.getElementById('bgMusic');
+      if (audio && audio.paused) {
+        audio.volume = 0.65;
+        audio.play().catch(e => {});
+      }
+    }
+
+    // Desbloqueo de audio en el primer clic o toque de la pantalla (evita bloqueo de autoplay)
+    window.addEventListener('pointerdown', tryPlayMusic, { once: true });
+    window.addEventListener('click', tryPlayMusic, { once: true });
+    window.addEventListener('keydown', tryPlayMusic, { once: true });
+
+    // Detener audio inmediatamente al salir de la página o cambiar de pestaña
+    window.addEventListener('pagehide', () => {
+      const audio = document.getElementById('bgMusic');
+      if (audio) audio.pause();
+    });
+    window.addEventListener('beforeunload', () => {
+      const audio = document.getElementById('bgMusic');
+      if (audio) audio.pause();
+    });
+
     function toggleMusic() {
       const audio = document.getElementById('bgMusic');
       const btn = document.getElementById('musicToggleBtn');
@@ -1022,10 +1049,10 @@
       const s = String(totalSeconds % 60).padStart(2, '0');
       document.getElementById('raceTimer').textContent = `${m}:${s}`;
 
-      // Avance constante de todos los carritos en tics continuos de 1 segundo
-      playerPos += 0.55;
-      rival1Pos += 0.48 + Math.random() * 0.16;
-      rival2Pos += 0.44 + Math.random() * 0.20;
+      // Rivales avanzan rápido de manera constante: si el jugador no contesta, los rivales ganan
+      playerPos += 0.32; // Avance base lento del jugador
+      rival1Pos += 0.78 + Math.random() * 0.22; // Rival 1 avanza ~0.89% por seg
+      rival2Pos += 0.72 + Math.random() * 0.24; // Rival 2 avanza ~0.84% por seg
 
       updateCarPositions();
       updatePositionBadge();
@@ -1120,7 +1147,7 @@
         // ACIERTO: IMPULSO POSITIVO Y TURBO
         score += 120;
         raceSpeed = Math.min(raceSpeed + 8, 75);
-        playerPos += 11.2; // ~8 aciertos cruzan la meta completa
+        playerPos += 11.8; // Nitro potente: solo con aciertos superamos a los rivales
 
         playEngineRev();
         document.getElementById('carPlayer').classList.add('nitro-boost');
@@ -1139,9 +1166,9 @@
           }, 600);
         }
       } else {
-        // ERROR: FRENADA LEVE SIN PRECIPITACIÓN
-        raceSpeed = Math.max(raceSpeed - 6, 35);
-        playerPos = Math.max(playerPos - 1.5, 2);
+        // ERROR: FRENADA CLARA (Frena el auto y pierde distancia ante los rivales)
+        raceSpeed = Math.max(raceSpeed - 18, 20);
+        playerPos = Math.max(2, playerPos - 4.5); // Frena y retrocede 4.5%
 
         playTone(200, 'sawtooth', 0.25);
         btnEl.classList.add('wrong-slow');
