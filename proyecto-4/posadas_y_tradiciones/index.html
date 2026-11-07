@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Posadas y Tradiciones: Procesos y Acuerdos · 3° "A"</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #ffffff;
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --emerald: #16a34a;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --text-main: #0f172a;
+      --border: #cbd5e1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Lexend', 'Fredoka', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      color: #fff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.9rem;
+      background: rgba(124, 58, 237, 0.25);
+      border: 2px solid #a78bfa;
+      border-radius: 0.75rem;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .student-pill {
+      background: #1e293b;
+      border: 2px solid #c084fc;
+      color: #f3e8ff;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .score-pill {
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.75rem 1rem 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      padding: 0.55rem 1.2rem;
+      border-radius: 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #d8b4fe;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.75rem 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .workspace {
+      background: var(--bg-panel);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.35rem;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      border: 3px solid #e2e8f0;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px dashed #cbd5e1;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .badge-info {
+      background: #f3e8ff;
+      color: #6d28d9;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    .story-box {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.9rem;
+      padding: 1.1rem;
+      font-size: 1.06rem;
+      line-height: 1.6;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+    }
+
+    .red-cap {
+      color: #dc2626;
+      font-weight: 900;
+    }
+
+    .choice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .choice-btn {
+      background: #ffffff;
+      border: 2px solid #94a3b8;
+      border-left: 6px solid var(--primary);
+      border-radius: 0.85rem;
+      padding: 0.8rem 0.95rem;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #1e293b;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .choice-btn:hover {
+      background: #faf5ff;
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .choice-btn.correct {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #14532d;
+    }
+
+    .choice-btn.wrong {
+      background: #ffe4e6;
+      border-color: #e11d48;
+      color: #881337;
+    }
+
+    .feedback-bar {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.8rem;
+      font-weight: 700;
+      font-size: 0.94rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: #f3e8ff;
+      color: #4c1d95;
+      border: 2px solid #d8b4fe;
+    }
+
+    .feedback-bar.ok {
+      background: #dcfce7;
+      color: #14532d;
+      border-color: #4ade80;
+    }
+
+    .feedback-bar.err {
+      background: #ffe4e6;
+      color: #881337;
+      border-color: #fda4af;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.55rem 1.15rem;
+      border-radius: 0.65rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🪅</div>
+      <div class="brand-text">
+        <h1>Posadas y Tradiciones: Procesos y Acuerdos</h1>
+        <p>Proyecto 4 · Lenguajes, Ética y De lo Humano · 3° "A"</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <div class="student-pill" onclick="nextStudent()">
+        <span>👧👦 Turno:</span>
+        <span id="currentStudent">Naomi</span>
+        <span>🔄</span>
+      </div>
+      <div class="score-pill">Aciertos: <span id="scoreVal">0</span></div>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" id="tab1" onclick="setTab(1)">📝 1. Descripción Cronológica de Procesos</button>
+    <button class="tab-btn" id="tab2" onclick="setTab(2)">🔴 2. Comas y Mayúsculas en Rojo</button>
+    <button class="tab-btn" id="tab3" onclick="setTab(3)">🤝 3. Colaboración, Ayuda Mutua e Inclusión</button>
+  </nav>
+
+  <main>
+    <div class="workspace" id="boardArea"></div>
+  </main>
+
+  <script>
+    window.addEventListener('contextmenu', e => e.preventDefault(), true);
+    document.addEventListener('contextmenu', e => e.preventDefault(), true);
+
+    const students = [
+      "Naomi", "Brianna", "Dalary", "Estrella", "Yamileth",
+      "Keyla", "Cristal", "Aurora", "Jarol", "Daniel",
+      "José Manuel", "Alexander", "Jesús", "Adriel", "Gael"
+    ];
+    let studentIdx = 0;
+    let score = 0;
+
+    function playTone(freq = 540, duration = 0.14, type = 'sine') {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function nextStudent() {
+      studentIdx = (studentIdx + 1) % students.length;
+      document.getElementById('currentStudent').textContent = students[studentIdx];
+      playTone(620, 0.08);
+    }
+
+    function addScore(pts) {
+      score += pts;
+      document.getElementById('scoreVal').textContent = score;
+    }
+
+    const tab1Data = [
+      {
+        title: "Proceso de transformación del papel y el engrudo",
+        prompt: "Al describir en orden cronológico cómo elaboramos la piñata del salón, ¿qué ocurrió después de pegar las capas húmedas de periódico y dejarlas dos días al sol?",
+        options: [
+          "El agua del engrudo se evaporó y el papel periódico formó un cascarón ligero, seco y resistente.",
+          "El globo se llenó de agua pesada y las tiras se deshicieron por completo.",
+          "Empezamos a cortar las hojas de periódico antes de inflar el globo.",
+          "Repartimos los aguinaldos antes de pegar la primera capa de papel."
+        ],
+        answer: 0,
+        explain: "Al secarse el agua del engrudo, las fibras de papel quedan unidas formando una estructura rígida y más ligera."
+      },
+      {
+        title: "Descripción cronológica de la posada en la comunidad",
+        prompt: "Elige la oración que describe en orden cronológico cómo se organiza una posada tradicional entre las familias y vecinos:",
+        options: [
+          "Primero los vecinos acuerdan las comisiones, después adornan el patio y preparan el ponche, y finalmente conviven y parten la piñata.",
+          "Finalmente parten la piñata, primero compran la fruta en el mercado y antes limpian el patio.",
+          "Después recogen la basura, primero cantan para pedir posada y nunca se ponen de acuerdo.",
+          "Parten la piñata sin colgarla y luego buscan el mecate."
+        ],
+        answer: 0,
+        explain: "Una descripción cronológica respeta el orden real de los hechos usando conectores como primero, después y finalmente."
+      },
+      {
+        title: "Proceso de armado del avioncito reciclado",
+        prompt: "¿Cuál de las siguientes descripciones explica con claridad cómo se construyó el avioncito en el aula?",
+        options: [
+          "Primero medimos con la regla la mitad de los abatelenguas, después los pegamos de forma simétrica sobre el broche de madera y finalmente colocamos la cola.",
+          "Pegamos todo sin medir y después buscamos el broche de madera en la mochila.",
+          "Primero pintamos el avión terminado y antes cortamos el árbol de madera.",
+          "Usamos engrudo hirviendo sobre una hoja de periódico sin broche."
+        ],
+        answer: 0,
+        explain: "Describe cada etapa en el orden exacto en que se realizó en el taller."
+      }
+    ];
+    let t1Idx = 0;
+
+    const tab2Data = [
+      {
+        title: "Uso de la coma en enumeraciones (Frutas del ponche)",
+        prompt: "¿Cuál de las siguientes oraciones utiliza correctamente las comas para enumerar los ingredientes del ponche y las mayúsculas en rojo?",
+        options: [
+          "<span class='red-cap'>E</span>n la olla del ponche pusimos tejocotes, guayabas, cañas, manzanas y canela.",
+          "en la olla del ponche pusimos tejocotes y guayabas y cañas y manzanas y canela.",
+          "<span class='red-cap'>E</span>n la olla, del ponche, pusimos tejocotes guayabas cañas y canela",
+          "En la olla del ponche pusimos, tejocotes, y, guayabas, y cañas."
+        ],
+        answer: 0,
+        explain: "Inicia con mayúscula en rojo, separa los elementos de la lista con comas y usa 'y' antes del último elemento."
+      },
+      {
+        title: "Mayúsculas en nombres propios y al inicio de oración",
+        prompt: "Identifica la oración descriptiva que tiene correctamente marcadas las mayúsculas en rojo y el punto final:",
+        options: [
+          "<span class='red-cap'>D</span>urante diciembre, las familias de <span class='red-cap'>S</span>ayula elaboran piñatas coloridas para convivir en armonía.",
+          "durante diciembre, las familias de sayula elaboran piñatas coloridas para convivir en armonía",
+          "<span class='red-cap'>D</span>urante <span class='red-cap'>D</span>iciembre, las <span class='red-cap'>F</span>amilias de sayula elaboran <span class='red-cap'>P</span>iñatas.",
+          "Durante diciembre las familias de Sayula elaboran piñatas coloridas"
+        ],
+        answer: 0,
+        explain: "Se escribe mayúscula inicial en la primera palabra de la oración ('Durante') y en el nombre propio del municipio ('Sayula'), cerrando con punto."
+      },
+      {
+        title: "Comas en la lista de materiales del taller",
+        prompt: "Selecciona el texto donde se emplea correctamente la coma para enumerar los materiales de nuestro equipo:",
+        options: [
+          "<span class='red-cap'>N</span>uestro equipo utilizó papel periódico, engrudo, cartoncillo, tijeras, regla y papel de <span class='red-cap'>C</span>hina.",
+          "nuestro equipo utilizó papel periódico y engrudo y cartoncillo y tijeras y regla.",
+          "<span class='red-cap'>N</span>uestro equipo utilizó papel periódico engrudo cartoncillo tijeras regla.",
+          "Nuestro, equipo, utilizó, papel, periódico, y, engrudo."
+        ],
+        answer: 0,
+        explain: "Las comas separan cada material de la enumeración dando orden y claridad al texto."
+      }
+    ];
+    let t2Idx = 0;
+
+    const tab3Data = [
+      {
+        title: "Trabajo equitativo y ayuda mutua en el taller de piñatas",
+        prompt: "En el equipo 2, dos compañeros quieren pegar todas las tiras de periódico ellos solos y no dejan participar a los demás. ¿Qué acuerdo comunitario resuelve la situación con justicia?",
+        options: [
+          "Repartir roles equitativos (medir tiras, aplicar engrudo, pegar capas y cuidar el orden) rotando los turnos para que todas y todos participen.",
+          "Dejar que solo un alumno haga toda la piñata mientras los demás salen al patio.",
+          "Suspender el trabajo del equipo y tirar el engrudo a la basura.",
+          "Competir para ver quién pega las tiras más rápido aunque se rompan."
+        ],
+        answer: 0,
+        explain: "La colaboración y la reciprocidad consisten en distribuir las tareas con equidad y apoyarnos mutuamente."
+      },
+      {
+        title: "Inclusión y trato digno (3 de Diciembre)",
+        prompt: "Al organizar el juego de lanzamiento de avioncitos y la quiebra de la piñata, ¿cómo garantizamos la inclusión de todas las niñas y los niños del grupo?",
+        options: [
+          "Acordar reglas claras, respetar el turno y el espacio de cada compañero, y adaptar la distancia o brindar apoyo para que nadie quede excluido.",
+          "Permitir que solo pasen al frente quienes corren más rápido.",
+          "Empujar en la fila para ganar los dulces antes que los demás.",
+          "Dejar fuera del juego a quienes tardaron más en pegar las alas de su avión."
+        ],
+        answer: 0,
+        explain: "La inclusión elimina barreras para que todas las personas participen con seguridad, respeto e igualdad."
+      },
+      {
+        title: "Reciprocidad y cuidado del aula tras el taller",
+        prompt: "Al terminar de decorar las piñatas con papel de China, quedaron recortes de papel y gotas de engrudo en las mesas. ¿Qué acción demuestra responsabilidad comunitaria?",
+        options: [
+          "Colaborar entre todos los integrantes del grupo para recolectar los recortes reutilizables, limpiar las mesas y dejar el salón ordenado.",
+          "Irse a casa dejando las mesas sucias porque a otro equipo se le cayó más papel.",
+          "Esconder los recortes debajo de las sillas del salón.",
+          "Culpar a un solo compañero para que limpie todo el salón él solo."
+        ],
+        answer: 0,
+        explain: "El cuidado mutuo del espacio escolar es responsabilidad compartida de toda la comunidad del aula."
+      }
+    ];
+    let t3Idx = 0;
+
+    function setTab(t) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i + 1 === t);
+      });
+      if (t === 1) renderBoard(tab1Data, t1Idx, 1);
+      if (t === 2) renderBoard(tab2Data, t2Idx, 2);
+      if (t === 3) renderBoard(tab3Data, t3Idx, 3);
+    }
+
+    function renderBoard(dataArr, idx, tabNum) {
+      const item = dataArr[idx];
+      const area = document.getElementById('boardArea');
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">📌 ${item.title} (${idx + 1}/${dataArr.length})</div>
+              <span class="badge-info">Tablero ${tabNum}</span>
+            </div>
+            <div class="story-box">${item.prompt}</div>
+          </div>
+          <div class="feedback-bar" id="boardFeedback">
+            <span>Lee con atención las cuatro opciones de la derecha y toca la correcta.</span>
+            <button class="btn-action" onclick="nextCard(${tabNum})">Siguiente Caso ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🎯 Opciones de Respuesta</div>
+              <span class="badge-info">Toca para seleccionar</span>
+            </div>
+            <div class="choice-list">
+              ${item.options.map((opt, oIdx) => `
+                <button class="choice-btn" onclick="checkChoice(this, ${oIdx}, ${tabNum})">${opt}</button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkChoice(btn, chosenIdx, tabNum) {
+      const dataArr = tabNum === 1 ? tab1Data : (tabNum === 2 ? tab2Data : tab3Data);
+      const idx = tabNum === 1 ? t1Idx : (tabNum === 2 ? t2Idx : t3Idx);
+      const item = dataArr[idx];
+      const fb = document.getElementById('boardFeedback');
+
+      if (chosenIdx === item.answer) {
+        btn.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = "¡Excelente! " + item.explain;
+        addScore(10);
+        playTone(720, 0.16);
+        nextStudent();
+      } else {
+        btn.classList.add('wrong');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Analiza nuevamente el orden de los hechos, el uso de las comas o el acuerdo de convivencia.";
+        playTone(230, 0.2, 'sawtooth');
+      }
+    }
+
+    function nextCard(tabNum) {
+      if (tabNum === 1) { t1Idx = (t1Idx + 1) % tab1Data.length; renderBoard(tab1Data, t1Idx, 1); }
+      if (tabNum === 2) { t2Idx = (t2Idx + 1) % tab2Data.length; renderBoard(tab2Data, t2Idx, 2); }
+      if (tabNum === 3) { t3Idx = (t3Idx + 1) % tab3Data.length; renderBoard(tab3Data, t3Idx, 3); }
+    }
+
+    setTab(1);
+  </script>
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Masa y Longitud: Regla y Balanza · 3° "A"</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #ffffff;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --emerald: #16a34a;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --text-main: #0f172a;
+      --border: #cbd5e1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-touch-callout: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Lexend', 'Fredoka', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      color: #fff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      font-size: 1.9rem;
+      background: rgba(16, 185, 129, 0.2);
+      border: 2px solid #10b981;
+      border-radius: 0.75rem;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .student-pill {
+      background: #1e293b;
+      border: 2px solid #38bdf8;
+      color: #e0f2fe;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .score-pill {
+      background: #dcfce7;
+      color: #14532d;
+      border: 2px solid #22c55e;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.75rem 1rem 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      padding: 0.55rem 1.2rem;
+      border-radius: 0.85rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #7dd3fc;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.75rem 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .workspace {
+      background: var(--bg-panel);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.35rem;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      border: 3px solid #e2e8f0;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px dashed #cbd5e1;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+    }
+
+    .badge-info {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.22rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    /* ESTACIÓN 1: REGLA DE 30 CM */
+    .ruler-stage {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.9rem;
+      padding: 1.1rem 0.9rem;
+      margin-bottom: 0.75rem;
+      overflow-x: auto;
+    }
+
+    .object-bar {
+      height: 44px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      transition: width 0.3s ease;
+    }
+
+    .ruler-track {
+      position: relative;
+      height: 54px;
+      background: linear-gradient(to bottom, #fef08a 0%, #fde047 100%);
+      border: 2px solid #ca8a04;
+      border-radius: 0.45rem;
+      display: flex;
+      align-items: flex-start;
+      padding: 0 12px;
+    }
+
+    .ruler-ticks {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      position: relative;
+      padding-top: 18px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #713f12;
+    }
+
+    .tick-item {
+      position: relative;
+      text-align: center;
+      flex: 1;
+    }
+
+    .tick-item::before {
+      content: '';
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      width: 2px;
+      height: 14px;
+      background: #854d0e;
+    }
+
+    .tick-zero {
+      color: #15803d;
+      font-weight: 900;
+      background: #dcfce7;
+      padding: 0 4px;
+      border-radius: 4px;
+      border: 1px solid #16a34a;
+    }
+
+    .ans-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.7rem;
+    }
+
+    .ans-btn {
+      background: #ffffff;
+      border: 2px solid #94a3b8;
+      border-radius: 0.85rem;
+      padding: 0.85rem;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #0f172a;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .ans-btn:hover {
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    .ans-btn.correct {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #14532d;
+    }
+
+    .ans-btn.wrong {
+      background: #ffe4e6;
+      border-color: #e11d48;
+      color: #881337;
+    }
+
+    /* ESTACIÓN 2: BALANZA INTERACTIVA */
+    .scale-box {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.9rem;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .pans-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      min-height: 135px;
+      padding: 0.5rem 1rem;
+      gap: 1.5rem;
+    }
+
+    .pan-col {
+      flex: 1;
+      background: #f1f5f9;
+      border: 2px solid #94a3b8;
+      border-bottom: 6px solid #475569;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      transition: transform 0.3s ease;
+    }
+
+    .weights-bar {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 0.65rem;
+    }
+
+    .weight-chip {
+      background: #334155;
+      color: #ffffff;
+      border: 2px solid #1e293b;
+      padding: 0.55rem 0.9rem;
+      border-radius: 0.7rem;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .weight-chip:hover {
+      background: #0284c7;
+      transform: translateY(-2px);
+    }
+
+    .feedback-bar {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 0.8rem;
+      font-weight: 700;
+      font-size: 0.94rem;
+      display: flex;
+      align-items: center;
+      justify-content:enangkan;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border: 2px solid #7dd3fc;
+    }
+
+    .feedback-bar.ok {
+      background: #dcfce7;
+      color: #14532d;
+      border-color: #4ade80;
+    }
+
+    .feedback-bar.err {
+      background: #ffe4e6;
+      color: #881337;
+      border-color: #fda4af;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.55rem 1.15rem;
+      border-radius: 0.65rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚖️</div>
+      <div class="brand-text">
+        <h1>Masa y Longitud: Regla y Balanza</h1>
+        <p>Proyecto 4 · Saberes y Pensamiento Científico · 3° "A"</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <div class="student-pill" onclick="nextStudent()">
+        <span>👧👦 Turno:</span>
+        <span id="currentStudent">Alexander</span>
+        <span>🔄</span>
+      </div>
+      <div class="score-pill">Aciertos: <span id="scoreVal">0</span></div>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" id="tab1" onclick="setStation(1)">📏 1. Medir Longitud con Regla (cm y m)</button>
+    <button class="tab-btn" id="tab2" onclick="setStation(2)">⚖️ 2. Equilibrar la Balanza (g y kg)</button>
+    <button class="tab-btn" id="tab3" onclick="setStation(3)">🔍 3. ¿Masa o Longitud?</button>
+  </nav>
+
+  <main>
+    <div class="workspace" id="stationArea"></div>
+  </main>
+
+  <script>
+    window.addEventListener('contextmenu', e => e.preventDefault(), true);
+    document.addEventListener('contextmenu', e => e.preventDefault(), true);
+
+    const students = [
+      "Alexander", "Brianna", "Dalary", "Daniel", "Estrella",
+      "Gael", "Jarol", "Jesús", "José Manuel", "Keyla",
+      "Naomi", "Yamileth", "Adriel", "Cristal", "Aurora"
+    ];
+    let studentIdx = 0;
+    let score = 0;
+
+    function playTone(freq = 540, duration = 0.14, type = 'sine') {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function nextStudent() {
+      studentIdx = (studentIdx + 1) % students.length;
+      document.getElementById('currentStudent').textContent = students[studentIdx];
+      playTone(620, 0.08);
+    }
+
+    function addScore(pts) {
+      score += pts;
+      document.getElementById('scoreVal').textContent = score;
+    }
+
+    // ESTACIÓN 1: REGLA DE 30 CM
+    const s1Items = [
+      {
+        name: "🪵 Broche de madera para el cuerpo del avioncito",
+        cm: 7,
+        color: "#b45309",
+        options: ["7 cm", "12 cm", "7 m", "15 cm"],
+        answer: "7 cm",
+        note: "Alineado desde el 0, el broche de madera llega exactamente a la marca del 7: mide 7 centímetros (7 cm)."
+      },
+      {
+        name: "✈️ Abatelenguas de madera para las alas del avión",
+        cm: 15,
+        color: "#0284c7",
+        options: ["15 cm", "25 cm", "15 m", "10 cm"],
+        answer: "15 cm",
+        note: "El abatelenguas mide 15 centímetros (15 cm), exactamente la mitad de la regla de 30 cm."
+      },
+      {
+        name: "📄 Ancho de la hoja reciclada para papiroflexia",
+        cm: 21,
+        color: "#7c3aed",
+        options: ["21 cm", "30 cm", "14 cm", "21 kg"],
+        answer: "21 cm",
+        note: "La hoja reciclada alineada desde el 0 llega a la marca del 21: mide 21 centímetros (21 cm)."
+      },
+      {
+        name: "🎉 Cono de cartoncillo para pico de la piñata",
+        cm: 25,
+        color: "#db2777",
+        options: ["25 cm", "18 cm", "25 m", "30 cm"],
+        answer: "25 cm",
+        note: "Cada cono de cartoncillo tiene una longitud de 25 centímetros (25 cm) para que la estrella quede simétrica."
+      },
+      {
+        name: "📰 Tira larga de papel periódico para pegar con engrudo",
+        cm: 28,
+        color: "#475569",
+        options: ["28 cm", "20 cm", "28 kg", "15 cm"],
+        answer: "28 cm",
+        note: "La tira de periódico mide 28 centímetros (28 cm) de largo."
+      }
+    ];
+    let s1Idx = 0;
+
+    // ESTACIÓN 2: BALANZA (MASA EN GRAMOS Y KILOGRAMOS)
+    const s2Items = [
+      {
+        name: "🍍 Bolsa de tejocotes y guayabas para el ponche",
+        targetGrams: 1000,
+        displayWeight: "1 kilogramo (1,000 g)",
+        note: "1 kilogramo (1 kg) equivale a 1,000 gramos (por ejemplo, dos pesas de 500 g o una pesa de 1 kg)."
+      },
+      {
+        name: "🍬 Bolsa de colaciones y dulces para rellenar la piñata",
+        targetGrams: 750,
+        displayWeight: "750 gramos",
+        note: "Sumando una pesa de 500 g y una de 250 g equilibramos los 750 gramos de dulces."
+      },
+      {
+        name: "🥣 Recipiente con engrudo húmedo recién preparado",
+        targetGrams: 600,
+        displayWeight: "600 gramos",
+        note: "Con una pesa de 500 g y una de 100 g logramos 600 g y los dos platillos quedan a la misma altura."
+      },
+      {
+        name: "🪅 Piñata terminada rellena de fruta y cacahuates",
+        targetGrams: 1500,
+        displayWeight: "1 kilogramo y medio (1,500 g)",
+        note: "Una pesa de 1 kg (1,000 g) más una de 500 g suman 1,500 gramos."
+      }
+    ];
+    let s2Idx = 0;
+    let currentPanGrams = 0;
+
+    // ESTACIÓN 3: CLASIFICACIÓN MASA VS LONGITUD
+    const s3Questions = [
+      {
+        q: "Queremos saber qué tan larga es la cuerda (mecate) para colgar la piñata en el patio de la escuela.",
+        opts: [
+          "Propiedad: Longitud · Instrumento: Metro (m)",
+          "Propiedad: Masa · Instrumento: Balanza (kg)",
+          "Propiedad: Masa · Instrumento: Regla (cm)",
+          "Propiedad: Temperatura · Instrumento: Termómetro"
+        ],
+        ans: "Propiedad: Longitud · Instrumento: Metro (m)",
+        exp: "La distancia de un extremo a otro del mecate es su longitud, y como es grande se mide en metros (m)."
+      },
+      {
+        q: "Queremos comprobar por qué la piñata pesa más cuando tiene el engrudo húmedo que cuando ya se secó al sol.",
+        opts: [
+          "Propiedad: Masa · Instrumento: Balanza (g y kg)",
+          "Propiedad: Longitud · Instrumento: Regla (cm)",
+          "Propiedad: Longitud · Instrumento: Balanza (m)",
+          "Propiedad: Capacidad · Instrumento: Escuadra"
+        ],
+        ans: "Propiedad: Masa · Instrumento: Balanza (g y kg)",
+        exp: "La cantidad de materia o peso del agua en el engrudo se compara midiendo la masa en la balanza."
+      },
+      {
+        q: "Necesitamos marcar exactamente la mitad de un abatelenguas de 14 cm para pegarlo centrado en el broche de madera.",
+        opts: [
+          "Propiedad: Longitud · Instrumento: Regla en centímetros (7 cm)",
+          "Propiedad: Masa · Instrumento: Balanza en kilogramos (7 kg)",
+          "Propiedad: Longitud · Instrumento: Balanza (7 m)",
+          "Propiedad: Masa · Instrumento: Metro (14 kg)"
+        ],
+        ans: "Propiedad: Longitud · Instrumento: Regla en centímetros (7 cm)",
+        exp: "Para objetos pequeños del aula usamos la regla graduada en centímetros (cm), iniciando siempre desde el 0."
+      },
+      {
+        q: "La comisión de la posada compró 2 kilogramos de cañas y 1 kilogramo de naranjas en el mercado local.",
+        opts: [
+          "Propiedad: Masa · Unidad básica: Kilogramo (kg)",
+          "Propiedad: Longitud · Unidad básica: Metro (m)",
+          "Propiedad: Longitud · Unidad básica: Centímetro (cm)",
+          "Propiedad: Tiempo · Unidad básica: Minuto"
+        ],
+        ans: "Propiedad: Masa · Unidad básica: Kilogramo (kg)",
+        exp: "El kilogramo (kg) es la unidad básica para medir la masa de las frutas y alimentos."
+      }
+    ];
+    let s3Idx = 0;
+
+    function setStation(st) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i + 1 === st);
+      });
+      if (st === 1) renderStation1();
+      if (st === 2) { currentPanGrams = 0; renderStation2(); }
+      if (st === 3) renderStation3();
+    }
+
+    function renderStation1() {
+      const item = s1Items[s1Idx];
+      const area = document.getElementById('stationArea');
+      const pct = (item.cm / 30) * 100;
+
+      let ticksHtml = '';
+      for (let i = 0; i <= 30; i += 5) {
+        ticksHtml += `<div class="tick-item ${i === 0 ? 'tick-zero' : ''}">${i}</div>`;
+      }
+
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">📏 Mesa de Medición (${s1Idx + 1}/${s1Items.length})</div>
+              <span class="badge-info">Alineado en la marca del 0</span>
+            </div>
+            <p style="font-weight:700; margin-bottom:0.65rem; color:#334155;">Objeto a medir: ${item.name}</p>
+            <div class="ruler-stage">
+              <div style="padding: 0 12px;">
+                <div class="object-bar" style="width: ${pct}%; background: ${item.color};">
+                  ${item.name.split(' ')[0]} · ¿Cuántos cm mide?
+                </div>
+              </div>
+              <div class="ruler-track">
+                <div class="ruler-ticks">
+                  ${Array.from({length: 31}, (_, i) => `<div class="tick-item ${i === 0 ? 'tick-zero' : ''}">${i}</div>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-bar" id="s1Feedback">
+            <span>Observa desde el 0 verde hasta qué número de la regla llega el extremo derecho del objeto.</span>
+            <button class="btn-action" onclick="nextS1()">Siguiente Objeto ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🎯 ¿Cuál es su longitud exacta?</div>
+              <span class="badge-info">Centímetros (cm) vs Metros (m)</span>
+            </div>
+            <div class="ans-grid">
+              ${item.options.map(opt => `
+                <button class="ans-btn" onclick="checkS1(this, '${opt}')">${opt}</button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkS1(btn, chosen) {
+      const item = s1Items[s1Idx];
+      const fb = document.getElementById('s1Feedback');
+      if (chosen === item.answer) {
+        btn.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = "¡Exacto! " + item.note;
+        addScore(10);
+        playTone(700, 0.15);
+        nextStudent();
+      } else {
+        btn.classList.add('wrong');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Revisa la marca exacta en la regla y fíjate en la unidad de medida (cm).";
+        playTone(230, 0.2, 'sawtooth');
+      }
+    }
+
+    function nextS1() {
+      s1Idx = (s1Idx + 1) % s1Items.length;
+      renderStation1();
+    }
+
+    function renderStation2() {
+      const item = s2Items[s2Idx];
+      const area = document.getElementById('stationArea');
+      const diff = currentPanGrams - item.targetGrams;
+      let leftShift = 0;
+      let rightShift = 0;
+      if (diff < 0) { leftShift = 14; rightShift = -14; }
+      else if (diff > 0) { leftShift = -14; rightShift = 14; }
+
+      const isBalanced = diff === 0;
+
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">⚖️ Balanza de Dos Platillos (${s2Idx + 1}/${s2Items.length})</div>
+              <span class="badge-info">1 kg = 1,000 g</span>
+            </div>
+            <div class="scale-box">
+              <div class="pans-row">
+                <div class="pan-col" style="transform: translateY(${leftShift}px); border-color:${isBalanced ? '#16a34a' : '#94a3b8'};">
+                  <div style="font-size:1.75rem;">📦</div>
+                  <div style="font-weight:800; font-size:0.92rem; margin-top:0.25rem;">${item.name}</div>
+                  <div style="color:#0369a1; font-weight:900; margin-top:0.25rem;">Masa: ${item.displayWeight}</div>
+                </div>
+                <div class="pan-col" style="transform: translateY(${rightShift}px); border-color:${isBalanced ? '#16a34a' : '#94a3b8'};">
+                  <div style="font-size:1.75rem;">🏋️</div>
+                  <div style="font-weight:800; font-size:0.92rem; margin-top:0.25rem;">Platillo de Pesas</div>
+                  <div style="color:${isBalanced ? '#16a34a' : '#b45309'}; font-weight:900; margin-top:0.25rem;">
+                    Acumulado: ${currentPanGrams} g ${currentPanGrams >= 1000 ? '(' + (currentPanGrams/1000) + ' kg)' : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-bar ${isBalanced ? 'ok' : ''}" id="s2Feedback">
+            <span>${isBalanced ? '¡Balanza en equilibrio! ' + item.note : 'Agrega pesas al platillo derecho hasta equilibrar exactamente la masa del objeto.'}</span>
+            <button class="btn-action" onclick="nextS2()">Siguiente Pesaje ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🏋️ Banco de Pesas (kg y g)</div>
+              <span class="badge-info">Toca para agregar al platillo</span>
+            </div>
+            <p style="font-size:0.9rem; color:#475569; margin-bottom:0.75rem;">
+              Combina las pesas necesarias para igualar <strong>${item.displayWeight}</strong>:
+            </p>
+            <div class="weights-bar">
+              <button class="weight-chip" onclick="addWeight(1000)">+ 1 kg (1,000 g)</button>
+              <button class="weight-chip" onclick="addWeight(500)">+ 500 g (Medio kg)</button>
+              <button class="weight-chip" onclick="addWeight(250)">+ 250 g (Cuarto kg)</button>
+              <button class="weight-chip" onclick="addWeight(100)">+ 100 g</button>
+            </div>
+            <div style="margin-top:1.1rem; text-align:center;">
+              <button class="btn-action" style="background:#64748b;" onclick="resetWeights()">🔄 Vaciar Platillo (0 g)</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function addWeight(grams) {
+      const item = s2Items[s2Idx];
+      currentPanGrams += grams;
+      if (currentPanGrams === item.targetGrams) {
+        addScore(15);
+        playTone(740, 0.18);
+        nextStudent();
+      } else if (currentPanGrams > item.targetGrams) {
+        playTone(250, 0.18, 'sawtooth');
+      } else {
+        playTone(520, 0.09);
+      }
+      renderStation2();
+    }
+
+    function resetWeights() {
+      currentPanGrams = 0;
+      renderStation2();
+    }
+
+    function nextS2() {
+      s2Idx = (s2Idx + 1) % s2Items.length;
+      currentPanGrams = 0;
+      renderStation2();
+    }
+
+    function renderStation3() {
+      const q = s3Questions[s3Idx];
+      const area = document.getElementById('stationArea');
+      area.innerHTML = `
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🔍 Situación del Taller (${s3Idx + 1}/${s3Questions.length})</div>
+              <span class="badge-info">Instrumentos y Unidades</span>
+            </div>
+            <div style="background:#fff; border:2px solid #cbd5e1; border-radius:0.9rem; padding:1.15rem; font-size:1.12rem; font-weight:700; line-height:1.5;">
+              ${q.q}
+            </div>
+          </div>
+          <div class="feedback-bar" id="s3Feedback">
+            <span>Selecciona la propiedad medible y el instrumento que debemos utilizar.</span>
+            <button class="btn-action" onclick="nextS3()">Siguiente Situación ➔</button>
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div>
+            <div class="panel-header">
+              <div class="panel-title">🎯 Elige la Respuesta Correcta</div>
+              <span class="badge-info">Masa (kg/g) vs Longitud (m/cm)</span>
+            </div>
+            <div class="ans-grid" style="grid-template-columns:1fr;">
+              ${q.opts.map(opt => `
+                <button class="ans-btn" style="text-align:left; font-size:0.98rem;" onclick="checkS3(this, '${opt}')">${opt}</button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function checkS3(btn, chosen) {
+      const q = s3Questions[s3Idx];
+      const fb = document.getElementById('s3Feedback');
+      if (chosen === q.ans) {
+        btn.classList.add('correct');
+        fb.className = "feedback-bar ok";
+        fb.querySelector('span').textContent = "¡Correcto! " + q.exp;
+        addScore(10);
+        playTone(720, 0.15);
+        nextStudent();
+      } else {
+        btn.classList.add('wrong');
+        fb.className = "feedback-bar err";
+        fb.querySelector('span').textContent = "Recuerda: la regla y el metro miden longitud (cm, m); la balanza mide masa (g, kg).";
+        playTone(230, 0.2, 'sawtooth');
+      }
+    }
+
+    function nextS3() {
+      s3Idx = (s3Idx + 1) % s3Questions.length;
+      renderStation3();
+    }
+
+    renderStation1();
+  </script>
+</body>
+</html>

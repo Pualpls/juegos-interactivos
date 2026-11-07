@@ -161,6 +161,11 @@
       color: #78350f;
     }
 
+    .tag-project4 {
+      background: #8b5cf6;
+      color: #ffffff;
+    }
+
     .tag-project3 {
       background: #3b82f6;
       color: #1e3a8a;
@@ -408,6 +413,10 @@
       background: linear-gradient(to bottom, #ffffff 0%, #fffbeb 100%);
     }
 
+    .game-card.project4-card {
+      border-top: 5px solid var(--purple);
+    }
+
     .game-card.project3-card {
       border-top: 5px solid var(--primary);
     }
@@ -545,6 +554,7 @@
       <button class="tab-btn active" onclick="filterCategory('todos')">🎮 Todos los Juegos</button>
       <button class="tab-btn" onclick="filterCategory('permanentes')">⭐ Juegos Permanentes</button>
       <button class="tab-btn" onclick="filterCategory('minijuegos')">🧪 Minijuegos (En desarrollo)</button>
+      <button class="tab-btn" onclick="filterCategory('proyecto-4')">🪅 Proyecto 4 (Diciembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-3')">❄️ Proyecto 3 (Noviembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-2')">🇲🇽 Proyecto 2 (Octubre)</button>
     </nav>
@@ -666,14 +676,154 @@
     <div class="proyectos-accordion-container">
       <button id="btnToggleProyectos" class="btn-toggle-proyectos" onclick="toggleProyectosMensuales()">
         <span class="proyectos-btn-icon">📁</span>
-        <span id="proyectosBtnText">Ver Proyectos de Aula Mensuales (Proyecto 3 y Proyecto 2)</span>
+        <span id="proyectosBtnText">Ver Proyectos de Aula Mensuales (Proyecto 4, Proyecto 3 y Proyecto 2)</span>
         <span id="proyectosArrow" class="proyectos-btn-arrow">▼</span>
       </button>
-      <p class="proyectos-hint">Toca aquí para desplegar o esconder los proyectos de aula de meses anteriores</p>
+      <p class="proyectos-hint">Toca aquí para desplegar o esconder los proyectos mensuales de aula</p>
     </div>
 
     <!-- CONTENEDOR COLAPSABLE DE PROYECTOS MENSUALES -->
     <div id="container-proyectos-mensuales" style="display: none;">
+
+    <!-- SECTION: PROYECTO 4 -->
+    <section class="section-block" id="sec-proyecto-4">
+      <div class="section-title-wrap">
+        <span class="section-icon">🪅</span>
+        <h2 class="section-title">Proyecto 4: Juguetes, Piñatas y Tradiciones</h2>
+        <span class="section-tag tag-project4">Diciembre 2026</span>
+        <button class="btn-yt-toggle" onclick="toggleYtDrawer('p4')" title="Ver videos educativos sugeridos para este proyecto">
+          <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Videos Sugeridos</span>
+          <span class="yt-arrow" id="arrow-p4">▼</span>
+        </button>
+      </div>
+
+      <!-- DRAWER DE VIDEOS SUGERIDOS PROYECTO 4 -->
+      <div class="yt-drawer" id="yt-drawer-p4" style="display: none;">
+        <div class="yt-drawer-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.4rem;">🎬</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff;">Cápsulas y Videos Sugeridos · Proyecto 4</h3>
+              <p style="font-size: 0.8rem; color: #94a3b8;">Instructivos, papiroflexia, masa y longitud, unidades de millar y algoritmos aditivos</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="yt-videos-grid">
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=El+texto+instructivo+para+ninos+primaria+verbos+infinitivo" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">📋</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-lenguajes">Lenguajes · Instructivos</span>
+              <h4 class="yt-card-title">El texto instructivo para niños</h4>
+              <p class="yt-card-channel">Sesión 2 (PP1)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Smile+and+Learn+Unidades+decenas+centenas+y+unidades+de+millar" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🟢</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-mate">Pensamiento Matemático</span>
+              <h4 class="yt-card-title">Unidades de millar y valor posicional</h4>
+              <p class="yt-card-channel">Smile and Learn · Reto Matemático 2</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Figuras+de+papiroflexia+faciles+para+ninos+primaria" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">⛵</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-lenguajes">Juguetes Reciclados</span>
+              <h4 class="yt-card-title">Figuras de papiroflexia para niños</h4>
+              <p class="yt-card-channel">Sesión 4 (PP2)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Dia+Internacional+de+las+Personas+con+Discapacidad+para+ninos+inclusion" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">🤝</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-civica">Fecha Cívica · 3 de Diciembre</span>
+              <h4 class="yt-card-title">Inclusión y discapacidad</h4>
+              <p class="yt-card-channel">Cápsula Reflexiva</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Smile+and+Learn+La+masa+y+la+longitud+para+ninos" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">⚖️</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-ciencias">Ciencias · Materiales</span>
+              <h4 class="yt-card-title">La masa y la longitud</h4>
+              <p class="yt-card-channel">Smile and Learn · Sesión 6 (PP3)</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Daniel+Carreon+Suma+llevando+super+facil" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">➕</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-mate">Pensamiento Matemático</span>
+              <h4 class="yt-card-title">Suma llevando súper fácil</h4>
+              <p class="yt-card-channel">Daniel Carreón · Reto Matemático 5</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+
+          <a class="yt-video-card" href="https://www.youtube.com/results?search_query=Daniel+Carreon+Resta+prestando+super+facil" target="_blank" rel="noopener noreferrer">
+            <div class="yt-card-icon">➖</div>
+            <div class="yt-card-info">
+              <span class="yt-tag tag-mate">Pensamiento Matemático</span>
+              <h4 class="yt-card-title">Resta prestando súper fácil</h4>
+              <p class="yt-card-channel">Daniel Carreón · Reto Matemático 6</p>
+            </div>
+            <span class="yt-card-btn">Ver ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="games-grid">
+        <!-- 1. TALLER DE INSTRUCTIVOS -->
+        <a class="game-card project4-card" href="proyecto-4/taller_instructivos_juguetes/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Lenguajes · Instructivos</span>
+            <div class="card-icon">📋</div>
+            <h3 class="card-title">Taller de Instructivos</h3>
+            <p class="card-desc">Partes del instructivo, verbos en infinitivo e imperativo, y ordenamiento paso a paso de juguetes reciclados y piñatas.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background:#7c3aed;">Abrir Taller ➔</span>
+          </div>
+        </a>
+
+        <!-- 2. MASA Y LONGITUD -->
+        <a class="game-card project4-card" href="proyecto-4/laboratorio_masa_longitud/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Saberes y P. Científico</span>
+            <div class="card-icon">⚖️</div>
+            <h3 class="card-title">Masa y Longitud: Regla y Balanza</h3>
+            <p class="card-desc">Medición en centímetros y metros con regla desde el 0, y pesaje en gramos y kilogramos en balanza de dos platillos.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background:#7c3aed;">Abrir Simulador ➔</span>
+          </div>
+        </a>
+
+        <!-- 3. POSADAS Y TRADICIONES -->
+        <a class="game-card project4-card" href="proyecto-4/posadas_y_tradiciones/index.html">
+          <div class="card-top">
+            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Ética y Lenguajes</span>
+            <div class="card-icon">🪅</div>
+            <h3 class="card-title">Posadas y Tradiciones</h3>
+            <p class="card-desc">Descripción cronológica de procesos, uso de comas y mayúsculas en rojo, y acuerdos de colaboración e inclusión.</p>
+          </div>
+          <div class="card-action">
+            <span class="action-btn" style="background:#7c3aed;">Abrir Actividad ➔</span>
+          </div>
+        </a>
+      </div>
+    </section>
 
     <!-- SECTION: PROYECTO 3 -->
     <section class="section-block" id="sec-proyecto-3">
@@ -969,7 +1119,7 @@
         container.style.display = 'none';
         if (btn) btn.classList.remove('open');
         if (arrow) arrow.textContent = '▼';
-        if (text) text.textContent = 'Ver Proyectos de Aula Mensuales (Proyecto 3 y Proyecto 2)';
+        if (text) text.textContent = 'Ver Proyectos de Aula Mensuales (Proyecto 4, Proyecto 3 y Proyecto 2)';
       }
     }
 
@@ -981,6 +1131,7 @@
       const secMinijuegos = document.getElementById('sec-minijuegos');
       const accordionWrap = document.querySelector('.proyectos-accordion-container');
       const containerProyectos = document.getElementById('container-proyectos-mensuales');
+      const secP4 = document.getElementById('sec-proyecto-4');
       const secP3 = document.getElementById('sec-proyecto-3');
       const secP2 = document.getElementById('sec-proyecto-2');
 
@@ -988,6 +1139,7 @@
         secPermanentes.style.display = 'block';
         secMinijuegos.style.display = 'block';
         if (accordionWrap) accordionWrap.style.display = 'block';
+        if (secP4) secP4.style.display = 'block';
         secP3.style.display = 'block';
         secP2.style.display = 'block';
         // En "todos", los proyectos mensuales permanecen colapsados tras el botón por defecto para evitar scroll
@@ -1004,11 +1156,20 @@
         secMinijuegos.style.display = 'block';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'none';
+      } else if (cat === 'proyecto-4') {
+        secPermanentes.style.display = 'none';
+        secMinijuegos.style.display = 'none';
+        if (accordionWrap) accordionWrap.style.display = 'none';
+        if (containerProyectos) containerProyectos.style.display = 'block';
+        if (secP4) secP4.style.display = 'block';
+        secP3.style.display = 'none';
+        secP2.style.display = 'none';
       } else if (cat === 'proyecto-3') {
         secPermanentes.style.display = 'none';
         secMinijuegos.style.display = 'none';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'block';
+        if (secP4) secP4.style.display = 'none';
         secP3.style.display = 'block';
         secP2.style.display = 'none';
       } else if (cat === 'proyecto-2') {
@@ -1016,6 +1177,7 @@
         secMinijuegos.style.display = 'none';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'block';
+        if (secP4) secP4.style.display = 'none';
         secP3.style.display = 'none';
         secP2.style.display = 'block';
       }
