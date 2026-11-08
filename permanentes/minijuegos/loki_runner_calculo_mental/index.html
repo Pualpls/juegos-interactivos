@@ -739,7 +739,7 @@
 
     .hud-math-problem {
       font-family: var(--font-display);
-      font-size: 2.15rem;
+      font-size: clamp(1.2rem, 3.2vw, 2.15rem);
       font-weight: 800;
       color: #ffffff;
       letter-spacing: 0.06rem;
@@ -1314,9 +1314,10 @@
       </div>
 
       <div class="world-tabs">
-        <button class="world-tab-btn active" onclick="switchWorld(1)">🟢 Mundo 1: Decenas y Base (#1 - #7)</button>
-        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2: Retos SiSAT Oficial (#8 - #14)</button>
+        <button class="world-tab-btn" onclick="switchWorld(1)">🟢 Mundo 1: Decenas y Base (#1 - #7)</button>
+        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2: Técnicas Numéricas (#8 - #14)</button>
         <button class="world-tab-btn" onclick="switchWorld(3)">🟣 Mundo 3: Maestría y Trucos (#15 - #20)</button>
+        <button class="world-tab-btn active" onclick="switchWorld(4)">⭐ Mundo SiSAT: Reactivos 3° (#21 - #31)</button>
       </div>
 
       <div class="levels-grid" id="levels-container">
@@ -1969,6 +1970,271 @@
           const choice = pairs[Math.floor(Math.random() * pairs.length)];
           return { text: choice.t, expected: choice.e, dist: choice.d };
         }
+      },
+      /* =============================================================
+         MUNDO 4: REACTIVOS OFICIALES SiSAT 3° DE PRIMARIA (#21 - #31)
+         ============================================================= */
+      {
+        id: 21, world: 4,
+        title: "SiSAT 1: Sumar 9 a dos cifras",
+        tag: "SiSAT Oficial · Reactivo 1",
+        sample: "26 + 9 = 35",
+        trickHeading: "Sumar 10 y quitar 1:",
+        steps: [
+          "Suma 10 al número para avanzar rápido: 26 + 10 = 36.",
+          "Como solo debías sumar 9, quítale 1 al resultado.",
+          "36 − 1 = 35. ¡Así de rápido y sin usar los dedos!"
+        ],
+        generator: () => {
+          const baseList = [26, 35, 47, 58, 64, 73, 85, 38, 49, 67, 18, 56];
+          const a = baseList[Math.floor(Math.random() * baseList.length)];
+          const expected = a + 9;
+          return { text: `${a} + 9`, expected: expected, dist: [a + 10, a + 8, a + 19, a - 1] };
+        }
+      },
+      {
+        id: 22, world: 4,
+        title: "SiSAT 2: ¿Cuánto le falta para llegar?",
+        tag: "SiSAT Oficial · Reactivo 2",
+        sample: "¿Cuánto falta de 35 a 50? = 15",
+        trickHeading: "Completar primero a la decena:",
+        steps: [
+          "Pregúntate: ¿cuánto le falta a 35 para completar 40? ¡Faltan 5!",
+          "Ahora: de 40 para llegar a 50, ¿cuánto falta? ¡Falta 10!",
+          "Junta las dos partes: 10 + 5 = 15. ¡Respuesta correcta!"
+        ],
+        generator: () => {
+          const pairs = [
+            { from: 35, to: 50, ans: 15 },
+            { from: 25, to: 40, ans: 15 },
+            { from: 45, to: 60, ans: 15 },
+            { from: 65, to: 80, ans: 15 },
+            { from: 35, to: 60, ans: 25 },
+            { from: 45, to: 70, ans: 25 },
+            { from: 55, to: 80, ans: 25 },
+            { from: 28, to: 40, ans: 12 },
+            { from: 36, to: 50, ans: 14 },
+            { from: 58, to: 70, ans: 12 },
+            { from: 44, to: 60, ans: 16 }
+          ];
+          const p = pairs[Math.floor(Math.random() * pairs.length)];
+          return { text: `¿Cuánto falta de ${p.from} a ${p.to}?`, expected: p.ans, dist: [p.ans + 10, p.ans - 5, p.ans + 5, p.ans - 2] };
+        }
+      },
+      {
+        id: 23, world: 4,
+        title: "SiSAT 3: Restar 10 a dos cifras",
+        tag: "SiSAT Oficial · Reactivo 3",
+        sample: "45 − 10 = 35",
+        trickHeading: "Disminuir una decena directa:",
+        steps: [
+          "Mira la cifra de las decenas: en 45 son 4 decenas.",
+          "Quítale 1 decena: te quedan 3 decenas.",
+          "Las unidades se quedan exactamente iguales: 5. Resultado: 35."
+        ],
+        generator: () => {
+          const list = [45, 38, 56, 72, 84, 93, 67, 29, 54, 88, 31, 62];
+          const a = list[Math.floor(Math.random() * list.length)];
+          const expected = a - 10;
+          return { text: `${a} − 10`, expected: expected, dist: [a - 9, a - 11, a - 20, a + 10] };
+        }
+      },
+      {
+        id: 24, world: 4,
+        title: "SiSAT 4: Restar 10 a centenas",
+        tag: "SiSAT Oficial · Reactivo 4",
+        sample: "260 − 10 = 250",
+        trickHeading: "Restar a las decenas de la centena:",
+        steps: [
+          "En 260 hay 26 decenas. Si quitas 1 decena, te quedan 25 decenas = 250.",
+          "O mira la cifra del medio: de 6 decenas quitas 1 y quedan 5.",
+          "La centena y el cero final se quedan intactos: ¡250!"
+        ],
+        generator: () => {
+          const list = [260, 180, 340, 450, 570, 230, 690, 150, 380, 520, 490, 760];
+          const c = list[Math.floor(Math.random() * list.length)];
+          const expected = c - 10;
+          return { text: `${c} − 10`, expected: expected, dist: [c - 20, c - 100, c + 10, c - 90] };
+        }
+      },
+      {
+        id: 25, world: 4,
+        title: "SiSAT 5: Suma cerrando decena",
+        tag: "SiSAT Oficial · Reactivo 5",
+        sample: "58 + 12 = 70",
+        trickHeading: "Regalar unidades para cerrar la decena:",
+        steps: [
+          "Fíjate en las unidades: 8 y 2 forman una decena completa (10).",
+          "Suma las decenas grandes: 50 + 10 = 60.",
+          "Añade la nueva decena que formaron las unidades: 60 + 10 = 70."
+        ],
+        generator: () => {
+          const list = [
+            { a: 58, b: 12, ans: 70 },
+            { a: 47, b: 13, ans: 60 },
+            { a: 36, b: 14, ans: 50 },
+            { a: 68, b: 22, ans: 90 },
+            { a: 27, b: 23, ans: 50 },
+            { a: 48, b: 32, ans: 80 },
+            { a: 39, b: 21, ans: 60 },
+            { a: 56, b: 24, ans: 80 },
+            { a: 28, b: 12, ans: 40 },
+            { a: 67, b: 13, ans: 80 },
+            { a: 45, b: 25, ans: 70 }
+          ];
+          const item = list[Math.floor(Math.random() * list.length)];
+          return { text: `${item.a} + ${item.b}`, expected: item.ans, dist: [item.ans - 10, item.ans + 10, item.ans - 2, item.ans + 2] };
+        }
+      },
+      {
+        id: 26, world: 4,
+        title: "SiSAT 6: Decena cerrada menos 11",
+        tag: "SiSAT Oficial · Reactivo 6",
+        sample: "80 − 11 = 69",
+        trickHeading: "Quitar 10 y luego quitar 1:",
+        steps: [
+          "Resta primero 10 a la decena: 80 − 10 = 70.",
+          "Ahora quita el 1 que falta: 70 − 1 = 69.",
+          "¡Recuerda que siempre termina en 9 y la decena baja en 1!"
+        ],
+        generator: () => {
+          const decades = [80, 50, 70, 60, 90, 40, 100];
+          const d = decades[Math.floor(Math.random() * decades.length)];
+          const expected = d - 11;
+          return { text: `${d} − 11`, expected: expected, dist: [expected + 1, expected - 1, d - 10, expected + 10] };
+        }
+      },
+      {
+        id: 27, world: 4,
+        title: "SiSAT 7: Serie numérica ascendente",
+        tag: "SiSAT Oficial · Reactivo 7",
+        sample: "53, 56, 59, _  (Sigue: 62)",
+        trickHeading: "Descubrir la regla de suma:",
+        steps: [
+          "Calcula la distancia entre los primeros números: de 53 a 56 van +3.",
+          "Comprueba el siguiente salto: 56 + 3 = 59. ¡La regla es sumar 3!",
+          "Aplica la regla al último número: 59 + 3 = 62."
+        ],
+        generator: () => {
+          const series = [
+            { nums: "53, 56, 59, _", ans: 62, step: 3 },
+            { nums: "34, 38, 42, _", ans: 46, step: 4 },
+            { nums: "25, 30, 35, _", ans: 40, step: 5 },
+            { nums: "41, 44, 47, _", ans: 50, step: 3 },
+            { nums: "62, 66, 70, _", ans: 74, step: 4 },
+            { nums: "18, 24, 30, _", ans: 36, step: 6 },
+            { nums: "73, 76, 79, _", ans: 82, step: 3 },
+            { nums: "45, 50, 55, _", ans: 60, step: 5 },
+            { nums: "28, 32, 36, _", ans: 40, step: 4 }
+          ];
+          const s = series[Math.floor(Math.random() * series.length)];
+          return { text: `${s.nums}`, expected: s.ans, dist: [s.ans + s.step, s.ans - 1, s.ans + 1, s.ans - s.step] };
+        }
+      },
+      {
+        id: 28, world: 4,
+        title: "SiSAT 8: Serie numérica descendente",
+        tag: "SiSAT Oficial · Reactivo 8",
+        sample: "98, 96, 94, _  (Sigue: 92)",
+        trickHeading: "Descubrir la regla de resta:",
+        steps: [
+          "Mira cuánto baja en cada paso: de 98 a 96 baja −2.",
+          "Comprueba el siguiente: 96 − 2 = 94. ¡La regla es restar 2!",
+          "Resta esa cantidad al último número: 94 − 2 = 92."
+        ],
+        generator: () => {
+          const series = [
+            { nums: "98, 96, 94, _", ans: 92, step: 2 },
+            { nums: "85, 80, 75, _", ans: 70, step: 5 },
+            { nums: "77, 74, 71, _", ans: 68, step: 3 },
+            { nums: "68, 64, 60, _", ans: 56, step: 4 },
+            { nums: "50, 47, 44, _", ans: 41, step: 3 },
+            { nums: "95, 90, 85, _", ans: 80, step: 5 },
+            { nums: "84, 82, 80, _", ans: 78, step: 2 },
+            { nums: "48, 44, 40, _", ans: 36, step: 4 },
+            { nums: "63, 60, 57, _", ans: 54, step: 3 }
+          ];
+          const s = series[Math.floor(Math.random() * series.length)];
+          return { text: `${s.nums}`, expected: s.ans, dist: [s.ans - s.step, s.ans + 1, s.ans - 1, s.ans + s.step] };
+        }
+      },
+      {
+        id: 29, world: 4,
+        title: "SiSAT 9: Multiplicación tablas 2 a 5",
+        tag: "SiSAT Oficial · Reactivo 9",
+        sample: "4 × 8 = 32",
+        trickHeading: "El Doble del Doble:",
+        steps: [
+          "Para multiplicar por 4, saca el doble dos veces: el doble de 8 es 16.",
+          "El doble de 16 es 32: ¡4 × 8 = 32!",
+          "Para multiplicar por 5: multiplica por 10 y toma la mitad."
+        ],
+        generator: () => {
+          const list = [
+            { a: 4, b: 8, ans: 32 },
+            { a: 3, b: 7, ans: 21 },
+            { a: 5, b: 6, ans: 30 },
+            { a: 4, b: 9, ans: 36 },
+            { a: 3, b: 8, ans: 24 },
+            { a: 5, b: 7, ans: 35 },
+            { a: 4, b: 7, ans: 28 },
+            { a: 3, b: 9, ans: 27 },
+            { a: 5, b: 9, ans: 45 },
+            { a: 4, b: 6, ans: 24 },
+            { a: 3, b: 6, ans: 18 },
+            { a: 5, b: 8, ans: 40 }
+          ];
+          const m = list[Math.floor(Math.random() * list.length)];
+          return { text: `${m.a} × ${m.b}`, expected: m.ans, dist: [m.ans + m.a, m.ans - m.a, m.ans + 10, m.ans - 2] };
+        }
+      },
+      {
+        id: 30, world: 4,
+        title: "SiSAT 10: Multiplicación tablas 6 a 9",
+        tag: "SiSAT Oficial · Reactivo 10",
+        sample: "9 × 7 = 63",
+        trickHeading: "El Secreto de la Tabla del 9:",
+        steps: [
+          "En la tabla del 9, la primera cifra siempre es 1 menos: 7 − 1 = 6 decenas (60).",
+          "La segunda cifra es lo que le falta a la primera para llegar a 9: de 6 a 9 faltan 3.",
+          "Junta las cifras: 6 y 3 = 63. ¡Nunca falla!"
+        ],
+        generator: () => {
+          const list = [
+            { a: 9, b: 7, ans: 63 },
+            { a: 8, b: 6, ans: 48 },
+            { a: 7, b: 8, ans: 56 },
+            { a: 6, b: 9, ans: 54 },
+            { a: 8, b: 8, ans: 64 },
+            { a: 7, b: 7, ans: 49 },
+            { a: 9, b: 8, ans: 72 },
+            { a: 6, b: 7, ans: 42 },
+            { a: 8, b: 9, ans: 72 },
+            { a: 9, b: 9, ans: 81 },
+            { a: 6, b: 6, ans: 36 },
+            { a: 7, b: 9, ans: 63 }
+          ];
+          const m = list[Math.floor(Math.random() * list.length)];
+          return { text: `${m.a} × ${m.b}`, expected: m.ans, dist: [m.ans + m.a, m.ans - m.a, m.ans + 10, m.ans - 4] };
+        }
+      },
+      {
+        id: 31, world: 4,
+        title: "Simulador SiSAT: Examen Completo 3°",
+        tag: "Simulador Diagnóstico Oficial",
+        sample: "Los 10 reactivos oficiales en 1 sola carrera",
+        trickHeading: "Evaluación Diagnóstica SiSAT 3° Grado:",
+        steps: [
+          "Este nivel alterna aleatoriamente entre los 10 tipos de reactivos oficiales del SiSAT.",
+          "Aplica con calma cada truco mental según el tipo de operación que aparezca.",
+          "¡Completar los 10 aciertos certifica Nivel Esperado en Cálculo Mental SiSAT!"
+        ],
+        generator: () => {
+          // Elige aleatoriamente entre los 10 reactivos oficiales SiSAT (#21 al #30)
+          const pick = Math.floor(Math.random() * 10) + 21;
+          const s = STRATEGIES.find(st => st.id === pick);
+          return s ? s.generator() : { text: "26 + 9", expected: 35, dist: [36, 34, 45] };
+        }
       }
     ];
 
@@ -1977,7 +2243,7 @@
        ============================================================= */
     const gameState = {
       soundEnabled: true,
-      currentWorld: 1,
+      currentWorld: 4,
       currentLevelId: 1,
       difficulty: 'muy_facil',
       cameraControlActive: false,
@@ -2161,7 +2427,7 @@
       if (!gameState.voiceSpeechEnabled || !window.speechSynthesis) return;
       try {
         window.speechSynthesis.cancel();
-        let clean = text.replace('−', ' menos ').replace('+', ' más ').replace('×', ' por ').replace('?', '');
+        let clean = text.replace('−', ' menos ').replace('+', ' más ').replace('×', ' por ').replace('?', '').replace('_', '¿qué número sigue?');
         const utter = new SpeechSynthesisUtterance(clean);
         utter.lang = 'es-MX';
         utter.rate = 0.95;
