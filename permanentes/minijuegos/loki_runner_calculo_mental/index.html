@@ -9,7 +9,7 @@
   <title>Loki Runner · Aventura de Cálculo Mental</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-sky-top: #1e3a8a;
@@ -27,6 +27,7 @@
       --card-bg: rgba(255, 255, 255, 0.96);
       --font-display: 'Fredoka', cursive, sans-serif;
       --font-body: 'Lexend', system-ui, sans-serif;
+      --font-pixel: 'Press Start 2P', monospace;
     }
 
     * {
@@ -72,24 +73,24 @@
     }
 
     /* -------------------------------------------------------------
-       VISTA 1: MENÚ DE NIVELES / MAPA DE ESTRATEGIAS
+       VISTA 1: MENÚ DE NIVELES (COMPACTO Y SELECCIÓN DIRECTA)
        ------------------------------------------------------------- */
     #view-menu {
       background: radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 100%);
       overflow-y: auto;
-      padding: 1rem 1.25rem 3rem 1.25rem;
+      padding: 0.85rem 1.15rem 2.5rem 1.15rem;
       z-index: 20;
     }
 
     .menu-header {
       max-width: 1100px;
-      margin: 0 auto 1rem auto;
+      margin: 0 auto 0.75rem auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 1rem;
-      padding-bottom: 0.75rem;
+      gap: 0.75rem;
+      padding-bottom: 0.65rem;
       border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -99,26 +100,65 @@
       gap: 0.85rem;
     }
 
+    .loki-idle-box {
+      position: relative;
+      cursor: pointer;
+    }
+
     .loki-badge-img {
-      width: 68px;
-      height: 68px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.45);
       border: 3px solid #f59e0b;
       background: #ffffff;
       object-fit: cover;
+      transition: transform 0.2s ease;
+    }
+
+    .loki-badge-img:hover {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .loki-status-bubble {
+      position: absolute;
+      bottom: -6px;
+      right: -8px;
+      background: #10b981;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 0.15rem 0.4rem;
+      border-radius: 9999px;
+      border: 2px solid #0f172a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      white-space: nowrap;
     }
 
     .menu-title h1 {
       font-family: var(--font-display);
-      font-size: 1.85rem;
+      font-size: 1.75rem;
       color: #fbbf24;
       line-height: 1.1;
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pixel-badge {
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      background: #ef4444;
+      color: #fff;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      letter-spacing: 0.05rem;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
     }
 
     .menu-title p {
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       color: #94a3b8;
       font-weight: 600;
     }
@@ -126,94 +166,91 @@
     .menu-stats {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
     }
 
     .stat-pill {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 0.4rem 0.85rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 9999px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #f8fafc;
     }
 
     .stat-pill img {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       object-fit: contain;
     }
 
     /* TARJETA DE CONTROL POR CÁMARA EN EL MENÚ */
     .menu-camera-card {
       max-width: 1100px;
-      margin: 0 auto 1.25rem auto;
+      margin: 0 auto 0.95rem auto;
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
       border: 2px solid rgba(59, 130, 246, 0.45);
-      border-radius: 1.1rem;
-      padding: 0.85rem 1.25rem;
+      border-radius: 1rem;
+      padding: 0.75rem 1.15rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      gap: 0.85rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
       flex-wrap: wrap;
     }
 
     .menu-cam-left {
       display: flex;
       align-items: center;
-      gap: 0.9rem;
+      gap: 0.85rem;
     }
 
     .cam-badge-icon {
-      width: 46px;
-      height: 46px;
+      width: 42px;
+      height: 42px;
       background: #1e3a8a;
       border: 2px solid #3b82f6;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
     }
 
     .cam-badge-title {
       font-family: var(--font-display);
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       color: #93c5fd;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
     .cam-badge-desc {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: #94a3b8;
       max-width: 620px;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     .btn-menu-camera {
       background: #2563eb;
       border: 2px solid #60a5fa;
       color: #ffffff;
-      padding: 0.6rem 1.35rem;
+      padding: 0.5rem 1.15rem;
       border-radius: 9999px;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.5rem;
       box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
       transition: all 0.2s ease;
     }
@@ -230,8 +267,8 @@
     }
 
     .cam-dot-pulse {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #cbd5e1;
       display: inline-block;
@@ -250,21 +287,21 @@
 
     .world-tabs {
       max-width: 1100px;
-      margin: 0 auto 1.25rem auto;
+      margin: 0 auto 0.95rem auto;
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       overflow-x: auto;
-      padding-bottom: 0.25rem;
+      padding-bottom: 0.2rem;
     }
 
     .world-tab-btn {
       background: rgba(255, 255, 255, 0.06);
       border: 2px solid transparent;
       color: #94a3b8;
-      padding: 0.55rem 1.1rem;
+      padding: 0.45rem 0.95rem;
       border-radius: 9999px;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
@@ -278,38 +315,46 @@
       box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
     }
 
+    /* GRID COMPACTO DE NIVELES */
     .levels-grid {
       max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+      gap: 0.85rem;
     }
 
+    /* TARJETA COMPACTA DE UN SOLO CLIC */
     .level-card {
       background: var(--card-bg);
       color: var(--text-main);
-      border-radius: 1.1rem;
-      padding: 1.1rem 1.15rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      border: 3px solid #cbd5e1;
+      border-radius: 0.95rem;
+      padding: 0.85rem 0.95rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      border: 2.5px solid #cbd5e1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 0.85rem;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      gap: 0.55rem;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .level-card:hover {
-      transform: translateY(-3px);
-      border-color: #3b82f6;
+      transform: translateY(-3px) scale(1.01);
+      border-color: #2563eb;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    }
+
+    .level-card:active {
+      transform: scale(0.98);
     }
 
     .level-card.featured {
       border-color: #f59e0b;
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
     }
 
     .level-badge-num {
@@ -320,21 +365,23 @@
       color: #fbbf24;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 0.82rem;
-      padding: 0.25rem 0.75rem;
-      border-bottom-left-radius: 0.85rem;
+      font-size: 0.76rem;
+      padding: 0.2rem 0.65rem;
+      border-bottom-left-radius: 0.75rem;
     }
 
     .level-header h3 {
       font-family: var(--font-display);
-      font-size: 1.15rem;
+      font-size: 1.02rem;
       color: #0f172a;
-      line-height: 1.25;
-      margin-bottom: 0.25rem;
+      line-height: 1.22;
+      margin-top: 0.15rem;
+      margin-bottom: 0.15rem;
+      padding-right: 2.2rem;
     }
 
     .level-strategy-tag {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #2563eb;
       text-transform: uppercase;
@@ -343,23 +390,23 @@
 
     .level-formula-preview {
       background: #f1f5f9;
-      border-radius: 0.65rem;
-      padding: 0.45rem 0.7rem;
+      border-radius: 0.55rem;
+      padding: 0.35rem 0.6rem;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #334155;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .level-formula-preview span.badge-ex {
       background: #cbd5e1;
       color: #0f172a;
-      font-size: 0.7rem;
-      padding: 0.1rem 0.35rem;
-      border-radius: 4px;
+      font-size: 0.65rem;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
       font-weight: 700;
     }
 
@@ -367,40 +414,40 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
-      padding-top: 0.4rem;
+      gap: 0.4rem;
+      padding-top: 0.35rem;
       border-top: 1px solid #e2e8f0;
     }
 
     .level-stars {
       display: flex;
-      gap: 0.15rem;
-      font-size: 1.05rem;
+      gap: 0.1rem;
+      font-size: 0.95rem;
     }
 
-    .btn-play-level {
-      background: #2563eb;
-      color: #ffffff;
-      border: none;
-      padding: 0.45rem 0.95rem;
-      border-radius: 9999px;
+    .level-cta-badge {
       font-family: var(--font-display);
-      font-size: 0.9rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      cursor: pointer;
+      color: #2563eb;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      transition: background 0.15s ease, transform 0.1s ease;
+      gap: 0.25rem;
+      transition: background 0.15s, color 0.15s;
     }
 
-    .btn-play-level:hover {
-      background: #1d4ed8;
-      transform: scale(1.03);
+    .level-card:hover .level-cta-badge {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
     }
 
     /* -------------------------------------------------------------
-       VISTA 2: ESCENARIO 3D SUBWAY SURFERS (CANVAS RUNNER)
+       VISTA 2: ESCENARIO 3D SUBWAY SURFERS (PIXEL ART ENGINE)
        ------------------------------------------------------------- */
     #view-game {
       background: #000;
@@ -412,6 +459,8 @@
       height: 100%;
       display: block;
       touch-action: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
     .game-hud-top {
@@ -419,13 +468,13 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 0.6rem 1rem;
+      padding: 0.5rem 0.9rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       pointer-events: none;
       z-index: 30;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0) 100%);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0) 100%);
     }
 
     .hud-row-meta {
@@ -434,13 +483,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
 
     .hud-badge-group {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       pointer-events: auto;
       flex-wrap: wrap;
     }
@@ -449,8 +498,8 @@
       background: rgba(0, 0, 0, 0.55);
       border: 1.5px solid rgba(255, 255, 255, 0.2);
       border-radius: 9999px;
-      padding: 0.25rem 0.65rem;
-      font-size: 1.15rem;
+      padding: 0.2rem 0.6rem;
+      font-size: 1.1rem;
       letter-spacing: 0.15rem;
       display: flex;
       align-items: center;
@@ -460,24 +509,37 @@
       background: rgba(0, 0, 0, 0.55);
       border: 1.5px solid #f59e0b;
       border-radius: 9999px;
-      padding: 0.25rem 0.75rem;
+      padding: 0.2rem 0.7rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       font-family: var(--font-display);
       font-weight: 700;
       color: #fbbf24;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     .hud-score-box img {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       object-fit: contain;
     }
 
+    .hud-theme-badge {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid #60a5fa;
+      border-radius: 9999px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
     .hud-mode-badge {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       padding: 0.2rem 0.55rem;
       border-radius: 9999px;
@@ -508,9 +570,9 @@
       background: transparent;
       border: none;
       color: #cbd5e1;
-      padding: 0.2rem 0.5rem;
+      padding: 0.2rem 0.45rem;
       border-radius: 9999px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
@@ -529,7 +591,7 @@
     .hud-btn-group {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       pointer-events: auto;
       flex-wrap: wrap;
     }
@@ -538,10 +600,10 @@
       background: rgba(255, 255, 255, 0.15);
       border: 1.5px solid rgba(255, 255, 255, 0.3);
       color: #fff;
-      padding: 0.35rem 0.65rem;
+      padding: 0.3rem 0.6rem;
       border-radius: 0.55rem;
       font-family: var(--font-display);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       backdrop-filter: blur(4px);
@@ -556,11 +618,11 @@
       border: 3px solid #f59e0b;
       box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
       border-radius: 1.1rem;
-      padding: 0.5rem 1.6rem;
+      padding: 0.45rem 1.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.15rem;
+      gap: 0.1rem;
       pointer-events: auto;
       max-width: 90vw;
       animation: pulseBorder 2s infinite ease-in-out;
@@ -572,7 +634,7 @@
     }
 
     .hud-strategy-title {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: #94a3b8;
       text-transform: uppercase;
@@ -581,18 +643,18 @@
 
     .hud-math-problem {
       font-family: var(--font-display);
-      font-size: 2.2rem;
+      font-size: 2.15rem;
       font-weight: 800;
       color: #ffffff;
       letter-spacing: 0.06rem;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .hud-math-hint {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #fde047;
       font-weight: 600;
       margin-top: -0.15rem;
@@ -819,7 +881,7 @@
       background: rgba(239, 68, 68, 0.95);
     }
 
-    /* MODALES FORMATIVOS */
+    /* MODAL DE ESTRATEGIA Y SELECCIÓN DIRECTA DE DIFICULTAD */
     .modal-overlay {
       position: absolute;
       top: 0;
@@ -841,15 +903,15 @@
       background: #ffffff;
       color: #0f172a;
       width: 100%;
-      max-width: 540px;
-      border-radius: 1.4rem;
-      padding: 1.5rem 1.6rem;
+      max-width: 530px;
+      border-radius: 1.3rem;
+      padding: 1.4rem 1.5rem;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
       border: 4px solid #f59e0b;
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
-      animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 0.95rem;
+      animation: modalPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     @keyframes modalPop {
@@ -860,14 +922,14 @@
     .modal-header {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.9rem;
       border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 0.85rem;
+      padding-bottom: 0.75rem;
     }
 
     .modal-avatar {
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       border: 3px solid #f59e0b;
       background: #fff;
@@ -876,13 +938,13 @@
 
     .modal-title h2 {
       font-family: var(--font-display);
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: #0f172a;
       line-height: 1.2;
     }
 
     .modal-title p {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: #64748b;
       font-weight: 600;
     }
@@ -890,16 +952,16 @@
     .trick-box {
       background: #fffbeb;
       border: 2px dashed #f59e0b;
-      border-radius: 0.95rem;
-      padding: 1rem 1.15rem;
+      border-radius: 0.9rem;
+      padding: 0.85rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .trick-title {
       font-family: var(--font-display);
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: #b45309;
       font-weight: 700;
       display: flex;
@@ -908,30 +970,30 @@
     }
 
     .trick-steps {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #334155;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     .trick-steps li {
-      margin-left: 1.25rem;
-      margin-bottom: 0.35rem;
+      margin-left: 1.2rem;
+      margin-bottom: 0.25rem;
     }
 
     .trick-formula {
       font-family: var(--font-display);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #b45309;
       background: rgba(245, 158, 11, 0.15);
-      padding: 0.45rem 0.75rem;
-      border-radius: 0.6rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.55rem;
       text-align: center;
       letter-spacing: 0.05rem;
     }
 
     .modal-speed-picker {
-      margin: 0.2rem 0;
+      margin-top: 0.15rem;
       text-align: left;
     }
 
@@ -943,33 +1005,38 @@
 
     .btn-modal-speed {
       background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      border-radius: 0.75rem;
-      padding: 0.55rem 0.5rem;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.65rem 0.55rem;
       font-family: var(--font-body);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.15rem;
+      gap: 0.2rem;
       transition: all 0.15s ease;
     }
 
     .btn-modal-speed span {
       font-family: var(--font-display);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 700;
     }
 
     .btn-modal-speed small {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       color: #64748b;
+      font-weight: 600;
     }
 
-    .btn-modal-speed.opt-tortuga:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; }
-    .btn-modal-speed.opt-paso:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
-    .btn-modal-speed.opt-trote:hover { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
-    .btn-modal-speed.opt-rayo:hover { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+    .btn-modal-speed:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-modal-speed.opt-tortuga:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
+    .btn-modal-speed.opt-paso:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); }
+    .btn-modal-speed.opt-trote:hover { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); }
+    .btn-modal-speed.opt-rayo:hover { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
 
     .modal-buttons {
       display: flex;
@@ -1055,14 +1122,17 @@
   <div id="app-container">
 
     <!-- =============================================================
-         VISTA 1: MENÚ DE NIVELES / MAPA DE ESTRATEGIAS
+         VISTA 1: MENÚ DE NIVELES (COMPACTO Y SELECCIÓN DIRECTA)
          ============================================================= -->
     <div id="view-menu" class="view active">
       <div class="menu-header">
         <div class="menu-brand">
-          <img src="recursos/loki_avatar.png" alt="Loki" class="loki-badge-img">
+          <div class="loki-idle-box" title="Loki esperando a que elijas un nivel">
+            <img src="recursos/loki_avatar.png" id="loki-menu-idle-img" alt="Loki" class="loki-badge-img">
+            <span class="loki-status-bubble">¡Listo! 🐾</span>
+          </div>
           <div class="menu-title">
-            <h1>LOKI RUNNER</h1>
+            <h1>LOKI RUNNER <span class="pixel-badge">8-BIT</span></h1>
             <p>Aventura de Cálculo Mental · Escuela Primaria Federal "José Clemente Orozco" · 3° "A"</p>
           </div>
         </div>
@@ -1104,12 +1174,12 @@
       </div>
 
       <div class="levels-grid" id="levels-container">
-        <!-- Render dinámico -->
+        <!-- Render dinámico de tarjetas compactas de 1 solo clic -->
       </div>
     </div>
 
     <!-- =============================================================
-         VISTA 2: ESCENARIO 3D SUBWAY SURFERS (CANVAS RUNNER)
+         VISTA 2: ESCENARIO 3D SUBWAY SURFERS (PIXEL ART RUNNER)
          ============================================================= -->
     <div id="view-game" class="view">
       <canvas id="gameCanvas"></canvas>
@@ -1123,6 +1193,7 @@
               <img src="recursos/hueso_transparente.png" alt="Huesos">
               <span id="hud-bones-progress">0 / 10</span>
             </div>
+            <span class="hud-theme-badge" id="hud-theme-badge">🌲 Bosque</span>
             <span class="hud-mode-badge mode-tutorial" id="hud-speed-badge">🐢 Ultra Lento</span>
 
             <!-- SELECTOR RÁPIDO DE VELOCIDAD CON MODO DIFÍCIL -->
@@ -1190,13 +1261,13 @@
       </div>
     </div>
 
-    <!-- MODAL 1: EXPLICACIÓN Y TUTORIAL DEL TRUCO MENTAL -->
+    <!-- MODAL 1: EXPLICACIÓN Y LANZAMIENTO DIRECTO DE DIFICULTAD -->
     <div id="modal-tutorial" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-header">
           <img src="recursos/loki_avatar.png" alt="Loki" class="modal-avatar">
           <div class="modal-title">
-            <h2 id="modal-tut-strategy-name">Estrategia #6: Restar 10</h2>
+            <h2 id="modal-tut-strategy-name">Nivel #6: Restar 10</h2>
             <p id="modal-tut-grade-tag">Consolidación Fase 4 · SiSAT Oficial</p>
           </div>
         </div>
@@ -1216,7 +1287,7 @@
         </div>
 
         <div class="modal-speed-picker">
-          <label style="font-weight:700; color:#334155; font-size:0.85rem; margin-bottom:0.4rem; display:block;">Selecciona la velocidad para iniciar:</label>
+          <label style="font-weight:700; color:#334155; font-size:0.85rem; margin-bottom:0.4rem; display:block;">Selecciona la dificultad para jugar:</label>
           <div class="modal-speed-grid">
             <button class="btn-modal-speed opt-tortuga" onclick="startGameWithSpeed(0.65, 'sp-tortuga')">
               <span>🐌 Ultra Lento</span>
@@ -1231,15 +1302,15 @@
               <small>~9 seg. por cálculo</small>
             </button>
             <button class="btn-modal-speed opt-rayo" onclick="startGameWithSpeed(2.2, 'sp-rayo')">
-              <span>⚡ Difícil (Rápido)</span>
+              <span>⚡ Rayo (Difícil)</span>
               <small>~6 seg. por cálculo</small>
             </button>
           </div>
         </div>
 
-        <div class="modal-buttons">
+        <div class="modal-buttons" style="margin-top:0.25rem;">
           <button class="btn-modal btn-modal-secondary" onclick="closeTutorialModal()">
-            Cerrar
+            ✕ Cerrar
           </button>
         </div>
       </div>
@@ -1328,7 +1399,88 @@
     document.oncontextmenu = () => false;
 
     /* =============================================================
-       2. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
+       2. ARQUITECTURA MULTI-TEMA PIXEL ART 8-BIT
+       ============================================================= */
+    const THEMES = [
+      {
+        id: 'bosque',
+        name: 'Bosque de Montaña',
+        icon: '🌲',
+        skyTop: '#0c1a30',
+        skyBottom: '#2563eb',
+        grassTop: '#15803d',
+        grassBottom: '#14532d',
+        roadTop: '#334155',
+        roadBottom: '#0f172a',
+        curb1: '#dc2626',
+        curb2: '#ffffff',
+        treeA: 'pino',
+        treeB: 'encino'
+      },
+      {
+        id: 'playa',
+        name: 'Costa Caribeña',
+        icon: '🏖️',
+        skyTop: '#0284c7',
+        skyBottom: '#7dd3fc',
+        grassTop: '#eab308', // arena dorada
+        grassBottom: '#ca8a04',
+        roadTop: '#475569',
+        roadBottom: '#1e293b',
+        curb1: '#06b6d4',
+        curb2: '#ffffff',
+        treeA: 'encino',
+        treeB: 'encino'
+      },
+      {
+        id: 'ciudad',
+        name: 'Ciudad Neón',
+        icon: '🏙️',
+        skyTop: '#090514',
+        skyBottom: '#311042',
+        grassTop: '#334155', // aceras urbanas
+        grassBottom: '#1e293b',
+        roadTop: '#1e293b',
+        roadBottom: '#020617',
+        curb1: '#facc15',
+        curb2: '#0f172a',
+        treeA: 'pino',
+        treeB: 'encino'
+      },
+      {
+        id: 'granja',
+        name: 'Granja Rural',
+        icon: '🚜',
+        skyTop: '#7c2d12',
+        skyBottom: '#fdba74',
+        grassTop: '#a16207', // tierra de cultivo
+        grassBottom: '#713f12',
+        roadTop: '#57534e',
+        roadBottom: '#292524',
+        curb1: '#ffffff',
+        curb2: '#b45309',
+        treeA: 'encino',
+        treeB: 'pino'
+      },
+      {
+        id: 'campo',
+        name: 'Valle Florido',
+        icon: '🌾',
+        skyTop: '#0369a1',
+        skyBottom: '#bae6fd',
+        grassTop: '#65a30d', // pradera
+        grassBottom: '#3f6212',
+        roadTop: '#475569',
+        roadBottom: '#1e293b',
+        curb1: '#22c55e',
+        curb2: '#ffffff',
+        treeA: 'encino',
+        treeB: 'pino'
+      }
+    ];
+
+    /* =============================================================
+       3. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
        ============================================================= */
     const STRATEGIES = [
       {
@@ -1660,7 +1812,7 @@
     ];
 
     /* =============================================================
-       3. ESTADO GLOBAL DE LA APLICACIÓN
+       4. ESTADO GLOBAL DE LA APLICACIÓN
        ============================================================= */
     const gameState = {
       soundEnabled: true,
@@ -1672,6 +1824,7 @@
       voiceSpeechEnabled: false,
       gameActive: false,
       gamePaused: false,
+      currentTheme: THEMES[0],
       lives: 3,
       correctCount: 0,
       targetGoal: 10,
@@ -1689,7 +1842,7 @@
     } catch(e) {}
 
     /* =============================================================
-       4. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
+       5. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
        ============================================================= */
     let audioCtx = null;
 
@@ -1811,7 +1964,7 @@
     }
 
     /* =============================================================
-       5. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
+       6. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
           FILTRADO ESTRICTO ANTI-MOVIMIENTOS LENTOS
        ============================================================= */
     let cameraStream = null;
@@ -2077,7 +2230,7 @@
     }
 
     /* =============================================================
-       6. RENDERIZADO DEL MENÚ Y NIVELES
+       7. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
     function switchWorld(worldNum) {
       gameState.currentWorld = worldNum;
@@ -2104,21 +2257,21 @@
 
         const card = document.createElement('div');
         card.className = 'level-card' + (strat.id === 6 ? ' featured' : '');
+        // El clic en cualquier parte de la tarjeta abre directamente el selector de dificultad
+        card.onclick = () => openTutorialModal(strat.id);
         card.innerHTML = `
-          <div class="level-badge-num">NIVEL ${strat.id}</div>
+          <div class="level-badge-num">#${strat.id}</div>
           <div class="level-header">
             <span class="level-strategy-tag">${strat.tag}</span>
             <h3>${strat.title}</h3>
           </div>
           <div class="level-formula-preview">
-            <span class="badge-ex">EJEMPLO</span>
+            <span class="badge-ex">EJ</span>
             <span>${strat.sample}</span>
           </div>
           <div class="level-footer">
             <div class="level-stars" title="${stars} estrellas ganadas">${starStr}</div>
-            <button class="btn-play-level" onclick="openTutorialModal(${strat.id}, 'tutorial')">
-              <span>▶</span> Jugar
-            </button>
+            <span class="level-cta-badge">⚡ Jugar</span>
           </div>
         `;
         container.appendChild(card);
@@ -2156,6 +2309,7 @@
       openTutorialModal(gameState.currentLevelId);
     }
 
+    // Al seleccionar una dificultad, se lanza la partida DE INMEDIATO (sin confirmación extra)
     function startGameWithSpeed(mult, btnId) {
       closeTutorialModal();
       gameState.speedMultiplier = mult;
@@ -2164,7 +2318,7 @@
     }
 
     /* =============================================================
-       7. MOTOR DEL JUEGO RUNNER 3D (CANVAS SUBWAY SURFERS)
+       8. MOTOR DEL JUEGO RUNNER 3D (PIXEL ART ENGINE)
        ============================================================= */
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -2222,6 +2376,7 @@
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.scale(dpr, dpr);
+      ctx.imageSmoothingEnabled = false; // Estilo Pixel Art nítido
       WORLD.horizonY = window.innerHeight * 0.38;
     }
     window.addEventListener('resize', resizeCanvas);
@@ -2233,6 +2388,13 @@
       gameState.lives = 3;
       gameState.correctCount = 0;
       gameState.startTime = Date.now();
+
+      // SELECCIÓN ALEATORIA DE TEMA DE ESCENARIO 8-BIT
+      gameState.currentTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
+      const themeBadge = document.getElementById('hud-theme-badge');
+      if (themeBadge) {
+        themeBadge.textContent = `${gameState.currentTheme.icon} ${gameState.currentTheme.name}`;
+      }
 
       document.getElementById('view-menu').classList.remove('active');
       document.getElementById('view-game').classList.add('active');
@@ -2269,25 +2431,26 @@
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
 
-      // VEGETACIÓN CON ALTERNANCIA COMPLETA DE PINOS Y ENCINOS EN AMBOS LADOS
+      // VEGETACIÓN CON ALTERNANCIA SEGÚN EL TEMA
       individualTrees = [];
+      const theme = gameState.currentTheme || THEMES[0];
       const treeSpacing = 130;
       let treeIdx = 0;
       for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
-        // Lado izquierdo: alterna pino y encino con sutil variación lateral
-        const leftType = (treeIdx % 2 === 0) ? 'pino' : 'encino';
+        // Lado izquierdo: alterna treeA y treeB
+        const leftType = (treeIdx % 2 === 0) ? theme.treeA : theme.treeB;
         const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
         individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
 
-        // Lado derecho: alterna encino y pino con desfase de medio paso
-        const rightType = (treeIdx % 2 === 0) ? 'encino' : 'pino';
+        // Lado derecho: alterna treeB y treeA con desfase
+        const rightType = (treeIdx % 2 === 0) ? theme.treeB : theme.treeA;
         const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
         individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
 
-        // Capa de fondo exterior (árboles más alejados para densidad forestal)
+        // Capa de fondo exterior
         if (treeIdx % 2 === 0) {
-          individualTrees.push({ x: -2.85, z: z + 40, type: 'pino', isFar: true });
-          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: 'encino', isFar: true });
+          individualTrees.push({ x: -2.85, z: z + 40, type: theme.treeA, isFar: true });
+          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: theme.treeB, isFar: true });
         }
 
         treeIdx++;
@@ -2301,7 +2464,7 @@
     }
 
     /* =============================================================
-       8. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
+       9. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
        ============================================================= */
     function spawnNextProblemWave() {
       const strat = STRATEGIES[gameState.currentLevelId - 1];
@@ -2424,7 +2587,7 @@
     }
 
     /* =============================================================
-       9. BUCLE DE ACTUALIZACIÓN Y FÍSICAS (60 FPS)
+       10. BUCLE DE ACTUALIZACIÓN Y FÍSICAS (60 FPS)
        ============================================================= */
     let lastFrameTime = performance.now();
 
@@ -2629,7 +2792,7 @@
     }
 
     /* =============================================================
-       10. RENDERIZADO 3D PERSPECTIVO Y ÁRBOLES INDIVIDUALES
+       11. RENDERIZADO 3D PERSPECTIVO Y TEMAS PIXEL ART 8-BIT
        ============================================================= */
     function project3D(xWorld, zWorld) {
       const fov = WORLD.cameraFov;
@@ -2649,11 +2812,12 @@
       const W = window.innerWidth;
       const H = window.innerHeight;
       const horizon = WORLD.horizonY;
+      const theme = gameState.currentTheme || THEMES[0];
 
       ctx.clearRect(0, 0, W, H);
 
-      // 1. CIELO Y HORIZONTE PANORÁMICO (CON PARALAJE 3D)
-      if (IMAGES.fondoHorizonte && IMAGES.fondoHorizonte.complete && IMAGES.fondoHorizonte.naturalWidth > 0) {
+      // 1. CIELO Y HORIZONTE PANORÁMICO SEGÚN TEMA (8-BIT / ASSET)
+      if (theme.id === 'bosque' && IMAGES.fondoHorizonte && IMAGES.fondoHorizonte.complete && IMAGES.fondoHorizonte.naturalWidth > 0) {
         const bgImg = IMAGES.fondoHorizonte;
         const bgW = W * 1.25;
         const bgH = horizon * 1.15;
@@ -2661,19 +2825,68 @@
         const bgY = horizon - bgH + 10;
         ctx.drawImage(bgImg, parallaxX, bgY, bgW, bgH);
       } else {
-        // Fallback degradado
+        // Cielo degradado pixel art
         const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
-        skyGrad.addColorStop(0, '#0c1a30');
-        skyGrad.addColorStop(0.65, '#1e3a8a');
-        skyGrad.addColorStop(1, '#60a5fa');
+        skyGrad.addColorStop(0, theme.skyTop);
+        skyGrad.addColorStop(1, theme.skyBottom);
         ctx.fillStyle = skyGrad;
         ctx.fillRect(0, 0, W, horizon);
+
+        // Horizonte procedural 8-bit característico del tema
+        const parallaxX = -player.worldX * 0.12;
+        if (theme.id === 'playa') {
+          // Océano y olas pixel art
+          ctx.fillStyle = '#0284c7';
+          ctx.fillRect(0, horizon - 30, W, 30);
+          ctx.fillStyle = '#38bdf8';
+          for (let x = -30; x < W + 30; x += 32) {
+            const waveY = horizon - 16 + (Math.floor(Math.sin((x + parallaxX * 2) * 0.06) * 2) * 4);
+            ctx.fillRect(x, waveY, 18, 4);
+          }
+          // Sol pixel art
+          ctx.fillStyle = '#fef08a';
+          ctx.fillRect(W * 0.75, horizon * 0.35, 36, 36);
+        } else if (theme.id === 'ciudad') {
+          // Siluetas de rascacielos con ventanas pixel art
+          ctx.fillStyle = '#170c2e';
+          for (let x = -20; x < W + 40; x += 44) {
+            const bH = 45 + ((Math.abs(Math.sin((x + 80) * 0.08)) * 55) | 0);
+            ctx.fillRect(x, horizon - bH, 40, bH + 10);
+            ctx.fillStyle = '#fef08a';
+            for (let wy = horizon - bH + 8; wy < horizon - 8; wy += 12) {
+              if ((x + wy) % 3 === 0) {
+                ctx.fillRect(x + 8, wy, 6, 6);
+                ctx.fillRect(x + 24, wy, 6, 6);
+              }
+            }
+            ctx.fillStyle = '#170c2e';
+          }
+        } else if (theme.id === 'granja') {
+          // Colinas de campo y molino
+          ctx.fillStyle = '#7c2d12';
+          for (let x = -20; x < W + 20; x += 20) {
+            const fH = 25 + Math.sin((x + parallaxX) * 0.008) * 18;
+            ctx.fillRect(x, horizon - Math.floor(fH / 6) * 6, 20, Math.floor(fH / 6) * 6 + 10);
+          }
+          const millX = ((W * 0.72 + parallaxX * 0.4) % W + W) % W;
+          ctx.fillStyle = '#431407';
+          ctx.fillRect(millX - 10, horizon - 44, 20, 44);
+          ctx.fillRect(millX - 20, horizon - 36, 40, 4);
+          ctx.fillRect(millX - 2, horizon - 54, 4, 40);
+        } else {
+          // Montañas pixel art (campo o bosque)
+          ctx.fillStyle = '#1e293b';
+          for (let x = -40; x < W + 40; x += 16) {
+            const hMtn = 35 + Math.sin((x + parallaxX) * 0.012) * 25 + Math.cos((x + parallaxX) * 0.025) * 15;
+            ctx.fillRect(x, horizon - Math.floor(hMtn / 8) * 8, 16, Math.floor(hMtn / 8) * 8 + 10);
+          }
+        }
       }
 
-      // 2. PRADERA LATERAL (CÉSPED)
+      // 2. TERRENO LATERAL (CÉSPED, ARENA O BANQUETA SEGÚN TEMA)
       const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
-      grassGrad.addColorStop(0, '#15803d');
-      grassGrad.addColorStop(1, '#14532d');
+      grassGrad.addColorStop(0, theme.grassTop);
+      grassGrad.addColorStop(1, theme.grassBottom);
       ctx.fillStyle = grassGrad;
       ctx.fillRect(0, horizon, W, H - horizon);
 
@@ -2684,8 +2897,8 @@
       const pNearRight = project3D(WORLD.laneWidth * 1.9, 0);
 
       const roadGrad = ctx.createLinearGradient(0, horizon, 0, H);
-      roadGrad.addColorStop(0, '#334155');
-      roadGrad.addColorStop(1, '#0f172a');
+      roadGrad.addColorStop(0, theme.roadTop);
+      roadGrad.addColorStop(1, theme.roadBottom);
       ctx.fillStyle = roadGrad;
 
       ctx.beginPath();
@@ -2696,7 +2909,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // 4. BORDES EN MOVIMIENTO (RUMBLE STRIPS)
+      // 4. BORDES EN MOVIMIENTO (RUMBLE STRIPS CON COLORES DEL TEMA)
       const segmentsCount = 28;
       const segLength = WORLD.roadLength / segmentsCount;
 
@@ -2710,7 +2923,7 @@
         const pR1 = project3D(WORLD.laneWidth * 1.85, z1);
         const pR2 = project3D(WORLD.laneWidth * 1.85, z2);
 
-        ctx.fillStyle = (s % 2 === 0) ? '#dc2626' : '#ffffff';
+        ctx.fillStyle = (s % 2 === 0) ? theme.curb1 : theme.curb2;
 
         const curbW1 = 12 * pL1.scale;
         const curbW2 = 12 * pL2.scale;
@@ -2749,7 +2962,7 @@
         }
       });
 
-      // 6. ÁRBOLES INDIVIDUALES (ORDENADOS POR Z DESCENDENTE PARA PERSPECTIVA REAL)
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (ORDENADOS POR Z DESCENDENTE)
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
@@ -2780,7 +2993,7 @@
           const gateX = pt.x - (gateW * 0.5);
           const gateY = pt.y - gateH;
 
-          // Postes laterales de madera
+          // Postes de madera
           ctx.fillStyle = '#78350f';
           ctx.fillRect(gateX, gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
           ctx.fillRect(gateX + gateW - (7 * pt.scale), gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
@@ -2795,13 +3008,13 @@
           ctx.lineWidth = Math.max(2, 4 * pt.scale);
           ctx.stroke();
 
-          // Sombra suave en la base
+          // Sombra
           ctx.fillStyle = 'rgba(0,0,0,0.3)';
           ctx.beginPath();
           ctx.ellipse(pt.x, pt.y, gateW * 0.45, 6 * pt.scale, 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // Número
+          // Número de respuesta
           const fontSize = Math.max(10, Math.floor(46 * pt.scale));
           ctx.font = `800 ${fontSize}px 'Fredoka', cursive, sans-serif`;
           ctx.fillStyle = '#ffffff';
@@ -2828,7 +3041,7 @@
       ctx.ellipse(lokiX, H * 0.86 + 18, Math.max(15, shadowW), 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Selección de fotograma alterno
+      // Selección de fotograma de carrera
       const isFrame2 = Math.floor(player.runCycle * 1.5) % 2 === 1;
       const currentSprite = (isFrame2 && IMAGES.lokiRun2.complete) ? IMAGES.lokiRun2 : 
                             (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
@@ -2839,7 +3052,7 @@
       // Rotación angular por inclinación de giro
       ctx.rotate(player.tilt);
 
-      // Parpadeo de invulnerabilidad tras choque
+      // Parpadeo de invulnerabilidad
       if (player.isInvulnerable) {
         ctx.globalAlpha = Math.floor(Date.now() / 90) % 2 === 0 ? 0.35 : 0.85;
       }
@@ -2847,13 +3060,10 @@
       if (currentSprite) {
         ctx.drawImage(currentSprite, -lokiW * 0.5, -lokiH * 0.85, lokiW, lokiH);
       } else {
-        // Fallback geométrico de espaldas
         ctx.fillStyle = '#1e1b18';
         ctx.beginPath();
         ctx.ellipse(0, -35, 38, 48, 0, 0, Math.PI * 2);
         ctx.fill();
-
-        // Collar rojo a cuadros en la nuca
         ctx.fillStyle = '#dc2626';
         ctx.fillRect(-22, -62, 44, 10);
       }
@@ -2872,7 +3082,7 @@
     }
 
     /* =============================================================
-       11. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       12. INICIALIZACIÓN AL CARGAR LA PÁGINA
        ============================================================= */
     window.addEventListener('DOMContentLoaded', () => {
       renderLevels();
