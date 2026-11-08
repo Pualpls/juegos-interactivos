@@ -2840,6 +2840,8 @@
       poste: new Image(),
       arbusto: new Image(),
       cactus: new Image(),
+      sombraPixel: new Image(),
+      arcoValla: new Image(),
       fondoHorizonte: new Image(),
       fondoBosque: new Image(),
       fondoPlaya: new Image(),
@@ -2861,6 +2863,8 @@
     IMAGES.poste.src = 'recursos/poste_luz_3d.png';
     IMAGES.arbusto.src = 'recursos/arbusto_flores_3d.png';
     IMAGES.cactus.src = 'recursos/cactus_campo_3d.png';
+    IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
+    IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
     IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
     IMAGES.fondoBosque.src = 'recursos/fondo_bosque_3d.png';
     IMAGES.fondoPlaya.src = 'recursos/fondo_playa_3d.png';
@@ -3150,7 +3154,9 @@
       }
       player.sprintCycle += dt * baseSprintFps * animSpeedRatio;
       player.runCycle += dt * (WORLD.speed * 4.5);
-      player.jumpY = Math.abs(Math.sin(player.sprintCycle * Math.PI * 0.5)) * 6;
+      // El sprite animado de Loki ya contiene su propia elevación de patas; jumpY = 0 mantiene
+      // sus patas firmemente ancladas sobre la superficie de la sombra sin gaps flotantes.
+      player.jumpY = 0;
 
       if (player.isInvulnerable) {
         player.invulnerableTimer -= dt;
@@ -3163,7 +3169,9 @@
 
       individualTrees.forEach(t => {
         t.z -= WORLD.speed;
-        if (t.z < 20) t.z += WORLD.roadLength;
+        // Permitir que los árboles y vegetación lateral sigan avanzando hasta z = -170
+        // para que desciendan y salgan gradualmente por las orillas de la pantalla (solo puntas visibles)
+        if (t.z < -170) t.z += WORLD.roadLength;
       });
 
       for (let i = roadWaves.length - 1; i >= 0; i--) {
@@ -3346,8 +3354,10 @@
        ============================================================= */
     function project3D(xWorld, zWorld) {
       const fov = WORLD.cameraFov;
-      const zClamped = Math.max(1, zWorld);
-      const scale = fov / (fov + zClamped);
+      // Permitir que los objetos pasen suavemente la cámara hasta z = -170 sin dividirse por cero
+      const minZ = -fov * 0.75;
+      const safeZ = Math.max(minZ, zWorld);
+      const scale = fov / (fov + safeZ);
 
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
@@ -3366,7 +3376,7 @@
 
       ctx.clearRect(0, 0, W, H);
 
-      // 1. CIELO Y HORIZONTE PANORÁMICO 3D PIXAR SEGÚN TEMA
+      // 1. CIELO Y HORIZONTE PANORÁMICO PIXEL ART RETRO SEGÚN TEMA
       let bgImg = null;
       if (theme.id === 'bosque') {
         bgImg = (IMAGES.fondoBosque && IMAGES.fondoBosque.complete && IMAGES.fondoBosque.naturalWidth > 0)
@@ -3390,11 +3400,30 @@
       }
 
       if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
-        const bgW = W * 1.25;
-        const bgH = horizon * 1.15;
-        const parallaxX = (W * 0.5) - (bgW * 0.5) - (player.worldX * 0.08);
-        const bgY = horizon - bgH + 10;
-        ctx.drawImage(bgImg, parallaxX, bgY, bgW, bgH);
+        // Preservar relación de aspecto nativa del fondo pixel art (cero estiramiento ni deformación)
+        const bgAspect = bgImg.naturalWidth / bgImg.naturalHeight;
+        const targetH = Math.round(horizon * 1.18);
+        const targetW = Math.round(targetH * bgAspect);
+
+        ctx.save();
+        ctx.imageSmoothingEnabled = false; // Pixel art razor-sharp 8-bit
+
+        // Mosaico continuo horizontal con parallax suave y espejado alternado para costuras 100% invisibles
+        const parallaxOffset = Math.floor(-(player.worldX * 0.12)) % targetW;
+        const startX = -targetW + parallaxOffset;
+        let tileIdx = 0;
+        for (let drawX = startX; drawX < W + targetW; drawX += targetW, tileIdx++) {
+          ctx.save();
+          if (Math.abs(tileIdx) % 2 === 1) {
+            ctx.translate(drawX + targetW, horizon - targetH + 8);
+            ctx.scale(-1, 1);
+            ctx.drawImage(bgImg, 0, 0, targetW, targetH);
+          } else {
+            ctx.drawImage(bgImg, drawX, horizon - targetH + 8, targetW, targetH);
+          }
+          ctx.restore();
+        }
+        ctx.restore();
       } else {
         // Cielo degradado pixel art
         const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
@@ -3502,7 +3531,17 @@
         }
       }
 
-      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (3D PIXAR EN ALTA DEFINICIÓN)
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (SPRITES PIXEL ART 8-BIT)
+      const VEGETATION_CONFIG = {
+        pino:    { baseH: 430, anchorY: 0.96 },
+        encino:  { baseH: 410, anchorY: 0.95 },
+        palmera: { baseH: 440, anchorY: 0.96 },
+        manzano: { baseH: 390, anchorY: 0.95 },
+        poste:   { baseH: 350, anchorY: 0.97 },
+        cactus:  { baseH: 175, anchorY: 0.94 }, // Cactus de altura media en pixel art
+        arbusto: { baseH: 120, anchorY: 0.92 }  // Arbusto bajo y florido a ras de suelo
+      };
+
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
@@ -3521,11 +3560,21 @@
           }
 
           if (imgTree && imgTree.complete && imgTree.naturalWidth > 0) {
+            const conf = VEGETATION_CONFIG[t.type] || { baseH: 400, anchorY: 0.95 };
             const scaleMod = t.isFar ? 0.75 : 1.0;
             const aspect = imgTree.naturalWidth / imgTree.naturalHeight;
-            const treeH = 480 * pt.scale * scaleMod;
+            const treeH = conf.baseH * pt.scale * scaleMod;
             const treeW = treeH * aspect;
-            ctx.drawImage(imgTree, pt.x - treeW * 0.5, pt.y - treeH * 0.95, treeW, treeH);
+            const drawX = pt.x - (treeW * 0.5);
+            const drawY = pt.y - (treeH * conf.anchorY);
+
+            // Se dibuja nítido hasta salir completamente de la vista (solo puntas visibles antes de salir)
+            if (drawY + treeH > 0 && drawY < H && drawX + treeW > 0 && drawX < W) {
+              ctx.save();
+              ctx.imageSmoothingEnabled = false;
+              ctx.drawImage(imgTree, drawX, drawY, treeW, treeH);
+              ctx.restore();
+            }
           }
         }
       });
@@ -3584,16 +3633,29 @@
       const lokiH = baseLokiH * lokiScale;
       const lokiX = pPlayer.x;
       const groundY = H * 0.84;
-      const lokiY = groundY - player.jumpY;
 
-      // Sombra dinámica exactamente bajo las patas de Loki (sobre el asfalto en groundY)
-      const shadowRatio = Math.max(0.2, 1 - (player.jumpY / 45));
-      const shadowW = Math.max(14, (lokiW * 0.36) * shadowRatio);
-      const shadowH = Math.max(3, 8 * shadowRatio);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-      ctx.beginPath();
-      ctx.ellipse(lokiX, groundY, shadowW, shadowH, 0, 0, Math.PI * 2);
-      ctx.fill();
+      // Sombra pixel art 8-bit perfectamente anclada en el suelo asfáltico justo bajo las patas
+      const shadowW = Math.max(34, Math.round(lokiW * 0.46));
+      const shadowH = Math.max(12, Math.round(shadowW * 0.32));
+      const shadowY = groundY + 3; // En la superficie del asfalto justo donde apoyan las patas
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      if (IMAGES.sombraPixel && IMAGES.sombraPixel.complete && IMAGES.sombraPixel.naturalWidth > 0) {
+        ctx.drawImage(IMAGES.sombraPixel, lokiX - (shadowW * 0.5), shadowY - (shadowH * 0.5), shadowW, shadowH);
+      } else {
+        // Fallback pixel art stepped (cero vector blur)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+        const sw = shadowW, sh = shadowH;
+        const sx = lokiX, sy = shadowY;
+        ctx.fillRect(sx - sw * 0.32, sy - sh * 0.50, sw * 0.64, sh * 0.20);
+        ctx.fillRect(sx - sw * 0.44, sy - sh * 0.30, sw * 0.88, sh * 0.20);
+        ctx.fillRect(sx - sw * 0.50, sy - sh * 0.10, sw * 1.00, sh * 0.20);
+        ctx.fillRect(sx - sw * 0.50, sy + sh * 0.10, sw * 1.00, sh * 0.20);
+        ctx.fillRect(sx - sw * 0.44, sy + sh * 0.30, sw * 0.88, sh * 0.20);
+        ctx.fillRect(sx - sw * 0.32, sy + sh * 0.50, sw * 0.64, sh * 0.20);
+      }
+      ctx.restore();
 
       // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
       const frameIdx = Math.floor(player.sprintCycle) % 8;
@@ -3602,9 +3664,9 @@
                         : (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
 
       ctx.save();
-      ctx.translate(lokiX, lokiY);
-
-      // Rotación angular por inclinación de giro
+      // Loki se posiciona en groundY: en fotogramas de apoyo (fila 52 de 64),
+      // las patas contactan exactamente la línea groundY tocando la sombra.
+      ctx.translate(lokiX, groundY);
       ctx.rotate(player.tilt);
 
       // Parpadeo de invulnerabilidad
@@ -3612,10 +3674,10 @@
         ctx.globalAlpha = Math.floor(Date.now() / 90) % 2 === 0 ? 0.35 : 0.85;
       }
 
+      ctx.imageSmoothingEnabled = false;
       if (sprintImg) {
-        // En los fotogramas 64x64, la línea base de las patas apoyadas en el suelo es Y=53 (53/64 = 0.828125).
-        // Al alinear verticalmente sobre esa línea base, las patas descansan exactamente sobre la sombra.
-        const pawBaseline = 53 / 64;
+        // En los fotogramas 64x64, la línea base de las patas apoyadas en el suelo es Y=52 (52/64 = 0.8125).
+        const pawBaseline = 52 / 64;
         ctx.drawImage(sprintImg, -lokiW * 0.5, -lokiH * pawBaseline, lokiW, lokiH);
       } else {
         ctx.fillStyle = '#1e1b18';
