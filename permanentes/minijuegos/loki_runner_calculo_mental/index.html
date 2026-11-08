@@ -1105,6 +1105,31 @@
       gap: 0.35rem;
     }
 
+    .touch-btn-jump-action {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.45) 100%);
+      border: 2px solid #fbbf24;
+      color: #fef08a;
+      padding: 0.55rem 1.15rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .touch-btn-jump-action:active {
+      transform: scale(0.95);
+      background: #d97706;
+      border-color: #fef08a;
+      color: #ffffff;
+    }
+
     .btn-trick-floating {
       background: #f59e0b;
       color: #0f172a;
@@ -1737,8 +1762,11 @@
         </button>
 
         <div class="touch-center-hint">
+          <button class="touch-btn-jump-action" onpointerdown="handleTouchJump(event)">
+            <span>🐾 SALTAR</span>
+          </button>
           <button class="btn-trick-floating" onclick="openExplanationFromGame()">
-            <span>💡</span> Ver Explicación del Truco
+            <span>💡</span> Truco
           </button>
         </div>
 
@@ -3436,6 +3464,8 @@
       runCycle: 0,
       sprintCycle: 0,
       jumpY: 0,
+      jumpVy: 0,
+      isJumping: false,
       isInvulnerable: false,
       invulnerableTimer: 0,
       celebrateTimer: 0,
@@ -3698,9 +3728,16 @@
       }
       player.sprintCycle += dt * baseSprintFps * animSpeedRatio;
       player.runCycle += dt * (WORLD.speed * 4.5);
-      // El sprite animado de Loki ya contiene su propia elevación de patas; jumpY = 0 mantiene
-      // sus patas firmemente ancladas sobre la superficie de la sombra sin gaps flotantes.
-      player.jumpY = 0;
+      // Físicas de salto dinámico con gravedad suave
+      if (player.isJumping || player.jumpY > 0) {
+        player.jumpY += player.jumpVy * dt;
+        player.jumpVy -= 1250 * dt; // Gravedad
+        if (player.jumpY <= 0) {
+          player.jumpY = 0;
+          player.jumpVy = 0;
+          player.isJumping = false;
+        }
+      }
 
       if (player.isInvulnerable) {
         player.invulnerableTimer -= dt;
