@@ -583,6 +583,82 @@
       image-rendering: crisp-edges;
     }
 
+    /* DIFICULTAD SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) */
+    .hud-top-left {
+      position: absolute;
+      top: 0.75rem;
+      left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      pointer-events: auto;
+      z-index: 45;
+      background: rgba(15, 23, 42, 0.90);
+      padding: 0.4rem 0.65rem;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+    }
+
+    .speed-pill-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid transparent;
+      color: #cbd5e1;
+      padding: 0.32rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .speed-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .speed-pill-btn.active#diff-muy-facil {
+      background: #059669;
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-facil {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-normal {
+      background: #d97706;
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-dificil {
+      background: #dc2626;
+      border-color: #f87171;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.75);
+    }
+
+    .speed-time-tag {
+      font-size: 0.65rem;
+      opacity: 0.9;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+    }
+
     /* CONTROLES FLOTANTES LATERAL IZQUIERDO (CENTRADO VERTICAL) */
     .hud-side-left {
       position: absolute;
@@ -600,7 +676,7 @@
       border: 2px solid rgba(255, 255, 255, 0.18);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(8px);
-      width: 145px;
+      width: 140px;
     }
 
     .hud-side-btn {
@@ -619,6 +695,7 @@
       transition: all 0.15s ease;
       white-space: nowrap;
       justify-content: flex-start;
+      width: 100%;
     }
 
     .hud-side-btn:hover {
@@ -645,83 +722,62 @@
       border-color: #34d399;
     }
 
+    .hud-side-btn.btn-vol {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: #38bdf8;
+    }
+    .hud-side-btn.btn-vol.muted {
+      background: rgba(100, 116, 139, 0.25);
+      border-color: #64748b;
+      opacity: 0.75;
+    }
+
+    /* CONTENEDOR POPOVER DE VOLUMEN */
+    .vol-btn-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .vol-slider-popover {
+      position: absolute;
+      left: calc(100% + 0.65rem);
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 23, 42, 0.96);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      width: 145px;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .vol-popover-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .vol-slider-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+      cursor: pointer;
+      accent-color: #38bdf8;
+    }
+
     .hud-side-divider {
       height: 1.5px;
       background: rgba(255, 255, 255, 0.15);
       margin: 0.2rem 0;
-    }
-
-    .hud-side-title {
-      font-size: 0.66rem;
-      font-weight: 800;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05rem;
-      text-align: center;
-    }
-
-    .hud-side-diff-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .speed-side-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1.5px solid transparent;
-      color: #cbd5e1;
-      padding: 0.35rem 0.55rem;
-      border-radius: 0.55rem;
-      font-size: 0.74rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.4rem;
-      transition: all 0.15s ease;
-    }
-
-    .speed-side-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-    }
-
-    .speed-side-btn.active#diff-muy-facil {
-      background: #059669;
-      border-color: #34d399;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-    }
-
-    .speed-side-btn.active#diff-facil {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
-    }
-
-    .speed-side-btn.active#diff-normal {
-      background: #d97706;
-      border-color: #fbbf24;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
-    }
-
-    .speed-side-btn.active#diff-dificil {
-      background: #dc2626;
-      border-color: #f87171;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(220, 38, 38, 0.75);
-    }
-
-    .speed-time-tag {
-      font-size: 0.65rem;
-      opacity: 0.9;
-      font-weight: 800;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.1rem 0.3rem;
-      border-radius: 4px;
     }
 
     /* ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIO */
@@ -802,6 +858,14 @@
       border-color: #93c5fd;
       color: #ffffff;
       transform: translateY(-1px);
+    }
+
+    .menu-theme-bar, .theme-chips-group, .levels-grid, #levels-container, #view-menu {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .menu-theme-bar::-webkit-scrollbar, .theme-chips-group::-webkit-scrollbar, .levels-grid::-webkit-scrollbar, #levels-container::-webkit-scrollbar, #view-menu::-webkit-scrollbar {
+      display: none;
     }
 
     .menu-theme-bar {
@@ -1578,6 +1642,22 @@
     <div id="view-game" class="view">
       <canvas id="gameCanvas"></canvas>
 
+      <!-- DIFICULTAD EN LA ESQUINA SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) -->
+      <div class="hud-top-left">
+        <button class="speed-pill-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">
+          <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">
+          <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">
+          <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">
+          <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
+        </button>
+      </div>
+
       <!-- CONTROLES LATERALES IZQUIERDOS (CENTRADO VERTICAL) -->
       <div class="hud-side-left">
         <button class="hud-side-btn btn-exit" onclick="exitToMenu()" title="Volver al menú principal">
@@ -1586,27 +1666,18 @@
         <button class="hud-side-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
           <span>⏸️</span> <span id="btn-pause-text">Pausa</span>
         </button>
-        <button class="hud-side-btn btn-vol" onclick="cycleVolume()" id="btn-hud-volume" title="Volumen de sonido">
-          <span>🔊</span> <span>100%</span>
-        </button>
-
-        <div class="hud-side-divider"></div>
-        <div class="hud-side-title">⏱️ TIEMPO</div>
-
-        <!-- SELECTOR DE DIFICULTAD VERTICAL A LA IZQUIERDA -->
-        <div class="hud-side-diff-group" title="Ajustar tiempo por cálculo">
-          <button class="speed-side-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">
-            <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+        
+        <div class="vol-btn-wrapper">
+          <button class="hud-side-btn btn-vol" id="btn-hud-volume" onclick="handleVolumeClick(event)" ondblclick="handleVolumeDblClick(event)" title="1 clic: barra volumen / Doble clic: silenciar">
+            <span id="vol-hud-icon">🔊</span> <span id="vol-hud-label">100%</span>
           </button>
-          <button class="speed-side-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">
-            <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
-          </button>
-          <button class="speed-side-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">
-            <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
-          </button>
-          <button class="speed-side-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">
-            <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
-          </button>
+          <div class="vol-slider-popover" id="vol-slider-popover" style="display: none;">
+            <div class="vol-popover-header">
+              <span>Volumen</span>
+              <span id="vol-popover-pct">100%</span>
+            </div>
+            <input type="range" min="0" max="100" value="100" id="vol-slider" class="vol-slider-input" oninput="setVolumeSlider(this.value)">
+          </div>
         </div>
 
         <div class="hud-side-divider"></div>
@@ -2674,32 +2745,108 @@
       });
     }
 
-    const VOLUME_LEVELS = [
-      { label: '🔊 100%', vol: 0.85, sound: true },
-      { label: '🔉 50%',  vol: 0.45, sound: true },
-      { label: '🔈 20%',  vol: 0.18, sound: true },
-      { label: '🔇 Mudo', vol: 0.00, sound: false }
-    ];
-    let currentVolIdx = 0;
+    let volClickTimer = null;
+    let savedVolumeBeforeMute = 1.0;
 
-    function cycleVolume() {
-      currentVolIdx = (currentVolIdx + 1) % VOLUME_LEVELS.length;
-      const setting = VOLUME_LEVELS[currentVolIdx];
-      gameState.soundEnabled = setting.sound;
+    function handleVolumeClick(e) {
+      if (e) e.stopPropagation();
+      if (volClickTimer) {
+        clearTimeout(volClickTimer);
+        volClickTimer = null;
+        toggleMuteSound();
+      } else {
+        volClickTimer = setTimeout(() => {
+          volClickTimer = null;
+          toggleVolumePopover();
+        }, 240);
+      }
+    }
+
+    function handleVolumeDblClick(e) {
+      if (e) e.stopPropagation();
+      if (volClickTimer) {
+        clearTimeout(volClickTimer);
+        volClickTimer = null;
+      }
+      toggleMuteSound();
+    }
+
+    function toggleVolumePopover() {
+      const pop = document.getElementById('vol-slider-popover');
+      if (!pop) return;
+      const isShown = (pop.style.display === 'flex' || pop.style.display === 'block');
+      pop.style.display = isShown ? 'none' : 'flex';
+    }
+
+    function closeVolumePopover() {
+      const pop = document.getElementById('vol-slider-popover');
+      if (pop) pop.style.display = 'none';
+    }
+
+    function setVolumeSlider(val) {
+      const num = parseInt(val, 10);
+      gameState.soundVolume = num / 100;
+      gameState.soundEnabled = (num > 0);
+      if (num > 0) savedVolumeBeforeMute = gameState.soundVolume;
+      applyVolumeState();
+    }
+
+    function toggleMuteSound() {
+      if (gameState.soundEnabled && gameState.soundVolume > 0) {
+        savedVolumeBeforeMute = gameState.soundVolume;
+        gameState.soundVolume = 0;
+        gameState.soundEnabled = false;
+      } else {
+        gameState.soundVolume = (savedVolumeBeforeMute > 0) ? savedVolumeBeforeMute : 1.0;
+        gameState.soundEnabled = true;
+      }
+      applyVolumeState();
+    }
+
+    function applyVolumeState() {
+      const pct = Math.round(gameState.soundVolume * 100);
+      const isMuted = (!gameState.soundEnabled || pct === 0);
+      const icon = isMuted ? '🔇' : (pct < 40 ? '🔈' : (pct < 80 ? '🔉' : '🔊'));
+
+      const hudIcon = document.getElementById('vol-hud-icon');
+      const hudLbl = document.getElementById('vol-hud-label');
+      const btn = document.getElementById('btn-hud-volume');
+      if (hudIcon) hudIcon.textContent = icon;
+      if (hudLbl) hudLbl.textContent = isMuted ? 'Mudo' : `${pct}%`;
+      if (btn) btn.classList.toggle('muted', isMuted);
+
+      const popPct = document.getElementById('vol-popover-pct');
+      const popSlider = document.getElementById('vol-slider');
+      if (popPct) popPct.textContent = isMuted ? 'Mudo' : `${pct}%`;
+      if (popSlider) popSlider.value = isMuted ? 0 : pct;
+
+      const menuBtn = document.getElementById('btn-toggle-sound');
+      if (menuBtn) menuBtn.textContent = `${icon} ${isMuted ? 'Mudo' : pct + '%'}`;
+
       initBeachMusic();
       if (beachAudio) {
-        beachAudio.volume = setting.vol;
+        beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.45);
       }
-      const btn = document.getElementById('btn-hud-volume');
-      if (btn) btn.textContent = setting.label;
-      const menuBtn = document.getElementById('btn-toggle-sound');
-      if (menuBtn) menuBtn.textContent = setting.label;
       updateThemeMusic();
     }
 
-    function toggleSound() {
-      cycleVolume();
+    function cycleVolume() {
+      toggleVolumePopover();
     }
+
+    function toggleSound() {
+      toggleMuteSound();
+    }
+
+    window.addEventListener('click', (e) => {
+      const pop = document.getElementById('vol-slider-popover');
+      const btn = document.getElementById('btn-hud-volume');
+      if (pop && (pop.style.display === 'flex' || pop.style.display === 'block')) {
+        if (!pop.contains(e.target) && !btn.contains(e.target)) {
+          pop.style.display = 'none';
+        }
+      }
+    });
 
     function toggleVoiceSpeech() {
       gameState.voiceSpeechEnabled = !gameState.voiceSpeechEnabled;
@@ -3005,49 +3152,49 @@
     function resetTrackTrees() {
       individualTrees = [];
       const theme = gameState.currentTheme || THEMES[0];
-      // Densidad significativamente aumentada para que no haya huecos vacíos
-      const treeSpacing = 85;
+      const treeSpacing = 95;
 
-      // Catálogo diverso de árboles ricos según el escenario (Múltiples variantes)
       let treePool = ['pino', 'pino_2', 'pino_3', 'pino_4', 'encino', 'encino_2'];
       let accentPool = ['arbusto', 'hierba'];
 
       if (theme.id === 'playa') {
-        treePool = ['palmera', 'palmera_2', 'palmera_3', 'encino_2', 'palmera'];
+        // En la playa EXCLUSIVAMENTE palmeras y vegetación costera (cero pinos o encinos)
+        treePool = ['palmera', 'palmera_2', 'palmera_3'];
         accentPool = ['arbusto', 'hierba'];
       } else if (theme.id === 'ciudad') {
-        treePool = ['encino', 'encino_2', 'pino_2', 'encino_3'];
-        accentPool = ['poste', 'arbusto', 'hierba'];
+        treePool = ['poste', 'encino', 'encino_2'];
+        accentPool = ['arbusto', 'hierba'];
       } else if (theme.id === 'granja') {
-        treePool = ['manzano', 'manzano_2', 'encino', 'encino_3', 'manzano'];
+        treePool = ['manzano', 'manzano_2', 'encino', 'encino_2'];
         accentPool = ['arbusto', 'hierba'];
       } else if (theme.id === 'campo') {
-        treePool = ['encino', 'pino_3', 'manzano_2', 'encino_2'];
-        accentPool = ['cactus', 'arbusto', 'hierba'];
+        treePool = ['cactus', 'encino_3', 'manzano_2'];
+        accentPool = ['cactus', 'hierba'];
       }
 
       let treeIdx = 0;
       for (let z = 60; z < WORLD.roadLength; z += treeSpacing) {
-        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±2.95 para que los troncos NUNCA pisen la carretera ni el borde)
+        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±3.85 para que los troncos NUNCA pisen la carretera ni el borde)
         const leftTreeType = treePool[treeIdx % treePool.length];
-        const treeLeftX = -2.95 - ((treeIdx % 3) * 0.22);
+        const treeLeftX = -3.85 - ((treeIdx % 3) * 0.35);
         individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
 
         const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
-        const treeRightX = 2.95 + (((treeIdx + 1) % 3) * 0.22);
+        const treeRightX = 3.85 + (((treeIdx + 1) % 3) * 0.35);
         individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
 
         // Capa de fondo densa (bosque lateral tupido y continuo)
-        individualTrees.push({ x: -3.85, z: z + 25, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
-        individualTrees.push({ x: 3.85, z: z + (treeSpacing * 0.5) + 25, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
+        individualTrees.push({ x: -5.10, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+        individualTrees.push({ x: 5.10, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
 
-        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA / POSTES / CACTUS)
+        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA)
+        // Se posicionan a ±2.45 (fuera de la calzada de 1.85, sin solaparse con el asfalto)
         if (treeIdx % 2 === 1) {
           const accentTypeL = accentPool[treeIdx % accentPool.length];
-          individualTrees.push({ x: -2.30, z: z + (treeSpacing * 0.45), type: accentTypeL });
+          individualTrees.push({ x: -2.45, z: z + (treeSpacing * 0.45), type: accentTypeL });
         } else if (treeIdx % 3 === 0) {
           const accentTypeR = accentPool[(treeIdx + 1) % accentPool.length];
-          individualTrees.push({ x: 2.30, z: z + (treeSpacing * 0.25), type: accentTypeR });
+          individualTrees.push({ x: 2.45, z: z + (treeSpacing * 0.25), type: accentTypeR });
         }
 
         treeIdx++;
@@ -3788,20 +3935,46 @@
           ? (horizon - Math.round(targetH * 0.70)) 
           : (horizon - targetH + 8);
 
-        // Mosaico continuo horizontal con parallax suave y espejado alternado para costuras 100% invisibles
+        // Fondo centrado exactamente en el punto de fuga de la carretera (W * 0.5)
         const parallaxOffset = Math.floor(-(player.worldX * 0.12)) % targetW;
-        const startX = -targetW + parallaxOffset;
-        let tileIdx = 0;
-        for (let drawX = startX; drawX < W + targetW; drawX += targetW, tileIdx++) {
+        const centerX = Math.round(W * 0.5);
+        const centerBaseX = Math.round(centerX - (targetW * 0.5)) + parallaxOffset;
+
+        // 1. Dibujar loseta central normal (sin invertir) centrada con la carretera
+        ctx.drawImage(bgImg, centerBaseX, drawBaseY, targetW, targetH);
+
+        // 2. Extender con espejo hacia la izquierda si la pantalla es más ancha que la imagen
+        let leftX = centerBaseX - targetW;
+        let leftStep = 1;
+        while (leftX + targetW > 0) {
           ctx.save();
-          if (Math.abs(tileIdx) % 2 === 1) {
-            ctx.translate(drawX + targetW, drawBaseY);
+          if (leftStep % 2 === 1) {
+            ctx.translate(leftX + targetW, drawBaseY);
             ctx.scale(-1, 1);
             ctx.drawImage(bgImg, 0, 0, targetW, targetH);
           } else {
-            ctx.drawImage(bgImg, drawX, drawBaseY, targetW, targetH);
+            ctx.drawImage(bgImg, leftX, drawBaseY, targetW, targetH);
           }
           ctx.restore();
+          leftX -= targetW;
+          leftStep++;
+        }
+
+        // 3. Extender con espejo hacia la derecha si la pantalla es más ancha que la imagen
+        let rightX = centerBaseX + targetW;
+        let rightStep = 1;
+        while (rightX < W) {
+          ctx.save();
+          if (rightStep % 2 === 1) {
+            ctx.translate(rightX + targetW, drawBaseY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(bgImg, 0, 0, targetW, targetH);
+          } else {
+            ctx.drawImage(bgImg, rightX, drawBaseY, targetW, targetH);
+          }
+          ctx.restore();
+          rightX += targetW;
+          rightStep++;
         }
         ctx.restore();
       } else {
@@ -4071,35 +4244,32 @@
 
       // 8. DIBUJAR A LOKI (SPRINT DE ESPALDAS MULTI-FOTOGRAMA DINÁMICO 8-BIT)
       const pPlayer = project3D(player.worldX, 0);
+      // Sprite de Loki 50% más grande para presencia heroica clara y disfrute de los niños
       const lokiScale = 1.35;
-      const baseLokiW = 96;
-      const baseLokiH = 96;
+      const baseLokiW = 144;
+      const baseLokiH = 144;
       const lokiW = baseLokiW * lokiScale;
       const lokiH = baseLokiH * lokiScale;
       const lokiX = pPlayer.x;
-      const groundY = H * 0.84;
+      // Posición vertical despegada de la orilla inferior (H * 0.79) para encuadre holgado
+      const groundY = H * 0.79;
 
-      // Sombra pixel art 8-bit perfectamente anclada en el suelo asfáltico justo bajo las patas
-      const shadowW = Math.max(34, Math.round(lokiW * 0.46));
-      const shadowH = Math.max(12, Math.round(shadowW * 0.32));
-      const shadowY = groundY + 3; // En la superficie del asfalto justo donde apoyan las patas
+      // Sombra pixel art 8-bit alargada verticalmente (en profundidad Y)
+      const shadowW = Math.max(48, Math.round(lokiW * 0.44));
+      const shadowH = Math.max(28, Math.round(shadowW * 0.72));
+      const shadowY = groundY + 4; // En la superficie del asfalto justo donde apoyan las patas
 
       ctx.save();
       ctx.imageSmoothingEnabled = false;
-      if (IMAGES.sombraPixel && IMAGES.sombraPixel.complete && IMAGES.sombraPixel.naturalWidth > 0) {
-        ctx.drawImage(IMAGES.sombraPixel, lokiX - (shadowW * 0.5), shadowY - (shadowH * 0.5), shadowW, shadowH);
-      } else {
-        // Fallback pixel art stepped (cero vector blur)
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
-        const sw = shadowW, sh = shadowH;
-        const sx = lokiX, sy = shadowY;
-        ctx.fillRect(sx - sw * 0.32, sy - sh * 0.50, sw * 0.64, sh * 0.20);
-        ctx.fillRect(sx - sw * 0.44, sy - sh * 0.30, sw * 0.88, sh * 0.20);
-        ctx.fillRect(sx - sw * 0.50, sy - sh * 0.10, sw * 1.00, sh * 0.20);
-        ctx.fillRect(sx - sw * 0.50, sy + sh * 0.10, sw * 1.00, sh * 0.20);
-        ctx.fillRect(sx - sw * 0.44, sy + sh * 0.30, sw * 0.88, sh * 0.20);
-        ctx.fillRect(sx - sw * 0.32, sy + sh * 0.50, sw * 0.64, sh * 0.20);
-      }
+      // Sombra stepped pixel art alargada en perspectiva longitudinal
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.44)';
+      const sw = shadowW, sh = shadowH;
+      const sx = lokiX, sy = shadowY;
+      ctx.fillRect(sx - sw * 0.22, sy - sh * 0.50, sw * 0.44, sh * 0.15);
+      ctx.fillRect(sx - sw * 0.38, sy - sh * 0.35, sw * 0.76, sh * 0.20);
+      ctx.fillRect(sx - sw * 0.48, sy - sh * 0.15, sw * 0.96, sh * 0.30);
+      ctx.fillRect(sx - sw * 0.48, sy + sh * 0.15, sw * 0.96, sh * 0.20);
+      ctx.fillRect(sx - sw * 0.36, sy + sh * 0.35, sw * 0.72, sh * 0.15);
       ctx.restore();
 
       // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
