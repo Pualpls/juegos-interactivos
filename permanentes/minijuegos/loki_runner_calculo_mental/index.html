@@ -106,14 +106,42 @@
     }
 
     .loki-badge-img {
-      width: 64px;
-      height: 64px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.45);
       border: 3px solid #f59e0b;
-      background: #ffffff;
-      object-fit: cover;
+      background: #1e293b;
+      object-fit: contain;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
       transition: transform 0.2s ease;
+      padding: 2px;
+    }
+
+    .menu-hero-banner {
+      max-width: 1100px;
+      margin: 0 auto 0.75rem auto;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      position: relative;
+      max-height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: 100%;
+      max-height: 175px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      image-rendering: pixelated;
     }
 
     .loki-badge-img:hover {
@@ -1208,8 +1236,8 @@
     <div id="view-menu" class="view active">
       <div class="menu-header">
         <div class="menu-brand">
-          <div class="loki-idle-box" title="Loki esperando a que elijas un nivel">
-            <img src="recursos/loki_avatar.png" id="loki-menu-idle-img" alt="Loki" class="loki-badge-img">
+          <div class="loki-idle-box" title="Loki listo para correr (Animación Idle)">
+            <img src="recursos/loki_idle_south.gif" id="loki-menu-idle-img" alt="Loki Idle" class="loki-badge-img">
             <span class="loki-status-bubble">¡Listo! 🐾</span>
           </div>
           <div class="menu-title">
@@ -1229,6 +1257,11 @@
           </div>
           <button class="hud-btn" id="btn-toggle-sound" onclick="toggleSound()">🔊 Sonido</button>
         </div>
+      </div>
+
+      <!-- BANNER ILUSTRADO HERO DE LOKI RUNNER -->
+      <div class="menu-hero-banner" id="menu-hero-banner">
+        <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
       </div>
 
       <!-- TARJETA DE CONTROL POR CÁMARA (WEBCAM) EN EL MENÚ -->
@@ -1253,7 +1286,7 @@
         <span class="theme-bar-label">🎨 Escenario:</span>
         <div class="theme-chips-group">
           <button class="theme-chip" id="tchip-bosque" onclick="selectThemeFromMenu('bosque')">🌲 Bosque</button>
-          <button class="theme-chip" id="tchip-playa" onclick="selectThemeFromMenu('playa')">🏖️ Costa Caribeña 🎵</button>
+          <button class="theme-chip" id="tchip-playa" onclick="selectThemeFromMenu('playa')">🏖️ Costa Caribeña</button>
           <button class="theme-chip" id="tchip-ciudad" onclick="selectThemeFromMenu('ciudad')">🏙️ Ciudad</button>
           <button class="theme-chip" id="tchip-granja" onclick="selectThemeFromMenu('granja')">🚜 Granja</button>
           <button class="theme-chip" id="tchip-campo" onclick="selectThemeFromMenu('campo')">🌾 Campo</button>
@@ -1987,11 +2020,8 @@
         stopBeachMusic(false);
         return;
       }
-      if (gameState.currentTheme && gameState.currentTheme.id === 'playa') {
-        playBeachMusic();
-      } else {
-        stopBeachMusic(true);
-      }
+      // Música activa para TODOS los niveles y escenarios
+      playBeachMusic();
     }
 
     function getAudioContext() {
@@ -2521,7 +2551,9 @@
       trophy: new Image(),
       pino: new Image(),
       encino: new Image(),
-      fondoHorizonte: new Image()
+      fondoHorizonte: new Image(),
+      banner: new Image(),
+      lokiSprint: []
     };
     IMAGES.lokiRun1.src = 'recursos/loki_back_run1.png';
     IMAGES.lokiRun2.src = 'recursos/loki_back_run2.png';
@@ -2531,6 +2563,14 @@
     IMAGES.pino.src = 'recursos/arbol_pino_3d.png';
     IMAGES.encino.src = 'recursos/arbol_encino_3d.png';
     IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
+    IMAGES.banner.src = 'recursos/loki_banner_principal.png';
+
+    // 8 Fotogramas del ciclo de sprint de espaldas (64x64 pixel art)
+    for (let f = 0; f < 8; f++) {
+      const spImg = new Image();
+      spImg.src = `recursos/loki_sprint_${f}.png`;
+      IMAGES.lokiSprint.push(spImg);
+    }
 
     const WORLD = {
       lanes: [-1, 0, 1],
@@ -2547,6 +2587,7 @@
       worldX: 0,
       tilt: 0,
       runCycle: 0,
+      sprintCycle: 0,
       jumpY: 0,
       isInvulnerable: false,
       invulnerableTimer: 0,
@@ -2623,6 +2664,7 @@
       player.worldX = 0;
       player.tilt = 0;
       player.runCycle = 0;
+      player.sprintCycle = 0;
       player.isInvulnerable = false;
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
@@ -2789,8 +2831,13 @@
       player.worldX += diffX * 0.16;
       player.tilt = (diffX / WORLD.laneWidth) * 0.26;
 
+      // Velocidad de animación sincronizada con la dificultad:
+      // Normal (speed = 5.14) corre al 100% (8.33 FPS nativo de 120ms por fotograma)
+      const baseSprintFps = 8.33;
+      const speedRatio = (WORLD.speed / 5.14); // Muy Fácil=0.47x, Fácil=0.64x, Normal=1.0x, Difícil=1.75x
+      player.sprintCycle += dt * baseSprintFps * speedRatio;
       player.runCycle += dt * (WORLD.speed * 4.5);
-      player.jumpY = Math.abs(Math.sin(player.runCycle)) * 9;
+      player.jumpY = Math.abs(Math.sin(player.sprintCycle * Math.PI * 0.5)) * 6;
 
       if (player.isInvulnerable) {
         player.invulnerableTimer -= dt;
@@ -3228,11 +3275,11 @@
         });
       });
 
-      // 8. DIBUJAR A LOKI (DE ESPALDAS CON FOTOGRAMAS ALTERNOS Y PERALTADO)
+      // 8. DIBUJAR A LOKI (SPRINT DE ESPALDAS MULTI-FOTOGRAMA DINÁMICO 8-BIT)
       const pPlayer = project3D(player.worldX, 0);
-      const lokiScale = 1.25;
-      const baseLokiW = 110;
-      const baseLokiH = 110;
+      const lokiScale = 1.35;
+      const baseLokiW = 96;
+      const baseLokiH = 96;
       const lokiW = baseLokiW * lokiScale;
       const lokiH = baseLokiH * lokiScale;
       const lokiX = pPlayer.x;
@@ -3241,14 +3288,15 @@
       // Sombra dinámica bajo Loki
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.beginPath();
-      const shadowW = (lokiW * 0.42) * (1 - (player.jumpY / 45));
-      ctx.ellipse(lokiX, H * 0.86 + 18, Math.max(15, shadowW), 8, 0, 0, Math.PI * 2);
+      const shadowW = (lokiW * 0.38) * (1 - (player.jumpY / 35));
+      ctx.ellipse(lokiX, H * 0.86 + 18, Math.max(14, shadowW), 7, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Selección de fotograma de carrera
-      const isFrame2 = Math.floor(player.runCycle * 1.5) % 2 === 1;
-      const currentSprite = (isFrame2 && IMAGES.lokiRun2.complete) ? IMAGES.lokiRun2 : 
-                            (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
+      // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
+      const frameIdx = Math.floor(player.sprintCycle) % 8;
+      const sprintImg = (IMAGES.lokiSprint[frameIdx] && IMAGES.lokiSprint[frameIdx].complete)
+                        ? IMAGES.lokiSprint[frameIdx]
+                        : (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
 
       ctx.save();
       ctx.translate(lokiX, lokiY);
@@ -3261,8 +3309,8 @@
         ctx.globalAlpha = Math.floor(Date.now() / 90) % 2 === 0 ? 0.35 : 0.85;
       }
 
-      if (currentSprite) {
-        ctx.drawImage(currentSprite, -lokiW * 0.5, -lokiH * 0.95, lokiW, lokiH);
+      if (sprintImg) {
+        ctx.drawImage(sprintImg, -lokiW * 0.5, -lokiH * 0.95, lokiW, lokiH);
       } else {
         ctx.fillStyle = '#1e1b18';
         ctx.beginPath();
