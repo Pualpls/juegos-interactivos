@@ -1590,8 +1590,8 @@
         roadDark: '#0369a1',
         curb1: '#f43f5e',
         curb2: '#ffffff',
-        treeA: 'encino',
-        treeB: 'encino'
+        treeA: 'palmera',
+        treeB: 'palmera'
       },
       {
         id: 'ciudad',
@@ -1605,8 +1605,8 @@
         roadDark: '#090514',
         curb1: '#ec4899',
         curb2: '#06b6d4',
-        treeA: 'pino',
-        treeB: 'encino'
+        treeA: 'poste',
+        treeB: 'arbusto'
       },
       {
         id: 'granja',
@@ -1620,8 +1620,8 @@
         roadDark: '#3c3836',
         curb1: '#ffffff',
         curb2: '#b45309',
-        treeA: 'encino',
-        treeB: 'pino'
+        treeA: 'manzano',
+        treeB: 'encino'
       },
       {
         id: 'campo',
@@ -1635,8 +1635,8 @@
         roadDark: '#3f3f46',
         curb1: '#f59e0b',
         curb2: '#ffffff',
-        treeA: 'encino',
-        treeB: 'pino'
+        treeA: 'arbusto',
+        treeB: 'cactus'
       }
     ];
 
@@ -2569,7 +2569,17 @@
       trophy: new Image(),
       pino: new Image(),
       encino: new Image(),
+      palmera: new Image(),
+      manzano: new Image(),
+      poste: new Image(),
+      arbusto: new Image(),
+      cactus: new Image(),
       fondoHorizonte: new Image(),
+      fondoBosque: new Image(),
+      fondoPlaya: new Image(),
+      fondoCiudad: new Image(),
+      fondoGranja: new Image(),
+      fondoCampo: new Image(),
       banner: new Image(),
       lokiSprint: []
     };
@@ -2580,7 +2590,17 @@
     IMAGES.trophy.src = 'recursos/trofeo_transparente.png';
     IMAGES.pino.src = 'recursos/arbol_pino_3d.png';
     IMAGES.encino.src = 'recursos/arbol_encino_3d.png';
+    IMAGES.palmera.src = 'recursos/arbol_palmera_3d.png';
+    IMAGES.manzano.src = 'recursos/arbol_manzano_3d.png';
+    IMAGES.poste.src = 'recursos/poste_luz_3d.png';
+    IMAGES.arbusto.src = 'recursos/arbusto_flores_3d.png';
+    IMAGES.cactus.src = 'recursos/cactus_campo_3d.png';
     IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
+    IMAGES.fondoBosque.src = 'recursos/fondo_bosque_3d.png';
+    IMAGES.fondoPlaya.src = 'recursos/fondo_playa_3d.png';
+    IMAGES.fondoCiudad.src = 'recursos/fondo_ciudad_3d.png';
+    IMAGES.fondoGranja.src = 'recursos/fondo_granja_3d.png';
+    IMAGES.fondoCampo.src = 'recursos/fondo_campo_3d.png';
     IMAGES.banner.src = 'recursos/loki_banner_principal.png';
 
     // 8 Fotogramas del ciclo de sprint de espaldas (64x64 pixel art)
@@ -3080,9 +3100,30 @@
 
       ctx.clearRect(0, 0, W, H);
 
-      // 1. CIELO Y HORIZONTE PANORÁMICO SEGÚN TEMA (8-BIT / ASSET)
-      if (theme.id === 'bosque' && IMAGES.fondoHorizonte && IMAGES.fondoHorizonte.complete && IMAGES.fondoHorizonte.naturalWidth > 0) {
-        const bgImg = IMAGES.fondoHorizonte;
+      // 1. CIELO Y HORIZONTE PANORÁMICO 3D PIXAR SEGÚN TEMA
+      let bgImg = null;
+      if (theme.id === 'bosque') {
+        bgImg = (IMAGES.fondoBosque && IMAGES.fondoBosque.complete && IMAGES.fondoBosque.naturalWidth > 0)
+                ? IMAGES.fondoBosque : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'playa') {
+        bgImg = (IMAGES.fondoPlaya && IMAGES.fondoPlaya.complete && IMAGES.fondoPlaya.naturalWidth > 0)
+                ? IMAGES.fondoPlaya : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'ciudad') {
+        bgImg = (IMAGES.fondoCiudad && IMAGES.fondoCiudad.complete && IMAGES.fondoCiudad.naturalWidth > 0)
+                ? IMAGES.fondoCiudad : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'granja') {
+        bgImg = (IMAGES.fondoGranja && IMAGES.fondoGranja.complete && IMAGES.fondoGranja.naturalWidth > 0)
+                ? IMAGES.fondoGranja : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'campo') {
+        bgImg = (IMAGES.fondoCampo && IMAGES.fondoCampo.complete && IMAGES.fondoCampo.naturalWidth > 0)
+                ? IMAGES.fondoCampo : IMAGES.fondoHorizonte;
+      }
+
+      if (!bgImg || !bgImg.complete || bgImg.naturalWidth === 0) {
+        bgImg = IMAGES.fondoHorizonte;
+      }
+
+      if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
         const bgW = W * 1.25;
         const bgH = horizon * 1.15;
         const parallaxX = (W * 0.5) - (bgW * 0.5) - (player.worldX * 0.08);
@@ -3095,51 +3136,6 @@
         skyGrad.addColorStop(1, theme.skyBottom);
         ctx.fillStyle = skyGrad;
         ctx.fillRect(0, 0, W, horizon);
-
-        // Horizonte procedural 8-bit característico del tema
-        const parallaxX = -player.worldX * 0.12;
-        if (theme.id === 'playa') {
-          ctx.fillStyle = '#0284c7';
-          ctx.fillRect(0, horizon - 30, W, 30);
-          ctx.fillStyle = '#38bdf8';
-          for (let x = -30; x < W + 30; x += 32) {
-            const waveY = horizon - 16 + (Math.floor(Math.sin((x + parallaxX * 2) * 0.06) * 2) * 4);
-            ctx.fillRect(x, waveY, 18, 4);
-          }
-          ctx.fillStyle = '#fef08a';
-          ctx.fillRect(W * 0.75, horizon * 0.35, 36, 36);
-        } else if (theme.id === 'ciudad') {
-          ctx.fillStyle = '#170c2e';
-          for (let x = -20; x < W + 40; x += 44) {
-            const bH = 45 + ((Math.abs(Math.sin((x + 80) * 0.08)) * 55) | 0);
-            ctx.fillRect(x, horizon - bH, 40, bH + 10);
-            ctx.fillStyle = '#fef08a';
-            for (let wy = horizon - bH + 8; wy < horizon - 8; wy += 12) {
-              if ((x + wy) % 3 === 0) {
-                ctx.fillRect(x + 8, wy, 6, 6);
-                ctx.fillRect(x + 24, wy, 6, 6);
-              }
-            }
-            ctx.fillStyle = '#170c2e';
-          }
-        } else if (theme.id === 'granja') {
-          ctx.fillStyle = '#7c2d12';
-          for (let x = -20; x < W + 20; x += 20) {
-            const fH = 25 + Math.sin((x + parallaxX) * 0.008) * 18;
-            ctx.fillRect(x, horizon - Math.floor(fH / 6) * 6, 20, Math.floor(fH / 6) * 6 + 10);
-          }
-          const millX = ((W * 0.72 + parallaxX * 0.4) % W + W) % W;
-          ctx.fillStyle = '#431407';
-          ctx.fillRect(millX - 10, horizon - 44, 20, 44);
-          ctx.fillRect(millX - 20, horizon - 36, 40, 4);
-          ctx.fillRect(millX - 2, horizon - 54, 4, 40);
-        } else {
-          ctx.fillStyle = '#1e293b';
-          for (let x = -40; x < W + 40; x += 16) {
-            const hMtn = 35 + Math.sin((x + parallaxX) * 0.012) * 25 + Math.cos((x + parallaxX) * 0.025) * 15;
-            ctx.fillRect(x, horizon - Math.floor(hMtn / 8) * 8, 16, Math.floor(hMtn / 8) * 8 + 10);
-          }
-        }
       }
 
       // 2. TERRENO LATERAL (CÉSPED, ARENA O BANQUETA SEGÚN TEMA)
@@ -3240,18 +3236,29 @@
         }
       }
 
-      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (3D PIXAR EN ALTA DEFINICIÓN)
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
         if (pt.scale > 0) {
-          const imgTree = (t.type === 'pino' && IMAGES.pino.complete) ? IMAGES.pino :
-                          (IMAGES.encino.complete ? IMAGES.encino : null);
+          let imgTree = null;
+          if (t.type === 'pino') imgTree = IMAGES.pino;
+          else if (t.type === 'encino') imgTree = IMAGES.encino;
+          else if (t.type === 'palmera') imgTree = IMAGES.palmera;
+          else if (t.type === 'manzano') imgTree = IMAGES.manzano;
+          else if (t.type === 'poste') imgTree = IMAGES.poste;
+          else if (t.type === 'arbusto') imgTree = IMAGES.arbusto;
+          else if (t.type === 'cactus') imgTree = IMAGES.cactus;
 
-          if (imgTree) {
+          if (!imgTree || !imgTree.complete || imgTree.naturalWidth === 0) {
+            imgTree = (IMAGES.pino && IMAGES.pino.complete) ? IMAGES.pino : IMAGES.encino;
+          }
+
+          if (imgTree && imgTree.complete && imgTree.naturalWidth > 0) {
             const scaleMod = t.isFar ? 0.75 : 1.0;
-            const treeW = 320 * pt.scale * scaleMod;
+            const aspect = imgTree.naturalWidth / imgTree.naturalHeight;
             const treeH = 480 * pt.scale * scaleMod;
+            const treeW = treeH * aspect;
             ctx.drawImage(imgTree, pt.x - treeW * 0.5, pt.y - treeH * 0.95, treeW, treeH);
           }
         }
