@@ -508,11 +508,29 @@
 
     .hud-row-meta {
       width: 100%;
-      max-width: 1020px;
+      max-width: 1220px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.3rem;
+      gap: 0.6rem;
+    }
+
+    .hud-left-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+
+    .hud-right-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      pointer-events: auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .hud-badge-group {
@@ -1334,13 +1352,23 @@
       <!-- HUD SUPERIOR -->
       <div class="game-hud-top">
         <div class="hud-row-meta">
-          <div class="hud-badge-group">
+          <!-- CONTROLES SUPERIOR IZQUIERDA: SALIR, PAUSA Y VOLUMEN -->
+          <div class="hud-left-group">
+            <button class="hud-btn" onclick="exitToMenu()" title="Volver al menú principal">🏠 Salir</button>
+            <button class="hud-btn" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar partida">⏸️ Pausa</button>
+            <button class="hud-btn" onclick="cycleVolume()" id="btn-hud-volume" title="Ajustar o silenciar volumen de música y efectos">🔊 100%</button>
+            <button class="hud-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">🗣️ Voz</button>
+            <button class="hud-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">📹 Cámara</button>
+          </div>
+
+          <!-- ESTADÍSTICAS Y DIFICULTAD SUPERIOR DERECHA -->
+          <div class="hud-right-group">
             <div class="hud-lives" id="hud-lives" title="Vidas de Loki">❤️❤️❤️</div>
             <div class="hud-score-box">
               <img src="recursos/hueso_transparente.png" alt="Huesos">
               <span id="hud-bones-progress">0 / 10</span>
             </div>
-            <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar tema de escenario (¡Haz clic!)">🌲 Bosque</span>
+            <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar tema de escenario">🌲 Bosque</span>
             <span class="hud-mode-badge mode-muy-facil" id="hud-speed-badge">🌱 Muy Fácil (15s)</span>
 
             <!-- SELECTOR RÁPIDO DE DIFICULTAD (EXACTO EN TIEMPO) -->
@@ -1350,14 +1378,6 @@
               <button class="speed-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">🏃 Normal</button>
               <button class="speed-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">⚡ Difícil</button>
             </div>
-          </div>
-
-          <div class="hud-btn-group">
-            <button class="hud-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Controlar a Loki inclinando tu cuerpo ante la cámara">📹 Cámara</button>
-            <button class="hud-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Leer la operación en voz alta">🔊 Voz</button>
-            <button class="hud-btn" onclick="openExplanationFromGame()" title="Pausar y repasar el truco mental">💡 Truco</button>
-            <button class="hud-btn" onclick="togglePauseGame()" id="btn-pause" title="Pausar partida">⏸️</button>
-            <button class="hud-btn" onclick="exitToMenu()" title="Volver al menú">🏠 Salir</button>
           </div>
         </div>
 
@@ -1592,7 +1612,7 @@
         curb1: '#f43f5e',
         curb2: '#ffffff',
         treeA: 'palmera',
-        treeB: 'palmera'
+        treeB: 'arbusto'
       },
       {
         id: 'ciudad',
@@ -1615,26 +1635,26 @@
         icon: '🚜',
         skyTop: '#7c2d12',
         skyBottom: '#fdba74',
-        grassTop: '#ca8a04',
-        grassBottom: '#854d0e',
-        roadLight: '#57534e',
-        roadDark: '#3c3836',
+        grassTop: '#b45309',
+        grassBottom: '#78350f',
+        roadLight: '#78716c',
+        roadDark: '#44403c',
         curb1: '#ffffff',
-        curb2: '#b45309',
+        curb2: '#d97706',
         treeA: 'manzano',
         treeB: 'encino'
       },
       {
         id: 'campo',
         name: 'Valle Florido',
-        icon: '🌾',
-        skyTop: '#0369a1',
+        icon: '🌸',
+        skyTop: '#0284c7',
         skyBottom: '#bae6fd',
-        grassTop: '#65a30d',
-        grassBottom: '#3f6212',
-        roadLight: '#52525b',
-        roadDark: '#3f3f46',
-        curb1: '#f59e0b',
+        grassTop: '#22c55e',
+        grassBottom: '#15803d',
+        roadLight: '#64748b',
+        roadDark: '#334155',
+        curb1: '#ec4899',
         curb2: '#ffffff',
         treeA: 'arbusto',
         treeB: 'cactus'
@@ -2404,11 +2424,31 @@
       });
     }
 
-    function toggleSound() {
-      gameState.soundEnabled = !gameState.soundEnabled;
-      const btn = document.getElementById('btn-toggle-sound');
-      if (btn) btn.textContent = gameState.soundEnabled ? '🔊 Sonido' : '🔇 Mudo';
+    const VOLUME_LEVELS = [
+      { label: '🔊 100%', vol: 0.85, sound: true },
+      { label: '🔉 50%',  vol: 0.45, sound: true },
+      { label: '🔈 20%',  vol: 0.18, sound: true },
+      { label: '🔇 Mudo', vol: 0.00, sound: false }
+    ];
+    let currentVolIdx = 0;
+
+    function cycleVolume() {
+      currentVolIdx = (currentVolIdx + 1) % VOLUME_LEVELS.length;
+      const setting = VOLUME_LEVELS[currentVolIdx];
+      gameState.soundEnabled = setting.sound;
+      initBeachMusic();
+      if (beachAudio) {
+        beachAudio.volume = setting.vol;
+      }
+      const btn = document.getElementById('btn-hud-volume');
+      if (btn) btn.textContent = setting.label;
+      const menuBtn = document.getElementById('btn-toggle-sound');
+      if (menuBtn) menuBtn.textContent = setting.label;
       updateThemeMusic();
+    }
+
+    function toggleSound() {
+      cycleVolume();
     }
 
     function toggleVoiceSpeech() {
@@ -3093,7 +3133,11 @@
     function togglePauseGame() {
       if (!gameState.gameActive) return;
       gameState.gamePaused = !gameState.gamePaused;
-      document.getElementById('btn-pause').textContent = gameState.gamePaused ? '▶️' : '⏸️';
+      const btn = document.getElementById('btn-pause');
+      if (btn) {
+        btn.textContent = gameState.gamePaused ? '▶️ Seguir' : '⏸️ Pausa';
+        btn.classList.toggle('active', gameState.gamePaused);
+      }
       updateThemeMusic();
     }
 
@@ -3354,16 +3398,27 @@
        ============================================================= */
     function project3D(xWorld, zWorld) {
       const fov = WORLD.cameraFov;
-      // Permitir que los objetos pasen suavemente la cámara hasta z = -170 sin dividirse por cero
-      const minZ = -fov * 0.75;
-      const safeZ = Math.max(minZ, zWorld);
-      const scale = fov / (fov + safeZ);
+      const roadLen = WORLD.roadLength;
+      let scale;
+
+      if (zWorld <= 0) {
+        // Objetos rebasando la cámara (salida fluida por los bordes laterales e inferiores)
+        const safeZ = Math.max(-fov * 0.75, zWorld);
+        scale = fov / (fov + safeZ);
+      } else {
+        // Hacia adelante: el camino converge de forma natural hasta tocarse en escala = 0 en el horizonte
+        const t = Math.min(1.0, zWorld / roadLen);
+        const baseScale = fov / (fov + zWorld);
+        // Taper de perspectiva que garantiza que a la distancia máxima ambas orillas se tocan en el horizonte
+        const taper = Math.pow(1.0 - t, 1.15);
+        scale = baseScale * taper;
+      }
 
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
 
       const screenX = (screenW * 0.5) + (xWorld * scale);
-      const screenY = WORLD.horizonY + ((screenH - WORLD.horizonY) * 0.88 * scale);
+      const screenY = WORLD.horizonY + ((screenH * 0.88 - WORLD.horizonY) * scale);
 
       return { x: screenX, y: screenY, scale: scale };
     }
@@ -3433,14 +3488,28 @@
         ctx.fillRect(0, 0, W, horizon);
       }
 
-      // 2. TERRENO LATERAL (CÉSPED, ARENA O BANQUETA SEGÚN TEMA)
+      // 2. COLINAS DE PROFUNDIDAD EN EL HORIZONTE
+      const hillH = 14;
+      ctx.fillStyle = theme.grassBottom;
+      ctx.beginPath();
+      ctx.moveTo(0, horizon);
+      for (let x = 0; x <= W; x += 32) {
+        const hillOffset = Math.sin((x * 0.006) + (player.worldX * 0.002)) * hillH;
+        ctx.lineTo(x, horizon - Math.max(2, hillOffset + 6));
+      }
+      ctx.lineTo(W, horizon);
+      ctx.closePath();
+      ctx.fill();
+
+      // 3. TERRENO LATERAL BASE (FONDO DEL SUELO)
       const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
       grassGrad.addColorStop(0, theme.grassTop);
       grassGrad.addColorStop(1, theme.grassBottom);
       ctx.fillStyle = grassGrad;
       ctx.fillRect(0, horizon, W, H - horizon);
 
-      // 3. BASE DE CARRETERA 3D (HORIZONTE)
+      // 4. BASE DE CARRETERA 3D (DESDE EL PUNTO DE FUGA DEL HORIZONTE HASTA EL FRENTE)
+      // Como project3D converge a escala=0 en roadLength, pFar toca el horizonte en el centro (W*0.5, horizon)
       const pFarLeft = project3D(-WORLD.laneWidth * 1.85, WORLD.roadLength);
       const pFarRight = project3D(WORLD.laneWidth * 1.85, WORLD.roadLength);
       const pNearLeft = project3D(-WORLD.laneWidth * 1.95, 0);
@@ -3455,9 +3524,9 @@
       ctx.closePath();
       ctx.fill();
 
-      // 4. SEGMENTOS DE CARRETERA, BORDES Y LÍNEAS DISCONTINUAS (PSEUDO-3D CONTINUO HACIA ADELANTE)
-      const SEG_LENGTH = 75;
-      const DRAW_DISTANCE = 32;
+      // 5. SEGMENTOS DE CARRETERA Y TERRENO LATERAL EN PERSPECTIVA CONTINUA HACIA EL HORIZONTE
+      const SEG_LENGTH = 50;
+      const DRAW_DISTANCE = 48; // 48 * 50 = 2400 (roadLength)
       const baseSegment = Math.floor(cameraZ / SEG_LENGTH);
       const segOffset = cameraZ % SEG_LENGTH;
 
@@ -3478,7 +3547,29 @@
         const p2L = project3D(-WORLD.laneWidth * 1.85, safeZ2);
         const p2R = project3D(WORLD.laneWidth * 1.85, safeZ2);
 
-        // A) ASFALTO DEL SEGMENTO (FRANJAS ALTERNAS EN MOVIMIENTO CONTINUO)
+        // A) TERRENO LATERAL EN MOVIMIENTO (FRANJAS DINÁMICAS DE CÉSPED/ARENA/PAVIMENTO)
+        // Esto elimina por completo el suelo vacío lateral y da dinamismo y velocidad arcade retro
+        ctx.fillStyle = isEven ? theme.grassTop : theme.grassBottom;
+        
+        // Franja izquierda del terreno
+        ctx.beginPath();
+        ctx.moveTo(0, p1L.y);
+        ctx.lineTo(p1L.x, p1L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(0, p2L.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Franja derecha del terreno
+        ctx.beginPath();
+        ctx.moveTo(p1R.x, p1R.y);
+        ctx.lineTo(W, p1R.y);
+        ctx.lineTo(W, p2R.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // B) ASFALTO DEL SEGMENTO (CONVERGE EXACTAMENTE HASTA EL HORIZONTE)
         ctx.fillStyle = isEven ? theme.roadLight : theme.roadDark;
         ctx.beginPath();
         ctx.moveTo(p1L.x, p1L.y);
@@ -3488,9 +3579,9 @@
         ctx.closePath();
         ctx.fill();
 
-        // B) BORDES / GUARNICIONES (RUMBLE STRIPS)
-        const curbW1 = Math.max(4, 15 * p1L.scale);
-        const curbW2 = Math.max(4, 15 * p2L.scale);
+        // C) BORDES / GUARNICIONES (RUMBLE STRIPS)
+        const curbW1 = Math.max(2.5, 14 * p1L.scale);
+        const curbW2 = Math.max(2.5, 14 * p2L.scale);
         ctx.fillStyle = isEven ? theme.curb1 : theme.curb2;
 
         // Borde izquierdo
@@ -3511,11 +3602,11 @@
         ctx.closePath();
         ctx.fill();
 
-        // C) LÍNEAS DISCONTINUAS BLANCAS (DIVISORES DE CARRILES)
+        // D) LÍNEAS DISCONTINUAS BLANCAS (DIVISORES DE CARRILES)
         if (isEven) {
-          const dashW1 = Math.max(2, 6 * p1L.scale);
-          const dashW2 = Math.max(2, 6 * p2L.scale);
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+          const dashW1 = Math.max(1.5, 6 * p1L.scale);
+          const dashW2 = Math.max(1.5, 6 * p2L.scale);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
 
           [-0.6, 0.6].forEach(laneFactor => {
             const d1 = project3D(WORLD.laneWidth * laneFactor, safeZ1);
