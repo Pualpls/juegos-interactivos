@@ -919,33 +919,47 @@
       padding: 0 0.2rem;
     }
 
-    /* TOAST DE FEEDBACK */
+    /* TOAST DE FEEDBACK (UBICADO ABAJO PARA NO TAPAR LA CARRETERA NI LAS PRÓXIMAS VALLAS) */
     #feedback-toast {
       position: absolute;
-      top: 48%;
+      bottom: 24px;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
+      transform: translateX(-50%) translateY(20px) scale(0.9);
       background: rgba(16, 185, 129, 0.95);
       color: #ffffff;
-      padding: 0.85rem 1.6rem;
+      padding: 0.55rem 1.35rem;
       border-radius: 9999px;
       font-family: var(--font-display);
-      font-size: 1.35rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.35);
       z-index: 50;
       pointer-events: none;
       opacity: 0;
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     #feedback-toast.show {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+      transform: translateX(-50%) translateY(0) scale(1);
     }
 
     #feedback-toast.error {
-      background: rgba(239, 68, 68, 0.95);
+      background: rgba(220, 38, 38, 0.95);
+      border-color: rgba(254, 202, 202, 0.5);
+    }
+
+    /* DESTELLO PERIFÉRICO EN EL PANEL DE CÁLCULO */
+    .hud-math-card.glow-correct {
+      border-color: #10b981 !important;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.85) !important;
+    }
+
+    .hud-math-card.glow-wrong {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.85) !important;
     }
 
     /* MODAL DE ESTRATEGIA Y SELECCIÓN DIRECTA DE DIFICULTAD */
@@ -2801,7 +2815,8 @@
 
           if (collidedHurdle) {
             wave.evaluated = true;
-            collidedHurdle.hit = true;
+            // Despejar inmediatamente TODAS las vallas de esta oleada para dejar el camino despejado
+            wave.hurdles.forEach(h => h.hit = true);
 
             if (collidedHurdle.isCorrect) {
               handleCorrectHit(collidedHurdle.value);
@@ -2836,10 +2851,21 @@
 
     function showToast(text, isError=false) {
       const toast = document.getElementById('feedback-toast');
+      const mathCard = document.getElementById('hud-math-card');
       toast.textContent = text;
       toast.className = isError ? 'show error' : 'show';
+
+      if (mathCard) {
+        mathCard.classList.remove('glow-correct', 'glow-wrong');
+        mathCard.classList.add(isError ? 'glow-wrong' : 'glow-correct');
+        clearTimeout(mathCard._timer);
+        mathCard._timer = setTimeout(() => {
+          mathCard.classList.remove('glow-correct', 'glow-wrong');
+        }, 900);
+      }
+
       clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => { toast.className = ''; }, 2400);
+      toast._timer = setTimeout(() => { toast.className = ''; }, 1100);
     }
 
     function handleCorrectHit(val) {
@@ -3204,9 +3230,9 @@
 
       // 8. DIBUJAR A LOKI (DE ESPALDAS CON FOTOGRAMAS ALTERNOS Y PERALTADO)
       const pPlayer = project3D(player.worldX, 0);
-      const lokiScale = 1.08;
-      const baseLokiW = 145;
-      const baseLokiH = 155;
+      const lokiScale = 1.25;
+      const baseLokiW = 110;
+      const baseLokiH = 110;
       const lokiW = baseLokiW * lokiScale;
       const lokiH = baseLokiH * lokiScale;
       const lokiX = pPlayer.x;
@@ -3215,7 +3241,7 @@
       // Sombra dinámica bajo Loki
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.beginPath();
-      const shadowW = (lokiW * 0.45) * (1 - (player.jumpY / 45));
+      const shadowW = (lokiW * 0.42) * (1 - (player.jumpY / 45));
       ctx.ellipse(lokiX, H * 0.86 + 18, Math.max(15, shadowW), 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
@@ -3236,7 +3262,7 @@
       }
 
       if (currentSprite) {
-        ctx.drawImage(currentSprite, -lokiW * 0.5, -lokiH * 0.85, lokiW, lokiH);
+        ctx.drawImage(currentSprite, -lokiW * 0.5, -lokiH * 0.95, lokiW, lokiH);
       } else {
         ctx.fillStyle = '#1e1b18';
         ctx.beginPath();
