@@ -547,9 +547,10 @@
       letter-spacing: 0.04rem;
     }
 
-    .mode-tutorial { background: #059669; color: #fff; }
-    .mode-carrera { background: #2563eb; color: #fff; }
-    .mode-hard { background: #dc2626; color: #fff; animation: pulseHard 1.6s infinite ease-in-out; }
+    .mode-muy-facil { background: #059669; color: #fff; }
+    .mode-facil     { background: #0284c7; color: #fff; }
+    .mode-normal    { background: #d97706; color: #fff; }
+    .mode-dificil   { background: #dc2626; color: #fff; animation: pulseHard 1.4s infinite ease-in-out; }
 
     @keyframes pulseHard {
       0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); }
@@ -578,15 +579,10 @@
       transition: all 0.15s;
     }
 
-    .speed-btn.active {
-      background: #f59e0b;
-      color: #0f172a;
-    }
-
-    .speed-btn#sp-rayo.active {
-      background: #ef4444;
-      color: #ffffff;
-    }
+    .speed-btn#diff-muy-facil.active { background: #10b981; color: #fff; }
+    .speed-btn#diff-facil.active     { background: #0284c7; color: #fff; }
+    .speed-btn#diff-normal.active    { background: #f59e0b; color: #0f172a; }
+    .speed-btn#diff-dificil.active   { background: #ef4444; color: #fff; }
 
     .hud-btn-group {
       display: flex;
@@ -798,7 +794,7 @@
       font-size: 0.62rem;
       font-weight: 700;
       color: #64748b;
-      transition: background 0.1s, color 0.1s;
+      transition: background 0.08s, color 0.08s;
     }
 
     .cam-zone-bar.active-lane {
@@ -808,7 +804,7 @@
 
     .cam-zone-bar.active-soft {
       color: #fbbf24;
-      background: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.25);
     }
 
     .cam-zone-bar.active-brusque {
@@ -836,8 +832,8 @@
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
-      transition: width 0.08s ease;
-      opacity: 0.55;
+      transition: width 0.06s ease;
+      opacity: 0.6;
     }
 
     .cam-motion-status-lbl {
@@ -1033,10 +1029,10 @@
       transform: translateY(-2px);
     }
 
-    .btn-modal-speed.opt-tortuga:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
-    .btn-modal-speed.opt-paso:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); }
-    .btn-modal-speed.opt-trote:hover { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); }
-    .btn-modal-speed.opt-rayo:hover { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
+    .btn-modal-speed.opt-muy-facil:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
+    .btn-modal-speed.opt-facil:hover     { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); }
+    .btn-modal-speed.opt-normal:hover    { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); }
+    .btn-modal-speed.opt-dificil:hover   { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
 
     .modal-buttons {
       display: flex;
@@ -1156,7 +1152,7 @@
           <div class="cam-badge-icon">📷</div>
           <div class="cam-badge-text">
             <div class="cam-badge-title">Control por Movimiento de Cámara (Cuerpo)</div>
-            <div class="cam-badge-desc">Inclina tu torso o cabeza bruscamente a la izquierda o derecha para esquivar y atrapar respuestas sin tocar la pantalla. (Ignora movimientos lentos).</div>
+            <div class="cam-badge-desc">Inclina tu torso o cabeza a la izquierda o derecha para esquivar y atrapar respuestas sin tocar la pantalla. (Sensibilidad alta calibrada).</div>
           </div>
         </div>
         <div class="menu-cam-right">
@@ -1194,14 +1190,14 @@
               <span id="hud-bones-progress">0 / 10</span>
             </div>
             <span class="hud-theme-badge" id="hud-theme-badge">🌲 Bosque</span>
-            <span class="hud-mode-badge mode-tutorial" id="hud-speed-badge">🐢 Ultra Lento</span>
+            <span class="hud-mode-badge mode-muy-facil" id="hud-speed-badge">🌱 Muy Fácil (15s)</span>
 
-            <!-- SELECTOR RÁPIDO DE VELOCIDAD CON MODO DIFÍCIL -->
-            <div class="speed-selector-group" title="Ajustar velocidad del juego">
-              <button class="speed-btn active" id="sp-tortuga" onclick="setSpeedMultiplier(0.65, 'sp-tortuga')" title="Ultra Lento (~20s por reto)">🐌 Lento</button>
-              <button class="speed-btn" id="sp-paso" onclick="setSpeedMultiplier(1.0, 'sp-paso')" title="Paso Normal (~14s por reto)">🚶 Normal</button>
-              <button class="speed-btn" id="sp-trote" onclick="setSpeedMultiplier(1.5, 'sp-trote')" title="Trote Ágil (~9s por reto)">🏃 Ágil</button>
-              <button class="speed-btn" id="sp-rayo" onclick="setSpeedMultiplier(2.2, 'sp-rayo')" title="Rayo Difícil (~6s por reto)">⚡ Difícil</button>
+            <!-- SELECTOR RÁPIDO DE DIFICULTAD (EXACTO EN TIEMPO) -->
+            <div class="speed-selector-group" title="Ajustar dificultad de cálculo">
+              <button class="speed-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">🌱 Muy Fácil</button>
+              <button class="speed-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">🚶 Fácil</button>
+              <button class="speed-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">🏃 Normal</button>
+              <button class="speed-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">⚡ Difícil</button>
             </div>
           </div>
 
@@ -1223,10 +1219,10 @@
 
       <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
 
-      <!-- CUADRO PIP DE LA CÁMARA WEBCAM -->
+      <!-- CUADRO PIP DE LA CÁMARA WEBCAM (ALTA SENSIBILIDAD) -->
       <div id="camera-pip-container">
         <div class="cam-pip-header">
-          <span class="cam-pip-title">📷 Control Corporal</span>
+          <span class="cam-pip-title">📷 Sensor Corporal</span>
           <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar cámara">✕</button>
         </div>
         <video id="camera-video-feed" autoplay playsinline muted></video>
@@ -1237,7 +1233,7 @@
         </div>
         <div class="cam-motion-meter-box">
           <div class="cam-motion-meter-fill" id="cam-motion-meter-fill"></div>
-          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Calma (esperando quiebre)</span>
+          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Centrado ●</span>
         </div>
       </div>
 
@@ -1289,21 +1285,21 @@
         <div class="modal-speed-picker">
           <label style="font-weight:700; color:#334155; font-size:0.85rem; margin-bottom:0.4rem; display:block;">Selecciona la dificultad para jugar:</label>
           <div class="modal-speed-grid">
-            <button class="btn-modal-speed opt-tortuga" onclick="startGameWithSpeed(0.65, 'sp-tortuga')">
-              <span>🐌 Ultra Lento</span>
-              <small>~20 seg. por cálculo</small>
+            <button class="btn-modal-speed opt-muy-facil" onclick="startLevelWithDifficulty('muy_facil')">
+              <span>🌱 Muy Fácil</span>
+              <small>15 segundos por cálculo</small>
             </button>
-            <button class="btn-modal-speed opt-paso" onclick="startGameWithSpeed(1.0, 'sp-paso')">
-              <span>🚶 Paso Normal</span>
-              <small>~14 seg. por cálculo</small>
+            <button class="btn-modal-speed opt-facil" onclick="startLevelWithDifficulty('facil')">
+              <span>🚶 Fácil</span>
+              <small>11 segundos por cálculo</small>
             </button>
-            <button class="btn-modal-speed opt-trote" onclick="startGameWithSpeed(1.5, 'sp-trote')">
-              <span>🏃 Trote Ágil</span>
-              <small>~9 seg. por cálculo</small>
+            <button class="btn-modal-speed opt-normal" onclick="startLevelWithDifficulty('normal')">
+              <span>🏃 Normal</span>
+              <small>7 segundos por cálculo</small>
             </button>
-            <button class="btn-modal-speed opt-rayo" onclick="startGameWithSpeed(2.2, 'sp-rayo')">
-              <span>⚡ Rayo (Difícil)</span>
-              <small>~6 seg. por cálculo</small>
+            <button class="btn-modal-speed opt-dificil" onclick="startLevelWithDifficulty('dificil')">
+              <span>⚡ Difícil</span>
+              <small>4 segundos por cálculo</small>
             </button>
           </div>
         </div>
@@ -1364,13 +1360,13 @@
             ¡Ánimo! Casi lo logras
           </h2>
           <p style="font-size:0.92rem; color:#475569; font-weight:600;" id="gameover-message">
-            El cálculo mental se entrena con paciencia. ¡Prueba el Modo Ultra Lento para dominar el truco!
+            El cálculo mental se entrena con paciencia. ¡Prueba en Muy Fácil (15s) para dominar el truco!
           </p>
         </div>
 
         <div class="modal-buttons">
-          <button class="btn-modal btn-modal-green" onclick="startGameWithSpeed(0.65, 'sp-tortuga')">
-            <span>🐌</span> Probar en Modo Ultra Lento
+          <button class="btn-modal btn-modal-green" onclick="startLevelWithDifficulty('muy_facil')">
+            <span>🌱</span> Probar en Muy Fácil (15s)
           </button>
           <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
             <span>🔄</span> Reintentar
@@ -1399,7 +1395,22 @@
     document.oncontextmenu = () => false;
 
     /* =============================================================
-       2. ARQUITECTURA MULTI-TEMA PIXEL ART 8-BIT
+       2. NIVELES DE DIFICULTAD MATEMÁTICAMENTE CALIBRADOS EN TIEMPO
+          Distancia de aparición = 2200 unidades, colisión = 40 unidades (Δ = 2160)
+          Muy Fácil: 15s  -> v = 2160 / (15 * 60) = 2.40 u/frame
+          Fácil:     11s  -> v = 2160 / (11 * 60) = 3.27 u/frame
+          Normal:    7s   -> v = 2160 / (7 * 60)  = 5.14 u/frame
+          Difícil:   4s   -> v = 2160 / (4 * 60)  = 9.00 u/frame
+       ============================================================= */
+    const DIFFICULTY_MODES = {
+      'muy_facil': { id: 'muy_facil', btnId: 'diff-muy-facil', name: 'Muy Fácil', icon: '🌱', sec: 15, speed: 2.40, badgeClass: 'mode-muy-facil' },
+      'facil':     { id: 'facil',     btnId: 'diff-facil',     name: 'Fácil',     icon: '🚶', sec: 11, speed: 3.27, badgeClass: 'mode-facil' },
+      'normal':    { id: 'normal',    btnId: 'diff-normal',    name: 'Normal',    icon: '🏃', sec: 7,  speed: 5.14, badgeClass: 'mode-normal' },
+      'dificil':   { id: 'dificil',   btnId: 'diff-dificil',   name: 'Difícil',   icon: '⚡', sec: 4,  speed: 9.00, badgeClass: 'mode-dificil' }
+    };
+
+    /* =============================================================
+       3. ARQUITECTURA MULTI-TEMA PIXEL ART 8-BIT
        ============================================================= */
     const THEMES = [
       {
@@ -1423,7 +1434,7 @@
         icon: '🏖️',
         skyTop: '#0284c7',
         skyBottom: '#7dd3fc',
-        grassTop: '#eab308', // arena dorada
+        grassTop: '#eab308',
         grassBottom: '#ca8a04',
         roadTop: '#475569',
         roadBottom: '#1e293b',
@@ -1438,7 +1449,7 @@
         icon: '🏙️',
         skyTop: '#090514',
         skyBottom: '#311042',
-        grassTop: '#334155', // aceras urbanas
+        grassTop: '#334155',
         grassBottom: '#1e293b',
         roadTop: '#1e293b',
         roadBottom: '#020617',
@@ -1453,7 +1464,7 @@
         icon: '🚜',
         skyTop: '#7c2d12',
         skyBottom: '#fdba74',
-        grassTop: '#a16207', // tierra de cultivo
+        grassTop: '#a16207',
         grassBottom: '#713f12',
         roadTop: '#57534e',
         roadBottom: '#292524',
@@ -1468,7 +1479,7 @@
         icon: '🌾',
         skyTop: '#0369a1',
         skyBottom: '#bae6fd',
-        grassTop: '#65a30d', // pradera
+        grassTop: '#65a30d',
         grassBottom: '#3f6212',
         roadTop: '#475569',
         roadBottom: '#1e293b',
@@ -1480,7 +1491,7 @@
     ];
 
     /* =============================================================
-       3. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
+       4. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
        ============================================================= */
     const STRATEGIES = [
       {
@@ -1812,14 +1823,13 @@
     ];
 
     /* =============================================================
-       4. ESTADO GLOBAL DE LA APLICACIÓN
+       5. ESTADO GLOBAL DE LA APLICACIÓN
        ============================================================= */
     const gameState = {
       soundEnabled: true,
       currentWorld: 1,
       currentLevelId: 1,
-      speedMode: 'tutorial',
-      speedMultiplier: 0.65,
+      difficulty: 'muy_facil',
       cameraControlActive: false,
       voiceSpeechEnabled: false,
       gameActive: false,
@@ -1842,7 +1852,7 @@
     } catch(e) {}
 
     /* =============================================================
-       5. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
+       6. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
        ============================================================= */
     let audioCtx = null;
 
@@ -1964,8 +1974,8 @@
     }
 
     /* =============================================================
-       6. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
-          FILTRADO ESTRICTO ANTI-MOVIMIENTOS LENTOS
+       7. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
+          CALIBRACIÓN ÁGIL (80% MÁS SENSIBLE)
        ============================================================= */
     let cameraStream = null;
     let cameraVideo = null;
@@ -2050,7 +2060,7 @@
         baselineCenter = 0;
 
         if (cameraInterval) clearInterval(cameraInterval);
-        cameraInterval = setInterval(processCameraMotion, 80);
+        cameraInterval = setInterval(processCameraMotion, 70);
 
         return true;
       } catch(err) {
@@ -2113,14 +2123,14 @@
         return;
       }
 
-      const zLeftEnd = Math.floor(cw * 0.36);
-      const zRightStart = Math.floor(cw * 0.64);
+      const zLeftEnd = Math.floor(cw * 0.38);
+      const zRightStart = Math.floor(cw * 0.62);
 
       let leftMotion = 0;
       let centerMotion = 0;
       let rightMotion = 0;
 
-      // UMBRAL ALTO (diff > 90): Ignora respiración, parpadeo de luz y movimientos suaves lentos
+      // UMBRAL DE SENSIBILIDAD REDUCIDO EN 80%: diff > 30 detecta inclinación natural sin esfuerzo
       for (let y = 0; y < ch; y++) {
         for (let x = 0; x < cw; x++) {
           const idx = (y * cw + x) * 4;
@@ -2128,7 +2138,7 @@
                        Math.abs(curData[idx+1] - prevFrameData[idx+1]) +
                        Math.abs(curData[idx+2] - prevFrameData[idx+2]);
 
-          if (diff > 90) {
+          if (diff > 30) {
             if (x < zLeftEnd) leftMotion++;
             else if (x > zRightStart) rightMotion++;
             else centerMotion++;
@@ -2138,19 +2148,18 @@
 
       prevFrameData.set(curData);
 
-      // Promedio móvil ambiental (ruido de fondo y balanceo lento)
-      baselineLeft = baselineLeft * 0.8 + leftMotion * 0.2;
-      baselineRight = baselineRight * 0.8 + rightMotion * 0.2;
-      baselineCenter = baselineCenter * 0.8 + centerMotion * 0.2;
+      // Promedio móvil adaptativo ágil
+      baselineLeft = baselineLeft * 0.7 + leftMotion * 0.3;
+      baselineRight = baselineRight * 0.7 + rightMotion * 0.3;
+      baselineCenter = baselineCenter * 0.7 + centerMotion * 0.3;
 
-      // Cálculo de ráfaga brusca (burst)
       const burstLeft = Math.max(0, leftMotion - baselineLeft);
       const burstRight = Math.max(0, rightMotion - baselineRight);
 
-      // CRITERIO ESTRICTO DE MOVIMIENTO BRUSCO:
-      // Debe haber al menos 95 pixeles activos con salto brusco, burst >= 55 y dominar el lado opuesto por 1.75x
-      const isBrusqueLeft = (leftMotion >= 95 && burstLeft >= 55 && leftMotion > rightMotion * 1.75);
-      const isBrusqueRight = (rightMotion >= 95 && burstRight >= 55 && rightMotion > leftMotion * 1.75);
+      // CRITERIO SENSIBLE Y DIRECTO (80% MÁS RÁPIDO Y SUAVE):
+      // Inclinación clara con al menos 18 pixeles y ráfaga de 10
+      const isMotionLeft = (leftMotion >= 18 && burstLeft >= 10 && leftMotion > rightMotion * 1.20);
+      const isMotionRight = (rightMotion >= 18 && burstRight >= 10 && rightMotion > leftMotion * 1.20);
 
       // Indicadores visuales en el cuadro PIP
       const bLeft = document.getElementById('cam-bar-left');
@@ -2159,26 +2168,26 @@
       const pipMeter = document.getElementById('cam-motion-meter-fill');
       const pipLabel = document.getElementById('cam-motion-status-lbl');
 
-      if (bLeft) bLeft.className = 'cam-zone-bar' + (isBrusqueLeft ? ' active-brusque' : (leftMotion > 45 ? ' active-soft' : ''));
-      if (bRight) bRight.className = 'cam-zone-bar' + (isBrusqueRight ? ' active-brusque' : (rightMotion > 45 ? ' active-soft' : ''));
+      if (bLeft) bLeft.className = 'cam-zone-bar' + (isMotionLeft ? ' active-brusque' : (leftMotion > 12 ? ' active-soft' : ''));
+      if (bRight) bRight.className = 'cam-zone-bar' + (isMotionRight ? ' active-brusque' : (rightMotion > 12 ? ' active-soft' : ''));
       if (bCenter) bCenter.className = 'cam-zone-bar' + (player.lane === 0 ? ' active-lane' : '');
 
       const currentMaxBurst = Math.max(burstLeft, burstRight);
-      const burstPct = Math.min(100, Math.floor((currentMaxBurst / 80) * 100));
+      const burstPct = Math.min(100, Math.floor((currentMaxBurst / 25) * 100));
       if (pipMeter) pipMeter.style.width = burstPct + '%';
 
       if (pipLabel) {
-        if (isBrusqueLeft) {
-          pipLabel.textContent = '⚡ ¡QUIEBRE IZQUIERDA!';
+        if (isMotionLeft) {
+          pipLabel.textContent = '◀ IZQUIERDA';
           pipLabel.style.color = '#38bdf8';
-        } else if (isBrusqueRight) {
-          pipLabel.textContent = '⚡ ¡QUIEBRE DERECHA!';
+        } else if (isMotionRight) {
+          pipLabel.textContent = 'DERECHA ▶';
           pipLabel.style.color = '#38bdf8';
-        } else if (leftMotion > 45 || rightMotion > 45) {
-          pipLabel.textContent = 'Movimiento lento (ignorado)';
-          pipLabel.style.color = '#94a3b8';
+        } else if (leftMotion > 12 || rightMotion > 12) {
+          pipLabel.textContent = 'Inclinación detectada...';
+          pipLabel.style.color = '#fde047';
         } else {
-          pipLabel.textContent = 'Calma (esperando quiebre)';
+          pipLabel.textContent = 'Centrado ●';
           pipLabel.style.color = '#64748b';
         }
       }
@@ -2186,15 +2195,15 @@
       if (!gameState.gameActive || gameState.gamePaused) return;
 
       const now = Date.now();
-      if (now - lastCameraMoveTime < 420) return; // Cooldown de 420ms para cambio seguro de carril
+      if (now - lastCameraMoveTime < 260) return; // Cooldown ágil de 260ms
 
-      if (isBrusqueLeft) {
+      if (isMotionLeft) {
         if (player.lane > -1) {
           player.lane--;
           soundLaneSwitch();
           lastCameraMoveTime = now;
         }
-      } else if (isBrusqueRight) {
+      } else if (isMotionRight) {
         if (player.lane < 1) {
           player.lane++;
           soundLaneSwitch();
@@ -2203,34 +2212,24 @@
       }
     }
 
-    function setSpeedMultiplier(mult, btnId) {
-      gameState.speedMultiplier = mult;
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById(btnId);
-      if (activeBtn) activeBtn.classList.add('active');
+    function setDifficultyMode(diffId) {
+      const mode = DIFFICULTY_MODES[diffId] || DIFFICULTY_MODES['muy_facil'];
+      gameState.difficulty = mode.id;
+      WORLD.speed = mode.speed;
 
-      WORLD.speed = WORLD.baseSpeed * gameState.speedMultiplier;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(mode.btnId);
+      if (activeBtn) activeBtn.classList.add('active');
 
       const badge = document.getElementById('hud-speed-badge');
       if (badge) {
-        if (mult <= 0.7) {
-          badge.textContent = '🐢 Ultra Lento';
-          badge.className = 'hud-mode-badge mode-tutorial';
-        } else if (mult <= 1.1) {
-          badge.textContent = '🚶 Paso Normal';
-          badge.className = 'hud-mode-badge mode-carrera';
-        } else if (mult <= 1.8) {
-          badge.textContent = '🏃 Trote Ágil';
-          badge.className = 'hud-mode-badge mode-carrera';
-        } else {
-          badge.textContent = '⚡ Rayo (Difícil)';
-          badge.className = 'hud-mode-badge mode-hard';
-        }
+        badge.textContent = `${mode.icon} ${mode.name} (${mode.sec}s)`;
+        badge.className = `hud-mode-badge ${mode.badgeClass}`;
       }
     }
 
     /* =============================================================
-       7. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
+       8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
     function switchWorld(worldNum) {
       gameState.currentWorld = worldNum;
@@ -2257,7 +2256,6 @@
 
         const card = document.createElement('div');
         card.className = 'level-card' + (strat.id === 6 ? ' featured' : '');
-        // El clic en cualquier parte de la tarjeta abre directamente el selector de dificultad
         card.onclick = () => openTutorialModal(strat.id);
         card.innerHTML = `
           <div class="level-badge-num">#${strat.id}</div>
@@ -2309,16 +2307,15 @@
       openTutorialModal(gameState.currentLevelId);
     }
 
-    // Al seleccionar una dificultad, se lanza la partida DE INMEDIATO (sin confirmación extra)
-    function startGameWithSpeed(mult, btnId) {
+    // Iniciar inmediatamente con la dificultad elegida (1 clic y adentro)
+    function startLevelWithDifficulty(diffId) {
       closeTutorialModal();
-      gameState.speedMultiplier = mult;
-      startGameWithMode(mult <= 0.7 ? 'tutorial' : 'normal');
-      setSpeedMultiplier(mult, btnId);
+      setDifficultyMode(diffId);
+      startGameWithMode(diffId);
     }
 
     /* =============================================================
-       8. MOTOR DEL JUEGO RUNNER 3D (PIXEL ART ENGINE)
+       9. MOTOR DEL JUEGO RUNNER 3D (PIXEL ART ENGINE)
        ============================================================= */
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -2349,8 +2346,7 @@
       cameraHeight: 180,
       horizonY: 260,
       roadLength: 2400,
-      baseSpeed: 1.8,
-      speed: 1.8
+      speed: 2.40
     };
 
     const player = {
@@ -2381,13 +2377,17 @@
     }
     window.addEventListener('resize', resizeCanvas);
 
-    function startGameWithMode(mode) {
-      gameState.speedMode = mode;
+    function startGameWithMode(diffId) {
+      gameState.difficulty = diffId || 'muy_facil';
       gameState.gameActive = true;
       gameState.gamePaused = false;
       gameState.lives = 3;
       gameState.correctCount = 0;
       gameState.startTime = Date.now();
+
+      // Configurar velocidad exacta del modo
+      const mode = DIFFICULTY_MODES[gameState.difficulty] || DIFFICULTY_MODES['muy_facil'];
+      WORLD.speed = mode.speed;
 
       // SELECCIÓN ALEATORIA DE TEMA DE ESCENARIO 8-BIT
       gameState.currentTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
@@ -2407,10 +2407,7 @@
         if (pip) pip.style.display = 'flex';
       }
 
-      setSpeedMultiplier(gameState.speedMultiplier, 
-        gameState.speedMultiplier <= 0.7 ? 'sp-tortuga' : 
-        (gameState.speedMultiplier <= 1.1 ? 'sp-paso' : 
-        (gameState.speedMultiplier <= 1.8 ? 'sp-trote' : 'sp-rayo')));
+      setDifficultyMode(gameState.difficulty);
 
       resizeCanvas();
       resetTrack();
@@ -2431,23 +2428,20 @@
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
 
-      // VEGETACIÓN CON ALTERNANCIA SEGÚN EL TEMA
+      // VEGETACIÓN SEGÚN TEMA
       individualTrees = [];
       const theme = gameState.currentTheme || THEMES[0];
       const treeSpacing = 130;
       let treeIdx = 0;
       for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
-        // Lado izquierdo: alterna treeA y treeB
         const leftType = (treeIdx % 2 === 0) ? theme.treeA : theme.treeB;
         const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
         individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
 
-        // Lado derecho: alterna treeB y treeA con desfase
         const rightType = (treeIdx % 2 === 0) ? theme.treeB : theme.treeA;
         const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
         individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
 
-        // Capa de fondo exterior
         if (treeIdx % 2 === 0) {
           individualTrees.push({ x: -2.85, z: z + 40, type: theme.treeA, isFar: true });
           individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: theme.treeB, isFar: true });
@@ -2464,7 +2458,7 @@
     }
 
     /* =============================================================
-       9. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
+       10. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
        ============================================================= */
     function spawnNextProblemWave() {
       const strat = STRATEGIES[gameState.currentLevelId - 1];
@@ -2499,7 +2493,8 @@
         hit: false
       }));
 
-      const spawnZ = gameState.speedMode === 'tutorial' ? 2200 : 1800;
+      // Distancia calibrada a 2200 para que los segundos sean exactos (15s, 11s, 7s, 4s)
+      const spawnZ = 2200;
       roadWaves.push({
         z: spawnZ,
         hurdles: hurdles,
@@ -2587,7 +2582,7 @@
     }
 
     /* =============================================================
-       10. BUCLE DE ACTUALIZACIÓN Y FÍSICAS (60 FPS)
+       11. BUCLE DE ACTUALIZACIÓN Y FÍSICAS (60 FPS)
        ============================================================= */
     let lastFrameTime = performance.now();
 
@@ -2779,7 +2774,7 @@
     }
 
     function restartCurrentLevel() {
-      startGameWithMode(gameState.speedMode);
+      startGameWithMode(gameState.difficulty);
     }
 
     function playNextLevel() {
@@ -2792,7 +2787,7 @@
     }
 
     /* =============================================================
-       11. RENDERIZADO 3D PERSPECTIVO Y TEMAS PIXEL ART 8-BIT
+       12. RENDERIZADO 3D PERSPECTIVO Y TEMAS PIXEL ART 8-BIT
        ============================================================= */
     function project3D(xWorld, zWorld) {
       const fov = WORLD.cameraFov;
@@ -2835,7 +2830,6 @@
         // Horizonte procedural 8-bit característico del tema
         const parallaxX = -player.worldX * 0.12;
         if (theme.id === 'playa') {
-          // Océano y olas pixel art
           ctx.fillStyle = '#0284c7';
           ctx.fillRect(0, horizon - 30, W, 30);
           ctx.fillStyle = '#38bdf8';
@@ -2843,11 +2837,9 @@
             const waveY = horizon - 16 + (Math.floor(Math.sin((x + parallaxX * 2) * 0.06) * 2) * 4);
             ctx.fillRect(x, waveY, 18, 4);
           }
-          // Sol pixel art
           ctx.fillStyle = '#fef08a';
           ctx.fillRect(W * 0.75, horizon * 0.35, 36, 36);
         } else if (theme.id === 'ciudad') {
-          // Siluetas de rascacielos con ventanas pixel art
           ctx.fillStyle = '#170c2e';
           for (let x = -20; x < W + 40; x += 44) {
             const bH = 45 + ((Math.abs(Math.sin((x + 80) * 0.08)) * 55) | 0);
@@ -2862,7 +2854,6 @@
             ctx.fillStyle = '#170c2e';
           }
         } else if (theme.id === 'granja') {
-          // Colinas de campo y molino
           ctx.fillStyle = '#7c2d12';
           for (let x = -20; x < W + 20; x += 20) {
             const fH = 25 + Math.sin((x + parallaxX) * 0.008) * 18;
@@ -2874,7 +2865,6 @@
           ctx.fillRect(millX - 20, horizon - 36, 40, 4);
           ctx.fillRect(millX - 2, horizon - 54, 4, 40);
         } else {
-          // Montañas pixel art (campo o bosque)
           ctx.fillStyle = '#1e293b';
           for (let x = -40; x < W + 40; x += 16) {
             const hMtn = 35 + Math.sin((x + parallaxX) * 0.012) * 25 + Math.cos((x + parallaxX) * 0.025) * 15;
@@ -2909,7 +2899,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // 4. BORDES EN MOVIMIENTO (RUMBLE STRIPS CON COLORES DEL TEMA)
+      // 4. BORDES EN MOVIMIENTO (RUMBLE STRIPS)
       const segmentsCount = 28;
       const segLength = WORLD.roadLength / segmentsCount;
 
@@ -2962,7 +2952,7 @@
         }
       });
 
-      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (ORDENADOS POR Z DESCENDENTE)
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
@@ -3082,7 +3072,7 @@
     }
 
     /* =============================================================
-       12. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       13. INICIALIZACIÓN AL CARGAR LA PÁGINA
        ============================================================= */
     window.addEventListener('DOMContentLoaded', () => {
       renderLevels();
