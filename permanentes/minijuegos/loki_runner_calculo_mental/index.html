@@ -3216,19 +3216,20 @@
       }
 
       let treeIdx = 0;
-      for (let z = 60; z < WORLD.roadLength; z += treeSpacing) {
-        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±3.85 para que los troncos NUNCA pisen la carretera ni el borde)
+      // Iniciar z desde -140 para que al arrancar o cambiar de mapa ya existan árboles en primer plano saliendo de la pantalla
+      for (let z = -140; z < WORLD.roadLength; z += treeSpacing) {
+        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±4.40 para que los troncos y ramas NUNCA pisen la carretera)
         const leftTreeType = treePool[treeIdx % treePool.length];
-        const treeLeftX = -3.85 - ((treeIdx % 3) * 0.35);
+        const treeLeftX = -4.40 - ((treeIdx % 3) * 0.40);
         individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
 
         const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
-        const treeRightX = 3.85 + (((treeIdx + 1) % 3) * 0.35);
+        const treeRightX = 4.40 + (((treeIdx + 1) % 3) * 0.40);
         individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
 
         // Capa de fondo densa (bosque lateral tupido y continuo)
-        individualTrees.push({ x: -5.10, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
-        individualTrees.push({ x: 5.10, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
+        individualTrees.push({ x: -5.90, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+        individualTrees.push({ x: 5.90, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
 
         // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA)
         // Se posicionan a ±2.45 (fuera de la calzada de 1.85, sin solaparse con el asfalto)
@@ -3339,9 +3340,29 @@
 
     function closeTutorialModal() {
       document.getElementById('modal-tutorial').classList.remove('active');
+      if (gameState.gameActive && gameState.wasPausedByTrick) {
+        gameState.gamePaused = false;
+        gameState.wasPausedByTrick = false;
+        const btn = document.getElementById('btn-pause');
+        if (btn) {
+          btn.textContent = '⏸️ Pausa';
+          btn.classList.remove('active');
+        }
+        updateThemeMusic();
+      }
     }
 
     function openExplanationFromGame() {
+      if (gameState.gameActive && !gameState.gamePaused) {
+        gameState.gamePaused = true;
+        gameState.wasPausedByTrick = true;
+        const btn = document.getElementById('btn-pause');
+        if (btn) {
+          btn.textContent = '▶️ Seguir';
+          btn.classList.add('active');
+        }
+        updateThemeMusic();
+      }
       openTutorialModal(gameState.currentLevelId);
     }
 
@@ -3566,7 +3587,11 @@
       gameState.currentProblem = prob;
 
       const mathEl = document.getElementById('hud-math-problem');
-      mathEl.textContent = `${prob.text} = ?`;
+      let displayText = prob.text.trim();
+      if (!displayText.includes('=') && !displayText.includes('?') && !displayText.includes('_')) {
+        displayText = `${displayText} = ?`;
+      }
+      mathEl.textContent = displayText;
 
       if (gameState.voiceSpeechEnabled) {
         speakProblem(prob.text);
@@ -3994,16 +4019,18 @@
       if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
         // Preservar relación de aspecto nativa del fondo pixel art (cero estiramiento ni deformación)
         const bgAspect = bgImg.naturalWidth / bgImg.naturalHeight;
-        const targetH = (theme.id === 'playa') ? Math.round(horizon * 1.45) : Math.round(horizon * 1.18);
+        // Ajuste vertical exacto: la altura del fondo abarca estrictamente desde Y = 0 hasta la línea del horizonte
+        const targetH = Math.round(horizon);
         const targetW = Math.round(targetH * bgAspect);
+        const drawBaseY = 0;
 
         ctx.save();
         ctx.imageSmoothingEnabled = false; // Pixel art razor-sharp 8-bit
 
-        // En la playa, alinear la línea del agua del mar exactamente con la línea de horizonte
-        const drawBaseY = (theme.id === 'playa') 
-          ? (horizon - Math.round(targetH * 0.70)) 
-          : (horizon - targetH + 8);
+        // Delimitar estrictamente el fondo al área superior (de la línea de horizonte hacia arriba)
+        ctx.beginPath();
+        ctx.rect(0, 0, W, horizon);
+        ctx.clip();
 
         // El horizonte permanece 100% fijo y estable en el centro (cero desvío al girar)
         const centerX = Math.round(W * 0.5);
@@ -4329,40 +4356,35 @@
         });
       });
 
-      // 7.5. FILTRO DE ILUMINACIÓN AMBIENTAL TEMÁTICA (ATMÓSFERA Y TINTADO DEL ENTORNO)
-      if (theme.ambientLight) {
-        ctx.save();
-        // Capa 1: Resplandor cálido de fondo
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = theme.ambientGlow || 'rgba(0,0,0,0)';
-        ctx.fillRect(0, horizon, W, H - horizon);
 
-        // Capa 2: Filtro de color ambiental (ej. más amarilloso y dorado en la playa)
-        ctx.globalCompositeOperation = theme.ambientBlend || 'color';
-        ctx.fillStyle = theme.ambientLight;
-        ctx.fillRect(0, horizon, W, H - horizon);
-        ctx.restore();
-      }
 
-      // 8. DIBUJAR A LOKI (SPRINT DE ESPALDAS MULTI-FOTOGRAMA DINÁMICO 8-BIT)
+      // 8. DIBUJAR A LOKI (SPRINT MULTI-FOTOGRAMA DINÁMICO 8-BIT)
       const pPlayer = project3D(player.worldX, 0);
-      // Reducción del tamaño de Loki en un 30% respecto al anterior (base 100x100 con escala 1.35 => ~135px)
       const lokiScale = 1.35;
       const baseLokiW = 100;
       const baseLokiH = 100;
       const lokiW = baseLokiW * lokiScale;
       const lokiH = baseLokiH * lokiScale;
       const lokiX = pPlayer.x;
-      // Posición vertical despegada de la orilla inferior para encuadre holgado
       const groundY = H * 0.81;
 
-      // Sombra normal suave (elipse natural) que reacciona y cambia de tamaño según la altura del salto
-      const jumpOffset = player.jumpY || 0;
-      const jumpRatio = Math.min(1.0, jumpOffset / 60);
-      const shadowW = Math.max(34, Math.round(lokiW * 0.44 * (1.0 - jumpRatio * 0.35)));
-      const shadowH = Math.max(14, Math.round(shadowW * 0.42 * (1.0 - jumpRatio * 0.40)));
-      const shadowY = groundY + 4; // Fija en el asfalto bajo las patas de Loki
-      const shadowAlpha = 0.38 * (1.0 - jumpRatio * 0.45);
+      // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
+      const frameIdx = Math.floor(player.sprintCycle) % 8;
+      const sprintImg = (IMAGES.lokiSprint[frameIdx] && IMAGES.lokiSprint[frameIdx].complete)
+                        ? IMAGES.lokiSprint[frameIdx]
+                        : (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
+
+      // Sombra dinámica normal (elipse suave) que varía de tamaño según el frame de correr de Loki:
+      // En frames de suspensión aérea (1, 2, 5, 6), Loki eleva las patas y la sombra se contrae ~18%.
+      // En frames de impacto (0, 3, 4, 7), las patas tocan el asfalto y la sombra se expande firmemente.
+      const strideLift = [0.0, 0.45, 0.90, 0.35, 0.05, 0.50, 0.95, 0.40][frameIdx] || 0.0;
+      const baseShadowW = Math.round(lokiW * 0.38);
+      const shadowW = Math.max(24, Math.round(baseShadowW * (1.0 - strideLift * 0.16)));
+      // Sombra alargada verticalmente (proporción 0.76)
+      const shadowH = Math.max(18, Math.round(shadowW * 0.76 * (1.0 - strideLift * 0.20)));
+      // Posicionada más arriba (groundY - 8) pegada bajo las patas de Loki
+      const shadowY = groundY - 8;
+      const shadowAlpha = 0.40 - (strideLift * 0.08);
 
       ctx.save();
       ctx.fillStyle = `rgba(0, 0, 0, ${shadowAlpha})`;
@@ -4371,15 +4393,8 @@
       ctx.fill();
       ctx.restore();
 
-      // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
-      const frameIdx = Math.floor(player.sprintCycle) % 8;
-      const sprintImg = (IMAGES.lokiSprint[frameIdx] && IMAGES.lokiSprint[frameIdx].complete)
-                        ? IMAGES.lokiSprint[frameIdx]
-                        : (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
-
       ctx.save();
-      // Loki se posiciona en groundY restando el salto (jumpOffset eleva al perro mientras la sombra permanece abajo)
-      ctx.translate(lokiX, groundY - jumpOffset);
+      ctx.translate(lokiX, groundY);
       ctx.rotate(player.tilt);
 
       // Parpadeo de invulnerabilidad
@@ -4412,6 +4427,24 @@
         ctx.fill();
         ctx.restore();
       });
+
+      // 10. FILTRO DE ILUMINACIÓN AMBIENTAL TEMÁTICA GLOBAL
+      // Cubre toda la pantalla (de 0 a H), incluyendo el fondo superior, la carretera, la vegetación Y A LOKI
+      if (theme.ambientLight) {
+        ctx.save();
+        // Capa 1: Tinte ambiental directo unificador en toda la pantalla
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = theme.ambientLight;
+        ctx.fillRect(0, 0, W, H);
+
+        // Capa 2: Resplandor suave atmosférico
+        if (theme.ambientGlow) {
+          ctx.globalCompositeOperation = 'soft-light';
+          ctx.fillStyle = theme.ambientGlow;
+          ctx.fillRect(0, 0, W, H);
+        }
+        ctx.restore();
+      }
     }
 
     /* =============================================================
@@ -4420,6 +4453,14 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderLevels();
       resizeCanvas();
+
+      // Cerrar modal de truco y reanudar al hacer clic en el fondo oscuro
+      const tutModal = document.getElementById('modal-tutorial');
+      if (tutModal) {
+        tutModal.addEventListener('click', (e) => {
+          if (e.target === tutModal) closeTutorialModal();
+        });
+      }
 
       // Restaurar preferencia de cámara si estaba guardada
       try {
