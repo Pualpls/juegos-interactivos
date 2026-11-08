@@ -1541,18 +1541,14 @@
         </div>
       </div>
 
-      <!-- PANEL DESTACADO DE SELECCIÓN DE MUNDOS (AMPLIO, TÁCTIL Y SIN SCROLLBARS) -->
+      <!-- PANEL DESTACADO DE SELECCIÓN DE MUNDOS (SOLO LOS 4 MUNDOS) -->
       <div class="menu-worlds-panel">
         <div class="worlds-panel-header">
-          <div class="worlds-panel-title">🗺️ SELECCIONA EL MUNDO O VER TODO:</div>
-          <div class="worlds-panel-desc">31 Desafíos de Cálculo Mental Primaria · Fase 4 NEM</div>
+          <div class="worlds-panel-title">🗺️ SELECCIONA EL MUNDO A JUGAR:</div>
+          <div class="worlds-panel-desc">Elige un mundo para explorar sus desafíos de cálculo mental</div>
         </div>
         <div class="worlds-btn-grid">
-          <button class="world-choice-btn active" id="wbtn-all" onclick="switchWorld(0)">
-            <span class="wchoice-title">🌟 Todos los Mundos</span>
-            <span class="wchoice-subtitle">31 Niveles completos</span>
-          </button>
-          <button class="world-choice-btn" id="wbtn-m1" onclick="switchWorld(1)">
+          <button class="world-choice-btn active" id="wbtn-m1" onclick="switchWorld(1)">
             <span class="wchoice-title">🟢 Mundo 1: Bosque</span>
             <span class="wchoice-subtitle">Niveles #1 al #7 · Sumas y Restas</span>
           </button>
@@ -1857,8 +1853,8 @@
         id: 'playa',
         name: 'Costa Caribeña',
         icon: '🏖️',
-        skyTop: '#0284c7',
-        skyBottom: '#7dd3fc',
+        skyTop: '#c54973',
+        skyBottom: '#fb914b',
         grassTop: '#fde047',
         grassBottom: '#ca8a04',
         roadLight: '#0284c7',
@@ -2517,7 +2513,7 @@
        ============================================================= */
     const gameState = {
       soundEnabled: true,
-      currentWorld: 0,
+      currentWorld: 1,
       currentLevelId: 1,
       difficulty: 'muy_facil',
       cameraControlActive: false,
@@ -3062,14 +3058,17 @@
        8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
     function switchWorld(worldNum) {
-      gameState.currentWorld = worldNum;
-      const btnIds = ['wbtn-all', 'wbtn-m1', 'wbtn-m2', 'wbtn-m3', 'wbtn-sisat'];
-      btnIds.forEach((id, idx) => {
+      gameState.currentWorld = worldNum || 1;
+      const btnMap = {
+        1: 'wbtn-m1',
+        2: 'wbtn-m2',
+        3: 'wbtn-m3',
+        4: 'wbtn-sisat'
+      };
+      Object.entries(btnMap).forEach(([w, id]) => {
         const el = document.getElementById(id);
-        if (el) el.classList.toggle('active', idx === worldNum);
+        if (el) el.classList.toggle('active', parseInt(w, 10) === gameState.currentWorld);
       });
-      renderLevels();
-    }
       renderLevels();
     }
 
@@ -3084,28 +3083,20 @@
       document.getElementById('global-stars-count').textContent = `${starsTotal} / 60`;
 
       const WORLDS_INFO = [
-        { id: 1, name: '🟢 MUNDO 1: DECENAS Y BASE', tag: 'Estrategias Fundamentales #1 a #7' },
-        { id: 2, name: '🔵 MUNDO 2: TÉCNICAS NUMÉRICAS', tag: 'Estrategias de Agilidad #8 a #14' },
-        { id: 3, name: '🟣 MUNDO 3: MAESTRÍA Y TRUCOS', tag: 'Desafíos Avanzados #15 a #20' },
+        { id: 1, name: '🟢 MUNDO 1: BOSQUE Y PRADERAS', tag: 'Estrategias Fundamentales #1 a #7' },
+        { id: 2, name: '🔵 MUNDO 2: COSTA Y AVENTURA', tag: 'Estrategias de Agilidad #8 a #14' },
+        { id: 3, name: '🟣 MUNDO 3: DESAFÍO URBANO', tag: 'Desafíos Avanzados #15 a #20' },
         { id: 4, name: '⭐ MUNDO SiSAT: REACTIVOS OFICIALES 3° DE PRIMARIA', tag: 'Reactivos Diagnósticos #21 a #31' }
       ];
 
-      const worldsToRender = (gameState.currentWorld === 0)
-        ? [1, 2, 3, 4]
-        : [gameState.currentWorld];
+      const wId = gameState.currentWorld || 1;
+      const wInfo = WORLDS_INFO.find(w => w.id === wId) || WORLDS_INFO[0];
+      const strats = STRATEGIES.filter(s => s.world === wId);
 
-      worldsToRender.forEach(wId => {
-        const wInfo = WORLDS_INFO.find(w => w.id === wId);
-        const strats = STRATEGIES.filter(s => s.world === wId);
-        if (strats.length === 0) return;
-
-        // Encabezado de mundo si se están mostrando todos
-        if (gameState.currentWorld === 0) {
-          const header = document.createElement('div');
-          header.className = 'world-section-header';
-          header.innerHTML = `<h3>${wInfo.name} <span class="world-count-tag">${wInfo.tag}</span></h3>`;
-          container.appendChild(header);
-        }
+      const header = document.createElement('div');
+      header.className = 'world-section-header';
+      header.innerHTML = `<h3>${wInfo.name} <span class="world-count-tag">${wInfo.tag}</span></h3>`;
+      container.appendChild(header);
 
         strats.forEach(strat => {
           const stars = gameState.userStars[strat.id] || 0;
@@ -3131,7 +3122,6 @@
           `;
           container.appendChild(card);
         });
-      });
     }
 
     function openTutorialModal(levelId) {
@@ -3787,11 +3777,16 @@
       if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
         // Preservar relación de aspecto nativa del fondo pixel art (cero estiramiento ni deformación)
         const bgAspect = bgImg.naturalWidth / bgImg.naturalHeight;
-        const targetH = Math.round(horizon * 1.18);
+        const targetH = (theme.id === 'playa') ? Math.round(horizon * 1.45) : Math.round(horizon * 1.18);
         const targetW = Math.round(targetH * bgAspect);
 
         ctx.save();
         ctx.imageSmoothingEnabled = false; // Pixel art razor-sharp 8-bit
+
+        // En la playa, alinear la línea del agua del mar exactamente con la línea de horizonte
+        const drawBaseY = (theme.id === 'playa') 
+          ? (horizon - Math.round(targetH * 0.70)) 
+          : (horizon - targetH + 8);
 
         // Mosaico continuo horizontal con parallax suave y espejado alternado para costuras 100% invisibles
         const parallaxOffset = Math.floor(-(player.worldX * 0.12)) % targetW;
@@ -3800,11 +3795,11 @@
         for (let drawX = startX; drawX < W + targetW; drawX += targetW, tileIdx++) {
           ctx.save();
           if (Math.abs(tileIdx) % 2 === 1) {
-            ctx.translate(drawX + targetW, horizon - targetH + 8);
+            ctx.translate(drawX + targetW, drawBaseY);
             ctx.scale(-1, 1);
             ctx.drawImage(bgImg, 0, 0, targetW, targetH);
           } else {
-            ctx.drawImage(bgImg, drawX, horizon - targetH + 8, targetW, targetH);
+            ctx.drawImage(bgImg, drawX, drawBaseY, targetW, targetH);
           }
           ctx.restore();
         }
@@ -3818,18 +3813,20 @@
         ctx.fillRect(0, 0, W, horizon);
       }
 
-      // 2. COLINAS DE PROFUNDIDAD EN EL HORIZONTE
-      const hillH = 14;
-      ctx.fillStyle = theme.grassBottom;
-      ctx.beginPath();
-      ctx.moveTo(0, horizon);
-      for (let x = 0; x <= W; x += 32) {
-        const hillOffset = Math.sin((x * 0.006) + (player.worldX * 0.002)) * hillH;
-        ctx.lineTo(x, horizon - Math.max(2, hillOffset + 6));
+      // 2. COLINAS DE PROFUNDIDAD EN EL HORIZONTE (Solo para temas terrestres, en la playa se omite para horizonte marino plano y amplio)
+      if (theme.id !== 'playa') {
+        const hillH = 14;
+        ctx.fillStyle = theme.grassBottom;
+        ctx.beginPath();
+        ctx.moveTo(0, horizon);
+        for (let x = 0; x <= W; x += 32) {
+          const hillOffset = Math.sin((x * 0.006) + (player.worldX * 0.002)) * hillH;
+          ctx.lineTo(x, horizon - Math.max(2, hillOffset + 6));
+        }
+        ctx.lineTo(W, horizon);
+        ctx.closePath();
+        ctx.fill();
       }
-      ctx.lineTo(W, horizon);
-      ctx.closePath();
-      ctx.fill();
 
       // 3. TERRENO LATERAL BASE (FONDO DEL SUELO)
       const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
