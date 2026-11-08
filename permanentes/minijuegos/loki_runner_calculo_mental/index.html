@@ -341,34 +341,98 @@
       50% { opacity: 0.4; transform: scale(0.8); }
     }
 
-    .world-tabs {
+    /* PANEL DESTACADO DE SELECCIÓN DE MUNDOS (AMPLIO, TÁCTIL Y SIN SCROLLBARS) */
+    .menu-worlds-panel {
       max-width: 1100px;
-      margin: 0 auto 0.95rem auto;
+      margin: 0 auto 1.15rem auto;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(245, 158, 11, 0.45);
+      border-radius: 1rem;
+      padding: 0.85rem 1.15rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .worlds-panel-header {
       display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.2rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
     }
 
-    .world-tab-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 2px solid transparent;
-      color: #94a3b8;
-      padding: 0.45rem 0.95rem;
-      border-radius: 9999px;
+    .worlds-panel-title {
       font-family: var(--font-display);
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      color: #fbbf24;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .world-tab-btn.active {
-      background: #2563eb;
-      color: #ffffff;
+    .worlds-panel-desc {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .worlds-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.65rem;
+    }
+
+    .world-choice-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2.5px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+      padding: 0.75rem 0.95rem;
+      border-radius: 0.85rem;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .world-choice-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
       border-color: #60a5fa;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .world-choice-btn.active {
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      border-color: #93c5fd;
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .world-choice-btn#wbtn-sisat.active {
+      background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+      border-color: #fef08a;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+      color: #0f172a;
+    }
+
+    .world-choice-btn .wchoice-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .world-choice-btn .wchoice-subtitle {
+      font-size: 0.72rem;
+      opacity: 0.85;
+      font-weight: 500;
     }
 
     /* GRID COMPACTO DE NIVELES */
@@ -519,53 +583,172 @@
       image-rendering: crisp-edges;
     }
 
-    .game-hud-top {
+    /* CONTROLES FLOTANTES LATERAL IZQUIERDO (CENTRADO VERTICAL) */
+    .hud-side-left {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 0.5rem 0.9rem;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      pointer-events: auto;
+      z-index: 45;
+      background: rgba(15, 23, 42, 0.92);
+      padding: 0.75rem 0.65rem;
+      border-radius: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      width: 145px;
+    }
+
+    .hud-side-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.65rem;
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      justify-content: flex-start;
+    }
+
+    .hud-side-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: #60a5fa;
+      transform: translateX(2px);
+    }
+
+    .hud-side-btn.btn-exit {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+    }
+    .hud-side-btn.btn-exit:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .hud-side-btn.btn-pause {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #f59e0b;
+    }
+    .hud-side-btn.btn-pause.active {
+      background: #10b981;
+      border-color: #34d399;
+    }
+
+    .hud-side-divider {
+      height: 1.5px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 0.2rem 0;
+    }
+
+    .hud-side-title {
+      font-size: 0.66rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+      text-align: center;
+    }
+
+    .hud-side-diff-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .speed-side-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid transparent;
+      color: #cbd5e1;
+      padding: 0.35rem 0.55rem;
+      border-radius: 0.55rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .speed-side-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .speed-side-btn.active#diff-muy-facil {
+      background: #059669;
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .speed-side-btn.active#diff-facil {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    .speed-side-btn.active#diff-normal {
+      background: #d97706;
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+    }
+
+    .speed-side-btn.active#diff-dificil {
+      background: #dc2626;
+      border-color: #f87171;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.75);
+    }
+
+    .speed-time-tag {
+      font-size: 0.65rem;
+      opacity: 0.9;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+    }
+
+    /* ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIO */
+    .hud-top-right {
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      pointer-events: auto;
+      z-index: 45;
+      flex-wrap: wrap;
+    }
+
+    /* CENTRO SUPERIOR: TARJETA MATEMÁTICA FOCAL */
+    .hud-top-center {
+      position: absolute;
+      top: 0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      pointer-events: none;
-      z-index: 30;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0) 100%);
-    }
-
-    .hud-row-meta {
-      width: 100%;
-      max-width: 1220px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.3rem;
-      gap: 0.6rem;
-    }
-
-    .hud-left-group {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
       pointer-events: auto;
-      flex-wrap: wrap;
-    }
-
-    .hud-right-group {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      pointer-events: auto;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .hud-badge-group {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      pointer-events: auto;
-      flex-wrap: wrap;
+      z-index: 40;
+      max-width: 85vw;
     }
 
     .hud-lives {
@@ -1358,12 +1541,34 @@
         </div>
       </div>
 
-      <div class="world-tabs">
-        <button class="world-tab-btn active" onclick="switchWorld(0)">🌟 Todos los Mundos (31)</button>
-        <button class="world-tab-btn" onclick="switchWorld(1)">🟢 Mundo 1 (#1 - #7)</button>
-        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2 (#8 - #14)</button>
-        <button class="world-tab-btn" onclick="switchWorld(3)">🟣 Mundo 3 (#15 - #20)</button>
-        <button class="world-tab-btn" onclick="switchWorld(4)">⭐ SiSAT 3° (#21 - #31)</button>
+      <!-- PANEL DESTACADO DE SELECCIÓN DE MUNDOS (AMPLIO, TÁCTIL Y SIN SCROLLBARS) -->
+      <div class="menu-worlds-panel">
+        <div class="worlds-panel-header">
+          <div class="worlds-panel-title">🗺️ SELECCIONA EL MUNDO O VER TODO:</div>
+          <div class="worlds-panel-desc">31 Desafíos de Cálculo Mental Primaria · Fase 4 NEM</div>
+        </div>
+        <div class="worlds-btn-grid">
+          <button class="world-choice-btn active" id="wbtn-all" onclick="switchWorld(0)">
+            <span class="wchoice-title">🌟 Todos los Mundos</span>
+            <span class="wchoice-subtitle">31 Niveles completos</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-m1" onclick="switchWorld(1)">
+            <span class="wchoice-title">🟢 Mundo 1: Bosque</span>
+            <span class="wchoice-subtitle">Niveles #1 al #7 · Sumas y Restas</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-m2" onclick="switchWorld(2)">
+            <span class="wchoice-title">🔵 Mundo 2: Costa</span>
+            <span class="wchoice-subtitle">Niveles #8 al #14 · Decenas y Agilidad</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-m3" onclick="switchWorld(3)">
+            <span class="wchoice-title">🟣 Mundo 3: Urbano</span>
+            <span class="wchoice-subtitle">Niveles #15 al #20 · Tablas y Series</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-sisat" onclick="switchWorld(4)">
+            <span class="wchoice-title">⭐ Mundo SiSAT 3°</span>
+            <span class="wchoice-subtitle">Niveles #21 al #31 · Examen Oficial</span>
+          </button>
+        </div>
       </div>
 
       <div class="levels-grid" id="levels-container">
@@ -1377,38 +1582,59 @@
     <div id="view-game" class="view">
       <canvas id="gameCanvas"></canvas>
 
-      <!-- HUD SUPERIOR -->
-      <div class="game-hud-top">
-        <div class="hud-row-meta">
-          <!-- CONTROLES SUPERIOR IZQUIERDA: SALIR, PAUSA Y VOLUMEN -->
-          <div class="hud-left-group">
-            <button class="hud-btn" onclick="exitToMenu()" title="Volver al menú principal">🏠 Salir</button>
-            <button class="hud-btn" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar partida">⏸️ Pausa</button>
-            <button class="hud-btn" onclick="cycleVolume()" id="btn-hud-volume" title="Ajustar o silenciar volumen de música y efectos">🔊 100%</button>
-            <button class="hud-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">🗣️ Voz</button>
-            <button class="hud-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">📹 Cámara</button>
-          </div>
+      <!-- CONTROLES LATERALES IZQUIERDOS (CENTRADO VERTICAL) -->
+      <div class="hud-side-left">
+        <button class="hud-side-btn btn-exit" onclick="exitToMenu()" title="Volver al menú principal">
+          <span>🏠</span> <span>Salir</span>
+        </button>
+        <button class="hud-side-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
+          <span>⏸️</span> <span id="btn-pause-text">Pausa</span>
+        </button>
+        <button class="hud-side-btn btn-vol" onclick="cycleVolume()" id="btn-hud-volume" title="Volumen de sonido">
+          <span>🔊</span> <span>100%</span>
+        </button>
 
-          <!-- ESTADÍSTICAS Y DIFICULTAD SUPERIOR DERECHA -->
-          <div class="hud-right-group">
-            <div class="hud-lives" id="hud-lives" title="Vidas de Loki">❤️❤️❤️</div>
-            <div class="hud-score-box">
-              <img src="recursos/hueso_transparente.png" alt="Huesos">
-              <span id="hud-bones-progress">0 / 10</span>
-            </div>
-            <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar tema de escenario">🌲 Bosque</span>
-            <span class="hud-mode-badge mode-muy-facil" id="hud-speed-badge">🌱 Muy Fácil (15s)</span>
+        <div class="hud-side-divider"></div>
+        <div class="hud-side-title">⏱️ TIEMPO</div>
 
-            <!-- SELECTOR RÁPIDO DE DIFICULTAD (EXACTO EN TIEMPO) -->
-            <div class="speed-selector-group" title="Ajustar dificultad de cálculo">
-              <button class="speed-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">🌱 Muy Fácil</button>
-              <button class="speed-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">🚶 Fácil</button>
-              <button class="speed-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">🏃 Normal</button>
-              <button class="speed-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">⚡ Difícil</button>
-            </div>
-          </div>
+        <!-- SELECTOR DE DIFICULTAD VERTICAL A LA IZQUIERDA -->
+        <div class="hud-side-diff-group" title="Ajustar tiempo por cálculo">
+          <button class="speed-side-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">
+            <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+          </button>
+          <button class="speed-side-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">
+            <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
+          </button>
+          <button class="speed-side-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">
+            <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
+          </button>
+          <button class="speed-side-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">
+            <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
+          </button>
         </div>
 
+        <div class="hud-side-divider"></div>
+
+        <button class="hud-side-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">
+          <span>📹</span> <span>Cámara</span>
+        </button>
+        <button class="hud-side-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
+          <span>🗣️</span> <span>Voz</span>
+        </button>
+      </div>
+
+      <!-- ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIOS -->
+      <div class="hud-top-right">
+        <div class="hud-lives" id="hud-lives" title="Vidas de Loki">❤️❤️❤️</div>
+        <div class="hud-score-box" title="Huesos conseguidos">
+          <img src="recursos/hueso_transparente.png" alt="Huesos">
+          <span id="hud-bones-progress">0 / 10</span>
+        </div>
+        <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar escenario">🌲 Bosque</span>
+      </div>
+
+      <!-- CENTRO SUPERIOR: OPERACIÓN MATEMÁTICA LIMPIA -->
+      <div class="hud-top-center">
         <div class="hud-math-card" id="hud-math-card">
           <span class="hud-strategy-title" id="hud-strategy-title">Estrategia #6 · Restar 10</span>
           <div class="hud-math-problem" id="hud-math-problem">28 − 10 = ?</div>
@@ -2747,7 +2973,7 @@
       gameState.difficulty = mode.id;
       WORLD.speed = mode.speed;
 
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.speed-btn, .speed-side-btn').forEach(b => b.classList.remove('active'));
       const activeBtn = document.getElementById(mode.btnId);
       if (activeBtn) activeBtn.classList.add('active');
 
@@ -2783,66 +3009,67 @@
     function resetTrackTrees() {
       individualTrees = [];
       const theme = gameState.currentTheme || THEMES[0];
-      const treeSpacing = 140;
+      // Densidad significativamente aumentada para que no haya huecos vacíos
+      const treeSpacing = 85;
 
-      // Catálogo de árboles ricos según el escenario
-      let treePool = ['pino', 'encino', 'manzano'];
+      // Catálogo diverso de árboles ricos según el escenario (Múltiples variantes)
+      let treePool = ['pino', 'pino_2', 'pino_3', 'pino_4', 'encino', 'encino_2'];
       let accentPool = ['arbusto', 'hierba'];
 
       if (theme.id === 'playa') {
-        treePool = ['palmera', 'encino', 'palmera'];
+        treePool = ['palmera', 'palmera_2', 'palmera_3', 'encino_2', 'palmera'];
         accentPool = ['arbusto', 'hierba'];
       } else if (theme.id === 'ciudad') {
-        treePool = ['encino', 'pino', 'encino'];
+        treePool = ['encino', 'encino_2', 'pino_2', 'encino_3'];
         accentPool = ['poste', 'arbusto', 'hierba'];
       } else if (theme.id === 'granja') {
-        treePool = ['manzano', 'encino', 'manzano'];
+        treePool = ['manzano', 'manzano_2', 'encino', 'encino_3', 'manzano'];
         accentPool = ['arbusto', 'hierba'];
       } else if (theme.id === 'campo') {
-        treePool = ['encino', 'pino', 'manzano'];
+        treePool = ['encino', 'pino_3', 'manzano_2', 'encino_2'];
         accentPool = ['cactus', 'arbusto', 'hierba'];
       }
 
       let treeIdx = 0;
-      for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
+      for (let z = 60; z < WORLD.roadLength; z += treeSpacing) {
         // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±2.95 para que los troncos NUNCA pisen la carretera ni el borde)
         const leftTreeType = treePool[treeIdx % treePool.length];
-        const treeLeftX = -2.95 - ((treeIdx % 3) * 0.20);
+        const treeLeftX = -2.95 - ((treeIdx % 3) * 0.22);
         individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
 
         const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
-        const treeRightX = 2.95 + (((treeIdx + 1) % 3) * 0.20);
+        const treeRightX = 2.95 + (((treeIdx + 1) % 3) * 0.22);
         individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
 
-        // Árboles de fondo en capa lejana para mayor frondosidad
-        if (treeIdx % 2 === 0) {
-          individualTrees.push({ x: -3.65, z: z + 35, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
-          individualTrees.push({ x: 3.65, z: z + (treeSpacing * 0.5) + 35, type: treePool[treeIdx % treePool.length], isFar: true });
-        }
+        // Capa de fondo densa (bosque lateral tupido y continuo)
+        individualTrees.push({ x: -3.85, z: z + 25, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+        individualTrees.push({ x: 3.85, z: z + (treeSpacing * 0.5) + 25, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
 
         // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA / POSTES / CACTUS)
-        // Se colocan en distancias intermedias y en menor frecuencia (pocos, como complementando a los árboles)
         if (treeIdx % 2 === 1) {
           const accentTypeL = accentPool[treeIdx % accentPool.length];
-          // A x = ±2.35 se ubican en el pasto entre el árbol y la orilla sin tocar el asfalto
-          individualTrees.push({ x: -2.35, z: z + (treeSpacing * 0.5), type: accentTypeL });
+          individualTrees.push({ x: -2.30, z: z + (treeSpacing * 0.45), type: accentTypeL });
         } else if (treeIdx % 3 === 0) {
           const accentTypeR = accentPool[(treeIdx + 1) % accentPool.length];
-          individualTrees.push({ x: 2.35, z: z + (treeSpacing * 0.25), type: accentTypeR });
+          individualTrees.push({ x: 2.30, z: z + (treeSpacing * 0.25), type: accentTypeR });
         }
 
         treeIdx++;
       }
     }
 
-        /* =============================================================
+    /* =============================================================
        8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
     function switchWorld(worldNum) {
       gameState.currentWorld = worldNum;
-      document.querySelectorAll('.world-tab-btn').forEach((b, idx) => {
-        b.classList.toggle('active', idx === worldNum);
+      const btnIds = ['wbtn-all', 'wbtn-m1', 'wbtn-m2', 'wbtn-m3', 'wbtn-sisat'];
+      btnIds.forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', idx === worldNum);
       });
+      renderLevels();
+    }
       renderLevels();
     }
 
@@ -2958,9 +3185,17 @@
       bone: new Image(),
       trophy: new Image(),
       pino: new Image(),
+      pino_2: new Image(),
+      pino_3: new Image(),
+      pino_4: new Image(),
       encino: new Image(),
+      encino_2: new Image(),
+      encino_3: new Image(),
       palmera: new Image(),
+      palmera_2: new Image(),
+      palmera_3: new Image(),
       manzano: new Image(),
+      manzano_2: new Image(),
       poste: new Image(),
       arbusto: new Image(),
       cactus: new Image(),
@@ -2982,9 +3217,17 @@
     IMAGES.bone.src = 'recursos/hueso_transparente.png';
     IMAGES.trophy.src = 'recursos/trofeo_transparente.png';
     IMAGES.pino.src = 'recursos/arbol_pino_3d.png';
+    IMAGES.pino_2.src = 'recursos/arbol_pino_2_3d.png';
+    IMAGES.pino_3.src = 'recursos/arbol_pino_3_3d.png';
+    IMAGES.pino_4.src = 'recursos/arbol_pino_4_3d.png';
     IMAGES.encino.src = 'recursos/arbol_encino_3d.png';
+    IMAGES.encino_2.src = 'recursos/arbol_encino_2_3d.png';
+    IMAGES.encino_3.src = 'recursos/arbol_encino_3_3d.png';
     IMAGES.palmera.src = 'recursos/arbol_palmera_3d.png';
+    IMAGES.palmera_2.src = 'recursos/arbol_palmera_2_3d.png';
+    IMAGES.palmera_3.src = 'recursos/arbol_palmera_3_3d.png';
     IMAGES.manzano.src = 'recursos/arbol_manzano_3d.png';
+    IMAGES.manzano_2.src = 'recursos/arbol_manzano_2_3d.png';
     IMAGES.poste.src = 'recursos/poste_luz_3d.png';
     IMAGES.arbusto.src = 'recursos/arbusto_flores_3d.png';
     IMAGES.cactus.src = 'recursos/cactus_campo_3d.png';
@@ -3011,7 +3254,7 @@
       laneWidth: 165,
       cameraFov: 240,
       cameraHeight: 180,
-      horizonY: 260,
+      horizonY: 210,
       roadLength: 2400,
       speed: 2.40
     };
@@ -3041,7 +3284,8 @@
       canvas.height = window.innerHeight * dpr;
       ctx.scale(dpr, dpr);
       ctx.imageSmoothingEnabled = false; // Estilo Pixel Art nítido
-      WORLD.horizonY = window.innerHeight * 0.38;
+      // Subir horizonte a 0.30 para dar más profundidad y recorrido a la carretera
+      WORLD.horizonY = window.innerHeight * 0.30;
     }
     window.addEventListener('resize', resizeCanvas);
 
@@ -3708,16 +3952,24 @@
         }
       }
 
-      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (SPRITES PIXEL ART 8-BIT)
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (SPRITES PIXEL ART 8-BIT GRANDES Y DENSOS)
       const VEGETATION_CONFIG = {
-        pino:    { baseH: 430, anchorY: 0.96 },
-        encino:  { baseH: 410, anchorY: 0.95 },
-        palmera: { baseH: 440, anchorY: 0.96 },
-        manzano: { baseH: 390, anchorY: 0.95 },
-        poste:   { baseH: 350, anchorY: 0.97 },
-        cactus:  { baseH: 175, anchorY: 0.94 }, // Cactus de altura media en pixel art
-        arbusto: { baseH: 120, anchorY: 0.92 }, // Arbusto bajo y florido a ras de suelo
-        hierba:  { baseH: 75,  anchorY: 0.90 }  // Mata pequeña de hierba silvestre
+        pino:     { baseH: 560, anchorY: 0.96 },
+        pino_2:   { baseH: 610, anchorY: 0.96 },
+        pino_3:   { baseH: 540, anchorY: 0.96 },
+        pino_4:   { baseH: 550, anchorY: 0.96 },
+        encino:   { baseH: 530, anchorY: 0.95 },
+        encino_2: { baseH: 560, anchorY: 0.95 },
+        encino_3: { baseH: 540, anchorY: 0.95 },
+        palmera:  { baseH: 570, anchorY: 0.96 },
+        palmera_2:{ baseH: 580, anchorY: 0.96 },
+        palmera_3:{ baseH: 620, anchorY: 0.96 },
+        manzano:  { baseH: 510, anchorY: 0.95 },
+        manzano_2:{ baseH: 520, anchorY: 0.95 },
+        poste:    { baseH: 380, anchorY: 0.97 },
+        cactus:   { baseH: 220, anchorY: 0.94 },
+        arbusto:  { baseH: 160, anchorY: 0.92 },
+        hierba:   { baseH: 95,  anchorY: 0.90 }
       };
 
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
@@ -3726,9 +3978,17 @@
         if (pt.scale > 0) {
           let imgTree = null;
           if (t.type === 'pino') imgTree = IMAGES.pino;
+          else if (t.type === 'pino_2') imgTree = IMAGES.pino_2;
+          else if (t.type === 'pino_3') imgTree = IMAGES.pino_3;
+          else if (t.type === 'pino_4') imgTree = IMAGES.pino_4;
           else if (t.type === 'encino') imgTree = IMAGES.encino;
+          else if (t.type === 'encino_2') imgTree = IMAGES.encino_2;
+          else if (t.type === 'encino_3') imgTree = IMAGES.encino_3;
           else if (t.type === 'palmera') imgTree = IMAGES.palmera;
+          else if (t.type === 'palmera_2') imgTree = IMAGES.palmera_2;
+          else if (t.type === 'palmera_3') imgTree = IMAGES.palmera_3;
           else if (t.type === 'manzano') imgTree = IMAGES.manzano;
+          else if (t.type === 'manzano_2') imgTree = IMAGES.manzano_2;
           else if (t.type === 'poste') imgTree = IMAGES.poste;
           else if (t.type === 'arbusto') imgTree = IMAGES.arbusto;
           else if (t.type === 'cactus') imgTree = IMAGES.cactus;
@@ -3739,8 +3999,8 @@
           }
 
           if (imgTree && imgTree.complete && imgTree.naturalWidth > 0) {
-            const conf = VEGETATION_CONFIG[t.type] || { baseH: 400, anchorY: 0.95 };
-            const scaleMod = t.isFar ? 0.75 : 1.0;
+            const conf = VEGETATION_CONFIG[t.type] || { baseH: 520, anchorY: 0.95 };
+            const scaleMod = t.isFar ? 0.78 : 1.0;
             const aspect = imgTree.naturalWidth / imgTree.naturalHeight;
             const treeH = conf.baseH * pt.scale * scaleMod;
             const treeW = treeH * aspect;
@@ -3761,12 +4021,8 @@
       // 7. OLEADAS DE VALLAS
       const sortedWaves = [...roadWaves].sort((a, b) => b.z - a.z);
       sortedWaves.forEach(wave => {
-        // Desvanecimiento suave en la lejanía para evitar solapamiento visual en el punto de fuga del horizonte
-        let waveAlpha = 1.0;
-        if (wave.z > 950) {
-          waveAlpha = Math.max(0, Math.min(1, (1350 - wave.z) / 400));
-        }
-        if (waveAlpha <= 0.04) return;
+        // Aparición inmediata desde el horizonte (sin fade lejano para máxima legibilidad temprana)
+        const waveAlpha = 1.0;
 
         wave.hurdles.forEach(hurdle => {
           if (hurdle.hit) return;
@@ -3774,9 +4030,8 @@
           const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
           if (pt.scale <= 0) return;
 
-          // Limitar ancho máximo al 70% del ancho del carril proyectado para que NUNCA se solapen
-          const maxGateW = WORLD.laneWidth * 0.70 * pt.scale;
-          const gateW = Math.min(115 * pt.scale, maxGateW);
+          // Tamaño completo y nítido para lectura cómoda y anticipada
+          const gateW = 120 * pt.scale;
           const gateH = gateW * 1.25;
           const gateX = pt.x - (gateW * 0.5);
           const gateY = pt.y - gateH;
