@@ -117,7 +117,34 @@
       image-rendering: pixelated;
       image-rendering: crisp-edges;
       transition: transform 0.2s ease;
-      padding: 2px;
+      display: block;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .world-section-header {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin: 1.1rem 0 0.4rem 0;
+      padding: 0.4rem 0.6rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+      font-family: var(--font-display);
+    }
+
+    .world-section-header h3 {
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      color: #fbbf24;
+    }
+
+    .world-count-tag {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 500;
     }
 
     .menu-hero-banner {
@@ -1332,10 +1359,11 @@
       </div>
 
       <div class="world-tabs">
-        <button class="world-tab-btn" onclick="switchWorld(1)">🟢 Mundo 1: Decenas y Base (#1 - #7)</button>
-        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2: Técnicas Numéricas (#8 - #14)</button>
-        <button class="world-tab-btn" onclick="switchWorld(3)">🟣 Mundo 3: Maestría y Trucos (#15 - #20)</button>
-        <button class="world-tab-btn active" onclick="switchWorld(4)">⭐ Mundo SiSAT: Reactivos 3° (#21 - #31)</button>
+        <button class="world-tab-btn active" onclick="switchWorld(0)">🌟 Todos los Mundos (31)</button>
+        <button class="world-tab-btn" onclick="switchWorld(1)">🟢 Mundo 1 (#1 - #7)</button>
+        <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2 (#8 - #14)</button>
+        <button class="world-tab-btn" onclick="switchWorld(3)">🟣 Mundo 3 (#15 - #20)</button>
+        <button class="world-tab-btn" onclick="switchWorld(4)">⭐ SiSAT 3° (#21 - #31)</button>
       </div>
 
       <div class="levels-grid" id="levels-container">
@@ -2263,7 +2291,7 @@
        ============================================================= */
     const gameState = {
       soundEnabled: true,
-      currentWorld: 4,
+      currentWorld: 0,
       currentLevelId: 1,
       difficulty: 'muy_facil',
       cameraControlActive: false,
@@ -2755,20 +2783,52 @@
     function resetTrackTrees() {
       individualTrees = [];
       const theme = gameState.currentTheme || THEMES[0];
-      const treeSpacing = 130;
+      const treeSpacing = 140;
+
+      // Catálogo de árboles ricos según el escenario
+      let treePool = ['pino', 'encino', 'manzano'];
+      let accentPool = ['arbusto', 'hierba'];
+
+      if (theme.id === 'playa') {
+        treePool = ['palmera', 'encino', 'palmera'];
+        accentPool = ['arbusto', 'hierba'];
+      } else if (theme.id === 'ciudad') {
+        treePool = ['encino', 'pino', 'encino'];
+        accentPool = ['poste', 'arbusto', 'hierba'];
+      } else if (theme.id === 'granja') {
+        treePool = ['manzano', 'encino', 'manzano'];
+        accentPool = ['arbusto', 'hierba'];
+      } else if (theme.id === 'campo') {
+        treePool = ['encino', 'pino', 'manzano'];
+        accentPool = ['cactus', 'arbusto', 'hierba'];
+      }
+
       let treeIdx = 0;
       for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
-        const leftType = (treeIdx % 2 === 0) ? theme.treeA : theme.treeB;
-        const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
-        individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
+        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±2.95 para que los troncos NUNCA pisen la carretera ni el borde)
+        const leftTreeType = treePool[treeIdx % treePool.length];
+        const treeLeftX = -2.95 - ((treeIdx % 3) * 0.20);
+        individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
 
-        const rightType = (treeIdx % 2 === 0) ? theme.treeB : theme.treeA;
-        const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
-        individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
+        const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
+        const treeRightX = 2.95 + (((treeIdx + 1) % 3) * 0.20);
+        individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
 
+        // Árboles de fondo en capa lejana para mayor frondosidad
         if (treeIdx % 2 === 0) {
-          individualTrees.push({ x: -2.85, z: z + 40, type: theme.treeA, isFar: true });
-          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: theme.treeB, isFar: true });
+          individualTrees.push({ x: -3.65, z: z + 35, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+          individualTrees.push({ x: 3.65, z: z + (treeSpacing * 0.5) + 35, type: treePool[treeIdx % treePool.length], isFar: true });
+        }
+
+        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA / POSTES / CACTUS)
+        // Se colocan en distancias intermedias y en menor frecuencia (pocos, como complementando a los árboles)
+        if (treeIdx % 2 === 1) {
+          const accentTypeL = accentPool[treeIdx % accentPool.length];
+          // A x = ±2.35 se ubican en el pasto entre el árbol y la orilla sin tocar el asfalto
+          individualTrees.push({ x: -2.35, z: z + (treeSpacing * 0.5), type: accentTypeL });
+        } else if (treeIdx % 3 === 0) {
+          const accentTypeR = accentPool[(treeIdx + 1) % accentPool.length];
+          individualTrees.push({ x: 2.35, z: z + (treeSpacing * 0.25), type: accentTypeR });
         }
 
         treeIdx++;
@@ -2781,7 +2841,7 @@
     function switchWorld(worldNum) {
       gameState.currentWorld = worldNum;
       document.querySelectorAll('.world-tab-btn').forEach((b, idx) => {
-        b.classList.toggle('active', (idx + 1) === worldNum);
+        b.classList.toggle('active', idx === worldNum);
       });
       renderLevels();
     }
@@ -2790,36 +2850,60 @@
       const container = document.getElementById('levels-container');
       container.innerHTML = '';
 
-      const filtered = STRATEGIES.filter(s => s.world === gameState.currentWorld);
       document.getElementById('global-bones-count').textContent = gameState.totalBones;
 
       let starsTotal = 0;
       Object.values(gameState.userStars).forEach(st => starsTotal += st);
       document.getElementById('global-stars-count').textContent = `${starsTotal} / 60`;
 
-      filtered.forEach(strat => {
-        const stars = gameState.userStars[strat.id] || 0;
-        const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+      const WORLDS_INFO = [
+        { id: 1, name: '🟢 MUNDO 1: DECENAS Y BASE', tag: 'Estrategias Fundamentales #1 a #7' },
+        { id: 2, name: '🔵 MUNDO 2: TÉCNICAS NUMÉRICAS', tag: 'Estrategias de Agilidad #8 a #14' },
+        { id: 3, name: '🟣 MUNDO 3: MAESTRÍA Y TRUCOS', tag: 'Desafíos Avanzados #15 a #20' },
+        { id: 4, name: '⭐ MUNDO SiSAT: REACTIVOS OFICIALES 3° DE PRIMARIA', tag: 'Reactivos Diagnósticos #21 a #31' }
+      ];
 
-        const card = document.createElement('div');
-        card.className = 'level-card' + (strat.id === 6 ? ' featured' : '');
-        card.onclick = () => openTutorialModal(strat.id);
-        card.innerHTML = `
-          <div class="level-badge-num">#${strat.id}</div>
-          <div class="level-header">
-            <span class="level-strategy-tag">${strat.tag}</span>
-            <h3>${strat.title}</h3>
-          </div>
-          <div class="level-formula-preview">
-            <span class="badge-ex">EJ</span>
-            <span>${strat.sample}</span>
-          </div>
-          <div class="level-footer">
-            <div class="level-stars" title="${stars} estrellas ganadas">${starStr}</div>
-            <span class="level-cta-badge">⚡ Jugar</span>
-          </div>
-        `;
-        container.appendChild(card);
+      const worldsToRender = (gameState.currentWorld === 0)
+        ? [1, 2, 3, 4]
+        : [gameState.currentWorld];
+
+      worldsToRender.forEach(wId => {
+        const wInfo = WORLDS_INFO.find(w => w.id === wId);
+        const strats = STRATEGIES.filter(s => s.world === wId);
+        if (strats.length === 0) return;
+
+        // Encabezado de mundo si se están mostrando todos
+        if (gameState.currentWorld === 0) {
+          const header = document.createElement('div');
+          header.className = 'world-section-header';
+          header.innerHTML = `<h3>${wInfo.name} <span class="world-count-tag">${wInfo.tag}</span></h3>`;
+          container.appendChild(header);
+        }
+
+        strats.forEach(strat => {
+          const stars = gameState.userStars[strat.id] || 0;
+          const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+          const card = document.createElement('div');
+          card.className = 'level-card' + (strat.id === 6 || strat.id === 21 ? ' featured' : '');
+          card.onclick = () => openTutorialModal(strat.id);
+          card.innerHTML = `
+            <div class="level-badge-num">#${strat.id}</div>
+            <div class="level-header">
+              <span class="level-strategy-tag">${strat.tag}</span>
+              <h3>${strat.title}</h3>
+            </div>
+            <div class="level-formula-preview">
+              <span class="badge-ex">EJ</span>
+              <span>${strat.sample}</span>
+            </div>
+            <div class="level-footer">
+              <div class="level-stars" title="${stars} estrellas ganadas">${starStr}</div>
+              <span class="level-cta-badge">⚡ Jugar</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
       });
     }
 
@@ -2880,6 +2964,7 @@
       poste: new Image(),
       arbusto: new Image(),
       cactus: new Image(),
+      hierba: new Image(),
       sombraPixel: new Image(),
       arcoValla: new Image(),
       fondoHorizonte: new Image(),
@@ -2903,6 +2988,7 @@
     IMAGES.poste.src = 'recursos/poste_luz_3d.png';
     IMAGES.arbusto.src = 'recursos/arbusto_flores_3d.png';
     IMAGES.cactus.src = 'recursos/cactus_campo_3d.png';
+    IMAGES.hierba.src = 'recursos/hierba_silvestre_3d.png';
     IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
     IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
     IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
@@ -3630,7 +3716,8 @@
         manzano: { baseH: 390, anchorY: 0.95 },
         poste:   { baseH: 350, anchorY: 0.97 },
         cactus:  { baseH: 175, anchorY: 0.94 }, // Cactus de altura media en pixel art
-        arbusto: { baseH: 120, anchorY: 0.92 }  // Arbusto bajo y florido a ras de suelo
+        arbusto: { baseH: 120, anchorY: 0.92 }, // Arbusto bajo y florido a ras de suelo
+        hierba:  { baseH: 75,  anchorY: 0.90 }  // Mata pequeña de hierba silvestre
       };
 
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
@@ -3645,6 +3732,7 @@
           else if (t.type === 'poste') imgTree = IMAGES.poste;
           else if (t.type === 'arbusto') imgTree = IMAGES.arbusto;
           else if (t.type === 'cactus') imgTree = IMAGES.cactus;
+          else if (t.type === 'hierba') imgTree = IMAGES.hierba;
 
           if (!imgTree || !imgTree.complete || imgTree.naturalWidth === 0) {
             imgTree = (IMAGES.pino && IMAGES.pino.complete) ? IMAGES.pino : IMAGES.encino;
@@ -3673,45 +3761,59 @@
       // 7. OLEADAS DE VALLAS
       const sortedWaves = [...roadWaves].sort((a, b) => b.z - a.z);
       sortedWaves.forEach(wave => {
+        // Desvanecimiento suave en la lejanía para evitar solapamiento visual en el punto de fuga del horizonte
+        let waveAlpha = 1.0;
+        if (wave.z > 950) {
+          waveAlpha = Math.max(0, Math.min(1, (1350 - wave.z) / 400));
+        }
+        if (waveAlpha <= 0.04) return;
+
         wave.hurdles.forEach(hurdle => {
           if (hurdle.hit) return;
 
           const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
           if (pt.scale <= 0) return;
 
-          const gateW = 125 * pt.scale;
-          const gateH = 150 * pt.scale;
+          // Limitar ancho máximo al 70% del ancho del carril proyectado para que NUNCA se solapen
+          const maxGateW = WORLD.laneWidth * 0.70 * pt.scale;
+          const gateW = Math.min(115 * pt.scale, maxGateW);
+          const gateH = gateW * 1.25;
           const gateX = pt.x - (gateW * 0.5);
           const gateY = pt.y - gateH;
 
+          ctx.save();
+          ctx.globalAlpha = waveAlpha;
+
           // Postes de madera
           ctx.fillStyle = '#78350f';
-          ctx.fillRect(gateX, gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
-          ctx.fillRect(gateX + gateW - (7 * pt.scale), gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
+          ctx.fillRect(gateX, gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
+          ctx.fillRect(gateX + gateW - Math.max(1, 6 * pt.scale), gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
 
           // Panel de respuesta
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, 8 * pt.scale);
+          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, Math.max(2, 6 * pt.scale));
           ctx.fill();
 
           ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = Math.max(2, 4 * pt.scale);
+          ctx.lineWidth = Math.max(1.5, 3 * pt.scale);
           ctx.stroke();
 
           // Sombra
           ctx.fillStyle = 'rgba(0,0,0,0.3)';
           ctx.beginPath();
-          ctx.ellipse(pt.x, pt.y, gateW * 0.45, 6 * pt.scale, 0, 0, Math.PI * 2);
+          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(1, 5 * pt.scale), 0, 0, Math.PI * 2);
           ctx.fill();
 
           // Número de respuesta
-          const fontSize = Math.max(10, Math.floor(46 * pt.scale));
+          const fontSize = Math.max(8, Math.floor(40 * pt.scale));
           ctx.font = `800 ${fontSize}px 'Fredoka', cursive, sans-serif`;
           ctx.fillStyle = '#ffffff';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+
+          ctx.restore();
         });
       });
 
