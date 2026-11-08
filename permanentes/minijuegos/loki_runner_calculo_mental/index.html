@@ -83,7 +83,7 @@
 
     .menu-header {
       max-width: 1100px;
-      margin: 0 auto 1.25rem auto;
+      margin: 0 auto 1rem auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -149,6 +149,105 @@
       object-fit: contain;
     }
 
+    /* TARJETA DE CONTROL POR CÁMARA EN EL MENÚ */
+    .menu-camera-card {
+      max-width: 1100px;
+      margin: 0 auto 1.25rem auto;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(59, 130, 246, 0.45);
+      border-radius: 1.1rem;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      flex-wrap: wrap;
+    }
+
+    .menu-cam-left {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .cam-badge-icon {
+      width: 46px;
+      height: 46px;
+      background: #1e3a8a;
+      border: 2px solid #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .cam-badge-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: #93c5fd;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cam-badge-desc {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      max-width: 620px;
+      line-height: 1.35;
+    }
+
+    .btn-menu-camera {
+      background: #2563eb;
+      border: 2px solid #60a5fa;
+      color: #ffffff;
+      padding: 0.6rem 1.35rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-menu-camera:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn-menu-camera.active {
+      background: #059669;
+      border-color: #34d399;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+    }
+
+    .cam-dot-pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      display: inline-block;
+    }
+
+    .btn-menu-camera.active .cam-dot-pulse {
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: pulseGreen 1.4s infinite ease-in-out;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
     .world-tabs {
       max-width: 1100px;
       margin: 0 auto 1.25rem auto;
@@ -210,138 +309,94 @@
 
     .level-card.featured {
       border-color: #f59e0b;
-      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
     }
 
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .card-num-badge {
+    .level-badge-num {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #0f172a;
+      color: #fbbf24;
       font-family: var(--font-display);
-      font-size: 0.85rem;
       font-weight: 700;
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      background: #e0f2fe;
-      color: #0369a1;
-      border: 1px solid #bae6fd;
+      font-size: 0.82rem;
+      padding: 0.25rem 0.75rem;
+      border-bottom-left-radius: 0.85rem;
     }
 
-    .card-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 9999px;
-    }
-
-    .tag-sisat { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .tag-base { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-    .tag-salto { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
-
-    .card-title {
+    .level-header h3 {
       font-family: var(--font-display);
       font-size: 1.15rem;
       color: #0f172a;
       line-height: 1.25;
-      font-weight: 700;
+      margin-bottom: 0.25rem;
     }
 
-    .card-example {
-      display: inline-block;
-      font-size: 0.86rem;
+    .level-strategy-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 0.04rem;
+    }
+
+    .level-formula-preview {
       background: #f1f5f9;
+      border-radius: 0.65rem;
+      padding: 0.45rem 0.7rem;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
       color: #334155;
-      padding: 0.25rem 0.55rem;
-      border-radius: 0.4rem;
-      font-family: monospace;
-      font-weight: 700;
-      margin-top: 0.25rem;
-    }
-
-    .card-desc {
-      font-size: 0.82rem;
-      color: #64748b;
-      line-height: 1.35;
-    }
-
-    .card-actions {
+      font-weight: 600;
       display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-top: 0.4rem;
-    }
-
-    .btn-row {
-      display: flex;
+      align-items: center;
       gap: 0.4rem;
     }
 
-    .btn-play-tutorial {
-      flex: 1;
-      background: #10b981;
-      color: #ffffff;
-      border: none;
-      border-radius: 0.65rem;
-      padding: 0.55rem 0.65rem;
-      font-family: var(--font-display);
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
-      transition: background 0.15s;
+    .level-formula-preview span.badge-ex {
+      background: #cbd5e1;
+      color: #0f172a;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 700;
     }
 
-    .btn-play-tutorial:hover { background: #059669; }
+    .level-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.4rem;
+      border-top: 1px solid #e2e8f0;
+    }
 
-    .btn-play-run {
-      flex: 1;
+    .level-stars {
+      display: flex;
+      gap: 0.15rem;
+      font-size: 1.05rem;
+    }
+
+    .btn-play-level {
       background: #2563eb;
       color: #ffffff;
       border: none;
-      border-radius: 0.65rem;
-      padding: 0.55rem 0.65rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
       font-family: var(--font-display);
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.35);
-      transition: background 0.15s;
-    }
-
-    .btn-play-run:hover { background: #1d4ed8; }
-
-    .btn-explain {
-      background: #f8fafc;
-      color: #475569;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 0.55rem;
-      padding: 0.35rem 0.6rem;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.3rem;
-      transition: all 0.15s;
+      gap: 0.35rem;
+      transition: background 0.15s ease, transform 0.1s ease;
     }
 
-    .btn-explain:hover {
-      background: #f1f5f9;
-      color: #0f172a;
-      border-color: #94a3b8;
+    .btn-play-level:hover {
+      background: #1d4ed8;
+      transform: scale(1.03);
     }
 
     /* -------------------------------------------------------------
@@ -375,7 +430,7 @@
 
     .hud-row-meta {
       width: 100%;
-      max-width: 960px;
+      max-width: 1020px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -387,6 +442,7 @@
       align-items: center;
       gap: 0.5rem;
       pointer-events: auto;
+      flex-wrap: wrap;
     }
 
     .hud-lives {
@@ -431,6 +487,12 @@
 
     .mode-tutorial { background: #059669; color: #fff; }
     .mode-carrera { background: #2563eb; color: #fff; }
+    .mode-hard { background: #dc2626; color: #fff; animation: pulseHard 1.6s infinite ease-in-out; }
+
+    @keyframes pulseHard {
+      0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); }
+      50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.75); }
+    }
 
     .speed-selector-group {
       display: flex;
@@ -459,11 +521,17 @@
       color: #0f172a;
     }
 
+    .speed-btn#sp-rayo.active {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
     .hud-btn-group {
       display: flex;
       align-items: center;
       gap: 0.4rem;
       pointer-events: auto;
+      flex-wrap: wrap;
     }
 
     .hud-btn {
@@ -606,33 +674,56 @@
 
     .btn-trick-floating:active { transform: scale(0.95); }
 
+    /* CUADRO PIP DE LA CÁMARA WEBCAM */
     #camera-pip-container {
       position: absolute;
       bottom: 95px;
       right: 1.25rem;
-      width: 140px;
-      height: 105px;
-      background: #000;
+      width: 155px;
+      height: 140px;
+      background: rgba(15, 23, 42, 0.95);
       border: 2px solid #3b82f6;
       border-radius: 0.85rem;
       overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
       z-index: 40;
       display: none;
       flex-direction: column;
       pointer-events: auto;
     }
 
+    .cam-pip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.2rem 0.45rem;
+      background: #1e293b;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .cam-pip-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0 0.2rem;
+    }
+
+    .cam-pip-close:hover { color: #ef4444; }
+
     #camera-video-feed {
       width: 100%;
-      height: 85px;
+      height: 75px;
       object-fit: cover;
       transform: scaleX(-1);
     }
 
     .camera-motion-bars {
       display: flex;
-      height: 20px;
+      height: 18px;
       background: #0f172a;
       border-top: 1px solid #334155;
     }
@@ -642,61 +733,105 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       color: #64748b;
       transition: background 0.1s, color 0.1s;
     }
 
-    .cam-zone-bar.active {
-      background: #10b981;
-      color: #ffffff;
+    .cam-zone-bar.active-lane {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
     }
 
+    .cam-zone-bar.active-soft {
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .cam-zone-bar.active-brusque {
+      color: #ffffff;
+      background: #0284c7;
+      font-weight: 900;
+    }
+
+    .cam-motion-meter-box {
+      position: relative;
+      width: 100%;
+      height: 18px;
+      background: #020617;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cam-motion-meter-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
+      transition: width 0.08s ease;
+      opacity: 0.55;
+    }
+
+    .cam-motion-status-lbl {
+      position: relative;
+      z-index: 2;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #94a3b8;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding: 0 0.2rem;
+    }
+
+    /* TOAST DE FEEDBACK */
     #feedback-toast {
       position: absolute;
-      top: 130px;
+      top: 48%;
       left: 50%;
-      transform: translateX(-50%) translateY(-20px);
-      background: rgba(15, 23, 42, 0.95);
-      border: 3px solid #10b981;
-      padding: 0.65rem 1.4rem;
-      border-radius: 1rem;
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 700;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(16, 185, 129, 0.95);
       color: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      padding: 0.85rem 1.6rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 50;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      z-index: 45;
-      text-align: center;
-      max-width: 85vw;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     #feedback-toast.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     #feedback-toast.error {
-      border-color: #ef4444;
-      background: rgba(153, 27, 27, 0.95);
+      background: rgba(239, 68, 68, 0.95);
     }
 
+    /* MODALES FORMATIVOS */
     .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(6px);
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 50;
+      z-index: 100;
       padding: 1rem;
     }
 
@@ -705,22 +840,19 @@
     .modal-card {
       background: #ffffff;
       color: #0f172a;
-      border-radius: 1.35rem;
-      padding: 1.6rem 1.8rem;
-      max-width: 580px;
       width: 100%;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
-      border: 4px solid #3b82f6;
+      max-width: 540px;
+      border-radius: 1.4rem;
+      padding: 1.5rem 1.6rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      border: 4px solid #f59e0b;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      position: relative;
-      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-height: 90vh;
-      overflow-y: auto;
+      gap: 1.1rem;
+      animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes popIn {
+    @keyframes modalPop {
       0% { transform: scale(0.85); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
@@ -728,7 +860,9 @@
     .modal-header {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 1rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.85rem;
     }
 
     .modal-avatar {
@@ -736,127 +870,153 @@
       height: 64px;
       border-radius: 50%;
       border: 3px solid #f59e0b;
+      background: #fff;
       object-fit: cover;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
     }
 
     .modal-title h2 {
       font-family: var(--font-display);
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       color: #0f172a;
-      line-height: 1.15;
+      line-height: 1.2;
     }
 
     .modal-title p {
       font-size: 0.82rem;
       color: #64748b;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .trick-box {
-      background: #f8fafc;
-      border: 2px dashed #94a3b8;
-      border-radius: 0.85rem;
-      padding: 1rem 1.1rem;
+      background: #fffbeb;
+      border: 2px dashed #f59e0b;
+      border-radius: 0.95rem;
+      padding: 1rem 1.15rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
+      gap: 0.5rem;
     }
 
     .trick-title {
       font-family: var(--font-display);
       font-size: 1.05rem;
-      color: #1e3a8a;
+      color: #b45309;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .trick-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: #334155;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
-    .trick-step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .step-badge {
-      background: #2563eb;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 9999px;
-      flex-shrink: 0;
-      margin-top: 0.15rem;
+    .trick-steps li {
+      margin-left: 1.25rem;
+      margin-bottom: 0.35rem;
     }
 
     .trick-formula {
-      background: #e0f2fe;
-      border: 1.5px solid #7dd3fc;
-      border-radius: 0.6rem;
-      padding: 0.6rem 0.85rem;
-      font-family: monospace;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
       font-weight: 800;
-      color: #0369a1;
-      font-size: 1.05rem;
+      color: #b45309;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 0.45rem 0.75rem;
+      border-radius: 0.6rem;
       text-align: center;
+      letter-spacing: 0.05rem;
     }
+
+    .modal-speed-picker {
+      margin: 0.2rem 0;
+      text-align: left;
+    }
+
+    .modal-speed-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.55rem;
+    }
+
+    .btn-modal-speed {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.5rem;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-modal-speed span {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .btn-modal-speed small {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    .btn-modal-speed.opt-tortuga:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+    .btn-modal-speed.opt-paso:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+    .btn-modal-speed.opt-trote:hover { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+    .btn-modal-speed.opt-rayo:hover { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
 
     .modal-buttons {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
-      margin-top: 0.5rem;
     }
 
     .btn-modal {
       flex: 1;
       min-width: 140px;
       padding: 0.75rem 1rem;
-      border-radius: 0.75rem;
+      border-radius: 9999px;
+      border: none;
       font-family: var(--font-display);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
-      border: none;
-      transition: all 0.15s;
+      transition: transform 0.15s ease, background 0.15s ease;
     }
 
-    .btn-modal-green { background: #10b981; color: #fff; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); }
-    .btn-modal-green:hover { background: #059669; }
-
-    .btn-modal-blue { background: #2563eb; color: #fff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); }
+    .btn-modal:hover { transform: scale(1.02); }
+    .btn-modal-green { background: #059669; color: #fff; }
+    .btn-modal-green:hover { background: #047857; }
+    .btn-modal-blue { background: #2563eb; color: #fff; }
     .btn-modal-blue:hover { background: #1d4ed8; }
-
     .btn-modal-secondary { background: #e2e8f0; color: #334155; }
     .btn-modal-secondary:hover { background: #cbd5e1; }
 
+    /* MODAL VICTORIA / GAMEOVER */
     .victory-hero {
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: 0.5rem;
+      gap: 0.35rem;
     }
 
     .victory-trophy-img {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       object-fit: contain;
-      filter: drop-shadow(0 6px 16px rgba(245, 158, 11, 0.5));
-      animation: floatTrophy 2s ease-in-out infinite;
+      filter: drop-shadow(0 6px 15px rgba(245, 158, 11, 0.4));
+      animation: floatTrophy 2s infinite ease-in-out;
     }
 
     @keyframes floatTrophy {
@@ -865,43 +1025,33 @@
     }
 
     .victory-stars {
-      display: flex;
-      gap: 0.35rem;
-      font-size: 2rem;
-      color: #f59e0b;
+      font-size: 2.2rem;
+      letter-spacing: 0.3rem;
+      margin: 0.4rem 0;
     }
 
     .victory-stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-      margin: 0.5rem 0;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.85rem;
+      padding: 0.75rem;
     }
 
     .v-stat-card {
-      background: #f1f5f9;
-      border-radius: 0.75rem;
-      padding: 0.65rem;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
     }
 
-    .v-stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
-    .v-stat-card b { display: block; font-size: 1.25rem; color: #0f172a; font-family: var(--font-display); }
-
-    @media (max-height: 700px) {
-      .hud-math-problem { font-size: 1.75rem; }
-      .hud-math-card { padding: 0.35rem 1.2rem; }
-      .touch-btn { height: 60px; width: 110px; font-size: 1rem; }
-      .menu-header { margin-bottom: 0.75rem; }
-      .world-tabs { margin-bottom: 0.75rem; }
-      .levels-grid { gap: 0.75rem; }
-      #camera-pip-container { bottom: 80px; width: 110px; height: 85px; }
-      #camera-video-feed { height: 65px; }
-    }
+    .v-stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
+    .v-stat-card b { font-family: var(--font-display); font-size: 1.25rem; color: #0f172a; }
   </style>
 </head>
 <body>
-
   <div id="app-container">
 
     <!-- =============================================================
@@ -927,6 +1077,23 @@
             <span id="global-stars-count">0 / 60</span>
           </div>
           <button class="hud-btn" id="btn-toggle-sound" onclick="toggleSound()">🔊 Sonido</button>
+        </div>
+      </div>
+
+      <!-- TARJETA DE CONTROL POR CÁMARA (WEBCAM) EN EL MENÚ -->
+      <div class="menu-camera-card" id="menu-camera-card">
+        <div class="menu-cam-left">
+          <div class="cam-badge-icon">📷</div>
+          <div class="cam-badge-text">
+            <div class="cam-badge-title">Control por Movimiento de Cámara (Cuerpo)</div>
+            <div class="cam-badge-desc">Inclina tu torso o cabeza bruscamente a la izquierda o derecha para esquivar y atrapar respuestas sin tocar la pantalla. (Ignora movimientos lentos).</div>
+          </div>
+        </div>
+        <div class="menu-cam-right">
+          <button class="btn-menu-camera" id="menu-camera-toggle-btn" onclick="toggleCameraGlobal()">
+            <span class="cam-dot-pulse" id="menu-cam-dot"></span>
+            <span id="menu-cam-label">Activar Cámara</span>
+          </button>
         </div>
       </div>
 
@@ -956,18 +1123,19 @@
               <img src="recursos/hueso_transparente.png" alt="Huesos">
               <span id="hud-bones-progress">0 / 10</span>
             </div>
-            <span class="hud-mode-badge mode-tutorial" id="hud-speed-badge">🐢 Tutorial (Ultra Lento)</span>
+            <span class="hud-mode-badge mode-tutorial" id="hud-speed-badge">🐢 Ultra Lento</span>
 
-            <!-- SELECTOR RÁPIDO DE VELOCIDAD -->
+            <!-- SELECTOR RÁPIDO DE VELOCIDAD CON MODO DIFÍCIL -->
             <div class="speed-selector-group" title="Ajustar velocidad del juego">
-              <button class="speed-btn active" id="sp-tortuga" onclick="setSpeedMultiplier(0.65, 'sp-tortuga')">🐌</button>
-              <button class="speed-btn" id="sp-paso" onclick="setSpeedMultiplier(1.0, 'sp-paso')">🚶</button>
-              <button class="speed-btn" id="sp-trote" onclick="setSpeedMultiplier(1.5, 'sp-trote')">🏃</button>
+              <button class="speed-btn active" id="sp-tortuga" onclick="setSpeedMultiplier(0.65, 'sp-tortuga')" title="Ultra Lento (~20s por reto)">🐌 Lento</button>
+              <button class="speed-btn" id="sp-paso" onclick="setSpeedMultiplier(1.0, 'sp-paso')" title="Paso Normal (~14s por reto)">🚶 Normal</button>
+              <button class="speed-btn" id="sp-trote" onclick="setSpeedMultiplier(1.5, 'sp-trote')" title="Trote Ágil (~9s por reto)">🏃 Ágil</button>
+              <button class="speed-btn" id="sp-rayo" onclick="setSpeedMultiplier(2.2, 'sp-rayo')" title="Rayo Difícil (~6s por reto)">⚡ Difícil</button>
             </div>
           </div>
 
           <div class="hud-btn-group">
-            <button class="hud-btn" onclick="toggleCameraControl()" id="btn-camera-toggle" title="Controlar a Loki inclinando tu cuerpo ante la cámara">📹 Cámara</button>
+            <button class="hud-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Controlar a Loki inclinando tu cuerpo ante la cámara">📹 Cámara</button>
             <button class="hud-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Leer la operación en voz alta">🔊 Voz</button>
             <button class="hud-btn" onclick="openExplanationFromGame()" title="Pausar y repasar el truco mental">💡 Truco</button>
             <button class="hud-btn" onclick="togglePauseGame()" id="btn-pause" title="Pausar partida">⏸️</button>
@@ -986,11 +1154,19 @@
 
       <!-- CUADRO PIP DE LA CÁMARA WEBCAM -->
       <div id="camera-pip-container">
+        <div class="cam-pip-header">
+          <span class="cam-pip-title">📷 Control Corporal</span>
+          <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar cámara">✕</button>
+        </div>
         <video id="camera-video-feed" autoplay playsinline muted></video>
         <div class="camera-motion-bars">
           <div class="cam-zone-bar" id="cam-bar-left">◀ IZQ</div>
-          <div class="cam-zone-bar active" id="cam-bar-center">● CENTRO</div>
+          <div class="cam-zone-bar active-lane" id="cam-bar-center">● CENTRO</div>
           <div class="cam-zone-bar" id="cam-bar-right">DER ▶</div>
+        </div>
+        <div class="cam-motion-meter-box">
+          <div class="cam-motion-meter-fill" id="cam-motion-meter-fill"></div>
+          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Calma (esperando quiebre)</span>
         </div>
       </div>
 
@@ -1039,13 +1215,29 @@
           </div>
         </div>
 
+        <div class="modal-speed-picker">
+          <label style="font-weight:700; color:#334155; font-size:0.85rem; margin-bottom:0.4rem; display:block;">Selecciona la velocidad para iniciar:</label>
+          <div class="modal-speed-grid">
+            <button class="btn-modal-speed opt-tortuga" onclick="startGameWithSpeed(0.65, 'sp-tortuga')">
+              <span>🐌 Ultra Lento</span>
+              <small>~20 seg. por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-paso" onclick="startGameWithSpeed(1.0, 'sp-paso')">
+              <span>🚶 Paso Normal</span>
+              <small>~14 seg. por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-trote" onclick="startGameWithSpeed(1.5, 'sp-trote')">
+              <span>🏃 Trote Ágil</span>
+              <small>~9 seg. por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-rayo" onclick="startGameWithSpeed(2.2, 'sp-rayo')">
+              <span>⚡ Difícil (Rápido)</span>
+              <small>~6 seg. por cálculo</small>
+            </button>
+          </div>
+        </div>
+
         <div class="modal-buttons">
-          <button class="btn-modal btn-modal-green" onclick="startGameWithMode('tutorial')">
-            <span>🐢</span> Modo Práctica (Ultra Lento)
-          </button>
-          <button class="btn-modal btn-modal-blue" onclick="startGameWithMode('normal')">
-            <span>⚡</span> Modo Carrera (Tranquilo)
-          </button>
           <button class="btn-modal btn-modal-secondary" onclick="closeTutorialModal()">
             Cerrar
           </button>
@@ -1106,8 +1298,8 @@
         </div>
 
         <div class="modal-buttons">
-          <button class="btn-modal btn-modal-green" onclick="startGameWithMode('tutorial')">
-            <span>🐢</span> Probar en Modo Ultra Lento
+          <button class="btn-modal btn-modal-green" onclick="startGameWithSpeed(0.65, 'sp-tortuga')">
+            <span>🐌</span> Probar en Modo Ultra Lento
           </button>
           <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
             <span>🔄</span> Reintentar
@@ -1140,582 +1332,371 @@
        ============================================================= */
     const STRATEGIES = [
       {
-        id: 1, world: 1, grade: '2°', tag: 'Consolidación',
-        name: 'Puente a la decena',
-        desc: 'Completar 10 para sumar fácil en 1 y 2 cifras.',
-        example: '27 + 6 = 33',
-        heading: 'Completar la decena amiga',
+        id: 1, world: 1,
+        title: "Sumar 10 a cualquier número",
+        tag: "Base Decimal",
+        sample: "43 + 10 = 53",
+        trickHeading: "El Secreto de la Decena:",
         steps: [
-          'Mira cuánto le falta al primer número para llegar a la siguiente decena cerrada.',
-          'Descompón el segundo sumando en dos partes: la que completa el 10 y lo que sobra.',
-          'Suma la decena limpia más el sobrante sin necesidad de contar con los dedos.'
+          "Observa únicamente la cifra de las decenas (el primer número en los de dos cifras).",
+          "Aumenta en 1 esa cifra de las decenas.",
+          "Las unidades se quedan exactamente iguales: ¡no cambian nada!"
         ],
-        formula: '27 + 6 ➔ (27 + 3) + 3 = 30 + 3 = 33',
-        generate: () => {
-          const a = [8, 9, 17, 18, 27, 28, 37, 48, 57, 68][Math.floor(Math.random() * 10)];
-          const falta = 10 - (a % 10);
-          const sobra = Math.floor(Math.random() * 4) + 2;
-          const b = falta + sobra;
-          const exp = a + b;
-          return {
-            qText: `${a} + ${b} = ?`,
-            expected: exp,
-            distractors: [exp - 2, exp + 10],
-            hint: `Descompón ${b} en (${falta} y ${sobra}) ➔ completa a ${a + falta} + ${sobra} = ${exp}`
-          };
+        generator: () => {
+          const a = Math.floor(Math.random() * 80) + 11;
+          return { text: `${a} + 10`, expected: a + 10, dist: [a + 9, a + 11, a + 20, a - 10] };
         }
       },
       {
-        id: 2, world: 1, grade: '2°', tag: 'Base',
-        name: 'Suma reiterada / Conteo a saltos',
-        desc: 'Sumas de sumandos iguales como base de la multiplicación.',
-        example: '4 + 4 + 4 = 12',
-        heading: 'Saltos rítmicos iguales',
+        id: 2, world: 1,
+        title: "Sumar 100 a centenas",
+        tag: "Centenas Exactas",
+        sample: "300 + 100 = 400",
+        trickHeading: "Subir un Piso en Centenas:",
         steps: [
-          'Reconoce cuántas veces se repite el mismo número.',
-          'Cuenta a saltos rápidos: 4, 8, 12... como una canción de ritmo.',
-          'Equivale a multiplicar las veces por el sumando.'
+          "Mira la primera cifra de la centena.",
+          "Súmale 1 y añade los dos ceros.",
+          "¡Es como contar de 100 en 100!"
         ],
-        formula: '4 + 4 + 4 = 3 × 4 = 12',
-        generate: () => {
-          const n = [3, 4, 5, 6][Math.floor(Math.random() * 4)];
-          const times = [3, 4, 5][Math.floor(Math.random() * 3)];
-          const exp = n * times;
-          const terms = Array(times).fill(n);
-          return {
-            qText: `${terms.join(' + ')} = ?`,
-            expected: exp,
-            distractors: [exp + n, exp - n > 0 ? exp - n : exp + 2 * n],
-            hint: `${times} saltos de ${n} ➔ ${times} × ${n} = ${exp}`
-          };
+        generator: () => {
+          const c = (Math.floor(Math.random() * 8) + 1) * 100;
+          return { text: `${c} + 100`, expected: c + 100, dist: [c + 90, c + 110, c + 200, c - 100] };
         }
       },
       {
-        id: 3, world: 1, grade: '2°', tag: 'tag-sisat',
-        name: 'Adición de decenas netas (SiSAT)',
-        desc: 'Sumar decenas cerradas en 2 y 3 cifras.',
-        example: '40 + 30 = 70 o 120 + 30 = 150',
-        heading: 'Sumar solo la columna roja de Decenas',
+        id: 3, world: 1,
+        title: "Restar 100 a centenas",
+        tag: "Descenso de Centenas",
+        sample: "500 − 100 = 400",
+        trickHeading: "Bajar un Piso en Centenas:",
         steps: [
-          'Identifica los números de decenas delanteros (4 y 3).',
-          'Suma solo las decenas: 4 + 3 = 7 decenas.',
-          'El 0 de las unidades se queda exactamente igual en su lugar: 70.'
+          "Quita 1 a la cifra de las centenas.",
+          "Los dos ceros se mantienen intactos."
         ],
-        formula: '40 + 30 ➔ (4 + 3) decenas = 7 decenas = 70',
-        generate: () => {
-          const is3 = Math.random() > 0.5;
-          const d1 = is3 ? (Math.floor(Math.random() * 15) + 11) * 10 : (Math.floor(Math.random() * 6) + 3) * 10;
-          const d2 = (Math.floor(Math.random() * 5) + 2) * 10;
-          const exp = d1 + d2;
-          return {
-            qText: `${d1} + ${d2} = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 10],
-            hint: `Suma ${d1/10} + ${d2/10} = ${exp/10} decenas ➔ ${exp}`
-          };
+        generator: () => {
+          const c = (Math.floor(Math.random() * 8) + 2) * 100;
+          return { text: `${c} − 100`, expected: c - 100, dist: [c - 90, c - 200, c + 100, c - 10] };
         }
       },
       {
-        id: 4, world: 1, grade: '2°', tag: 'tag-sisat',
-        name: 'Sustracción de decenas netas (SiSAT)',
-        desc: 'Restar decenas cerradas en 2 y 3 cifras.',
-        example: '80 − 30 = 50 o 160 − 40 = 120',
-        heading: 'Retroceso de decenas puras',
+        id: 4, world: 1,
+        title: "Sumar decenas completas",
+        tag: "Decenas Cerradas",
+        sample: "40 + 30 = 70",
+        trickHeading: "Truco de los Ceros Ocultos:",
         steps: [
-          'Enfócate en la cantidad de decenas que tienes y las que vas a quitar.',
-          'A 8 decenas le quitas 3 decenas y te quedan 5 decenas.',
-          'Conserva el cero final de las unidades.'
+          "Tapa mentalmente el cero de cada número.",
+          "Suma los números pequeños: 4 + 3 = 7.",
+          "Destapa el cero y agrégalo al final: ¡70!"
         ],
-        formula: '80 − 30 ➔ 8 dec − 3 dec = 5 decenas = 50',
-        generate: () => {
-          const is3 = Math.random() > 0.5;
-          const d1 = is3 ? (Math.floor(Math.random() * 15) + 14) * 10 : (Math.floor(Math.random() * 5) + 5) * 10;
-          const d2 = (Math.floor(Math.random() * 3) + 2) * 10;
-          const exp = d1 - d2;
-          return {
-            qText: `${d1} − ${d2} = ?`,
-            expected: exp,
-            distractors: [exp + 20, exp - 10],
-            hint: `${d1/10} decenas − ${d2/10} decenas = ${exp/10} decenas ➔ ${exp}`
-          };
+        generator: () => {
+          const d1 = (Math.floor(Math.random() * 5) + 1) * 10;
+          const d2 = (Math.floor(Math.random() * 4) + 1) * 10;
+          return { text: `${d1} + ${d2}`, expected: d1 + d2, dist: [d1 + d2 - 10, d1 + d2 + 10, d1 + d2 - 5] };
         }
       },
       {
-        id: 5, world: 1, grade: '2°/3°', tag: 'tag-sisat',
-        name: 'Sumar 10 a cualquier número (SiSAT)',
-        desc: 'Aumentar una decena exacta sin tocar unidades.',
-        example: '68 + 10 = 78 o 145 + 10 = 155',
-        heading: 'El salto de la decena mágica',
+        id: 5, world: 1,
+        title: "Restar decenas completas",
+        tag: "Resta sin Transformación",
+        sample: "70 − 30 = 40",
+        trickHeading: "Resta Directa de Decenas:",
         steps: [
-          '¡Las unidades no se tocan! En 68, el 8 se queda exactamente igual.',
-          'Solo aumenta 1 en la posición de las decenas: el 6 pasa a ser 7.',
-          '¡Resultado instantáneo en menos de dos segundos!'
+          "Tapa mentalmente los ceros.",
+          "Resta los números sencillos: 7 − 3 = 4.",
+          "Devuelve el cero: ¡40!"
         ],
-        formula: '68 + 10 ➔ (6 dec + 1) y 8 unidades = 78',
-        generate: () => {
-          const pool = [28, 35, 47, 54, 68, 73, 86, 92, 134, 145, 178, 235];
-          const n = pool[Math.floor(Math.random() * pool.length)];
-          const exp = n + 10;
-          return {
-            qText: `${n} + 10 = ?`,
-            expected: exp,
-            distractors: [n + 20, exp - 1],
-            hint: `Sube 1 a la decena de ${n} sin mover las unidades ➔ ${exp}`
-          };
+        generator: () => {
+          const d1 = (Math.floor(Math.random() * 5) + 4) * 10;
+          const d2 = (Math.floor(Math.random() * 3) + 1) * 10;
+          return { text: `${d1} − ${d2}`, expected: d1 - d2, dist: [d1 - d2 + 10, d1 - d2 - 10, d1 - d2 + 20] };
         }
       },
       {
-        id: 6, world: 1, grade: '2°/3°', tag: 'tag-sisat',
-        name: 'Restar 10 a cualquier número (SiSAT)',
-        desc: 'Quitar una decena exacta sin tocar unidades.',
-        example: '28 − 10 = 18 o 87 − 10 = 77',
-        heading: 'Retroceder 1 decena sin tocar unidades',
+        id: 6, world: 1,
+        title: "Restar 10 a cualquier número",
+        tag: "Descenso de Decenas",
+        sample: "28 − 10 = 18",
+        trickHeading: "La Decena Menguante:",
         steps: [
-          '¡Las unidades quedan intactas! En 28, el 8 se mantiene fijo.',
-          'A las decenas (2) quítale una (1): queda 1 decena.',
-          'Une la decena y las unidades: ¡18!'
+          "Réstale 1 a la cifra de las decenas.",
+          "Las unidades quedan exactamente igualitas.",
+          "Ejemplo: en 28, el 2 pasa a ser 1, y el 8 se queda: ¡18!"
         ],
-        formula: '28 − 10 ➔ (2 dec − 1) y 8 unidades = 18',
-        generate: () => {
-          const pool = [28, 35, 47, 54, 68, 73, 87, 92, 135, 148, 175, 235];
-          const n = pool[Math.floor(Math.random() * pool.length)];
-          const exp = n - 10;
-          return {
-            qText: `${n} − 10 = ?`,
-            expected: exp,
-            distractors: [n + 10, exp - 10 > 0 ? exp - 10 : exp + 2],
-            hint: `Bájale 1 a la decena de ${n} sin mover las unidades ➔ ${exp}`
-          };
+        generator: () => {
+          const a = Math.floor(Math.random() * 80) + 18;
+          return { text: `${a} − 10`, expected: a - 10, dist: [a - 9, a - 11, a - 20, a + 10] };
         }
       },
       {
-        id: 7, world: 1, grade: '2°', tag: 'tag-sisat',
-        name: 'Complemento a 10 y 100 netos',
-        desc: 'Parejas cerradas que forman 10 o 100.',
-        example: '10 − 4 = 6 o 100 − 30 = 70',
-        heading: 'Los amigos inseparables de la base',
+        id: 7, world: 1,
+        title: "Dobles de decenas completas",
+        tag: "Multiplicación Base",
+        sample: "Doble de 30 = 60",
+        trickHeading: "El Espejo de Loki:",
         steps: [
-          'Aprende de memoria las parejas de 10: (1 y 9), (2 y 8), (3 y 7), (4 y 6), (5 y 5).',
-          'Para llegar a 100, es lo mismo multiplicado por 10: 30 necesita a 70.',
-          'Si a 100 le quitas 30, su amigo complementario es 70.'
+          "Duplica el número que no es cero: el doble de 3 es 6.",
+          "Acompaña con el cero: ¡60!"
         ],
-        formula: '100 − 30 = 70 porque 30 + 70 = 100',
-        generate: () => {
-          const is100 = Math.random() > 0.4;
-          if (is100) {
-            const dec = (Math.floor(Math.random() * 7) + 2) * 10;
-            const exp = 100 - dec;
-            return {
-              qText: `100 − ${dec} = ?`,
-              expected: exp,
-              distractors: [exp + 10, exp - 10],
-              hint: `El amigo de ${dec} para llegar a 100 es ${exp}`
-            };
-          } else {
-            const u = Math.floor(Math.random() * 7) + 2;
-            const exp = 10 - u;
-            return {
-              qText: `10 − ${u} = ?`,
-              expected: exp,
-              distractors: [exp + 2, exp > 2 ? exp - 2 : exp + 3],
-              hint: `El amigo de ${u} para llegar a 10 es ${exp}`
-            };
-          }
+        generator: () => {
+          const d = (Math.floor(Math.random() * 5) + 1) * 10;
+          return { text: `Doble de ${d}`, expected: d * 2, dist: [d * 2 - 10, d * 2 + 10, d * 2 + 20] };
         }
       },
       {
-        id: 8, world: 2, grade: '3°', tag: 'tag-sisat',
-        name: 'Complemento a 100 con unidades (SiSAT)',
-        desc: 'Restar a 100 números con decenas y unidades.',
-        example: '100 − 35 = 65 o 100 − 48 = 52',
-        heading: 'El truco del 90 y el 10',
+        id: 8, world: 2,
+        title: "Complementos al 100 con decenas",
+        tag: "Amigos del 100",
+        sample: "70 + ? = 100",
+        trickHeading: "¿Cuánto le falta para llegar a 100?:",
         steps: [
-          'Las unidades deben sumar 10: si termina en 5, el amigo es 5 (5 + 5 = 10).',
-          'Las decenas deben completar 9: al 3 le faltan 6 para 9.',
-          'Une decenas y unidades: ¡65!'
+          "Piensa en los amigos del 10: a 7 le faltan 3 para ser 10.",
+          "Entonces a 70 le faltan 30 para ser 100."
         ],
-        formula: '100 − 35 ➔ Decenas a 9 (6), Unidades a 10 (5) = 65',
-        generate: () => {
-          const pool = [25, 35, 45, 55, 65, 38, 48, 52, 64, 76];
-          const n = pool[Math.floor(Math.random() * pool.length)];
-          const exp = 100 - n;
-          return {
-            qText: `100 − ${n} = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 10],
-            hint: `Unidades completan 10 y decenas completan 9 ➔ ${exp}`
-          };
+        generator: () => {
+          const d = (Math.floor(Math.random() * 8) + 1) * 10;
+          return { text: `${d} + ? = 100`, expected: 100 - d, dist: [100 - d - 10, 100 - d + 10, 90 - d] };
         }
       },
       {
-        id: 9, world: 2, grade: '2°/3°', tag: 'tag-sisat',
-        name: 'Dobles y Mitades (SiSAT)',
-        desc: 'Calcular el doble o la mitad de números.',
-        example: 'Doble de 25 = 50 o Mitad de 60 = 30',
-        heading: 'Duplicar o repartir en 2 partes exactas',
+        id: 9, world: 2,
+        title: "Restar a 100 una decena",
+        tag: "Complemento Inverso",
+        sample: "100 − 40 = 60",
+        trickHeading: "Desarmar el Cien:",
         steps: [
-          'Para el doble de 25: Doble de 20 (40) + Doble de 5 (10) = 50.',
-          'Para la mitad de 60: mitad de 6 decenas = 3 decenas = 30.',
-          'Descompón en decenas y unidades para no equivocarte.'
+          "Si tienes 10 decenas y regalas 4 decenas, te quedan 6 decenas.",
+          "6 decenas son 60."
         ],
-        formula: 'Doble de 25 = 25 + 25 = 50 | Mitad de 60 = 30',
-        generate: () => {
-          const isDoble = Math.random() > 0.5;
-          if (isDoble) {
-            const n = [15, 25, 35, 40, 45, 50, 75][Math.floor(Math.random() * 7)];
-            const exp = n * 2;
-            return {
-              qText: `Doble de ${n} = ?`,
-              expected: exp,
-              distractors: [exp + 10, exp - 10],
-              hint: `Suma ${n} + ${n} ➔ ${exp}`
-            };
-          } else {
-            const n = [40, 60, 80, 100, 120, 160][Math.floor(Math.random() * 6)];
-            const exp = n / 2;
-            return {
-              qText: `Mitad de ${n} = ?`,
-              expected: exp,
-              distractors: [exp + 10, exp - 10],
-              hint: `Reparte ${n} entre 2 ➔ ${exp}`
-            };
-          }
+        generator: () => {
+          const d = (Math.floor(Math.random() * 8) + 1) * 10;
+          return { text: `100 − ${d}`, expected: 100 - d, dist: [100 - d + 10, 100 - d - 10, 90 - d] };
         }
       },
       {
-        id: 10, world: 2, grade: '2°/3°', tag: 'tag-sisat',
-        name: '¿Cuánto le falta para llegar? (SiSAT)',
-        desc: 'Calcular el salto o complemento hacia la meta.',
-        example: '¿Cuánto le falta a 35 para 50? = 15',
-        heading: 'Salto en dos etapas hacia la meta',
+        id: 10, world: 2,
+        title: "Sumar 9 (Sumar 10 y quitar 1)",
+        tag: "Compensación Rápida",
+        sample: "35 + 9 = 44",
+        trickHeading: "El Salto de Compensación:",
         steps: [
-          'Paso 1: Salto a la decena más cercana (de 35 a 40 faltan 5).',
-          'Paso 2: Salto de la decena a la meta (de 40 a 50 faltan 10).',
-          'Une los dos saltos: 5 + 10 = ¡15!'
+          "Es más fácil sumar 10 primero: 35 + 10 = 45.",
+          "Como solo querías sumar 9, quítale 1 que prestaste: 45 − 1 = 44."
         ],
-        formula: 'De 35 a 50 ➔ +5 (llega a 40) +10 (llega a 50) = 15',
-        generate: () => {
-          const base = [25, 35, 45, 65, 75][Math.floor(Math.random() * 5)];
-          const meta = base + [15, 20, 25, 30][Math.floor(Math.random() * 4)];
-          const exp = meta - base;
-          return {
-            qText: `¿A ${base} cuánto para ${meta}?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 5],
-            hint: `De ${base} a la decena + el resto hasta ${meta} ➔ ${exp}`
-          };
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 14;
+          return { text: `${a} + 9`, expected: a + 9, dist: [a + 10, a + 8, a + 11, a + 19] };
         }
       },
       {
-        id: 11, world: 2, grade: '3°', tag: 'tag-sisat',
-        name: 'Cruzar la centena con decenas (SiSAT)',
-        desc: 'Sumar o restar decenas netas pasando 100.',
-        example: '150 + 80 = 230 o 260 − 70 = 190',
-        heading: 'Pensar en centenas y decenas unidas',
+        id: 11, world: 2,
+        title: "Restar 9 (Quitar 10 y devolver 1)",
+        tag: "Compensación Inversa",
+        sample: "52 − 9 = 43",
+        trickHeading: "Quitar 10 y Regresar 1:",
         steps: [
-          'Trata las cantidades como decenas: 15 decenas + 8 decenas.',
-          '15 + 8 = 23 decenas.',
-          'Coloca el cero de unidades: ¡230!'
+          "Réstale 10 de golpe: 52 − 10 = 42.",
+          "Le quitaste uno de más, así que devuélvelo: 42 + 1 = 43."
         ],
-        formula: '150 + 80 ➔ 15 dec + 8 dec = 23 dec = 230',
-        generate: () => {
-          const isAdd = Math.random() > 0.5;
-          if (isAdd) {
-            const a = (Math.floor(Math.random() * 8) + 12) * 10;
-            const b = (Math.floor(Math.random() * 4) + 6) * 10;
-            const exp = a + b;
-            return {
-              qText: `${a} + ${b} = ?`,
-              expected: exp,
-              distractors: [exp + 20, exp - 10],
-              hint: `${a/10} decenas + ${b/10} decenas = ${exp/10} dec ➔ ${exp}`
-            };
-          } else {
-            const a = (Math.floor(Math.random() * 6) + 21) * 10;
-            const b = (Math.floor(Math.random() * 4) + 5) * 10;
-            const exp = a - b;
-            return {
-              qText: `${a} − ${b} = ?`,
-              expected: exp,
-              distractors: [exp + 20, exp - 10],
-              hint: `${a/10} decenas − ${b/10} decenas = ${exp/10} dec ➔ ${exp}`
-            };
-          }
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 22;
+          return { text: `${a} − 9`, expected: a - 9, dist: [a - 10, a - 8, a - 11, a - 19] };
         }
       },
       {
-        id: 12, world: 2, grade: '3°', tag: 'tag-sisat',
-        name: 'Suma de terminados en 5 (SiSAT)',
-        desc: 'Redondear unidades con 5 para formar decenas.',
-        example: '35 + 25 = 60 o 45 + 35 = 80',
-        heading: 'Emparejar los dos cincos en un diez',
+        id: 12, world: 2,
+        title: "Sumar número de 2 cifras más 1 cifra sin llevar",
+        tag: "Unidades Directas",
+        sample: "62 + 5 = 67",
+        trickHeading: "Suma solo las Unidades:",
         steps: [
-          'Paso 1: Los dos 5 de las unidades forman 10 (5 + 5 = 10).',
-          'Paso 2: Suma las decenas: 30 + 20 = 50.',
-          'Paso 3: Añade la nueva decena: 50 + 10 = ¡60!'
+          "La decena (60) se queda esperando tranquila.",
+          "Suma las unidades: 2 + 5 = 7.",
+          "Junta todo: ¡67!"
         ],
-        formula: '35 + 25 ➔ (30 + 20) + (5 + 5) = 50 + 10 = 60',
-        generate: () => {
-          const d1 = (Math.floor(Math.random() * 5) + 2) * 10 + 5;
-          const d2 = (Math.floor(Math.random() * 4) + 1) * 10 + 5;
-          const exp = d1 + d2;
-          return {
-            qText: `${d1} + ${d2} = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 10],
-            hint: `Los dos 5 forman 10 ➔ súmalo a las decenas = ${exp}`
-          };
+        generator: () => {
+          const d = (Math.floor(Math.random() * 7) + 2) * 10;
+          const u1 = Math.floor(Math.random() * 4) + 1;
+          const u2 = Math.floor(Math.random() * (9 - u1)) + 1;
+          const num = d + u1;
+          return { text: `${num} + ${u2}`, expected: num + u2, dist: [num + u2 - 1, num + u2 + 1, num + u2 + 10] };
         }
       },
       {
-        id: 13, world: 2, grade: '2°/3°', tag: 'tag-sisat',
-        name: 'Suma y resta de centenas netas (SiSAT)',
-        desc: 'Operar centenas cerradas directamente.',
-        example: '500 + 400 = 900 o 800 − 300 = 500',
-        heading: 'Operar en la escala de cientos',
+        id: 13, world: 2,
+        title: "Mitades de decenas pares",
+        tag: "Partición Equitativa",
+        sample: "Mitad de 80 = 40",
+        trickHeading: "Repartir en Dos:",
         steps: [
-          'Trabaja únicamente con el dígito de las centenas (5 y 4).',
-          '5 + 4 = 9 centenas.',
-          'Agrega los dos ceros: ¡900!'
+          "Saca la mitad del primer número: la mitad de 8 es 4.",
+          "Agrega el cero: ¡40!"
         ],
-        formula: '500 + 400 ➔ 5 cen + 4 cen = 9 centenas = 900',
-        generate: () => {
-          const isAdd = Math.random() > 0.5;
-          if (isAdd) {
-            const a = (Math.floor(Math.random() * 4) + 2) * 100;
-            const b = (Math.floor(Math.random() * 4) + 2) * 100;
-            const exp = a + b;
-            return {
-              qText: `${a} + ${b} = ?`,
-              expected: exp,
-              distractors: [exp + 100, exp - 100],
-              hint: `${a/100} centenas + ${b/100} centenas = ${exp/100} centenas ➔ ${exp}`
-            };
-          } else {
-            const a = (Math.floor(Math.random() * 4) + 5) * 100;
-            const b = (Math.floor(Math.random() * 3) + 1) * 100;
-            const exp = a - b;
-            return {
-              qText: `${a} − ${b} = ?`,
-              expected: exp,
-              distractors: [exp + 100, exp - 100],
-              hint: `${a/100} centenas − ${b/100} centenas = ${exp/100} centenas ➔ ${exp}`
-            };
-          }
+        generator: () => {
+          const evens = [20, 40, 60, 80, 100];
+          const n = evens[Math.floor(Math.random() * evens.length)];
+          return { text: `Mitad de ${n}`, expected: n / 2, dist: [(n / 2) - 5, (n / 2) + 10, (n / 2) - 10] };
         }
       },
       {
-        id: 14, world: 2, grade: '3°', tag: 'tag-sisat',
-        name: 'Multiplicar por 10 (SiSAT)',
-        desc: 'Agregar un cero a la derecha en 2 y 3 cifras.',
-        example: '25 × 10 = 250 o 48 × 10 = 480',
-        heading: 'El salto de valor posicional',
+        id: 14, world: 2,
+        title: "Sumar 11 (Sumar 10 y luego 1)",
+        tag: "Descomposición Aditiva",
+        sample: "34 + 11 = 45",
+        trickHeading: "Paso de Once:",
         steps: [
-          'Al multiplicar cualquier número por 10, cada cifra sube un puesto de valor.',
-          'Las unidades pasan a decenas, y las decenas a centenas.',
-          'El resultado es el mismo número con un 0 al final: 25 ➔ 250.'
+          "Suma primero 10: 34 + 10 = 44.",
+          "Luego suma el 1 que falta: 44 + 1 = 45."
         ],
-        formula: '25 × 10 ➔ 25 decenas = 250',
-        generate: () => {
-          const pool = [14, 25, 36, 48, 52, 65, 74, 88, 93];
-          const n = pool[Math.floor(Math.random() * pool.length)];
-          const exp = n * 10;
-          return {
-            qText: `${n} × 10 = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 20],
-            hint: `Agrega un 0 al final de ${n} ➔ ${exp}`
-          };
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 15;
+          return { text: `${a} + 11`, expected: a + 11, dist: [a + 10, a + 12, a + 21, a + 9] };
         }
       },
       {
-        id: 15, world: 3, grade: '3°', tag: 'tag-sisat',
-        name: 'Tablas de multiplicar básicas (SiSAT)',
-        desc: 'Multiplicaciones fundamentales del SiSAT.',
-        example: '4 × 8 = 32 o 7 × 6 = 42',
-        heading: 'Agilidad en las tablas nucleares',
+        id: 15, world: 3,
+        title: "Restar 11 (Quitar 10 y luego 1)",
+        tag: "Doble Salto Atrás",
+        sample: "46 − 11 = 35",
+        trickHeading: "Dos Pasitos Atrás:",
         steps: [
-          'Recurre a las tablas clave: 4 × 8 = 32, 6 × 7 = 42, 8 × 7 = 56.',
-          'Apóyate en dobles conocidos o conteo rítmico.',
-          '¡Responde con seguridad sin dudar!'
+          "Quita 10 primero: 46 − 10 = 36.",
+          "Quita 1 más: 36 − 1 = 35."
         ],
-        formula: '6 × 7 = 42 | 4 × 8 = 32 | 8 × 7 = 56',
-        generate: () => {
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 25;
+          return { text: `${a} − 11`, expected: a - 11, dist: [a - 10, a - 12, a - 9, a - 21] };
+        }
+      },
+      {
+        id: 16, world: 3,
+        title: "Sumar decenas a números mixtos",
+        tag: "Avance de Decenas",
+        sample: "34 + 20 = 54",
+        trickHeading: "Suma de Decenas a la Cabeza:",
+        steps: [
+          "Suma solo las decenas: 3 decenas + 2 decenas = 5 decenas (50).",
+          "Conserva las 4 unidades: ¡54!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 50) + 12;
+          const d = (Math.floor(Math.random() * 3) + 2) * 10;
+          return { text: `${a} + ${d}`, expected: a + d, dist: [a + d - 10, a + d + 10, a + d - 1] };
+        }
+      },
+      {
+        id: 17, world: 3,
+        title: "Restar decenas a números mixtos",
+        tag: "Retroceso de Decenas",
+        sample: "68 − 30 = 38",
+        trickHeading: "Resta las Decenas:",
+        steps: [
+          "6 decenas − 3 decenas = 3 decenas (30).",
+          "Las 8 unidades siguen vivas: ¡38!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 40) + 52;
+          const d = (Math.floor(Math.random() * 3) + 2) * 10;
+          return { text: `${a} − ${d}`, expected: a - d, dist: [a - d + 10, a - d - 10, a - d + 1] };
+        }
+      },
+      {
+        id: 18, world: 3,
+        title: "Completar la decena inmediata superior",
+        tag: "Puente a la Decena",
+        sample: "47 + ? = 50",
+        trickHeading: "El Puente de la Unidad:",
+        steps: [
+          "Mira la unidad: tienes 7.",
+          "¿Cuánto falta para 10? Faltan 3.",
+          "¡Ese es el número del puente!"
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 7) + 2) * 10;
+          const u = Math.floor(Math.random() * 7) + 2;
+          const num = d + u;
+          const target = d + 10;
+          return { text: `${num} + ? = ${target}`, expected: target - num, dist: [target - num + 1, target - num - 1, 10] };
+        }
+      },
+      {
+        id: 19, world: 3,
+        title: "Multiplicar por 10 (Agregar un cero)",
+        tag: "Potencia de 10",
+        sample: "6 × 10 = 60",
+        trickHeading: "El Efecto Imán del Cero:",
+        steps: [
+          "Escribe el mismo número.",
+          "Pégale un cero al final: 6 pasa a ser 60.",
+          "¡Magia matemática!"
+        ],
+        generator: () => {
+          const n = Math.floor(Math.random() * 9) + 2;
+          return { text: `${n} × 10`, expected: n * 10, dist: [n * 10 - 10, n * 10 + 10, n + 10] };
+        }
+      },
+      {
+        id: 20, world: 3,
+        title: "Desafío Maestro Mixto SiSAT",
+        tag: "Cálculo Integral",
+        sample: "25 + 25 = 50",
+        trickHeading: "Cálculo Relámpago:",
+        steps: [
+          "Combina dobles y decenas para resolver velozmente.",
+          "25 + 25 = 50; 50 + 50 = 100."
+        ],
+        generator: () => {
           const pairs = [
-            [4, 8, 32], [7, 6, 42], [8, 7, 56], [6, 8, 48],
-            [9, 6, 54], [7, 7, 49], [8, 8, 64], [9, 8, 72]
+            { t: "25 + 25", e: 50, d: [45, 55, 60] },
+            { t: "50 + 50", e: 100, d: [90, 110, 80] },
+            { t: "15 + 15", e: 30, d: [25, 35, 40] },
+            { t: "75 + 25", e: 100, d: [95, 105, 90] },
+            { t: "45 + 45", e: 90, d: [80, 100, 85] }
           ];
-          const [f1, f2, exp] = pairs[Math.floor(Math.random() * pairs.length)];
-          return {
-            qText: `${f1} × ${f2} = ?`,
-            expected: exp,
-            distractors: [exp + f1, exp - f2],
-            hint: `Tabla del ${f1}: ${f1} veces ${f2} = ${exp}`
-          };
-        }
-      },
-      {
-        id: 16, world: 3, grade: '3°', tag: 'tag-salto',
-        name: 'Compensación aditiva (+9 y +19)',
-        desc: 'Sumar 10 o 20 y restar 1.',
-        example: '46 + 9 = 55 (46 + 10 − 1)',
-        heading: 'Suma la decena redonda y descuenta 1',
-        steps: [
-          'Sumar 9 es difícil, ¡pero sumar 10 es facilísimo!',
-          'Primero suma 10: 46 + 10 = 56.',
-          'Luego compensa restando el 1 que agregaste de más: 56 − 1 = ¡55!'
-        ],
-        formula: '46 + 9 ➔ (46 + 10) − 1 = 56 − 1 = 55',
-        generate: () => {
-          const is19 = Math.random() > 0.5;
-          const n = [34, 45, 56, 67, 73, 82][Math.floor(Math.random() * 6)];
-          const add = is19 ? 19 : 9;
-          const exp = n + add;
-          return {
-            qText: `${n} + ${add} = ?`,
-            expected: exp,
-            distractors: [exp + 2, exp - 10],
-            hint: `Suma ${add + 1} y réstale 1 ➔ (${n} + ${add + 1}) − 1 = ${exp}`
-          };
-        }
-      },
-      {
-        id: 17, world: 3, grade: '3°', tag: 'tag-salto',
-        name: 'Compensación sustractiva (−9 y −19)',
-        desc: 'Restar 10 o 20 y sumar 1.',
-        example: '54 − 9 = 45 (54 − 10 + 1)',
-        heading: 'Resta la decena redonda y devuelve 1',
-        steps: [
-          'Restar 9 se hace en dos pasos rápidos:',
-          'Paso 1: Quítale una decena completa (54 − 10 = 44).',
-          'Paso 2: Como quitaste uno de más, regrésalo sumándolo: 44 + 1 = ¡45!'
-        ],
-        formula: '54 − 9 ➔ (54 − 10) + 1 = 44 + 1 = 45',
-        generate: () => {
-          const is19 = Math.random() > 0.5;
-          const n = [44, 53, 62, 75, 84, 91][Math.floor(Math.random() * 6)];
-          const sub = is19 ? 19 : 9;
-          const exp = n - sub;
-          return {
-            qText: `${n} − ${sub} = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 2],
-            hint: `Resta ${sub + 1} y súmale 1 ➔ (${n} − ${sub + 1}) + 1 = ${exp}`
-          };
-        }
-      },
-      {
-        id: 18, world: 3, grade: '2°', tag: 'Base',
-        name: 'Desprender la unidad suelta',
-        desc: 'Aislar y quitar la unidad para dejar decena limpia.',
-        example: '76 − 6 = 70 o 148 − 8 = 140',
-        heading: 'Aterrizar en la decena redonda',
-        steps: [
-          'Observa la unidad suelta del número (el 6 en 76).',
-          'Al restarle exactamente esa misma unidad, se cancela a cero.',
-          'Queda la decena neta limpia de forma instantánea: 70.'
-        ],
-        formula: '76 − 6 ➔ 70 | 148 − 8 ➔ 140',
-        generate: () => {
-          const is3 = Math.random() > 0.5;
-          const u = Math.floor(Math.random() * 6) + 3;
-          const base = is3 ? (Math.floor(Math.random() * 10) + 11) * 10 + u : (Math.floor(Math.random() * 6) + 3) * 10 + u;
-          const exp = base - u;
-          return {
-            qText: `${base} − ${u} = ?`,
-            expected: exp,
-            distractors: [exp + 10, exp - 10],
-            hint: `Cancela la unidad ${u} y aterriza en la decena limpia ➔ ${exp}`
-          };
-        }
-      },
-      {
-        id: 19, world: 3, grade: '3°', tag: 'tag-salto',
-        name: 'Doble del doble (Multiplicar ×4)',
-        desc: 'Duplicar dos veces seguidas para la tabla del 4.',
-        example: '4 × 6 = 24 (6 ➔ 12 ➔ 24)',
-        heading: 'Multiplicar por 4 en dos saltos dobles',
-        steps: [
-          'Multiplicar por 4 es simplemente sacar el doble dos veces.',
-          'Primer salto: Doble de 6 = 12.',
-          'Segundo salto: Doble de 12 = ¡24!'
-        ],
-        formula: '4 × 6 ➔ Doble de 6 (12) ➔ Doble de 12 = 24',
-        generate: () => {
-          const n = [5, 6, 7, 8, 9, 12, 15][Math.floor(Math.random() * 7)];
-          const exp = n * 4;
-          return {
-            qText: `4 × ${n} = ?`,
-            expected: exp,
-            distractors: [exp + 4, exp - 4],
-            hint: `Doble de ${n} (${n*2}) ➔ Doble de ${n*2} = ${exp}`
-          };
-        }
-      },
-      {
-        id: 20, world: 3, grade: '3°', tag: 'tag-salto',
-        name: 'Multiplicación rápida (×9 y ×11)',
-        desc: 'Multiplicar por 10 y ajustar unidades.',
-        example: '9 × 7 = 63 (70 − 7) u 11 × 6 = 66',
-        heading: 'Apoyarse en la tabla del 10',
-        steps: [
-          'Para × 9: Multiplica por 10 y resta una vez el número: 10 × 7 = 70 ➔ 70 − 7 = 63.',
-          'Para × 11: Multiplica por 10 y suma una vez el número: 10 × 6 = 60 ➔ 60 + 6 = 66.',
-          '¡Estrategia veloz para no memorizar a ciegas!'
-        ],
-        formula: '9 × 7 = 70 − 7 = 63 | 11 × 6 = 60 + 6 = 66',
-        generate: () => {
-          const is11 = Math.random() > 0.5;
-          const mult = is11 ? 11 : 9;
-          const n = [4, 5, 6, 7, 8][Math.floor(Math.random() * 5)];
-          const exp = mult * n;
-          return {
-            qText: `${mult} × ${n} = ?`,
-            expected: exp,
-            distractors: [exp + (is11 ? -11 : 9), exp + (is11 ? 11 : -9)],
-            hint: is11 ? `(10 × ${n}) + ${n} = ${n*10} + ${n} = ${exp}` : `(10 × ${n}) − ${n} = ${n*10} − ${n} = ${exp}`
-          };
+          const choice = pairs[Math.floor(Math.random() * pairs.length)];
+          return { text: choice.t, expected: choice.e, dist: choice.d };
         }
       }
     ];
 
     /* =============================================================
-       3. ESTADO GLOBAL DEL JUEGO Y VELOCIDADES CALIBRADAS
+       3. ESTADO GLOBAL DE LA APLICACIÓN
        ============================================================= */
     const gameState = {
-      currentLevelId: 6,
+      soundEnabled: true,
       currentWorld: 1,
+      currentLevelId: 1,
       speedMode: 'tutorial',
-      speedMultiplier: 1.0,
+      speedMultiplier: 0.65,
+      cameraControlActive: false,
+      voiceSpeechEnabled: false,
       gameActive: false,
       gamePaused: false,
       lives: 3,
       correctCount: 0,
       targetGoal: 10,
-      currentProblem: null,
-      soundEnabled: true,
-      voiceSpeechEnabled: true,
-      cameraControlActive: false,
-      startTime: 0,
+      totalBones: 0,
       userStars: {},
-      totalBones: 0
+      currentProblem: null,
+      startTime: 0
     };
 
     try {
-      const savedStars = localStorage.getItem('loki_runner_stars');
-      if (savedStars) gameState.userStars = JSON.parse(savedStars);
       const savedBones = localStorage.getItem('loki_runner_bones');
       if (savedBones) gameState.totalBones = parseInt(savedBones, 10) || 0;
+      const savedStars = localStorage.getItem('loki_runner_stars');
+      if (savedStars) gameState.userStars = JSON.parse(savedStars) || {};
     } catch(e) {}
 
     /* =============================================================
-       4. AUDIO OFFLINE Y SPEECH SYNTHESIS
+       4. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
        ============================================================= */
     let audioCtx = null;
+
     function getAudioContext() {
       if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) audioCtx = new AudioContext();
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
       }
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -1723,59 +1704,79 @@
       return audioCtx;
     }
 
-    function playTone(freq, duration, type='sine', gainVal=0.15) {
+    function soundLaneSwitch() {
       if (!gameState.soundEnabled) return;
-      try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
-      } catch(e) {}
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(420, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(780, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
     }
 
-    function soundLaneSwitch() { playTone(420, 0.08, 'triangle', 0.12); }
     function soundCorrectHit() {
       if (!gameState.soundEnabled) return;
-      [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.22, 'sine', 0.14), i * 50);
-      });
-    }
-    function soundWrongHit() {
-      if (!gameState.soundEnabled) return;
-      try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(140, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.25, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.06));
+        gain.gain.setValueAtTime(0.22, ctx.currentTime + (idx * 0.06));
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * 0.06) + 0.18);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
-      } catch(e) {}
+        osc.start(ctx.currentTime + (idx * 0.06));
+        osc.stop(ctx.currentTime + (idx * 0.06) + 0.18);
+      });
     }
+
+    function soundWrongHit() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    }
+
     function soundVictoryFanfare() {
       if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const notes = [
-        { f: 523.25, d: 0.15 }, { f: 659.25, d: 0.15 }, { f: 783.99, d: 0.15 },
-        { f: 1046.50, d: 0.4 }, { f: 880.00, d: 0.2 }, { f: 1046.50, d: 0.6 }
+        { f: 523.25, d: 0.12, t: 0.0 },
+        { f: 659.25, d: 0.12, t: 0.14 },
+        { f: 783.99, d: 0.14, t: 0.28 },
+        { f: 1046.50, d: 0.45, t: 0.44 }
       ];
-      let delay = 0;
       notes.forEach(n => {
-        setTimeout(() => playTone(n.f, n.d, 'triangle', 0.2), delay);
-        delay += (n.d * 1000) * 0.85;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(n.f, ctx.currentTime + n.t);
+        gain.gain.setValueAtTime(0.26, ctx.currentTime + n.t);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.t + n.d);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + n.t);
+        osc.stop(ctx.currentTime + n.t + n.d);
       });
     }
 
@@ -1788,7 +1789,13 @@
     function toggleVoiceSpeech() {
       gameState.voiceSpeechEnabled = !gameState.voiceSpeechEnabled;
       const btn = document.getElementById('btn-voice-toggle');
-      if (btn) btn.textContent = gameState.voiceSpeechEnabled ? '🔊 Voz' : '🔇 Voz off';
+      if (btn) {
+        btn.classList.toggle('active', gameState.voiceSpeechEnabled);
+        btn.textContent = gameState.voiceSpeechEnabled ? '🔊 Voz ON' : '🔈 Voz OFF';
+      }
+      if (gameState.voiceSpeechEnabled && gameState.currentProblem) {
+        speakProblem(gameState.currentProblem.text);
+      }
     }
 
     function speakProblem(text) {
@@ -1804,7 +1811,8 @@
     }
 
     /* =============================================================
-       5. DETECCIÓN DE MOVIMIENTO POR CÁMARA WEBCAM
+       5. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
+          FILTRADO ESTRICTO ANTI-MOVIMIENTOS LENTOS
        ============================================================= */
     let cameraStream = null;
     let cameraVideo = null;
@@ -1814,15 +1822,59 @@
     let cameraInterval = null;
     let lastCameraMoveTime = 0;
 
-    async function toggleCameraControl() {
+    let baselineLeft = 0;
+    let baselineRight = 0;
+    let baselineCenter = 0;
+
+    async function toggleCameraGlobal() {
       if (gameState.cameraControlActive) {
         stopCamera();
-        return;
+        try { localStorage.setItem('loki_camera_pref', 'false'); } catch(e) {}
+        updateCameraUI(false);
+      } else {
+        const ok = await startCamera();
+        if (ok) {
+          try { localStorage.setItem('loki_camera_pref', 'true'); } catch(e) {}
+          updateCameraUI(true);
+        }
       }
+    }
+
+    function updateCameraUI(isActive) {
+      const menuBtn = document.getElementById('menu-camera-toggle-btn');
+      const menuLbl = document.getElementById('menu-cam-label');
+      if (menuBtn && menuLbl) {
+        if (isActive) {
+          menuBtn.classList.add('active');
+          menuLbl.textContent = '● Cámara Activa (ON)';
+        } else {
+          menuBtn.classList.remove('active');
+          menuLbl.textContent = 'Activar Cámara';
+        }
+      }
+
+      const hudBtn = document.getElementById('btn-camera-toggle');
+      if (hudBtn) {
+        if (isActive) {
+          hudBtn.classList.add('active');
+          hudBtn.textContent = '📹 Activa';
+        } else {
+          hudBtn.classList.remove('active');
+          hudBtn.textContent = '📹 Cámara';
+        }
+      }
+
+      const pip = document.getElementById('camera-pip-container');
+      if (pip) {
+        pip.style.display = (isActive && gameState.gameActive) ? 'flex' : 'none';
+      }
+    }
+
+    async function startCamera() {
       try {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          alert('Tu navegador no soporta acceso directo a la cámara. ¡Puedes usar las flechas o botones táctiles!');
-          return;
+          alert('Tu navegador no soporta acceso directo a la cámara web. ¡Puedes jugar con botones táctiles o teclado!');
+          return false;
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -1831,10 +1883,8 @@
         cameraStream = stream;
         gameState.cameraControlActive = true;
 
-        const pip = document.getElementById('camera-pip-container');
-        pip.style.display = 'flex';
         cameraVideo = document.getElementById('camera-video-feed');
-        cameraVideo.srcObject = stream;
+        if (cameraVideo) cameraVideo.srcObject = stream;
 
         cameraCanvas = document.createElement('canvas');
         cameraCanvas.width = 64;
@@ -1842,14 +1892,19 @@
         cameraCtx = cameraCanvas.getContext('2d', { willReadFrequently: true });
         prevFrameData = null;
 
-        document.getElementById('btn-camera-toggle').classList.add('active');
-        document.getElementById('btn-camera-toggle').textContent = '📹 Activa';
+        baselineLeft = 0;
+        baselineRight = 0;
+        baselineCenter = 0;
 
         if (cameraInterval) clearInterval(cameraInterval);
         cameraInterval = setInterval(processCameraMotion, 80);
+
+        return true;
       } catch(err) {
-        alert('No se pudo acceder a la cámara o el permiso fue denegado. ¡Puedes jugar perfectamente con los botones táctiles o teclado!');
+        console.warn('Error accediendo a cámara:', err);
+        alert('No se pudo acceder a la cámara o el permiso fue cancelado. ¡Puedes jugar con flechas de teclado o botones táctiles!');
         stopCamera();
+        return false;
       }
     }
 
@@ -1865,21 +1920,31 @@
       }
       const pip = document.getElementById('camera-pip-container');
       if (pip) pip.style.display = 'none';
-      const btn = document.getElementById('btn-camera-toggle');
-      if (btn) {
-        btn.classList.remove('active');
-        btn.textContent = '📹 Cámara';
+
+      const hudBtn = document.getElementById('btn-camera-toggle');
+      if (hudBtn) {
+        hudBtn.classList.remove('active');
+        hudBtn.textContent = '📹 Cámara';
       }
+
+      const menuBtn = document.getElementById('menu-camera-toggle-btn');
+      const menuLbl = document.getElementById('menu-cam-label');
+      if (menuBtn && menuLbl) {
+        menuBtn.classList.remove('active');
+        menuLbl.textContent = 'Activar Cámara';
+      }
+
       prevFrameData = null;
     }
 
     function processCameraMotion() {
-      if (!cameraVideo || !cameraCtx || !gameState.cameraControlActive || !gameState.gameActive || gameState.gamePaused) return;
+      if (!cameraVideo || !cameraCtx || !gameState.cameraControlActive) return;
       if (cameraVideo.readyState < 2) return;
 
       const cw = cameraCanvas.width;
       const ch = cameraCanvas.height;
 
+      // Dibujar espejado para que coincida intuitivamente con el cuerpo del alumno
       cameraCtx.save();
       cameraCtx.translate(cw, 0);
       cameraCtx.scale(-1, 1);
@@ -1902,6 +1967,7 @@
       let centerMotion = 0;
       let rightMotion = 0;
 
+      // UMBRAL ALTO (diff > 90): Ignora respiración, parpadeo de luz y movimientos suaves lentos
       for (let y = 0; y < ch; y++) {
         for (let x = 0; x < cw; x++) {
           const idx = (y * cw + x) * 4;
@@ -1909,7 +1975,7 @@
                        Math.abs(curData[idx+1] - prevFrameData[idx+1]) +
                        Math.abs(curData[idx+2] - prevFrameData[idx+2]);
 
-          if (diff > 55) {
+          if (diff > 90) {
             if (x < zLeftEnd) leftMotion++;
             else if (x > zRightStart) rightMotion++;
             else centerMotion++;
@@ -1919,24 +1985,63 @@
 
       prevFrameData.set(curData);
 
+      // Promedio móvil ambiental (ruido de fondo y balanceo lento)
+      baselineLeft = baselineLeft * 0.8 + leftMotion * 0.2;
+      baselineRight = baselineRight * 0.8 + rightMotion * 0.2;
+      baselineCenter = baselineCenter * 0.8 + centerMotion * 0.2;
+
+      // Cálculo de ráfaga brusca (burst)
+      const burstLeft = Math.max(0, leftMotion - baselineLeft);
+      const burstRight = Math.max(0, rightMotion - baselineRight);
+
+      // CRITERIO ESTRICTO DE MOVIMIENTO BRUSCO:
+      // Debe haber al menos 95 pixeles activos con salto brusco, burst >= 55 y dominar el lado opuesto por 1.75x
+      const isBrusqueLeft = (leftMotion >= 95 && burstLeft >= 55 && leftMotion > rightMotion * 1.75);
+      const isBrusqueRight = (rightMotion >= 95 && burstRight >= 55 && rightMotion > leftMotion * 1.75);
+
+      // Indicadores visuales en el cuadro PIP
       const bLeft = document.getElementById('cam-bar-left');
       const bCenter = document.getElementById('cam-bar-center');
       const bRight = document.getElementById('cam-bar-right');
+      const pipMeter = document.getElementById('cam-motion-meter-fill');
+      const pipLabel = document.getElementById('cam-motion-status-lbl');
 
-      bLeft.className = 'cam-zone-bar' + (leftMotion > 40 && leftMotion > rightMotion * 1.3 ? ' active' : '');
-      bRight.className = 'cam-zone-bar' + (rightMotion > 40 && rightMotion > leftMotion * 1.3 ? ' active' : '');
-      bCenter.className = 'cam-zone-bar' + (player.lane === 0 ? ' active' : '');
+      if (bLeft) bLeft.className = 'cam-zone-bar' + (isBrusqueLeft ? ' active-brusque' : (leftMotion > 45 ? ' active-soft' : ''));
+      if (bRight) bRight.className = 'cam-zone-bar' + (isBrusqueRight ? ' active-brusque' : (rightMotion > 45 ? ' active-soft' : ''));
+      if (bCenter) bCenter.className = 'cam-zone-bar' + (player.lane === 0 ? ' active-lane' : '');
+
+      const currentMaxBurst = Math.max(burstLeft, burstRight);
+      const burstPct = Math.min(100, Math.floor((currentMaxBurst / 80) * 100));
+      if (pipMeter) pipMeter.style.width = burstPct + '%';
+
+      if (pipLabel) {
+        if (isBrusqueLeft) {
+          pipLabel.textContent = '⚡ ¡QUIEBRE IZQUIERDA!';
+          pipLabel.style.color = '#38bdf8';
+        } else if (isBrusqueRight) {
+          pipLabel.textContent = '⚡ ¡QUIEBRE DERECHA!';
+          pipLabel.style.color = '#38bdf8';
+        } else if (leftMotion > 45 || rightMotion > 45) {
+          pipLabel.textContent = 'Movimiento lento (ignorado)';
+          pipLabel.style.color = '#94a3b8';
+        } else {
+          pipLabel.textContent = 'Calma (esperando quiebre)';
+          pipLabel.style.color = '#64748b';
+        }
+      }
+
+      if (!gameState.gameActive || gameState.gamePaused) return;
 
       const now = Date.now();
-      if (now - lastCameraMoveTime < 320) return;
+      if (now - lastCameraMoveTime < 420) return; // Cooldown de 420ms para cambio seguro de carril
 
-      if (leftMotion > 45 && leftMotion > rightMotion * 1.35) {
+      if (isBrusqueLeft) {
         if (player.lane > -1) {
           player.lane--;
           soundLaneSwitch();
           lastCameraMoveTime = now;
         }
-      } else if (rightMotion > 45 && rightMotion > leftMotion * 1.35) {
+      } else if (isBrusqueRight) {
         if (player.lane < 1) {
           player.lane++;
           soundLaneSwitch();
@@ -1945,9 +2050,6 @@
       }
     }
 
-    /* =============================================================
-       6. CONTROL DE VELOCIDAD DINÁMICA
-       ============================================================= */
     function setSpeedMultiplier(mult, btnId) {
       gameState.speedMultiplier = mult;
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
@@ -1955,92 +2057,94 @@
       if (activeBtn) activeBtn.classList.add('active');
 
       WORLD.speed = WORLD.baseSpeed * gameState.speedMultiplier;
+
+      const badge = document.getElementById('hud-speed-badge');
+      if (badge) {
+        if (mult <= 0.7) {
+          badge.textContent = '🐢 Ultra Lento';
+          badge.className = 'hud-mode-badge mode-tutorial';
+        } else if (mult <= 1.1) {
+          badge.textContent = '🚶 Paso Normal';
+          badge.className = 'hud-mode-badge mode-carrera';
+        } else if (mult <= 1.8) {
+          badge.textContent = '🏃 Trote Ágil';
+          badge.className = 'hud-mode-badge mode-carrera';
+        } else {
+          badge.textContent = '⚡ Rayo (Difícil)';
+          badge.className = 'hud-mode-badge mode-hard';
+        }
+      }
     }
 
     /* =============================================================
-       7. RENDERIZADO DEL MENÚ Y NIVELES
+       6. RENDERIZADO DEL MENÚ Y NIVELES
        ============================================================= */
+    function switchWorld(worldNum) {
+      gameState.currentWorld = worldNum;
+      document.querySelectorAll('.world-tab-btn').forEach((b, idx) => {
+        b.classList.toggle('active', (idx + 1) === worldNum);
+      });
+      renderLevels();
+    }
+
     function renderLevels() {
       const container = document.getElementById('levels-container');
       container.innerHTML = '';
 
       const filtered = STRATEGIES.filter(s => s.world === gameState.currentWorld);
+      document.getElementById('global-bones-count').textContent = gameState.totalBones;
+
+      let starsTotal = 0;
+      Object.values(gameState.userStars).forEach(st => starsTotal += st);
+      document.getElementById('global-stars-count').textContent = `${starsTotal} / 60`;
 
       filtered.forEach(strat => {
         const stars = gameState.userStars[strat.id] || 0;
         const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-        const isFeatured = strat.id === 6;
 
         const card = document.createElement('div');
-        card.className = `level-card ${isFeatured ? 'featured' : ''}`;
+        card.className = 'level-card' + (strat.id === 6 ? ' featured' : '');
         card.innerHTML = `
-          <div>
-            <div class="card-top">
-              <span class="card-num-badge">Nivel ${strat.id}</span>
-              <span class="card-tag ${strat.tag}">${strat.name.includes('SiSAT') ? '⭐ SiSAT Oficial' : strat.grade}</span>
-            </div>
-            <h3 class="card-title" style="margin-top:0.4rem;">${strat.name}</h3>
-            <span class="card-example">${strat.example}</span>
-            <p class="card-desc" style="margin-top:0.35rem;">${strat.desc}</p>
+          <div class="level-badge-num">NIVEL ${strat.id}</div>
+          <div class="level-header">
+            <span class="level-strategy-tag">${strat.tag}</span>
+            <h3>${strat.title}</h3>
           </div>
-
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-              <span style="font-size:0.75rem; font-weight:700; color:#64748b;">Récord:</span>
-              <span style="font-size:0.95rem; color:#f59e0b;">${starStr}</span>
-            </div>
-
-            <div class="card-actions">
-              <div class="btn-row">
-                <button class="btn-play-tutorial" onclick="openTutorialModal(${strat.id}, 'tutorial')" title="Velocidad reducida para aprender el truco">
-                  <span>🐢</span> Práctica Lenta
-                </button>
-                <button class="btn-play-run" onclick="openTutorialModal(${strat.id}, 'normal')" title="Velocidad normal tipo carrera">
-                  <span>⚡</span> Carrera
-                </button>
-              </div>
-              <button class="btn-explain" onclick="openTutorialModal(${strat.id}, 'preview')">
-                <span>💡</span> Ver Explicación del Truco
-              </button>
-            </div>
+          <div class="level-formula-preview">
+            <span class="badge-ex">EJEMPLO</span>
+            <span>${strat.sample}</span>
+          </div>
+          <div class="level-footer">
+            <div class="level-stars" title="${stars} estrellas ganadas">${starStr}</div>
+            <button class="btn-play-level" onclick="openTutorialModal(${strat.id}, 'tutorial')">
+              <span>▶</span> Jugar
+            </button>
           </div>
         `;
         container.appendChild(card);
       });
-
-      document.getElementById('global-bones-count').textContent = gameState.totalBones;
-      let totalStars = 0;
-      Object.values(gameState.userStars).forEach(s => totalStars += s);
-      document.getElementById('global-stars-count').textContent = `${totalStars} / 60`;
     }
 
-    function switchWorld(wNum) {
-      gameState.currentWorld = wNum;
-      document.querySelectorAll('.world-tab-btn').forEach((b, idx) => {
-        b.classList.toggle('active', (idx + 1) === wNum);
-      });
-      renderLevels();
-    }
-
-    function openTutorialModal(stratId, mode) {
-      gameState.currentLevelId = stratId;
-      const strat = STRATEGIES.find(s => s.id === stratId);
+    function openTutorialModal(levelId) {
+      gameState.currentLevelId = levelId;
+      const strat = STRATEGIES.find(s => s.id === levelId);
       if (!strat) return;
 
-      document.getElementById('modal-tut-strategy-name').textContent = `#${strat.id}: ${strat.name}`;
-      document.getElementById('modal-tut-grade-tag').textContent = `${strat.grade} Grado · Fase 4 NEM`;
-      document.getElementById('modal-tut-trick-heading').textContent = strat.heading;
+      document.getElementById('modal-tut-strategy-name').textContent = `Nivel #${strat.id}: ${strat.title}`;
+      document.getElementById('modal-tut-grade-tag').textContent = `Mundo ${strat.world} · ${strat.tag}`;
+      document.getElementById('modal-tut-trick-heading').textContent = strat.trickHeading || "El Secreto de Loki:";
 
       const stepsContainer = document.getElementById('modal-tut-steps');
       stepsContainer.innerHTML = '';
-      strat.steps.forEach((step, idx) => {
-        const item = document.createElement('div');
-        item.className = 'trick-step-item';
-        item.innerHTML = `<span class="step-badge">Paso ${idx + 1}</span> <span>${step}</span>`;
-        stepsContainer.appendChild(item);
+      const ol = document.createElement('ol');
+      strat.steps.forEach(step => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        ol.appendChild(li);
       });
+      stepsContainer.appendChild(ol);
 
-      document.getElementById('modal-tut-formula').textContent = strat.formula;
+      document.getElementById('modal-tut-formula').textContent = `Ejemplo del truco: ${strat.sample}`;
       document.getElementById('modal-tutorial').classList.add('active');
     }
 
@@ -2049,44 +2153,50 @@
     }
 
     function openExplanationFromGame() {
-      if (gameState.gameActive) {
-        gameState.gamePaused = true;
-      }
-      openTutorialModal(gameState.currentLevelId, 'preview');
+      openTutorialModal(gameState.currentLevelId);
+    }
+
+    function startGameWithSpeed(mult, btnId) {
+      closeTutorialModal();
+      gameState.speedMultiplier = mult;
+      startGameWithMode(mult <= 0.7 ? 'tutorial' : 'normal');
+      setSpeedMultiplier(mult, btnId);
     }
 
     /* =============================================================
-       8. MOTOR 3D SUBWAY SURFERS (CANVAS RUNNER)
+       7. MOTOR DEL JUEGO RUNNER 3D (CANVAS SUBWAY SURFERS)
        ============================================================= */
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
     const IMAGES = {
+      lokiRun1: new Image(),
+      lokiRun2: new Image(),
       lokiAvatar: new Image(),
-      lokiBack1: new Image(),
-      lokiBack2: new Image(),
       bone: new Image(),
       trophy: new Image(),
       pino: new Image(),
-      encino: new Image()
+      encino: new Image(),
+      fondoHorizonte: new Image()
     };
+    IMAGES.lokiRun1.src = 'recursos/loki_back_run1.png';
+    IMAGES.lokiRun2.src = 'recursos/loki_back_run2.png';
     IMAGES.lokiAvatar.src = 'recursos/loki_avatar.png';
-    IMAGES.lokiBack1.src = 'recursos/loki_back_run1.png';
-    IMAGES.lokiBack2.src = 'recursos/loki_back_run2.png';
     IMAGES.bone.src = 'recursos/hueso_transparente.png';
     IMAGES.trophy.src = 'recursos/trofeo_transparente.png';
     IMAGES.pino.src = 'recursos/arbol_pino_3d.png';
     IMAGES.encino.src = 'recursos/arbol_encino_3d.png';
+    IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
 
     const WORLD = {
       lanes: [-1, 0, 1],
       laneWidth: 165,
       cameraFov: 240,
       cameraHeight: 180,
-      horizonY: 0,
+      horizonY: 260,
       roadLength: 2400,
-      speed: 1.8,
-      baseSpeed: 1.8
+      baseSpeed: 1.8,
+      speed: 1.8
     };
 
     const player = {
@@ -2112,15 +2222,11 @@
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.scale(dpr, dpr);
-      WORLD.horizonY = window.innerHeight * 0.36;
+      WORLD.horizonY = window.innerHeight * 0.38;
     }
     window.addEventListener('resize', resizeCanvas);
 
     function startGameWithMode(mode) {
-      closeTutorialModal();
-      document.getElementById('modal-victory').classList.remove('active');
-      document.getElementById('modal-gameover').classList.remove('active');
-
       gameState.speedMode = mode;
       gameState.gameActive = true;
       gameState.gamePaused = false;
@@ -2128,65 +2234,94 @@
       gameState.correctCount = 0;
       gameState.startTime = Date.now();
 
-      if (mode === 'tutorial') {
-        WORLD.baseSpeed = 1.8;
-        document.getElementById('hud-speed-badge').textContent = '🐢 Tutorial (Ultra Lento)';
-        document.getElementById('hud-speed-badge').className = 'hud-mode-badge mode-tutorial';
-      } else {
-        WORLD.baseSpeed = 3.2;
-        document.getElementById('hud-speed-badge').textContent = '⚡ Carrera (Tranquilo)';
-        document.getElementById('hud-speed-badge').className = 'hud-mode-badge mode-carrera';
-      }
-      WORLD.speed = WORLD.baseSpeed * gameState.speedMultiplier;
-
-      player.lane = 0;
-      player.worldX = 0;
-      player.tilt = 0;
-      player.runCycle = 0;
-      player.jumpY = 0;
-      player.isInvulnerable = false;
-      player.celebrateTimer = 0;
-      player.stumbleTimer = 0;
-
-      individualTrees = [];
-      for (let z = 120; z < WORLD.roadLength; z += 180) {
-        individualTrees.push({ x: -2.15, z: z, type: z % 360 === 0 ? 'pino' : 'encino' });
-        individualTrees.push({ x: 2.15, z: z + 90, type: z % 360 === 0 ? 'encino' : 'pino' });
-      }
-
-      roadWaves = [];
-      particles = [];
-
       document.getElementById('view-menu').classList.remove('active');
       document.getElementById('view-game').classList.add('active');
-      resizeCanvas();
+      document.getElementById('modal-tutorial').classList.remove('active');
+      document.getElementById('modal-victory').classList.remove('active');
+      document.getElementById('modal-gameover').classList.remove('active');
 
-      spawnNewMathChallenge();
+      if (gameState.cameraControlActive) {
+        const pip = document.getElementById('camera-pip-container');
+        if (pip) pip.style.display = 'flex';
+      }
+
+      setSpeedMultiplier(gameState.speedMultiplier, 
+        gameState.speedMultiplier <= 0.7 ? 'sp-tortuga' : 
+        (gameState.speedMultiplier <= 1.1 ? 'sp-paso' : 
+        (gameState.speedMultiplier <= 1.8 ? 'sp-trote' : 'sp-rayo')));
+
+      resizeCanvas();
+      resetTrack();
+      updateHudCounters();
+      spawnNextProblemWave();
 
       if (animFrameId) cancelAnimationFrame(animFrameId);
       lastFrameTime = performance.now();
       animFrameId = requestAnimationFrame(gameLoop);
     }
 
-    function spawnNewMathChallenge() {
-      const strat = STRATEGIES.find(s => s.id === gameState.currentLevelId);
-      if (!strat) return;
+    function resetTrack() {
+      player.lane = 0;
+      player.worldX = 0;
+      player.tilt = 0;
+      player.runCycle = 0;
+      player.isInvulnerable = false;
+      player.celebrateTimer = 0;
+      player.stumbleTimer = 0;
 
-      const challenge = strat.generate();
-      gameState.currentProblem = challenge;
+      // VEGETACIÓN CON ALTERNANCIA COMPLETA DE PINOS Y ENCINOS EN AMBOS LADOS
+      individualTrees = [];
+      const treeSpacing = 130;
+      let treeIdx = 0;
+      for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
+        // Lado izquierdo: alterna pino y encino con sutil variación lateral
+        const leftType = (treeIdx % 2 === 0) ? 'pino' : 'encino';
+        const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
+        individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
 
-      document.getElementById('hud-strategy-title').textContent = `Estrategia #${strat.id} · ${strat.name}`;
-      document.getElementById('hud-math-problem').textContent = challenge.qText;
-      document.getElementById('hud-math-hint').textContent = challenge.hint || '¡Impacta la respuesta correcta!';
-      updateHudCounters();
+        // Lado derecho: alterna encino y pino con desfase de medio paso
+        const rightType = (treeIdx % 2 === 0) ? 'encino' : 'pino';
+        const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
+        individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
 
-      speakProblem(challenge.qText);
+        // Capa de fondo exterior (árboles más alejados para densidad forestal)
+        if (treeIdx % 2 === 0) {
+          individualTrees.push({ x: -2.85, z: z + 40, type: 'pino', isFar: true });
+          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: 'encino', isFar: true });
+        }
+
+        treeIdx++;
+      }
+
+      roadWaves = [];
+      particles = [];
+
+      document.getElementById('hud-strategy-title').textContent = 
+        `Nivel #${gameState.currentLevelId} · ${STRATEGIES[gameState.currentLevelId - 1].title}`;
+    }
+
+    /* =============================================================
+       8. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
+       ============================================================= */
+    function spawnNextProblemWave() {
+      const strat = STRATEGIES[gameState.currentLevelId - 1];
+      const prob = strat.generator();
+      gameState.currentProblem = prob;
+
+      const mathEl = document.getElementById('hud-math-problem');
+      mathEl.textContent = `${prob.text} = ?`;
+
+      if (gameState.voiceSpeechEnabled) {
+        speakProblem(prob.text);
+      }
 
       const rawOptions = [
-        { val: challenge.expected, isCorrect: true },
-        { val: challenge.distractors[0], isCorrect: false },
-        { val: challenge.distractors[1], isCorrect: false }
+        { val: prob.expected, isCorrect: true }
       ];
+
+      const shuffledDist = [...prob.dist].sort(() => Math.random() - 0.5);
+      rawOptions.push({ val: shuffledDist[0], isCorrect: false });
+      rawOptions.push({ val: shuffledDist[1], isCorrect: false });
 
       for (let i = rawOptions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -2274,7 +2409,9 @@
     }
 
     function exitToMenu() {
-      stopCamera();
+      const pip = document.getElementById('camera-pip-container');
+      if (pip) pip.style.display = 'none';
+
       gameState.gameActive = false;
       gameState.gamePaused = false;
       if (animFrameId) cancelAnimationFrame(animFrameId);
@@ -2349,26 +2486,26 @@
           }
         }
 
-        if (!wave.evaluated && wave.z < -40) {
-          wave.evaluated = true;
-          handleMissedWave();
-        }
-
-        if (wave.z < -80) {
+        if (wave.z < -90) {
+          if (!wave.evaluated) {
+            handleMissedWave();
+          }
           roadWaves.splice(i, 1);
-          if (gameState.gameActive && gameState.correctCount < gameState.targetGoal) {
-            spawnNewMathChallenge();
+          if (gameState.lives > 0 && gameState.correctCount < gameState.targetGoal) {
+            spawnNextProblemWave();
           }
         }
       }
 
-      for (let p = particles.length - 1; p >= 0; p--) {
-        const pt = particles[p];
-        pt.x += pt.vx;
-        pt.y += pt.vy;
-        pt.vy += 0.25;
-        pt.alpha -= dt * 1.5;
-        if (pt.alpha <= 0) particles.splice(p, 1);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35;
+        p.alpha -= dt * 1.5;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+        }
       }
     }
 
@@ -2485,7 +2622,7 @@
     function playNextLevel() {
       if (gameState.currentLevelId < STRATEGIES.length) {
         gameState.currentLevelId++;
-        openTutorialModal(gameState.currentLevelId, gameState.speedMode);
+        openTutorialModal(gameState.currentLevelId);
       } else {
         exitToMenu();
       }
@@ -2515,37 +2652,23 @@
 
       ctx.clearRect(0, 0, W, H);
 
-      // 1. CIELO Y HORIZONTE
-      const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
-      skyGrad.addColorStop(0, '#0c1a30');
-      skyGrad.addColorStop(0.65, '#1e3a8a');
-      skyGrad.addColorStop(1, '#60a5fa');
-      ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, W, horizon);
-
-      // Nubes lejanas
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
-      ctx.beginPath();
-      ctx.arc(W * 0.22, horizon * 0.45, 45, 0, Math.PI * 2);
-      ctx.arc(W * 0.27, horizon * 0.40, 60, 0, Math.PI * 2);
-      ctx.arc(W * 0.32, horizon * 0.46, 40, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(W * 0.72, horizon * 0.55, 55, 0, Math.PI * 2);
-      ctx.arc(W * 0.78, horizon * 0.50, 70, 0, Math.PI * 2);
-      ctx.arc(W * 0.84, horizon * 0.56, 50, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Colinas de Sayula en el horizonte
-      ctx.fillStyle = '#1e293b';
-      ctx.beginPath();
-      ctx.moveTo(0, horizon);
-      ctx.quadraticCurveTo(W * 0.25, horizon - 35, W * 0.5, horizon - 15);
-      ctx.quadraticCurveTo(W * 0.75, horizon - 45, W, horizon);
-      ctx.lineTo(W, horizon);
-      ctx.lineTo(0, horizon);
-      ctx.fill();
+      // 1. CIELO Y HORIZONTE PANORÁMICO (CON PARALAJE 3D)
+      if (IMAGES.fondoHorizonte && IMAGES.fondoHorizonte.complete && IMAGES.fondoHorizonte.naturalWidth > 0) {
+        const bgImg = IMAGES.fondoHorizonte;
+        const bgW = W * 1.25;
+        const bgH = horizon * 1.15;
+        const parallaxX = (W * 0.5) - (bgW * 0.5) - (player.worldX * 0.08);
+        const bgY = horizon - bgH + 10;
+        ctx.drawImage(bgImg, parallaxX, bgY, bgW, bgH);
+      } else {
+        // Fallback degradado
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
+        skyGrad.addColorStop(0, '#0c1a30');
+        skyGrad.addColorStop(0.65, '#1e3a8a');
+        skyGrad.addColorStop(1, '#60a5fa');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, W, horizon);
+      }
 
       // 2. PRADERA LATERAL (CÉSPED)
       const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
@@ -2626,7 +2749,7 @@
         }
       });
 
-      // 6. ÁRBOLES INDIVIDUALES GRANDES (ORDENADOS POR Z DESCENDENTE PARA PERSPECTIVA REAL)
+      // 6. ÁRBOLES INDIVIDUALES (ORDENADOS POR Z DESCENDENTE PARA PERSPECTIVA REAL)
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
@@ -2635,8 +2758,9 @@
                           (IMAGES.encino.complete ? IMAGES.encino : null);
 
           if (imgTree) {
-            const treeW = 320 * pt.scale;
-            const treeH = 480 * pt.scale;
+            const scaleMod = t.isFar ? 0.75 : 1.0;
+            const treeW = 320 * pt.scale * scaleMod;
+            const treeH = 480 * pt.scale * scaleMod;
             ctx.drawImage(imgTree, pt.x - treeW * 0.5, pt.y - treeH * 0.95, treeW, treeH);
           }
         }
@@ -2645,20 +2769,100 @@
       // 7. OLEADAS DE VALLAS
       const sortedWaves = [...roadWaves].sort((a, b) => b.z - a.z);
       sortedWaves.forEach(wave => {
-        if (wave.z > 0 && wave.z < WORLD.roadLength) {
-          wave.hurdles.forEach(hurdle => {
-            renderHurdle(hurdle, wave.z);
-          });
-        }
+        wave.hurdles.forEach(hurdle => {
+          if (hurdle.hit) return;
+
+          const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
+          if (pt.scale <= 0) return;
+
+          const gateW = 125 * pt.scale;
+          const gateH = 150 * pt.scale;
+          const gateX = pt.x - (gateW * 0.5);
+          const gateY = pt.y - gateH;
+
+          // Postes laterales de madera
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(gateX, gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
+          ctx.fillRect(gateX + gateW - (7 * pt.scale), gateY + gateH * 0.25, 7 * pt.scale, gateH * 0.75);
+
+          // Panel de respuesta
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, 8 * pt.scale);
+          ctx.fill();
+
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = Math.max(2, 4 * pt.scale);
+          ctx.stroke();
+
+          // Sombra suave en la base
+          ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          ctx.beginPath();
+          ctx.ellipse(pt.x, pt.y, gateW * 0.45, 6 * pt.scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Número
+          const fontSize = Math.max(10, Math.floor(46 * pt.scale));
+          ctx.font = `800 ${fontSize}px 'Fredoka', cursive, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+        });
       });
 
-      // 8. JUGADOR (LOKI DE ESPALDAS EN 3D)
-      renderLokiPlayerBack();
+      // 8. DIBUJAR A LOKI (DE ESPALDAS CON FOTOGRAMAS ALTERNOS Y PERALTADO)
+      const pPlayer = project3D(player.worldX, 0);
+      const lokiScale = 1.08;
+      const baseLokiW = 145;
+      const baseLokiH = 155;
+      const lokiW = baseLokiW * lokiScale;
+      const lokiH = baseLokiH * lokiScale;
+      const lokiX = pPlayer.x;
+      const lokiY = (H * 0.86) - player.jumpY;
+
+      // Sombra dinámica bajo Loki
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.beginPath();
+      const shadowW = (lokiW * 0.45) * (1 - (player.jumpY / 45));
+      ctx.ellipse(lokiX, H * 0.86 + 18, Math.max(15, shadowW), 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Selección de fotograma alterno
+      const isFrame2 = Math.floor(player.runCycle * 1.5) % 2 === 1;
+      const currentSprite = (isFrame2 && IMAGES.lokiRun2.complete) ? IMAGES.lokiRun2 : 
+                            (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
+
+      ctx.save();
+      ctx.translate(lokiX, lokiY);
+
+      // Rotación angular por inclinación de giro
+      ctx.rotate(player.tilt);
+
+      // Parpadeo de invulnerabilidad tras choque
+      if (player.isInvulnerable) {
+        ctx.globalAlpha = Math.floor(Date.now() / 90) % 2 === 0 ? 0.35 : 0.85;
+      }
+
+      if (currentSprite) {
+        ctx.drawImage(currentSprite, -lokiW * 0.5, -lokiH * 0.85, lokiW, lokiH);
+      } else {
+        // Fallback geométrico de espaldas
+        ctx.fillStyle = '#1e1b18';
+        ctx.beginPath();
+        ctx.ellipse(0, -35, 38, 48, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Collar rojo a cuadros en la nuca
+        ctx.fillStyle = '#dc2626';
+        ctx.fillRect(-22, -62, 44, 10);
+      }
+      ctx.restore();
 
       // 9. PARTÍCULAS
       particles.forEach(p => {
         ctx.save();
-        ctx.globalAlpha = p.alpha;
+        ctx.globalAlpha = Math.max(0, p.alpha);
         ctx.fillStyle = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -2667,84 +2871,21 @@
       });
     }
 
-    function renderHurdle(hurdle, z) {
-      const p = project3D(hurdle.lane * WORLD.laneWidth, z);
-      const scale = p.scale;
-      if (scale <= 0.04) return;
-
-      const archW = 145 * scale;
-      const archH = 105 * scale;
-      const archX = p.x - archW * 0.5;
-      const archY = p.y - archH;
-
-      ctx.save();
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y - 2, archW * 0.45, 8 * scale, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#78350f';
-      ctx.fillRect(archX + 4 * scale, archY, 14 * scale, archH);
-      ctx.fillRect(archX + archW - 18 * scale, archY, 14 * scale, archH);
-
-      ctx.fillStyle = '#92400e';
-      ctx.fillRect(archX, archY, archW, 20 * scale);
-
-      const plateW = archW * 0.78;
-      const plateH = archH * 0.62;
-      const plateX = p.x - plateW * 0.5;
-      const plateY = archY + 12 * scale;
-
-      ctx.fillStyle = '#ffffff';
-      ctx.strokeStyle = '#b45309';
-      ctx.lineWidth = Math.max(1, 3 * scale);
-
-      ctx.beginPath();
-      ctx.roundRect(plateX, plateY, plateW, plateH, 6 * scale);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `bold ${Math.max(10, 28 * scale)}px 'Fredoka', cursive, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(hurdle.value, p.x, plateY + plateH * 0.52);
-
-      ctx.restore();
-    }
-
-    // RENDERIZADO DEL PERRO LOKI VISTO DE ESPALDAS (CON SPRITES Y ROTACIÓN)
-    function renderLokiPlayerBack() {
-      const p = project3D(player.worldX, 15);
-      const H = window.innerHeight;
-
-      const spriteW = 140;
-      const spriteH = 168;
-      const posX = p.x;
-      const posY = H * 0.88 - player.jumpY;
-
-      ctx.save();
-      ctx.translate(posX, posY);
-      ctx.rotate(player.tilt);
-
-      if (player.isInvulnerable && Math.floor(Date.now() / 80) % 2 === 0) {
-        ctx.globalAlpha = 0.35;
-      }
-
-      const runCycleStep = Math.floor((player.runCycle * 0.5) % 2);
-      const currentSprite = (runCycleStep === 0 && IMAGES.lokiBack1.complete) ? IMAGES.lokiBack1 :
-                            (IMAGES.lokiBack2.complete ? IMAGES.lokiBack2 : IMAGES.lokiBack1);
-
-      if (currentSprite.complete) {
-        ctx.drawImage(currentSprite, -spriteW * 0.5, -spriteH, spriteW, spriteH);
-      }
-
-      ctx.restore();
-    }
-
+    /* =============================================================
+       11. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       ============================================================= */
     window.addEventListener('DOMContentLoaded', () => {
       renderLevels();
+      resizeCanvas();
+
+      // Restaurar preferencia de cámara si estaba guardada
+      try {
+        const camPref = localStorage.getItem('loki_camera_pref');
+        if (camPref === 'true') {
+          const menuLbl = document.getElementById('menu-cam-label');
+          if (menuLbl) menuLbl.textContent = '📷 Iniciar Cámara Guardada';
+        }
+      } catch(e) {}
     });
 
   </script>
