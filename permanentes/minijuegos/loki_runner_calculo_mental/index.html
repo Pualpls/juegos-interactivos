@@ -526,16 +526,87 @@
     }
 
     .hud-theme-badge {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.85);
       border: 1.5px solid #60a5fa;
       border-radius: 9999px;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.65rem;
       font-size: 0.76rem;
       font-weight: 700;
       color: #93c5fd;
       display: flex;
       align-items: center;
       gap: 0.3rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .hud-theme-badge:hover {
+      background: #1e3a8a;
+      border-color: #93c5fd;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .menu-theme-bar {
+      max-width: 1100px;
+      margin: 0 auto 0.75rem auto;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0.55rem 0.85rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .theme-bar-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .theme-chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .theme-chip {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .theme-chip:hover {
+      background: #334155;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .theme-chip.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.45);
+    }
+
+    .theme-chip#tchip-playa.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.55);
     }
 
     .hud-mode-badge {
@@ -1163,6 +1234,19 @@
         </div>
       </div>
 
+      <!-- SELECTOR DE ESCENARIO TEMÁTICO (PLAYA CON MÚSICA DEDICADA) -->
+      <div class="menu-theme-bar">
+        <span class="theme-bar-label">🎨 Escenario:</span>
+        <div class="theme-chips-group">
+          <button class="theme-chip" id="tchip-bosque" onclick="selectThemeFromMenu('bosque')">🌲 Bosque</button>
+          <button class="theme-chip" id="tchip-playa" onclick="selectThemeFromMenu('playa')">🏖️ Costa Caribeña 🎵</button>
+          <button class="theme-chip" id="tchip-ciudad" onclick="selectThemeFromMenu('ciudad')">🏙️ Ciudad</button>
+          <button class="theme-chip" id="tchip-granja" onclick="selectThemeFromMenu('granja')">🚜 Granja</button>
+          <button class="theme-chip" id="tchip-campo" onclick="selectThemeFromMenu('campo')">🌾 Campo</button>
+          <button class="theme-chip active" id="tchip-random" onclick="selectThemeFromMenu('random')">🎲 Aleatorio</button>
+        </div>
+      </div>
+
       <div class="world-tabs">
         <button class="world-tab-btn active" onclick="switchWorld(1)">🟢 Mundo 1: Decenas y Base (#1 - #7)</button>
         <button class="world-tab-btn" onclick="switchWorld(2)">🔵 Mundo 2: Retos SiSAT Oficial (#8 - #14)</button>
@@ -1189,7 +1273,7 @@
               <img src="recursos/hueso_transparente.png" alt="Huesos">
               <span id="hud-bones-progress">0 / 10</span>
             </div>
-            <span class="hud-theme-badge" id="hud-theme-badge">🌲 Bosque</span>
+            <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar tema de escenario (¡Haz clic!)">🌲 Bosque</span>
             <span class="hud-mode-badge mode-muy-facil" id="hud-speed-badge">🌱 Muy Fácil (15s)</span>
 
             <!-- SELECTOR RÁPIDO DE DIFICULTAD (EXACTO EN TIEMPO) -->
@@ -1419,11 +1503,11 @@
         icon: '🌲',
         skyTop: '#0c1a30',
         skyBottom: '#2563eb',
-        grassTop: '#15803d',
+        grassTop: '#16a34a',
         grassBottom: '#14532d',
-        roadTop: '#334155',
-        roadBottom: '#0f172a',
-        curb1: '#dc2626',
+        roadLight: '#475569',
+        roadDark: '#243042',
+        curb1: '#ef4444',
         curb2: '#ffffff',
         treeA: 'pino',
         treeB: 'encino'
@@ -1434,11 +1518,11 @@
         icon: '🏖️',
         skyTop: '#0284c7',
         skyBottom: '#7dd3fc',
-        grassTop: '#eab308',
+        grassTop: '#fde047',
         grassBottom: '#ca8a04',
-        roadTop: '#475569',
-        roadBottom: '#1e293b',
-        curb1: '#06b6d4',
+        roadLight: '#0284c7',
+        roadDark: '#0369a1',
+        curb1: '#f43f5e',
         curb2: '#ffffff',
         treeA: 'encino',
         treeB: 'encino'
@@ -1449,12 +1533,12 @@
         icon: '🏙️',
         skyTop: '#090514',
         skyBottom: '#311042',
-        grassTop: '#334155',
-        grassBottom: '#1e293b',
-        roadTop: '#1e293b',
-        roadBottom: '#020617',
-        curb1: '#facc15',
-        curb2: '#0f172a',
+        grassTop: '#1e293b',
+        grassBottom: '#0f172a',
+        roadLight: '#1e1b4b',
+        roadDark: '#090514',
+        curb1: '#ec4899',
+        curb2: '#06b6d4',
         treeA: 'pino',
         treeB: 'encino'
       },
@@ -1464,10 +1548,10 @@
         icon: '🚜',
         skyTop: '#7c2d12',
         skyBottom: '#fdba74',
-        grassTop: '#a16207',
-        grassBottom: '#713f12',
-        roadTop: '#57534e',
-        roadBottom: '#292524',
+        grassTop: '#ca8a04',
+        grassBottom: '#854d0e',
+        roadLight: '#57534e',
+        roadDark: '#3c3836',
         curb1: '#ffffff',
         curb2: '#b45309',
         treeA: 'encino',
@@ -1481,9 +1565,9 @@
         skyBottom: '#bae6fd',
         grassTop: '#65a30d',
         grassBottom: '#3f6212',
-        roadTop: '#475569',
-        roadBottom: '#1e293b',
-        curb1: '#22c55e',
+        roadLight: '#52525b',
+        roadDark: '#3f3f46',
+        curb1: '#f59e0b',
         curb2: '#ffffff',
         treeA: 'encino',
         treeB: 'pino'
@@ -1834,6 +1918,7 @@
       voiceSpeechEnabled: false,
       gameActive: false,
       gamePaused: false,
+      selectedThemeId: 'random',
       currentTheme: THEMES[0],
       lives: 3,
       correctCount: 0,
@@ -1852,9 +1937,48 @@
     } catch(e) {}
 
     /* =============================================================
-       6. AUDIO SINTETIZADO (WEB AUDIO API - 100% OFFLINE)
+       6. AUDIO SINTETIZADO Y MÚSICA DE ESCENARIO (100% OFFLINE)
        ============================================================= */
     let audioCtx = null;
+    let beachAudio = null;
+
+    function initBeachMusic() {
+      if (!beachAudio) {
+        beachAudio = new Audio('recursos/musica_playa.mp3');
+        beachAudio.loop = true;
+        beachAudio.volume = 0.55;
+        beachAudio.preload = 'auto';
+      }
+    }
+
+    function playBeachMusic() {
+      initBeachMusic();
+      if (!gameState.soundEnabled || !gameState.gameActive || gameState.gamePaused) return;
+      if (gameState.currentTheme && gameState.currentTheme.id === 'playa') {
+        beachAudio.play().catch(e => {
+          // Autoplay policy: reanudará al primer toque
+        });
+      }
+    }
+
+    function stopBeachMusic(resetTime = false) {
+      if (beachAudio) {
+        beachAudio.pause();
+        if (resetTime) beachAudio.currentTime = 0;
+      }
+    }
+
+    function updateThemeMusic() {
+      if (!gameState.gameActive || !gameState.soundEnabled || gameState.gamePaused) {
+        stopBeachMusic(false);
+        return;
+      }
+      if (gameState.currentTheme && gameState.currentTheme.id === 'playa') {
+        playBeachMusic();
+      } else {
+        stopBeachMusic(true);
+      }
+    }
 
     function getAudioContext() {
       if (!audioCtx) {
@@ -1866,6 +1990,15 @@
       }
       return audioCtx;
     }
+
+    window.addEventListener('pointerdown', () => {
+      getAudioContext();
+      if (gameState.gameActive && !gameState.gamePaused && gameState.soundEnabled && gameState.currentTheme && gameState.currentTheme.id === 'playa') {
+        if (beachAudio && beachAudio.paused) {
+          beachAudio.play().catch(() => {});
+        }
+      }
+    }, { passive: true });
 
     function soundLaneSwitch() {
       if (!gameState.soundEnabled) return;
@@ -1947,6 +2080,7 @@
       gameState.soundEnabled = !gameState.soundEnabled;
       const btn = document.getElementById('btn-toggle-sound');
       if (btn) btn.textContent = gameState.soundEnabled ? '🔊 Sonido' : '🔇 Mudo';
+      updateThemeMusic();
     }
 
     function toggleVoiceSpeech() {
@@ -2229,6 +2363,51 @@
     }
 
     /* =============================================================
+       7.5 SELECTOR Y GESTOR DE ESCENARIOS TEMÁTICOS
+       ============================================================= */
+    function selectThemeFromMenu(themeId) {
+      gameState.selectedThemeId = themeId;
+      document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
+      const activeBtn = document.getElementById(`tchip-${themeId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function cycleTheme() {
+      const idx = THEMES.findIndex(t => t.id === gameState.currentTheme.id);
+      const nextIdx = (idx + 1) % THEMES.length;
+      gameState.currentTheme = THEMES[nextIdx];
+      const themeBadge = document.getElementById('hud-theme-badge');
+      if (themeBadge) {
+        themeBadge.textContent = `${gameState.currentTheme.icon} ${gameState.currentTheme.name}`;
+      }
+      resetTrackTrees();
+      updateThemeMusic();
+    }
+
+    function resetTrackTrees() {
+      individualTrees = [];
+      const theme = gameState.currentTheme || THEMES[0];
+      const treeSpacing = 130;
+      let treeIdx = 0;
+      for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
+        const leftType = (treeIdx % 2 === 0) ? theme.treeA : theme.treeB;
+        const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
+        individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
+
+        const rightType = (treeIdx % 2 === 0) ? theme.treeB : theme.treeA;
+        const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
+        individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
+
+        if (treeIdx % 2 === 0) {
+          individualTrees.push({ x: -2.85, z: z + 40, type: theme.treeA, isFar: true });
+          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: theme.treeB, isFar: true });
+        }
+
+        treeIdx++;
+      }
+    }
+
+        /* =============================================================
        8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
     function switchWorld(worldNum) {
@@ -2363,7 +2542,7 @@
 
     let roadWaves = [];
     let individualTrees = [];
-    let roadZOffset = 0;
+    let cameraZ = 0;
     let particles = [];
     let animFrameId = null;
 
@@ -2389,12 +2568,18 @@
       const mode = DIFFICULTY_MODES[gameState.difficulty] || DIFFICULTY_MODES['muy_facil'];
       WORLD.speed = mode.speed;
 
-      // SELECCIÓN ALEATORIA DE TEMA DE ESCENARIO 8-BIT
-      gameState.currentTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
+      // SELECCIÓN DE TEMA (RESPECTANDO ELECCIÓN DEL MENÚ O ALEATORIO)
+      if (gameState.selectedThemeId && gameState.selectedThemeId !== 'random') {
+        gameState.currentTheme = THEMES.find(t => t.id === gameState.selectedThemeId) || THEMES[0];
+      } else {
+        gameState.currentTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
+      }
       const themeBadge = document.getElementById('hud-theme-badge');
       if (themeBadge) {
         themeBadge.textContent = `${gameState.currentTheme.icon} ${gameState.currentTheme.name}`;
       }
+      cameraZ = 0;
+      updateThemeMusic();
 
       document.getElementById('view-menu').classList.remove('active');
       document.getElementById('view-game').classList.add('active');
@@ -2427,28 +2612,9 @@
       player.isInvulnerable = false;
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
+      cameraZ = 0;
 
-      // VEGETACIÓN SEGÚN TEMA
-      individualTrees = [];
-      const theme = gameState.currentTheme || THEMES[0];
-      const treeSpacing = 130;
-      let treeIdx = 0;
-      for (let z = 90; z < WORLD.roadLength; z += treeSpacing) {
-        const leftType = (treeIdx % 2 === 0) ? theme.treeA : theme.treeB;
-        const lateralJitterLeft = -2.15 - ((treeIdx % 3) * 0.15);
-        individualTrees.push({ x: lateralJitterLeft, z: z, type: leftType });
-
-        const rightType = (treeIdx % 2 === 0) ? theme.treeB : theme.treeA;
-        const lateralJitterRight = 2.15 + (((treeIdx + 1) % 3) * 0.15);
-        individualTrees.push({ x: lateralJitterRight, z: z + (treeSpacing * 0.5), type: rightType });
-
-        if (treeIdx % 2 === 0) {
-          individualTrees.push({ x: -2.85, z: z + 40, type: theme.treeA, isFar: true });
-          individualTrees.push({ x: 2.85, z: z + (treeSpacing * 0.5) + 40, type: theme.treeB, isFar: true });
-        }
-
-        treeIdx++;
-      }
+      resetTrackTrees();
 
       roadWaves = [];
       particles = [];
@@ -2564,9 +2730,11 @@
       if (!gameState.gameActive) return;
       gameState.gamePaused = !gameState.gamePaused;
       document.getElementById('btn-pause').textContent = gameState.gamePaused ? '▶️' : '⏸️';
+      updateThemeMusic();
     }
 
     function exitToMenu() {
+      stopBeachMusic(true);
       const pip = document.getElementById('camera-pip-container');
       if (pip) pip.style.display = 'none';
 
@@ -2617,8 +2785,7 @@
       if (player.celebrateTimer > 0) player.celebrateTimer -= dt;
       if (player.stumbleTimer > 0) player.stumbleTimer -= dt;
 
-      roadZOffset += WORLD.speed;
-      if (roadZOffset > 80) roadZOffset -= 80;
+      cameraZ += WORLD.speed;
 
       individualTrees.forEach(t => {
         t.z -= WORLD.speed;
@@ -2742,6 +2909,7 @@
     }
 
     function triggerVictory() {
+      stopBeachMusic(false);
       gameState.gameActive = false;
       soundVictoryFanfare();
 
@@ -2767,6 +2935,7 @@
     }
 
     function triggerGameOver() {
+      stopBeachMusic(false);
       gameState.gameActive = false;
       setTimeout(() => {
         document.getElementById('modal-gameover').classList.add('active');
@@ -2880,17 +3049,13 @@
       ctx.fillStyle = grassGrad;
       ctx.fillRect(0, horizon, W, H - horizon);
 
-      // 3. CARRETERA 3D
-      const pFarLeft = project3D(-WORLD.laneWidth * 1.8, WORLD.roadLength);
-      const pFarRight = project3D(WORLD.laneWidth * 1.8, WORLD.roadLength);
-      const pNearLeft = project3D(-WORLD.laneWidth * 1.9, 0);
-      const pNearRight = project3D(WORLD.laneWidth * 1.9, 0);
+      // 3. BASE DE CARRETERA 3D (HORIZONTE)
+      const pFarLeft = project3D(-WORLD.laneWidth * 1.85, WORLD.roadLength);
+      const pFarRight = project3D(WORLD.laneWidth * 1.85, WORLD.roadLength);
+      const pNearLeft = project3D(-WORLD.laneWidth * 1.95, 0);
+      const pNearRight = project3D(WORLD.laneWidth * 1.95, 0);
 
-      const roadGrad = ctx.createLinearGradient(0, horizon, 0, H);
-      roadGrad.addColorStop(0, theme.roadTop);
-      roadGrad.addColorStop(1, theme.roadBottom);
-      ctx.fillStyle = roadGrad;
-
+      ctx.fillStyle = theme.roadDark;
       ctx.beginPath();
       ctx.moveTo(pNearLeft.x, pNearLeft.y);
       ctx.lineTo(pFarLeft.x, pFarLeft.y);
@@ -2899,58 +3064,81 @@
       ctx.closePath();
       ctx.fill();
 
-      // 4. BORDES EN MOVIMIENTO (RUMBLE STRIPS)
-      const segmentsCount = 28;
-      const segLength = WORLD.roadLength / segmentsCount;
+      // 4. SEGMENTOS DE CARRETERA, BORDES Y LÍNEAS DISCONTINUAS (PSEUDO-3D CONTINUO HACIA ADELANTE)
+      const SEG_LENGTH = 75;
+      const DRAW_DISTANCE = 32;
+      const baseSegment = Math.floor(cameraZ / SEG_LENGTH);
+      const segOffset = cameraZ % SEG_LENGTH;
 
-      for (let s = 0; s < segmentsCount; s++) {
-        const z1 = ((s * segLength) - roadZOffset + WORLD.roadLength) % WORLD.roadLength;
-        const z2 = z1 + segLength * 0.5;
-        if (z2 < z1) continue;
+      for (let n = DRAW_DISTANCE - 1; n >= 0; n--) {
+        const segIndex = baseSegment + n;
+        const isEven = (segIndex % 2 === 0);
 
-        const pL1 = project3D(-WORLD.laneWidth * 1.85, z1);
-        const pL2 = project3D(-WORLD.laneWidth * 1.85, z2);
-        const pR1 = project3D(WORLD.laneWidth * 1.85, z1);
-        const pR2 = project3D(WORLD.laneWidth * 1.85, z2);
+        // Distancia Z desde la cámara (hacia el jugador):
+        const z1 = (n * SEG_LENGTH) - segOffset;
+        const z2 = ((n + 1) * SEG_LENGTH) - segOffset;
 
-        ctx.fillStyle = (s % 2 === 0) ? theme.curb1 : theme.curb2;
+        if (z2 <= 2) continue;
+        const safeZ1 = Math.max(2, z1);
+        const safeZ2 = Math.max(4, z2);
 
-        const curbW1 = 12 * pL1.scale;
-        const curbW2 = 12 * pL2.scale;
+        const p1L = project3D(-WORLD.laneWidth * 1.85, safeZ1);
+        const p1R = project3D(WORLD.laneWidth * 1.85, safeZ1);
+        const p2L = project3D(-WORLD.laneWidth * 1.85, safeZ2);
+        const p2R = project3D(WORLD.laneWidth * 1.85, safeZ2);
+
+        // A) ASFALTO DEL SEGMENTO (FRANJAS ALTERNAS EN MOVIMIENTO CONTINUO)
+        ctx.fillStyle = isEven ? theme.roadLight : theme.roadDark;
         ctx.beginPath();
-        ctx.moveTo(pL1.x - curbW1, pL1.y);
-        ctx.lineTo(pL2.x - curbW2, pL2.y);
-        ctx.lineTo(pL2.x + curbW2, pL2.y);
-        ctx.lineTo(pL1.x + curbW1, pL1.y);
+        ctx.moveTo(p1L.x, p1L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.lineTo(p1R.x, p1R.y);
+        ctx.closePath();
         ctx.fill();
 
+        // B) BORDES / GUARNICIONES (RUMBLE STRIPS)
+        const curbW1 = Math.max(4, 15 * p1L.scale);
+        const curbW2 = Math.max(4, 15 * p2L.scale);
+        ctx.fillStyle = isEven ? theme.curb1 : theme.curb2;
+
+        // Borde izquierdo
         ctx.beginPath();
-        ctx.moveTo(pR1.x - curbW1, pR1.y);
-        ctx.lineTo(pR2.x - curbW2, pR2.y);
-        ctx.lineTo(pR2.x + curbW2, pR2.y);
-        ctx.lineTo(pR1.x + curbW1, pR1.y);
+        ctx.moveTo(p1L.x - curbW1, p1L.y);
+        ctx.lineTo(p2L.x - curbW2, p2L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(p1L.x, p1L.y);
+        ctx.closePath();
         ctx.fill();
-      }
 
-      // 5. LÍNEAS DISCONTINUAS BLANCAS
-      [-0.6, 0.6].forEach(laneBorder => {
-        for (let s = 0; s < segmentsCount; s++) {
-          if (s % 2 !== 0) continue;
-          const z1 = ((s * segLength) - roadZOffset + WORLD.roadLength) % WORLD.roadLength;
-          const z2 = z1 + segLength * 0.5;
-          if (z2 < z1) continue;
+        // Borde derecho
+        ctx.beginPath();
+        ctx.moveTo(p1R.x, p1R.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.lineTo(p2R.x + curbW2, p2R.y);
+        ctx.lineTo(p1R.x + curbW1, p1R.y);
+        ctx.closePath();
+        ctx.fill();
 
-          const p1 = project3D(WORLD.laneWidth * laneBorder, z1);
-          const p2 = project3D(WORLD.laneWidth * laneBorder, z2);
+        // C) LÍNEAS DISCONTINUAS BLANCAS (DIVISORES DE CARRILES)
+        if (isEven) {
+          const dashW1 = Math.max(2, 6 * p1L.scale);
+          const dashW2 = Math.max(2, 6 * p2L.scale);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
 
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
-          ctx.lineWidth = Math.max(1.5, 6 * p1.scale);
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
+          [-0.6, 0.6].forEach(laneFactor => {
+            const d1 = project3D(WORLD.laneWidth * laneFactor, safeZ1);
+            const d2 = project3D(WORLD.laneWidth * laneFactor, safeZ2);
+            ctx.beginPath();
+            ctx.moveTo(d1.x - dashW1 * 0.5, d1.y);
+            ctx.lineTo(d2.x - dashW2 * 0.5, d2.y);
+            ctx.lineTo(d2.x + dashW2 * 0.5, d2.y);
+            ctx.lineTo(d1.x + dashW1 * 0.5, d1.y);
+            ctx.closePath();
+            ctx.fill();
+          });
         }
-      });
+      }
 
       // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
