@@ -1598,6 +1598,10 @@
       <!-- BANNER ILUSTRADO HERO DE LOKI RUNNER -->
       <div class="menu-hero-banner" id="menu-hero-banner">
         <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
+        <div style="margin: 0.45rem auto 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.18); border: 1.5px solid #10b981; color: #6ee7b7; padding: 0.25rem 0.85rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 700; max-width: 460px;">
+          <span>⚡ v3.3 Panorámico 3:1 Activo</span>
+          <span style="color: #cbd5e1; font-weight: 500;">(Si ves datos viejos, presiona Ctrl+F5)</span>
+        </div>
       </div>
 
       <!-- TARJETA DE CONTROL POR CÁMARA (WEBCAM) EN EL MENÚ -->
@@ -3218,27 +3222,27 @@
       let treeIdx = 0;
       // Iniciar z desde -140 para que al arrancar o cambiar de mapa ya existan árboles en primer plano saliendo de la pantalla
       for (let z = -140; z < WORLD.roadLength; z += treeSpacing) {
-        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±4.40 para que los troncos y ramas NUNCA pisen la carretera)
+        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±4.60 para que troncos y ramas queden con holgura absoluta > 200px del asfalto)
         const leftTreeType = treePool[treeIdx % treePool.length];
-        const treeLeftX = -4.40 - ((treeIdx % 3) * 0.40);
+        const treeLeftX = -4.60 - ((treeIdx % 3) * 0.35);
         individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
 
         const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
-        const treeRightX = 4.40 + (((treeIdx + 1) % 3) * 0.40);
+        const treeRightX = 4.60 + (((treeIdx + 1) % 3) * 0.35);
         individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
 
         // Capa de fondo densa (bosque lateral tupido y continuo)
-        individualTrees.push({ x: -5.90, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
-        individualTrees.push({ x: 5.90, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
+        individualTrees.push({ x: -6.20, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+        individualTrees.push({ x: 6.20, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
 
-        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA)
-        // Se posicionan a ±2.45 (fuera de la calzada de 1.85, sin solaparse con el asfalto)
+        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA / CACTUS)
+        // Se posicionan a ±3.35 (garantizando margen de seguridad de más de 95px de césped libre hasta el borde de la guarnición)
         if (treeIdx % 2 === 1) {
           const accentTypeL = accentPool[treeIdx % accentPool.length];
-          individualTrees.push({ x: -2.45, z: z + (treeSpacing * 0.45), type: accentTypeL });
+          individualTrees.push({ x: -3.35, z: z + (treeSpacing * 0.45), type: accentTypeL });
         } else if (treeIdx % 3 === 0) {
           const accentTypeR = accentPool[(treeIdx + 1) % accentPool.length];
-          individualTrees.push({ x: 2.45, z: z + (treeSpacing * 0.25), type: accentTypeR });
+          individualTrees.push({ x: 3.35, z: z + (treeSpacing * 0.25), type: accentTypeR });
         }
 
         treeIdx++;
@@ -3453,7 +3457,7 @@
     IMAGES.hierba_baja.src = 'recursos/hierba_baja_3d.png';
     IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
     IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
-    const ASSET_CACHE_BUST = 'v=3.2_panoramicos_3x1_20261108';
+    const ASSET_CACHE_BUST = 'v=3.3_clean_panoramicos_20261108_2';
     IMAGES.fondoHorizonte.src = `recursos/fondo_horizonte_panoramico_3d.png?${ASSET_CACHE_BUST}`;
     IMAGES.fondoBosque.src = `recursos/fondo_bosque_panoramico_3d.png?${ASSET_CACHE_BUST}`;
     IMAGES.fondoPlaya.src = `recursos/fondo_playa_panoramico_3d.png?${ASSET_CACHE_BUST}`;
