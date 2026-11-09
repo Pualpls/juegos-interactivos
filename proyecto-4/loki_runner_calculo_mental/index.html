@@ -1,0 +1,4478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Loki Runner · Aventura de Cálculo Mental</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-sky-top: #1e3a8a;
+      --bg-sky-bottom: #38bdf8;
+      --road-color: #1e293b;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --amber: #f59e0b;
+      --amber-dark: #d97706;
+      --emerald: #10b981;
+      --rose: #ef4444;
+      --purple: #8b5cf6;
+      --text-main: #0f172a;
+      --text-light: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Lexend', system-ui, sans-serif;
+      --font-pixel: 'Press Start 2P', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: #0f172a;
+      color: var(--text-light);
+    }
+
+    #app-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* -------------------------------------------------------------
+       VISTA 1: MENÚ DE NIVELES (COMPACTO Y SELECCIÓN DIRECTA)
+       ------------------------------------------------------------- */
+    #view-menu {
+      background: linear-gradient(rgba(10, 15, 29, 0.82), rgba(8, 12, 22, 0.94)),
+                  url('recursos/loki_banner_principal.png') center center / cover no-repeat fixed;
+      overflow-y: auto;
+      padding: 0.85rem 1.15rem 2.5rem 1.15rem;
+      z-index: 20;
+    }
+
+    .menu-header {
+      max-width: 1100px;
+      margin: 0 auto 0.75rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .loki-idle-box {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .loki-badge-img {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.45);
+      border: 3px solid #f59e0b;
+      background: #1e293b;
+      object-fit: contain;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      transition: transform 0.2s ease;
+      display: block;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .world-section-header {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin: 1.1rem 0 0.4rem 0;
+      padding: 0.4rem 0.6rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+      font-family: var(--font-display);
+    }
+
+    .world-section-header h3 {
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      color: #fbbf24;
+    }
+
+    .world-count-tag {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .menu-hero-banner {
+      max-width: 1100px;
+      margin: 0 auto 0.75rem auto;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      position: relative;
+      max-height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+    }
+
+    .hero-banner-img {
+      width: 100%;
+      height: 100%;
+      max-height: 175px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    .loki-badge-img:hover {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .loki-status-bubble {
+      position: absolute;
+      bottom: -6px;
+      right: -8px;
+      background: #10b981;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 0.15rem 0.4rem;
+      border-radius: 9999px;
+      border: 2px solid #0f172a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .menu-title h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      color: #fbbf24;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pixel-badge {
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      background: #ef4444;
+      color: #fff;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      letter-spacing: 0.05rem;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    }
+
+    .menu-title p {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .menu-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #f8fafc;
+    }
+
+    .stat-pill img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    /* TARJETA DE CONTROL POR CÁMARA EN EL MENÚ */
+    .menu-camera-card {
+      max-width: 1100px;
+      margin: 0 auto 0.95rem auto;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(59, 130, 246, 0.45);
+      border-radius: 1rem;
+      padding: 0.75rem 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+      flex-wrap: wrap;
+    }
+
+    .menu-cam-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .cam-badge-icon {
+      width: 42px;
+      height: 42px;
+      background: #1e3a8a;
+      border: 2px solid #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .cam-badge-title {
+      font-family: var(--font-display);
+      font-size: 0.98rem;
+      color: #93c5fd;
+      font-weight: 700;
+    }
+
+    .cam-badge-desc {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      max-width: 620px;
+      line-height: 1.3;
+    }
+
+    .btn-menu-camera {
+      background: #2563eb;
+      border: 2px solid #60a5fa;
+      color: #ffffff;
+      padding: 0.5rem 1.15rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-menu-camera:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn-menu-camera.active {
+      background: #059669;
+      border-color: #34d399;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+    }
+
+    .cam-dot-pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      display: inline-block;
+    }
+
+    .btn-menu-camera.active .cam-dot-pulse {
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: pulseGreen 1.4s infinite ease-in-out;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* PANEL DESTACADO DE SELECCIÓN DE MUNDOS (AMPLIO, TÁCTIL Y SIN SCROLLBARS) */
+    .menu-worlds-panel {
+      max-width: 1100px;
+      margin: 0 auto 1.15rem auto;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(245, 158, 11, 0.45);
+      border-radius: 1rem;
+      padding: 0.85rem 1.15rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .worlds-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .worlds-panel-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: #fbbf24;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .worlds-panel-desc {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .worlds-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.65rem;
+    }
+
+    .world-choice-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2.5px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+      padding: 0.75rem 0.95rem;
+      border-radius: 0.85rem;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .world-choice-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .world-choice-btn.active {
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      border-color: #93c5fd;
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .world-choice-btn#wbtn-sisat.active {
+      background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+      border-color: #fef08a;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+      color: #0f172a;
+    }
+
+    .world-choice-btn .wchoice-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .world-choice-btn .wchoice-subtitle {
+      font-size: 0.72rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+
+    /* GRID COMPACTO DE NIVELES */
+    .levels-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+      gap: 0.85rem;
+    }
+
+    /* TARJETA COMPACTA DE UN SOLO CLIC */
+    .level-card {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border-radius: 0.95rem;
+      padding: 0.85rem 0.95rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      border: 2.5px solid #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.55rem;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .level-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      border-color: #2563eb;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    }
+
+    .level-card:active {
+      transform: scale(0.98);
+    }
+
+    .level-card.featured {
+      border-color: #f59e0b;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+    }
+
+    .level-badge-num {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #0f172a;
+      color: #fbbf24;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 0.2rem 0.65rem;
+      border-bottom-left-radius: 0.75rem;
+    }
+
+    .level-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      color: #0f172a;
+      line-height: 1.22;
+      margin-top: 0.15rem;
+      margin-bottom: 0.15rem;
+      padding-right: 2.2rem;
+    }
+
+    .level-strategy-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 0.04rem;
+    }
+
+    .level-formula-preview {
+      background: #f1f5f9;
+      border-radius: 0.55rem;
+      padding: 0.35rem 0.6rem;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      color: #334155;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .level-formula-preview span.badge-ex {
+      background: #cbd5e1;
+      color: #0f172a;
+      font-size: 0.65rem;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .level-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      padding-top: 0.35rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .level-stars {
+      display: flex;
+      gap: 0.1rem;
+      font-size: 0.95rem;
+    }
+
+    .level-cta-badge {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #2563eb;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .level-card:hover .level-cta-badge {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+
+    /* -------------------------------------------------------------
+       VISTA 2: ESCENARIO 3D SUBWAY SURFERS (PIXEL ART ENGINE)
+       ------------------------------------------------------------- */
+    #view-game {
+      background: #000;
+      z-index: 10;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* DIFICULTAD SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) */
+    .hud-top-left {
+      position: absolute;
+      top: 0.75rem;
+      left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      pointer-events: auto;
+      z-index: 45;
+      background: rgba(15, 23, 42, 0.90);
+      padding: 0.4rem 0.65rem;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+    }
+
+    .speed-pill-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid transparent;
+      color: #cbd5e1;
+      padding: 0.32rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .speed-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .speed-pill-btn.active#diff-muy-facil {
+      background: #059669;
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-facil {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-normal {
+      background: #d97706;
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+    }
+
+    .speed-pill-btn.active#diff-dificil {
+      background: #dc2626;
+      border-color: #f87171;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.75);
+    }
+
+    .speed-time-tag {
+      font-size: 0.65rem;
+      opacity: 0.9;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+    }
+
+    /* CONTROLES FLOTANTES LATERAL IZQUIERDO (CENTRADO VERTICAL) */
+    .hud-side-left {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      pointer-events: auto;
+      z-index: 45;
+      background: rgba(15, 23, 42, 0.92);
+      padding: 0.75rem 0.65rem;
+      border-radius: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      width: 140px;
+    }
+
+    .hud-side-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.65rem;
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    .hud-side-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      border-color: #60a5fa;
+      transform: translateX(2px);
+    }
+
+    .hud-side-btn.btn-exit {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+    }
+    .hud-side-btn.btn-exit:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .hud-side-btn.btn-pause {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #f59e0b;
+    }
+    .hud-side-btn.btn-pause.active {
+      background: #10b981;
+      border-color: #34d399;
+    }
+
+    .hud-side-btn.btn-vol {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: #38bdf8;
+    }
+    .hud-side-btn.btn-vol.muted {
+      background: rgba(100, 116, 139, 0.25);
+      border-color: #64748b;
+      opacity: 0.75;
+    }
+
+    /* CONTENEDOR POPOVER DE VOLUMEN */
+    .vol-btn-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .vol-slider-popover {
+      position: absolute;
+      left: calc(100% + 0.65rem);
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 23, 42, 0.96);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      width: 145px;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .vol-popover-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .vol-slider-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #334155;
+      outline: none;
+      cursor: pointer;
+      accent-color: #38bdf8;
+    }
+
+    .hud-side-divider {
+      height: 1.5px;
+      background: rgba(255, 255, 255, 0.15);
+      margin: 0.2rem 0;
+    }
+
+    /* ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIO */
+    .hud-top-right {
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      pointer-events: auto;
+      z-index: 45;
+      flex-wrap: wrap;
+    }
+
+    /* CENTRO SUPERIOR: TARJETA MATEMÁTICA FOCAL */
+    .hud-top-center {
+      position: absolute;
+      top: 0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: auto;
+      z-index: 40;
+      max-width: 85vw;
+    }
+
+    .hud-lives {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      padding: 0.2rem 0.6rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.15rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .hud-score-box {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1.5px solid #f59e0b;
+      border-radius: 9999px;
+      padding: 0.2rem 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #fbbf24;
+      font-size: 0.92rem;
+    }
+
+    .hud-score-box img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    .hud-theme-badge {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid #60a5fa;
+      border-radius: 9999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .hud-theme-badge:hover {
+      background: #1e3a8a;
+      border-color: #93c5fd;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .menu-theme-bar, .theme-chips-group, .levels-grid, #levels-container, #view-menu {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .menu-theme-bar::-webkit-scrollbar, .theme-chips-group::-webkit-scrollbar, .levels-grid::-webkit-scrollbar, #levels-container::-webkit-scrollbar, #view-menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    .menu-theme-bar {
+      max-width: 1100px;
+      margin: 0 auto 0.75rem auto;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 0.55rem 0.85rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .theme-bar-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .theme-chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .theme-chip {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .theme-chip:hover {
+      background: #334155;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .theme-chip.active {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.45);
+    }
+
+    .theme-chip#tchip-playa.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.55);
+    }
+
+    .hud-mode-badge {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04rem;
+    }
+
+    .mode-muy-facil { background: #059669; color: #fff; }
+    .mode-facil     { background: #0284c7; color: #fff; }
+    .mode-normal    { background: #d97706; color: #fff; }
+    .mode-dificil   { background: #dc2626; color: #fff; animation: pulseHard 1.4s infinite ease-in-out; }
+
+    @keyframes pulseHard {
+      0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); }
+      50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.75); }
+    }
+
+    .speed-selector-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      padding: 0.15rem 0.25rem;
+      gap: 0.15rem;
+      pointer-events: auto;
+    }
+
+    .speed-btn {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 0.2rem 0.45rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .speed-btn#diff-muy-facil.active { background: #10b981; color: #fff; }
+    .speed-btn#diff-facil.active     { background: #0284c7; color: #fff; }
+    .speed-btn#diff-normal.active    { background: #f59e0b; color: #0f172a; }
+    .speed-btn#diff-dificil.active   { background: #ef4444; color: #fff; }
+
+    .hud-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+
+    .hud-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.55rem;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.15s;
+    }
+
+    .hud-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .hud-btn.active { background: #10b981; border-color: #34d399; }
+
+    .hud-math-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 3px solid #f59e0b;
+      box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
+      border-radius: 1.1rem;
+      padding: 0.45rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+      pointer-events: auto;
+      max-width: 90vw;
+      animation: pulseBorder 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseBorder {
+      0%, 100% { border-color: #f59e0b; box-shadow: 0 4px 18px rgba(245, 158, 11, 0.3); }
+      50% { border-color: #60a5fa; box-shadow: 0 4px 22px rgba(96, 165, 250, 0.45); }
+    }
+
+    .hud-strategy-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+    }
+
+    .hud-math-problem {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3.2vw, 2.15rem);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.06rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .hud-math-hint {
+      font-size: 0.78rem;
+      color: #fde047;
+      font-weight: 600;
+      margin-top: -0.15rem;
+    }
+
+    .game-touch-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      z-index: 30;
+      background: linear-gradient(0deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0) 100%);
+    }
+
+    .touch-btn {
+      pointer-events: auto;
+      width: 130px;
+      height: 72px;
+      border-radius: 1.1rem;
+      background: rgba(30, 41, 59, 0.85);
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: transform 0.1s, background 0.1s;
+    }
+
+    .touch-btn:active {
+      transform: scale(0.94);
+      background: #2563eb;
+      border-color: #60a5fa;
+    }
+
+    .touch-btn-sub {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .touch-center-hint {
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .touch-btn-jump-action {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.45) 100%);
+      border: 2px solid #fbbf24;
+      color: #fef08a;
+      padding: 0.55rem 1.15rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .touch-btn-jump-action:active {
+      transform: scale(0.95);
+      background: #d97706;
+      border-color: #fef08a;
+      color: #ffffff;
+    }
+
+    .btn-trick-floating {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);
+      transition: transform 0.1s;
+    }
+
+    .btn-trick-floating:active { transform: scale(0.95); }
+
+    /* CUADRO PIP DE LA CÁMARA WEBCAM */
+    #camera-pip-container {
+      position: absolute;
+      bottom: 95px;
+      right: 1.25rem;
+      width: 155px;
+      height: 140px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid #3b82f6;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      z-index: 40;
+      display: none;
+      flex-direction: column;
+      pointer-events: auto;
+    }
+
+    .cam-pip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.2rem 0.45rem;
+      background: #1e293b;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .cam-pip-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0 0.2rem;
+    }
+
+    .cam-pip-close:hover { color: #ef4444; }
+
+    #camera-video-feed {
+      width: 100%;
+      height: 75px;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .camera-motion-bars {
+      display: flex;
+      height: 18px;
+      background: #0f172a;
+      border-top: 1px solid #334155;
+    }
+
+    .cam-zone-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #64748b;
+      transition: background 0.08s, color 0.08s;
+    }
+
+    .cam-zone-bar.active-lane {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .cam-zone-bar.active-soft {
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.25);
+    }
+
+    .cam-zone-bar.active-brusque {
+      color: #ffffff;
+      background: #0284c7;
+      font-weight: 900;
+    }
+
+    .cam-motion-meter-box {
+      position: relative;
+      width: 100%;
+      height: 18px;
+      background: #020617;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cam-motion-meter-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
+      transition: width 0.06s ease;
+      opacity: 0.6;
+    }
+
+    .cam-motion-status-lbl {
+      position: relative;
+      z-index: 2;
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #94a3b8;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding: 0 0.2rem;
+    }
+
+    /* TOAST DE FEEDBACK (UBICADO ABAJO PARA NO TAPAR LA CARRETERA NI LAS PRÓXIMAS VALLAS) */
+    #feedback-toast {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px) scale(0.9);
+      background: rgba(16, 185, 129, 0.95);
+      color: #ffffff;
+      padding: 0.55rem 1.35rem;
+      border-radius: 9999px;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0;
+      white-space: nowrap;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    #feedback-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    #feedback-toast.error {
+      background: rgba(220, 38, 38, 0.95);
+      border-color: rgba(254, 202, 202, 0.5);
+    }
+
+    /* DESTELLO PERIFÉRICO EN EL PANEL DE CÁLCULO */
+    .hud-math-card.glow-correct {
+      border-color: #10b981 !important;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.85) !important;
+    }
+
+    .hud-math-card.glow-wrong {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.85) !important;
+    }
+
+    /* MODAL DE ESTRATEGIA Y SELECCIÓN DIRECTA DE DIFICULTAD */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+      max-width: 530px;
+      border-radius: 1.3rem;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      border: 4px solid #f59e0b;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      animation: modalPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modalPop {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.75rem;
+    }
+
+    .modal-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #f59e0b;
+      background: #fff;
+      object-fit: cover;
+    }
+
+    .modal-title h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .modal-title p {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .trick-box {
+      background: #fffbeb;
+      border: 2px dashed #f59e0b;
+      border-radius: 0.9rem;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .trick-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: #b45309;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .trick-steps {
+      font-size: 0.88rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .trick-steps li {
+      margin-left: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .trick-formula {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #b45309;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.55rem;
+      text-align: center;
+      letter-spacing: 0.05rem;
+    }
+
+    .modal-speed-picker {
+      margin-top: 0.15rem;
+      text-align: left;
+    }
+
+    .modal-speed-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.55rem;
+    }
+
+    .btn-modal-speed {
+      background: #f8fafc;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.65rem 0.55rem;
+      font-family: var(--font-body);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-modal-speed span {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .btn-modal-speed small {
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .btn-modal-speed:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-modal-speed.opt-muy-facil:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
+    .btn-modal-speed.opt-facil:hover     { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); }
+    .btn-modal-speed.opt-normal:hover    { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); }
+    .btn-modal-speed.opt-dificil:hover   { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
+
+    .modal-buttons {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-modal {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1rem;
+      border-radius: 9999px;
+      border: none;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn-modal:hover { transform: scale(1.02); }
+    .btn-modal-green { background: #059669; color: #fff; }
+    .btn-modal-green:hover { background: #047857; }
+    .btn-modal-blue { background: #2563eb; color: #fff; }
+    .btn-modal-blue:hover { background: #1d4ed8; }
+    .btn-modal-secondary { background: #e2e8f0; color: #334155; }
+    .btn-modal-secondary:hover { background: #cbd5e1; }
+
+    /* MODAL VICTORIA / GAMEOVER */
+    .victory-hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .modal-loki-circle {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      border: 3.5px solid #f59e0b;
+      background: #1e293b;
+      object-fit: contain;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+      padding: 3px;
+    }
+
+    .modal-loki-circle.gameover {
+      border-color: #ef4444;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+    }
+
+    .victory-trophy-img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 15px rgba(245, 158, 11, 0.4));
+      animation: floatTrophy 2s infinite ease-in-out;
+    }
+
+    @keyframes floatTrophy {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .victory-stars {
+      font-size: 2.2rem;
+      letter-spacing: 0.3rem;
+      margin: 0.4rem 0;
+    }
+
+    .victory-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.85rem;
+      padding: 0.75rem;
+    }
+
+    .v-stat-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .v-stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
+    .v-stat-card b { font-family: var(--font-display); font-size: 1.25rem; color: #0f172a; }
+  </style>
+</head>
+<body>
+  <div id="app-container">
+
+    <!-- =============================================================
+         VISTA 1: MENÚ DE NIVELES (COMPACTO Y SELECCIÓN DIRECTA)
+         ============================================================= -->
+    <div id="view-menu" class="view active">
+      <div class="menu-header">
+        <div class="menu-brand">
+          <div class="loki-idle-box" title="Loki listo para correr (Animación Idle)">
+            <img src="recursos/loki_idle_south.gif" id="loki-menu-idle-img" alt="Loki Idle" class="loki-badge-img">
+            <span class="loki-status-bubble">¡Listo! 🐾</span>
+          </div>
+          <div class="menu-title">
+            <h1>LOKI RUNNER <span class="pixel-badge">8-BIT</span></h1>
+            <p>Aventura de Cálculo Mental · Escuela Primaria Federal "José Clemente Orozco" · 3° "A"</p>
+          </div>
+        </div>
+
+        <div class="menu-stats">
+          <div class="stat-pill" title="Huesos conseguidos">
+            <img src="recursos/hueso_transparente.png" alt="Hueso">
+            <span id="global-bones-count">0</span>
+          </div>
+          <div class="stat-pill" title="Estrellas doradas">
+            <span style="color:#fbbf24; font-size:1.15rem;">⭐</span>
+            <span id="global-stars-count">0 / 60</span>
+          </div>
+          <button class="hud-btn" id="btn-toggle-sound" onclick="toggleSound()">🔊 Sonido</button>
+        </div>
+      </div>
+
+      <!-- BANNER ILUSTRADO HERO DE LOKI RUNNER -->
+      <div class="menu-hero-banner" id="menu-hero-banner">
+        <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
+      </div>
+
+      <!-- TARJETA DE CONTROL POR CÁMARA (WEBCAM) EN EL MENÚ -->
+      <div class="menu-camera-card" id="menu-camera-card">
+        <div class="menu-cam-left">
+          <div class="cam-badge-icon">📷</div>
+          <div class="cam-badge-text">
+            <div class="cam-badge-title">Control por Movimiento de Cámara (Cuerpo)</div>
+            <div class="cam-badge-desc">Inclina tu torso o cabeza a la izquierda o derecha para esquivar y atrapar respuestas sin tocar la pantalla. (Sensibilidad alta calibrada).</div>
+          </div>
+        </div>
+        <div class="menu-cam-right">
+          <button class="btn-menu-camera" id="menu-camera-toggle-btn" onclick="toggleCameraGlobal()">
+            <span class="cam-dot-pulse" id="menu-cam-dot"></span>
+            <span id="menu-cam-label">Activar Cámara</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SELECTOR DE ESCENARIO TEMÁTICO (PLAYA CON MÚSICA DEDICADA) -->
+      <div class="menu-theme-bar">
+        <span class="theme-bar-label">🎨 Escenario:</span>
+        <div class="theme-chips-group">
+          <button class="theme-chip" id="tchip-bosque" onclick="selectThemeFromMenu('bosque')">🌲 Bosque</button>
+          <button class="theme-chip" id="tchip-playa" onclick="selectThemeFromMenu('playa')">🏖️ Costa Caribeña</button>
+          <button class="theme-chip" id="tchip-ciudad" onclick="selectThemeFromMenu('ciudad')">🏙️ Ciudad</button>
+          <button class="theme-chip" id="tchip-granja" onclick="selectThemeFromMenu('granja')">🚜 Granja</button>
+          <button class="theme-chip" id="tchip-campo" onclick="selectThemeFromMenu('campo')">🌾 Campo</button>
+          <button class="theme-chip active" id="tchip-random" onclick="selectThemeFromMenu('random')">🎲 Aleatorio</button>
+        </div>
+      </div>
+
+      <!-- PANEL DESTACADO DE SELECCIÓN DE MUNDOS (SOLO LOS 4 MUNDOS) -->
+      <div class="menu-worlds-panel">
+        <div class="worlds-panel-header">
+          <div class="worlds-panel-title">🗺️ SELECCIONA EL MUNDO A JUGAR:</div>
+          <div class="worlds-panel-desc">Elige un mundo para explorar sus desafíos de cálculo mental</div>
+        </div>
+        <div class="worlds-btn-grid">
+          <button class="world-choice-btn active" id="wbtn-m1" onclick="switchWorld(1)">
+            <span class="wchoice-title">🟢 Mundo 1: Bosque</span>
+            <span class="wchoice-subtitle">Niveles #1 al #7 · Sumas y Restas</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-m2" onclick="switchWorld(2)">
+            <span class="wchoice-title">🔵 Mundo 2: Costa</span>
+            <span class="wchoice-subtitle">Niveles #8 al #14 · Decenas y Agilidad</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-m3" onclick="switchWorld(3)">
+            <span class="wchoice-title">🟣 Mundo 3: Urbano</span>
+            <span class="wchoice-subtitle">Niveles #15 al #20 · Tablas y Series</span>
+          </button>
+          <button class="world-choice-btn" id="wbtn-sisat" onclick="switchWorld(4)">
+            <span class="wchoice-title">⭐ Mundo SiSAT 3°</span>
+            <span class="wchoice-subtitle">Niveles #21 al #31 · Examen Oficial</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="levels-grid" id="levels-container">
+        <!-- Render dinámico de tarjetas compactas de 1 solo clic -->
+      </div>
+    </div>
+
+    <!-- =============================================================
+         VISTA 2: ESCENARIO 3D SUBWAY SURFERS (PIXEL ART RUNNER)
+         ============================================================= -->
+    <div id="view-game" class="view">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- DIFICULTAD EN LA ESQUINA SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) -->
+      <div class="hud-top-left">
+        <button class="speed-pill-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">
+          <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">
+          <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">
+          <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
+        </button>
+        <button class="speed-pill-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">
+          <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
+        </button>
+      </div>
+
+      <!-- CONTROLES LATERALES IZQUIERDOS (CENTRADO VERTICAL) -->
+      <div class="hud-side-left">
+        <button class="hud-side-btn btn-exit" onclick="exitToMenu()" title="Volver al menú principal">
+          <span>🏠</span> <span>Salir</span>
+        </button>
+        <button class="hud-side-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
+          <span>⏸️</span> <span id="btn-pause-text">Pausa</span>
+        </button>
+        
+        <div class="vol-btn-wrapper">
+          <button class="hud-side-btn btn-vol" id="btn-hud-volume" onclick="handleVolumeClick(event)" ondblclick="handleVolumeDblClick(event)" title="1 clic: barra volumen / Doble clic: silenciar">
+            <span id="vol-hud-icon">🔊</span> <span id="vol-hud-label">100%</span>
+          </button>
+          <div class="vol-slider-popover" id="vol-slider-popover" style="display: none;">
+            <div class="vol-popover-header">
+              <span>Volumen</span>
+              <span id="vol-popover-pct">100%</span>
+            </div>
+            <input type="range" min="0" max="100" value="100" id="vol-slider" class="vol-slider-input" oninput="setVolumeSlider(this.value)">
+          </div>
+        </div>
+
+        <div class="hud-side-divider"></div>
+
+        <button class="hud-side-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">
+          <span>📹</span> <span>Cámara</span>
+        </button>
+        <button class="hud-side-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
+          <span>🗣️</span> <span>Voz</span>
+        </button>
+      </div>
+
+      <!-- ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIOS -->
+      <div class="hud-top-right">
+        <div class="hud-lives" id="hud-lives" title="Vidas de Loki">❤️❤️❤️</div>
+        <div class="hud-score-box" title="Huesos conseguidos">
+          <img src="recursos/hueso_transparente.png" alt="Huesos">
+          <span id="hud-bones-progress">0 / 10</span>
+        </div>
+        <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar escenario">🌲 Bosque</span>
+      </div>
+
+      <!-- CENTRO SUPERIOR: OPERACIÓN MATEMÁTICA LIMPIA -->
+      <div class="hud-top-center">
+        <div class="hud-math-card" id="hud-math-card">
+          <span class="hud-strategy-title" id="hud-strategy-title">Estrategia #6 · Restar 10</span>
+          <div class="hud-math-problem" id="hud-math-problem">28 − 10 = ?</div>
+          <div class="hud-math-hint" id="hud-math-hint">¡Esquiva las trampas e impacta directamente la correcta!</div>
+        </div>
+      </div>
+
+      <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
+
+      <!-- CUADRO PIP DE LA CÁMARA WEBCAM (ALTA SENSIBILIDAD) -->
+      <div id="camera-pip-container">
+        <div class="cam-pip-header">
+          <span class="cam-pip-title">📷 Sensor Corporal</span>
+          <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar cámara">✕</button>
+        </div>
+        <video id="camera-video-feed" autoplay playsinline muted></video>
+        <div class="camera-motion-bars">
+          <div class="cam-zone-bar" id="cam-bar-left">◀ FILA 1 (IZQ)</div>
+          <div class="cam-zone-bar active-lane" id="cam-bar-center">● FILAS 2-3 (CENTRO)</div>
+          <div class="cam-zone-bar" id="cam-bar-right">FILA 4 (DER) ▶</div>
+        </div>
+        <div class="cam-motion-meter-box">
+          <div class="cam-motion-meter-fill" id="cam-motion-meter-fill"></div>
+          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Votación por Filas Activa ●</span>
+        </div>
+      </div>
+
+      <!-- CONTROLES TÁCTILES INFERIORES -->
+      <div class="game-touch-controls">
+        <button class="touch-btn" id="btn-touch-left" onpointerdown="handleTouchLeft(event)">
+          <span>◀ IZQ</span>
+          <span class="touch-btn-sub">Mover Carril</span>
+        </button>
+
+        <div class="touch-center-hint">
+          <button class="touch-btn-jump-action" onpointerdown="handleTouchJump(event)">
+            <span>🐾 SALTAR</span>
+          </button>
+          <button class="btn-trick-floating" onclick="openExplanationFromGame()">
+            <span>💡</span> Truco
+          </button>
+        </div>
+
+        <button class="touch-btn" id="btn-touch-right" onpointerdown="handleTouchRight(event)">
+          <span>DER ▶</span>
+          <span class="touch-btn-sub">Mover Carril</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 1: EXPLICACIÓN Y LANZAMIENTO DIRECTO DE DIFICULTAD -->
+    <div id="modal-tutorial" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <img src="recursos/loki_avatar.png" alt="Loki" class="modal-avatar">
+          <div class="modal-title">
+            <h2 id="modal-tut-strategy-name">Nivel #6: Restar 10</h2>
+            <p id="modal-tut-grade-tag">Consolidación Fase 4 · SiSAT Oficial</p>
+          </div>
+        </div>
+
+        <div class="trick-box">
+          <div class="trick-title">
+            <span>💡</span> <span id="modal-tut-trick-heading">El Secreto de Loki:</span>
+          </div>
+
+          <div class="trick-steps" id="modal-tut-steps">
+            <!-- Pasos -->
+          </div>
+
+          <div class="trick-formula" id="modal-tut-formula">
+            Ejemplo: 28 − 10 = 18
+          </div>
+        </div>
+
+        <div class="modal-speed-picker">
+          <label style="font-weight:700; color:#334155; font-size:0.85rem; margin-bottom:0.4rem; display:block;">Selecciona la dificultad para jugar:</label>
+          <div class="modal-speed-grid">
+            <button class="btn-modal-speed opt-muy-facil" onclick="startLevelWithDifficulty('muy_facil')">
+              <span>🌱 Muy Fácil</span>
+              <small>15 segundos por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-facil" onclick="startLevelWithDifficulty('facil')">
+              <span>🚶 Fácil</span>
+              <small>11 segundos por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-normal" onclick="startLevelWithDifficulty('normal')">
+              <span>🏃 Normal</span>
+              <small>7 segundos por cálculo</small>
+            </button>
+            <button class="btn-modal-speed opt-dificil" onclick="startLevelWithDifficulty('dificil')">
+              <span>⚡ Difícil</span>
+              <small>4 segundos por cálculo</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-buttons" style="margin-top:0.25rem;">
+          <button class="btn-modal btn-modal-secondary" onclick="closeTutorialModal()">
+            ✕ Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: VICTORIA -->
+    <div id="modal-victory" class="modal-overlay">
+      <div class="modal-card">
+        <div class="victory-hero">
+          <img src="recursos/loki_idle_south.gif" alt="Loki Campeón" class="modal-loki-circle">
+          <h2 style="font-family:var(--font-display); font-size:1.75rem; color:#f59e0b; margin-top:0.35rem;">
+            ¡MISIÓN CUMPLIDA!
+          </h2>
+          <p style="font-size:0.95rem; color:#475569; font-weight:600;">
+            ¡Loki dominó esta estrategia y completó los 10 aciertos!
+          </p>
+          <div class="victory-stars" id="victory-stars-display">⭐⭐⭐</div>
+        </div>
+
+        <div class="victory-stats-grid">
+          <div class="v-stat-card">
+            <span>Tiempo de Carrera</span>
+            <b id="victory-stat-time">01:14</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Vidas Restantes</span>
+            <b id="victory-stat-lives">3 / 3</b>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-modal btn-modal-green" onclick="playNextLevel()">
+            <span>▶</span> Siguiente Nivel
+          </button>
+          <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
+            <span>🔄</span> Repetir Nivel
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="exitToMenu()">
+            <span>🏠</span> Volver al Menú
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: FIN DE PARTIDA -->
+    <div id="modal-gameover" class="modal-overlay">
+      <div class="modal-card" style="border-color:#ef4444;">
+        <div class="victory-hero">
+          <img src="recursos/loki_idle_south.gif" alt="Loki" class="modal-loki-circle gameover">
+          <h2 style="font-family:var(--font-display); font-size:1.6rem; color:#ef4444; margin-top:0.35rem;">
+            ¡Ánimo! Casi lo logras
+          </h2>
+          <p style="font-size:0.92rem; color:#475569; font-weight:600;" id="gameover-message">
+            El cálculo mental se entrena con paciencia. ¡Prueba en Muy Fácil (15s) para dominar el truco!
+          </p>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn-modal btn-modal-green" onclick="startLevelWithDifficulty('muy_facil')">
+            <span>🌱</span> Probar en Muy Fácil (15s)
+          </button>
+          <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
+            <span>🔄</span> Reintentar
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="exitToMenu()">
+            <span>🏠</span> Menú de Niveles
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* =============================================================
+       1. BLOQUEO UNIVERSAL DE MENÚS CONTEXTUALES Y LONG-PRESS
+       ============================================================= */
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    /* =============================================================
+       2. NIVELES DE DIFICULTAD MATEMÁTICAMENTE CALIBRADOS EN TIEMPO
+          Distancia de aparición = 2200 unidades, colisión = 40 unidades (Δ = 2160)
+          Muy Fácil: 15s  -> v = 2160 / (15 * 60) = 2.40 u/frame
+          Fácil:     11s  -> v = 2160 / (11 * 60) = 3.27 u/frame
+          Normal:    7s   -> v = 2160 / (7 * 60)  = 5.14 u/frame
+          Difícil:   4s   -> v = 2160 / (4 * 60)  = 9.00 u/frame
+       ============================================================= */
+    const DIFFICULTY_MODES = {
+      'muy_facil': { id: 'muy_facil', btnId: 'diff-muy-facil', name: 'Muy Fácil', icon: '🌱', sec: 15, speed: 2.40, badgeClass: 'mode-muy-facil' },
+      'facil':     { id: 'facil',     btnId: 'diff-facil',     name: 'Fácil',     icon: '🚶', sec: 11, speed: 3.27, badgeClass: 'mode-facil' },
+      'normal':    { id: 'normal',    btnId: 'diff-normal',    name: 'Normal',    icon: '🏃', sec: 7,  speed: 5.14, badgeClass: 'mode-normal' },
+      'dificil':   { id: 'dificil',   btnId: 'diff-dificil',   name: 'Difícil',   icon: '⚡', sec: 4,  speed: 9.00, badgeClass: 'mode-dificil' }
+    };
+
+    /* =============================================================
+       3. ARQUITECTURA MULTI-TEMA PIXEL ART 8-BIT
+       ============================================================= */
+    const THEMES = [
+      {
+        id: 'bosque',
+        name: 'Bosque de Montaña',
+        icon: '🌲',
+        skyTop: '#0c1a30',
+        skyBottom: '#2563eb',
+        grassTop: '#16a34a',
+        grassBottom: '#14532d',
+        roadLight: '#475569',
+        roadDark: '#243042',
+        curb1: '#ef4444',
+        curb2: '#ffffff',
+        treeA: 'pino',
+        treeB: 'encino',
+        ambientLight: 'rgba(16, 185, 129, 0.08)',
+        ambientBlend: 'soft-light',
+        ambientGlow: 'rgba(56, 189, 248, 0.05)'
+      },
+      {
+        id: 'playa',
+        name: 'Costa Caribeña',
+        icon: '🏖️',
+        skyTop: '#c54973',
+        skyBottom: '#fb914b',
+        grassTop: '#fde047',
+        grassBottom: '#ca8a04',
+        roadLight: '#0284c7',
+        roadDark: '#0369a1',
+        curb1: '#f43f5e',
+        curb2: '#ffffff',
+        treeA: 'palmera',
+        treeB: 'arbusto',
+        ambientLight: 'rgba(251, 191, 36, 0.22)',
+        ambientBlend: 'color',
+        ambientGlow: 'rgba(245, 158, 11, 0.16)'
+      },
+      {
+        id: 'ciudad',
+        name: 'Ciudad Neón',
+        icon: '🏙️',
+        skyTop: '#090514',
+        skyBottom: '#311042',
+        grassTop: '#1e293b',
+        grassBottom: '#0f172a',
+        roadLight: '#1e1b4b',
+        roadDark: '#090514',
+        curb1: '#ec4899',
+        curb2: '#06b6d4',
+        treeA: 'poste',
+        treeB: 'arbusto',
+        ambientLight: 'rgba(147, 51, 234, 0.18)',
+        ambientBlend: 'color',
+        ambientGlow: 'rgba(6, 182, 212, 0.12)'
+      },
+      {
+        id: 'granja',
+        name: 'Granja Rural',
+        icon: '🚜',
+        skyTop: '#7c2d12',
+        skyBottom: '#fdba74',
+        grassTop: '#b45309',
+        grassBottom: '#78350f',
+        roadLight: '#78716c',
+        roadDark: '#44403c',
+        curb1: '#ffffff',
+        curb2: '#d97706',
+        treeA: 'manzano',
+        treeB: 'encino',
+        ambientLight: 'rgba(217, 119, 6, 0.18)',
+        ambientBlend: 'color',
+        ambientGlow: 'rgba(245, 158, 11, 0.14)'
+      },
+      {
+        id: 'campo',
+        name: 'Valle Florido',
+        icon: '🌸',
+        skyTop: '#0284c7',
+        skyBottom: '#bae6fd',
+        grassTop: '#22c55e',
+        grassBottom: '#15803d',
+        roadLight: '#64748b',
+        roadDark: '#334155',
+        curb1: '#ec4899',
+        curb2: '#ffffff',
+        treeA: 'arbusto',
+        treeB: 'cactus',
+        ambientLight: 'rgba(234, 179, 8, 0.16)',
+        ambientBlend: 'color',
+        ambientGlow: 'rgba(251, 191, 36, 0.12)'
+      }
+    ];
+
+    /* =============================================================
+       4. CATÁLOGO DE LAS 20 ESTRATEGIAS DE CÁLCULO MENTAL (MÓDULO 3)
+       ============================================================= */
+    const STRATEGIES = [
+      {
+        id: 1, world: 1,
+        title: "Sumar 10 a cualquier número",
+        tag: "Base Decimal",
+        sample: "43 + 10 = 53",
+        trickHeading: "El Secreto de la Decena:",
+        steps: [
+          "Observa únicamente la cifra de las decenas (el primer número en los de dos cifras).",
+          "Aumenta en 1 esa cifra de las decenas.",
+          "Las unidades se quedan exactamente iguales: ¡no cambian nada!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 80) + 11;
+          return { text: `${a} + 10`, expected: a + 10, dist: [a + 9, a + 11, a + 20, a - 10] };
+        }
+      },
+      {
+        id: 2, world: 1,
+        title: "Sumar 100 a centenas",
+        tag: "Centenas Exactas",
+        sample: "300 + 100 = 400",
+        trickHeading: "Subir un Piso en Centenas:",
+        steps: [
+          "Mira la primera cifra de la centena.",
+          "Súmale 1 y añade los dos ceros.",
+          "¡Es como contar de 100 en 100!"
+        ],
+        generator: () => {
+          const c = (Math.floor(Math.random() * 8) + 1) * 100;
+          return { text: `${c} + 100`, expected: c + 100, dist: [c + 90, c + 110, c + 200, c - 100] };
+        }
+      },
+      {
+        id: 3, world: 1,
+        title: "Restar 100 a centenas",
+        tag: "Descenso de Centenas",
+        sample: "500 − 100 = 400",
+        trickHeading: "Bajar un Piso en Centenas:",
+        steps: [
+          "Quita 1 a la cifra de las centenas.",
+          "Los dos ceros se mantienen intactos."
+        ],
+        generator: () => {
+          const c = (Math.floor(Math.random() * 8) + 2) * 100;
+          return { text: `${c} − 100`, expected: c - 100, dist: [c - 90, c - 200, c + 100, c - 10] };
+        }
+      },
+      {
+        id: 4, world: 1,
+        title: "Sumar decenas completas",
+        tag: "Decenas Cerradas",
+        sample: "40 + 30 = 70",
+        trickHeading: "Truco de los Ceros Ocultos:",
+        steps: [
+          "Tapa mentalmente el cero de cada número.",
+          "Suma los números pequeños: 4 + 3 = 7.",
+          "Destapa el cero y agrégalo al final: ¡70!"
+        ],
+        generator: () => {
+          const d1 = (Math.floor(Math.random() * 5) + 1) * 10;
+          const d2 = (Math.floor(Math.random() * 4) + 1) * 10;
+          return { text: `${d1} + ${d2}`, expected: d1 + d2, dist: [d1 + d2 - 10, d1 + d2 + 10, d1 + d2 - 5] };
+        }
+      },
+      {
+        id: 5, world: 1,
+        title: "Restar decenas completas",
+        tag: "Resta sin Transformación",
+        sample: "70 − 30 = 40",
+        trickHeading: "Resta Directa de Decenas:",
+        steps: [
+          "Tapa mentalmente los ceros.",
+          "Resta los números sencillos: 7 − 3 = 4.",
+          "Devuelve el cero: ¡40!"
+        ],
+        generator: () => {
+          const d1 = (Math.floor(Math.random() * 5) + 4) * 10;
+          const d2 = (Math.floor(Math.random() * 3) + 1) * 10;
+          return { text: `${d1} − ${d2}`, expected: d1 - d2, dist: [d1 - d2 + 10, d1 - d2 - 10, d1 - d2 + 20] };
+        }
+      },
+      {
+        id: 6, world: 1,
+        title: "Restar 10 a cualquier número",
+        tag: "Descenso de Decenas",
+        sample: "28 − 10 = 18",
+        trickHeading: "La Decena Menguante:",
+        steps: [
+          "Réstale 1 a la cifra de las decenas.",
+          "Las unidades quedan exactamente igualitas.",
+          "Ejemplo: en 28, el 2 pasa a ser 1, y el 8 se queda: ¡18!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 80) + 18;
+          return { text: `${a} − 10`, expected: a - 10, dist: [a - 9, a - 11, a - 20, a + 10] };
+        }
+      },
+      {
+        id: 7, world: 1,
+        title: "Dobles de decenas completas",
+        tag: "Multiplicación Base",
+        sample: "Doble de 30 = 60",
+        trickHeading: "El Espejo de Loki:",
+        steps: [
+          "Duplica el número que no es cero: el doble de 3 es 6.",
+          "Acompaña con el cero: ¡60!"
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 5) + 1) * 10;
+          return { text: `Doble de ${d}`, expected: d * 2, dist: [d * 2 - 10, d * 2 + 10, d * 2 + 20] };
+        }
+      },
+      {
+        id: 8, world: 2,
+        title: "Complementos al 100 con decenas",
+        tag: "Amigos del 100",
+        sample: "70 + ? = 100",
+        trickHeading: "¿Cuánto le falta para llegar a 100?:",
+        steps: [
+          "Piensa en los amigos del 10: a 7 le faltan 3 para ser 10.",
+          "Entonces a 70 le faltan 30 para ser 100."
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 8) + 1) * 10;
+          return { text: `${d} + ? = 100`, expected: 100 - d, dist: [100 - d - 10, 100 - d + 10, 90 - d] };
+        }
+      },
+      {
+        id: 9, world: 2,
+        title: "Restar a 100 una decena",
+        tag: "Complemento Inverso",
+        sample: "100 − 40 = 60",
+        trickHeading: "Desarmar el Cien:",
+        steps: [
+          "Si tienes 10 decenas y regalas 4 decenas, te quedan 6 decenas.",
+          "6 decenas son 60."
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 8) + 1) * 10;
+          return { text: `100 − ${d}`, expected: 100 - d, dist: [100 - d + 10, 100 - d - 10, 90 - d] };
+        }
+      },
+      {
+        id: 10, world: 2,
+        title: "Sumar 9 (Sumar 10 y quitar 1)",
+        tag: "Compensación Rápida",
+        sample: "35 + 9 = 44",
+        trickHeading: "El Salto de Compensación:",
+        steps: [
+          "Es más fácil sumar 10 primero: 35 + 10 = 45.",
+          "Como solo querías sumar 9, quítale 1 que prestaste: 45 − 1 = 44."
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 14;
+          return { text: `${a} + 9`, expected: a + 9, dist: [a + 10, a + 8, a + 11, a + 19] };
+        }
+      },
+      {
+        id: 11, world: 2,
+        title: "Restar 9 (Quitar 10 y devolver 1)",
+        tag: "Compensación Inversa",
+        sample: "52 − 9 = 43",
+        trickHeading: "Quitar 10 y Regresar 1:",
+        steps: [
+          "Réstale 10 de golpe: 52 − 10 = 42.",
+          "Le quitaste uno de más, así que devuélvelo: 42 + 1 = 43."
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 22;
+          return { text: `${a} − 9`, expected: a - 9, dist: [a - 10, a - 8, a - 11, a - 19] };
+        }
+      },
+      {
+        id: 12, world: 2,
+        title: "Sumar número de 2 cifras más 1 cifra sin llevar",
+        tag: "Unidades Directas",
+        sample: "62 + 5 = 67",
+        trickHeading: "Suma solo las Unidades:",
+        steps: [
+          "La decena (60) se queda esperando tranquila.",
+          "Suma las unidades: 2 + 5 = 7.",
+          "Junta todo: ¡67!"
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 7) + 2) * 10;
+          const u1 = Math.floor(Math.random() * 4) + 1;
+          const u2 = Math.floor(Math.random() * (9 - u1)) + 1;
+          const num = d + u1;
+          return { text: `${num} + ${u2}`, expected: num + u2, dist: [num + u2 - 1, num + u2 + 1, num + u2 + 10] };
+        }
+      },
+      {
+        id: 13, world: 2,
+        title: "Mitades de decenas pares",
+        tag: "Partición Equitativa",
+        sample: "Mitad de 80 = 40",
+        trickHeading: "Repartir en Dos:",
+        steps: [
+          "Saca la mitad del primer número: la mitad de 8 es 4.",
+          "Agrega el cero: ¡40!"
+        ],
+        generator: () => {
+          const evens = [20, 40, 60, 80, 100];
+          const n = evens[Math.floor(Math.random() * evens.length)];
+          return { text: `Mitad de ${n}`, expected: n / 2, dist: [(n / 2) - 5, (n / 2) + 10, (n / 2) - 10] };
+        }
+      },
+      {
+        id: 14, world: 2,
+        title: "Sumar 11 (Sumar 10 y luego 1)",
+        tag: "Descomposición Aditiva",
+        sample: "34 + 11 = 45",
+        trickHeading: "Paso de Once:",
+        steps: [
+          "Suma primero 10: 34 + 10 = 44.",
+          "Luego suma el 1 que falta: 44 + 1 = 45."
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 15;
+          return { text: `${a} + 11`, expected: a + 11, dist: [a + 10, a + 12, a + 21, a + 9] };
+        }
+      },
+      {
+        id: 15, world: 3,
+        title: "Restar 11 (Quitar 10 y luego 1)",
+        tag: "Doble Salto Atrás",
+        sample: "46 − 11 = 35",
+        trickHeading: "Dos Pasitos Atrás:",
+        steps: [
+          "Quita 10 primero: 46 − 10 = 36.",
+          "Quita 1 más: 36 − 1 = 35."
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 70) + 25;
+          return { text: `${a} − 11`, expected: a - 11, dist: [a - 10, a - 12, a - 9, a - 21] };
+        }
+      },
+      {
+        id: 16, world: 3,
+        title: "Sumar decenas a números mixtos",
+        tag: "Avance de Decenas",
+        sample: "34 + 20 = 54",
+        trickHeading: "Suma de Decenas a la Cabeza:",
+        steps: [
+          "Suma solo las decenas: 3 decenas + 2 decenas = 5 decenas (50).",
+          "Conserva las 4 unidades: ¡54!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 50) + 12;
+          const d = (Math.floor(Math.random() * 3) + 2) * 10;
+          return { text: `${a} + ${d}`, expected: a + d, dist: [a + d - 10, a + d + 10, a + d - 1] };
+        }
+      },
+      {
+        id: 17, world: 3,
+        title: "Restar decenas a números mixtos",
+        tag: "Retroceso de Decenas",
+        sample: "68 − 30 = 38",
+        trickHeading: "Resta las Decenas:",
+        steps: [
+          "6 decenas − 3 decenas = 3 decenas (30).",
+          "Las 8 unidades siguen vivas: ¡38!"
+        ],
+        generator: () => {
+          const a = Math.floor(Math.random() * 40) + 52;
+          const d = (Math.floor(Math.random() * 3) + 2) * 10;
+          return { text: `${a} − ${d}`, expected: a - d, dist: [a - d + 10, a - d - 10, a - d + 1] };
+        }
+      },
+      {
+        id: 18, world: 3,
+        title: "Completar la decena inmediata superior",
+        tag: "Puente a la Decena",
+        sample: "47 + ? = 50",
+        trickHeading: "El Puente de la Unidad:",
+        steps: [
+          "Mira la unidad: tienes 7.",
+          "¿Cuánto falta para 10? Faltan 3.",
+          "¡Ese es el número del puente!"
+        ],
+        generator: () => {
+          const d = (Math.floor(Math.random() * 7) + 2) * 10;
+          const u = Math.floor(Math.random() * 7) + 2;
+          const num = d + u;
+          const target = d + 10;
+          return { text: `${num} + ? = ${target}`, expected: target - num, dist: [target - num + 1, target - num - 1, 10] };
+        }
+      },
+      {
+        id: 19, world: 3,
+        title: "Multiplicar por 10 (Agregar un cero)",
+        tag: "Potencia de 10",
+        sample: "6 × 10 = 60",
+        trickHeading: "El Efecto Imán del Cero:",
+        steps: [
+          "Escribe el mismo número.",
+          "Pégale un cero al final: 6 pasa a ser 60.",
+          "¡Magia matemática!"
+        ],
+        generator: () => {
+          const n = Math.floor(Math.random() * 9) + 2;
+          return { text: `${n} × 10`, expected: n * 10, dist: [n * 10 - 10, n * 10 + 10, n + 10] };
+        }
+      },
+      {
+        id: 20, world: 3,
+        title: "Desafío Maestro Mixto SiSAT",
+        tag: "Cálculo Integral",
+        sample: "25 + 25 = 50",
+        trickHeading: "Cálculo Relámpago:",
+        steps: [
+          "Combina dobles y decenas para resolver velozmente.",
+          "25 + 25 = 50; 50 + 50 = 100."
+        ],
+        generator: () => {
+          const pairs = [
+            { t: "25 + 25", e: 50, d: [45, 55, 60] },
+            { t: "50 + 50", e: 100, d: [90, 110, 80] },
+            { t: "15 + 15", e: 30, d: [25, 35, 40] },
+            { t: "75 + 25", e: 100, d: [95, 105, 90] },
+            { t: "45 + 45", e: 90, d: [80, 100, 85] }
+          ];
+          const choice = pairs[Math.floor(Math.random() * pairs.length)];
+          return { text: choice.t, expected: choice.e, dist: choice.d };
+        }
+      },
+      /* =============================================================
+         MUNDO 4: REACTIVOS OFICIALES SiSAT 3° DE PRIMARIA (#21 - #31)
+         ============================================================= */
+      {
+        id: 21, world: 4,
+        title: "SiSAT 1: Sumar 9 a dos cifras",
+        tag: "SiSAT Oficial · Reactivo 1",
+        sample: "26 + 9 = 35",
+        trickHeading: "Sumar 10 y quitar 1:",
+        steps: [
+          "Suma 10 al número para avanzar rápido: 26 + 10 = 36.",
+          "Como solo debías sumar 9, quítale 1 al resultado.",
+          "36 − 1 = 35. ¡Así de rápido y sin usar los dedos!"
+        ],
+        generator: () => {
+          const baseList = [26, 35, 47, 58, 64, 73, 85, 38, 49, 67, 18, 56];
+          const a = baseList[Math.floor(Math.random() * baseList.length)];
+          const expected = a + 9;
+          return { text: `${a} + 9`, expected: expected, dist: [a + 10, a + 8, a + 19, a - 1] };
+        }
+      },
+      {
+        id: 22, world: 4,
+        title: "SiSAT 2: ¿Cuánto le falta para llegar?",
+        tag: "SiSAT Oficial · Reactivo 2",
+        sample: "¿Cuánto falta de 35 a 50? = 15",
+        trickHeading: "Completar primero a la decena:",
+        steps: [
+          "Pregúntate: ¿cuánto le falta a 35 para completar 40? ¡Faltan 5!",
+          "Ahora: de 40 para llegar a 50, ¿cuánto falta? ¡Falta 10!",
+          "Junta las dos partes: 10 + 5 = 15. ¡Respuesta correcta!"
+        ],
+        generator: () => {
+          const pairs = [
+            { from: 35, to: 50, ans: 15 },
+            { from: 25, to: 40, ans: 15 },
+            { from: 45, to: 60, ans: 15 },
+            { from: 65, to: 80, ans: 15 },
+            { from: 35, to: 60, ans: 25 },
+            { from: 45, to: 70, ans: 25 },
+            { from: 55, to: 80, ans: 25 },
+            { from: 28, to: 40, ans: 12 },
+            { from: 36, to: 50, ans: 14 },
+            { from: 58, to: 70, ans: 12 },
+            { from: 44, to: 60, ans: 16 }
+          ];
+          const p = pairs[Math.floor(Math.random() * pairs.length)];
+          return { text: `¿Cuánto falta de ${p.from} a ${p.to}?`, expected: p.ans, dist: [p.ans + 10, p.ans - 5, p.ans + 5, p.ans - 2] };
+        }
+      },
+      {
+        id: 23, world: 4,
+        title: "SiSAT 3: Restar 10 a dos cifras",
+        tag: "SiSAT Oficial · Reactivo 3",
+        sample: "45 − 10 = 35",
+        trickHeading: "Disminuir una decena directa:",
+        steps: [
+          "Mira la cifra de las decenas: en 45 son 4 decenas.",
+          "Quítale 1 decena: te quedan 3 decenas.",
+          "Las unidades se quedan exactamente iguales: 5. Resultado: 35."
+        ],
+        generator: () => {
+          const list = [45, 38, 56, 72, 84, 93, 67, 29, 54, 88, 31, 62];
+          const a = list[Math.floor(Math.random() * list.length)];
+          const expected = a - 10;
+          return { text: `${a} − 10`, expected: expected, dist: [a - 9, a - 11, a - 20, a + 10] };
+        }
+      },
+      {
+        id: 24, world: 4,
+        title: "SiSAT 4: Restar 10 a centenas",
+        tag: "SiSAT Oficial · Reactivo 4",
+        sample: "260 − 10 = 250",
+        trickHeading: "Restar a las decenas de la centena:",
+        steps: [
+          "En 260 hay 26 decenas. Si quitas 1 decena, te quedan 25 decenas = 250.",
+          "O mira la cifra del medio: de 6 decenas quitas 1 y quedan 5.",
+          "La centena y el cero final se quedan intactos: ¡250!"
+        ],
+        generator: () => {
+          const list = [260, 180, 340, 450, 570, 230, 690, 150, 380, 520, 490, 760];
+          const c = list[Math.floor(Math.random() * list.length)];
+          const expected = c - 10;
+          return { text: `${c} − 10`, expected: expected, dist: [c - 20, c - 100, c + 10, c - 90] };
+        }
+      },
+      {
+        id: 25, world: 4,
+        title: "SiSAT 5: Suma cerrando decena",
+        tag: "SiSAT Oficial · Reactivo 5",
+        sample: "58 + 12 = 70",
+        trickHeading: "Regalar unidades para cerrar la decena:",
+        steps: [
+          "Fíjate en las unidades: 8 y 2 forman una decena completa (10).",
+          "Suma las decenas grandes: 50 + 10 = 60.",
+          "Añade la nueva decena que formaron las unidades: 60 + 10 = 70."
+        ],
+        generator: () => {
+          const list = [
+            { a: 58, b: 12, ans: 70 },
+            { a: 47, b: 13, ans: 60 },
+            { a: 36, b: 14, ans: 50 },
+            { a: 68, b: 22, ans: 90 },
+            { a: 27, b: 23, ans: 50 },
+            { a: 48, b: 32, ans: 80 },
+            { a: 39, b: 21, ans: 60 },
+            { a: 56, b: 24, ans: 80 },
+            { a: 28, b: 12, ans: 40 },
+            { a: 67, b: 13, ans: 80 },
+            { a: 45, b: 25, ans: 70 }
+          ];
+          const item = list[Math.floor(Math.random() * list.length)];
+          return { text: `${item.a} + ${item.b}`, expected: item.ans, dist: [item.ans - 10, item.ans + 10, item.ans - 2, item.ans + 2] };
+        }
+      },
+      {
+        id: 26, world: 4,
+        title: "SiSAT 6: Decena cerrada menos 11",
+        tag: "SiSAT Oficial · Reactivo 6",
+        sample: "80 − 11 = 69",
+        trickHeading: "Quitar 10 y luego quitar 1:",
+        steps: [
+          "Resta primero 10 a la decena: 80 − 10 = 70.",
+          "Ahora quita el 1 que falta: 70 − 1 = 69.",
+          "¡Recuerda que siempre termina en 9 y la decena baja en 1!"
+        ],
+        generator: () => {
+          const decades = [80, 50, 70, 60, 90, 40, 100];
+          const d = decades[Math.floor(Math.random() * decades.length)];
+          const expected = d - 11;
+          return { text: `${d} − 11`, expected: expected, dist: [expected + 1, expected - 1, d - 10, expected + 10] };
+        }
+      },
+      {
+        id: 27, world: 4,
+        title: "SiSAT 7: Serie numérica ascendente",
+        tag: "SiSAT Oficial · Reactivo 7",
+        sample: "53, 56, 59, _  (Sigue: 62)",
+        trickHeading: "Descubrir la regla de suma:",
+        steps: [
+          "Calcula la distancia entre los primeros números: de 53 a 56 van +3.",
+          "Comprueba el siguiente salto: 56 + 3 = 59. ¡La regla es sumar 3!",
+          "Aplica la regla al último número: 59 + 3 = 62."
+        ],
+        generator: () => {
+          const series = [
+            { nums: "53, 56, 59, _", ans: 62, step: 3 },
+            { nums: "34, 38, 42, _", ans: 46, step: 4 },
+            { nums: "25, 30, 35, _", ans: 40, step: 5 },
+            { nums: "41, 44, 47, _", ans: 50, step: 3 },
+            { nums: "62, 66, 70, _", ans: 74, step: 4 },
+            { nums: "18, 24, 30, _", ans: 36, step: 6 },
+            { nums: "73, 76, 79, _", ans: 82, step: 3 },
+            { nums: "45, 50, 55, _", ans: 60, step: 5 },
+            { nums: "28, 32, 36, _", ans: 40, step: 4 }
+          ];
+          const s = series[Math.floor(Math.random() * series.length)];
+          return { text: `${s.nums}`, expected: s.ans, dist: [s.ans + s.step, s.ans - 1, s.ans + 1, s.ans - s.step] };
+        }
+      },
+      {
+        id: 28, world: 4,
+        title: "SiSAT 8: Serie numérica descendente",
+        tag: "SiSAT Oficial · Reactivo 8",
+        sample: "98, 96, 94, _  (Sigue: 92)",
+        trickHeading: "Descubrir la regla de resta:",
+        steps: [
+          "Mira cuánto baja en cada paso: de 98 a 96 baja −2.",
+          "Comprueba el siguiente: 96 − 2 = 94. ¡La regla es restar 2!",
+          "Resta esa cantidad al último número: 94 − 2 = 92."
+        ],
+        generator: () => {
+          const series = [
+            { nums: "98, 96, 94, _", ans: 92, step: 2 },
+            { nums: "85, 80, 75, _", ans: 70, step: 5 },
+            { nums: "77, 74, 71, _", ans: 68, step: 3 },
+            { nums: "68, 64, 60, _", ans: 56, step: 4 },
+            { nums: "50, 47, 44, _", ans: 41, step: 3 },
+            { nums: "95, 90, 85, _", ans: 80, step: 5 },
+            { nums: "84, 82, 80, _", ans: 78, step: 2 },
+            { nums: "48, 44, 40, _", ans: 36, step: 4 },
+            { nums: "63, 60, 57, _", ans: 54, step: 3 }
+          ];
+          const s = series[Math.floor(Math.random() * series.length)];
+          return { text: `${s.nums}`, expected: s.ans, dist: [s.ans - s.step, s.ans + 1, s.ans - 1, s.ans + s.step] };
+        }
+      },
+      {
+        id: 29, world: 4,
+        title: "SiSAT 9: Multiplicación tablas 2 a 5",
+        tag: "SiSAT Oficial · Reactivo 9",
+        sample: "4 × 8 = 32",
+        trickHeading: "El Doble del Doble:",
+        steps: [
+          "Para multiplicar por 4, saca el doble dos veces: el doble de 8 es 16.",
+          "El doble de 16 es 32: ¡4 × 8 = 32!",
+          "Para multiplicar por 5: multiplica por 10 y toma la mitad."
+        ],
+        generator: () => {
+          const list = [
+            { a: 4, b: 8, ans: 32 },
+            { a: 3, b: 7, ans: 21 },
+            { a: 5, b: 6, ans: 30 },
+            { a: 4, b: 9, ans: 36 },
+            { a: 3, b: 8, ans: 24 },
+            { a: 5, b: 7, ans: 35 },
+            { a: 4, b: 7, ans: 28 },
+            { a: 3, b: 9, ans: 27 },
+            { a: 5, b: 9, ans: 45 },
+            { a: 4, b: 6, ans: 24 },
+            { a: 3, b: 6, ans: 18 },
+            { a: 5, b: 8, ans: 40 }
+          ];
+          const m = list[Math.floor(Math.random() * list.length)];
+          return { text: `${m.a} × ${m.b}`, expected: m.ans, dist: [m.ans + m.a, m.ans - m.a, m.ans + 10, m.ans - 2] };
+        }
+      },
+      {
+        id: 30, world: 4,
+        title: "SiSAT 10: Multiplicación tablas 6 a 9",
+        tag: "SiSAT Oficial · Reactivo 10",
+        sample: "9 × 7 = 63",
+        trickHeading: "El Secreto de la Tabla del 9:",
+        steps: [
+          "En la tabla del 9, la primera cifra siempre es 1 menos: 7 − 1 = 6 decenas (60).",
+          "La segunda cifra es lo que le falta a la primera para llegar a 9: de 6 a 9 faltan 3.",
+          "Junta las cifras: 6 y 3 = 63. ¡Nunca falla!"
+        ],
+        generator: () => {
+          const list = [
+            { a: 9, b: 7, ans: 63 },
+            { a: 8, b: 6, ans: 48 },
+            { a: 7, b: 8, ans: 56 },
+            { a: 6, b: 9, ans: 54 },
+            { a: 8, b: 8, ans: 64 },
+            { a: 7, b: 7, ans: 49 },
+            { a: 9, b: 8, ans: 72 },
+            { a: 6, b: 7, ans: 42 },
+            { a: 8, b: 9, ans: 72 },
+            { a: 9, b: 9, ans: 81 },
+            { a: 6, b: 6, ans: 36 },
+            { a: 7, b: 9, ans: 63 }
+          ];
+          const m = list[Math.floor(Math.random() * list.length)];
+          return { text: `${m.a} × ${m.b}`, expected: m.ans, dist: [m.ans + m.a, m.ans - m.a, m.ans + 10, m.ans - 4] };
+        }
+      },
+      {
+        id: 31, world: 4,
+        title: "Simulador SiSAT: Examen Completo 3°",
+        tag: "Simulador Diagnóstico Oficial",
+        sample: "Los 10 reactivos oficiales en 1 sola carrera",
+        trickHeading: "Evaluación Diagnóstica SiSAT 3° Grado:",
+        steps: [
+          "Este nivel alterna aleatoriamente entre los 10 tipos de reactivos oficiales del SiSAT.",
+          "Aplica con calma cada truco mental según el tipo de operación que aparezca.",
+          "¡Completar los 10 aciertos certifica Nivel Esperado en Cálculo Mental SiSAT!"
+        ],
+        generator: () => {
+          // Elige aleatoriamente entre los 10 reactivos oficiales SiSAT (#21 al #30)
+          const pick = Math.floor(Math.random() * 10) + 21;
+          const s = STRATEGIES.find(st => st.id === pick);
+          return s ? s.generator() : { text: "26 + 9", expected: 35, dist: [36, 34, 45] };
+        }
+      }
+    ];
+
+    /* =============================================================
+       5. ESTADO GLOBAL DE LA APLICACIÓN
+       ============================================================= */
+    const gameState = {
+      soundEnabled: true,
+      currentWorld: 1,
+      currentLevelId: 1,
+      difficulty: 'muy_facil',
+      cameraControlActive: false,
+      voiceSpeechEnabled: false,
+      gameActive: false,
+      gamePaused: false,
+      selectedThemeId: 'random',
+      currentTheme: THEMES[0],
+      lives: 3,
+      correctCount: 0,
+      targetGoal: 10,
+      totalBones: 0,
+      userStars: {},
+      currentProblem: null,
+      startTime: 0
+    };
+
+    try {
+      const savedBones = localStorage.getItem('loki_runner_bones');
+      if (savedBones) gameState.totalBones = parseInt(savedBones, 10) || 0;
+      const savedStars = localStorage.getItem('loki_runner_stars');
+      if (savedStars) gameState.userStars = JSON.parse(savedStars) || {};
+    } catch(e) {}
+
+    /* =============================================================
+       6. AUDIO SINTETIZADO Y MÚSICA DE ESCENARIO (100% OFFLINE)
+       ============================================================= */
+    let audioCtx = null;
+    let beachAudio = null;
+
+    function initBeachMusic() {
+      if (!beachAudio) {
+        beachAudio = new Audio('recursos/musica_playa.mp3');
+        beachAudio.loop = true;
+        beachAudio.volume = 0.55;
+        beachAudio.preload = 'auto';
+      }
+    }
+
+    function playBeachMusic() {
+      initBeachMusic();
+      if (!gameState.soundEnabled || !gameState.gameActive || gameState.gamePaused) return;
+      // Reproducción activa para TODOS los niveles y temas
+      beachAudio.play().catch(e => {
+        // Autoplay policy: reanudará al primer toque
+      });
+    }
+
+    function stopBeachMusic(resetTime = false) {
+      if (beachAudio) {
+        beachAudio.pause();
+        if (resetTime) beachAudio.currentTime = 0;
+      }
+    }
+
+    function updateThemeMusic() {
+      if (!gameState.gameActive || !gameState.soundEnabled || gameState.gamePaused) {
+        stopBeachMusic(false);
+        return;
+      }
+      // Música activa para TODOS los niveles y escenarios
+      playBeachMusic();
+    }
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    window.addEventListener('pointerdown', () => {
+      getAudioContext();
+      if (gameState.gameActive && !gameState.gamePaused && gameState.soundEnabled) {
+        if (beachAudio && beachAudio.paused) {
+          beachAudio.play().catch(() => {});
+        }
+      }
+    }, { passive: true });
+
+    function soundLaneSwitch() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(420, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(780, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    }
+
+    function soundCorrectHit() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.06));
+        gain.gain.setValueAtTime(0.22, ctx.currentTime + (idx * 0.06));
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * 0.06) + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + (idx * 0.06));
+        osc.stop(ctx.currentTime + (idx * 0.06) + 0.18);
+      });
+    }
+
+    function soundWrongHit() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    }
+
+    function soundVictoryFanfare() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const notes = [
+        { f: 523.25, d: 0.12, t: 0.0 },
+        { f: 659.25, d: 0.12, t: 0.14 },
+        { f: 783.99, d: 0.14, t: 0.28 },
+        { f: 1046.50, d: 0.45, t: 0.44 }
+      ];
+      notes.forEach(n => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(n.f, ctx.currentTime + n.t);
+        gain.gain.setValueAtTime(0.26, ctx.currentTime + n.t);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.t + n.d);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + n.t);
+        osc.stop(ctx.currentTime + n.t + n.d);
+      });
+    }
+
+    let volClickTimer = null;
+    let savedVolumeBeforeMute = 1.0;
+
+    function handleVolumeClick(e) {
+      if (e) e.stopPropagation();
+      if (volClickTimer) {
+        clearTimeout(volClickTimer);
+        volClickTimer = null;
+        toggleMuteSound();
+      } else {
+        volClickTimer = setTimeout(() => {
+          volClickTimer = null;
+          toggleVolumePopover();
+        }, 240);
+      }
+    }
+
+    function handleVolumeDblClick(e) {
+      if (e) e.stopPropagation();
+      if (volClickTimer) {
+        clearTimeout(volClickTimer);
+        volClickTimer = null;
+      }
+      toggleMuteSound();
+    }
+
+    function toggleVolumePopover() {
+      const pop = document.getElementById('vol-slider-popover');
+      if (!pop) return;
+      const isShown = (pop.style.display === 'flex' || pop.style.display === 'block');
+      pop.style.display = isShown ? 'none' : 'flex';
+    }
+
+    function closeVolumePopover() {
+      const pop = document.getElementById('vol-slider-popover');
+      if (pop) pop.style.display = 'none';
+    }
+
+    function setVolumeSlider(val) {
+      const num = parseInt(val, 10);
+      gameState.soundVolume = num / 100;
+      gameState.soundEnabled = (num > 0);
+      if (num > 0) savedVolumeBeforeMute = gameState.soundVolume;
+      applyVolumeState();
+    }
+
+    function toggleMuteSound() {
+      if (gameState.soundEnabled && gameState.soundVolume > 0) {
+        savedVolumeBeforeMute = gameState.soundVolume;
+        gameState.soundVolume = 0;
+        gameState.soundEnabled = false;
+      } else {
+        gameState.soundVolume = (savedVolumeBeforeMute > 0) ? savedVolumeBeforeMute : 1.0;
+        gameState.soundEnabled = true;
+      }
+      applyVolumeState();
+    }
+
+    function applyVolumeState() {
+      const pct = Math.round(gameState.soundVolume * 100);
+      const isMuted = (!gameState.soundEnabled || pct === 0);
+      const icon = isMuted ? '🔇' : (pct < 40 ? '🔈' : (pct < 80 ? '🔉' : '🔊'));
+
+      const hudIcon = document.getElementById('vol-hud-icon');
+      const hudLbl = document.getElementById('vol-hud-label');
+      const btn = document.getElementById('btn-hud-volume');
+      if (hudIcon) hudIcon.textContent = icon;
+      if (hudLbl) hudLbl.textContent = isMuted ? 'Mudo' : `${pct}%`;
+      if (btn) btn.classList.toggle('muted', isMuted);
+
+      const popPct = document.getElementById('vol-popover-pct');
+      const popSlider = document.getElementById('vol-slider');
+      if (popPct) popPct.textContent = isMuted ? 'Mudo' : `${pct}%`;
+      if (popSlider) popSlider.value = isMuted ? 0 : pct;
+
+      const menuBtn = document.getElementById('btn-toggle-sound');
+      if (menuBtn) menuBtn.textContent = `${icon} ${isMuted ? 'Mudo' : pct + '%'}`;
+
+      initBeachMusic();
+      if (beachAudio) {
+        beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.45);
+      }
+      updateThemeMusic();
+    }
+
+    function cycleVolume() {
+      toggleVolumePopover();
+    }
+
+    function toggleSound() {
+      toggleMuteSound();
+    }
+
+    window.addEventListener('click', (e) => {
+      const pop = document.getElementById('vol-slider-popover');
+      const btn = document.getElementById('btn-hud-volume');
+      if (pop && (pop.style.display === 'flex' || pop.style.display === 'block')) {
+        if (!pop.contains(e.target) && !btn.contains(e.target)) {
+          pop.style.display = 'none';
+        }
+      }
+    });
+
+    function toggleVoiceSpeech() {
+      gameState.voiceSpeechEnabled = !gameState.voiceSpeechEnabled;
+      const btn = document.getElementById('btn-voice-toggle');
+      if (btn) {
+        btn.classList.toggle('active', gameState.voiceSpeechEnabled);
+        btn.textContent = gameState.voiceSpeechEnabled ? '🔊 Voz ON' : '🔈 Voz OFF';
+      }
+      if (gameState.voiceSpeechEnabled && gameState.currentProblem) {
+        speakProblem(gameState.currentProblem.text);
+      }
+    }
+
+    function speakProblem(text) {
+      if (!gameState.voiceSpeechEnabled || !window.speechSynthesis) return;
+      try {
+        window.speechSynthesis.cancel();
+        let clean = text.replace('−', ' menos ').replace('+', ' más ').replace('×', ' por ').replace('?', '').replace('_', '¿qué número sigue?');
+        const utter = new SpeechSynthesisUtterance(clean);
+        utter.lang = 'es-MX';
+        utter.rate = 0.95;
+        window.speechSynthesis.speak(utter);
+      } catch(e) {}
+    }
+
+    /* =============================================================
+       7. DETECCIÓN DE MOVIMIENTO POR CÁMARA (WEBCAM)
+          CALIBRACIÓN ÁGIL (80% MÁS SENSIBLE)
+       ============================================================= */
+    let cameraStream = null;
+    let cameraVideo = null;
+    let cameraCanvas = null;
+    let cameraCtx = null;
+    let prevFrameData = null;
+    let cameraInterval = null;
+    let lastCameraMoveTime = 0;
+
+    let baselineLeft = 0;
+    let baselineRight = 0;
+    let baselineCenter = 0;
+
+    async function toggleCameraGlobal() {
+      if (gameState.cameraControlActive) {
+        stopCamera();
+        try { localStorage.setItem('loki_camera_pref', 'false'); } catch(e) {}
+        updateCameraUI(false);
+      } else {
+        const ok = await startCamera();
+        if (ok) {
+          try { localStorage.setItem('loki_camera_pref', 'true'); } catch(e) {}
+          updateCameraUI(true);
+        }
+      }
+    }
+
+    function updateCameraUI(isActive) {
+      const menuBtn = document.getElementById('menu-camera-toggle-btn');
+      const menuLbl = document.getElementById('menu-cam-label');
+      if (menuBtn && menuLbl) {
+        if (isActive) {
+          menuBtn.classList.add('active');
+          menuLbl.textContent = '● Cámara Activa (ON)';
+        } else {
+          menuBtn.classList.remove('active');
+          menuLbl.textContent = 'Activar Cámara';
+        }
+      }
+
+      const hudBtn = document.getElementById('btn-camera-toggle');
+      if (hudBtn) {
+        if (isActive) {
+          hudBtn.classList.add('active');
+          hudBtn.textContent = '📹 Activa';
+        } else {
+          hudBtn.classList.remove('active');
+          hudBtn.textContent = '📹 Cámara';
+        }
+      }
+
+      const pip = document.getElementById('camera-pip-container');
+      if (pip) {
+        pip.style.display = (isActive && gameState.gameActive) ? 'flex' : 'none';
+      }
+    }
+
+    async function startCamera() {
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert('Tu navegador no soporta acceso directo a la cámara web. ¡Puedes jugar con botones táctiles o teclado!');
+          return false;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 320, height: 240, facingMode: 'user' }
+        });
+        cameraStream = stream;
+        gameState.cameraControlActive = true;
+
+        cameraVideo = document.getElementById('camera-video-feed');
+        if (cameraVideo) cameraVideo.srcObject = stream;
+
+        cameraCanvas = document.createElement('canvas');
+        cameraCanvas.width = 64;
+        cameraCanvas.height = 48;
+        cameraCtx = cameraCanvas.getContext('2d', { willReadFrequently: true });
+        prevFrameData = null;
+
+        baselineLeft = 0;
+        baselineRight = 0;
+        baselineCenter = 0;
+
+        if (cameraInterval) clearInterval(cameraInterval);
+        cameraInterval = setInterval(processCameraMotion, 70);
+
+        return true;
+      } catch(err) {
+        console.warn('Error accediendo a cámara:', err);
+        alert('No se pudo acceder a la cámara o el permiso fue cancelado. ¡Puedes jugar con flechas de teclado o botones táctiles!');
+        stopCamera();
+        return false;
+      }
+    }
+
+    function stopCamera() {
+      gameState.cameraControlActive = false;
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      if (cameraInterval) {
+        clearInterval(cameraInterval);
+        cameraInterval = null;
+      }
+      const pip = document.getElementById('camera-pip-container');
+      if (pip) pip.style.display = 'none';
+
+      const hudBtn = document.getElementById('btn-camera-toggle');
+      if (hudBtn) {
+        hudBtn.classList.remove('active');
+        hudBtn.textContent = '📹 Cámara';
+      }
+
+      const menuBtn = document.getElementById('menu-camera-toggle-btn');
+      const menuLbl = document.getElementById('menu-cam-label');
+      if (menuBtn && menuLbl) {
+        menuBtn.classList.remove('active');
+        menuLbl.textContent = 'Activar Cámara';
+      }
+
+      prevFrameData = null;
+    }
+
+    function processCameraMotion() {
+      if (!cameraVideo || !cameraCtx || !gameState.cameraControlActive) return;
+      if (cameraVideo.readyState < 2) return;
+
+      const cw = cameraCanvas.width;
+      const ch = cameraCanvas.height;
+
+      // Dibujar espejado para que coincida intuitivamente con el cuerpo del alumno
+      cameraCtx.save();
+      cameraCtx.translate(cw, 0);
+      cameraCtx.scale(-1, 1);
+      cameraCtx.drawImage(cameraVideo, 0, 0, cw, ch);
+      cameraCtx.restore();
+
+      const curImgData = cameraCtx.getImageData(0, 0, cw, ch);
+      const curData = curImgData.data;
+
+      if (!prevFrameData) {
+        prevFrameData = new Uint8Array(curData.length);
+        prevFrameData.set(curData);
+        return;
+      }
+
+      const zLeftEnd = Math.floor(cw * 0.38);
+      const zRightStart = Math.floor(cw * 0.62);
+
+      let leftMotion = 0;
+      let centerMotion = 0;
+      let rightMotion = 0;
+
+      // UMBRAL DE SENSIBILIDAD REDUCIDO EN 80%: diff > 30 detecta inclinación natural sin esfuerzo
+      for (let y = 0; y < ch; y++) {
+        for (let x = 0; x < cw; x++) {
+          const idx = (y * cw + x) * 4;
+          const diff = Math.abs(curData[idx] - prevFrameData[idx]) +
+                       Math.abs(curData[idx+1] - prevFrameData[idx+1]) +
+                       Math.abs(curData[idx+2] - prevFrameData[idx+2]);
+
+          if (diff > 30) {
+            if (x < zLeftEnd) leftMotion++;
+            else if (x > zRightStart) rightMotion++;
+            else centerMotion++;
+          }
+        }
+      }
+
+      prevFrameData.set(curData);
+
+      // Promedio móvil adaptativo ágil
+      baselineLeft = baselineLeft * 0.7 + leftMotion * 0.3;
+      baselineRight = baselineRight * 0.7 + rightMotion * 0.3;
+      baselineCenter = baselineCenter * 0.7 + centerMotion * 0.3;
+
+      const burstLeft = Math.max(0, leftMotion - baselineLeft);
+      const burstRight = Math.max(0, rightMotion - baselineRight);
+
+      // CRITERIO SENSIBLE Y DIRECTO (80% MÁS RÁPIDO Y SUAVE):
+      // Inclinación clara con al menos 18 pixeles y ráfaga de 10
+      const isMotionLeft = (leftMotion >= 18 && burstLeft >= 10 && leftMotion > rightMotion * 1.20);
+      const isMotionRight = (rightMotion >= 18 && burstRight >= 10 && rightMotion > leftMotion * 1.20);
+
+      // Indicadores visuales en el cuadro PIP
+      const bLeft = document.getElementById('cam-bar-left');
+      const bCenter = document.getElementById('cam-bar-center');
+      const bRight = document.getElementById('cam-bar-right');
+      const pipMeter = document.getElementById('cam-motion-meter-fill');
+      const pipLabel = document.getElementById('cam-motion-status-lbl');
+
+      if (bLeft) bLeft.className = 'cam-zone-bar' + (isMotionLeft ? ' active-brusque' : (leftMotion > 12 ? ' active-soft' : ''));
+      if (bRight) bRight.className = 'cam-zone-bar' + (isMotionRight ? ' active-brusque' : (rightMotion > 12 ? ' active-soft' : ''));
+      if (bCenter) bCenter.className = 'cam-zone-bar' + (player.lane === 0 ? ' active-lane' : '');
+
+      const currentMaxBurst = Math.max(burstLeft, burstRight);
+      const burstPct = Math.min(100, Math.floor((currentMaxBurst / 25) * 100));
+      if (pipMeter) pipMeter.style.width = burstPct + '%';
+
+      if (pipLabel) {
+        if (isMotionLeft) {
+          pipLabel.textContent = '◀ IZQUIERDA';
+          pipLabel.style.color = '#38bdf8';
+        } else if (isMotionRight) {
+          pipLabel.textContent = 'DERECHA ▶';
+          pipLabel.style.color = '#38bdf8';
+        } else if (leftMotion > 12 || rightMotion > 12) {
+          pipLabel.textContent = 'Inclinación detectada...';
+          pipLabel.style.color = '#fde047';
+        } else {
+          pipLabel.textContent = 'Centrado ●';
+          pipLabel.style.color = '#64748b';
+        }
+      }
+
+      if (!gameState.gameActive || gameState.gamePaused) return;
+
+      const now = Date.now();
+      if (now - lastCameraMoveTime < 260) return; // Cooldown ágil de 260ms
+
+      if (isMotionLeft) {
+        if (player.lane > -1) {
+          player.lane--;
+          soundLaneSwitch();
+          lastCameraMoveTime = now;
+        }
+      } else if (isMotionRight) {
+        if (player.lane < 1) {
+          player.lane++;
+          soundLaneSwitch();
+          lastCameraMoveTime = now;
+        }
+      }
+    }
+
+    function setDifficultyMode(diffId) {
+      const mode = DIFFICULTY_MODES[diffId] || DIFFICULTY_MODES['muy_facil'];
+      gameState.difficulty = mode.id;
+      WORLD.speed = mode.speed;
+
+      document.querySelectorAll('.speed-btn, .speed-side-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(mode.btnId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const badge = document.getElementById('hud-speed-badge');
+      if (badge) {
+        badge.textContent = `${mode.icon} ${mode.name} (${mode.sec}s)`;
+        badge.className = `hud-mode-badge ${mode.badgeClass}`;
+      }
+    }
+
+    /* =============================================================
+       7.5 SELECTOR Y GESTOR DE ESCENARIOS TEMÁTICOS
+       ============================================================= */
+    function selectThemeFromMenu(themeId) {
+      gameState.selectedThemeId = themeId;
+      document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
+      const activeBtn = document.getElementById(`tchip-${themeId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function cycleTheme() {
+      const idx = THEMES.findIndex(t => t.id === gameState.currentTheme.id);
+      const nextIdx = (idx + 1) % THEMES.length;
+      gameState.currentTheme = THEMES[nextIdx];
+      const themeBadge = document.getElementById('hud-theme-badge');
+      if (themeBadge) {
+        themeBadge.textContent = `${gameState.currentTheme.icon} ${gameState.currentTheme.name}`;
+      }
+      resetTrackTrees();
+      updateThemeMusic();
+    }
+
+    function resetTrackTrees() {
+      individualTrees = [];
+      const theme = gameState.currentTheme || THEMES[0];
+      const treeSpacing = 90;
+
+      let treePool = ['pino', 'pino_2', 'pino_3', 'pino_4', 'pino_5', 'pino_6', 'pino_7', 'encino', 'encino_2'];
+      let accentPool = ['hierba_alta', 'hierba_flores', 'hierba_baja', 'arbusto'];
+
+      if (theme.id === 'playa') {
+        // En la playa EXCLUSIVAMENTE palmeras tropicales variadas y vegetación costera
+        treePool = ['palmera', 'palmera_2', 'palmera_3', 'palmera_4', 'palmera_5'];
+        accentPool = ['hierba_flores', 'hierba_alta', 'hierba_baja', 'arbusto'];
+      } else if (theme.id === 'ciudad') {
+        treePool = ['poste', 'encino', 'encino_2', 'poste'];
+        accentPool = ['arbusto', 'hierba_alta', 'hierba_baja'];
+      } else if (theme.id === 'granja') {
+        treePool = ['manzano', 'manzano_2', 'manzano_3', 'encino', 'encino_2', 'encino_3'];
+        accentPool = ['hierba_alta', 'hierba_flores', 'hierba_baja', 'arbusto'];
+      } else if (theme.id === 'campo') {
+        treePool = ['cactus', 'encino_3', 'manzano_2', 'pino_7'];
+        accentPool = ['cactus', 'hierba_baja', 'hierba_alta'];
+      }
+
+      let treeIdx = 0;
+      // Iniciar z desde -140 para que al arrancar o cambiar de mapa ya existan árboles en primer plano saliendo de la pantalla
+      for (let z = -140; z < WORLD.roadLength; z += treeSpacing) {
+        // 1. ÁRBOLES PRINCIPALES (Retirados a x = ±4.40 para que los troncos y ramas NUNCA pisen la carretera)
+        const leftTreeType = treePool[treeIdx % treePool.length];
+        const treeLeftX = -4.40 - ((treeIdx % 3) * 0.40);
+        individualTrees.push({ x: treeLeftX, z: z, type: leftTreeType });
+
+        const rightTreeType = treePool[(treeIdx + 1) % treePool.length];
+        const treeRightX = 4.40 + (((treeIdx + 1) % 3) * 0.40);
+        individualTrees.push({ x: treeRightX, z: z + (treeSpacing * 0.5), type: rightTreeType });
+
+        // Capa de fondo densa (bosque lateral tupido y continuo)
+        individualTrees.push({ x: -5.90, z: z + 30, type: treePool[(treeIdx + 2) % treePool.length], isFar: true });
+        individualTrees.push({ x: 5.90, z: z + (treeSpacing * 0.5) + 30, type: treePool[(treeIdx + 3) % treePool.length], isFar: true });
+
+        // 2. DETALLES INTERMEDIOS DE LA GUARNICIÓN (ARBUSTOS / HIERBA)
+        // Se posicionan a ±2.45 (fuera de la calzada de 1.85, sin solaparse con el asfalto)
+        if (treeIdx % 2 === 1) {
+          const accentTypeL = accentPool[treeIdx % accentPool.length];
+          individualTrees.push({ x: -2.45, z: z + (treeSpacing * 0.45), type: accentTypeL });
+        } else if (treeIdx % 3 === 0) {
+          const accentTypeR = accentPool[(treeIdx + 1) % accentPool.length];
+          individualTrees.push({ x: 2.45, z: z + (treeSpacing * 0.25), type: accentTypeR });
+        }
+
+        treeIdx++;
+      }
+    }
+
+    /* =============================================================
+       8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
+       ============================================================= */
+    function switchWorld(worldNum) {
+      gameState.currentWorld = worldNum || 1;
+      const btnMap = {
+        1: 'wbtn-m1',
+        2: 'wbtn-m2',
+        3: 'wbtn-m3',
+        4: 'wbtn-sisat'
+      };
+      Object.entries(btnMap).forEach(([w, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', parseInt(w, 10) === gameState.currentWorld);
+      });
+      renderLevels();
+    }
+
+    function renderLevels() {
+      const container = document.getElementById('levels-container');
+      container.innerHTML = '';
+
+      document.getElementById('global-bones-count').textContent = gameState.totalBones;
+
+      let starsTotal = 0;
+      Object.values(gameState.userStars).forEach(st => starsTotal += st);
+      document.getElementById('global-stars-count').textContent = `${starsTotal} / 60`;
+
+      const WORLDS_INFO = [
+        { id: 1, name: '🟢 MUNDO 1: BOSQUE Y PRADERAS', tag: 'Estrategias Fundamentales #1 a #7' },
+        { id: 2, name: '🔵 MUNDO 2: COSTA Y AVENTURA', tag: 'Estrategias de Agilidad #8 a #14' },
+        { id: 3, name: '🟣 MUNDO 3: DESAFÍO URBANO', tag: 'Desafíos Avanzados #15 a #20' },
+        { id: 4, name: '⭐ MUNDO SiSAT: REACTIVOS OFICIALES 3° DE PRIMARIA', tag: 'Reactivos Diagnósticos #21 a #31' }
+      ];
+
+      const wId = gameState.currentWorld || 1;
+      const wInfo = WORLDS_INFO.find(w => w.id === wId) || WORLDS_INFO[0];
+      const strats = STRATEGIES.filter(s => s.world === wId);
+
+      const header = document.createElement('div');
+      header.className = 'world-section-header';
+      header.innerHTML = `<h3>${wInfo.name} <span class="world-count-tag">${wInfo.tag}</span></h3>`;
+      container.appendChild(header);
+
+        strats.forEach(strat => {
+          const stars = gameState.userStars[strat.id] || 0;
+          const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+          const card = document.createElement('div');
+          card.className = 'level-card' + (strat.id === 6 || strat.id === 21 ? ' featured' : '');
+          card.onclick = () => openTutorialModal(strat.id);
+          card.innerHTML = `
+            <div class="level-badge-num">#${strat.id}</div>
+            <div class="level-header">
+              <span class="level-strategy-tag">${strat.tag}</span>
+              <h3>${strat.title}</h3>
+            </div>
+            <div class="level-formula-preview">
+              <span class="badge-ex">EJ</span>
+              <span>${strat.sample}</span>
+            </div>
+            <div class="level-footer">
+              <div class="level-stars" title="${stars} estrellas ganadas">${starStr}</div>
+              <span class="level-cta-badge">⚡ Jugar</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+    }
+
+    function openTutorialModal(levelId) {
+      gameState.currentLevelId = levelId;
+      const strat = STRATEGIES.find(s => s.id === levelId);
+      if (!strat) return;
+
+      document.getElementById('modal-tut-strategy-name').textContent = `Nivel #${strat.id}: ${strat.title}`;
+      document.getElementById('modal-tut-grade-tag').textContent = `Mundo ${strat.world} · ${strat.tag}`;
+      document.getElementById('modal-tut-trick-heading').textContent = strat.trickHeading || "El Secreto de Loki:";
+
+      const stepsContainer = document.getElementById('modal-tut-steps');
+      stepsContainer.innerHTML = '';
+      const ol = document.createElement('ol');
+      strat.steps.forEach(step => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        ol.appendChild(li);
+      });
+      stepsContainer.appendChild(ol);
+
+      document.getElementById('modal-tut-formula').textContent = `Ejemplo del truco: ${strat.sample}`;
+      document.getElementById('modal-tutorial').classList.add('active');
+    }
+
+    function closeTutorialModal() {
+      document.getElementById('modal-tutorial').classList.remove('active');
+      if (gameState.gameActive && gameState.wasPausedByTrick) {
+        gameState.gamePaused = false;
+        gameState.wasPausedByTrick = false;
+        const btn = document.getElementById('btn-pause');
+        if (btn) {
+          btn.textContent = '⏸️ Pausa';
+          btn.classList.remove('active');
+        }
+        updateThemeMusic();
+      }
+    }
+
+    function openExplanationFromGame() {
+      if (gameState.gameActive && !gameState.gamePaused) {
+        gameState.gamePaused = true;
+        gameState.wasPausedByTrick = true;
+        const btn = document.getElementById('btn-pause');
+        if (btn) {
+          btn.textContent = '▶️ Seguir';
+          btn.classList.add('active');
+        }
+        updateThemeMusic();
+      }
+      openTutorialModal(gameState.currentLevelId);
+    }
+
+    // Iniciar inmediatamente con la dificultad elegida (1 clic y adentro)
+    function startLevelWithDifficulty(diffId) {
+      closeTutorialModal();
+      setDifficultyMode(diffId);
+      startGameWithMode(diffId);
+    }
+
+    /* =============================================================
+       9. MOTOR DEL JUEGO RUNNER 3D (PIXEL ART ENGINE)
+       ============================================================= */
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const IMAGES = {
+      lokiRun1: new Image(),
+      lokiRun2: new Image(),
+      lokiAvatar: new Image(),
+      bone: new Image(),
+      trophy: new Image(),
+      pino: new Image(),
+      pino_2: new Image(),
+      pino_3: new Image(),
+      pino_4: new Image(),
+      pino_5: new Image(),
+      pino_6: new Image(),
+      pino_7: new Image(),
+      encino: new Image(),
+      encino_2: new Image(),
+      encino_3: new Image(),
+      palmera: new Image(),
+      palmera_2: new Image(),
+      palmera_3: new Image(),
+      palmera_4: new Image(),
+      palmera_5: new Image(),
+      manzano: new Image(),
+      manzano_2: new Image(),
+      manzano_3: new Image(),
+      poste: new Image(),
+      arbusto: new Image(),
+      cactus: new Image(),
+      hierba: new Image(),
+      hierba_alta: new Image(),
+      hierba_flores: new Image(),
+      hierba_baja: new Image(),
+      sombraPixel: new Image(),
+      arcoValla: new Image(),
+      fondoHorizonte: new Image(),
+      fondoBosque: new Image(),
+      fondoPlaya: new Image(),
+      fondoCiudad: new Image(),
+      fondoGranja: new Image(),
+      fondoCampo: new Image(),
+      banner: new Image(),
+      lokiSprint: []
+    };
+    IMAGES.lokiRun1.src = 'recursos/loki_back_run1.png';
+    IMAGES.lokiRun2.src = 'recursos/loki_back_run2.png';
+    IMAGES.lokiAvatar.src = 'recursos/loki_avatar.png';
+    IMAGES.bone.src = 'recursos/hueso_transparente.png';
+    IMAGES.trophy.src = 'recursos/trofeo_transparente.png';
+    IMAGES.pino.src = 'recursos/arbol_pino_3d.png';
+    IMAGES.pino_2.src = 'recursos/arbol_pino_2_3d.png';
+    IMAGES.pino_3.src = 'recursos/arbol_pino_3_3d.png';
+    IMAGES.pino_4.src = 'recursos/arbol_pino_4_3d.png';
+    IMAGES.pino_5.src = 'recursos/arbol_pino_5_3d.png';
+    IMAGES.pino_6.src = 'recursos/arbol_pino_6_3d.png';
+    IMAGES.pino_7.src = 'recursos/arbol_pino_7_3d.png';
+    IMAGES.encino.src = 'recursos/arbol_encino_3d.png';
+    IMAGES.encino_2.src = 'recursos/arbol_encino_2_3d.png';
+    IMAGES.encino_3.src = 'recursos/arbol_encino_3_3d.png';
+    IMAGES.palmera.src = 'recursos/arbol_palmera_3d.png';
+    IMAGES.palmera_2.src = 'recursos/arbol_palmera_2_3d.png';
+    IMAGES.palmera_3.src = 'recursos/arbol_palmera_3_3d.png';
+    IMAGES.palmera_4.src = 'recursos/arbol_palmera_4_3d.png';
+    IMAGES.palmera_5.src = 'recursos/arbol_palmera_5_3d.png';
+    IMAGES.manzano.src = 'recursos/arbol_manzano_3d.png';
+    IMAGES.manzano_2.src = 'recursos/arbol_manzano_2_3d.png';
+    IMAGES.manzano_3.src = 'recursos/arbol_manzano_3_3d.png';
+    IMAGES.poste.src = 'recursos/poste_luz_3d.png';
+    IMAGES.arbusto.src = 'recursos/arbusto_flores_3d.png';
+    IMAGES.cactus.src = 'recursos/cactus_campo_3d.png';
+    IMAGES.hierba.src = 'recursos/hierba_silvestre_3d.png';
+    IMAGES.hierba_alta.src = 'recursos/hierba_alta_3d.png';
+    IMAGES.hierba_flores.src = 'recursos/hierba_flores_3d.png';
+    IMAGES.hierba_baja.src = 'recursos/hierba_baja_3d.png';
+    IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
+    IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
+    const ASSET_CACHE_BUST = 'v=3.2_panoramicos_3x1_20261108';
+    IMAGES.fondoHorizonte.src = `recursos/fondo_horizonte_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoBosque.src = `recursos/fondo_bosque_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoPlaya.src = `recursos/fondo_playa_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoCiudad.src = `recursos/fondo_ciudad_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoGranja.src = `recursos/fondo_granja_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoCampo.src = `recursos/fondo_campo_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.banner.src = 'recursos/loki_banner_principal.png';
+
+    // 8 Fotogramas del ciclo de sprint de espaldas (64x64 pixel art)
+    for (let f = 0; f < 8; f++) {
+      const spImg = new Image();
+      spImg.src = `recursos/loki_sprint_${f}.png`;
+      IMAGES.lokiSprint.push(spImg);
+    }
+
+    const WORLD = {
+      lanes: [-1, 0, 1],
+      laneWidth: 165,
+      cameraFov: 240,
+      cameraHeight: 180,
+      horizonY: 210,
+      roadLength: 2400,
+      speed: 2.40
+    };
+
+    const player = {
+      lane: 0,
+      worldX: 0,
+      tilt: 0,
+      runCycle: 0,
+      sprintCycle: 0,
+      jumpY: 0,
+      jumpVy: 0,
+      isJumping: false,
+      isInvulnerable: false,
+      invulnerableTimer: 0,
+      celebrateTimer: 0,
+      stumbleTimer: 0
+    };
+
+    let roadWaves = [];
+    let individualTrees = [];
+    let cameraZ = 0;
+    let particles = [];
+    let animFrameId = null;
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.imageSmoothingEnabled = false; // Estilo Pixel Art nítido
+      // Subir horizonte a 0.30 para dar más profundidad y recorrido a la carretera
+      WORLD.horizonY = window.innerHeight * 0.30;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function startGameWithMode(diffId) {
+      gameState.difficulty = diffId || 'muy_facil';
+      gameState.gameActive = true;
+      gameState.gamePaused = false;
+      gameState.lives = 3;
+      gameState.correctCount = 0;
+      gameState.startTime = Date.now();
+
+      // Configurar velocidad exacta del modo
+      const mode = DIFFICULTY_MODES[gameState.difficulty] || DIFFICULTY_MODES['muy_facil'];
+      WORLD.speed = mode.speed;
+
+      // SELECCIÓN DE TEMA (RESPECTANDO ELECCIÓN DEL MENÚ O ALEATORIO)
+      if (gameState.selectedThemeId && gameState.selectedThemeId !== 'random') {
+        gameState.currentTheme = THEMES.find(t => t.id === gameState.selectedThemeId) || THEMES[0];
+      } else {
+        gameState.currentTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
+      }
+      const themeBadge = document.getElementById('hud-theme-badge');
+      if (themeBadge) {
+        themeBadge.textContent = `${gameState.currentTheme.icon} ${gameState.currentTheme.name}`;
+      }
+      cameraZ = 0;
+      updateThemeMusic();
+
+      document.getElementById('view-menu').classList.remove('active');
+      document.getElementById('view-game').classList.add('active');
+      document.getElementById('modal-tutorial').classList.remove('active');
+      document.getElementById('modal-victory').classList.remove('active');
+      document.getElementById('modal-gameover').classList.remove('active');
+
+      if (gameState.cameraControlActive) {
+        const pip = document.getElementById('camera-pip-container');
+        if (pip) pip.style.display = 'flex';
+      }
+
+      setDifficultyMode(gameState.difficulty);
+
+      resizeCanvas();
+      resetTrack();
+      updateHudCounters();
+      spawnNextProblemWave();
+
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      lastFrameTime = performance.now();
+      animFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function resetTrack() {
+      player.lane = 0;
+      player.worldX = 0;
+      player.tilt = 0;
+      player.runCycle = 0;
+      player.sprintCycle = 0;
+      player.isInvulnerable = false;
+      player.celebrateTimer = 0;
+      player.stumbleTimer = 0;
+      cameraZ = 0;
+
+      resetTrackTrees();
+
+      roadWaves = [];
+      particles = [];
+
+      document.getElementById('hud-strategy-title').textContent = 
+        `Nivel #${gameState.currentLevelId} · ${STRATEGIES[gameState.currentLevelId - 1].title}`;
+    }
+
+    /* =============================================================
+       10. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
+       ============================================================= */
+    function spawnNextProblemWave() {
+      const strat = STRATEGIES[gameState.currentLevelId - 1];
+      const prob = strat.generator();
+      gameState.currentProblem = prob;
+
+      const mathEl = document.getElementById('hud-math-problem');
+      let displayText = prob.text.trim();
+      if (!displayText.includes('=') && !displayText.includes('?') && !displayText.includes('_')) {
+        displayText = `${displayText} = ?`;
+      }
+      mathEl.textContent = displayText;
+
+      if (gameState.voiceSpeechEnabled) {
+        speakProblem(prob.text);
+      }
+
+      const rawOptions = [
+        { val: prob.expected, isCorrect: true }
+      ];
+
+      const shuffledDist = [...prob.dist].sort(() => Math.random() - 0.5);
+      rawOptions.push({ val: shuffledDist[0], isCorrect: false });
+      rawOptions.push({ val: shuffledDist[1], isCorrect: false });
+
+      for (let i = rawOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rawOptions[i], rawOptions[j]] = [rawOptions[j], rawOptions[i]];
+      }
+
+      const lanes = [-1, 0, 1];
+      const hurdles = rawOptions.map((opt, idx) => ({
+        lane: lanes[idx],
+        value: opt.val,
+        isCorrect: opt.isCorrect,
+        hit: false
+      }));
+
+      // Distancia calibrada a 2200 para que los segundos sean exactos (15s, 11s, 7s, 4s)
+      const spawnZ = 2200;
+      roadWaves.push({
+        z: spawnZ,
+        hurdles: hurdles,
+        evaluated: false
+      });
+    }
+
+    function updateHudCounters() {
+      const hearts = '❤️'.repeat(Math.max(0, gameState.lives)) + '🖤'.repeat(Math.max(0, 3 - gameState.lives));
+      document.getElementById('hud-lives').textContent = hearts;
+      document.getElementById('hud-bones-progress').textContent = `${gameState.correctCount} / ${gameState.targetGoal}`;
+    }
+
+    function movePlayerLeft() {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      if (player.lane > -1) {
+        player.lane--;
+        soundLaneSwitch();
+      }
+    }
+
+    function movePlayerRight() {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      if (player.lane < 1) {
+        player.lane++;
+        soundLaneSwitch();
+      }
+    }
+
+    function handleTouchLeft(e) {
+      if (e) e.preventDefault();
+      movePlayerLeft();
+    }
+
+    function handleTouchRight(e) {
+      if (e) e.preventDefault();
+      movePlayerRight();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (!gameState.gameActive) return;
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        movePlayerLeft();
+      } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        movePlayerRight();
+      } else if (e.key === 'p' || e.key === 'P' || e.key === ' ') {
+        togglePauseGame();
+      }
+    });
+
+    canvas.addEventListener('pointerdown', (e) => {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const third = rect.width / 3;
+
+      if (clickX < third) {
+        if (player.lane !== -1) { player.lane = -1; soundLaneSwitch(); }
+      } else if (clickX > third * 2) {
+        if (player.lane !== 1) { player.lane = 1; soundLaneSwitch(); }
+      } else {
+        if (player.lane !== 0) { player.lane = 0; soundLaneSwitch(); }
+      }
+    });
+
+    function togglePauseGame() {
+      if (!gameState.gameActive) return;
+      gameState.gamePaused = !gameState.gamePaused;
+      const btn = document.getElementById('btn-pause');
+      if (btn) {
+        btn.textContent = gameState.gamePaused ? '▶️ Seguir' : '⏸️ Pausa';
+        btn.classList.toggle('active', gameState.gamePaused);
+      }
+      updateThemeMusic();
+    }
+
+    function exitToMenu() {
+      stopBeachMusic(true);
+      const pip = document.getElementById('camera-pip-container');
+      if (pip) pip.style.display = 'none';
+
+      gameState.gameActive = false;
+      gameState.gamePaused = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      document.getElementById('view-game').classList.remove('active');
+      document.getElementById('modal-victory').classList.remove('active');
+      document.getElementById('modal-gameover').classList.remove('active');
+      document.getElementById('modal-tutorial').classList.remove('active');
+      document.getElementById('view-menu').classList.add('active');
+      renderLevels();
+    }
+
+    /* =============================================================
+       11. BUCLE DE ACTUALIZACIÓN Y FÍSICAS (60 FPS)
+       ============================================================= */
+    let lastFrameTime = performance.now();
+
+    function gameLoop(now) {
+      const dt = Math.min((now - lastFrameTime) / 1000, 0.1);
+      lastFrameTime = now;
+
+      if (gameState.gameActive && !gameState.gamePaused) {
+        updateGame(dt);
+      }
+
+      renderGame();
+
+      if (gameState.gameActive) {
+        animFrameId = requestAnimationFrame(gameLoop);
+      }
+    }
+
+    function updateGame(dt) {
+      const targetX = player.lane * WORLD.laneWidth;
+      const diffX = targetX - player.worldX;
+      player.worldX += diffX * 0.16;
+      player.tilt = (diffX / WORLD.laneWidth) * 0.26;
+
+      // Velocidad de animación sincronizada con la dificultad:
+      // Normal (speed = 5.14) corre al 100% (8.33 FPS nativo de 120ms por fotograma)
+      const baseSprintFps = 8.33;
+      // Multiplicador de animación calibrado según la dificultad:
+      // Muy Fácil: 0.55x, Fácil: 0.75x, Normal: 1.0x, Difícil: 1.35x (punto medio solicitado entre 1.0x y 1.75x)
+      let animSpeedRatio = (WORLD.speed / 5.14);
+      if (gameState.difficulty === 'dificil') {
+        animSpeedRatio = 1.35; // Punto medio suave y ágil
+      } else if (gameState.difficulty === 'muy_facil') {
+        animSpeedRatio = 0.55;
+      } else if (gameState.difficulty === 'facil') {
+        animSpeedRatio = 0.75;
+      }
+      player.sprintCycle += dt * baseSprintFps * animSpeedRatio;
+      player.runCycle += dt * (WORLD.speed * 4.5);
+      // Físicas de salto dinámico con gravedad suave
+      if (player.isJumping || player.jumpY > 0) {
+        player.jumpY += player.jumpVy * dt;
+        player.jumpVy -= 1250 * dt; // Gravedad
+        if (player.jumpY <= 0) {
+          player.jumpY = 0;
+          player.jumpVy = 0;
+          player.isJumping = false;
+        }
+      }
+
+      if (player.isInvulnerable) {
+        player.invulnerableTimer -= dt;
+        if (player.invulnerableTimer <= 0) player.isInvulnerable = false;
+      }
+      if (player.celebrateTimer > 0) player.celebrateTimer -= dt;
+      if (player.stumbleTimer > 0) player.stumbleTimer -= dt;
+
+      cameraZ += WORLD.speed;
+
+      individualTrees.forEach(t => {
+        t.z -= WORLD.speed;
+        // Permitir que los árboles y vegetación lateral sigan avanzando hasta z = -170
+        // para que desciendan y salgan gradualmente por las orillas de la pantalla (solo puntas visibles)
+        if (t.z < -170) t.z += WORLD.roadLength;
+      });
+
+      for (let i = roadWaves.length - 1; i >= 0; i--) {
+        const wave = roadWaves[i];
+        wave.z -= WORLD.speed;
+
+        if (!wave.evaluated && wave.z <= 40 && wave.z >= -20) {
+          const collidedHurdle = wave.hurdles.find(h => h.lane === player.lane);
+
+          if (collidedHurdle) {
+            wave.evaluated = true;
+            // Despejar inmediatamente TODAS las vallas de esta oleada para dejar el camino despejado
+            wave.hurdles.forEach(h => h.hit = true);
+
+            if (collidedHurdle.isCorrect) {
+              handleCorrectHit(collidedHurdle.value);
+            } else {
+              handleWrongHit(collidedHurdle.value);
+            }
+          }
+        }
+
+        if (wave.z < -90) {
+          if (!wave.evaluated) {
+            handleMissedWave();
+          }
+          roadWaves.splice(i, 1);
+          if (gameState.lives > 0 && gameState.correctCount < gameState.targetGoal) {
+            spawnNextProblemWave();
+          }
+        }
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35;
+        p.alpha -= dt * 1.5;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+    }
+
+    function showToast(text, isError=false) {
+      const toast = document.getElementById('feedback-toast');
+      const mathCard = document.getElementById('hud-math-card');
+      toast.textContent = text;
+      toast.className = isError ? 'show error' : 'show';
+
+      if (mathCard) {
+        mathCard.classList.remove('glow-correct', 'glow-wrong');
+        mathCard.classList.add(isError ? 'glow-wrong' : 'glow-correct');
+        clearTimeout(mathCard._timer);
+        mathCard._timer = setTimeout(() => {
+          mathCard.classList.remove('glow-correct', 'glow-wrong');
+        }, 900);
+      }
+
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => { toast.className = ''; }, 1100);
+    }
+
+    function handleCorrectHit(val) {
+      gameState.correctCount++;
+      gameState.totalBones++;
+      player.celebrateTimer = 0.6;
+      soundCorrectHit();
+      showToast(`¡Excelente! ${val} es correcto 🦴`, false);
+      updateHudCounters();
+
+      try { localStorage.setItem('loki_runner_bones', gameState.totalBones); } catch(e) {}
+
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      for (let i = 0; i < 24; i++) {
+        particles.push({
+          x: screenW * 0.5 + (player.worldX * 0.8),
+          y: screenH * 0.78 - player.jumpY,
+          vx: (Math.random() - 0.5) * 10,
+          vy: -Math.random() * 8 - 4,
+          color: ['#fbbf24', '#f59e0b', '#38bdf8', '#ffffff'][Math.floor(Math.random() * 4)],
+          size: Math.random() * 7 + 4,
+          alpha: 1.0
+        });
+      }
+
+      if (gameState.correctCount >= gameState.targetGoal) {
+        triggerVictory();
+      }
+    }
+
+    function handleWrongHit(val) {
+      if (player.isInvulnerable) return;
+
+      gameState.lives--;
+      player.stumbleTimer = 0.5;
+      player.isInvulnerable = true;
+      player.invulnerableTimer = 1.2;
+      soundWrongHit();
+
+      const expected = gameState.currentProblem ? gameState.currentProblem.expected : '';
+      showToast(`¡Cuidado! ${val} es trampa. La correcta es ${expected}`, true);
+      updateHudCounters();
+
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+      for (let i = 0; i < 16; i++) {
+        particles.push({
+          x: screenW * 0.5 + (player.worldX * 0.8),
+          y: screenH * 0.78,
+          vx: (Math.random() - 0.5) * 8,
+          vy: -Math.random() * 6 - 2,
+          color: ['#ef4444', '#991b1b', '#64748b'][Math.floor(Math.random() * 3)],
+          size: Math.random() * 6 + 3,
+          alpha: 1.0
+        });
+      }
+
+      if (gameState.lives <= 0) {
+        triggerGameOver();
+      }
+    }
+
+    function handleMissedWave() {
+      const expected = gameState.currentProblem ? gameState.currentProblem.expected : '';
+      showToast(`¡Se te pasó! La respuesta correcta era ${expected}`, false);
+    }
+
+    function triggerVictory() {
+      stopBeachMusic(false);
+      gameState.gameActive = false;
+      soundVictoryFanfare();
+
+      const totalSec = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
+
+      document.getElementById('victory-stat-time').textContent = `${m}:${s}`;
+      document.getElementById('victory-stat-lives').textContent = `${gameState.lives} / 3`;
+
+      const starsEarned = Math.max(1, gameState.lives);
+      document.getElementById('victory-stars-display').textContent = '⭐'.repeat(starsEarned);
+
+      const prevStars = gameState.userStars[gameState.currentLevelId] || 0;
+      if (starsEarned > prevStars) {
+        gameState.userStars[gameState.currentLevelId] = starsEarned;
+        try { localStorage.setItem('loki_runner_stars', JSON.stringify(gameState.userStars)); } catch(e) {}
+      }
+
+      setTimeout(() => {
+        document.getElementById('modal-victory').classList.add('active');
+      }, 500);
+    }
+
+    function triggerGameOver() {
+      stopBeachMusic(false);
+      gameState.gameActive = false;
+      setTimeout(() => {
+        document.getElementById('modal-gameover').classList.add('active');
+      }, 400);
+    }
+
+    function restartCurrentLevel() {
+      startGameWithMode(gameState.difficulty);
+    }
+
+    function playNextLevel() {
+      if (gameState.currentLevelId < STRATEGIES.length) {
+        gameState.currentLevelId++;
+        openTutorialModal(gameState.currentLevelId);
+      } else {
+        exitToMenu();
+      }
+    }
+
+    /* =============================================================
+       12. RENDERIZADO 3D PERSPECTIVO Y TEMAS PIXEL ART 8-BIT
+       ============================================================= */
+    function project3D(xWorld, zWorld) {
+      const fov = WORLD.cameraFov;
+      const roadLen = WORLD.roadLength;
+      let scale;
+
+      if (zWorld <= 0) {
+        // Objetos rebasando la cámara (salida fluida por los bordes laterales e inferiores)
+        const safeZ = Math.max(-fov * 0.75, zWorld);
+        scale = fov / (fov + safeZ);
+      } else {
+        // Hacia adelante: el camino converge de forma natural hasta tocarse en escala = 0 en el horizonte
+        const t = Math.min(1.0, zWorld / roadLen);
+        const baseScale = fov / (fov + zWorld);
+        // Taper de perspectiva que garantiza que a la distancia máxima ambas orillas se tocan en el horizonte
+        const taper = Math.pow(1.0 - t, 1.15);
+        scale = baseScale * taper;
+      }
+
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+
+      const screenX = (screenW * 0.5) + (xWorld * scale);
+      const screenY = WORLD.horizonY + ((screenH * 0.88 - WORLD.horizonY) * scale);
+
+      return { x: screenX, y: screenY, scale: scale };
+    }
+
+    function renderGame() {
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const horizon = WORLD.horizonY;
+      const theme = gameState.currentTheme || THEMES[0];
+
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. CIELO Y HORIZONTE PANORÁMICO PIXEL ART RETRO SEGÚN TEMA
+      let bgImg = null;
+      if (theme.id === 'bosque') {
+        bgImg = (IMAGES.fondoBosque && IMAGES.fondoBosque.complete && IMAGES.fondoBosque.naturalWidth > 0)
+                ? IMAGES.fondoBosque : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'playa') {
+        bgImg = (IMAGES.fondoPlaya && IMAGES.fondoPlaya.complete && IMAGES.fondoPlaya.naturalWidth > 0)
+                ? IMAGES.fondoPlaya : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'ciudad') {
+        bgImg = (IMAGES.fondoCiudad && IMAGES.fondoCiudad.complete && IMAGES.fondoCiudad.naturalWidth > 0)
+                ? IMAGES.fondoCiudad : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'granja') {
+        bgImg = (IMAGES.fondoGranja && IMAGES.fondoGranja.complete && IMAGES.fondoGranja.naturalWidth > 0)
+                ? IMAGES.fondoGranja : IMAGES.fondoHorizonte;
+      } else if (theme.id === 'campo') {
+        bgImg = (IMAGES.fondoCampo && IMAGES.fondoCampo.complete && IMAGES.fondoCampo.naturalWidth > 0)
+                ? IMAGES.fondoCampo : IMAGES.fondoHorizonte;
+      }
+
+      if (!bgImg || !bgImg.complete || bgImg.naturalWidth === 0) {
+        bgImg = IMAGES.fondoHorizonte;
+      }
+
+      if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
+        // Preservar relación de aspecto nativa del fondo pixel art (cero estiramiento ni deformación)
+        const bgAspect = bgImg.naturalWidth / bgImg.naturalHeight;
+        // Ajuste vertical exacto: la altura del fondo abarca estrictamente desde Y = 0 hasta la línea del horizonte
+        const targetH = Math.round(horizon);
+        const targetW = Math.round(targetH * bgAspect);
+        const drawBaseY = 0;
+
+        ctx.save();
+        ctx.imageSmoothingEnabled = false; // Pixel art razor-sharp 8-bit
+
+        // Delimitar estrictamente el fondo al área superior (de la línea de horizonte hacia arriba)
+        ctx.beginPath();
+        ctx.rect(0, 0, W, horizon);
+        ctx.clip();
+
+        // El horizonte permanece 100% fijo y estable en el centro (cero desvío al girar)
+        const centerX = Math.round(W * 0.5);
+        const centerBaseX = Math.round(centerX - (targetW * 0.5));
+
+        // 1. Dibujar loseta central normal (sin invertir) centrada con la carretera
+        ctx.drawImage(bgImg, centerBaseX, drawBaseY, targetW, targetH);
+
+        // 2. Extender con espejo hacia la izquierda si la pantalla es más ancha que la imagen
+        let leftX = centerBaseX - targetW;
+        let leftStep = 1;
+        while (leftX + targetW > 0) {
+          ctx.save();
+          if (leftStep % 2 === 1) {
+            ctx.translate(leftX + targetW, drawBaseY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(bgImg, 0, 0, targetW, targetH);
+          } else {
+            ctx.drawImage(bgImg, leftX, drawBaseY, targetW, targetH);
+          }
+          ctx.restore();
+          leftX -= targetW;
+          leftStep++;
+        }
+
+        // 3. Extender con espejo hacia la derecha si la pantalla es más ancha que la imagen
+        let rightX = centerBaseX + targetW;
+        let rightStep = 1;
+        while (rightX < W) {
+          ctx.save();
+          if (rightStep % 2 === 1) {
+            ctx.translate(rightX + targetW, drawBaseY);
+            ctx.scale(-1, 1);
+            ctx.drawImage(bgImg, 0, 0, targetW, targetH);
+          } else {
+            ctx.drawImage(bgImg, rightX, drawBaseY, targetW, targetH);
+          }
+          ctx.restore();
+          rightX += targetW;
+          rightStep++;
+        }
+        ctx.restore();
+      } else {
+        // Cielo degradado pixel art
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizon);
+        skyGrad.addColorStop(0, theme.skyTop);
+        skyGrad.addColorStop(1, theme.skyBottom);
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, W, horizon);
+      }
+
+      // 2. COLINAS DE PROFUNDIDAD EN EL HORIZONTE (Solo para temas terrestres, en la playa se omite para horizonte marino plano y amplio)
+      if (theme.id !== 'playa') {
+        const hillH = 14;
+        ctx.fillStyle = theme.grassBottom;
+        ctx.beginPath();
+        ctx.moveTo(0, horizon);
+        for (let x = 0; x <= W; x += 32) {
+          const hillOffset = Math.sin((x * 0.006) + (player.worldX * 0.002)) * hillH;
+          ctx.lineTo(x, horizon - Math.max(2, hillOffset + 6));
+        }
+        ctx.lineTo(W, horizon);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 3. TERRENO LATERAL BASE (FONDO DEL SUELO)
+      const grassGrad = ctx.createLinearGradient(0, horizon, 0, H);
+      grassGrad.addColorStop(0, theme.grassTop);
+      grassGrad.addColorStop(1, theme.grassBottom);
+      ctx.fillStyle = grassGrad;
+      ctx.fillRect(0, horizon, W, H - horizon);
+
+      // 4. BASE DE CARRETERA 3D (DESDE EL PUNTO DE FUGA DEL HORIZONTE HASTA EL FRENTE)
+      // Como project3D converge a escala=0 en roadLength, pFar toca el horizonte en el centro (W*0.5, horizon)
+      const pFarLeft = project3D(-WORLD.laneWidth * 1.85, WORLD.roadLength);
+      const pFarRight = project3D(WORLD.laneWidth * 1.85, WORLD.roadLength);
+      const pNearLeft = project3D(-WORLD.laneWidth * 1.95, 0);
+      const pNearRight = project3D(WORLD.laneWidth * 1.95, 0);
+
+      ctx.fillStyle = theme.roadDark;
+      ctx.beginPath();
+      ctx.moveTo(pNearLeft.x, pNearLeft.y);
+      ctx.lineTo(pFarLeft.x, pFarLeft.y);
+      ctx.lineTo(pFarRight.x, pFarRight.y);
+      ctx.lineTo(pNearRight.x, pNearRight.y);
+      ctx.closePath();
+      ctx.fill();
+
+      // 5. SEGMENTOS DE CARRETERA Y TERRENO LATERAL EN PERSPECTIVA CONTINUA HACIA EL HORIZONTE
+      const SEG_LENGTH = 50;
+      const DRAW_DISTANCE = 48; // 48 * 50 = 2400 (roadLength)
+      const baseSegment = Math.floor(cameraZ / SEG_LENGTH);
+      const segOffset = cameraZ % SEG_LENGTH;
+
+      for (let n = DRAW_DISTANCE - 1; n >= 0; n--) {
+        const segIndex = baseSegment + n;
+        const isEven = (segIndex % 2 === 0);
+
+        // Distancia Z desde la cámara (hacia el jugador):
+        const z1 = (n * SEG_LENGTH) - segOffset;
+        const z2 = ((n + 1) * SEG_LENGTH) - segOffset;
+
+        if (z2 <= 2) continue;
+        const safeZ1 = Math.max(2, z1);
+        const safeZ2 = Math.max(4, z2);
+
+        const p1L = project3D(-WORLD.laneWidth * 1.85, safeZ1);
+        const p1R = project3D(WORLD.laneWidth * 1.85, safeZ1);
+        const p2L = project3D(-WORLD.laneWidth * 1.85, safeZ2);
+        const p2R = project3D(WORLD.laneWidth * 1.85, safeZ2);
+
+        // A) TERRENO LATERAL EN MOVIMIENTO (FRANJAS DINÁMICAS DE CÉSPED/ARENA/PAVIMENTO)
+        // Esto elimina por completo el suelo vacío lateral y da dinamismo y velocidad arcade retro
+        ctx.fillStyle = isEven ? theme.grassTop : theme.grassBottom;
+        
+        // Franja izquierda del terreno
+        ctx.beginPath();
+        ctx.moveTo(0, p1L.y);
+        ctx.lineTo(p1L.x, p1L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(0, p2L.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Franja derecha del terreno
+        ctx.beginPath();
+        ctx.moveTo(p1R.x, p1R.y);
+        ctx.lineTo(W, p1R.y);
+        ctx.lineTo(W, p2R.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // B) ASFALTO DEL SEGMENTO (CONVERGE EXACTAMENTE HASTA EL HORIZONTE)
+        ctx.fillStyle = isEven ? theme.roadLight : theme.roadDark;
+        ctx.beginPath();
+        ctx.moveTo(p1L.x, p1L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.lineTo(p1R.x, p1R.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // C) BORDES / GUARNICIONES (RUMBLE STRIPS)
+        const curbW1 = Math.max(2.5, 14 * p1L.scale);
+        const curbW2 = Math.max(2.5, 14 * p2L.scale);
+        ctx.fillStyle = isEven ? theme.curb1 : theme.curb2;
+
+        // Borde izquierdo
+        ctx.beginPath();
+        ctx.moveTo(p1L.x - curbW1, p1L.y);
+        ctx.lineTo(p2L.x - curbW2, p2L.y);
+        ctx.lineTo(p2L.x, p2L.y);
+        ctx.lineTo(p1L.x, p1L.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Borde derecho
+        ctx.beginPath();
+        ctx.moveTo(p1R.x, p1R.y);
+        ctx.lineTo(p2R.x, p2R.y);
+        ctx.lineTo(p2R.x + curbW2, p2R.y);
+        ctx.lineTo(p1R.x + curbW1, p1R.y);
+        ctx.closePath();
+        ctx.fill();
+
+        // D) LÍNEAS DISCONTINUAS BLANCAS (DIVISORES DE CARRILES)
+        if (isEven) {
+          const dashW1 = Math.max(1.5, 6 * p1L.scale);
+          const dashW2 = Math.max(1.5, 6 * p2L.scale);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+
+          [-0.6, 0.6].forEach(laneFactor => {
+            const d1 = project3D(WORLD.laneWidth * laneFactor, safeZ1);
+            const d2 = project3D(WORLD.laneWidth * laneFactor, safeZ2);
+            ctx.beginPath();
+            ctx.moveTo(d1.x - dashW1 * 0.5, d1.y);
+            ctx.lineTo(d2.x - dashW2 * 0.5, d2.y);
+            ctx.lineTo(d2.x + dashW2 * 0.5, d2.y);
+            ctx.lineTo(d1.x + dashW1 * 0.5, d1.y);
+            ctx.closePath();
+            ctx.fill();
+          });
+        }
+      }
+
+      // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (SPRITES PIXEL ART 8-BIT GRANDES Y DENSOS)
+      const VEGETATION_CONFIG = {
+        pino:          { baseH: 560, anchorY: 0.96 },
+        pino_2:        { baseH: 610, anchorY: 0.96 },
+        pino_3:        { baseH: 540, anchorY: 0.96 },
+        pino_4:        { baseH: 550, anchorY: 0.96 },
+        pino_5:        { baseH: 580, anchorY: 0.96 },
+        pino_6:        { baseH: 600, anchorY: 0.96 },
+        pino_7:        { baseH: 570, anchorY: 0.96 },
+        encino:        { baseH: 530, anchorY: 0.95 },
+        encino_2:      { baseH: 560, anchorY: 0.95 },
+        encino_3:      { baseH: 540, anchorY: 0.95 },
+        palmera:       { baseH: 570, anchorY: 0.96 },
+        palmera_2:     { baseH: 580, anchorY: 0.96 },
+        palmera_3:     { baseH: 620, anchorY: 0.96 },
+        palmera_4:     { baseH: 590, anchorY: 0.96 },
+        palmera_5:     { baseH: 610, anchorY: 0.96 },
+        manzano:       { baseH: 510, anchorY: 0.95 },
+        manzano_2:     { baseH: 520, anchorY: 0.95 },
+        manzano_3:     { baseH: 540, anchorY: 0.95 },
+        poste:         { baseH: 380, anchorY: 0.97 },
+        cactus:        { baseH: 220, anchorY: 0.94 },
+        arbusto:       { baseH: 160, anchorY: 0.92 },
+        hierba:        { baseH: 95,  anchorY: 0.90 },
+        hierba_alta:   { baseH: 120, anchorY: 0.92 },
+        hierba_flores: { baseH: 100, anchorY: 0.90 },
+        hierba_baja:   { baseH: 80,  anchorY: 0.88 }
+      };
+
+      const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
+      sortedTrees.forEach(t => {
+        const pt = project3D(t.x * WORLD.laneWidth, t.z);
+        if (pt.scale > 0) {
+          let imgTree = null;
+          if (t.type === 'pino') imgTree = IMAGES.pino;
+          else if (t.type === 'pino_2') imgTree = IMAGES.pino_2;
+          else if (t.type === 'pino_3') imgTree = IMAGES.pino_3;
+          else if (t.type === 'pino_4') imgTree = IMAGES.pino_4;
+          else if (t.type === 'pino_5') imgTree = IMAGES.pino_5;
+          else if (t.type === 'pino_6') imgTree = IMAGES.pino_6;
+          else if (t.type === 'pino_7') imgTree = IMAGES.pino_7;
+          else if (t.type === 'encino') imgTree = IMAGES.encino;
+          else if (t.type === 'encino_2') imgTree = IMAGES.encino_2;
+          else if (t.type === 'encino_3') imgTree = IMAGES.encino_3;
+          else if (t.type === 'palmera') imgTree = IMAGES.palmera;
+          else if (t.type === 'palmera_2') imgTree = IMAGES.palmera_2;
+          else if (t.type === 'palmera_3') imgTree = IMAGES.palmera_3;
+          else if (t.type === 'palmera_4') imgTree = IMAGES.palmera_4;
+          else if (t.type === 'palmera_5') imgTree = IMAGES.palmera_5;
+          else if (t.type === 'manzano') imgTree = IMAGES.manzano;
+          else if (t.type === 'manzano_2') imgTree = IMAGES.manzano_2;
+          else if (t.type === 'manzano_3') imgTree = IMAGES.manzano_3;
+          else if (t.type === 'poste') imgTree = IMAGES.poste;
+          else if (t.type === 'arbusto') imgTree = IMAGES.arbusto;
+          else if (t.type === 'cactus') imgTree = IMAGES.cactus;
+          else if (t.type === 'hierba') imgTree = IMAGES.hierba;
+          else if (t.type === 'hierba_alta') imgTree = IMAGES.hierba_alta;
+          else if (t.type === 'hierba_flores') imgTree = IMAGES.hierba_flores;
+          else if (t.type === 'hierba_baja') imgTree = IMAGES.hierba_baja;
+
+          if (!imgTree || !imgTree.complete || imgTree.naturalWidth === 0) {
+            imgTree = (IMAGES.pino && IMAGES.pino.complete) ? IMAGES.pino : IMAGES.encino;
+          }
+
+          if (imgTree && imgTree.complete && imgTree.naturalWidth > 0) {
+            const conf = VEGETATION_CONFIG[t.type] || { baseH: 520, anchorY: 0.95 };
+            const scaleMod = t.isFar ? 0.78 : 1.0;
+            const aspect = imgTree.naturalWidth / imgTree.naturalHeight;
+            const treeH = conf.baseH * pt.scale * scaleMod;
+            const treeW = treeH * aspect;
+            const drawX = pt.x - (treeW * 0.5);
+            const drawY = pt.y - (treeH * conf.anchorY);
+
+            // Se dibuja nítido hasta salir completamente de la vista (solo puntas visibles antes de salir)
+            if (drawY + treeH > 0 && drawY < H && drawX + treeW > 0 && drawX < W) {
+              ctx.save();
+              ctx.imageSmoothingEnabled = false;
+              ctx.drawImage(imgTree, drawX, drawY, treeW, treeH);
+              ctx.restore();
+            }
+          }
+        }
+      });
+
+      // 7. OLEADAS DE VALLAS
+      const sortedWaves = [...roadWaves].sort((a, b) => b.z - a.z);
+      sortedWaves.forEach(wave => {
+        // Aparición inmediata desde el horizonte (sin fade lejano para máxima legibilidad temprana)
+        const waveAlpha = 1.0;
+
+        wave.hurdles.forEach(hurdle => {
+          if (hurdle.hit) return;
+
+          const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
+          if (pt.scale <= 0) return;
+
+          // Tamaño completo y nítido para lectura cómoda y anticipada
+          const gateW = 120 * pt.scale;
+          const gateH = gateW * 1.25;
+          const gateX = pt.x - (gateW * 0.5);
+          const gateY = pt.y - gateH;
+
+          ctx.save();
+          ctx.globalAlpha = waveAlpha;
+
+          // Postes de madera
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(gateX, gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
+          ctx.fillRect(gateX + gateW - Math.max(1, 6 * pt.scale), gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
+
+          // Panel de respuesta
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, Math.max(2, 6 * pt.scale));
+          ctx.fill();
+
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = Math.max(1.5, 3 * pt.scale);
+          ctx.stroke();
+
+          // Sombra
+          ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          ctx.beginPath();
+          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(1, 5 * pt.scale), 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Número de respuesta
+          const fontSize = Math.max(8, Math.floor(40 * pt.scale));
+          ctx.font = `800 ${fontSize}px 'Fredoka', cursive, sans-serif`;
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+
+          ctx.restore();
+        });
+      });
+
+
+
+      // 8. DIBUJAR A LOKI (SPRINT MULTI-FOTOGRAMA DINÁMICO 8-BIT)
+      const pPlayer = project3D(player.worldX, 0);
+      const lokiScale = 1.35;
+      const baseLokiW = 100;
+      const baseLokiH = 100;
+      const lokiW = baseLokiW * lokiScale;
+      const lokiH = baseLokiH * lokiScale;
+      const lokiX = pPlayer.x;
+      const groundY = H * 0.81;
+
+      // Selección dinámica del fotograma (0 a 7) según la velocidad calibrada
+      const frameIdx = Math.floor(player.sprintCycle) % 8;
+      const sprintImg = (IMAGES.lokiSprint[frameIdx] && IMAGES.lokiSprint[frameIdx].complete)
+                        ? IMAGES.lokiSprint[frameIdx]
+                        : (IMAGES.lokiRun1.complete ? IMAGES.lokiRun1 : null);
+
+      // Sombra dinámica normal (elipse suave) que varía de tamaño según el frame de correr de Loki:
+      // En frames de suspensión aérea (1, 2, 5, 6), Loki eleva las patas y la sombra se contrae ~18%.
+      // En frames de impacto (0, 3, 4, 7), las patas tocan el asfalto y la sombra se expande firmemente.
+      const strideLift = [0.0, 0.45, 0.90, 0.35, 0.05, 0.50, 0.95, 0.40][frameIdx] || 0.0;
+      const baseShadowW = Math.round(lokiW * 0.38);
+      const shadowW = Math.max(24, Math.round(baseShadowW * (1.0 - strideLift * 0.16)));
+      // Sombra alargada verticalmente (proporción 0.76)
+      const shadowH = Math.max(18, Math.round(shadowW * 0.76 * (1.0 - strideLift * 0.20)));
+      // Posicionada más arriba (groundY - 8) pegada bajo las patas de Loki
+      const shadowY = groundY - 8;
+      const shadowAlpha = 0.40 - (strideLift * 0.08);
+
+      ctx.save();
+      ctx.fillStyle = `rgba(0, 0, 0, ${shadowAlpha})`;
+      ctx.beginPath();
+      ctx.ellipse(lokiX, shadowY, shadowW * 0.5, shadowH * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(lokiX, groundY);
+      ctx.rotate(player.tilt);
+
+      // Parpadeo de invulnerabilidad
+      if (player.isInvulnerable) {
+        ctx.globalAlpha = Math.floor(Date.now() / 90) % 2 === 0 ? 0.35 : 0.85;
+      }
+
+      ctx.imageSmoothingEnabled = false;
+      if (sprintImg) {
+        // En los fotogramas 64x64, la línea base de las patas apoyadas en el suelo es Y=52 (52/64 = 0.8125).
+        const pawBaseline = 52 / 64;
+        ctx.drawImage(sprintImg, -lokiW * 0.5, -lokiH * pawBaseline, lokiW, lokiH);
+      } else {
+        ctx.fillStyle = '#1e1b18';
+        ctx.beginPath();
+        ctx.ellipse(0, -35, 38, 48, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#dc2626';
+        ctx.fillRect(-22, -62, 44, 10);
+      }
+      ctx.restore();
+
+      // 9. PARTÍCULAS
+      particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // 10. FILTRO DE ILUMINACIÓN AMBIENTAL TEMÁTICA GLOBAL
+      // Cubre toda la pantalla (de 0 a H), incluyendo el fondo superior, la carretera, la vegetación Y A LOKI
+      if (theme.ambientLight) {
+        ctx.save();
+        // Capa 1: Tinte ambiental directo unificador en toda la pantalla
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = theme.ambientLight;
+        ctx.fillRect(0, 0, W, H);
+
+        // Capa 2: Resplandor suave atmosférico
+        if (theme.ambientGlow) {
+          ctx.globalCompositeOperation = 'soft-light';
+          ctx.fillStyle = theme.ambientGlow;
+          ctx.fillRect(0, 0, W, H);
+        }
+        ctx.restore();
+      }
+    }
+
+    /* =============================================================
+       13. INICIALIZACIÓN AL CARGAR LA PÁGINA
+       ============================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLevels();
+      resizeCanvas();
+
+      // Cerrar modal de truco y reanudar al hacer clic en el fondo oscuro
+      const tutModal = document.getElementById('modal-tutorial');
+      if (tutModal) {
+        tutModal.addEventListener('click', (e) => {
+          if (e.target === tutModal) closeTutorialModal();
+        });
+      }
+
+      // Restaurar preferencia de cámara si estaba guardada
+      try {
+        const camPref = localStorage.getItem('loki_camera_pref');
+        if (camPref === 'true') {
+          const menuLbl = document.getElementById('menu-cam-label');
+          if (menuLbl) menuLbl.textContent = '📷 Iniciar Cámara Guardada';
+        }
+      } catch(e) {}
+    });
+
+  </script>
+</body>
+</html>

@@ -3453,12 +3453,13 @@
     IMAGES.hierba_baja.src = 'recursos/hierba_baja_3d.png';
     IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
     IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
-    IMAGES.fondoHorizonte.src = 'recursos/fondo_horizonte_3d.png';
-    IMAGES.fondoBosque.src = 'recursos/fondo_bosque_3d.png';
-    IMAGES.fondoPlaya.src = 'recursos/fondo_playa_3d.png';
-    IMAGES.fondoCiudad.src = 'recursos/fondo_ciudad_3d.png';
-    IMAGES.fondoGranja.src = 'recursos/fondo_granja_3d.png';
-    IMAGES.fondoCampo.src = 'recursos/fondo_campo_3d.png';
+    const ASSET_CACHE_BUST = 'v=3.2_panoramicos_3x1_20261108';
+    IMAGES.fondoHorizonte.src = `recursos/fondo_horizonte_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoBosque.src = `recursos/fondo_bosque_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoPlaya.src = `recursos/fondo_playa_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoCiudad.src = `recursos/fondo_ciudad_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoGranja.src = `recursos/fondo_granja_panoramico_3d.png?${ASSET_CACHE_BUST}`;
+    IMAGES.fondoCampo.src = `recursos/fondo_campo_panoramico_3d.png?${ASSET_CACHE_BUST}`;
     IMAGES.banner.src = 'recursos/loki_banner_principal.png';
 
     // 8 Fotogramas del ciclo de sprint de espaldas (64x64 pixel art)
