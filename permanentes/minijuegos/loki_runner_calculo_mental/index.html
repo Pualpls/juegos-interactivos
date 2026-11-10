@@ -6,6 +6,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
   <title>Loki Runner · Aventura de Cálculo Mental</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1591,7 +1592,7 @@
       <div class="menu-hero-banner" id="menu-hero-banner">
         <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
         <div style="margin: 0.45rem auto 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.18); border: 1.5px solid #10b981; color: #6ee7b7; padding: 0.25rem 0.85rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 700; max-width: 460px;">
-          <span>⚡ v3.5 Alto Rendimiento 60 FPS & Menú Desplegable</span>
+          <span>⚡ v3.6 Voz Google AI Online & HUD Matemático Limpio</span>
           <span style="color: #cbd5e1; font-weight: 500;">(Si ves datos viejos, presiona Ctrl+F5)</span>
         </div>
       </div>
@@ -2922,16 +2923,74 @@
       }
     }
 
+    let currentSpeechAudio = null;
     function speakProblem(text) {
-      if (!gameState.voiceSpeechEnabled || !window.speechSynthesis) return;
-      try {
+      if (!gameState.voiceSpeechEnabled) return;
+
+      // Transformación pedagógica natural para dicción en voz alta
+      let clean = text.trim();
+      // Casos de complementos (ej: "30 + ? = 100" -> "¿Cuánto le falta a 30 para llegar a 100?")
+      clean = clean.replace(/(\d+)\s*\+\s*\?\s*=\s*(\d+)/i, '¿Cuánto le falta a $1 para llegar a $2?');
+      // Casos de dobles y mitades
+      clean = clean.replace(/Doble de (\d+)/i, '¿Cuál es el doble de $1?');
+      clean = clean.replace(/Mitad de (\d+)/i, '¿Cuál es la mitad de $1?');
+      // Casos de series numéricas: "53, 56, 59, _" -> "¿Qué número sigue en: 53, 56, 59?"
+      clean = clean.replace(/([0-9,\s]+),\s*_/i, '¿Qué número sigue en: $1?');
+      // Operaciones estándar
+      clean = clean.replace(/−/g, ' menos ').replace(/\+/g, ' más ').replace(/×/g, ' por ');
+      clean = clean.replace(/\?/g, '').replace(/=/g, 'es igual a');
+      clean = clean.replace(/\s+/g, ' ').trim();
+
+      // Detener audio previo si seguía reproduciéndose
+      if (currentSpeechAudio) {
+        currentSpeechAudio.pause();
+        currentSpeechAudio.currentTime = 0;
+        currentSpeechAudio = null;
+      }
+      if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
-        let clean = text.replace('−', ' menos ').replace('+', ' más ').replace('×', ' por ').replace('?', '').replace('_', '¿qué número sigue?');
-        const utter = new SpeechSynthesisUtterance(clean);
-        utter.lang = 'es-MX';
-        utter.rate = 0.95;
-        window.speechSynthesis.speak(utter);
-      } catch(e) {}
+      }
+
+      // 1. Streaming directo en línea de Google AI TTS en español mexicano (es-MX)
+      try {
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(clean)}`;
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.src = url;
+        audio.playbackRate = 1.0;
+        currentSpeechAudio = audio;
+
+        let fallbackTriggered = false;
+        const triggerNativeFallback = () => {
+          if (fallbackTriggered) return;
+          fallbackTriggered = true;
+          if (window.speechSynthesis) {
+            try {
+              const utter = new SpeechSynthesisUtterance(clean);
+              utter.lang = 'es-MX';
+              utter.rate = 0.95;
+              window.speechSynthesis.speak(utter);
+            } catch(e) {}
+          }
+        };
+
+        audio.onerror = () => triggerNativeFallback();
+        const timeoutId = setTimeout(() => {
+          if (audio.readyState === 0) triggerNativeFallback();
+        }, 2200);
+
+        audio.onplay = () => clearTimeout(timeoutId);
+        audio.play().catch(() => triggerNativeFallback());
+      } catch(err) {
+        if (window.speechSynthesis) {
+          try {
+            const utter = new SpeechSynthesisUtterance(clean);
+            utter.lang = 'es-MX';
+            utter.rate = 0.95;
+            window.speechSynthesis.speak(utter);
+          } catch(e) {}
+        }
+      }
     }
 
     /* =============================================================
@@ -3616,6 +3675,10 @@
 
       const mathEl = document.getElementById('hud-math-problem');
       let displayText = prob.text.trim();
+      // Eliminar sufijo accidental '= ?' si la expresión ya incluye igualdad o incógnita
+      if (displayText.includes('=') && displayText.endsWith('= ?')) {
+        displayText = displayText.replace(/\s*=\s*\?\s*$/, '');
+      }
       if (!displayText.includes('=') && !displayText.includes('?') && !displayText.includes('_')) {
         displayText = `${displayText} = ?`;
       }
