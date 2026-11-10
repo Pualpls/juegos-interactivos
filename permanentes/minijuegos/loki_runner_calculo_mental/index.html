@@ -583,8 +583,10 @@
       image-rendering: crisp-edges;
     }
 
-    /* DIFICULTAD SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) */
-    .hud-top-left {
+    /* =============================================================
+       4. BARRA DE CONTROLES COMPACTA Y MENÚ DESPLEGABLE ELEGANTE
+       ============================================================= */
+    .hud-top-left-bar {
       position: absolute;
       top: 0.75rem;
       left: 1rem;
@@ -592,91 +594,166 @@
       align-items: center;
       gap: 0.45rem;
       pointer-events: auto;
-      z-index: 45;
-      background: rgba(15, 23, 42, 0.90);
-      padding: 0.4rem 0.65rem;
-      border-radius: 9999px;
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(8px);
+      z-index: 50;
     }
 
-    .speed-pill-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1.5px solid transparent;
-      color: #cbd5e1;
-      padding: 0.32rem 0.65rem;
+    .hud-compact-btn {
+      background: rgba(15, 23, 42, 0.90);
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      color: #f1f5f9;
+      padding: 0.42rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.74rem;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
       transition: all 0.15s ease;
       white-space: nowrap;
     }
 
-    .speed-pill-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
+    .hud-compact-btn:hover {
+      background: #1e293b;
+      border-color: #60a5fa;
+      transform: translateY(-1px);
     }
 
-    .speed-pill-btn.active#diff-muy-facil {
-      background: #059669;
-      border-color: #34d399;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-    }
-
-    .speed-pill-btn.active#diff-facil {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
-    }
-
-    .speed-pill-btn.active#diff-normal {
+    .hud-compact-btn.btn-pause.active {
       background: #d97706;
-      border-color: #fbbf24;
+      border-color: #fde047;
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.6);
     }
 
-    .speed-pill-btn.active#diff-dificil {
-      background: #dc2626;
-      border-color: #f87171;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(220, 38, 38, 0.75);
+    .hud-compact-btn.btn-settings {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border-color: #f59e0b;
+      color: #fef08a;
     }
 
-    .speed-time-tag {
-      font-size: 0.65rem;
-      opacity: 0.9;
-      font-weight: 800;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.1rem 0.3rem;
-      border-radius: 4px;
-    }
-
-    /* CONTROLES FLOTANTES LATERAL IZQUIERDO (CENTRADO VERTICAL) */
-    .hud-side-left {
+    /* MENÚ DESPLEGABLE FLOTANTE ELEGANTE */
+    .hud-settings-dropdown {
       position: absolute;
+      top: 3.25rem;
       left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-      pointer-events: auto;
-      z-index: 45;
-      background: rgba(15, 23, 42, 0.92);
-      padding: 0.75rem 0.65rem;
+      width: 295px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.98) 100%);
+      border: 2px solid #f59e0b;
       border-radius: 1rem;
-      border: 2px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(8px);
-      width: 140px;
+      padding: 0.85rem 1rem;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      z-index: 55;
+      pointer-events: auto;
+      animation: dropdownFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dropdownFadeIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .dropdown-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .dropdown-title {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .dropdown-close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0 0.3rem;
+      transition: color 0.15s ease;
+    }
+    .dropdown-close-btn:hover { color: #ef4444; }
+
+    .dropdown-section {
+      margin-bottom: 0.75rem;
+    }
+
+    .dropdown-section-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.04rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .dropdown-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.35rem;
+    }
+
+    .speed-pill-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 0.35rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.25rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .speed-pill-btn:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+    .speed-pill-btn.active#diff-muy-facil { background: #059669; border-color: #34d399; color: #fff; }
+    .speed-pill-btn.active#diff-facil { background: #0284c7; border-color: #38bdf8; color: #fff; }
+    .speed-pill-btn.active#diff-normal { background: #d97706; border-color: #fbbf24; color: #fff; }
+    .speed-pill-btn.active#diff-dificil { background: #dc2626; border-color: #f87171; color: #fff; }
+
+    .dropdown-vol-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.4rem 0.65rem;
+      border-radius: 0.6rem;
+    }
+
+    .dropdown-icon-btn {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 0.4rem;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    .dropdown-toggles-row {
+      display: flex;
+      gap: 0.45rem;
     }
 
     .hud-side-btn {
@@ -686,82 +763,26 @@
       padding: 0.45rem 0.65rem;
       border-radius: 0.65rem;
       font-family: var(--font-display);
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      justify-content: center;
+      gap: 0.35rem;
       transition: all 0.15s ease;
       white-space: nowrap;
-      justify-content: flex-start;
-      width: 100%;
+      flex: 1;
     }
+    .hud-side-btn:hover { background: rgba(255, 255, 255, 0.22); border-color: #60a5fa; }
+    .hud-side-btn.active { background: #059669; border-color: #34d399; }
+    .hud-side-btn.btn-exit { background: rgba(239, 68, 68, 0.25); border-color: #ef4444; }
+    .hud-side-btn.btn-exit:hover { background: #ef4444; color: #ffffff; }
 
-    .hud-side-btn:hover {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: #60a5fa;
-      transform: translateX(2px);
-    }
-
-    .hud-side-btn.btn-exit {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: #ef4444;
-    }
-    .hud-side-btn.btn-exit:hover {
-      background: #ef4444;
-      color: #ffffff;
-    }
-
-    .hud-side-btn.btn-pause {
-      background: rgba(245, 158, 11, 0.25);
-      border-color: #f59e0b;
-    }
-    .hud-side-btn.btn-pause.active {
-      background: #10b981;
-      border-color: #34d399;
-    }
-
-    .hud-side-btn.btn-vol {
-      background: rgba(56, 189, 248, 0.22);
-      border-color: #38bdf8;
-    }
-    .hud-side-btn.btn-vol.muted {
-      background: rgba(100, 116, 139, 0.25);
-      border-color: #64748b;
-      opacity: 0.75;
-    }
-
-    /* CONTENEDOR POPOVER DE VOLUMEN */
-    .vol-btn-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    .vol-slider-popover {
-      position: absolute;
-      left: calc(100% + 0.65rem);
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1.5px solid rgba(56, 189, 248, 0.45);
-      border-radius: 0.75rem;
-      padding: 0.55rem 0.75rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      width: 145px;
-      z-index: 60;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .vol-popover-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #94a3b8;
+    .dropdown-footer {
+      border-top: 1.5px solid rgba(255, 255, 255, 0.12);
+      padding-top: 0.55rem;
+      margin-top: 0.65rem;
     }
 
     .vol-slider-input {
@@ -772,12 +793,6 @@
       outline: none;
       cursor: pointer;
       accent-color: #38bdf8;
-    }
-
-    .hud-side-divider {
-      height: 1.5px;
-      background: rgba(255, 255, 255, 0.15);
-      margin: 0.2rem 0;
     }
 
     /* ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIO */
@@ -1006,7 +1021,7 @@
       border: 3px solid #f59e0b;
       box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
       border-radius: 1.1rem;
-      padding: 0.45rem 1.6rem;
+      padding: 0.35rem 1.25rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1031,7 +1046,7 @@
 
     .hud-math-problem {
       font-family: var(--font-display);
-      font-size: clamp(1.2rem, 3.2vw, 2.15rem);
+      font-size: clamp(1.1rem, 2.3vw, 1.7rem);
       font-weight: 800;
       color: #ffffff;
       letter-spacing: 0.06rem;
@@ -1576,7 +1591,7 @@
       <div class="menu-hero-banner" id="menu-hero-banner">
         <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
         <div style="margin: 0.45rem auto 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.18); border: 1.5px solid #10b981; color: #6ee7b7; padding: 0.25rem 0.85rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 700; max-width: 460px;">
-          <span>⚡ v3.4 Panorámico 3:1 Activo (Sin Salto)</span>
+          <span>⚡ v3.5 Alto Rendimiento 60 FPS & Menú Desplegable</span>
           <span style="color: #cbd5e1; font-weight: 500;">(Si ves datos viejos, presiona Ctrl+F5)</span>
         </div>
       </div>
@@ -1648,52 +1663,78 @@
     <div id="view-game" class="view">
       <canvas id="gameCanvas"></canvas>
 
-      <!-- DIFICULTAD EN LA ESQUINA SUPERIOR IZQUIERDA (HORIZONTAL ARRIBA) -->
-      <div class="hud-top-left">
-        <button class="speed-pill-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')" title="Muy Fácil (15s por cálculo)">
-          <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+      <!-- BARRA DE CONTROLES SUPERIOR IZQUIERDA COMPACTA -->
+      <div class="hud-top-left-bar">
+        <button class="hud-compact-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
+          <span id="btn-pause-icon">⏸️</span> <span id="btn-pause-text">Pausa</span>
         </button>
-        <button class="speed-pill-btn" id="diff-facil" onclick="setDifficultyMode('facil')" title="Fácil (11s por cálculo)">
-          <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
-        </button>
-        <button class="speed-pill-btn" id="diff-normal" onclick="setDifficultyMode('normal')" title="Normal (7s por cálculo)">
-          <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
-        </button>
-        <button class="speed-pill-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')" title="Difícil (4s por cálculo)">
-          <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
+        <button class="hud-compact-btn btn-settings" onclick="toggleSettingsDropdown(event)" id="btn-settings-toggle" title="Ajustes de dificultad, escenario, volumen y cámara">
+          <span>⚙️ Opciones ▾</span>
         </button>
       </div>
 
-      <!-- CONTROLES LATERALES IZQUIERDOS (CENTRADO VERTICAL) -->
-      <div class="hud-side-left">
-        <button class="hud-side-btn btn-exit" onclick="exitToMenu()" title="Volver al menú principal">
-          <span>🏠</span> <span>Salir</span>
-        </button>
-        <button class="hud-side-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
-          <span>⏸️</span> <span id="btn-pause-text">Pausa</span>
-        </button>
-        
-        <div class="vol-btn-wrapper">
-          <button class="hud-side-btn btn-vol" id="btn-hud-volume" onclick="handleVolumeClick(event)" ondblclick="handleVolumeDblClick(event)" title="1 clic: barra volumen / Doble clic: silenciar">
-            <span id="vol-hud-icon">🔊</span> <span id="vol-hud-label">100%</span>
-          </button>
-          <div class="vol-slider-popover" id="vol-slider-popover" style="display: none;">
-            <div class="vol-popover-header">
-              <span>Volumen</span>
-              <span id="vol-popover-pct">100%</span>
-            </div>
-            <input type="range" min="0" max="100" value="100" id="vol-slider" class="vol-slider-input" oninput="setVolumeSlider(this.value)">
+      <!-- MENÚ DESPLEGABLE FLOTANTE ELEGANTE DE OPCIONES -->
+      <div class="hud-settings-dropdown" id="hud-settings-dropdown" style="display: none;">
+        <div class="dropdown-header">
+          <span class="dropdown-title">⚙️ Ajustes de Partida</span>
+          <button class="dropdown-close-btn" onclick="closeSettingsDropdown(event)">✕</button>
+        </div>
+
+        <div class="dropdown-section">
+          <div class="dropdown-section-label">⚡ Velocidad / Dificultad:</div>
+          <div class="dropdown-chips-grid">
+            <button class="speed-pill-btn active" id="diff-muy-facil" onclick="setDifficultyMode('muy_facil')">
+              <span>🌱 M. Fácil</span> <span class="speed-time-tag">15s</span>
+            </button>
+            <button class="speed-pill-btn" id="diff-facil" onclick="setDifficultyMode('facil')">
+              <span>🚶 Fácil</span> <span class="speed-time-tag">11s</span>
+            </button>
+            <button class="speed-pill-btn" id="diff-normal" onclick="setDifficultyMode('normal')">
+              <span>🏃 Normal</span> <span class="speed-time-tag">7s</span>
+            </button>
+            <button class="speed-pill-btn" id="diff-dificil" onclick="setDifficultyMode('dificil')">
+              <span>⚡ Difícil</span> <span class="speed-time-tag">4s</span>
+            </button>
           </div>
         </div>
 
-        <div class="hud-side-divider"></div>
+        <div class="dropdown-section">
+          <div class="dropdown-section-label">🎨 Escenario Temático:</div>
+          <div class="dropdown-chips-grid">
+            <button class="theme-chip" id="gchip-bosque" onclick="selectThemeFromGame('bosque')">🌲 Bosque</button>
+            <button class="theme-chip" id="gchip-playa" onclick="selectThemeFromGame('playa')">🏖️ Playa</button>
+            <button class="theme-chip" id="gchip-ciudad" onclick="selectThemeFromGame('ciudad')">🏙️ Ciudad</button>
+            <button class="theme-chip" id="gchip-granja" onclick="selectThemeFromGame('granja')">🚜 Granja</button>
+            <button class="theme-chip" id="gchip-campo" onclick="selectThemeFromGame('campo')">🌸 Campo</button>
+            <button class="theme-chip" id="gchip-random" onclick="selectThemeFromGame('random')">🎲 Aleatorio</button>
+          </div>
+        </div>
 
-        <button class="hud-side-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">
-          <span>📹</span> <span>Cámara</span>
-        </button>
-        <button class="hud-side-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
-          <span>🗣️</span> <span>Voz</span>
-        </button>
+        <div class="dropdown-section">
+          <div class="dropdown-section-label">🔊 Sonido y Volumen:</div>
+          <div class="dropdown-vol-row">
+            <button class="dropdown-icon-btn" id="btn-hud-volume" onclick="toggleMuteSound()" title="Silenciar / Activar">
+              <span id="vol-hud-icon">🔊</span>
+            </button>
+            <input type="range" min="0" max="100" value="100" id="vol-slider" class="vol-slider-input" oninput="setVolumeSlider(this.value)">
+            <span id="vol-hud-label" style="font-size:0.78rem; font-weight:700; min-width:38px; color:#cbd5e1; text-align:right;">100%</span>
+          </div>
+        </div>
+
+        <div class="dropdown-section dropdown-toggles-row">
+          <button class="hud-side-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">
+            <span>📹</span> <span>Cámara</span>
+          </button>
+          <button class="hud-side-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
+            <span>🗣️</span> <span>Voz ON</span>
+          </button>
+        </div>
+
+        <div class="dropdown-footer">
+          <button class="hud-side-btn btn-exit" onclick="exitToMenu()" title="Volver al menú principal" style="width:100%; justify-content:center;">
+            <span>🏠</span> <span>Salir al Menú de Niveles</span>
+          </button>
+        </div>
       </div>
 
       <!-- ESQUINA SUPERIOR DERECHA: VIDAS, HUESOS Y ESCENARIOS -->
@@ -2960,14 +3001,22 @@
           return false;
         }
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 320, height: 240, facingMode: 'user' }
-        });
+        // Constraints seguras para cámaras USB de escritorio / pantallas táctiles
+        // IMPORTANTE: NO usar facingMode: 'user' en Windows porque crashea drivers DirectShow genéricos
+        const safeConstraints = {
+          video: { width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(safeConstraints);
         cameraStream = stream;
         gameState.cameraControlActive = true;
 
         cameraVideo = document.getElementById('camera-video-feed');
-        if (cameraVideo) cameraVideo.srcObject = stream;
+        if (cameraVideo) {
+          cameraVideo.srcObject = stream;
+          try { await cameraVideo.play(); } catch(e) {}
+        }
 
         cameraCanvas = document.createElement('canvas');
         cameraCanvas.width = 64;
@@ -2980,7 +3029,7 @@
         baselineCenter = 0;
 
         if (cameraInterval) clearInterval(cameraInterval);
-        cameraInterval = setInterval(processCameraMotion, 70);
+        cameraInterval = setInterval(processCameraMotion, 85);
 
         return true;
       } catch(err) {
@@ -3022,7 +3071,8 @@
 
     function processCameraMotion() {
       if (!cameraVideo || !cameraCtx || !gameState.cameraControlActive) return;
-      if (cameraVideo.readyState < 2) return;
+      // Guard estricto: verificar dimensiones reales para evitar violaciones de acceso en el driver
+      if (cameraVideo.readyState < 2 || !cameraVideo.videoWidth || cameraVideo.videoHeight === 0) return;
 
       const cw = cameraCanvas.width;
       const ch = cameraCanvas.height;
@@ -3173,7 +3223,7 @@
     function resetTrackTrees() {
       individualTrees = [];
       const theme = gameState.currentTheme || THEMES[0];
-      const treeSpacing = 90;
+      const treeSpacing = 135; // Espaciado amplio: mayor fluidez y mejor visibilidad del horizonte
 
       let treePool = ['pino', 'pino_2', 'pino_3', 'pino_4', 'pino_5', 'pino_6', 'pino_7', 'encino', 'encino_2'];
       let accentPool = ['hierba_alta', 'hierba_flores', 'hierba_baja', 'arbusto'];
@@ -3431,7 +3481,7 @@
     IMAGES.hierba_baja.src = 'recursos/hierba_baja_3d.png';
     IMAGES.sombraPixel.src = 'recursos/sombra_pixel_8bit.png';
     IMAGES.arcoValla.src = 'recursos/arco_valla_3d.png';
-    const ASSET_CACHE_BUST = 'v=3.4_no_jump_button_20261108';
+    const ASSET_CACHE_BUST = 'v=3.5_fps_opt_dropdown_20261110';
     IMAGES.fondoHorizonte.src = `recursos/fondo_horizonte_panoramico_3d.png?${ASSET_CACHE_BUST}`;
     IMAGES.fondoBosque.src = `recursos/fondo_bosque_panoramico_3d.png?${ASSET_CACHE_BUST}`;
     IMAGES.fondoPlaya.src = `recursos/fondo_playa_panoramico_3d.png?${ASSET_CACHE_BUST}`;
@@ -3477,13 +3527,14 @@
     let animFrameId = null;
 
     function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.imageSmoothingEnabled = false; // Estilo Pixel Art nítido
-      // Subir horizonte a 0.30 para dar más profundidad y recorrido a la carretera
-      WORLD.horizonY = window.innerHeight * 0.30;
+      // Optimización máxima de FPS para pantallas táctiles de aula: fijar DPR a 1.0
+      // para evitar cuellos de botella al renderizar a 4K en GPUs integradas
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+      canvas.width = Math.min(1920, winW);
+      canvas.height = Math.min(1080, winH);
+      ctx.imageSmoothingEnabled = false; // Estilo Pixel Art nítido sin blur
+      WORLD.horizonY = canvas.height * 0.30;
     }
     window.addEventListener('resize', resizeCanvas);
 
@@ -4089,8 +4140,8 @@
       ctx.fill();
 
       // 5. SEGMENTOS DE CARRETERA Y TERRENO LATERAL EN PERSPECTIVA CONTINUA HACIA EL HORIZONTE
-      const SEG_LENGTH = 50;
-      const DRAW_DISTANCE = 48; // 48 * 50 = 2400 (roadLength)
+      const SEG_LENGTH = 65;
+      const DRAW_DISTANCE = 32; // 32 * 65 = 2080 (33% menos polígonos por cuadro = 60 FPS estables)
       const baseSegment = Math.floor(cameraZ / SEG_LENGTH);
       const segOffset = cameraZ % SEG_LENGTH;
 
@@ -4405,15 +4456,92 @@
         ctx.fillStyle = theme.ambientLight;
         ctx.fillRect(0, 0, W, H);
 
-        // Capa 2: Resplandor suave atmosférico
-        if (theme.ambientGlow) {
-          ctx.globalCompositeOperation = 'soft-light';
-          ctx.fillStyle = theme.ambientGlow;
-          ctx.fillRect(0, 0, W, H);
-        }
+        // Optimización GPU: omitir pase soft-light que bloquea GPUs integradas en pantallas táctiles
         ctx.restore();
       }
     }
+
+    
+    /* =============================================================
+       CONTROL DEL MENÚ DESPLEGABLE DE AJUSTES EN EL HUD
+       ============================================================= */
+    function toggleSettingsDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('hud-settings-dropdown');
+      if (!dropdown) return;
+      const isHidden = (dropdown.style.display === 'none' || !dropdown.style.display);
+      if (isHidden) {
+        dropdown.style.display = 'block';
+        if (gameState.gameActive && !gameState.gamePaused) {
+          gameState.gamePaused = true;
+          gameState.wasPausedByDropdown = true;
+          const btn = document.getElementById('btn-pause');
+          if (btn) {
+            btn.classList.add('active');
+            const txt = document.getElementById('btn-pause-text');
+            if (txt) txt.textContent = 'Reanudar';
+          }
+        }
+        updateGameThemeChips();
+      } else {
+        closeSettingsDropdown();
+      }
+    }
+
+    function closeSettingsDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('hud-settings-dropdown');
+      if (dropdown) dropdown.style.display = 'none';
+      if (gameState.gameActive && gameState.wasPausedByDropdown) {
+        gameState.gamePaused = false;
+        gameState.wasPausedByDropdown = false;
+        const btn = document.getElementById('btn-pause');
+        if (btn) {
+          btn.classList.remove('active');
+          const txt = document.getElementById('btn-pause-text');
+          if (txt) txt.textContent = 'Pausa';
+        }
+      }
+    }
+
+    function selectThemeFromGame(themeId) {
+      if (themeId === 'random') {
+        gameState.isRandomTheme = true;
+        const pool = THEMES.filter(t => t.id !== gameState.currentTheme.id);
+        const chosen = pool[Math.floor(Math.random() * pool.length)] || THEMES[0];
+        applyTheme(chosen);
+      } else {
+        gameState.isRandomTheme = false;
+        const chosen = THEMES.find(t => t.id === themeId) || THEMES[0];
+        applyTheme(chosen);
+      }
+      updateThemeMusic();
+      updateGameThemeChips();
+    }
+
+    function updateGameThemeChips() {
+      const theme = gameState.currentTheme || THEMES[0];
+      ['bosque', 'playa', 'ciudad', 'granja', 'campo', 'random'].forEach(id => {
+        const chip = document.getElementById(`gchip-${id}`);
+        if (!chip) return;
+        if (id === 'random') {
+          chip.classList.toggle('active', gameState.isRandomTheme === true);
+        } else {
+          chip.classList.toggle('active', !gameState.isRandomTheme && theme.id === id);
+        }
+      });
+    }
+
+    // Cerrar dropdown al hacer clic en cualquier otra parte
+    window.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('hud-settings-dropdown');
+      const toggleBtn = document.getElementById('btn-settings-toggle');
+      if (dropdown && dropdown.style.display !== 'none') {
+        if (!dropdown.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+          closeSettingsDropdown();
+        }
+      }
+    });
 
     /* =============================================================
        13. INICIALIZACIÓN AL CARGAR LA PÁGINA
