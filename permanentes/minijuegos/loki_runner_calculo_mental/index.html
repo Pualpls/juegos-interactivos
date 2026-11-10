@@ -1142,34 +1142,55 @@
 
     .btn-trick-floating:active { transform: scale(0.95); }
 
-    /* CUADRO PIP DE LA CÁMARA WEBCAM */
+    /* CUADRO PIP / BARRA DE SENSOR DE MOVIMIENTO */
     #camera-pip-container {
       position: absolute;
-      bottom: 95px;
-      right: 1.25rem;
-      width: 155px;
-      height: 140px;
+      bottom: 85px;
+      right: 1rem;
+      width: 195px;
       background: rgba(15, 23, 42, 0.95);
-      border: 2px solid #3b82f6;
-      border-radius: 0.85rem;
+      border: 1.5px solid #3b82f6;
+      border-radius: 0.75rem;
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
       z-index: 40;
       display: none;
       flex-direction: column;
       pointer-events: auto;
+      transition: width 0.2s ease, height 0.2s ease;
+    }
+
+    #camera-pip-container.cam-pip-expanded {
+      width: 160px;
     }
 
     .cam-pip-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.2rem 0.45rem;
+      padding: 0.22rem 0.45rem;
       background: #1e293b;
       font-size: 0.68rem;
       font-weight: 700;
       color: #93c5fd;
     }
+
+    .cam-pip-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .cam-pip-btn-toggle-vid {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0 0.15rem;
+      transition: color 0.15s ease;
+    }
+    .cam-pip-btn-toggle-vid:hover { color: #38bdf8; }
 
     .cam-pip-close {
       background: transparent;
@@ -1187,6 +1208,7 @@
       height: 75px;
       object-fit: cover;
       transform: scaleX(-1);
+      display: none; /* Por defecto OCULTO: no obstruye la pantalla y ahorra compositing GPU en celular */
     }
 
     .camera-motion-bars {
@@ -1554,6 +1576,147 @@
 
     .v-stat-card span { font-size: 0.75rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
     .v-stat-card b { font-family: var(--font-display); font-size: 1.25rem; color: #0f172a; }
+
+    /* =============================================================
+       REGLAS RESPONSIVAS PARA MÓVILES (CERO TRASLAPE EN VERTICAL Y HORIZONTAL)
+       ============================================================= */
+
+    /* 1. CELULAR VERTICAL (PORTRAIT / ANCHO <= 720px) */
+    @media (max-width: 720px) and (orientation: portrait), (max-width: 520px) {
+      .hud-top-left-bar {
+        top: 0.45rem;
+        left: 0.45rem;
+        gap: 0.35rem;
+      }
+      .hud-compact-btn {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.78rem;
+      }
+      .hud-top-right {
+        top: 0.45rem;
+        right: 0.45rem;
+        gap: 0.35rem;
+      }
+      .hud-lives {
+        font-size: 0.95rem;
+        padding: 0.15rem 0.45rem;
+      }
+      .hud-score-box {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.5rem;
+      }
+      .hud-theme-badge {
+        font-size: 0.72rem;
+        padding: 0.15rem 0.45rem;
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* LA TARJETA MATEMÁTICA SE POSICIONA LIMPIAMENTE DEBAJO DE LA BARRA SUPERIOR */
+      .hud-top-center {
+        top: 3.35rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 1.25rem);
+        max-width: 420px;
+      }
+      .hud-math-card {
+        padding: 0.35rem 0.85rem;
+        border-width: 2px;
+        border-radius: 0.9rem;
+      }
+      .hud-strategy-title {
+        font-size: 0.68rem;
+      }
+      .hud-math-problem {
+        font-size: 1.45rem;
+        margin: 0.1rem 0;
+      }
+      .hud-math-hint {
+        font-size: 0.68rem;
+        line-height: 1.25;
+      }
+
+      #camera-pip-container {
+        bottom: 80px;
+        right: 0.65rem;
+        width: 175px;
+      }
+    }
+
+    /* 2. CELULAR HORIZONTAL (LANDSCAPE / ALTURA <= 540px) */
+    @media (max-height: 540px) {
+      .hud-top-left-bar {
+        top: 0.30rem;
+        left: 0.5rem;
+        gap: 0.3rem;
+      }
+      .hud-compact-btn {
+        padding: 0.26rem 0.52rem;
+        font-size: 0.74rem;
+      }
+      .hud-top-right {
+        top: 0.30rem;
+        right: 0.5rem;
+        gap: 0.35rem;
+      }
+      .hud-lives {
+        font-size: 0.88rem;
+        padding: 0.15rem 0.4rem;
+      }
+      .hud-score-box {
+        font-size: 0.76rem;
+        padding: 0.15rem 0.45rem;
+      }
+      /* Ocultar badge de escenario en horizontal móvil (ya está accesible en ⚙️ Opciones) */
+      .hud-theme-badge {
+        display: none !important;
+      }
+
+      /* EN HORIZONTAL: TARJETA MATEMÁTICA ULTRA COMPACTA ALINEADA EN EL CENTRO SIN TOCAR BOTONES */
+      .hud-top-center {
+        top: 0.25rem;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 280px);
+        width: auto;
+      }
+      .hud-math-card {
+        padding: 0.18rem 0.75rem;
+        border-width: 2px;
+        border-radius: 0.75rem;
+      }
+      .hud-strategy-title {
+        font-size: 0.62rem;
+        line-height: 1.1;
+      }
+      .hud-math-problem {
+        font-size: clamp(1.05rem, 4.2vh, 1.35rem);
+        margin: 0;
+      }
+      /* Ocultar hint en horizontal para que la tarjeta sea bajita (~42px) y deje ver la pista y los hurdles */
+      .hud-math-hint {
+        display: none !important;
+      }
+
+      /* Dropdown de opciones ajustado a la altura reducida */
+      .hud-settings-dropdown {
+        top: 2.5rem;
+        left: 0.5rem;
+        width: 275px;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 0.65rem 0.85rem;
+      }
+
+      #camera-pip-container {
+        bottom: 75px;
+        right: 0.65rem;
+        width: 175px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1592,7 +1755,7 @@
       <div class="menu-hero-banner" id="menu-hero-banner">
         <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
         <div style="margin: 0.45rem auto 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.18); border: 1.5px solid #10b981; color: #6ee7b7; padding: 0.25rem 0.85rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 700; max-width: 460px;">
-          <span>⚡ v3.6 Voz Google AI Online & HUD Matemático Limpio</span>
+          <span>⚡ v3.7 Móvil Ultra Fluido, HUD Adaptable & Sensor Discreto</span>
           <span style="color: #cbd5e1; font-weight: 500;">(Si ves datos viejos, presiona Ctrl+F5)</span>
         </div>
       </div>
@@ -1759,21 +1922,24 @@
 
       <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
 
-      <!-- CUADRO PIP DE LA CÁMARA WEBCAM (ALTA SENSIBILIDAD) -->
+      <!-- CUADRO PIP / BARRA DEL SENSOR CORPORAL (DISCRETO Y NO OBSTRUCTIVO) -->
       <div id="camera-pip-container">
         <div class="cam-pip-header">
           <span class="cam-pip-title">📷 Sensor Corporal</span>
-          <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar cámara">✕</button>
+          <div class="cam-pip-header-actions">
+            <button class="cam-pip-btn-toggle-vid" id="btn-toggle-cam-preview" onclick="toggleCameraVideoPreview(event)" title="Mostrar / Ocultar video de prueba">👁️</button>
+            <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar sensor">✕</button>
+          </div>
         </div>
-        <video id="camera-video-feed" autoplay playsinline muted></video>
+        <video id="camera-video-feed" autoplay playsinline muted style="display: none;"></video>
         <div class="camera-motion-bars">
-          <div class="cam-zone-bar" id="cam-bar-left">◀ FILA 1 (IZQ)</div>
-          <div class="cam-zone-bar active-lane" id="cam-bar-center">● FILAS 2-3 (CENTRO)</div>
-          <div class="cam-zone-bar" id="cam-bar-right">FILA 4 (DER) ▶</div>
+          <div class="cam-zone-bar" id="cam-bar-left">◀ IZQ</div>
+          <div class="cam-zone-bar active-lane" id="cam-bar-center">● CENTRO</div>
+          <div class="cam-zone-bar" id="cam-bar-right">DER ▶</div>
         </div>
         <div class="cam-motion-meter-box">
           <div class="cam-motion-meter-fill" id="cam-motion-meter-fill"></div>
-          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Votación por Filas Activa ●</span>
+          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Centrado ●</span>
         </div>
       </div>
 
@@ -3009,6 +3175,21 @@
     let baselineRight = 0;
     let baselineCenter = 0;
 
+    let cameraPreviewVisible = false;
+    function toggleCameraVideoPreview(e) {
+      if (e) e.stopPropagation();
+      cameraPreviewVisible = !cameraPreviewVisible;
+      const v = document.getElementById('camera-video-feed');
+      const pip = document.getElementById('camera-pip-container');
+      const btn = document.getElementById('btn-toggle-cam-preview');
+      if (v) v.style.display = cameraPreviewVisible ? 'block' : 'none';
+      if (pip) {
+        if (cameraPreviewVisible) pip.classList.add('cam-pip-expanded');
+        else pip.classList.remove('cam-pip-expanded');
+      }
+      if (btn) btn.textContent = cameraPreviewVisible ? '🙈' : '👁️';
+    }
+
     async function toggleCameraGlobal() {
       if (gameState.cameraControlActive) {
         stopCamera();
@@ -3078,8 +3259,9 @@
         }
 
         cameraCanvas = document.createElement('canvas');
-        cameraCanvas.width = 64;
-        cameraCanvas.height = 48;
+        // Resolución optimizada (40x30 = 1200 px): reduce uso de CPU en un 61%
+        cameraCanvas.width = 40;
+        cameraCanvas.height = 30;
         cameraCtx = cameraCanvas.getContext('2d', { willReadFrequently: true });
         prevFrameData = null;
 
@@ -3088,7 +3270,7 @@
         baselineCenter = 0;
 
         if (cameraInterval) clearInterval(cameraInterval);
-        cameraInterval = setInterval(processCameraMotion, 85);
+        cameraInterval = setInterval(processCameraMotion, 100);
 
         return true;
       } catch(err) {
@@ -3824,19 +4006,21 @@
     }
 
     function updateGame(dt) {
+      // Normalización de velocidad por delta time respecto a 60 FPS estándar (1/60s = 0.016666s)
+      // Esto elimina por completo la lentitud en celulares de 30-45 FPS o pantallas con refresco variable:
+      const speedScale = Math.min(2.5, dt * 60);
+      const frameSpeed = WORLD.speed * speedScale;
+
       const targetX = player.lane * WORLD.laneWidth;
       const diffX = targetX - player.worldX;
-      player.worldX += diffX * 0.16;
+      player.worldX += diffX * Math.min(1.0, 0.16 * speedScale);
       player.tilt = (diffX / WORLD.laneWidth) * 0.26;
 
       // Velocidad de animación sincronizada con la dificultad:
-      // Normal (speed = 5.14) corre al 100% (8.33 FPS nativo de 120ms por fotograma)
       const baseSprintFps = 8.33;
-      // Multiplicador de animación calibrado según la dificultad:
-      // Muy Fácil: 0.55x, Fácil: 0.75x, Normal: 1.0x, Difícil: 1.35x (punto medio solicitado entre 1.0x y 1.75x)
       let animSpeedRatio = (WORLD.speed / 5.14);
       if (gameState.difficulty === 'dificil') {
-        animSpeedRatio = 1.35; // Punto medio suave y ágil
+        animSpeedRatio = 1.35;
       } else if (gameState.difficulty === 'muy_facil') {
         animSpeedRatio = 0.55;
       } else if (gameState.difficulty === 'facil') {
@@ -3845,7 +4029,6 @@
       player.sprintCycle += dt * baseSprintFps * animSpeedRatio;
       player.runCycle += dt * (WORLD.speed * 4.5);
 
-
       if (player.isInvulnerable) {
         player.invulnerableTimer -= dt;
         if (player.invulnerableTimer <= 0) player.isInvulnerable = false;
@@ -3853,18 +4036,16 @@
       if (player.celebrateTimer > 0) player.celebrateTimer -= dt;
       if (player.stumbleTimer > 0) player.stumbleTimer -= dt;
 
-      cameraZ += WORLD.speed;
+      cameraZ += frameSpeed;
 
       individualTrees.forEach(t => {
-        t.z -= WORLD.speed;
-        // Permitir que los árboles y vegetación lateral sigan avanzando hasta z = -170
-        // para que desciendan y salgan gradualmente por las orillas de la pantalla (solo puntas visibles)
+        t.z -= frameSpeed;
         if (t.z < -170) t.z += WORLD.roadLength;
       });
 
       for (let i = roadWaves.length - 1; i >= 0; i--) {
         const wave = roadWaves[i];
-        wave.z -= WORLD.speed;
+        wave.z -= frameSpeed;
 
         if (!wave.evaluated && wave.z <= 40 && wave.z >= -20) {
           const collidedHurdle = wave.hurdles.find(h => h.lane === player.lane);
@@ -4109,10 +4290,7 @@
         ctx.save();
         ctx.imageSmoothingEnabled = false; // Pixel art razor-sharp 8-bit
 
-        // Delimitar estrictamente el fondo al área superior (de la línea de horizonte hacia arriba)
-        ctx.beginPath();
-        ctx.rect(0, 0, W, horizon);
-        ctx.clip();
+        // El fondo se dibuja de 0 a targetH (horizon) sin necesidad de stencil clipping en GPU
 
         // El horizonte permanece 100% fijo y estable en el centro (cero desvío al girar)
         const centerX = Math.round(W * 0.5);
@@ -4204,7 +4382,8 @@
 
       // 5. SEGMENTOS DE CARRETERA Y TERRENO LATERAL EN PERSPECTIVA CONTINUA HACIA EL HORIZONTE
       const SEG_LENGTH = 65;
-      const DRAW_DISTANCE = 32; // 32 * 65 = 2080 (33% menos polígonos por cuadro = 60 FPS estables)
+      // En celulares o pantallas compactas (<850px o alto <550px) 22 segmentos convergen exactamente al horizonte
+      const DRAW_DISTANCE = (W < 850 || H < 550) ? 22 : 32;
       const baseSegment = Math.floor(cameraZ / SEG_LENGTH);
       const segOffset = cameraZ % SEG_LENGTH;
 
@@ -4332,7 +4511,9 @@
       const sortedTrees = [...individualTrees].sort((a, b) => b.z - a.z);
       sortedTrees.forEach(t => {
         const pt = project3D(t.x * WORLD.laneWidth, t.z);
-        if (pt.scale > 0) {
+        // Descarte temprano de vegetación fuera de los límites de pantalla horizontal
+        if (pt.scale <= 0 || pt.x < -180 || pt.x > W + 180) return;
+        if (true) {
           let imgTree = null;
           if (t.type === 'pino') imgTree = IMAGES.pino;
           else if (t.type === 'pino_2') imgTree = IMAGES.pino_2;
@@ -4373,12 +4554,9 @@
             const drawX = pt.x - (treeW * 0.5);
             const drawY = pt.y - (treeH * conf.anchorY);
 
-            // Se dibuja nítido hasta salir completamente de la vista (solo puntas visibles antes de salir)
+            // Se dibuja nítido sin llamar save/restore por cada árbol (ahorro de 160 operaciones de estado por cuadro)
             if (drawY + treeH > 0 && drawY < H && drawX + treeW > 0 && drawX < W) {
-              ctx.save();
-              ctx.imageSmoothingEnabled = false;
               ctx.drawImage(imgTree, drawX, drawY, treeW, treeH);
-              ctx.restore();
             }
           }
         }
