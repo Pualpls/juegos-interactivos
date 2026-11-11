@@ -1142,142 +1142,16 @@
 
     .btn-trick-floating:active { transform: scale(0.95); }
 
-    /* CUADRO PIP / BARRA DE SENSOR DE MOVIMIENTO */
-    #camera-pip-container {
-      position: absolute;
-      bottom: 85px;
-      right: 1rem;
-      width: 195px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1.5px solid #3b82f6;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-      z-index: 40;
-      display: none;
-      flex-direction: column;
-      pointer-events: auto;
-      transition: width 0.2s ease, height 0.2s ease;
-    }
-
-    #camera-pip-container.cam-pip-expanded {
-      width: 160px;
-    }
-
-    .cam-pip-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.22rem 0.45rem;
-      background: #1e293b;
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: #93c5fd;
-    }
-
-    .cam-pip-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .cam-pip-btn-toggle-vid {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 0.82rem;
-      cursor: pointer;
-      padding: 0 0.15rem;
-      transition: color 0.15s ease;
-    }
-    .cam-pip-btn-toggle-vid:hover { color: #38bdf8; }
-
-    .cam-pip-close {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 0.75rem;
-      cursor: pointer;
-      padding: 0 0.2rem;
-    }
-
-    .cam-pip-close:hover { color: #ef4444; }
-
+    /* FEED DE VIDEO DE CÁMARA (100% INVISIBLE EN PANTALLA) */
     #camera-video-feed {
-      width: 100%;
-      height: 75px;
-      object-fit: cover;
-      transform: scaleX(-1);
-      display: none; /* Por defecto OCULTO: no obstruye la pantalla y ahorra compositing GPU en celular */
-    }
-
-    .camera-motion-bars {
-      display: flex;
-      height: 18px;
-      background: #0f172a;
-      border-top: 1px solid #334155;
-    }
-
-    .cam-zone-bar {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: #64748b;
-      transition: background 0.08s, color 0.08s;
-    }
-
-    .cam-zone-bar.active-lane {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.2);
-    }
-
-    .cam-zone-bar.active-soft {
-      color: #fbbf24;
-      background: rgba(245, 158, 11, 0.25);
-    }
-
-    .cam-zone-bar.active-brusque {
-      color: #ffffff;
-      background: #0284c7;
-      font-weight: 900;
-    }
-
-    .cam-motion-meter-box {
-      position: relative;
-      width: 100%;
-      height: 18px;
-      background: #020617;
-      border-top: 1px solid #1e293b;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .cam-motion-meter-fill {
       position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
-      transition: width 0.06s ease;
-      opacity: 0.6;
-    }
-
-    .cam-motion-status-lbl {
-      position: relative;
-      z-index: 2;
-      font-size: 0.58rem;
-      font-weight: 700;
-      color: #94a3b8;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      padding: 0 0.2rem;
+      top: -9999px;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      display: none;
     }
 
     /* TOAST DE FEEDBACK (UBICADO ABAJO PARA NO TAPAR LA CARRETERA NI LAS PRÓXIMAS VALLAS) */
@@ -1639,11 +1513,7 @@
         line-height: 1.25;
       }
 
-      #camera-pip-container {
-        bottom: 80px;
-        right: 0.65rem;
-        width: 175px;
-      }
+      
     }
 
     /* 2. CELULAR HORIZONTAL (LANDSCAPE / ALTURA <= 540px) */
@@ -1711,11 +1581,7 @@
         padding: 0.65rem 0.85rem;
       }
 
-      #camera-pip-container {
-        bottom: 75px;
-        right: 0.65rem;
-        width: 175px;
-      }
+      
     }
   </style>
 </head>
@@ -1755,7 +1621,7 @@
       <div class="menu-hero-banner" id="menu-hero-banner">
         <img src="recursos/loki_banner_principal.png" alt="Loki Runner Banner" class="hero-banner-img">
         <div style="margin: 0.45rem auto 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.18); border: 1.5px solid #10b981; color: #6ee7b7; padding: 0.25rem 0.85rem; border-radius: 9999px; font-size: 0.76rem; font-weight: 700; max-width: 460px;">
-          <span>⚡ v3.7 Móvil Ultra Fluido, HUD Adaptable & Sensor Discreto</span>
+          <span>⚡ v3.8 Control por Cámara 100% Invisible & Pantalla Despejada</span>
           <span style="color: #cbd5e1; font-weight: 500;">(Si ves datos viejos, presiona Ctrl+F5)</span>
         </div>
       </div>
@@ -1922,15 +1788,8 @@
 
       <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
 
-      <!-- CUADRO PIP / BARRA DEL SENSOR CORPORAL (DISCRETO Y NO OBSTRUCTIVO) -->
-      <div id="camera-pip-container">
-        <div class="cam-pip-header">
-          <span class="cam-pip-title">📷 Sensor Corporal</span>
-          <div class="cam-pip-header-actions">
-            <button class="cam-pip-btn-toggle-vid" id="btn-toggle-cam-preview" onclick="toggleCameraVideoPreview(event)" title="Mostrar / Ocultar video de prueba">👁️</button>
-            <button class="cam-pip-close" onclick="toggleCameraGlobal()" title="Desactivar sensor">✕</button>
-          </div>
-        </div>
+      <!-- RECEPTOR DE STREAM DE CÁMARA (INVISIBLE EN PANTALLA, PROCESADO EN BACKGROUND) -->
+      <video id="camera-video-feed" autoplay playsinline muted style="display: none; position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></video>
         <video id="camera-video-feed" autoplay playsinline muted style="display: none;"></video>
         <div class="camera-motion-bars">
           <div class="cam-zone-bar" id="cam-bar-left">◀ IZQ</div>
@@ -3175,20 +3034,7 @@
     let baselineRight = 0;
     let baselineCenter = 0;
 
-    let cameraPreviewVisible = false;
-    function toggleCameraVideoPreview(e) {
-      if (e) e.stopPropagation();
-      cameraPreviewVisible = !cameraPreviewVisible;
-      const v = document.getElementById('camera-video-feed');
-      const pip = document.getElementById('camera-pip-container');
-      const btn = document.getElementById('btn-toggle-cam-preview');
-      if (v) v.style.display = cameraPreviewVisible ? 'block' : 'none';
-      if (pip) {
-        if (cameraPreviewVisible) pip.classList.add('cam-pip-expanded');
-        else pip.classList.remove('cam-pip-expanded');
-      }
-      if (btn) btn.textContent = cameraPreviewVisible ? '🙈' : '👁️';
-    }
+
 
     async function toggleCameraGlobal() {
       if (gameState.cameraControlActive) {
@@ -3210,10 +3056,10 @@
       if (menuBtn && menuLbl) {
         if (isActive) {
           menuBtn.classList.add('active');
-          menuLbl.textContent = '● Cámara Activa (ON)';
+          menuLbl.textContent = '● Control por Cámara (ON)';
         } else {
           menuBtn.classList.remove('active');
-          menuLbl.textContent = 'Activar Cámara';
+          menuLbl.textContent = '📷 Activar Control por Cámara';
         }
       }
 
@@ -3221,16 +3067,15 @@
       if (hudBtn) {
         if (isActive) {
           hudBtn.classList.add('active');
-          hudBtn.textContent = '📹 Activa';
+          hudBtn.textContent = '📹 Cámara ON';
         } else {
           hudBtn.classList.remove('active');
           hudBtn.textContent = '📹 Cámara';
         }
       }
 
-      const pip = document.getElementById('camera-pip-container');
-      if (pip) {
-        pip.style.display = (isActive && gameState.gameActive) ? 'flex' : 'none';
+      if (gameState.gameActive) {
+        showToast(isActive ? '📷 Control por cámara ACTIVO: ¡Inclínate para moverte!' : '📷 Control por cámara DESACTIVADO', false);
       }
     }
 
@@ -3291,9 +3136,7 @@
         clearInterval(cameraInterval);
         cameraInterval = null;
       }
-      const pip = document.getElementById('camera-pip-container');
-      if (pip) pip.style.display = 'none';
-
+      
       const hudBtn = document.getElementById('btn-camera-toggle');
       if (hudBtn) {
         hudBtn.classList.remove('active');
@@ -3372,36 +3215,8 @@
       const isMotionLeft = (leftMotion >= 18 && burstLeft >= 10 && leftMotion > rightMotion * 1.20);
       const isMotionRight = (rightMotion >= 18 && burstRight >= 10 && rightMotion > leftMotion * 1.20);
 
-      // Indicadores visuales en el cuadro PIP
-      const bLeft = document.getElementById('cam-bar-left');
-      const bCenter = document.getElementById('cam-bar-center');
-      const bRight = document.getElementById('cam-bar-right');
-      const pipMeter = document.getElementById('cam-motion-meter-fill');
-      const pipLabel = document.getElementById('cam-motion-status-lbl');
-
-      if (bLeft) bLeft.className = 'cam-zone-bar' + (isMotionLeft ? ' active-brusque' : (leftMotion > 12 ? ' active-soft' : ''));
-      if (bRight) bRight.className = 'cam-zone-bar' + (isMotionRight ? ' active-brusque' : (rightMotion > 12 ? ' active-soft' : ''));
-      if (bCenter) bCenter.className = 'cam-zone-bar' + (player.lane === 0 ? ' active-lane' : '');
-
-      const currentMaxBurst = Math.max(burstLeft, burstRight);
-      const burstPct = Math.min(100, Math.floor((currentMaxBurst / 25) * 100));
-      if (pipMeter) pipMeter.style.width = burstPct + '%';
-
-      if (pipLabel) {
-        if (isMotionLeft) {
-          pipLabel.textContent = '◀ IZQUIERDA';
-          pipLabel.style.color = '#38bdf8';
-        } else if (isMotionRight) {
-          pipLabel.textContent = 'DERECHA ▶';
-          pipLabel.style.color = '#38bdf8';
-        } else if (leftMotion > 12 || rightMotion > 12) {
-          pipLabel.textContent = 'Inclinación detectada...';
-          pipLabel.style.color = '#fde047';
-        } else {
-          pipLabel.textContent = 'Centrado ●';
-          pipLabel.style.color = '#64748b';
-        }
-      }
+      // Control 100% invisible en pantalla: el sensor procesa el movimiento en segundo plano
+      // sin manipular el DOM ni mostrar recuadros que obstaculicen la carretera
 
       if (!gameState.gameActive || gameState.gamePaused) return;
 
@@ -3811,9 +3626,7 @@
       document.getElementById('modal-gameover').classList.remove('active');
 
       if (gameState.cameraControlActive) {
-        const pip = document.getElementById('camera-pip-container');
-        if (pip) pip.style.display = 'flex';
-      }
+              }
 
       setDifficultyMode(gameState.difficulty);
 
@@ -3971,9 +3784,7 @@
 
     function exitToMenu() {
       stopBeachMusic(true);
-      const pip = document.getElementById('camera-pip-container');
-      if (pip) pip.style.display = 'none';
-
+      
       gameState.gameActive = false;
       gameState.gamePaused = false;
       if (animFrameId) cancelAnimationFrame(animFrameId);
