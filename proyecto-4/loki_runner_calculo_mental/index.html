@@ -1651,6 +1651,9 @@
             <span style="color:#fbbf24; font-size:1.15rem;">⭐</span>
             <span id="global-stars-count">0 / 60</span>
           </div>
+          <button class="hud-btn" onclick="openLeaderboardModal('global')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; font-weight:700; border:none; box-shadow:0 2px 6px rgba(245, 158, 11, 0.4);">
+            🏆 Clasificación
+          </button>
           <button class="hud-btn" id="btn-toggle-sound" onclick="toggleSound()">🔊 Sonido</button>
         </div>
       </div>
@@ -1911,17 +1914,17 @@
         </div>
 
         <div class="victory-stats-grid">
-          <div class="v-stat-card">
-            <span>Puntaje Obtenido</span>
-            <b id="victory-stat-score" style="color:#d97706;">0 pts</b>
+          <div class="v-stat-card" style="border:2px solid #f59e0b; background:#fffbeb;">
+            <span style="color:#b45309; font-weight:700;">Huesos Totales</span>
+            <b id="victory-stat-total-bones" style="color:#d97706; font-size:1.35rem;">13 🦴</b>
           </div>
           <div class="v-stat-card">
-            <span>Huesos Conseguidos</span>
+            <span>Huesos Base</span>
             <b id="victory-stat-bones" style="color:#059669;">10 / 10 🦴</b>
           </div>
           <div class="v-stat-card">
-            <span>Vidas Restantes</span>
-            <b id="victory-stat-lives">❤️❤️❤️</b>
+            <span>Bono por Vidas</span>
+            <b id="victory-stat-lives">+3 🦴 (❤️❤️❤️)</b>
           </div>
           <div class="v-stat-card">
             <span>Tiempo de Carrera</span>
@@ -1930,11 +1933,17 @@
         </div>
 
         <div class="modal-buttons">
+          <button class="btn-modal" id="btn-open-record" onclick="openRecordScoreModal()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; box-shadow:0 4px 14px rgba(245, 158, 11, 0.45); font-weight:700;">
+            <span>🏆</span> Registrar Récord en Clasificación
+          </button>
           <button class="btn-modal btn-modal-green" onclick="playNextLevel()">
             <span>▶</span> Siguiente Nivel
           </button>
           <button class="btn-modal btn-modal-blue" onclick="restartCurrentLevel()">
             <span>🔄</span> Repetir Nivel
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="openLeaderboardModal('level')">
+            <span>📊</span> Ver Tabla de Clasificación
           </button>
           <button class="btn-modal btn-modal-secondary" onclick="exitToMenu()">
             <span>🏠</span> Volver al Menú
@@ -1956,11 +1965,7 @@
           </p>
         </div>
 
-        <div class="victory-stats-grid">
-          <div class="v-stat-card">
-            <span>Puntaje Obtenido</span>
-            <b id="gameover-stat-score" style="color:#ef4444;">0 pts</b>
-          </div>
+        <div class="victory-stats-grid" style="grid-template-columns:repeat(3, 1fr);">
           <div class="v-stat-card">
             <span>Huesos Conseguidos</span>
             <b id="gameover-stat-bones" style="color:#059669;">0 / 10 🦴</b>
@@ -1988,6 +1993,88 @@
         </div>
       </div>
     </div>
+
+    <!-- MODAL 4: REGISTRO VOLUNTARIO DE RÉCORD EN CLASIFICACIÓN -->
+    <div id="modal-record-score" class="modal-overlay">
+      <div class="modal-card" style="border-color:#f59e0b; max-width:440px;">
+        <div class="victory-hero" style="margin-bottom:0.8rem;">
+          <div style="font-size:2.8rem; line-height:1; margin-bottom:0.3rem;">🏆</div>
+          <h2 style="font-family:var(--font-display); font-size:1.6rem; color:#d97706;">
+            ¡Registrar mi Récord!
+          </h2>
+          <p style="font-size:0.9rem; color:#475569; font-weight:600;" id="record-summary-text">
+            Nivel #1 · 13 huesos conseguidos (10 base + 3 vidas)
+          </p>
+        </div>
+
+        <div style="background:#f8fafc; border:2px dashed #cbd5e1; border-radius:0.85rem; padding:1rem; margin-bottom:1rem; text-align:left;">
+          <label for="record-input-name" style="display:block; font-size:0.92rem; font-weight:700; color:#1e293b; margin-bottom:0.4rem;">
+            👤 Nombre del estudiante o del equipo:
+          </label>
+          <input type="text" id="record-input-name" placeholder="Ej: Sofía y Mateo / Equipo Rayo" maxlength="32" autocomplete="off"
+                 style="width:100%; padding:0.75rem 1rem; border:2px solid #94a3b8; border-radius:0.6rem; font-size:1.05rem; font-family:var(--font-body); font-weight:600; outline:none; transition:border 0.2s;"
+                 onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#94a3b8'"
+                 onkeydown="if(event.key==='Enter') submitRecordScore();" />
+          <p style="font-size:0.78rem; color:#64748b; margin-top:0.35rem;">
+            * Solo se guardará con el nombre que escribas. Sin contraseñas ni registros anónimos.
+          </p>
+        </div>
+
+        <div class="modal-buttons" style="margin-top:0;">
+          <button class="btn-modal btn-modal-green" onclick="submitRecordScore()" id="btn-submit-record">
+            <span>💾</span> Guardar mi Récord
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="closeRecordScoreModal()">
+            <span>✕</span> Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 5: TABLA DE CLASIFICACIÓN (POR NIVEL Y GLOBAL) -->
+    <div id="modal-leaderboard" class="modal-overlay">
+      <div class="modal-card" style="max-width:580px; max-height:88vh; display:flex; flex-direction:column; text-align:left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e2e8f0; padding-bottom:0.75rem; margin-bottom:0.75rem;">
+          <div>
+            <h2 style="font-family:var(--font-display); font-size:1.5rem; color:#1e3a8a; display:flex; align-items:center; gap:0.4rem; margin:0;">
+              <span>🏆</span> Tabla de Clasificación
+            </h2>
+            <p style="font-size:0.82rem; color:#64748b; font-weight:600; margin:0.2rem 0 0 0;" id="leaderboard-subtitle">
+              Mejores récords de cálculo mental escolar
+            </p>
+          </div>
+          <button class="btn-icon" onclick="closeLeaderboardModal()" style="font-size:1.2rem; padding:0.4rem 0.7rem; border-radius:0.5rem; border:1px solid #cbd5e1; background:#f1f5f9; cursor:pointer;">✕</button>
+        </div>
+
+        <!-- PESTAÑAS -->
+        <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem;">
+          <button id="tab-lead-level" class="lead-tab active" onclick="switchLeaderboardTab('level')"
+                  style="flex:1; padding:0.55rem; font-family:var(--font-display); font-size:0.92rem; font-weight:700; border-radius:0.6rem; border:none; cursor:pointer; background:#2563eb; color:#fff; transition:all 0.2s;">
+            🎯 Este Nivel
+          </button>
+          <button id="tab-lead-global" class="lead-tab" onclick="switchLeaderboardTab('global')"
+                  style="flex:1; padding:0.55rem; font-family:var(--font-display); font-size:0.92rem; font-weight:700; border-radius:0.6rem; border:none; cursor:pointer; background:#e2e8f0; color:#475569; transition:all 0.2s;">
+            🌟 Ranking Global
+          </button>
+        </div>
+
+        <!-- LISTA CON SCROLL -->
+        <div id="leaderboard-list-container" style="flex:1; overflow-y:auto; min-height:220px; max-height:360px; padding-right:0.3rem;">
+          <!-- Filas generadas dinámicamente -->
+        </div>
+
+        <!-- PIE CON ENLACE A GOOGLE SHEET -->
+        <div style="margin-top:0.75rem; padding-top:0.6rem; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#64748b;">
+          <button onclick="promptGoogleSheetUrl()" style="background:none; border:none; color:#2563eb; cursor:pointer; font-weight:600; text-decoration:underline;">
+            ⚙️ Vincular Google Sheet
+          </button>
+          <button class="btn-modal btn-modal-secondary" onclick="closeLeaderboardModal()" style="padding:0.45rem 1.1rem; font-size:0.85rem; margin:0;">
+            Volver
+          </button>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 
@@ -3042,17 +3129,33 @@
       clean = clean.replace(/\?/g, '').replace(/=/g, 'es igual a');
       clean = clean.replace(/\s+/g, ' ').trim();
 
-      // Detener audio previo si seguía reproduciéndose
+      // Detener audio previo si seguía reproduciéndose y cancelar síntesis activa
       if (currentSpeechAudio) {
-        currentSpeechAudio.pause();
-        currentSpeechAudio.currentTime = 0;
+        try {
+          currentSpeechAudio.pause();
+          currentSpeechAudio.src = '';
+        } catch(e) {}
         currentSpeechAudio = null;
       }
       if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
+        try {
+          window.speechSynthesis.cancel();
+        } catch(e) {}
       }
 
-      // 1. Streaming directo en línea de Google AI TTS en español mexicano (es-MX)
+      // PRIORIDAD 1: Motor nativo de la PC (speechSynthesis)
+      // Cero latencia, offline y elimina por completo el cruce de voces
+      if (window.speechSynthesis) {
+        try {
+          const utter = new SpeechSynthesisUtterance(clean);
+          utter.lang = 'es-MX';
+          utter.rate = 0.95;
+          window.speechSynthesis.speak(utter);
+          return;
+        } catch(e) {}
+      }
+
+      // FALLBACK: Streaming de Google AI TTS para pantallas sin motor de voz nativo
       try {
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(clean)}`;
         const audio = new Audio();
@@ -3060,38 +3163,8 @@
         audio.src = url;
         audio.playbackRate = 1.0;
         currentSpeechAudio = audio;
-
-        let fallbackTriggered = false;
-        const triggerNativeFallback = () => {
-          if (fallbackTriggered) return;
-          fallbackTriggered = true;
-          if (window.speechSynthesis) {
-            try {
-              const utter = new SpeechSynthesisUtterance(clean);
-              utter.lang = 'es-MX';
-              utter.rate = 0.95;
-              window.speechSynthesis.speak(utter);
-            } catch(e) {}
-          }
-        };
-
-        audio.onerror = () => triggerNativeFallback();
-        const timeoutId = setTimeout(() => {
-          if (audio.readyState === 0) triggerNativeFallback();
-        }, 2200);
-
-        audio.onplay = () => clearTimeout(timeoutId);
-        audio.play().catch(() => triggerNativeFallback());
-      } catch(err) {
-        if (window.speechSynthesis) {
-          try {
-            const utter = new SpeechSynthesisUtterance(clean);
-            utter.lang = 'es-MX';
-            utter.rate = 0.95;
-            window.speechSynthesis.speak(utter);
-          } catch(e) {}
-        }
-      }
+        audio.play().catch(() => {});
+      } catch(err) {}
     }
 
     /* =============================================================
@@ -3691,6 +3764,7 @@
       gameState.gamePaused = false;
       gameState.lives = 3;
       gameState.correctCount = 0;
+      gameState.solvedQuestions = new Set();
       gameState.startTime = Date.now();
 
       // Configurar velocidad exacta del modo
@@ -3756,7 +3830,12 @@
        ============================================================= */
     function spawnNextProblemWave() {
       const strat = STRATEGIES[gameState.currentLevelId - 1];
-      const prob = strat.generator();
+      let prob;
+      let attempts = 0;
+      do {
+        prob = strat.generator();
+        attempts++;
+      } while (gameState.solvedQuestions && gameState.solvedQuestions.has(prob.text.trim()) && attempts < 40);
       gameState.currentProblem = prob;
 
       const mathEl = document.getElementById('hud-math-problem');
@@ -4039,6 +4118,10 @@
     function handleCorrectHit(val) {
       gameState.correctCount++;
       gameState.totalBones++;
+      if (gameState.currentProblem && gameState.currentProblem.text) {
+        if (!gameState.solvedQuestions) gameState.solvedQuestions = new Set();
+        gameState.solvedQuestions.add(gameState.currentProblem.text.trim());
+      }
       player.celebrateTimer = 0.6;
       soundCorrectHit();
       showToast(`¡Excelente! ${val} es correcto 🦴`, false);
@@ -4102,6 +4185,8 @@
       showToast(`¡Se te pasó! La respuesta correcta era ${expected}`, false);
     }
 
+    let lastCompletedRunData = null;
+
     function triggerVictory() {
       stopBeachMusic(false);
       gameState.gameActive = false;
@@ -4111,17 +4196,43 @@
       const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
       const s = String(totalSec % 60).padStart(2, '0');
 
-      const timeBonus = Math.max(0, 300 - totalSec * 3);
-      const finalScore = (gameState.correctCount * 100) + (gameState.lives * 75) + timeBonus;
+      // Vidas extra cuentan como huesos extra: 10 base + vidas restantes = total huesos
+      const baseBones = gameState.correctCount;
+      const extraBones = Math.max(0, gameState.lives);
+      const totalBones = baseBones + extraBones;
 
-      const elScore = document.getElementById('victory-stat-score');
-      if (elScore) elScore.textContent = `${finalScore.toLocaleString()} pts`;
+      // Guardar datos para registro voluntario en la tabla de clasificación
+      lastCompletedRunData = {
+        levelId: gameState.currentLevelId,
+        levelTitle: STRATEGIES[gameState.currentLevelId - 1].title,
+        world: STRATEGIES[gameState.currentLevelId - 1].world,
+        difficulty: gameState.difficulty,
+        difficultyName: DIFFICULTY_MODES[gameState.difficulty].name,
+        baseBones: baseBones,
+        extraBones: extraBones,
+        totalBones: totalBones,
+        lives: gameState.lives,
+        timeSec: totalSec,
+        timeFormatted: `${m}:${s}`
+      };
+
+      const elTotalBones = document.getElementById('victory-stat-total-bones');
+      if (elTotalBones) elTotalBones.textContent = `${totalBones} 🦴`;
       const elBones = document.getElementById('victory-stat-bones');
-      if (elBones) elBones.textContent = `${gameState.correctCount} / ${gameState.targetGoal} 🦴`;
+      if (elBones) elBones.textContent = `${baseBones} / ${gameState.targetGoal} 🦴`;
       const elLives = document.getElementById('victory-stat-lives');
-      if (elLives) elLives.textContent = `${'❤️'.repeat(Math.max(0, gameState.lives))} (${gameState.lives}/3)`;
+      if (elLives) elLives.textContent = `+${extraBones} 🦴 (${'❤️'.repeat(extraBones)})`;
       const elTime = document.getElementById('victory-stat-time');
       if (elTime) elTime.textContent = `${m}:${s}`;
+
+      // Resetear estado del botón de registro
+      const btnOpenRecord = document.getElementById('btn-open-record');
+      if (btnOpenRecord) {
+        btnOpenRecord.disabled = false;
+        btnOpenRecord.innerHTML = '<span>🏆</span> Registrar Récord en Clasificación';
+        btnOpenRecord.style.opacity = '1';
+        btnOpenRecord.style.cursor = 'pointer';
+      }
 
       const starsEarned = Math.max(1, gameState.lives);
       document.getElementById('victory-stars-display').textContent = '⭐'.repeat(starsEarned);
@@ -4144,10 +4255,8 @@
       const totalSec = Math.floor((Date.now() - gameState.startTime) / 1000);
       const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
       const s = String(totalSec % 60).padStart(2, '0');
-      const finalScore = gameState.correctCount * 100;
 
-      const elScore = document.getElementById('gameover-stat-score');
-      if (elScore) elScore.textContent = `${finalScore.toLocaleString()} pts`;
+      // En Ánimo casi lo logras solo mostramos huesos conseguidos (los puntos son los huesos)
       const elBones = document.getElementById('gameover-stat-bones');
       if (elBones) elBones.textContent = `${gameState.correctCount} / ${gameState.targetGoal} 🦴`;
       const elLives = document.getElementById('gameover-stat-lives');
@@ -4158,6 +4267,245 @@
       setTimeout(() => {
         document.getElementById('modal-gameover').classList.add('active');
       }, 400);
+    }
+
+    /* =============================================================
+       SISTEMA DE CLASIFICACIÓN ESCOLAR Y GOOGLE SHEETS
+       ============================================================= */
+    let currentLeaderboardTab = 'level';
+
+    function openRecordScoreModal() {
+      if (!lastCompletedRunData) return;
+      const modal = document.getElementById('modal-record-score');
+      if (!modal) return;
+
+      const summaryText = document.getElementById('record-summary-text');
+      if (summaryText) {
+        summaryText.textContent = `Nivel #${lastCompletedRunData.levelId} · ${lastCompletedRunData.totalBones} huesos conseguidos (${lastCompletedRunData.baseBones} base + ${lastCompletedRunData.extraBones} de vidas) en ${lastCompletedRunData.timeFormatted}`;
+      }
+
+      const inputName = document.getElementById('record-input-name');
+      if (inputName) {
+        inputName.value = '';
+        setTimeout(() => inputName.focus(), 300);
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeRecordScoreModal() {
+      const modal = document.getElementById('modal-record-score');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function submitRecordScore() {
+      const inputName = document.getElementById('record-input-name');
+      const name = (inputName ? inputName.value : '').trim();
+      if (!name) {
+        alert('Por favor escribe el nombre del estudiante o del equipo antes de registrar.');
+        if (inputName) inputName.focus();
+        return;
+      }
+
+      if (!lastCompletedRunData) return;
+
+      const now = new Date();
+      const fechaStr = now.toLocaleDateString('es-MX', { day:'2-digit', month:'short' }) + ' ' +
+                       now.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+
+      const recordItem = {
+        id: 'rec_' + Date.now(),
+        nombre: name,
+        nivelId: lastCompletedRunData.levelId,
+        nivelTitulo: lastCompletedRunData.levelTitle,
+        mundo: lastCompletedRunData.world,
+        dificultad: lastCompletedRunData.difficulty,
+        dificultadNombre: lastCompletedRunData.difficultyName,
+        huesosTotales: lastCompletedRunData.totalBones,
+        huesosBase: lastCompletedRunData.baseBones,
+        vidasBonus: lastCompletedRunData.extraBones,
+        tiempoSec: lastCompletedRunData.timeSec,
+        tiempoStr: lastCompletedRunData.timeFormatted,
+        fecha: fechaStr,
+        timestamp: Date.now()
+      };
+
+      // Guardar en almacenamiento local (siempre disponible offline)
+      try {
+        let list = JSON.parse(localStorage.getItem('loki_runner_leaderboard') || '[]');
+        list.push(recordItem);
+        localStorage.setItem('loki_runner_leaderboard', JSON.stringify(list));
+      } catch(e) {}
+
+      // Enviar a Google Sheet si hay Web App configurada
+      sendRecordToGoogleSheet(recordItem);
+
+      // Deshabilitar botón en modal-victory para confirmar registro
+      const btnOpenRecord = document.getElementById('btn-open-record');
+      if (btnOpenRecord) {
+        btnOpenRecord.disabled = true;
+        btnOpenRecord.innerHTML = '<span>✅</span> ¡Récord Registrado!';
+        btnOpenRecord.style.opacity = '0.75';
+        btnOpenRecord.style.cursor = 'default';
+      }
+
+      closeRecordScoreModal();
+      openLeaderboardModal('level', recordItem.id);
+    }
+
+    function sendRecordToGoogleSheet(record) {
+      const sheetUrl = localStorage.getItem('loki_sheet_url') || '';
+      if (!sheetUrl) return;
+
+      try {
+        fetch(sheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        }).catch(() => {
+          // Fallback con imagen beacon GET
+          try {
+            const p = new URLSearchParams(record).toString();
+            new Image().src = `${sheetUrl}?${p}`;
+          } catch(err) {}
+        });
+      } catch(e) {}
+    }
+
+    function promptGoogleSheetUrl() {
+      const current = localStorage.getItem('loki_sheet_url') || '';
+      const input = prompt(
+        "Ingresa la URL de la aplicación web de Google Apps Script vinculada a tu Google Sheet (termina en /exec):
+
+(Deja vacío para desvincular)",
+        current
+      );
+      if (input !== null) {
+        const trimmed = input.trim();
+        if (trimmed) {
+          localStorage.setItem('loki_sheet_url', trimmed);
+          alert("¡Google Sheet vinculado exitosamente! Los nuevos registros se enviarán a tu hoja.");
+        } else {
+          localStorage.removeItem('loki_sheet_url');
+          alert("Google Sheet desvinculado.");
+        }
+      }
+    }
+
+    function openLeaderboardModal(tab = 'level', highlightId = null) {
+      currentLeaderboardTab = tab;
+      const modal = document.getElementById('modal-leaderboard');
+      if (!modal) return;
+      modal.classList.add('active');
+      renderLeaderboard(tab, highlightId);
+    }
+
+    function closeLeaderboardModal() {
+      const modal = document.getElementById('modal-leaderboard');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function switchLeaderboardTab(tab) {
+      currentLeaderboardTab = tab;
+      renderLeaderboard(tab);
+    }
+
+    function renderLeaderboard(tab = 'level', highlightId = null) {
+      const btnLevel = document.getElementById('tab-lead-level');
+      const btnGlobal = document.getElementById('tab-lead-global');
+      const subtitle = document.getElementById('leaderboard-subtitle');
+      const container = document.getElementById('leaderboard-list-container');
+      if (!container) return;
+
+      if (btnLevel && btnGlobal) {
+        if (tab === 'level') {
+          btnLevel.style.background = '#2563eb';
+          btnLevel.style.color = '#fff';
+          btnGlobal.style.background = '#e2e8f0';
+          btnGlobal.style.color = '#475569';
+          const lvlTitle = STRATEGIES[gameState.currentLevelId - 1]?.title || `Nivel #${gameState.currentLevelId}`;
+          if (subtitle) subtitle.textContent = `Ranking de Nivel #${gameState.currentLevelId}: ${lvlTitle}`;
+        } else {
+          btnGlobal.style.background = '#2563eb';
+          btnGlobal.style.color = '#fff';
+          btnLevel.style.background = '#e2e8f0';
+          btnLevel.style.color = '#475569';
+          if (subtitle) subtitle.textContent = 'Ranking Global Escolar (todos los niveles)';
+        }
+      }
+
+      let allRecords = [];
+      try {
+        allRecords = JSON.parse(localStorage.getItem('loki_runner_leaderboard') || '[]');
+      } catch(e) {
+        allRecords = [];
+      }
+
+      // Filtrar según pestaña
+      let filtered = tab === 'level' 
+        ? allRecords.filter(r => r.nivelId === gameState.currentLevelId)
+        : [...allRecords];
+
+      // Ordenar: primero mayor cantidad de huesos totales, segundo menor tiempo
+      filtered.sort((a, b) => {
+        if (b.huesosTotales !== a.huesosTotales) {
+          return b.huesosTotales - a.huesosTotales;
+        }
+        return a.tiempoSec - b.tiempoSec;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:2rem 1rem; color:#64748b;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">🐾</div>
+            <p style="font-weight:700; color:#334155; margin-bottom:0.3rem;">¡Aún no hay récords registrados en esta tabla!</p>
+            <p style="font-size:0.85rem;">Completa el nivel y toca "Registrar Récord" para aparecer en el podio de la escuela.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const medals = ['🥇', '🥈', '🥉'];
+      let html = '<div style="display:flex; flex-direction:column; gap:0.5rem;">';
+
+      filtered.forEach((item, index) => {
+        const isHighlight = highlightId && item.id === highlightId;
+        const medal = index < 3 ? medals[index] : `<span style="font-size:0.85rem; font-weight:700; color:#64748b;">#${index + 1}</span>`;
+        const diffColor = item.dificultad === 'muy_facil' ? '#10b981' :
+                          item.dificultad === 'facil' ? '#0284c7' :
+                          item.dificultad === 'normal' ? '#f59e0b' : '#ef4444';
+
+        html += `
+          <div style="display:flex; align-items:center; justify-content:space-between; background:${isHighlight ? '#fef3c7' : '#f8fafc'}; border:2px solid ${isHighlight ? '#f59e0b' : '#e2e8f0'}; border-radius:0.75rem; padding:0.6rem 0.8rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+            <div style="display:flex; align-items:center; gap:0.6rem; min-width:0;">
+              <div style="font-size:1.4rem; min-width:1.8rem; text-align:center;">${medal}</div>
+              <div style="min-width:0;">
+                <div style="font-weight:700; color:#1e293b; font-size:0.95rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                  ${item.nombre}
+                </div>
+                <div style="font-size:0.75rem; color:#64748b; display:flex; gap:0.4rem; align-items:center;">
+                  ${tab === 'global' ? `<span style="background:#e0e7ff; color:#3730a3; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">Nivel ${item.nivelId}</span>` : ''}
+                  <span style="background:${diffColor}18; color:${diffColor}; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">${item.dificultadNombre}</span>
+                  <span>⏱️ ${item.tiempoStr}</span>
+                  <span>📅 ${item.fecha}</span>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right; min-width:4.5rem;">
+              <div style="font-family:var(--font-display); font-size:1.15rem; font-weight:700; color:#d97706;">
+                ${item.huesosTotales} 🦴
+              </div>
+              <div style="font-size:0.72rem; color:#059669; font-weight:600;">
+                (${item.huesosBase} + ${item.vidasBonus} ❤️)
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
     }
 
     function restartCurrentLevel() {
