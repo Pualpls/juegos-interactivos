@@ -206,19 +206,41 @@
             cursor: pointer;
         }
 
-        .bone-slot.highlight {
-            fill: #0c4a6e;
-            stroke: #38bdf8;
-            stroke-width: 3.5;
-            filter: drop-shadow(0 0 8px #38bdf8);
+        .bone-slot.wrong-attempt {
+            fill: #450a0a !important;
+            stroke: #ef4444 !important;
+            stroke-width: 3px !important;
+            stroke-dasharray: none !important;
+            animation: slotShake 0.4s ease;
+        }
+
+        @keyframes slotShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
         }
 
         .bone-slot.placed {
             fill: #f8fafc;
-            stroke: #0284c7;
+            stroke: #38bdf8;
             stroke-width: 2.5;
             stroke-dasharray: none;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+            filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+            cursor: default;
+        }
+
+        .bone-chip-img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.14);
+            padding: 3px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            flex-shrink: 0;
+            pointer-events: none;
         }
 
         /* Banco de Huesos para Arrastre y Selección */
@@ -614,22 +636,28 @@
 
                     <div class="bones-bank" id="bones-bank">
                         <div class="bone-chip" data-bone="craneo" id="chip-craneo">
-                            <span class="bone-icon">💀</span> Cráneo
+                            <img src="recursos/icono_craneo.png" alt="Cráneo" class="bone-chip-img">
+                            <span>Cráneo</span>
                         </div>
                         <div class="bone-chip" data-bone="costillas" id="chip-costillas">
-                            <span class="bone-icon">🫁</span> Costillas
+                            <img src="recursos/icono_costillas.png" alt="Costillas" class="bone-chip-img">
+                            <span>Costillas</span>
                         </div>
                         <div class="bone-chip" data-bone="columna" id="chip-columna">
-                            <span class="bone-icon">🦴</span> Columna vertebral
+                            <img src="recursos/icono_columna.png" alt="Columna vertebral" class="bone-chip-img">
+                            <span>Columna vertebral</span>
                         </div>
                         <div class="bone-chip" data-bone="pelvis" id="chip-pelvis">
-                            <span class="bone-icon">🩻</span> Pelvis
+                            <img src="recursos/icono_pelvis.png" alt="Pelvis" class="bone-chip-img">
+                            <span>Pelvis</span>
                         </div>
                         <div class="bone-chip" data-bone="humero" id="chip-humero">
-                            <span class="bone-icon">💪</span> Húmero (Brazo)
+                            <img src="recursos/icono_humero.png" alt="Húmero" class="bone-chip-img">
+                            <span>Húmero (Brazo)</span>
                         </div>
                         <div class="bone-chip" data-bone="femur" id="chip-femur">
-                            <span class="bone-icon">🦵</span> Fémur (Muslo)
+                            <img src="recursos/icono_femur.png" alt="Fémur" class="bone-chip-img">
+                            <span>Fémur (Muslo)</span>
                         </div>
                     </div>
 
@@ -849,15 +877,15 @@
                 if (state.selectedChip === boneKey) {
                     state.selectedChip = null;
                     chip.classList.remove('selected');
-                    clearHighlights();
+                    showBoneInfo('Instrucción', 'Arrastra los huesos desde el banco o tócalos para colocarlos en la silueta y descubrir su función en el cuerpo.');
                 } else {
                     document.querySelectorAll('.bone-chip').forEach(c => c.classList.remove('selected'));
                     state.selectedChip = boneKey;
                     chip.classList.add('selected');
-                    highlightSlot(boneKey);
+                    // NO resaltamos en azul el slot para que el alumno deba deducir la posición correcta
                     
                     const info = BONE_DATA[boneKey];
-                    showBoneInfo(info.name, info.desc + ' (Toca la zona parpadeante en la silueta para colocarlo).');
+                    showBoneInfo(info.name, info.desc + ' 💡 ¿En qué parte del cuerpo humano se encuentra? Toca en la silueta la zona correcta para colocarlo.');
                 }
             });
 
@@ -872,12 +900,11 @@
 
                 ghostEl = document.createElement('div');
                 ghostEl.className = 'drag-ghost';
-                ghostEl.textContent = chip.textContent.trim();
+                ghostEl.innerHTML = chip.innerHTML;
                 ghostEl.style.left = e.clientX + 'px';
                 ghostEl.style.top = e.clientY + 'px';
                 document.body.appendChild(ghostEl);
-
-                highlightSlot(boneKey);
+                // Cero pista azul al arrastrar
             });
 
             chip.addEventListener('pointermove', (e) => {
@@ -898,12 +925,20 @@
 
                 // Detect element under pointer
                 const targetEl = document.elementFromPoint(e.clientX, e.clientY);
-                clearHighlights();
 
                 if (targetEl) {
                     const slot = targetEl.closest('.bone-slot');
-                    if (slot && slot.getAttribute('data-bone') === boneKey) {
-                        placeBone(boneKey);
+                    if (slot) {
+                        const targetBone = slot.getAttribute('data-bone');
+                        if (targetBone === boneKey) {
+                            placeBone(boneKey);
+                        } else if (!state.placedBones.has(targetBone)) {
+                            // Feedback didáctico si sueltan en la zona equivocada
+                            slot.classList.add('wrong-attempt');
+                            setTimeout(() => slot.classList.remove('wrong-attempt'), 600);
+                            const info = BONE_DATA[boneKey];
+                            showBoneInfo('¡Sigue observando!', `Esa parte del cuerpo no corresponde a ${info ? info.name : 'este hueso'}. ¿Dónde se sitúa en el esqueleto?`);
+                        }
                     }
                 }
             });
@@ -914,7 +949,6 @@
                     ghostEl.remove();
                     ghostEl = null;
                 }
-                clearHighlights();
             });
         });
 
@@ -923,25 +957,27 @@
             const boneKey = slot.getAttribute('data-bone');
 
             slot.addEventListener('click', () => {
-                if (state.selectedChip === boneKey) {
-                    placeBone(boneKey);
+                if (state.selectedChip) {
+                    if (state.selectedChip === boneKey) {
+                        placeBone(boneKey);
+                    } else if (!state.placedBones.has(boneKey)) {
+                        // Feedback al tocar zona equivocada
+                        slot.classList.add('wrong-attempt');
+                        setTimeout(() => slot.classList.remove('wrong-attempt'), 600);
+                        const selectedInfo = BONE_DATA[state.selectedChip];
+                        showBoneInfo('¡Observa con atención!', `Esa parte del cuerpo no corresponde al hueso "${selectedInfo ? selectedInfo.name : 'seleccionado'}". ¿En qué parte del esqueleto se encuentra?`);
+                    }
                 } else if (state.placedBones.has(boneKey)) {
                     const info = BONE_DATA[boneKey];
                     showBoneInfo(info.name + ' (Colocado)', info.desc);
+                } else {
+                    showBoneInfo('Zona sin colocar', 'Selecciona primero un hueso del banco para ubicarlo en esta parte del cuerpo.');
                 }
             });
         });
 
-        function highlightSlot(boneKey) {
-            clearHighlights();
-            const slot = document.getElementById(`slot-${boneKey}`);
-            if (slot && !state.placedBones.has(boneKey)) {
-                slot.classList.add('highlight');
-            }
-        }
-
         function clearHighlights() {
-            document.querySelectorAll('.bone-slot').forEach(s => s.classList.remove('highlight'));
+            // Ya no se requiere limpiar pistas azules
         }
 
         function placeBone(boneKey) {
