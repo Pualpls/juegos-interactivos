@@ -2015,9 +2015,6 @@
                  style="width:100%; padding:0.75rem 1rem; border:2px solid #94a3b8; border-radius:0.6rem; font-size:1.05rem; font-family:var(--font-body); font-weight:600; outline:none; transition:border 0.2s;"
                  onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#94a3b8'"
                  onkeydown="if(event.key==='Enter') submitRecordScore();" />
-          <p style="font-size:0.78rem; color:#64748b; margin-top:0.35rem;">
-            * Solo se guardará con el nombre que escribas. Sin contraseñas ni registros anónimos.
-          </p>
         </div>
 
         <div class="modal-buttons" style="margin-top:0;">
@@ -2063,12 +2060,9 @@
           <!-- Filas generadas dinámicamente -->
         </div>
 
-        <!-- PIE CON ENLACE A GOOGLE SHEET -->
-        <div style="margin-top:0.75rem; padding-top:0.6rem; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#64748b;">
-          <button onclick="promptGoogleSheetUrl()" style="background:none; border:none; color:#2563eb; cursor:pointer; font-weight:600; text-decoration:underline;">
-            ⚙️ Vincular Google Sheet
-          </button>
-          <button class="btn-modal btn-modal-secondary" onclick="closeLeaderboardModal()" style="padding:0.45rem 1.1rem; font-size:0.85rem; margin:0;">
+        <!-- PIE CON BOTÓN VOLVER -->
+        <div style="margin-top:0.75rem; padding-top:0.6rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; align-items:center;">
+          <button class="btn-modal btn-modal-secondary" onclick="closeLeaderboardModal()" style="padding:0.45rem 1.3rem; font-size:0.85rem; margin:0;">
             Volver
           </button>
         </div>
@@ -3442,7 +3436,7 @@
         treePool = ['palmera', 'palmera_2', 'palmera_3', 'palmera_4', 'palmera_5'];
         accentPool = ['hierba_flores', 'hierba_alta', 'hierba_baja', 'arbusto'];
       } else if (theme.id === 'ciudad') {
-        treePool = ['poste', 'encino', 'encino_2', 'poste'];
+        treePool = ['encino', 'encino_2', 'arbusto', 'encino_3', 'encino', 'encino_2', 'poste', 'encino_3', 'arbusto', 'encino'];
         accentPool = ['arbusto', 'hierba_alta', 'hierba_baja'];
       } else if (theme.id === 'granja') {
         treePool = ['manzano', 'manzano_2', 'manzano_3', 'encino', 'encino_2', 'encino_3'];
@@ -3561,9 +3555,16 @@
     }
 
     function openTutorialModal(levelId) {
+      // Cerrar cualquier otro modal que pudiera estar activo (evita superposiciones)
+      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard'].forEach(id => {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('active');
+      });
+
       gameState.currentLevelId = levelId;
       const strat = STRATEGIES.find(s => s.id === levelId);
       if (!strat) return;
+      if (strat.world) gameState.currentWorld = strat.world;
 
       document.getElementById('modal-tut-strategy-name').textContent = `Nivel #${strat.id}: ${strat.title}`;
       document.getElementById('modal-tut-grade-tag').textContent = `Mundo ${strat.world} · ${strat.tag}`;
@@ -4518,10 +4519,17 @@
     }
 
     function playNextLevel() {
+      // Cerrar modales anteriores
+      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard'].forEach(id => {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('active');
+      });
+
       if (gameState.currentLevelId < STRATEGIES.length) {
         gameState.currentLevelId++;
         openTutorialModal(gameState.currentLevelId);
       } else {
+        alert("¡Felicitaciones! Has completado todos los desafíos de cálculo mental.");
         exitToMenu();
       }
     }
