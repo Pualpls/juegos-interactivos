@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>Rimas y Calaveritas · 3° Primaria</title>
   <style>
     /* ==========================================================================
@@ -1763,31 +1764,144 @@
       }
     });
 
-    document.getElementById('btn-reproducir-voz').addEventListener('click', () => {
-      audioMotor.asegurarContexto();
-      if (!('speechSynthesis' in window)) {
-        alert('La síntesis de voz no está habilitada en este equipo.');
-        return;
+    /* =========================================================================
+       MOTOR DE VOZ GOOGLE AI ONLINE (STREAMING ES-MX CON CHUNKER Y FALLBACK NATIVO)
+       ========================================================================= */
+    let currentTtsAudio = null;
+    let currentTtsAbort = false;
+
+    function splitTextForTts(text, maxLen = 160) {
+      if (text.length <= maxLen) return [text];
+      const sentences = text.match(/[^.!?\n]+[.!?\n]+|[^.!?\n]+$/g) || [text];
+      const chunks = [];
+      let current = '';
+      for (let s of sentences) {
+        s = s.trim();
+        if (!s) continue;
+        if ((current + ' ' + s).trim().length <= maxLen) {
+          current = (current + ' ' + s).trim();
+        } else {
+          if (current) chunks.push(current);
+          if (s.length <= maxLen) {
+            current = s;
+          } else {
+            const words = s.split(' ');
+            current = '';
+            for (let w of words) {
+              if ((current + ' ' + w).trim().length <= maxLen) {
+                current = (current + ' ' + w).trim();
+              } else {
+                if (current) chunks.push(current);
+                current = w;
+              }
+            }
+          }
+        }
+      }
+      if (current) chunks.push(current);
+      return chunks.length > 0 ? chunks : [text];
+    }
+
+    function stopTtsAudio() {
+      currentTtsAbort = true;
+      if (currentTtsAudio) {
+        try {
+          currentTtsAudio.pause();
+          currentTtsAudio.currentTime = 0;
+        } catch(e) {}
+        currentTtsAudio = null;
+      }
+      if (window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch(e) {}
+      }
+    }
+
+    function declamarVozGoogle(texto, rate = 0.9) {
+      if (!texto) return;
+      stopTtsAudio();
+
+      let clean = String(texto).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!clean) return;
+
+      const chunks = splitTextForTts(clean, 160);
+      currentTtsAbort = false;
+
+      let idx = 0;
+      function playNextChunk() {
+        if (currentTtsAbort || idx >= chunks.length) {
+          currentTtsAudio = null;
+          return;
+        }
+        const chunk = chunks[idx++];
+        try {
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(chunk)}`;
+          const audio = new Audio();
+          audio.referrerPolicy = 'no-referrer';
+          audio.src = url;
+          audio.playbackRate = Math.min(1.2, Math.max(0.75, rate));
+          currentTtsAudio = audio;
+
+          let fallbackTriggered = false;
+          const triggerNativeFallback = () => {
+            if (fallbackTriggered || currentTtsAbort) return;
+            fallbackTriggered = true;
+            if (window.speechSynthesis) {
+              try {
+                const remaining = [chunk, ...chunks.slice(idx)].join(' ');
+                const utter = new SpeechSynthesisUtterance(remaining);
+                utter.lang = 'es-MX';
+                utter.rate = rate;
+                window.speechSynthesis.speak(utter);
+              } catch(e) {}
+            }
+          };
+
+          audio.onerror = () => triggerNativeFallback();
+          const timeoutId = setTimeout(() => {
+            if (audio.readyState === 0 && !currentTtsAbort) {
+              triggerNativeFallback();
+            }
+          }, 2500);
+
+          audio.onplay = () => clearTimeout(timeoutId);
+          audio.onended = () => {
+            clearTimeout(timeoutId);
+            playNextChunk();
+          };
+
+          audio.play().catch(() => triggerNativeFallback());
+        } catch(err) {
+          if (window.speechSynthesis) {
+            try {
+              const utter = new SpeechSynthesisUtterance(clean);
+              utter.lang = 'es-MX';
+              utter.rate = rate;
+              window.speechSynthesis.speak(utter);
+            } catch(e) {}
+          }
+        }
       }
 
-      window.speechSynthesis.cancel();
+      playNextChunk();
+    }
+
+    document.getElementById('btn-reproducir-voz').addEventListener('click', () => {
+      audioMotor.asegurarContexto();
       const calaverita = BANCO_CALAVERITAS[estadoJuego.rondaIndice];
       let declamacion = '';
 
       calaverita.versos.forEach(v => {
         if (!v.espacio) {
-          declamacion += v.texto + ' \n';
+          declamacion += v.texto + '. ';
         } else {
           const palabra = estadoJuego.palabraColocada || calaverita.opcion_correcta;
-          declamacion += v.texto + ' ' + palabra + '.\n';
+          declamacion += v.texto + ' ' + palabra + '. ';
         }
       });
 
-      const voz = new SpeechSynthesisUtterance(declamacion);
-      voz.lang = 'es-MX';
-      voz.rate = 0.88; // Velocidad pausada adecuada para 3° de primaria
-      voz.pitch = 1.05;
-      window.speechSynthesis.speak(voz);
+      declamarVozGoogle(declamacion, 0.9);
     });
 
     /* ==========================================================================
@@ -1977,13 +2091,8 @@
     });
 
     document.getElementById('btn-leer-en-voz-taller').addEventListener('click', () => {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
       const versos = ESTROFAS_BIBLIOTECA[CONFIG_TALLER.personaje][CONFIG_TALLER.rima];
-      const declamacion = new SpeechSynthesisUtterance(versos.join('\n'));
-      declamacion.lang = 'es-MX';
-      declamacion.rate = 0.88;
-      window.speechSynthesis.speak(declamacion);
+      declamarVozGoogle(versos.join('. '), 0.9);
     });
 
   </script>

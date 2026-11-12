@@ -551,7 +551,7 @@
         context: "Instructivo del avioncito reciclado (Verbo en infinitivo terminado en -ir):",
         img: "instrumento_regla.png",
         sentence: "Paso 1: <span class='blank-pill' id='m2Blank'>¿ ?</span> con la regla de 30 cm la mitad exacta del abatelenguas antes de aplicar el pegamento.",
-        options: ["Medir", "Medimos", "Midieron", "Midiendo"],
+        options: ["Medimos", "Medir", "Midieron", "Midiendo"],
         answer: "Medir",
         explain: "Los verbos en infinitivo terminan en -ar, -er, -ir. 'Medir' termina en -ir."
       },
@@ -559,7 +559,7 @@
         context: "Instructivo de papiroflexia (Verbo en infinitivo terminado en -ar frente a verbos conjugados):",
         img: "accion_doblar.png",
         sentence: "Paso 2: <span class='blank-pill' id='m2Blank'>¿ ?</span> la hoja por la mitad marcando bien el pliegue con los dedos.",
-        options: ["Doblar", "Doblé", "Doblaron", "Doblábamos"],
+        options: ["Doblé", "Doblaron", "Doblar", "Doblábamos"],
         answer: "Doblar",
         explain: "'Doblar' es un verbo en infinitivo (-ar) que sirve como instrucción general, a diferencia de 'Doblé' o 'Doblaron' que están conjugados en pasado."
       },
@@ -575,7 +575,7 @@
         context: "Uso de la coma en lista de materiales:",
         img: "material_periodico.png",
         sentence: "Materiales necesarios: papel periódico<span class='blank-pill' id='m2Blank'>¿ ?</span> engrudo, cartoncillo, tijeras y papel de China.",
-        options: [", (coma)", ": (dos puntos)", ". (punto)", "y (conjunción)"],
+        options: [": (dos puntos)", ". (punto)", ", (coma)", "y (conjunción)"],
         answer: ", (coma)",
         explain: "La coma separa los elementos intermedios de una enumeración o lista de materiales sin repetir 'y'."
       },
@@ -583,15 +583,15 @@
         context: "Instructivo en modo imperativo (orden directa):",
         img: "accion_pegar.png",
         sentence: "Paso 4: <span class='blank-pill' id='m2Blank'>¿ ?</span> los conos de cartoncillo alrededor de la piñata seca y decóralos con tiras de papel.",
-        options: ["Pega", "Pegaron", "Pegando", "Pegábamos"],
+        options: ["Pegaron", "Pega", "Pegando", "Pegábamos"],
         answer: "Pega",
         explain: "'Pega' está en modo imperativo, dando una indicación directa al lector del instructivo."
       },
       {
         context: "Conector para el último paso del instructivo:",
         img: "juguete_pinata.png",
-        sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> amarra el mecate resistente en la parte superior y cuelga la piñata para la posada.",
-        options: ["Finalmente,", "Antes de,", "Primero,", "Mientras,"],
+        sentence: "<span class='blank-pill' id='m2Blank'>¿ ?</span> amarra la cuerda en la parte superior y cuelga la piñata para la posada.",
+        options: ["Antes de,", "Primero,", "Mientras,", "Finalmente,"],
         answer: "Finalmente,",
         explain: "'Finalmente,' señala el último paso cronológico del instructivo."
       }
@@ -753,8 +753,20 @@
       renderMode2();
     }
 
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
     function renderMode2() {
       const q = m2Questions[m2Idx];
+      if (!q.shuffledOptions) {
+        q.shuffledOptions = shuffleArray(q.options);
+      }
       const area = document.getElementById('gameArea');
       area.innerHTML = `
         <div class="panel-box">
@@ -782,7 +794,7 @@
               <span class="badge-step">Infinitivo (-ar, -er, -ir) e Imperativo</span>
             </div>
             <div class="verb-grid">
-              ${q.options.map(opt => `
+              ${q.shuffledOptions.map(opt => `
                 <button class="verb-btn" onclick="checkM2(this, '${opt}')">${opt}</button>
               `).join('')}
             </div>
@@ -812,6 +824,7 @@
 
     function nextM2() {
       m2Idx = (m2Idx + 1) % m2Questions.length;
+      m2Questions[m2Idx].shuffledOptions = null;
       renderMode2();
     }
 

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>Retos Matemáticos · 3° Primaria</title>
   <style>
     :root {
@@ -2126,6 +2127,7 @@
 
     /* NAVEGACIÓN */
     function openModule(num) {
+      if (typeof stopTtsAudio === 'function') stopTtsAudio();
       state.currentModule = num;
       document.getElementById('view-menu').style.display = 'none';
       document.getElementById('btn-back-menu').style.display = 'inline-flex';
@@ -2146,6 +2148,7 @@
     }
 
     document.getElementById('btn-back-menu').addEventListener('click', () => {
+      if (typeof stopTtsAudio === 'function') stopTtsAudio();
       state.currentModule = 0;
       state.selectedChipForTap = null;
       document.querySelectorAll('.module-container').forEach(mod => {
@@ -4124,14 +4127,14 @@
       {
         difficulty: 'desafio',
         category: 'Lecturas de Biblioteca (Trampa de 3)',
-        situation: 'Cristal leyó 18 libros este mes, Brianna leyó 24 libros y Jesús leyó 15 libros en la biblioteca.',
+        situation: 'Estrella leyó 18 libros este mes, Brianna leyó 24 libros y Jesús leyó 15 libros en la biblioteca.',
         question: '¿Cuántos libros leyeron las dos niñas en total?',
         chips: [
-          { text: '18 libros de Cristal', type: 'useful' },
+          { text: '18 libros de Estrella', type: 'useful' },
           { text: '24 libros de Brianna', type: 'useful' },
           { text: '15 libros de Jesús', type: 'distractor' }
         ],
-        explanation: 'La pregunta especifica "las dos niñas" (Cristal y Brianna). Los 15 libros leídos por Jesús son un distractor.'
+        explanation: 'La pregunta especifica "las dos niñas" (Estrella y Brianna). Los 15 libros leídos por Jesús son un distractor.'
       },
       {
         difficulty: 'desafio',
@@ -4246,14 +4249,14 @@
       {
         difficulty: 'desafio',
         category: 'Investigación de Biblioteca (Trampa de 3 Alumnas)',
-        situation: 'Yamileth investigó 14 mitos prehispánicos, Cristal investigó 16 fábulas y Brianna investigó 20 leyendas de México.',
+        situation: 'Yamileth investigó 14 mitos prehispánicos, Naomi investigó 16 fábulas y Brianna investigó 20 leyendas de México.',
         question: '¿Cuántos relatos investigaron entre Yamileth y Brianna juntas?',
         chips: [
           { text: '14 mitos de Yamileth', type: 'useful' },
           { text: '20 leyendas de Brianna', type: 'useful' },
-          { text: '16 fábulas de Cristal', type: 'distractor' }
+          { text: '16 fábulas de Naomi', type: 'distractor' }
         ],
-        explanation: 'Sumamos los textos de Yamileth y Brianna (14 + 20 = 34). Los 16 relatos de Cristal no se preguntan.'
+        explanation: 'Sumamos los textos de Yamileth y Brianna (14 + 20 = 34). Los 16 relatos de Naomi no se preguntan.'
       },
       // ==========================================
       // PROBLEMAS EXTRA: EDADES, PAUPESOS Y FALTANTES
@@ -4287,14 +4290,14 @@
       {
         difficulty: 'medio',
         category: 'Tiendita del Aula (¿Cuánto le falta?)',
-        situation: 'En la tiendita del aula que atiende el maestro Paul a las 12:00, una caja de colores cuesta 80 paupesos. Cristal tiene guardados 54 paupesos.',
+        situation: 'En la tiendita del aula que atiende el maestro Paul a las 12:00, una caja de colores cuesta 80 paupesos. Estrella tiene guardados 54 paupesos.',
         question: '¿Cuántos paupesos le faltan a Cristal para comprar la caja de colores?',
         chips: [
           { text: '80 paupesos costo de colores', type: 'useful' },
-          { text: '54 paupesos que tiene Cristal', type: 'useful' },
+          { text: '54 paupesos que tiene Estrella', type: 'useful' },
           { text: 'Hora 12:00 del día', type: 'distractor' }
         ],
-        explanation: 'Restamos 80 − 54 = 26 paupesos que le faltan a Cristal. La hora del día es un distractor.'
+        explanation: 'Restamos 80 − 54 = 26 paupesos que le faltan a Estrella. La hora del día es un distractor.'
       },
       {
         difficulty: 'desafio',
@@ -4314,7 +4317,7 @@
        ========================================================================= */
     const DYNAMIC_POOLS = {
       boys: ['Jarol', 'Daniel', 'José Manuel', 'Alexander', 'Jesús', 'Adriel', 'Gael', 'Iker'],
-      girls: ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Cristal', 'Aurora'],
+      girls: ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Aurora'],
       adults: [
         'el maestro Paul', 
         'el maestro Pedro', 
@@ -4434,7 +4437,7 @@
       const availableGirls = [...DYNAMIC_POOLS.girls].sort(() => Math.random() - 0.5);
 
       const knownBoys = ['Jarol', 'Daniel', 'José Manuel', 'Alexander', 'Jesús', 'Adriel', 'Gael', 'Iker'];
-      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Cristal', 'Aurora'];
+      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Aurora'];
 
       let bIdx = 0, gIdx = 0;
       const nameMap = {};
@@ -4556,7 +4559,7 @@
       const availableGirls = [...DYNAMIC_POOLS.girls].sort(() => Math.random() - 0.5);
 
       const knownBoys = ['Jarol', 'Daniel', 'José Manuel', 'Alexander', 'Jesús', 'Adriel', 'Gael', 'Iker'];
-      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Cristal', 'Aurora'];
+      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Aurora'];
 
       let bIdx = 0, gIdx = 0;
       const nameMap = {};
@@ -4839,8 +4842,8 @@
       // 5. AUMENTO
       {
         context: 'Economía de Fichas (Aumento)',
-        situation: 'Cristal tenía 35 paupesos en su alcancía. El maestro Paul le entregó 20 paupesos por su excelente reseña de lectura.',
-        question: '¿Cuántos paupesos tiene ahora Cristal en total?',
+        situation: 'Naomi tenía 35 paupesos en su alcancía. El maestro Paul le entregó 20 paupesos por su excelente reseña de lectura.',
+        question: '¿Cuántos paupesos tiene ahora Naomi en total?',
         op: 'suma',
         numMayor: 35,
         labelMayor: '35 paupesos en alcancía',
@@ -5191,8 +5194,8 @@
       // 34. ¿CUÁNTO LE FALTA PARA COMPRAR CON PAUPESOS? (TIENDITA DEL AULA)
       {
         context: 'Tiendita del Aula (Paupesos faltantes)',
-        situation: 'En la tiendita del aula, un estuche de plumones de colores cuesta 75 paupesos. Cristal tiene ahorrados 48 paupesos en su sobre.',
-        question: '¿Cuántos paupesos le faltan a Cristal para poder comprar el estuche?',
+        situation: 'En la tiendita del aula, un estuche de plumones de colores cuesta 75 paupesos. Estrella tiene ahorrados 48 paupesos en su sobre.',
+        question: '¿Cuántos paupesos le faltan a Estrella para poder comprar el estuche?',
         op: 'resta',
         numMayor: 75,
         labelMayor: '75 paupesos costo del estuche',
@@ -5585,29 +5588,127 @@
       }
     }
 
-    /* SÍNTESIS DE VOZ NATIVA CON SALVAGUARDA DE IDIOMA */
-    function speakText(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'es-MX';
-        utter.rate = 0.9;
-        
-        // Salvaguarda para Linux / Chrome: Buscar voz nativa en español
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-          const spanishVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('es'));
-          if (spanishVoice) {
-            utter.voice = spanishVoice;
-            window.speechSynthesis.speak(utter);
-          } else {
-            console.warn("TTS: No se encontró voz en español en el sistema. Se omite para evitar audio robótico en inglés.");
-          }
+    /* =========================================================================
+       MOTOR DE VOZ GOOGLE AI ONLINE (STREAMING ES-MX CON CHUNKER Y FALLBACK NATIVO)
+       ========================================================================= */
+    let currentTtsAudio = null;
+    let currentTtsAbort = false;
+
+    function splitTextForTts(text, maxLen = 160) {
+      if (text.length <= maxLen) return [text];
+      const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+      const chunks = [];
+      let current = '';
+      for (let s of sentences) {
+        s = s.trim();
+        if (!s) continue;
+        if ((current + ' ' + s).trim().length <= maxLen) {
+          current = (current + ' ' + s).trim();
         } else {
-          // Si el array de voces aún no termina de hidratarse, intentamos síntesis estándar
-          window.speechSynthesis.speak(utter);
+          if (current) chunks.push(current);
+          if (s.length <= maxLen) {
+            current = s;
+          } else {
+            const words = s.split(' ');
+            current = '';
+            for (let w of words) {
+              if ((current + ' ' + w).trim().length <= maxLen) {
+                current = (current + ' ' + w).trim();
+              } else {
+                if (current) chunks.push(current);
+                current = w;
+              }
+            }
+          }
         }
       }
+      if (current) chunks.push(current);
+      return chunks.length > 0 ? chunks : [text];
+    }
+
+    function stopTtsAudio() {
+      currentTtsAbort = true;
+      if (currentTtsAudio) {
+        try {
+          currentTtsAudio.pause();
+          currentTtsAudio.currentTime = 0;
+        } catch(e) {}
+        currentTtsAudio = null;
+      }
+      if (window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch(e) {}
+      }
+    }
+
+    function speakText(text, pitch = 1.0, rate = 0.95) {
+      if (!text) return;
+      stopTtsAudio();
+
+      let clean = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!clean) return;
+
+      const chunks = splitTextForTts(clean, 160);
+      currentTtsAbort = false;
+
+      let idx = 0;
+      function playNextChunk() {
+        if (currentTtsAbort || idx >= chunks.length) {
+          currentTtsAudio = null;
+          return;
+        }
+        const chunk = chunks[idx++];
+        try {
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(chunk)}`;
+          const audio = new Audio();
+          audio.referrerPolicy = 'no-referrer';
+          audio.src = url;
+          audio.playbackRate = Math.min(1.25, Math.max(0.75, rate));
+          currentTtsAudio = audio;
+
+          let fallbackTriggered = false;
+          const triggerNativeFallback = () => {
+            if (fallbackTriggered || currentTtsAbort) return;
+            fallbackTriggered = true;
+            if (window.speechSynthesis) {
+              try {
+                const remaining = [chunk, ...chunks.slice(idx)].join(' ');
+                const utter = new SpeechSynthesisUtterance(remaining);
+                utter.lang = 'es-MX';
+                utter.rate = rate;
+                window.speechSynthesis.speak(utter);
+              } catch(e) {}
+            }
+          };
+
+          audio.onerror = () => triggerNativeFallback();
+          const timeoutId = setTimeout(() => {
+            if (audio.readyState === 0 && !currentTtsAbort) {
+              triggerNativeFallback();
+            }
+          }, 2500);
+
+          audio.onplay = () => clearTimeout(timeoutId);
+          audio.onended = () => {
+            clearTimeout(timeoutId);
+            playNextChunk();
+          };
+
+          audio.play().catch(() => triggerNativeFallback());
+        } catch(err) {
+          if (window.speechSynthesis) {
+            try {
+              const utter = new SpeechSynthesisUtterance(clean);
+              utter.lang = 'es-MX';
+              utter.rate = rate;
+              window.speechSynthesis.speak(utter);
+            } catch(e) {}
+          }
+        }
+      }
+
+      playNextChunk();
     }
   
 
@@ -5969,7 +6070,7 @@
       const availableGirls = [...DYNAMIC_POOLS.girls].sort(() => Math.random() - 0.5);
 
       const knownBoys = ['Jarol', 'Daniel', 'José Manuel', 'Alexander', 'Jesús', 'Adriel', 'Gael', 'Iker'];
-      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Cristal', 'Aurora'];
+      const knownGirls = ['Naomi', 'Brianna', 'Dalary', 'Estrella', 'Yamileth', 'Keyla', 'Aurora'];
 
       let bIdx = 0, gIdx = 0;
       const nameMap = {};

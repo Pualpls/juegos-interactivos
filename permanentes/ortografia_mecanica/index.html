@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
   <title>Ortografía y Redacción · 3° Primaria</title>
   <style>
     :root {
@@ -1028,16 +1029,129 @@
       } catch (e) {}
     }
 
+    /* =========================================================================
+       MOTOR DE VOZ GOOGLE AI ONLINE (STREAMING ES-MX CON CHUNKER Y FALLBACK NATIVO)
+       ========================================================================= */
+    let currentTtsAudio = null;
+    let currentTtsAbort = false;
+
+    function splitTextForTts(text, maxLen = 160) {
+      if (text.length <= maxLen) return [text];
+      const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+      const chunks = [];
+      let current = '';
+      for (let s of sentences) {
+        s = s.trim();
+        if (!s) continue;
+        if ((current + ' ' + s).trim().length <= maxLen) {
+          current = (current + ' ' + s).trim();
+        } else {
+          if (current) chunks.push(current);
+          if (s.length <= maxLen) {
+            current = s;
+          } else {
+            const words = s.split(' ');
+            current = '';
+            for (let w of words) {
+              if ((current + ' ' + w).trim().length <= maxLen) {
+                current = (current + ' ' + w).trim();
+              } else {
+                if (current) chunks.push(current);
+                current = w;
+              }
+            }
+          }
+        }
+      }
+      if (current) chunks.push(current);
+      return chunks.length > 0 ? chunks : [text];
+    }
+
+    function stopTtsAudio() {
+      currentTtsAbort = true;
+      if (currentTtsAudio) {
+        try {
+          currentTtsAudio.pause();
+          currentTtsAudio.currentTime = 0;
+        } catch(e) {}
+        currentTtsAudio = null;
+      }
+      if (window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch(e) {}
+      }
+    }
+
     function speakText(text, pitch = 1.05, rate = 0.9) {
-      if (!('speechSynthesis' in window)) return;
-      try {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'es-MX';
-        utter.pitch = pitch;
-        utter.rate = rate;
-        window.speechSynthesis.speak(utter);
-      } catch (e) {}
+      if (!text) return;
+      stopTtsAudio();
+
+      let clean = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!clean) return;
+
+      const chunks = splitTextForTts(clean, 160);
+      currentTtsAbort = false;
+
+      let idx = 0;
+      function playNextChunk() {
+        if (currentTtsAbort || idx >= chunks.length) {
+          currentTtsAudio = null;
+          return;
+        }
+        const chunk = chunks[idx++];
+        try {
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(chunk)}`;
+          const audio = new Audio();
+          audio.referrerPolicy = 'no-referrer';
+          audio.src = url;
+          audio.playbackRate = Math.min(1.25, Math.max(0.75, rate));
+          currentTtsAudio = audio;
+
+          let fallbackTriggered = false;
+          const triggerNativeFallback = () => {
+            if (fallbackTriggered || currentTtsAbort) return;
+            fallbackTriggered = true;
+            if (window.speechSynthesis) {
+              try {
+                const remaining = [chunk, ...chunks.slice(idx)].join(' ');
+                const utter = new SpeechSynthesisUtterance(remaining);
+                utter.lang = 'es-MX';
+                utter.pitch = pitch;
+                utter.rate = rate;
+                window.speechSynthesis.speak(utter);
+              } catch(e) {}
+            }
+          };
+
+          audio.onerror = () => triggerNativeFallback();
+          const timeoutId = setTimeout(() => {
+            if (audio.readyState === 0 && !currentTtsAbort) {
+              triggerNativeFallback();
+            }
+          }, 2500);
+
+          audio.onplay = () => clearTimeout(timeoutId);
+          audio.onended = () => {
+            clearTimeout(timeoutId);
+            playNextChunk();
+          };
+
+          audio.play().catch(() => triggerNativeFallback());
+        } catch(err) {
+          if (window.speechSynthesis) {
+            try {
+              const utter = new SpeechSynthesisUtterance(clean);
+              utter.lang = 'es-MX';
+              utter.pitch = pitch;
+              utter.rate = rate;
+              window.speechSynthesis.speak(utter);
+            } catch(e) {}
+          }
+        }
+      }
+
+      playNextChunk();
     }
 
     function repeatCurrentPromptAudio() {
@@ -1752,12 +1866,12 @@
        NAVEGACIÓN Y FLUJO DE MÓDULOS
        ========================================================================= */
     function showHub() {
+      if (typeof stopTtsAudio === 'function') stopTtsAudio();
       clearSelectedChip();
       document.getElementById('hub-view').style.display = 'grid';
       document.getElementById('game-view').style.display = 'none';
       document.getElementById('btn-back-hub').style.display = 'none';
       document.getElementById('btn-tts-repeat').style.display = 'none';
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     }
 
     function openModule(modNum) {
