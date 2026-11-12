@@ -1061,6 +1061,40 @@
       margin-top: -0.15rem;
     }
 
+    .hud-lanes-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-top: 0.2rem;
+    }
+
+    .hud-lane-badge {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      padding: 0.15rem 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: all 0.15s ease;
+    }
+
+    .hud-lane-badge b {
+      color: #fbbf24;
+      font-size: 0.98rem;
+    }
+
+    .hud-lane-badge.active-lane {
+      border-color: #38bdf8;
+      background: rgba(14, 165, 233, 0.35);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+      color: #fff;
+    }
+
     .game-touch-controls {
       position: absolute;
       bottom: 0;
@@ -1763,12 +1797,16 @@
         <span class="hud-theme-badge" id="hud-theme-badge" onclick="cycleTheme()" title="Cambiar escenario">🌲 Bosque</span>
       </div>
 
-      <!-- CENTRO SUPERIOR: OPERACIÓN MATEMÁTICA LIMPIA -->
+      <!-- CENTRO SUPERIOR: OPERACIÓN MATEMÁTICA LIMPIA Y PREVISUALIZACIÓN DE CARRILES -->
       <div class="hud-top-center">
         <div class="hud-math-card" id="hud-math-card">
           <span class="hud-strategy-title" id="hud-strategy-title">Estrategia #6 · Restar 10</span>
           <div class="hud-math-problem" id="hud-math-problem">28 − 10 = ?</div>
-          <div class="hud-math-hint" id="hud-math-hint">¡Esquiva las trampas e impacta directamente la correcta!</div>
+          <div class="hud-lanes-preview" id="hud-lanes-preview">
+            <span class="hud-lane-badge" id="hud-opt-left">◀ <b id="lbl-opt-left">--</b></span>
+            <span class="hud-lane-badge active-lane" id="hud-opt-center">● <b id="lbl-opt-center">--</b></span>
+            <span class="hud-lane-badge" id="hud-opt-right"><b id="lbl-opt-right">--</b> ▶</span>
+          </div>
         </div>
       </div>
 
@@ -2768,7 +2806,17 @@
       }
     }, { passive: true });
 
+    function updateHudLaneSelection() {
+      const optL = document.getElementById('hud-opt-left');
+      const optC = document.getElementById('hud-opt-center');
+      const optR = document.getElementById('hud-opt-right');
+      if (optL) optL.classList.toggle('active-lane', player.lane === -1);
+      if (optC) optC.classList.toggle('active-lane', player.lane === 0);
+      if (optR) optR.classList.toggle('active-lane', player.lane === 1);
+    }
+
     function soundLaneSwitch() {
+      updateHudLaneSelection();
       if (!gameState.soundEnabled) return;
       const ctx = getAudioContext();
       if (!ctx) return;
@@ -3748,6 +3796,18 @@
         hurdles: hurdles,
         evaluated: false
       });
+
+      // Actualizar previsualización clara de carriles en el HUD superior
+      const valL = hurdles.find(h => h.lane === -1)?.value ?? '--';
+      const valC = hurdles.find(h => h.lane === 0)?.value ?? '--';
+      const valR = hurdles.find(h => h.lane === 1)?.value ?? '--';
+      const lblL = document.getElementById('lbl-opt-left');
+      const lblC = document.getElementById('lbl-opt-center');
+      const lblR = document.getElementById('lbl-opt-right');
+      if (lblL) lblL.textContent = valL;
+      if (lblC) lblC.textContent = valC;
+      if (lblR) lblR.textContent = valR;
+      updateHudLaneSelection();
     }
 
     function updateHudCounters() {
@@ -4463,10 +4523,11 @@
           const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
           if (pt.scale <= 0) return;
 
-          // Escala visual calibrada: legible a gran distancia para resolver con tiempo
-          const visualScale = Math.max(0.48, pt.scale);
-          const gateW = Math.max(68, 135 * visualScale);
-          const gateH = gateW * 1.15;
+          // Ancho proporcional al carril en perspectiva (máximo 74% del ancho del carril):
+          // Garantiza matemáticamente que los paneles de carriles adyacentes NUNCA se toquen ni se traslapen
+          const laneDist = WORLD.laneWidth * pt.scale;
+          const gateW = Math.max(14, Math.min(115, laneDist * 0.74));
+          const gateH = gateW * 1.25;
           const gateX = pt.x - (gateW * 0.5);
           const gateY = pt.y - gateH;
 
@@ -4475,39 +4536,37 @@
 
           // Postes de madera
           ctx.fillStyle = '#78350f';
-          const postW = Math.max(2, 6 * visualScale);
+          const postW = Math.max(1.5, Math.floor(gateW * 0.055));
           ctx.fillRect(gateX, gateY + gateH * 0.25, postW, gateH * 0.75);
           ctx.fillRect(gateX + gateW - postW, gateY + gateH * 0.25, postW, gateH * 0.75);
 
           // Panel de respuesta de alto contraste
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.roundRect(gateX, gateY, gateW, gateH * 0.74, Math.max(4, 8 * visualScale));
+          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, Math.max(2, Math.floor(gateW * 0.08)));
           ctx.fill();
 
           ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = Math.max(2, 3.5 * visualScale);
+          ctx.lineWidth = Math.max(1, Math.floor(gateW * 0.03));
           ctx.stroke();
 
           // Sombra sobre el asfalto
-          ctx.fillStyle = 'rgba(0,0,0,0.35)';
+          ctx.fillStyle = 'rgba(0,0,0,0.3)';
           ctx.beginPath();
-          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(2, 6 * visualScale), 0, 0, Math.PI * 2);
+          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(1, Math.floor(gateW * 0.05)), 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // Número de respuesta ampliado y nítido con sombra tipográfica
-          const fontSize = Math.max(26, Math.floor(46 * visualScale));
-          ctx.save();
-          ctx.font = `900 ${fontSize}px 'Fredoka', cursive, sans-serif`;
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-          ctx.shadowBlur = 4;
-          ctx.shadowOffsetX = 1;
-          ctx.shadowOffsetY = 2;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.37));
-          ctx.restore();
+          // Número de respuesta proporcional que cabe perfectamente dentro de su panel sin desbordarse
+          const fontSize = Math.max(8, Math.floor(gateW * 0.46));
+          if (fontSize >= 8) {
+            ctx.save();
+            ctx.font = `800 ${fontSize}px 'Fredoka', system-ui, -apple-system, sans-serif`;
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+            ctx.restore();
+          }
 
           ctx.restore();
         });
