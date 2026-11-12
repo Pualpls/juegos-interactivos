@@ -3900,7 +3900,17 @@ function doPost(e) {
       if (confirm('¿Estás seguro de que deseas borrar TODOS los puntajes registrados? Esta acción no se puede deshacer.')) {
         state.scores = [];
         saveScoresToStorage();
+        // Borrar todos los récords individuales de fichas de la memoria local
+        FICHAS_DATA.forEach(f => {
+          localStorage.removeItem(`lector_ficha_${f.id}`);
+          const el = document.getElementById(`rec-stat-${f.id}`);
+          if (el) {
+            el.innerHTML = '<span>Sin intento</span>';
+            el.classList.remove('has-record');
+          }
+        });
         renderLeaderboardTable();
+        alert('✅ Se han eliminado todos los puntajes y récords locales de este dispositivo.');
       }
     }
 
