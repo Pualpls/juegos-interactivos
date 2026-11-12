@@ -4353,42 +4353,47 @@
       openLeaderboardModal('level', recordItem.id);
     }
 
+    const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxGg2LGGbcWXxu6qBEsgbbhQzATamlCAeYeFeqYHrVdokm_uYVZ_BxOP8zWMaKhhpbr/exec";
+
     function sendRecordToGoogleSheet(record) {
-      const sheetUrl = localStorage.getItem('loki_sheet_url') || '';
+      const sheetUrl = localStorage.getItem('loki_sheet_url') || DEFAULT_GOOGLE_SHEET_URL;
       if (!sheetUrl) return;
 
       try {
+        // Enviar vía POST con text/plain para evitar bloqueo de pre-flight CORS en el navegador
         fetch(sheetUrl, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(record)
         }).catch(() => {
-          // Fallback con imagen beacon GET
+          // Fallback con imagen beacon GET o fetch GET
           try {
             const p = new URLSearchParams(record).toString();
-            new Image().src = `${sheetUrl}?${p}`;
+            fetch(`${sheetUrl}?${p}`, { mode: 'no-cors' }).catch(() => {
+              new Image().src = `${sheetUrl}?${p}`;
+            });
           } catch(err) {}
         });
       } catch(e) {}
     }
 
     function promptGoogleSheetUrl() {
-      const current = localStorage.getItem('loki_sheet_url') || '';
+      const current = localStorage.getItem('loki_sheet_url') || DEFAULT_GOOGLE_SHEET_URL;
       const input = prompt(
         "Ingresa la URL de la aplicación web de Google Apps Script vinculada a tu Google Sheet (termina en /exec):
 
-(Deja vacío para desvincular)",
+(Deja vacío para usar la URL predeterminada)",
         current
       );
       if (input !== null) {
         const trimmed = input.trim();
-        if (trimmed) {
+        if (trimmed && trimmed !== DEFAULT_GOOGLE_SHEET_URL) {
           localStorage.setItem('loki_sheet_url', trimmed);
-          alert("¡Google Sheet vinculado exitosamente! Los nuevos registros se enviarán a tu hoja.");
+          alert("¡Google Sheet personalizado vinculado exitosamente!");
         } else {
           localStorage.removeItem('loki_sheet_url');
-          alert("Google Sheet desvinculado.");
+          alert("Restablecida la hoja de cálculo oficial de la escuela.");
         }
       }
     }
