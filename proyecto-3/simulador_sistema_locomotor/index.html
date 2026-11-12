@@ -591,7 +591,7 @@
                 <div class="panel-card">
                     <div class="card-header">
                         <h2>Esqueleto Humano (Soporte y Protección)</h2>
-                        <span class="badge-info" id="bones-count-badge">0 / 6 colocados</span>
+                        <span class="badge-info" id="bones-count-badge">0 / 8 colocados</span>
                     </div>
 
                     <div class="silhouette-area" id="silhouette-container">
@@ -616,8 +616,14 @@
                             <!-- 5. Húmero (Brazo) -->
                             <rect id="slot-humero" data-bone="humero" class="bone-slot" x="72" y="145" width="14" height="60" rx="6" transform="rotate(16 72 145)" />
 
-                            <!-- 6. Fémur (Pierna) -->
+                            <!-- 6. Radio (Antebrazo) -->
+                            <rect id="slot-radio" data-bone="radio" class="bone-slot" x="48" y="205" width="12" height="55" rx="5" transform="rotate(18 48 205)" />
+
+                            <!-- 7. Fémur (Muslo) -->
                             <rect id="slot-femur" data-bone="femur" class="bone-slot" x="118" y="260" width="16" height="85" rx="7" transform="rotate(-4 118 260)" />
+
+                            <!-- 8. Tibia (Pierna / Espinilla) -->
+                            <rect id="slot-tibia" data-bone="tibia" class="bone-slot" x="105" y="345" width="13" height="55" rx="5" transform="rotate(-2 105 345)" />
                         </svg>
                     </div>
 
@@ -655,9 +661,17 @@
                             <img src="recursos/icono_humero.png" alt="Húmero" class="bone-chip-img">
                             <span>Húmero (Brazo)</span>
                         </div>
+                        <div class="bone-chip" data-bone="radio" id="chip-radio">
+                            <img src="recursos/icono_radio.png" alt="Radio" class="bone-chip-img">
+                            <span>Radio (Antebrazo)</span>
+                        </div>
                         <div class="bone-chip" data-bone="femur" id="chip-femur">
                             <img src="recursos/icono_femur.png" alt="Fémur" class="bone-chip-img">
                             <span>Fémur (Muslo)</span>
+                        </div>
+                        <div class="bone-chip" data-bone="tibia" id="chip-tibia">
+                            <img src="recursos/icono_tibia.png" alt="Tibia" class="bone-chip-img">
+                            <span>Tibia (Espinilla)</span>
                         </div>
                     </div>
 
@@ -859,9 +873,17 @@
                 name: 'Húmero (Brazo)',
                 desc: 'Hueso largo y fuerte de la parte superior del brazo que se articula con el hombro y el codo para alcanzar objetos.'
             },
+            radio: {
+                name: 'Radio (Antebrazo)',
+                desc: 'Hueso del antebrazo que une el codo con la muñeca (lado del pulgar). Permite girar la mano para escribir o saludar.'
+            },
             femur: {
                 name: 'Fémur (Pierna / Muslo)',
                 desc: 'Es el hueso más largo, pesado y resistente del cuerpo humano. Sostiene nuestro peso al caminar y correr.'
+            },
+            tibia: {
+                name: 'Tibia (Pierna / Espinilla)',
+                desc: 'Hueso frontal y robusto de la pierna (la espinilla). Es el soporte principal que sostiene el peso del cuerpo al correr y saltar.'
             }
         };
 
