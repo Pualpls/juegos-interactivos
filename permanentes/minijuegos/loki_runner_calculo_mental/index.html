@@ -23,9 +23,9 @@
       --text-main: #0f172a;
       --text-light: #f8fafc;
       --card-bg: rgba(255, 255, 255, 0.96);
-      --font-display: 'Fredoka', cursive, sans-serif;
-      --font-body: 'Lexend', system-ui, sans-serif;
-      --font-pixel: 'Press Start 2P', monospace;
+      --font-display: 'Fredoka', system-ui, -apple-system, sans-serif;
+      --font-body: 'Lexend', system-ui, -apple-system, sans-serif;
+      --font-pixel: 'Press Start 2P', monospace, sans-serif;
     }
 
     * {
@@ -147,13 +147,13 @@
 
     .menu-hero-banner {
       max-width: 1100px;
-      margin: 0 auto 0.75rem auto;
-      border-radius: 14px;
+      margin: 0 auto 0.5rem auto;
+      border-radius: 12px;
       overflow: hidden;
       border: 2px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
       position: relative;
-      max-height: 175px;
+      max-height: 95px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -163,7 +163,7 @@
     .hero-banner-img {
       width: 100%;
       height: 100%;
-      max-height: 175px;
+      max-height: 95px;
       object-fit: cover;
       object-position: center;
       display: block;
@@ -342,58 +342,58 @@
     /* PANEL DESTACADO DE SELECCIÓN DE MUNDOS (AMPLIO, TÁCTIL Y SIN SCROLLBARS) */
     .menu-worlds-panel {
       max-width: 1100px;
-      margin: 0 auto 1.15rem auto;
+      margin: 0 auto 0.65rem auto;
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
       border: 2px solid rgba(245, 158, 11, 0.45);
-      border-radius: 1rem;
-      padding: 0.85rem 1.15rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      border-radius: 0.9rem;
+      padding: 0.55rem 0.85rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
     }
 
     .worlds-panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.45rem;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .worlds-panel-title {
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #fbbf24;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
 
     .worlds-panel-desc {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: #94a3b8;
     }
 
     .worlds-btn-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.65rem;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.5rem;
     }
 
     .world-choice-btn {
       background: rgba(255, 255, 255, 0.08);
-      border: 2.5px solid rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.15);
       color: #f1f5f9;
-      padding: 0.75rem 0.95rem;
-      border-radius: 0.85rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 0.75rem;
       font-family: var(--font-display);
-      font-size: 0.92rem;
+      font-size: 0.86rem;
       font-weight: 700;
       cursor: pointer;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.15rem;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -420,15 +420,15 @@
     }
 
     .world-choice-btn .wchoice-title {
-      font-size: 0.92rem;
+      font-size: 0.86rem;
       font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
     }
 
     .world-choice-btn .wchoice-subtitle {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       opacity: 0.85;
       font-weight: 500;
     }
@@ -438,22 +438,22 @@
       max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
-      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 0.65rem;
     }
 
     /* TARJETA COMPACTA DE UN SOLO CLIC */
     .level-card {
       background: var(--card-bg);
       color: var(--text-main);
-      border-radius: 0.95rem;
-      padding: 0.85rem 0.95rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-      border: 2.5px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.65rem 0.8rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      border: 2px solid #cbd5e1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 0.55rem;
+      gap: 0.4rem;
       transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       position: relative;
       overflow: hidden;
@@ -461,9 +461,9 @@
     }
 
     .level-card:hover {
-      transform: translateY(-3px) scale(1.01);
+      transform: translateY(-2px) scale(1.01);
       border-color: #2563eb;
-      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
     }
 
     .level-card:active {
@@ -1139,16 +1139,17 @@
 
     .btn-trick-floating:active { transform: scale(0.95); }
 
-    /* FEED DE VIDEO DE CÁMARA (100% INVISIBLE EN PANTALLA) */
+    /* FEED DE VIDEO DE CÁMARA (100% INVISIBLE EN PANTALLA, SIN display:none PARA COMPATIBILIDAD CON DRIVERS LINUX / VA-API) */
     #camera-video-feed {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 64px;
+      height: 48px;
+      opacity: 0.001;
       pointer-events: none;
-      display: none;
+      z-index: -9999;
+      visibility: visible;
     }
 
     /* TOAST DE FEEDBACK (UBICADO ABAJO PARA NO TAPAR LA CARRETERA NI LAS PRÓXIMAS VALLAS) */
@@ -1346,10 +1347,10 @@
       transform: translateY(-2px);
     }
 
-    .btn-modal-speed.opt-muy-facil:hover { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); }
-    .btn-modal-speed.opt-facil:hover     { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); }
-    .btn-modal-speed.opt-normal:hover    { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35); }
-    .btn-modal-speed.opt-dificil:hover   { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35); }
+    .btn-modal-speed.opt-muy-facil:hover, .btn-modal-speed.active.opt-muy-facil { background: #ecfdf5; border-color: #10b981; color: #065f46; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45); }
+    .btn-modal-speed.opt-facil:hover, .btn-modal-speed.active.opt-facil         { background: #eff6ff; border-color: #3b82f6; color: #1e40af; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45); }
+    .btn-modal-speed.opt-normal:hover, .btn-modal-speed.active.opt-normal       { background: #fffbeb; border-color: #f59e0b; color: #92400e; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45); }
+    .btn-modal-speed.opt-dificil:hover, .btn-modal-speed.active.opt-dificil     { background: #fef2f2; border-color: #ef4444; color: #991b1b; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45); }
 
     .modal-buttons {
       display: flex;
@@ -1726,18 +1727,6 @@
         </div>
 
         <div class="dropdown-section">
-          <div class="dropdown-section-label">🎨 Escenario Temático:</div>
-          <div class="dropdown-chips-grid">
-            <button class="theme-chip" id="gchip-bosque" onclick="selectThemeFromGame('bosque')">🌲 Bosque</button>
-            <button class="theme-chip" id="gchip-playa" onclick="selectThemeFromGame('playa')">🏖️ Playa</button>
-            <button class="theme-chip" id="gchip-ciudad" onclick="selectThemeFromGame('ciudad')">🏙️ Ciudad</button>
-            <button class="theme-chip" id="gchip-granja" onclick="selectThemeFromGame('granja')">🚜 Granja</button>
-            <button class="theme-chip" id="gchip-campo" onclick="selectThemeFromGame('campo')">🌸 Campo</button>
-            <button class="theme-chip" id="gchip-random" onclick="selectThemeFromGame('random')">🎲 Aleatorio</button>
-          </div>
-        </div>
-
-        <div class="dropdown-section">
           <div class="dropdown-section-label">🔊 Sonido y Volumen:</div>
           <div class="dropdown-vol-row">
             <button class="dropdown-icon-btn" id="btn-hud-volume" onclick="toggleMuteSound()" title="Silenciar / Activar">
@@ -1785,19 +1774,8 @@
 
       <div id="feedback-toast">¡Correcto! +1 Hueso 🦴</div>
 
-      <!-- RECEPTOR DE STREAM DE CÁMARA (INVISIBLE EN PANTALLA, PROCESADO EN BACKGROUND) -->
-      <video id="camera-video-feed" autoplay playsinline muted style="display: none; position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></video>
-        <video id="camera-video-feed" autoplay playsinline muted style="display: none;"></video>
-        <div class="camera-motion-bars">
-          <div class="cam-zone-bar" id="cam-bar-left">◀ IZQ</div>
-          <div class="cam-zone-bar active-lane" id="cam-bar-center">● CENTRO</div>
-          <div class="cam-zone-bar" id="cam-bar-right">DER ▶</div>
-        </div>
-        <div class="cam-motion-meter-box">
-          <div class="cam-motion-meter-fill" id="cam-motion-meter-fill"></div>
-          <span class="cam-motion-status-lbl" id="cam-motion-status-lbl">Centrado ●</span>
-        </div>
-      </div>
+      <!-- RECEPTOR DE STREAM DE CÁMARA (PROCESADO EN BACKGROUND DE FORMA COMPATIBLE CON LINUX) -->
+      <video id="camera-video-feed" autoplay playsinline muted></video>
 
       <!-- CONTROLES TÁCTILES INFERIORES -->
       <div class="game-touch-controls">
@@ -1890,12 +1868,20 @@
 
         <div class="victory-stats-grid">
           <div class="v-stat-card">
-            <span>Tiempo de Carrera</span>
-            <b id="victory-stat-time">01:14</b>
+            <span>Puntaje Obtenido</span>
+            <b id="victory-stat-score" style="color:#d97706;">0 pts</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Huesos Conseguidos</span>
+            <b id="victory-stat-bones" style="color:#059669;">10 / 10 🦴</b>
           </div>
           <div class="v-stat-card">
             <span>Vidas Restantes</span>
-            <b id="victory-stat-lives">3 / 3</b>
+            <b id="victory-stat-lives">❤️❤️❤️</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Tiempo de Carrera</span>
+            <b id="victory-stat-time">01:14</b>
           </div>
         </div>
 
@@ -1924,6 +1910,25 @@
           <p style="font-size:0.92rem; color:#475569; font-weight:600;" id="gameover-message">
             El cálculo mental se entrena con paciencia. ¡Prueba en Muy Fácil (15s) para dominar el truco!
           </p>
+        </div>
+
+        <div class="victory-stats-grid">
+          <div class="v-stat-card">
+            <span>Puntaje Obtenido</span>
+            <b id="gameover-stat-score" style="color:#ef4444;">0 pts</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Huesos Conseguidos</span>
+            <b id="gameover-stat-bones" style="color:#059669;">0 / 10 🦴</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Vidas Restantes</span>
+            <b id="gameover-stat-lives">💔 0 / 3</b>
+          </div>
+          <div class="v-stat-card">
+            <span>Tiempo Jugado</span>
+            <b id="gameover-stat-time">00:45</b>
+          </div>
         </div>
 
         <div class="modal-buttons">
@@ -2699,6 +2704,15 @@
        ============================================================= */
     let audioCtx = null;
     let beachAudio = null;
+    let barkAudio = null;
+
+    function initBarkAudio() {
+      if (!barkAudio) {
+        barkAudio = new Audio('recursos/ladrido_perro.mp3');
+        barkAudio.volume = 0.85;
+        barkAudio.preload = 'auto';
+      }
+    }
 
     function initBeachMusic() {
       if (!beachAudio) {
@@ -2791,19 +2805,30 @@
 
     function soundWrongHit() {
       if (!gameState.soundEnabled) return;
+
+      // 1. Ladrido auténtico de Loki ante error / obstáculo incorrecto
+      initBarkAudio();
+      if (barkAudio) {
+        try {
+          barkAudio.currentTime = 0;
+          barkAudio.play().catch(() => {});
+        } catch(e) {}
+      }
+
+      // 2. Sub-grave de impacto complementario
       const ctx = getAudioContext();
       if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(220, ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.25);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.22);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.25);
+      osc.stop(ctx.currentTime + 0.22);
     }
 
     function soundVictoryFanfare() {
@@ -3152,86 +3177,85 @@
 
     function processCameraMotion() {
       if (!cameraVideo || !cameraCtx || !gameState.cameraControlActive) return;
-      // Guard estricto: verificar dimensiones reales para evitar violaciones de acceso en el driver
+      // Guard estricto: verificar dimensiones reales y estado para evitar crasheos de hardware en Linux/Chromium
       if (cameraVideo.readyState < 2 || !cameraVideo.videoWidth || cameraVideo.videoHeight === 0) return;
 
-      const cw = cameraCanvas.width;
-      const ch = cameraCanvas.height;
+      try {
+        const cw = cameraCanvas.width;
+        const ch = cameraCanvas.height;
 
-      // Dibujar espejado para que coincida intuitivamente con el cuerpo del alumno
-      cameraCtx.save();
-      cameraCtx.translate(cw, 0);
-      cameraCtx.scale(-1, 1);
-      cameraCtx.drawImage(cameraVideo, 0, 0, cw, ch);
-      cameraCtx.restore();
+        // Dibujar espejado para que coincida intuitivamente con el cuerpo del alumno
+        cameraCtx.save();
+        cameraCtx.translate(cw, 0);
+        cameraCtx.scale(-1, 1);
+        cameraCtx.drawImage(cameraVideo, 0, 0, cw, ch);
+        cameraCtx.restore();
 
-      const curImgData = cameraCtx.getImageData(0, 0, cw, ch);
-      const curData = curImgData.data;
+        const curImgData = cameraCtx.getImageData(0, 0, cw, ch);
+        const curData = curImgData.data;
 
-      if (!prevFrameData) {
-        prevFrameData = new Uint8Array(curData.length);
-        prevFrameData.set(curData);
-        return;
-      }
+        if (!prevFrameData) {
+          prevFrameData = new Uint8Array(curData.length);
+          prevFrameData.set(curData);
+          return;
+        }
 
-      const zLeftEnd = Math.floor(cw * 0.38);
-      const zRightStart = Math.floor(cw * 0.62);
+        const zLeftEnd = Math.floor(cw * 0.38);
+        const zRightStart = Math.floor(cw * 0.62);
 
-      let leftMotion = 0;
-      let centerMotion = 0;
-      let rightMotion = 0;
+        let leftMotion = 0;
+        let centerMotion = 0;
+        let rightMotion = 0;
 
-      // UMBRAL DE SENSIBILIDAD REDUCIDO EN 80%: diff > 30 detecta inclinación natural sin esfuerzo
-      for (let y = 0; y < ch; y++) {
-        for (let x = 0; x < cw; x++) {
-          const idx = (y * cw + x) * 4;
-          const diff = Math.abs(curData[idx] - prevFrameData[idx]) +
-                       Math.abs(curData[idx+1] - prevFrameData[idx+1]) +
-                       Math.abs(curData[idx+2] - prevFrameData[idx+2]);
+        // UMBRAL DE SENSIBILIDAD REDUCIDO: diff > 30 detecta inclinación natural sin esfuerzo
+        for (let y = 0; y < ch; y++) {
+          for (let x = 0; x < cw; x++) {
+            const idx = (y * cw + x) * 4;
+            const diff = Math.abs(curData[idx] - prevFrameData[idx]) +
+                         Math.abs(curData[idx+1] - prevFrameData[idx+1]) +
+                         Math.abs(curData[idx+2] - prevFrameData[idx+2]);
 
-          if (diff > 30) {
-            if (x < zLeftEnd) leftMotion++;
-            else if (x > zRightStart) rightMotion++;
-            else centerMotion++;
+            if (diff > 30) {
+              if (x < zLeftEnd) leftMotion++;
+              else if (x > zRightStart) rightMotion++;
+              else centerMotion++;
+            }
           }
         }
-      }
 
-      prevFrameData.set(curData);
+        prevFrameData.set(curData);
 
-      // Promedio móvil adaptativo ágil
-      baselineLeft = baselineLeft * 0.7 + leftMotion * 0.3;
-      baselineRight = baselineRight * 0.7 + rightMotion * 0.3;
-      baselineCenter = baselineCenter * 0.7 + centerMotion * 0.3;
+        // Promedio móvil adaptativo ágil
+        baselineLeft = baselineLeft * 0.7 + leftMotion * 0.3;
+        baselineRight = baselineRight * 0.7 + rightMotion * 0.3;
+        baselineCenter = baselineCenter * 0.7 + centerMotion * 0.3;
 
-      const burstLeft = Math.max(0, leftMotion - baselineLeft);
-      const burstRight = Math.max(0, rightMotion - baselineRight);
+        const burstLeft = Math.max(0, leftMotion - baselineLeft);
+        const burstRight = Math.max(0, rightMotion - baselineRight);
 
-      // CRITERIO SENSIBLE Y DIRECTO (80% MÁS RÁPIDO Y SUAVE):
-      // Inclinación clara con al menos 18 pixeles y ráfaga de 10
-      const isMotionLeft = (leftMotion >= 18 && burstLeft >= 10 && leftMotion > rightMotion * 1.20);
-      const isMotionRight = (rightMotion >= 18 && burstRight >= 10 && rightMotion > leftMotion * 1.20);
+        const isMotionLeft = (leftMotion >= 18 && burstLeft >= 10 && leftMotion > rightMotion * 1.20);
+        const isMotionRight = (rightMotion >= 18 && burstRight >= 10 && rightMotion > leftMotion * 1.20);
 
-      // Control 100% invisible en pantalla: el sensor procesa el movimiento en segundo plano
-      // sin manipular el DOM ni mostrar recuadros que obstaculicen la carretera
+        if (!gameState.gameActive || gameState.gamePaused) return;
 
-      if (!gameState.gameActive || gameState.gamePaused) return;
+        const now = Date.now();
+        if (now - lastCameraMoveTime < 260) return; // Cooldown ágil de 260ms
 
-      const now = Date.now();
-      if (now - lastCameraMoveTime < 260) return; // Cooldown ágil de 260ms
-
-      if (isMotionLeft) {
-        if (player.lane > -1) {
-          player.lane--;
-          soundLaneSwitch();
-          lastCameraMoveTime = now;
+        if (isMotionLeft) {
+          if (player.lane > -1) {
+            player.lane--;
+            soundLaneSwitch();
+            lastCameraMoveTime = now;
+          }
+        } else if (isMotionRight) {
+          if (player.lane < 1) {
+            player.lane++;
+            soundLaneSwitch();
+            lastCameraMoveTime = now;
+          }
         }
-      } else if (isMotionRight) {
-        if (player.lane < 1) {
-          player.lane++;
-          soundLaneSwitch();
-          lastCameraMoveTime = now;
-        }
+      } catch(err) {
+        console.warn('Motion tracking guard:', err);
       }
     }
 
@@ -3240,9 +3264,21 @@
       gameState.difficulty = mode.id;
       WORLD.speed = mode.speed;
 
-      document.querySelectorAll('.speed-btn, .speed-side-btn').forEach(b => b.classList.remove('active'));
+      // Deseleccionar todas las dificultades previas y activar exclusivamente la actual
+      document.querySelectorAll('.speed-pill-btn, .speed-btn, .speed-side-btn').forEach(b => b.classList.remove('active'));
       const activeBtn = document.getElementById(mode.btnId);
       if (activeBtn) activeBtn.classList.add('active');
+
+      document.querySelectorAll('.btn-modal-speed').forEach(b => b.classList.remove('active'));
+      const activeTutBtn = document.querySelector(`.btn-modal-speed.opt-${mode.id.replace('_', '-')}`);
+      if (activeTutBtn) activeTutBtn.classList.add('active');
+
+      const badge = document.getElementById('hud-speed-badge');
+      if (badge) {
+        badge.textContent = `${mode.icon} ${mode.name} (${mode.sec}s)`;
+        badge.className = `hud-mode-badge ${mode.badgeClass}`;
+      }
+    }
 
       const badge = document.getElementById('hud-speed-badge');
       if (badge) {
@@ -3342,6 +3378,14 @@
         if (el) el.classList.toggle('active', parseInt(w, 10) === gameState.currentWorld);
       });
       renderLevels();
+
+      // Enfoque visual suave para que las tarjetas de niveles queden 100% visibles en la pantalla interactiva
+      setTimeout(() => {
+        const container = document.getElementById('levels-container');
+        if (container) {
+          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 40);
     }
 
     function renderLevels() {
@@ -3416,6 +3460,9 @@
       stepsContainer.appendChild(ol);
 
       document.getElementById('modal-tut-formula').textContent = `Ejemplo del truco: ${strat.sample}`;
+      document.querySelectorAll('.btn-modal-speed').forEach(b => b.classList.remove('active'));
+      const activeTutBtn = document.querySelector(`.btn-modal-speed.opt-${(gameState.difficulty || 'muy_facil').replace('_', '-')}`);
+      if (activeTutBtn) activeTutBtn.classList.add('active');
       document.getElementById('modal-tutorial').classList.add('active');
     }
 
@@ -3757,14 +3804,31 @@
       if (!gameState.gameActive || gameState.gamePaused) return;
       const rect = canvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
-      const third = rect.width / 3;
+      const clickY = e.clientY - rect.top;
+      const centerX = rect.width * 0.5;
+      const dx = clickX - centerX;
 
-      if (clickX < third) {
-        if (player.lane !== -1) { player.lane = -1; soundLaneSwitch(); }
-      } else if (clickX > third * 2) {
-        if (player.lane !== 1) { player.lane = 1; soundLaneSwitch(); }
+      // Mapeo táctil en perspectiva: sensible y preciso tanto dentro de los carriles como a lo ancho de la pantalla
+      const horizon = WORLD.horizonY || 210;
+      const effectiveY = Math.max(horizon + 30, clickY);
+      const roadBaseline = rect.height * 0.88;
+      const scaleAtTouch = Math.max(0.12, Math.min(1.2, (effectiveY - horizon) / (roadBaseline - horizon)));
+
+      const worldXTouch = dx / scaleAtTouch;
+      const dividerThreshold = WORLD.laneWidth * 0.55; // ~90px, separadores visuales del carril
+
+      let targetLane = 0;
+      if (worldXTouch < -dividerThreshold) {
+        targetLane = -1; // Carril izquierdo
+      } else if (worldXTouch > dividerThreshold) {
+        targetLane = 1;  // Carril derecho
       } else {
-        if (player.lane !== 0) { player.lane = 0; soundLaneSwitch(); }
+        targetLane = 0;  // Carril central
+      }
+
+      if (player.lane !== targetLane) {
+        player.lane = targetLane;
+        soundLaneSwitch();
       }
     });
 
@@ -3988,8 +4052,17 @@
       const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
       const s = String(totalSec % 60).padStart(2, '0');
 
-      document.getElementById('victory-stat-time').textContent = `${m}:${s}`;
-      document.getElementById('victory-stat-lives').textContent = `${gameState.lives} / 3`;
+      const timeBonus = Math.max(0, 300 - totalSec * 3);
+      const finalScore = (gameState.correctCount * 100) + (gameState.lives * 75) + timeBonus;
+
+      const elScore = document.getElementById('victory-stat-score');
+      if (elScore) elScore.textContent = `${finalScore.toLocaleString()} pts`;
+      const elBones = document.getElementById('victory-stat-bones');
+      if (elBones) elBones.textContent = `${gameState.correctCount} / ${gameState.targetGoal} 🦴`;
+      const elLives = document.getElementById('victory-stat-lives');
+      if (elLives) elLives.textContent = `${'❤️'.repeat(Math.max(0, gameState.lives))} (${gameState.lives}/3)`;
+      const elTime = document.getElementById('victory-stat-time');
+      if (elTime) elTime.textContent = `${m}:${s}`;
 
       const starsEarned = Math.max(1, gameState.lives);
       document.getElementById('victory-stars-display').textContent = '⭐'.repeat(starsEarned);
@@ -4008,6 +4081,21 @@
     function triggerGameOver() {
       stopBeachMusic(false);
       gameState.gameActive = false;
+
+      const totalSec = Math.floor((Date.now() - gameState.startTime) / 1000);
+      const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
+      const finalScore = gameState.correctCount * 100;
+
+      const elScore = document.getElementById('gameover-stat-score');
+      if (elScore) elScore.textContent = `${finalScore.toLocaleString()} pts`;
+      const elBones = document.getElementById('gameover-stat-bones');
+      if (elBones) elBones.textContent = `${gameState.correctCount} / ${gameState.targetGoal} 🦴`;
+      const elLives = document.getElementById('gameover-stat-lives');
+      if (elLives) elLives.textContent = '💔 0 / 3';
+      const elTime = document.getElementById('gameover-stat-time');
+      if (elTime) elTime.textContent = `${m}:${s}`;
+
       setTimeout(() => {
         document.getElementById('modal-gameover').classList.add('active');
       }, 400);
@@ -4382,9 +4470,10 @@
           const pt = project3D(hurdle.lane * WORLD.laneWidth, wave.z);
           if (pt.scale <= 0) return;
 
-          // Tamaño completo y nítido para lectura cómoda y anticipada
-          const gateW = 120 * pt.scale;
-          const gateH = gateW * 1.25;
+          // Escala visual calibrada: legible a gran distancia para resolver con tiempo
+          const visualScale = Math.max(0.48, pt.scale);
+          const gateW = Math.max(68, 135 * visualScale);
+          const gateH = gateW * 1.15;
           const gateX = pt.x - (gateW * 0.5);
           const gateY = pt.y - gateH;
 
@@ -4393,32 +4482,39 @@
 
           // Postes de madera
           ctx.fillStyle = '#78350f';
-          ctx.fillRect(gateX, gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
-          ctx.fillRect(gateX + gateW - Math.max(1, 6 * pt.scale), gateY + gateH * 0.25, Math.max(1, 6 * pt.scale), gateH * 0.75);
+          const postW = Math.max(2, 6 * visualScale);
+          ctx.fillRect(gateX, gateY + gateH * 0.25, postW, gateH * 0.75);
+          ctx.fillRect(gateX + gateW - postW, gateY + gateH * 0.25, postW, gateH * 0.75);
 
-          // Panel de respuesta
+          // Panel de respuesta de alto contraste
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.roundRect(gateX, gateY, gateW, gateH * 0.72, Math.max(2, 6 * pt.scale));
+          ctx.roundRect(gateX, gateY, gateW, gateH * 0.74, Math.max(4, 8 * visualScale));
           ctx.fill();
 
           ctx.strokeStyle = '#f59e0b';
-          ctx.lineWidth = Math.max(1.5, 3 * pt.scale);
+          ctx.lineWidth = Math.max(2, 3.5 * visualScale);
           ctx.stroke();
 
-          // Sombra
-          ctx.fillStyle = 'rgba(0,0,0,0.3)';
+          // Sombra sobre el asfalto
+          ctx.fillStyle = 'rgba(0,0,0,0.35)';
           ctx.beginPath();
-          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(1, 5 * pt.scale), 0, 0, Math.PI * 2);
+          ctx.ellipse(pt.x, pt.y, gateW * 0.45, Math.max(2, 6 * visualScale), 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // Número de respuesta
-          const fontSize = Math.max(8, Math.floor(40 * pt.scale));
-          ctx.font = `800 ${fontSize}px 'Fredoka', cursive, sans-serif`;
+          // Número de respuesta ampliado y nítido con sombra tipográfica
+          const fontSize = Math.max(26, Math.floor(46 * visualScale));
+          ctx.save();
+          ctx.font = `900 ${fontSize}px 'Fredoka', cursive, sans-serif`;
           ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+          ctx.shadowBlur = 4;
+          ctx.shadowOffsetX = 1;
+          ctx.shadowOffsetY = 2;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+          ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.37));
+          ctx.restore();
 
           ctx.restore();
         });
