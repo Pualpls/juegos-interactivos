@@ -392,9 +392,16 @@
     let studentIdx = 0;
     let score = 0;
 
+    let sharedAudioCtx = null;
     function playTone(freq = 540, duration = 0.14, type = 'sine') {
       try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (!sharedAudioCtx) {
+          sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (sharedAudioCtx.state === 'suspended') {
+          sharedAudioCtx.resume().catch(() => { });
+        }
+        const ctx = sharedAudioCtx;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = type;
@@ -635,20 +642,20 @@
     }
 
     function nextCard(tabNum) {
-      if (tabNum === 1) { 
+      if (tabNum === 1) {
         tab1Data[t1Idx].shuffled = null;
-        t1Idx = (t1Idx + 1) % tab1Data.length; 
-        renderBoard(tab1Data, t1Idx, 1); 
+        t1Idx = (t1Idx + 1) % tab1Data.length;
+        renderBoard(tab1Data, t1Idx, 1);
       }
-      if (tabNum === 2) { 
+      if (tabNum === 2) {
         tab2Data[t2Idx].shuffled = null;
-        t2Idx = (t2Idx + 1) % tab2Data.length; 
-        renderBoard(tab2Data, t2Idx, 2); 
+        t2Idx = (t2Idx + 1) % tab2Data.length;
+        renderBoard(tab2Data, t2Idx, 2);
       }
-      if (tabNum === 3) { 
+      if (tabNum === 3) {
         tab3Data[t3Idx].shuffled = null;
-        t3Idx = (t3Idx + 1) % tab3Data.length; 
-        renderBoard(tab3Data, t3Idx, 3); 
+        t3Idx = (t3Idx + 1) % tab3Data.length;
+        renderBoard(tab3Data, t3Idx, 3);
       }
     }
 
