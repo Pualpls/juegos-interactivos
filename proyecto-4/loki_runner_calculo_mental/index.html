@@ -2041,7 +2041,7 @@
 
     <!-- MODAL 5: TABLA DE CLASIFICACIÓN (POR NIVEL Y GLOBAL) -->
     <div id="modal-leaderboard" class="modal-overlay">
-      <div class="modal-card" style="max-width:580px; max-height:88vh; display:flex; flex-direction:column; text-align:left;">
+      <div class="modal-card" style="max-width:580px; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; text-align:left;">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e2e8f0; padding-bottom:0.75rem; margin-bottom:0.75rem;">
           <div>
             <h2 style="font-family:var(--font-display); font-size:1.5rem; color:#1e3a8a; display:flex; align-items:center; gap:0.4rem; margin:0;">
@@ -2067,7 +2067,7 @@
         </div>
 
         <!-- LISTA CON SCROLL -->
-        <div id="leaderboard-list-container" style="flex:1; overflow-y:auto; min-height:220px; max-height:360px; padding-right:0.3rem;">
+        <div id="leaderboard-list-container" style="flex:1 1 auto; overflow-y:auto; min-height:0; max-height:360px; padding-right:0.3rem;">
           <!-- Filas generadas dinámicamente -->
         </div>
 
@@ -4655,12 +4655,15 @@
       });
     }
 
-    const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxGg2LGGbcWXxu6qBEsgbbhQzATamlCAeYeFeqYHrVdokm_uYVZ_BxOP8zWMaKhhpbr/exec";
+    const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyQx31REZROV2QA4V-w3tTmhV6LBGNInasPbPRmmGxUbQjfrGfWw94joSm1ChO_CtL8/exec";
+    const LEGACY_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxGg2LGGbcWXxu6qBEsgbbhQzATamlCAeYeFeqYHrVdokm_uYVZ_BxOP8zWMaKhhpbr/exec";
 
     function getLeaderboardSheetUrl() {
       try {
         const custom = (localStorage.getItem('loki_sheet_url') || '').trim();
-        if (custom && custom.startsWith('https://') && custom.includes('/exec')) {
+        if (custom === LEGACY_GOOGLE_SHEET_URL) {
+          localStorage.removeItem('loki_sheet_url');
+        } else if (custom && custom.startsWith('https://') && custom.includes('/exec')) {
           return custom;
         }
       } catch(e) {}
@@ -4765,8 +4768,12 @@
       const nombre = String(raw.nombre || '').trim();
       const nivelNum = parseInt(raw.nivelId, 10);
       const mundoNum = parseInt(raw.mundo, 10);
-      const tiempoStr = String(raw.tiempoStr || '00:00').trim();
-      const tiempoSec = (typeof raw.tiempoSec === 'number' && !isNaN(raw.tiempoSec))
+      let tiempoStr = String(raw.tiempoStr || '00:00').trim();
+      const legacySheetSecMatch = tiempoStr.match(/^([1-5][0-9]):00$/);
+      if (legacySheetSecMatch) {
+        tiempoStr = `00:${legacySheetSecMatch[1]}`;
+      }
+      const tiempoSec = (!legacySheetSecMatch && typeof raw.tiempoSec === 'number' && !isNaN(raw.tiempoSec))
         ? raw.tiempoSec
         : parseLeaderboardTimeToSec(tiempoStr);
       const difNombre = String(raw.dificultadNombre || raw.dificultad || 'Normal').trim();
