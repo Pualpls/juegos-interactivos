@@ -2888,9 +2888,23 @@
     /* =============================================================
        6. AUDIO SINTETIZADO Y MÚSICA DE ESCENARIO (100% OFFLINE)
        ============================================================= */
+    const THEME_MUSIC_MAP = {
+      bosque: 'recursos/musica_bosque.mp3',
+      playa: 'recursos/musica_playa.mp3',
+      ciudad: 'recursos/musica_ciudad.mp3',
+      granja: 'recursos/musica_granja.mp3',
+      campo: 'recursos/musica_valle.mp3'
+    };
+
     let audioCtx = null;
     let beachAudio = null;
     let barkAudio = null;
+    let currentMusicSrc = '';
+
+    function getCurrentThemeTrack() {
+      const themeId = (gameState && gameState.currentTheme && gameState.currentTheme.id) || 'bosque';
+      return THEME_MUSIC_MAP[themeId] || THEME_MUSIC_MAP.bosque;
+    }
 
     function initBarkAudio() {
       if (!barkAudio) {
@@ -2901,19 +2915,28 @@
     }
 
     function initBeachMusic() {
+      const targetSrc = getCurrentThemeTrack();
       if (!beachAudio) {
-        beachAudio = new Audio('recursos/musica_playa.mp3');
+        beachAudio = new Audio(targetSrc);
         beachAudio.loop = true;
-        beachAudio.volume = 0.55;
         beachAudio.preload = 'auto';
+        currentMusicSrc = targetSrc;
+      } else if (currentMusicSrc !== targetSrc) {
+        beachAudio.pause();
+        beachAudio.src = targetSrc;
+        beachAudio.currentTime = 0;
+        beachAudio.load();
+        currentMusicSrc = targetSrc;
       }
+      const isMuted = !gameState.soundEnabled || gameState.soundVolume <= 0;
+      beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.45);
     }
 
     function playBeachMusic() {
       initBeachMusic();
-      if (!gameState.soundEnabled || !gameState.gameActive || gameState.gamePaused) return;
-      // Reproducción activa para TODOS los niveles y temas
-      beachAudio.play().catch(e => {
+      const isMuted = !gameState.soundEnabled || gameState.soundVolume <= 0;
+      if (isMuted || !gameState.gameActive || gameState.gamePaused) return;
+      beachAudio.play().catch(() => {
         // Autoplay policy: reanudará al primer toque
       });
     }
@@ -2926,11 +2949,11 @@
     }
 
     function updateThemeMusic() {
-      if (!gameState.gameActive || !gameState.soundEnabled || gameState.gamePaused) {
+      const isMuted = !gameState.soundEnabled || gameState.soundVolume <= 0;
+      if (!gameState.gameActive || isMuted || gameState.gamePaused) {
         stopBeachMusic(false);
         return;
       }
-      // Música activa para TODOS los niveles y escenarios
       playBeachMusic();
     }
 
@@ -2947,7 +2970,9 @@
 
     window.addEventListener('pointerdown', () => {
       getAudioContext();
-      if (gameState.gameActive && !gameState.gamePaused && gameState.soundEnabled) {
+      const isMuted = !gameState.soundEnabled || gameState.soundVolume <= 0;
+      if (gameState.gameActive && !gameState.gamePaused && !isMuted) {
+        initBeachMusic();
         if (beachAudio && beachAudio.paused) {
           beachAudio.play().catch(() => {});
         }
@@ -5490,6 +5515,7 @@
             const txt = document.getElementById('btn-pause-text');
             if (txt) txt.textContent = 'Reanudar';
           }
+          updateThemeMusic();
         }
         updateGameThemeChips();
       } else {
@@ -5510,6 +5536,7 @@
           const txt = document.getElementById('btn-pause-text');
           if (txt) txt.textContent = 'Pausa';
         }
+        updateThemeMusic();
       }
     }
 
