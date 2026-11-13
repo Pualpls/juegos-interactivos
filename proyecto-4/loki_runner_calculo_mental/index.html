@@ -2857,6 +2857,7 @@
        ============================================================= */
     const gameState = {
       soundEnabled: true,
+      soundVolume: 1.0,
       currentWorld: 1,
       currentLevelId: 1,
       difficulty: 'muy_facil',
@@ -2962,63 +2963,91 @@
       if (optR) optR.classList.toggle('active-lane', player.lane === 1);
     }
 
-    function soundLaneSwitch() {
-      updateHudLaneSelection();
-      if (!gameState.soundEnabled) return;
+    function withAudioCtx(cb) {
+      if (!gameState.soundEnabled || gameState.soundVolume <= 0) return;
       const ctx = getAudioContext();
       if (!ctx) return;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(420, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(780, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.08);
+      const fire = () => {
+        window.__lastGameAudioTs = performance.now();
+        try { cb(ctx, ctx.currentTime); } catch (e) {}
+      };
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(fire).catch(() => {});
+      } else {
+        fire();
+      }
+    }
+
+    function soundUiClick() {
+      withAudioCtx((ctx, now) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const vol = Math.min(0.085, Math.max(0.025, 0.065 * (gameState.soundVolume || 1)));
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(560, now);
+        osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(vol, now + 0.006);
+        gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      });
+    }
+
+    function soundLaneSwitch() {
+      updateHudLaneSelection();
+      withAudioCtx((ctx, now) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.exponentialRampToValueAtTime(780, now + 0.08);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      });
     }
 
     function soundTurboBoost() {
-      if (!gameState.soundEnabled) return;
-      const ctx = getAudioContext();
-      if (!ctx) return;
-      try {
+      withAudioCtx((ctx, now) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(210, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(680, ctx.currentTime + 0.16);
-        gain.gain.setValueAtTime(0.14, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+        osc.frequency.setValueAtTime(210, now);
+        osc.frequency.exponentialRampToValueAtTime(680, now + 0.16);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.18);
-      } catch(e) {}
+        osc.start(now);
+        osc.stop(now + 0.18);
+      });
     }
 
     function soundCorrectHit() {
-      if (!gameState.soundEnabled) return;
-      const ctx = getAudioContext();
-      if (!ctx) return;
-      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.06));
-        gain.gain.setValueAtTime(0.22, ctx.currentTime + (idx * 0.06));
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (idx * 0.06) + 0.18);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime + (idx * 0.06));
-        osc.stop(ctx.currentTime + (idx * 0.06) + 0.18);
+      withAudioCtx((ctx, now) => {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + (idx * 0.06));
+          gain.gain.setValueAtTime(0.22, now + (idx * 0.06));
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.06) + 0.18);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + (idx * 0.06));
+          osc.stop(now + (idx * 0.06) + 0.18);
+        });
       });
     }
 
     function soundWrongHit() {
-      if (!gameState.soundEnabled) return;
+      if (!gameState.soundEnabled || gameState.soundVolume <= 0) return;
 
       // 1. Ladrido auténtico de Loki ante error / obstáculo incorrecto
       initBarkAudio();
@@ -3030,42 +3059,41 @@
       }
 
       // 2. Sub-grave de impacto complementario
-      const ctx = getAudioContext();
-      if (!ctx) return;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(200, ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.22);
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.22);
+      withAudioCtx((ctx, now) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.linearRampToValueAtTime(100, now + 0.22);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      });
     }
 
     function soundVictoryFanfare() {
-      if (!gameState.soundEnabled) return;
-      const ctx = getAudioContext();
-      if (!ctx) return;
-      const notes = [
-        { f: 523.25, d: 0.12, t: 0.0 },
-        { f: 659.25, d: 0.12, t: 0.14 },
-        { f: 783.99, d: 0.14, t: 0.28 },
-        { f: 1046.50, d: 0.45, t: 0.44 }
-      ];
-      notes.forEach(n => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(n.f, ctx.currentTime + n.t);
-        gain.gain.setValueAtTime(0.26, ctx.currentTime + n.t);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.t + n.d);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(ctx.currentTime + n.t);
-        osc.stop(ctx.currentTime + n.t + n.d);
+      withAudioCtx((ctx, now) => {
+        const notes = [
+          { f: 523.25, d: 0.12, t: 0.0 },
+          { f: 659.25, d: 0.12, t: 0.14 },
+          { f: 783.99, d: 0.14, t: 0.28 },
+          { f: 1046.50, d: 0.45, t: 0.44 }
+        ];
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+          gain.gain.setValueAtTime(0.26, now + n.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d);
+        });
       });
     }
 
@@ -3263,7 +3291,6 @@
     let baselineLeft = 0;
     let baselineRight = 0;
     let baselineCenter = 0;
-
 
 
     async function toggleCameraGlobal() {
@@ -5337,7 +5364,6 @@
       });
 
 
-
       // 8. DIBUJAR A LOKI (SPRINT MULTI-FOTOGRAMA DINÁMICO 8-BIT)
       const pPlayer = project3D(player.worldX, 0);
       const lokiScale = 1.35;
@@ -5529,6 +5555,23 @@
     /* =============================================================
        13. INICIALIZACIÓN AL CARGAR LA PÁGINA
        ============================================================= */
+    (function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return;
+      window.__uiClickSfxBound = true;
+      const sel = 'button, [role="button"], .level-card, .world-tab, .diff-btn, .theme-chip, select, input[type="checkbox"], input[type="radio"], [onclick]';
+      document.addEventListener('click', (e) => {
+        const ctrl = e.target && e.target.closest ? e.target.closest(sel) : null;
+        if (!ctrl || ctrl.disabled || ctrl.getAttribute('aria-disabled') === 'true') return;
+        const beforeTs = window.__lastGameAudioTs || 0;
+        if (gameState.soundEnabled && gameState.soundVolume > 0) getAudioContext();
+        queueMicrotask(() => {
+          if (!gameState.soundEnabled || gameState.soundVolume <= 0) return;
+          if ((window.__lastGameAudioTs || 0) > beforeTs) return;
+          soundUiClick();
+        });
+      }, { capture: true });
+    })();
+
     window.addEventListener('DOMContentLoaded', () => {
       renderLevels();
       resizeCanvas();

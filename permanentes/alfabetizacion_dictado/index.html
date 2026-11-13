@@ -1193,40 +1193,48 @@
     }
 
     function playSound(type) {
+      window.__lastGameAudioTs = performance.now();
       try {
         const ctx = getAudioContext();
-        const now = ctx.currentTime;
-        if (type === 'click') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.frequency.setValueAtTime(420, now);
-          osc.frequency.exponentialRampToValueAtTime(820, now + 0.08);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.start(now); osc.stop(now + 0.08);
-        } else if (type === 'success') {
-          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.value = freq;
-            const t = now + (idx * 0.09);
-            gain.gain.setValueAtTime(0.24, t);
-            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
-            osc.connect(gain); gain.connect(ctx.destination);
-            osc.start(t); osc.stop(t + 0.2);
-          });
-        } else if (type === 'error') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.frequency.setValueAtTime(185, now);
-          osc.frequency.linearRampToValueAtTime(125, now + 0.25);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.start(now); osc.stop(now + 0.25);
-        }
+        if (!ctx) return;
+        const emit = () => {
+          try {
+            const now = ctx.currentTime;
+            if (type === 'click') {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.frequency.setValueAtTime(420, now);
+              osc.frequency.exponentialRampToValueAtTime(820, now + 0.08);
+              gain.gain.setValueAtTime(0.18, now);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+              osc.connect(gain); gain.connect(ctx.destination);
+              osc.start(now); osc.stop(now + 0.09);
+            } else if (type === 'success') {
+              [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                const t = now + (idx * 0.09);
+                gain.gain.setValueAtTime(0.24, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.18);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(t); osc.stop(t + 0.2);
+              });
+            } else if (type === 'error') {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.frequency.setValueAtTime(185, now);
+              osc.frequency.linearRampToValueAtTime(125, now + 0.25);
+              gain.gain.setValueAtTime(0.2, now);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+              osc.connect(gain); gain.connect(ctx.destination);
+              osc.start(now); osc.stop(now + 0.26);
+            }
+          } catch (e) {}
+        };
+        if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+        else emit();
       } catch (e) {}
     }
 
@@ -2041,6 +2049,54 @@
     window.addEventListener('DOMContentLoaded', () => {
       selectLevel(1);
     });
+
+    (function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return;
+      window.__uiClickSfxBound = true;
+      const sel = 'button, [role="button"], .tab-btn, .mod-btn, .level-tab, .module-card, .ficha-card, .choice-btn, .option-card, .menu-card, .mode-btn, .diff-btn, .joint-btn, .pill, .card, .btn, .btn-action, .nav-btn, select, summary, input[type="checkbox"], input[type="radio"], a[href], [onclick]';
+      const getCtxSafe = () => { try { return getAudioContext(); } catch (e) { return null; } };
+      const isMutedSafe = () => { try { return Boolean(false); } catch (e) { return false; } };
+      document.addEventListener('pointerdown', () => {
+        if (isMutedSafe()) return;
+        const c = getCtxSafe();
+        if (c && c.state === 'suspended') c.resume().catch(() => {});
+      }, { capture: true, passive: true });
+      document.addEventListener('click', (e) => {
+        const ctrl = e.target && e.target.closest ? e.target.closest(sel) : null;
+        if (!ctrl || ctrl.disabled || ctrl.getAttribute('aria-disabled') === 'true') return;
+        const beforeTs = window.__lastGameAudioTs || 0;
+        if (!isMutedSafe()) {
+          const c = getCtxSafe();
+          if (c && c.state === 'suspended') c.resume().catch(() => {});
+        }
+        queueMicrotask(() => {
+          if (isMutedSafe()) return;
+          if ((window.__lastGameAudioTs || 0) > beforeTs) return;
+          const c = getCtxSafe();
+          if (!c) return;
+          const emit = () => {
+            try {
+              window.__lastGameAudioTs = performance.now();
+              const now = c.currentTime;
+              const osc = c.createOscillator();
+              const gain = c.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(600, now);
+              osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.065, now + 0.006);
+              gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+              osc.connect(gain);
+              gain.connect(c.destination);
+              osc.start(now);
+              osc.stop(now + 0.065);
+            } catch (err) {}
+          };
+          if (c.state === 'suspended') c.resume().then(emit).catch(() => {});
+          else emit();
+        });
+      }, { capture: true });
+    })();
   </script>
 </body>
 </html>

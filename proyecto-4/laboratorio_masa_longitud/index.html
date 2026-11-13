@@ -902,20 +902,35 @@
 
     // Audio Context
     let audioCtx = null;
-    function playTone(freq, duration = 0.12, type = 'sine') {
+    function getLabAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!audioCtx) audioCtx = new Ctx();
+      return audioCtx;
+    }
+
+    function playTone(freq, duration = 0.12, type = 'sine', vol = 0.15) {
+      window.__lastGameAudioTs = performance.now();
       try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        const ctx = getLabAudioCtx();
+        if (!ctx) return;
+        const emit = () => {
+          try {
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(vol, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + duration + 0.01);
+          } catch (e) {}
+        };
+        if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+        else emit();
       } catch (e) {}
     }
 
@@ -1731,6 +1746,54 @@
 
     // Inicializar en Estacion 1
     renderStation1();
+
+    (function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return;
+      window.__uiClickSfxBound = true;
+      const sel = 'button, [role="button"], .tab-btn, .mod-btn, .level-tab, .module-card, .ficha-card, .choice-btn, .option-card, .menu-card, .mode-btn, .diff-btn, .joint-btn, .pill, .card, .btn, .btn-action, .nav-btn, select, summary, input[type="checkbox"], input[type="radio"], a[href], [onclick]';
+      const getCtxSafe = () => { try { return getLabAudioCtx(); } catch (e) { return null; } };
+      const isMutedSafe = () => { try { return Boolean(false); } catch (e) { return false; } };
+      document.addEventListener('pointerdown', () => {
+        if (isMutedSafe()) return;
+        const c = getCtxSafe();
+        if (c && c.state === 'suspended') c.resume().catch(() => {});
+      }, { capture: true, passive: true });
+      document.addEventListener('click', (e) => {
+        const ctrl = e.target && e.target.closest ? e.target.closest(sel) : null;
+        if (!ctrl || ctrl.disabled || ctrl.getAttribute('aria-disabled') === 'true') return;
+        const beforeTs = window.__lastGameAudioTs || 0;
+        if (!isMutedSafe()) {
+          const c = getCtxSafe();
+          if (c && c.state === 'suspended') c.resume().catch(() => {});
+        }
+        queueMicrotask(() => {
+          if (isMutedSafe()) return;
+          if ((window.__lastGameAudioTs || 0) > beforeTs) return;
+          const c = getCtxSafe();
+          if (!c) return;
+          const emit = () => {
+            try {
+              window.__lastGameAudioTs = performance.now();
+              const now = c.currentTime;
+              const osc = c.createOscillator();
+              const gain = c.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(600, now);
+              osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.065, now + 0.006);
+              gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+              osc.connect(gain);
+              gain.connect(c.destination);
+              osc.start(now);
+              osc.stop(now + 0.065);
+            } catch (err) {}
+          };
+          if (c.state === 'suspended') c.resume().then(emit).catch(() => {});
+          else emit();
+        });
+      }, { capture: true });
+    })();
   </script>
 </body>
 </html>

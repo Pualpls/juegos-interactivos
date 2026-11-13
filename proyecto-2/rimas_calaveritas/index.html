@@ -1349,23 +1349,29 @@
 
       emitirNota(freq, tiempoOffset, duracion, tipo = 'triangle', ganancia = 0.22) {
         if (this.silenciado || !this.ctx) return;
-        try {
-          const osc = this.ctx.createOscillator();
-          const gainNode = this.ctx.createGain();
-          osc.type = tipo;
-          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + tiempoOffset);
-
-          gainNode.gain.setValueAtTime(0, this.ctx.currentTime + tiempoOffset);
-          gainNode.gain.linearRampToValueAtTime(ganancia, this.ctx.currentTime + tiempoOffset + 0.02);
-          gainNode.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + tiempoOffset + duracion);
-
-          osc.connect(gainNode);
-          gainNode.connect(this.ctx.destination);
-
-          osc.start(this.ctx.currentTime + tiempoOffset);
-          osc.stop(this.ctx.currentTime + tiempoOffset + duracion);
-        } catch (e) {
-          console.warn('Audio desactivado', e);
+        window.__lastGameAudioTs = performance.now();
+        const emit = () => {
+          try {
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gainNode = this.ctx.createGain();
+            osc.type = tipo;
+            osc.frequency.setValueAtTime(freq, now + tiempoOffset);
+            gainNode.gain.setValueAtTime(0, now + tiempoOffset);
+            gainNode.gain.linearRampToValueAtTime(ganancia, now + tiempoOffset + 0.015);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + tiempoOffset + duracion);
+            osc.connect(gainNode);
+            gainNode.connect(this.ctx.destination);
+            osc.start(now + tiempoOffset);
+            osc.stop(now + tiempoOffset + duracion + 0.01);
+          } catch (e) {
+            console.warn('Audio desactivado', e);
+          }
+        };
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume().then(emit).catch(() => {});
+        } else {
+          emit();
         }
       }
 
@@ -2101,6 +2107,54 @@
       declamarVozGoogle(versos.join('. '), 0.9);
     });
 
+
+    (function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return;
+      window.__uiClickSfxBound = true;
+      const sel = 'button, [role="button"], .tab-btn, .mod-btn, .level-tab, .module-card, .ficha-card, .choice-btn, .option-card, .menu-card, .mode-btn, .diff-btn, .joint-btn, .pill, .card, .btn, .btn-action, .nav-btn, select, summary, input[type="checkbox"], input[type="radio"], a[href], [onclick]';
+      const getCtxSafe = () => { try { return (audioMotor.asegurarContexto(), audioMotor.ctx); } catch (e) { return null; } };
+      const isMutedSafe = () => { try { return Boolean(audioMotor.silenciado); } catch (e) { return false; } };
+      document.addEventListener('pointerdown', () => {
+        if (isMutedSafe()) return;
+        const c = getCtxSafe();
+        if (c && c.state === 'suspended') c.resume().catch(() => {});
+      }, { capture: true, passive: true });
+      document.addEventListener('click', (e) => {
+        const ctrl = e.target && e.target.closest ? e.target.closest(sel) : null;
+        if (!ctrl || ctrl.disabled || ctrl.getAttribute('aria-disabled') === 'true') return;
+        const beforeTs = window.__lastGameAudioTs || 0;
+        if (!isMutedSafe()) {
+          const c = getCtxSafe();
+          if (c && c.state === 'suspended') c.resume().catch(() => {});
+        }
+        queueMicrotask(() => {
+          if (isMutedSafe()) return;
+          if ((window.__lastGameAudioTs || 0) > beforeTs) return;
+          const c = getCtxSafe();
+          if (!c) return;
+          const emit = () => {
+            try {
+              window.__lastGameAudioTs = performance.now();
+              const now = c.currentTime;
+              const osc = c.createOscillator();
+              const gain = c.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(600, now);
+              osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.065, now + 0.006);
+              gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+              osc.connect(gain);
+              gain.connect(c.destination);
+              osc.start(now);
+              osc.stop(now + 0.065);
+            } catch (err) {}
+          };
+          if (c.state === 'suspended') c.resume().then(emit).catch(() => {});
+          else emit();
+        });
+      }, { capture: true });
+    })();
   </script>
 </body>
 </html>

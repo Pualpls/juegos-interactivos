@@ -131,6 +131,33 @@
       box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
     }
 
+    .portal-sound-btn {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 1.15rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.15);
+      color: #a7f3d0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .portal-sound-btn:hover {
+      background: rgba(16, 185, 129, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .portal-sound-btn.muted {
+      border-color: rgba(148, 163, 184, 0.35);
+      background: rgba(51, 65, 85, 0.7);
+      color: #94a3b8;
+    }
+
     /* SECTIONS */
     .section-title-wrap {
       display: flex;
@@ -563,6 +590,7 @@
       <button class="tab-btn" onclick="filterCategory('proyecto-4')">🪅 Proyecto 4 (Diciembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-3')">❄️ Proyecto 3 (Noviembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-2')">🇲🇽 Proyecto 2 (Octubre)</button>
+      <button type="button" class="portal-sound-btn" id="btnPortalSound" onclick="togglePortalSound()" aria-pressed="true" title="Activar o silenciar sonidos del portal">🔊 Sonido: ON</button>
     </nav>
 
     <!-- SECTION: PERMANENTES -->
@@ -1221,6 +1249,141 @@
         if (btn) btn.classList.remove('open');
       }
     }
+
+    /* ======================================================================
+       SISTEMA DE AUDIO TÁCTIL DEL PORTAL (WEB AUDIO API SINGLETON)
+       ====================================================================== */
+    let portalAudioCtx = null;
+    let portalSoundEnabled = (() => {
+      try { return localStorage.getItem('portal_sfx_enabled') !== '0'; } catch (e) { return true; }
+    })();
+
+    function getPortalAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!portalAudioCtx) portalAudioCtx = new Ctx();
+      return portalAudioCtx;
+    }
+
+    function updatePortalSoundBtn() {
+      const btn = document.getElementById('btnPortalSound');
+      if (!btn) return;
+      btn.textContent = portalSoundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF';
+      btn.classList.toggle('muted', !portalSoundEnabled);
+      btn.setAttribute('aria-pressed', String(portalSoundEnabled));
+    }
+
+    function playPortalUiSfx(kind = 'tap') {
+      if (!portalSoundEnabled) return;
+      const ctx = getPortalAudioCtx();
+      if (!ctx) return;
+
+      const emit = () => {
+        try {
+          const now = ctx.currentTime;
+          if (kind === 'card') {
+            [[587.33, 0, 0.065, 0.075], [880, 0.042, 0.085, 0.07]].forEach(([freq, off, dur, vol]) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(freq, now + off);
+              gain.gain.setValueAtTime(0.001, now + off);
+              gain.gain.linearRampToValueAtTime(vol, now + off + 0.008);
+              gain.gain.exponentialRampToValueAtTime(0.0008, now + off + dur);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.01);
+            });
+          } else if (kind === 'tab') {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(500, now);
+            osc.frequency.exponentialRampToValueAtTime(710, now + 0.055);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.07, now + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.06);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.07);
+          } else {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(580, now);
+            osc.frequency.exponentialRampToValueAtTime(790, now + 0.05);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.075, now + 0.006);
+            gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.055);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.065);
+          }
+        } catch (e) {}
+      };
+
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(emit).catch(() => {});
+      } else {
+        emit();
+      }
+    }
+
+    function togglePortalSound() {
+      portalSoundEnabled = !portalSoundEnabled;
+      try { localStorage.setItem('portal_sfx_enabled', portalSoundEnabled ? '1' : '0'); } catch (e) {}
+      updatePortalSoundBtn();
+      if (portalSoundEnabled) playPortalUiSfx('tab');
+    }
+
+    (function initPortalUiAudio() {
+      updatePortalSoundBtn();
+      const selector = '.tab-btn, #btnToggleProyectos, .btn-yt-toggle, a.game-card, a.yt-video-card';
+      let lastPtrTs = 0;
+      let lastPtrEl = null;
+
+      function classifyEl(el) {
+        if (!el) return 'tap';
+        if (el.matches('a.game-card, a.yt-video-card')) return 'card';
+        if (el.matches('.tab-btn')) return 'tab';
+        return 'tap';
+      }
+
+      document.addEventListener('pointerdown', (e) => {
+        const target = e.target && e.target.closest ? e.target.closest(selector) : null;
+        if (!target) return;
+        lastPtrTs = Date.now();
+        lastPtrEl = target;
+        playPortalUiSfx(classifyEl(target));
+      }, { capture: true, passive: true });
+
+      document.addEventListener('click', (e) => {
+        const target = e.target && e.target.closest ? e.target.closest(selector) : null;
+        if (!target) return;
+        const elapsed = Date.now() - lastPtrTs;
+        const fromPointer = (lastPtrEl === target && elapsed < 600);
+        if (!fromPointer) {
+          playPortalUiSfx(classifyEl(target));
+        }
+        if (
+          target.matches('a.game-card') &&
+          portalSoundEnabled &&
+          target.getAttribute('href') &&
+          target.getAttribute('target') !== '_blank' &&
+          e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey
+        ) {
+          const remaining = fromPointer ? Math.max(0, 125 - elapsed) : 125;
+          if (remaining > 0) {
+            const dest = target.getAttribute('href');
+            e.preventDefault();
+            setTimeout(() => { window.location.href = dest; }, remaining);
+          }
+        }
+      }, { capture: true });
+    })();
   </script>
 </body>
 </html>
