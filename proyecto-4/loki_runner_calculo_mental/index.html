@@ -1086,6 +1086,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
+      cursor: pointer;
+      touch-action: none;
+      user-select: none;
       transition: all 0.15s ease;
     }
 
@@ -1098,6 +1101,13 @@
       border-color: #38bdf8;
       background: rgba(14, 165, 233, 0.35);
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+      color: #fff;
+    }
+
+    .hud-lane-badge.active-lane.turbo-active {
+      border-color: #fde047;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.72), rgba(245, 158, 11, 0.55));
+      box-shadow: 0 0 16px rgba(253, 224, 71, 0.75);
       color: #fff;
     }
 
@@ -1151,7 +1161,7 @@
     }
 
     .touch-center-hint {
-      pointer-events: auto;
+      pointer-events: none;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
@@ -1160,48 +1170,8 @@
       gap: 0.6rem;
     }
 
-    .touch-btn-turbo {
-      pointer-events: auto;
-      min-width: 148px;
-      height: 72px;
-      padding: 0 1rem;
-      border-radius: 1.1rem;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.92), rgba(234, 88, 12, 0.92));
-      border: 3px solid rgba(254, 240, 138, 0.85);
-      color: #0f172a;
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 800;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.12rem;
-      box-shadow: 0 8px 22px rgba(245, 158, 11, 0.45);
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
-    }
-
-    .touch-btn-turbo .touch-btn-sub {
-      color: #451a03;
-      font-weight: 700;
-    }
-
-    .touch-btn-turbo:active,
-    .touch-btn-turbo.turbo-active {
-      transform: scale(0.96);
-      background: linear-gradient(135deg, #22d3ee, #0284c7);
-      border-color: #fef08a;
-      color: #ffffff;
-      box-shadow: 0 0 26px rgba(34, 211, 238, 0.85);
-    }
-
-    .touch-btn-turbo.turbo-active .touch-btn-sub {
-      color: #e0f2fe;
-    }
-
     .btn-trick-floating {
+      pointer-events: auto;
       background: #f59e0b;
       color: #0f172a;
       border: none;
@@ -1873,14 +1843,6 @@
         </button>
 
         <div class="touch-center-hint">
-          <button class="touch-btn-turbo" id="btn-touch-turbo"
-                  onpointerdown="handleTouchTurboDown(event)"
-                  onpointerup="handleTouchTurboUp(event)"
-                  onpointercancel="handleTouchTurboUp(event)"
-                  onpointerleave="handleTouchTurboUp(event)">
-            <span>⚡ TURBO</span>
-            <span class="touch-btn-sub">Acelerar (↑ / W)</span>
-          </button>
           <button class="btn-trick-floating" onclick="openExplanationFromGame()">
             <span>💡</span> Truco
           </button>
@@ -2874,8 +2836,9 @@
       userStars: {},
       currentProblem: null,
       startTime: 0,
-      turboHeld: false,
-      turboSurgeWave: false
+      turboPointerHeld: false,
+      turboKeyHeld: false,
+      turboBlend: 0
     };
 
     try {
@@ -2986,6 +2949,7 @@
       if (optL) optL.classList.toggle('active-lane', player.lane === -1);
       if (optC) optC.classList.toggle('active-lane', player.lane === 0);
       if (optR) optR.classList.toggle('active-lane', player.lane === 1);
+      updateTurboUi();
     }
 
     function withAudioCtx(cb) {
@@ -3744,6 +3708,7 @@
       if (gameState.gameActive && !gameState.gamePaused) {
         gameState.gamePaused = true;
         gameState.wasPausedByTrick = true;
+        releaseAllTurboHolds(true);
         const btn = document.getElementById('btn-pause');
         if (btn) {
           btn.textContent = '▶️ Seguir';
@@ -3955,9 +3920,7 @@
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
       cameraZ = 0;
-      gameState.turboHeld = false;
-      gameState.turboSurgeWave = false;
-      updateTurboUi();
+      releaseAllTurboHolds(true);
 
       resetTrackTrees();
 
@@ -4035,8 +3998,6 @@
       if (lblL) lblL.textContent = valL;
       if (lblC) lblC.textContent = valC;
       if (lblR) lblR.textContent = valR;
-      gameState.turboSurgeWave = false;
-      updateTurboUi();
       updateHudLaneSelection();
     }
 
@@ -4062,47 +4023,110 @@
       }
     }
 
-    let turboPressStart = 0;
+    const HOLD_TURBO_DELAY_MS = 90;
+    let activeHoldPointerId = null;
+    let activeHoldTarget = null;
+    let holdTurboTimer = null;
+
     function isTurboActive() {
-      return !!(gameState.gameActive && !gameState.gamePaused && (gameState.turboHeld || gameState.turboSurgeWave));
+      return !!(gameState.gameActive && !gameState.gamePaused && ((gameState.turboPointerHeld && activeHoldPointerId !== null) || gameState.turboKeyHeld));
     }
 
     function updateTurboUi() {
-      const btn = document.getElementById('btn-touch-turbo');
-      if (btn) btn.classList.toggle('turbo-active', isTurboActive());
+      const turboActive = isTurboActive();
+      ['hud-opt-left', 'hud-opt-center', 'hud-opt-right'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('turbo-active', turboActive && el.classList.contains('active-lane'));
+      });
     }
 
-    function triggerTurboSurge() {
+    function clearHoldTurboTimer() {
+      if (holdTurboTimer) {
+        clearTimeout(holdTurboTimer);
+        holdTurboTimer = null;
+      }
+    }
+
+    function setPlayerLane(targetLane) {
+      if (player.lane !== targetLane) {
+        player.lane = targetLane;
+        soundLaneSwitch();
+      }
+    }
+
+    function cleanupActiveDrag() {
+      endLaneHold();
+    }
+
+    function beginLaneHold(pointerId, lane, captureEl) {
       if (!gameState.gameActive || gameState.gamePaused) return;
-      const hasPending = roadWaves.some(w => !w.evaluated && w.z > 40);
-      if (!hasPending) return;
-      if (!gameState.turboSurgeWave) {
-        gameState.turboSurgeWave = true;
-        soundTurboBoost();
+      cleanupActiveDrag();
+      activeHoldPointerId = pointerId;
+      activeHoldTarget = captureEl || null;
+      setPlayerLane(lane);
+
+      if (captureEl && typeof captureEl.setPointerCapture === 'function') {
+        try { captureEl.setPointerCapture(pointerId); } catch (err) {}
+      }
+
+      if (!gameState.turboPointerHeld) {
+        holdTurboTimer = setTimeout(() => {
+          holdTurboTimer = null;
+          if (activeHoldPointerId === pointerId && gameState.gameActive && !gameState.gamePaused) {
+            const wasActive = isTurboActive();
+            gameState.turboPointerHeld = true;
+            if (!wasActive) soundTurboBoost();
+            updateTurboUi();
+          }
+        }, HOLD_TURBO_DELAY_MS);
+      }
+    }
+
+    function endLaneHold(pointerId) {
+      if (pointerId !== undefined && pointerId !== null && activeHoldPointerId !== pointerId) return;
+      clearHoldTurboTimer();
+      if (activeHoldTarget && activeHoldPointerId !== null && typeof activeHoldTarget.releasePointerCapture === 'function') {
+        try {
+          if (activeHoldTarget.hasPointerCapture && activeHoldTarget.hasPointerCapture(activeHoldPointerId)) {
+            activeHoldTarget.releasePointerCapture(activeHoldPointerId);
+          }
+        } catch (err) {}
+      }
+      activeHoldPointerId = null;
+      activeHoldTarget = null;
+      if (gameState.turboPointerHeld) {
+        gameState.turboPointerHeld = false;
         updateTurboUi();
       }
     }
 
-    function handleTouchTurboDown(e) {
-      if (e) e.preventDefault();
-      if (!gameState.gameActive || gameState.gamePaused) return;
-      turboPressStart = Date.now();
-      const wasActive = isTurboActive();
-      gameState.turboHeld = true;
-      if (!wasActive) soundTurboBoost();
+    function releaseAllTurboHolds(immediateStop = false) {
+      cleanupActiveDrag();
+      gameState.turboKeyHeld = false;
+      if (immediateStop) {
+        gameState.turboBlend = 0;
+      }
       updateTurboUi();
     }
 
-    function handleTouchTurboUp(e) {
-      if (e) e.preventDefault();
-      const elapsed = Date.now() - turboPressStart;
-      const wasHeld = gameState.turboHeld;
-      gameState.turboHeld = false;
-      if (wasHeld && elapsed < 260 && gameState.gameActive && !gameState.gamePaused) {
-        const hasPending = roadWaves.some(w => !w.evaluated && w.z > 40);
-        if (hasPending) gameState.turboSurgeWave = true;
-      }
-      updateTurboUi();
+    function computeCanvasLane(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = clientX - rect.left;
+      const clickY = clientY - rect.top;
+      const centerX = rect.width * 0.5;
+      const dx = clickX - centerX;
+
+      const horizon = WORLD.horizonY || 210;
+      const effectiveY = Math.max(horizon + 30, clickY);
+      const roadBaseline = rect.height * 0.88;
+      const scaleAtTouch = Math.max(0.12, Math.min(1.2, (effectiveY - horizon) / (roadBaseline - horizon)));
+
+      const worldXTouch = dx / scaleAtTouch;
+      const dividerThreshold = WORLD.laneWidth * 0.6;
+
+      if (worldXTouch < -dividerThreshold) return -1;
+      if (worldXTouch > dividerThreshold) return 1;
+      return 0;
     }
 
     function handleTouchLeft(e) {
@@ -4125,7 +4149,7 @@
         e.preventDefault();
         if (!gameState.gamePaused) {
           const wasActive = isTurboActive();
-          gameState.turboHeld = true;
+          gameState.turboKeyHeld = true;
           if (!wasActive && !e.repeat) soundTurboBoost();
           updateTurboUi();
         }
@@ -4136,59 +4160,91 @@
 
     window.addEventListener('keyup', (e) => {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
-        gameState.turboHeld = false;
+        gameState.turboKeyHeld = false;
         updateTurboUi();
       }
     });
 
     window.addEventListener('blur', () => {
-      gameState.turboHeld = false;
-      gameState.turboSurgeWave = false;
-      updateTurboUi();
+      releaseAllTurboHolds(true);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) releaseAllTurboHolds(true);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      endLaneHold();
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      endLaneHold(e.pointerId);
+    });
+
+    window.addEventListener('pointercancel', (e) => {
+      endLaneHold(e.pointerId);
     });
 
     canvas.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (!gameState.gameActive || gameState.gamePaused) return;
-      const rect = canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      const centerX = rect.width * 0.5;
-      const dx = clickX - centerX;
+      beginLaneHold(e.pointerId, computeCanvasLane(e.clientX, e.clientY), canvas);
+    });
 
-      // Mapeo táctil en perspectiva: sensible y preciso tanto dentro de los carriles como a lo ancho de la pantalla
-      const horizon = WORLD.horizonY || 210;
-      const effectiveY = Math.max(horizon + 30, clickY);
-      const roadBaseline = rect.height * 0.88;
-      const scaleAtTouch = Math.max(0.12, Math.min(1.2, (effectiveY - horizon) / (roadBaseline - horizon)));
-
-      const worldXTouch = dx / scaleAtTouch;
-      const dividerThreshold = WORLD.laneWidth * 0.55; // ~90px, separadores visuales del carril
-
-      let targetLane = 0;
-      if (worldXTouch < -dividerThreshold) {
-        targetLane = -1; // Carril izquierdo
-      } else if (worldXTouch > dividerThreshold) {
-        targetLane = 1;  // Carril derecho
-      } else {
-        targetLane = 0;  // Carril central
+    canvas.addEventListener('pointermove', (e) => {
+      if (activeHoldPointerId !== e.pointerId) return;
+      if (e.pointerType === 'mouse' && (e.buttons & 1) === 0) {
+        endLaneHold(e.pointerId);
+        return;
       }
-
-      if (player.lane !== targetLane) {
-        player.lane = targetLane;
-        soundLaneSwitch();
-      } else {
-        triggerTurboSurge();
+      if (!gameState.gameActive || gameState.gamePaused) {
+        endLaneHold(e.pointerId);
+        return;
       }
+      setPlayerLane(computeCanvasLane(e.clientX, e.clientY));
+    });
+
+    canvas.addEventListener('pointerup', (e) => {
+      endLaneHold(e.pointerId);
+    });
+
+    canvas.addEventListener('pointercancel', (e) => {
+      endLaneHold(e.pointerId);
+    });
+
+    canvas.addEventListener('lostpointercapture', (e) => {
+      endLaneHold(e.pointerId);
+    });
+
+    [
+      ['hud-opt-left', -1],
+      ['hud-opt-center', 0],
+      ['hud-opt-right', 1]
+    ].forEach(([elId, lane]) => {
+      const badge = document.getElementById(elId);
+      if (!badge) return;
+      badge.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (!gameState.gameActive || gameState.gamePaused) return;
+        e.stopPropagation();
+        beginLaneHold(e.pointerId, lane, badge);
+      });
+      badge.addEventListener('pointermove', (e) => {
+        if (activeHoldPointerId === e.pointerId && e.pointerType === 'mouse' && (e.buttons & 1) === 0) {
+          endLaneHold(e.pointerId);
+        }
+      });
+      badge.addEventListener('pointerup', (e) => endLaneHold(e.pointerId));
+      badge.addEventListener('pointercancel', (e) => endLaneHold(e.pointerId));
+      badge.addEventListener('lostpointercapture', (e) => endLaneHold(e.pointerId));
     });
 
     function togglePauseGame() {
       if (!gameState.gameActive) return;
       gameState.gamePaused = !gameState.gamePaused;
       if (gameState.gamePaused) {
-        gameState.turboHeld = false;
-        gameState.turboSurgeWave = false;
+        releaseAllTurboHolds(true);
       }
-      updateTurboUi();
       const btn = document.getElementById('btn-pause');
       if (btn) {
         btn.textContent = gameState.gamePaused ? '▶️ Seguir' : '⏸️ Pausa';
@@ -4199,9 +4255,7 @@
 
     function exitToMenu() {
       stopBeachMusic(true);
-      gameState.turboHeld = false;
-      gameState.turboSurgeWave = false;
-      updateTurboUi();
+      releaseAllTurboHolds(true);
       gameState.gameActive = false;
       gameState.gamePaused = false;
       if (animFrameId) cancelAnimationFrame(animFrameId);
@@ -4238,7 +4292,14 @@
       // Esto elimina por completo la lentitud en celulares de 30-45 FPS o pantallas con refresco variable:
       const speedScale = Math.min(2.5, dt * 60);
       const turboOn = isTurboActive();
-      const turboFactor = turboOn ? Math.max(5.5, 28 / Math.max(1, WORLD.speed)) : 1.0;
+      const targetBlend = turboOn ? 1.0 : 0.0;
+      if (targetBlend > gameState.turboBlend) {
+        gameState.turboBlend = Math.min(1.0, gameState.turboBlend + dt * 8.0);
+      } else if (targetBlend < gameState.turboBlend) {
+        gameState.turboBlend = Math.max(0.0, gameState.turboBlend - dt * 6.5);
+      }
+      const maxTurboFactor = Math.max(5.5, 28 / Math.max(1, WORLD.speed));
+      const turboFactor = 1.0 + (maxTurboFactor - 1.0) * gameState.turboBlend;
       const frameSpeed = WORLD.speed * speedScale * turboFactor;
 
       const targetX = player.lane * WORLD.laneWidth;
@@ -4256,7 +4317,7 @@
       } else if (gameState.difficulty === 'facil') {
         animSpeedRatio = 0.75;
       }
-      const turboAnimMult = turboOn ? 2.1 : 1.0;
+      const turboAnimMult = 1.0 + 1.1 * gameState.turboBlend;
       player.sprintCycle += dt * baseSprintFps * animSpeedRatio * turboAnimMult;
       player.runCycle += dt * (WORLD.speed * 4.5) * turboAnimMult;
 
@@ -4286,8 +4347,6 @@
 
           if (collidedHurdle) {
             wave.evaluated = true;
-            gameState.turboSurgeWave = false;
-            updateTurboUi();
             // Despejar inmediatamente TODAS las vallas de esta oleada para dejar el camino despejado
             wave.hurdles.forEach(h => h.hit = true);
 
@@ -4415,6 +4474,7 @@
 
     function triggerVictory() {
       stopBeachMusic(false);
+      releaseAllTurboHolds(true);
       gameState.gameActive = false;
       soundVictoryFanfare();
 
@@ -4476,6 +4536,7 @@
 
     function triggerGameOver() {
       stopBeachMusic(false);
+      releaseAllTurboHolds(true);
       gameState.gameActive = false;
 
       const totalSec = Math.floor((Date.now() - gameState.startTime) / 1000);
@@ -5244,6 +5305,34 @@
         }
       }
 
+      // E) DESTELLO DEL CARRIL ACELERADO AL MANTENER PRESIONADO
+      if (gameState.gameActive && !gameState.gamePaused && gameState.turboBlend > 0.04) {
+        const laneLeftF = player.lane === -1 ? -1.85 : (player.lane === 0 ? -0.6 : 0.6);
+        const laneRightF = player.lane === -1 ? -0.6 : (player.lane === 0 ? 0.6 : 1.85);
+        const nearL = project3D(WORLD.laneWidth * laneLeftF, 2);
+        const nearR = project3D(WORLD.laneWidth * laneRightF, 2);
+        const farL = project3D(WORLD.laneWidth * laneLeftF, WORLD.roadLength * 0.85);
+        const farR = project3D(WORLD.laneWidth * laneRightF, WORLD.roadLength * 0.85);
+        ctx.save();
+        ctx.fillStyle = `rgba(56, 189, 248, ${(0.20 * gameState.turboBlend).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(nearL.x, nearL.y);
+        ctx.lineTo(farL.x, farL.y);
+        ctx.lineTo(farR.x, farR.y);
+        ctx.lineTo(nearR.x, nearR.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = `rgba(253, 224, 71, ${(0.55 * gameState.turboBlend).toFixed(3)})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(nearL.x, nearL.y);
+        ctx.lineTo(farL.x, farL.y);
+        ctx.moveTo(nearR.x, nearR.y);
+        ctx.lineTo(farR.x, farR.y);
+        ctx.stroke();
+        ctx.restore();
+      }
+
       // 6. ÁRBOLES Y VEGETACIÓN INDIVIDUALES (SPRITES PIXEL ART 8-BIT GRANDES Y DENSOS)
       const VEGETATION_CONFIG = {
         pino:          { baseH: 560, anchorY: 0.96 },
@@ -5460,10 +5549,10 @@
       });
 
       // 9.5 ESTELAS DE VELOCIDAD EN MODO TURBO
-      if (isTurboActive()) {
+      if (gameState.gameActive && !gameState.gamePaused && gameState.turboBlend > 0.04) {
         ctx.save();
         const tTick = Date.now() * 0.028;
-        ctx.strokeStyle = 'rgba(254, 240, 138, 0.52)';
+        ctx.strokeStyle = `rgba(254, 240, 138, ${(0.52 * gameState.turboBlend).toFixed(3)})`;
         ctx.lineWidth = 3;
         const cx = W * 0.5;
         const cy = WORLD.horizonY + (H - WORLD.horizonY) * 0.35;
@@ -5509,6 +5598,7 @@
         if (gameState.gameActive && !gameState.gamePaused) {
           gameState.gamePaused = true;
           gameState.wasPausedByDropdown = true;
+          releaseAllTurboHolds(true);
           const btn = document.getElementById('btn-pause');
           if (btn) {
             btn.classList.add('active');
