@@ -1717,16 +1717,6 @@
       let clean = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       if (!clean) return;
 
-      // PRIORIDAD: Motor nativo de la PC para respuesta inmediata y cero cruce de voces
-      if (window.speechSynthesis) {
-        try {
-          const utter = new SpeechSynthesisUtterance(clean);
-          utter.lang = 'es-MX';
-          utter.rate = rate;
-          window.speechSynthesis.speak(utter);
-          return;
-        } catch(e) {}
-      }
 
       const chunks = splitTextForTts(clean, 160);
       currentTtsAbort = false;

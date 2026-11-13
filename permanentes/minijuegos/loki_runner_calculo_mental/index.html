@@ -3137,19 +3137,16 @@
         } catch(e) {}
       }
 
-      // PRIORIDAD 1: Motor nativo de la PC (speechSynthesis)
-      // Cero latencia, offline y elimina por completo el cruce de voces
-      if (window.speechSynthesis) {
+      // PRIORIDAD 1: Voz de Google AI en linea (es-MX). Si falla, usar la voz del dispositivo.
+      const speakWithDevice = () => {
+        if (!window.speechSynthesis) return;
         try {
           const utter = new SpeechSynthesisUtterance(clean);
           utter.lang = 'es-MX';
           utter.rate = 0.95;
           window.speechSynthesis.speak(utter);
-          return;
         } catch(e) {}
-      }
-
-      // FALLBACK: Streaming de Google AI TTS para pantallas sin motor de voz nativo
+      };
       try {
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(clean)}`;
         const audio = new Audio();
@@ -3157,8 +3154,19 @@
         audio.src = url;
         audio.playbackRate = 1.0;
         currentSpeechAudio = audio;
-        audio.play().catch(() => {});
-      } catch(err) {}
+        let fellBack = false;
+        const fallback = () => {
+          if (fellBack || currentSpeechAudio !== audio) return;
+          fellBack = true;
+          speakWithDevice();
+        };
+        const timeoutId = setTimeout(() => { if (audio.readyState === 0) fallback(); }, 2500);
+        audio.onplay = () => clearTimeout(timeoutId);
+        audio.onerror = () => { clearTimeout(timeoutId); fallback(); };
+        audio.play().catch(() => { clearTimeout(timeoutId); fallback(); });
+      } catch(err) {
+        speakWithDevice();
+      }
     }
 
     /* =============================================================
