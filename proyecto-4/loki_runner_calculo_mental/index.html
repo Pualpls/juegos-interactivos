@@ -1153,12 +1153,53 @@
     .touch-center-hint {
       pointer-events: auto;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0.6rem;
     }
 
-    
+    .touch-btn-turbo {
+      pointer-events: auto;
+      min-width: 148px;
+      height: 72px;
+      padding: 0 1rem;
+      border-radius: 1.1rem;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.92), rgba(234, 88, 12, 0.92));
+      border: 3px solid rgba(254, 240, 138, 0.85);
+      color: #0f172a;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.12rem;
+      box-shadow: 0 8px 22px rgba(245, 158, 11, 0.45);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+    }
+
+    .touch-btn-turbo .touch-btn-sub {
+      color: #451a03;
+      font-weight: 700;
+    }
+
+    .touch-btn-turbo:active,
+    .touch-btn-turbo.turbo-active {
+      transform: scale(0.96);
+      background: linear-gradient(135deg, #22d3ee, #0284c7);
+      border-color: #fef08a;
+      color: #ffffff;
+      box-shadow: 0 0 26px rgba(34, 211, 238, 0.85);
+    }
+
+    .touch-btn-turbo.turbo-active .touch-btn-sub {
+      color: #e0f2fe;
+    }
 
     .btn-trick-floating {
       background: #f59e0b;
@@ -1832,6 +1873,14 @@
         </button>
 
         <div class="touch-center-hint">
+          <button class="touch-btn-turbo" id="btn-touch-turbo"
+                  onpointerdown="handleTouchTurboDown(event)"
+                  onpointerup="handleTouchTurboUp(event)"
+                  onpointercancel="handleTouchTurboUp(event)"
+                  onpointerleave="handleTouchTurboUp(event)">
+            <span>⚡ TURBO</span>
+            <span class="touch-btn-sub">Acelerar (↑ / W)</span>
+          </button>
           <button class="btn-trick-floating" onclick="openExplanationFromGame()">
             <span>💡</span> Truco
           </button>
@@ -2060,8 +2109,17 @@
           <!-- Filas generadas dinámicamente -->
         </div>
 
-        <!-- PIE CON BOTÓN VOLVER -->
-        <div style="margin-top:0.75rem; padding-top:0.6rem; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; align-items:center;">
+        <!-- PIE CON ESTADO DE NUBE Y BOTÓN VOLVER -->
+        <div style="margin-top:0.75rem; padding-top:0.6rem; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+            <span id="leaderboard-sync-status" style="font-size:0.78rem; font-weight:700; color:#475569; background:#f1f5f9; border:1px solid #cbd5e1; padding:0.25rem 0.55rem; border-radius:9999px;">
+              ☁️ Listo para sincronizar
+            </span>
+            <button id="btn-sync-leaderboard" onclick="syncLeaderboardFromCloud(null, true)"
+                    style="font-size:0.78rem; font-weight:700; color:#1d4ed8; background:#eff6ff; border:1px solid #bfdbfe; padding:0.28rem 0.6rem; border-radius:0.5rem; cursor:pointer;">
+              🔄 Actualizar Nube
+            </button>
+          </div>
           <button class="btn-modal btn-modal-secondary" onclick="closeLeaderboardModal()" style="padding:0.45rem 1.3rem; font-size:0.85rem; margin:0;">
             Volver
           </button>
@@ -2814,7 +2872,9 @@
       totalBones: 0,
       userStars: {},
       currentProblem: null,
-      startTime: 0
+      startTime: 0,
+      turboHeld: false,
+      turboSurgeWave: false
     };
 
     try {
@@ -2918,6 +2978,25 @@
       gain.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + 0.08);
+    }
+
+    function soundTurboBoost() {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(210, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(680, ctx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.14, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.18);
+      } catch(e) {}
     }
 
     function soundCorrectHit() {
@@ -3824,6 +3903,9 @@
       player.celebrateTimer = 0;
       player.stumbleTimer = 0;
       cameraZ = 0;
+      gameState.turboHeld = false;
+      gameState.turboSurgeWave = false;
+      updateTurboUi();
 
       resetTrackTrees();
 
@@ -3901,6 +3983,8 @@
       if (lblL) lblL.textContent = valL;
       if (lblC) lblC.textContent = valC;
       if (lblR) lblR.textContent = valR;
+      gameState.turboSurgeWave = false;
+      updateTurboUi();
       updateHudLaneSelection();
     }
 
@@ -3926,6 +4010,49 @@
       }
     }
 
+    let turboPressStart = 0;
+    function isTurboActive() {
+      return !!(gameState.gameActive && !gameState.gamePaused && (gameState.turboHeld || gameState.turboSurgeWave));
+    }
+
+    function updateTurboUi() {
+      const btn = document.getElementById('btn-touch-turbo');
+      if (btn) btn.classList.toggle('turbo-active', isTurboActive());
+    }
+
+    function triggerTurboSurge() {
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      const hasPending = roadWaves.some(w => !w.evaluated && w.z > 40);
+      if (!hasPending) return;
+      if (!gameState.turboSurgeWave) {
+        gameState.turboSurgeWave = true;
+        soundTurboBoost();
+        updateTurboUi();
+      }
+    }
+
+    function handleTouchTurboDown(e) {
+      if (e) e.preventDefault();
+      if (!gameState.gameActive || gameState.gamePaused) return;
+      turboPressStart = Date.now();
+      const wasActive = isTurboActive();
+      gameState.turboHeld = true;
+      if (!wasActive) soundTurboBoost();
+      updateTurboUi();
+    }
+
+    function handleTouchTurboUp(e) {
+      if (e) e.preventDefault();
+      const elapsed = Date.now() - turboPressStart;
+      const wasHeld = gameState.turboHeld;
+      gameState.turboHeld = false;
+      if (wasHeld && elapsed < 260 && gameState.gameActive && !gameState.gamePaused) {
+        const hasPending = roadWaves.some(w => !w.evaluated && w.z > 40);
+        if (hasPending) gameState.turboSurgeWave = true;
+      }
+      updateTurboUi();
+    }
+
     function handleTouchLeft(e) {
       if (e) e.preventDefault();
       movePlayerLeft();
@@ -3942,9 +4069,30 @@
         movePlayerLeft();
       } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         movePlayerRight();
+      } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        e.preventDefault();
+        if (!gameState.gamePaused) {
+          const wasActive = isTurboActive();
+          gameState.turboHeld = true;
+          if (!wasActive && !e.repeat) soundTurboBoost();
+          updateTurboUi();
+        }
       } else if (e.key === 'p' || e.key === 'P' || e.key === ' ') {
         togglePauseGame();
       }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+        gameState.turboHeld = false;
+        updateTurboUi();
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      gameState.turboHeld = false;
+      gameState.turboSurgeWave = false;
+      updateTurboUi();
     });
 
     canvas.addEventListener('pointerdown', (e) => {
@@ -3976,12 +4124,19 @@
       if (player.lane !== targetLane) {
         player.lane = targetLane;
         soundLaneSwitch();
+      } else {
+        triggerTurboSurge();
       }
     });
 
     function togglePauseGame() {
       if (!gameState.gameActive) return;
       gameState.gamePaused = !gameState.gamePaused;
+      if (gameState.gamePaused) {
+        gameState.turboHeld = false;
+        gameState.turboSurgeWave = false;
+      }
+      updateTurboUi();
       const btn = document.getElementById('btn-pause');
       if (btn) {
         btn.textContent = gameState.gamePaused ? '▶️ Seguir' : '⏸️ Pausa';
@@ -3992,7 +4147,9 @@
 
     function exitToMenu() {
       stopBeachMusic(true);
-      
+      gameState.turboHeld = false;
+      gameState.turboSurgeWave = false;
+      updateTurboUi();
       gameState.gameActive = false;
       gameState.gamePaused = false;
       if (animFrameId) cancelAnimationFrame(animFrameId);
@@ -4028,14 +4185,16 @@
       // Normalización de velocidad por delta time respecto a 60 FPS estándar (1/60s = 0.016666s)
       // Esto elimina por completo la lentitud en celulares de 30-45 FPS o pantallas con refresco variable:
       const speedScale = Math.min(2.5, dt * 60);
-      const frameSpeed = WORLD.speed * speedScale;
+      const turboOn = isTurboActive();
+      const turboFactor = turboOn ? Math.max(5.5, 28 / Math.max(1, WORLD.speed)) : 1.0;
+      const frameSpeed = WORLD.speed * speedScale * turboFactor;
 
       const targetX = player.lane * WORLD.laneWidth;
       const diffX = targetX - player.worldX;
-      player.worldX += diffX * Math.min(1.0, 0.16 * speedScale);
+      player.worldX += diffX * Math.min(1.0, 0.18 * speedScale);
       player.tilt = (diffX / WORLD.laneWidth) * 0.26;
 
-      // Velocidad de animación sincronizada con la dificultad:
+      // Velocidad de animación sincronizada con la dificultad (y turbo):
       const baseSprintFps = 8.33;
       let animSpeedRatio = (WORLD.speed / 5.14);
       if (gameState.difficulty === 'dificil') {
@@ -4045,8 +4204,9 @@
       } else if (gameState.difficulty === 'facil') {
         animSpeedRatio = 0.75;
       }
-      player.sprintCycle += dt * baseSprintFps * animSpeedRatio;
-      player.runCycle += dt * (WORLD.speed * 4.5);
+      const turboAnimMult = turboOn ? 2.1 : 1.0;
+      player.sprintCycle += dt * baseSprintFps * animSpeedRatio * turboAnimMult;
+      player.runCycle += dt * (WORLD.speed * 4.5) * turboAnimMult;
 
       if (player.isInvulnerable) {
         player.invulnerableTimer -= dt;
@@ -4064,13 +4224,18 @@
 
       for (let i = roadWaves.length - 1; i >= 0; i--) {
         const wave = roadWaves[i];
+        const prevZ = wave.z;
         wave.z -= frameSpeed;
 
-        if (!wave.evaluated && wave.z <= 40 && wave.z >= -20) {
+        // Barrido continuo (swept check) para que el modo turbo jamás salte el rango de colisión
+        if (!wave.evaluated && prevZ >= -20 && wave.z <= 40) {
+          wave.z = Math.min(wave.z, 40);
           const collidedHurdle = wave.hurdles.find(h => h.lane === player.lane);
 
           if (collidedHurdle) {
             wave.evaluated = true;
+            gameState.turboSurgeWave = false;
+            updateTurboUi();
             // Despejar inmediatamente TODAS las vallas de esta oleada para dejar el camino despejado
             wave.hurdles.forEach(h => h.hit = true);
 
@@ -4336,7 +4501,8 @@
         tiempoSec: lastCompletedRunData.timeSec,
         tiempoStr: lastCompletedRunData.timeFormatted,
         fecha: fechaStr,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        fromCloud: false
       };
 
       // Guardar en almacenamiento local (siempre disponible offline)
@@ -4359,27 +4525,39 @@
       }
 
       closeRecordScoreModal();
-      openLeaderboardModal('level', recordItem.id);
+      openLeaderboardModal('level', recordItem.id, true);
+      setTimeout(() => { syncLeaderboardFromCloud(recordItem.id, false); }, 1400);
     }
 
     const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxGg2LGGbcWXxu6qBEsgbbhQzATamlCAeYeFeqYHrVdokm_uYVZ_BxOP8zWMaKhhpbr/exec";
 
+    function getLeaderboardSheetUrl() {
+      try {
+        const custom = (localStorage.getItem('loki_sheet_url') || '').trim();
+        if (custom && custom.startsWith('https://') && custom.includes('/exec')) {
+          return custom;
+        }
+      } catch(e) {}
+      return DEFAULT_GOOGLE_SHEET_URL;
+    }
+
     function sendRecordToGoogleSheet(record) {
-      const sheetUrl = localStorage.getItem('loki_sheet_url') || DEFAULT_GOOGLE_SHEET_URL;
+      const sheetUrl = getLeaderboardSheetUrl();
       if (!sheetUrl) return;
 
       try {
-        // Enviar vía POST con text/plain para evitar bloqueo de pre-flight CORS en el navegador
+        // Enviar vía POST con text/plain + keepalive para evitar bloqueo CORS preflight y asegurar entrega
         fetch(sheetUrl, {
           method: 'POST',
           mode: 'no-cors',
+          keepalive: true,
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(record)
         }).catch(() => {
-          // Fallback con imagen beacon GET o fetch GET
+          // Fallback con fetch GET o imagen beacon
           try {
             const p = new URLSearchParams(record).toString();
-            fetch(`${sheetUrl}?${p}`, { mode: 'no-cors' }).catch(() => {
+            fetch(`${sheetUrl}?${p}`, { mode: 'no-cors', keepalive: true }).catch(() => {
               new Image().src = `${sheetUrl}?${p}`;
             });
           } catch(err) {}
@@ -4407,12 +4585,215 @@
       }
     }
 
-    function openLeaderboardModal(tab = 'level', highlightId = null) {
+    let leaderboardSyncState = { text: '☁️ Listo para sincronizar', color: '#475569', bg: '#f1f5f9', border: '#cbd5e1' };
+    let isSyncingCloudLeaderboard = false;
+
+    function setLeaderboardSyncStatus(text, tone = 'neutral') {
+      const tones = {
+        neutral: { color: '#475569', bg: '#f1f5f9', border: '#cbd5e1' },
+        syncing: { color: '#1d4ed8', bg: '#eff6ff', border: '#93c5fd' },
+        ok:      { color: '#047857', bg: '#ecfdf5', border: '#6ee7b7' },
+        warn:    { color: '#b45309', bg: '#fffbeb', border: '#fcd34d' },
+        offline: { color: '#64748b', bg: '#f8fafc', border: '#cbd5e1' }
+      };
+      const t = tones[tone] || tones.neutral;
+      leaderboardSyncState = { text, ...t };
+      const el = document.getElementById('leaderboard-sync-status');
+      if (el) {
+        el.textContent = text;
+        el.style.color = t.color;
+        el.style.background = t.bg;
+        el.style.borderColor = t.border;
+      }
+    }
+
+    function escapeHtmlSafe(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function parseLeaderboardTimeToSec(str) {
+      const s = String(str || '').trim();
+      const parts = s.split(':');
+      if (parts.length === 2) {
+        return (parseInt(parts[0], 10) || 0) * 60 + (parseInt(parts[1], 10) || 0);
+      }
+      return parseFloat(s) || 0;
+    }
+
+    function normalizeCloudRecord(raw, idx) {
+      const nombre = String(raw.nombre || '').trim();
+      const nivelNum = parseInt(raw.nivelId, 10);
+      const mundoNum = parseInt(raw.mundo, 10);
+      const tiempoStr = String(raw.tiempoStr || '00:00').trim();
+      const tiempoSec = (typeof raw.tiempoSec === 'number' && !isNaN(raw.tiempoSec))
+        ? raw.tiempoSec
+        : parseLeaderboardTimeToSec(tiempoStr);
+      const difNombre = String(raw.dificultadNombre || raw.dificultad || 'Normal').trim();
+      const difLow = difNombre.toLowerCase();
+      const difKey = raw.dificultad || (
+        difLow.includes('muy') ? 'muy_facil' :
+        difLow.includes('fácil') || difLow.includes('facil') ? 'facil' :
+        difLow.includes('dif') ? 'dificil' : 'normal'
+      );
+      return {
+        id: String(raw.id || ('cloud_' + idx + '_' + nombre.toLowerCase().replace(/[^a-z0-9]/g, ''))),
+        nombre,
+        nivelId: isNaN(nivelNum) ? raw.nivelId : nivelNum,
+        nivelTitulo: String(raw.nivelTitulo || ''),
+        mundo: isNaN(mundoNum) ? raw.mundo : mundoNum,
+        dificultad: difKey,
+        dificultadNombre: difNombre,
+        huesosTotales: parseInt(raw.huesosTotales, 10) || 0,
+        huesosBase: parseInt(raw.huesosBase, 10) || 0,
+        vidasBonus: parseInt(raw.vidasBonus, 10) || 0,
+        tiempoSec,
+        tiempoStr,
+        fecha: String(raw.fecha || ''),
+        fromCloud: true
+      };
+    }
+
+    function mergeCloudRecords(localList, cloudRaw, highlightId = null) {
+      const cloudNormalized = [];
+      (cloudRaw || []).forEach((item, idx) => {
+        if (!item || !String(item.nombre || '').trim()) return;
+        cloudNormalized.push(normalizeCloudRecord(item, idx));
+      });
+
+      const pendingLocals = (localList || []).filter(item => item && !item.fromCloud && String(item.nombre || '').trim());
+      const usedCloudIdx = new Set();
+      const remainingPending = [];
+      let resolvedHighlightId = highlightId;
+
+      pendingLocals.forEach(loc => {
+        const lName = String(loc.nombre || '').trim().toLowerCase();
+        const lNivel = String(loc.nivelId || '');
+        const lHuesos = parseInt(loc.huesosTotales, 10) || 0;
+        const lTiempo = String(loc.tiempoStr || '').trim();
+
+        const matchIdx = cloudNormalized.findIndex((c, ci) => {
+          if (usedCloudIdx.has(ci)) return false;
+          return String(c.nombre || '').trim().toLowerCase() === lName &&
+                 String(c.nivelId || '') === lNivel &&
+                 (parseInt(c.huesosTotales, 10) || 0) === lHuesos &&
+                 String(c.tiempoStr || '').trim() === lTiempo;
+        });
+
+        if (matchIdx !== -1) {
+          usedCloudIdx.add(matchIdx);
+          if (highlightId && loc.id === highlightId) {
+            resolvedHighlightId = cloudNormalized[matchIdx].id;
+          }
+        } else {
+          remainingPending.push(loc);
+        }
+      });
+
+      return {
+        merged: [...cloudNormalized, ...remainingPending],
+        cloudCount: cloudNormalized.length,
+        resolvedHighlightId
+      };
+    }
+
+    function fetchLeaderboardJsonp(sheetUrl) {
+      return new Promise((resolve, reject) => {
+        const cbName = '__lokiSheetCb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+        const script = document.createElement('script');
+        let finished = false;
+        const cleanup = () => {
+          try { delete window[cbName]; } catch(e) { window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        };
+        const timer = setTimeout(() => {
+          if (finished) return;
+          finished = true;
+          cleanup();
+          reject(new Error('JSONP timeout'));
+        }, 7000);
+        window[cbName] = (payload) => {
+          if (finished) return;
+          finished = true;
+          clearTimeout(timer);
+          cleanup();
+          resolve(payload);
+        };
+        script.onerror = () => {
+          if (finished) return;
+          finished = true;
+          clearTimeout(timer);
+          cleanup();
+          reject(new Error('JSONP error'));
+        };
+        const sep = sheetUrl.includes('?') ? '&' : '?';
+        script.src = `${sheetUrl}${sep}action=list&callback=${cbName}&_t=${Date.now()}`;
+        document.head.appendChild(script);
+      });
+    }
+
+    async function syncLeaderboardFromCloud(highlightId = null, forceManual = false) {
+      if (isSyncingCloudLeaderboard && !forceManual) return;
+      const sheetUrl = getLeaderboardSheetUrl();
+      if (!sheetUrl) return;
+
+      isSyncingCloudLeaderboard = true;
+      setLeaderboardSyncStatus('☁️ Sincronizando con la nube...', 'syncing');
+
+      try {
+        let payload = null;
+        const sep = sheetUrl.includes('?') ? '&' : '?';
+        const readUrl = `${sheetUrl}${sep}action=list&_t=${Date.now()}`;
+        try {
+          const resp = await fetch(readUrl, { method: 'GET', cache: 'no-store' });
+          if (resp && resp.ok) {
+            payload = await resp.json();
+          }
+        } catch(fetchErr) {
+          payload = await fetchLeaderboardJsonp(sheetUrl);
+        }
+
+        if (!payload || !Array.isArray(payload.records)) {
+          setLeaderboardSyncStatus('⚠️ Falta actualizar lectura (doGet) en Apps Script', 'warn');
+          return;
+        }
+
+        let currentLocal = [];
+        try {
+          currentLocal = JSON.parse(localStorage.getItem('loki_runner_leaderboard') || '[]');
+        } catch(e) { currentLocal = []; }
+
+        const { merged, cloudCount, resolvedHighlightId } = mergeCloudRecords(currentLocal, payload.records, highlightId);
+        try {
+          localStorage.setItem('loki_runner_leaderboard', JSON.stringify(merged));
+        } catch(e) {}
+
+        setLeaderboardSyncStatus(`☁️ Nube al día (${cloudCount} récords)`, 'ok');
+        const modal = document.getElementById('modal-leaderboard');
+        if (modal && modal.classList.contains('active')) {
+          renderLeaderboard(currentLeaderboardTab, resolvedHighlightId);
+        }
+      } catch(err) {
+        setLeaderboardSyncStatus('📱 Sin conexión a la nube (caché local)', 'offline');
+      } finally {
+        isSyncingCloudLeaderboard = false;
+      }
+    }
+
+    function openLeaderboardModal(tab = 'level', highlightId = null, skipImmediateCloud = false) {
       currentLeaderboardTab = tab;
       const modal = document.getElementById('modal-leaderboard');
       if (!modal) return;
       modal.classList.add('active');
       renderLeaderboard(tab, highlightId);
+      if (!skipImmediateCloud) {
+        syncLeaderboardFromCloud(highlightId, false);
+      } else {
+        setLeaderboardSyncStatus('☁️ Enviando récord a la nube...', 'syncing');
+      }
     }
 
     function closeLeaderboardModal() {
@@ -4431,6 +4812,14 @@
       const subtitle = document.getElementById('leaderboard-subtitle');
       const container = document.getElementById('leaderboard-list-container');
       if (!container) return;
+
+      const syncEl = document.getElementById('leaderboard-sync-status');
+      if (syncEl && leaderboardSyncState) {
+        syncEl.textContent = leaderboardSyncState.text;
+        syncEl.style.color = leaderboardSyncState.color;
+        syncEl.style.background = leaderboardSyncState.bg;
+        syncEl.style.borderColor = leaderboardSyncState.border;
+      }
 
       if (btnLevel && btnGlobal) {
         if (tab === 'level') {
@@ -4457,16 +4846,15 @@
       }
 
       // Filtrar según pestaña
-      let filtered = tab === 'level' 
-        ? allRecords.filter(r => r.nivelId === gameState.currentLevelId)
+      let filtered = tab === 'level'
+        ? allRecords.filter(r => String(r.nivelId) === String(gameState.currentLevelId))
         : [...allRecords];
 
       // Ordenar: primero mayor cantidad de huesos totales, segundo menor tiempo
       filtered.sort((a, b) => {
-        if (b.huesosTotales !== a.huesosTotales) {
-          return b.huesosTotales - a.huesosTotales;
-        }
-        return a.tiempoSec - b.tiempoSec;
+        const hb = (parseInt(b.huesosTotales, 10) || 0) - (parseInt(a.huesosTotales, 10) || 0);
+        if (hb !== 0) return hb;
+        return (Number(a.tiempoSec) || 0) - (Number(b.tiempoSec) || 0);
       });
 
       if (filtered.length === 0) {
@@ -4489,6 +4877,7 @@
         const diffColor = item.dificultad === 'muy_facil' ? '#10b981' :
                           item.dificultad === 'facil' ? '#0284c7' :
                           item.dificultad === 'normal' ? '#f59e0b' : '#ef4444';
+        const cloudTag = item.fromCloud ? '<span title="Guardado en la nube" style="font-size:0.72rem; opacity:0.8;">☁️</span>' : '';
 
         html += `
           <div style="display:flex; align-items:center; justify-content:space-between; background:${isHighlight ? '#fef3c7' : '#f8fafc'}; border:2px solid ${isHighlight ? '#f59e0b' : '#e2e8f0'}; border-radius:0.75rem; padding:0.6rem 0.8rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
@@ -4496,13 +4885,13 @@
               <div style="font-size:1.4rem; min-width:1.8rem; text-align:center;">${medal}</div>
               <div style="min-width:0;">
                 <div style="font-weight:700; color:#1e293b; font-size:0.95rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
-                  ${item.nombre}
+                  ${escapeHtmlSafe(item.nombre)} ${cloudTag}
                 </div>
-                <div style="font-size:0.75rem; color:#64748b; display:flex; gap:0.4rem; align-items:center;">
-                  ${tab === 'global' ? `<span style="background:#e0e7ff; color:#3730a3; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">Nivel ${item.nivelId}</span>` : ''}
-                  <span style="background:${diffColor}18; color:${diffColor}; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">${item.dificultadNombre}</span>
-                  <span>⏱️ ${item.tiempoStr}</span>
-                  <span>📅 ${item.fecha}</span>
+                <div style="font-size:0.75rem; color:#64748b; display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                  ${tab === 'global' ? `<span style="background:#e0e7ff; color:#3730a3; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">Nivel ${escapeHtmlSafe(item.nivelId)}</span>` : ''}
+                  <span style="background:${diffColor}18; color:${diffColor}; padding:0.1rem 0.35rem; border-radius:0.3rem; font-weight:700;">${escapeHtmlSafe(item.dificultadNombre)}</span>
+                  <span>⏱️ ${escapeHtmlSafe(item.tiempoStr)}</span>
+                  <span>📅 ${escapeHtmlSafe(item.fecha)}</span>
                 </div>
               </div>
             </div>
@@ -5018,6 +5407,28 @@
         ctx.fill();
         ctx.restore();
       });
+
+      // 9.5 ESTELAS DE VELOCIDAD EN MODO TURBO
+      if (isTurboActive()) {
+        ctx.save();
+        const tTick = Date.now() * 0.028;
+        ctx.strokeStyle = 'rgba(254, 240, 138, 0.52)';
+        ctx.lineWidth = 3;
+        const cx = W * 0.5;
+        const cy = WORLD.horizonY + (H - WORLD.horizonY) * 0.35;
+        const maxR = Math.max(W, H) * 0.45;
+        for (let s = 0; s < 14; s++) {
+          const ang = (s / 14) * Math.PI * 2;
+          const distOffset = ((tTick * 26 + s * 43) % maxR);
+          const r1 = Math.min(W, H) * 0.22 + distOffset;
+          const r2 = r1 + 44;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+          ctx.lineTo(cx + Math.cos(ang) * r2, cy + Math.sin(ang) * r2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
 
       // 10. FILTRO DE ILUMINACIÓN AMBIENTAL TEMÁTICA GLOBAL
       // Cubre toda la pantalla (de 0 a H), incluyendo el fondo superior, la carretera, la vegetación Y A LOKI

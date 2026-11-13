@@ -1583,22 +1583,67 @@
     /* =========================================================================
        INTERACCIÓN DUAL (CLIC + DRAG & DROP POINTER EVENTS COMPATIBLE CON LINUX)
        ========================================================================= */
+    if (!window.cleanupAllDragGhosts) {
+      window.__activeDrag = null;
+      window.cleanupAllDragGhosts = function() {
+        if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
+          const prev = window.__activeDrag;
+          window.__activeDrag = null;
+          try { prev.cancel(); } catch (_) {}
+        }
+        document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
+          try { el.remove(); } catch (_) {}
+        });
+        document.querySelectorAll('.syllable-slot.drag-over, .drag-over, .hovered, .dragging').forEach(s => {
+          s.classList.remove('drag-over', 'hovered', 'dragging');
+        });
+      };
+      window.addEventListener('blur', window.cleanupAllDragGhosts);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) window.cleanupAllDragGhosts();
+      });
+    }
+
     function attachSyllableCardInteraction(cardEl) {
       let ghost = null;
       let startX = 0;
       let startY = 0;
       let isDragging = false;
+      let activePointerId = null;
 
       cardEl.addEventListener('pointerdown', (e) => {
         if (isTransitioning) return;
         if (e.button !== undefined && e.button !== 0) return;
         e.preventDefault();
+        window.cleanupAllDragGhosts();
         startX = e.clientX;
         startY = e.clientY;
         isDragging = false;
-        cardEl.setPointerCapture(e.pointerId);
+        activePointerId = e.pointerId;
+        try { cardEl.setPointerCapture(e.pointerId); } catch (_) {}
+
+        const cleanup = () => {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+          window.removeEventListener('pointercancel', onCancel);
+          cardEl.removeEventListener('lostpointercapture', onCancel);
+          const pid = activePointerId;
+          activePointerId = null;
+          if (pid !== null) {
+            try { cardEl.releasePointerCapture(pid); } catch (_) {}
+          }
+          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+          if (ghost) {
+            ghost.remove();
+            ghost = null;
+          }
+          if (window.__activeDrag && window.__activeDrag.element === cardEl) {
+            window.__activeDrag = null;
+          }
+        };
 
         const onMove = (ev) => {
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
           const dx = ev.clientX - startX;
           const dy = ev.clientY - startY;
           if (!isDragging && Math.hypot(dx, dy) > 8) {
@@ -1606,6 +1651,7 @@
             const fam = CONSONANT_FAMILIES[cardEl.dataset.fam] || CONSONANT_FAMILIES.p;
             ghost = document.createElement('div');
             ghost.className = 'drag-ghost';
+            ghost.setAttribute('data-drag-ghost', '1');
             ghost.style.background = fam.bg;
             ghost.textContent = cardEl.dataset.syl;
             document.body.appendChild(ghost);
@@ -1619,18 +1665,17 @@
           }
         };
 
+        const onCancel = (ev) => {
+          if (ev && ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          cleanup();
+        };
+
         const onUp = (ev) => {
-          cardEl.removeEventListener('pointermove', onMove);
-          cardEl.removeEventListener('pointerup', onUp);
-          cardEl.removeEventListener('pointercancel', onUp);
-          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          const wasDragging = isDragging;
+          cleanup();
 
-          if (ghost) {
-            ghost.remove();
-            ghost = null;
-          }
-
-          if (isDragging) {
+          if (wasDragging) {
             const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
             if (targetSlot && targetSlot.dataset.slotIdx !== undefined) {
               placeSyllableInSlot(
@@ -1650,9 +1695,11 @@
           }
         };
 
-        cardEl.addEventListener('pointermove', onMove);
-        cardEl.addEventListener('pointerup', onUp);
-        cardEl.addEventListener('pointercancel', onUp);
+        window.__activeDrag = { element: cardEl, pointerId: activePointerId, cancel: cleanup };
+        window.addEventListener('pointermove', onMove, { passive: false });
+        window.addEventListener('pointerup', onUp, { passive: false });
+        window.addEventListener('pointercancel', onCancel, { passive: false });
+        cardEl.addEventListener('lostpointercapture', onCancel);
       });
     }
 
@@ -1661,23 +1708,48 @@
       let startX = 0;
       let startY = 0;
       let isDragging = false;
+      let activePointerId = null;
 
       cardEl.addEventListener('pointerdown', (e) => {
         if (isTransitioning || cardEl.style.display === 'none') return;
         if (e.button !== undefined && e.button !== 0) return;
         e.preventDefault();
+        window.cleanupAllDragGhosts();
         startX = e.clientX;
         startY = e.clientY;
         isDragging = false;
-        cardEl.setPointerCapture(e.pointerId);
+        activePointerId = e.pointerId;
+        try { cardEl.setPointerCapture(e.pointerId); } catch (_) {}
+
+        const cleanup = () => {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+          window.removeEventListener('pointercancel', onCancel);
+          cardEl.removeEventListener('lostpointercapture', onCancel);
+          const pid = activePointerId;
+          activePointerId = null;
+          if (pid !== null) {
+            try { cardEl.releasePointerCapture(pid); } catch (_) {}
+          }
+          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+          if (ghost) {
+            ghost.remove();
+            ghost = null;
+          }
+          if (window.__activeDrag && window.__activeDrag.element === cardEl) {
+            window.__activeDrag = null;
+          }
+        };
 
         const onMove = (ev) => {
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
           const dx = ev.clientX - startX;
           const dy = ev.clientY - startY;
           if (!isDragging && Math.hypot(dx, dy) > 8) {
             isDragging = true;
             ghost = document.createElement('div');
             ghost.className = 'drag-ghost';
+            ghost.setAttribute('data-drag-ghost', '1');
             ghost.style.background = '#ffffff';
             ghost.style.color = '#0f172a';
             ghost.style.borderColor = '#2563eb';
@@ -1693,18 +1765,17 @@
           }
         };
 
+        const onCancel = (ev) => {
+          if (ev && ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          cleanup();
+        };
+
         const onUp = (ev) => {
-          cardEl.removeEventListener('pointermove', onMove);
-          cardEl.removeEventListener('pointerup', onUp);
-          cardEl.removeEventListener('pointercancel', onUp);
-          document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          const wasDragging = isDragging;
+          cleanup();
 
-          if (ghost) {
-            ghost.remove();
-            ghost = null;
-          }
-
-          if (isDragging) {
+          if (wasDragging) {
             const targetSlot = findSlotUnderPoint(ev.clientX, ev.clientY);
             if (targetSlot && targetSlot.dataset.slotIdx !== undefined) {
               placeWordInSentenceSlot(cardEl, parseInt(targetSlot.dataset.slotIdx, 10));
@@ -1717,9 +1788,11 @@
           }
         };
 
-        cardEl.addEventListener('pointermove', onMove);
-        cardEl.addEventListener('pointerup', onUp);
-        cardEl.addEventListener('pointercancel', onUp);
+        window.__activeDrag = { element: cardEl, pointerId: activePointerId, cancel: cleanup };
+        window.addEventListener('pointermove', onMove, { passive: false });
+        window.addEventListener('pointerup', onUp, { passive: false });
+        window.addEventListener('pointercancel', onCancel, { passive: false });
+        cardEl.addEventListener('lostpointercapture', onCancel);
       });
     }
 

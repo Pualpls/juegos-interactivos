@@ -911,39 +911,81 @@
                 }
             });
 
-            // 2. Pointer Events Drag and Drop
+            // 2. Pointer Events Drag and Drop (Blindaje Multi-Touch anti-fantasmas)
+            if (!window.cleanupAllDragGhosts) {
+                window.__activeDrag = null;
+                window.cleanupAllDragGhosts = function() {
+                    if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
+                        const prev = window.__activeDrag;
+                        window.__activeDrag = null;
+                        try { prev.cancel(); } catch (_) {}
+                    }
+                    document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
+                        try { el.remove(); } catch (_) {}
+                    });
+                    document.querySelectorAll('.drag-over, .hovered, .dragging').forEach(el => {
+                        el.classList.remove('drag-over', 'hovered', 'dragging');
+                    });
+                };
+                window.addEventListener('blur', window.cleanupAllDragGhosts);
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) window.cleanupAllDragGhosts();
+                });
+            }
+
             let isDragging = false;
             let ghostEl = null;
+            let activePointerId = null;
+
+            const cancelBoneDrag = (ev) => {
+                if (ev && ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+                isDragging = false;
+                const pid = activePointerId;
+                activePointerId = null;
+                if (pid !== null) {
+                    try { chip.releasePointerCapture(pid); } catch (_) {}
+                }
+                if (ghostEl) {
+                    ghostEl.remove();
+                    ghostEl = null;
+                }
+                if (window.__activeDrag && window.__activeDrag.element === chip) {
+                    window.__activeDrag = null;
+                }
+            };
 
             chip.addEventListener('pointerdown', (e) => {
+                if (e.button !== undefined && e.button !== 0) return;
                 if (state.placedBones.has(boneKey)) return;
+                e.preventDefault();
+                window.cleanupAllDragGhosts();
                 isDragging = true;
-                chip.setPointerCapture(e.pointerId);
+                activePointerId = e.pointerId;
+                try { chip.setPointerCapture(e.pointerId); } catch (_) {}
 
                 ghostEl = document.createElement('div');
                 ghostEl.className = 'drag-ghost';
+                ghostEl.setAttribute('data-drag-ghost', '1');
                 ghostEl.innerHTML = chip.innerHTML;
                 ghostEl.style.left = e.clientX + 'px';
                 ghostEl.style.top = e.clientY + 'px';
                 document.body.appendChild(ghostEl);
+                window.__activeDrag = { element: chip, pointerId: activePointerId, cancel: () => cancelBoneDrag() };
                 // Cero pista azul al arrastrar
             });
 
             chip.addEventListener('pointermove', (e) => {
                 if (!isDragging || !ghostEl) return;
+                if (activePointerId !== null && e.pointerId !== activePointerId) return;
                 ghostEl.style.left = e.clientX + 'px';
                 ghostEl.style.top = e.clientY + 'px';
             });
 
             chip.addEventListener('pointerup', (e) => {
                 if (!isDragging) return;
-                isDragging = false;
+                if (activePointerId !== null && e.pointerId !== activePointerId) return;
                 window._dragJustFinished = Date.now() + 350;
-
-                if (ghostEl) {
-                    ghostEl.remove();
-                    ghostEl = null;
-                }
+                cancelBoneDrag(e);
 
                 // Detect element under pointer
                 const targetEl = document.elementFromPoint(e.clientX, e.clientY);
@@ -965,13 +1007,8 @@
                 }
             });
 
-            chip.addEventListener('pointercancel', () => {
-                isDragging = false;
-                if (ghostEl) {
-                    ghostEl.remove();
-                    ghostEl = null;
-                }
-            });
+            chip.addEventListener('pointercancel', cancelBoneDrag);
+            chip.addEventListener('lostpointercapture', cancelBoneDrag);
         });
 
         // Eventos en los slots de la silueta

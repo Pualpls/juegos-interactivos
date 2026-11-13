@@ -898,41 +898,82 @@
             });
         });
 
-        // Interacción Dual: Pointer Events Drag and Drop
+        // Interacción Dual Blindada Multi-Touch: Pointer Events Drag and Drop
+        if (!window.cleanupAllDragGhosts) {
+            window.__activeDrag = null;
+            window.cleanupAllDragGhosts = function() {
+                if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
+                    const prev = window.__activeDrag;
+                    window.__activeDrag = null;
+                    try { prev.cancel(); } catch (_) {}
+                }
+                document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
+                    try { el.remove(); } catch (_) {}
+                });
+                document.querySelectorAll('.light-bin.highlight, .drag-over, .hovered, .dragging').forEach(el => {
+                    el.classList.remove('highlight', 'drag-over', 'hovered', 'dragging');
+                });
+            };
+            window.addEventListener('blur', window.cleanupAllDragGhosts);
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) window.cleanupAllDragGhosts();
+            });
+        }
+
         let ghostEl = null;
+        let activePointerId = null;
+
+        function cancelChipDrag(ev) {
+            if (ev && ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+            gameState.isDragging = false;
+            const pid = activePointerId;
+            activePointerId = null;
+            if (pid !== null) {
+                try { activeChip.releasePointerCapture(pid); } catch (_) {}
+            }
+            if (ghostEl) {
+                ghostEl.remove();
+                ghostEl = null;
+            }
+            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
+            if (window.__activeDrag && window.__activeDrag.element === activeChip) {
+                window.__activeDrag = null;
+            }
+        }
 
         activeChip.addEventListener('pointerdown', (e) => {
+            if (e.button !== undefined && e.button !== 0) return;
+            e.preventDefault();
+            window.cleanupAllDragGhosts();
             getAudioCtx();
+            activePointerId = e.pointerId;
             gameState.isDragging = true;
-            activeChip.setPointerCapture(e.pointerId);
+            try { activeChip.setPointerCapture(e.pointerId); } catch (_) {}
 
             ghostEl = document.createElement('div');
             ghostEl.className = 'drag-ghost';
+            ghostEl.setAttribute('data-drag-ghost', '1');
             ghostEl.textContent = activeChip.textContent.trim();
             ghostEl.style.left = e.clientX + 'px';
             ghostEl.style.top = e.clientY + 'px';
             document.body.appendChild(ghostEl);
 
+            window.__activeDrag = { element: activeChip, pointerId: activePointerId, cancel: () => cancelChipDrag() };
             document.querySelectorAll('.light-bin').forEach(b => b.classList.add('highlight'));
         });
 
         activeChip.addEventListener('pointermove', (e) => {
             if (!gameState.isDragging || !ghostEl) return;
+            if (activePointerId !== null && e.pointerId !== activePointerId) return;
             ghostEl.style.left = e.clientX + 'px';
             ghostEl.style.top = e.clientY + 'px';
         });
 
         activeChip.addEventListener('pointerup', (e) => {
             if (!gameState.isDragging) return;
-            gameState.isDragging = false;
+            if (activePointerId !== null && e.pointerId !== activePointerId) return;
             window._dragJustFinished = Date.now() + 350;
-
-            if (ghostEl) {
-                ghostEl.remove();
-                ghostEl = null;
-            }
-
-            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
+            cancelChipDrag(e);
 
             const targetEl = document.elementFromPoint(e.clientX, e.clientY);
             if (targetEl) {
@@ -944,14 +985,8 @@
             }
         });
 
-        activeChip.addEventListener('pointercancel', () => {
-            gameState.isDragging = false;
-            if (ghostEl) {
-                ghostEl.remove();
-                ghostEl = null;
-            }
-            document.querySelectorAll('.light-bin').forEach(b => b.classList.remove('highlight'));
-        });
+        activeChip.addEventListener('pointercancel', cancelChipDrag);
+        activeChip.addEventListener('lostpointercapture', cancelChipDrag);
 
         // Clic directo sobre el buzón (Tap dual)
         function handleBinClick(color) {

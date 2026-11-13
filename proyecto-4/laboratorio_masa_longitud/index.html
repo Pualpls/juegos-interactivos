@@ -1082,26 +1082,55 @@
       initDragEvents();
     }
 
+    let activePointerId = null;
+
+    if (!window.cleanupAllDragGhosts) {
+      window.__activeDrag = null;
+      window.cleanupAllDragGhosts = function() {
+        if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
+          const prev = window.__activeDrag;
+          window.__activeDrag = null;
+          try { prev.cancel(); } catch (_) {}
+        }
+        document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
+          try { el.remove(); } catch (_) {}
+        });
+      };
+      window.addEventListener('blur', window.cleanupAllDragGhosts);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) window.cleanupAllDragGhosts();
+      });
+    }
+
     function initDragEvents() {
       const dragObj = document.getElementById('dragObj');
       const placementZone = document.getElementById('placementZone');
       if (!dragObj || !placementZone) return;
 
       dragObj.addEventListener('pointerdown', onPointerDown);
+      dragObj.addEventListener('lostpointercapture', onPointerCancel);
       window.addEventListener('pointermove', onPointerMove);
       window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerCancel);
     }
 
     function onPointerDown(e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      window.cleanupAllDragGhosts();
       isDragging = true;
+      activePointerId = e.pointerId;
       dragStartX = e.clientX;
       dragStartOffset = s1ObjectOffsetPx;
       const dragObj = document.getElementById('dragObj');
-      if (dragObj) dragObj.setPointerCapture(e.pointerId);
+      if (dragObj) {
+        try { dragObj.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      window.__activeDrag = { element: dragObj, pointerId: activePointerId, cancel: () => onPointerCancel() };
     }
 
     function onPointerMove(e) {
       if (!isDragging) return;
+      if (activePointerId !== null && e.pointerId !== activePointerId) return;
       const dx = e.clientX - dragStartX;
       let newOffset = dragStartOffset + dx;
       // Límites de arrastre
@@ -1114,9 +1143,25 @@
       checkAlignment();
     }
 
+    function onPointerCancel(e) {
+      if (!isDragging) return;
+      if (e && e.pointerId !== undefined && activePointerId !== null && e.pointerId !== activePointerId) return;
+      const pid = activePointerId;
+      isDragging = false;
+      activePointerId = null;
+      const dragObj = document.getElementById('dragObj');
+      if (dragObj && pid !== null) {
+        try { dragObj.releasePointerCapture(pid); } catch (_) {}
+      }
+      if (window.__activeDrag && window.__activeDrag.element === dragObj) {
+        window.__activeDrag = null;
+      }
+    }
+
     function onPointerUp(e) {
       if (!isDragging) return;
-      isDragging = false;
+      if (activePointerId !== null && e.pointerId !== activePointerId) return;
+      onPointerCancel(e);
       // Enganche sutil únicamente si el alumno lo coloca casi exacto (menos de 5 px)
       if (Math.abs(s1ObjectOffsetPx - DEADZONE_PX) <= 4) {
         s1ObjectOffsetPx = DEADZONE_PX;

@@ -1195,6 +1195,28 @@
        ========================================================================= */
     const DROP_ZONE_SELECTOR = '.drop-slot, .interword-slot, .char-gap-slot, #m5-glue-zone, #m6-sentence-zone';
 
+    if (!window.cleanupAllDragGhosts) {
+      window.__activeDrag = null;
+      window.cleanupAllDragGhosts = function() {
+        if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
+          const prev = window.__activeDrag;
+          window.__activeDrag = null;
+          try { prev.cancel(); } catch (_) {}
+        }
+        document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
+          try { el.remove(); } catch (_) {}
+        });
+        document.querySelectorAll('.hovered, .drag-over, .dragging').forEach(el => {
+          el.classList.remove('hovered', 'drag-over', 'dragging');
+          if (el.style && el.style.opacity === '0.35') el.style.opacity = '1';
+        });
+      };
+      window.addEventListener('blur', window.cleanupAllDragGhosts);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) window.cleanupAllDragGhosts();
+      });
+    }
+
     function makePointerDraggable(chip, onDropValid) {
       chip._onDropValidCallback = onDropValid;
       if (chip._pointerDraggableAttached) return;
@@ -1204,14 +1226,33 @@
       let startX = 0, startY = 0;
       let hasMoved = false;
       let activeHovered = null;
+      let activePointerId = null;
+
+      let onMove = null;
+      let onUp = null;
+      let onCancel = null;
 
       const cleanupDrag = () => {
+        if (onMove) window.removeEventListener('pointermove', onMove);
+        if (onUp) window.removeEventListener('pointerup', onUp);
+        if (onCancel) {
+          window.removeEventListener('pointercancel', onCancel);
+          chip.removeEventListener('lostpointercapture', onCancel);
+        }
+        const pid = activePointerId;
+        activePointerId = null;
+        if (pid !== null) {
+          try { chip.releasePointerCapture(pid); } catch (err) {}
+        }
         if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
         ghost = null;
         chip.style.opacity = '1';
         if (activeHovered) {
           activeHovered.classList.remove('hovered');
           activeHovered = null;
+        }
+        if (window.__activeDrag && window.__activeDrag.element === chip) {
+          window.__activeDrag = null;
         }
       };
 
@@ -1220,15 +1261,19 @@
         e.preventDefault();
         e.stopPropagation();
 
+        window.cleanupAllDragGhosts();
+
         startX = e.clientX;
         startY = e.clientY;
         hasMoved = false;
+        activePointerId = e.pointerId;
 
         try { chip.setPointerCapture(e.pointerId); } catch (err) {}
 
         const rect = chip.getBoundingClientRect();
         ghost = chip.cloneNode(true);
         ghost.classList.remove('selected-chip');
+        ghost.setAttribute('data-drag-ghost', '1');
         ghost.style.position = 'fixed';
         ghost.style.left = `${rect.left}px`;
         ghost.style.top = `${rect.top}px`;
@@ -1241,73 +1286,82 @@
         ghost.style.transform = 'scale(1.08)';
         document.body.appendChild(ghost);
         chip.style.opacity = '0.35';
-      });
 
-      chip.addEventListener('pointermove', (e) => {
-        if (!ghost) return;
-        e.preventDefault();
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasMoved = true;
+        onMove = (ev) => {
+          if (!ghost) return;
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          ev.preventDefault();
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+          if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasMoved = true;
 
-        const w = ghost.offsetWidth || 72;
-        const h = ghost.offsetHeight || 52;
-        ghost.style.left = `${e.clientX - w / 2}px`;
-        ghost.style.top = `${e.clientY - h / 2}px`;
+          const w = ghost.offsetWidth || 72;
+          const h = ghost.offsetHeight || 52;
+          ghost.style.left = `${ev.clientX - w / 2}px`;
+          ghost.style.top = `${ev.clientY - h / 2}px`;
 
-        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-        const dropZone = elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null;
-        if (activeHovered && activeHovered !== dropZone) {
-          activeHovered.classList.remove('hovered');
-        }
-        if (dropZone) {
-          dropZone.classList.add('hovered');
-          activeHovered = dropZone;
-        } else {
-          activeHovered = null;
-        }
-      });
-
-      chip.addEventListener('pointerup', (e) => {
-        if (!ghost) return;
-        e.preventDefault();
-        e.stopPropagation();
-        try { chip.releasePointerCapture(e.pointerId); } catch (err) {}
-
-        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-        const dropZone = (elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null) || activeHovered;
-
-        cleanupDrag();
-
-        if (hasMoved) {
-          window._dragJustFinished = Date.now() + 420;
-          if (dropZone && chip._onDropValidCallback) {
-            clearSelectedChip();
-            chip._onDropValidCallback(chip, dropZone);
-          } else {
-            playBeep('pop');
+          const elemBelow = document.elementFromPoint(ev.clientX, ev.clientY);
+          const dropZone = elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null;
+          if (activeHovered && activeHovered !== dropZone) {
+            activeHovered.classList.remove('hovered');
           }
-        } else {
-          // Modo Tap-to-Select / Tap-to-Place para pizarrones táctiles Linux
-          if (selectedChipEl === chip) {
-            clearSelectedChip();
+          if (dropZone) {
+            dropZone.classList.add('hovered');
+            activeHovered = dropZone;
           } else {
-            clearSelectedChip();
-            selectedChipEl = chip;
-            chip.classList.add('selected-chip');
-            playBeep('pop');
-            // Si en el módulo hay una única ranura evidente (.drop-slot única), permitir colocación directa o esperar toque en ranura
-            const singleSlots = document.querySelectorAll('#arena-container .drop-slot');
-            if (singleSlots.length === 1 && chip._onDropValidCallback) {
+            activeHovered = null;
+          }
+        };
+
+        onCancel = (ev) => {
+          if (ev && ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          cleanupDrag();
+        };
+
+        onUp = (ev) => {
+          if (!ghost) return;
+          if (ev.pointerId !== undefined && activePointerId !== null && ev.pointerId !== activePointerId) return;
+          ev.preventDefault();
+          ev.stopPropagation();
+
+          const elemBelow = document.elementFromPoint(ev.clientX, ev.clientY);
+          const dropZone = (elemBelow ? elemBelow.closest(DROP_ZONE_SELECTOR) : null) || activeHovered;
+          const moved = hasMoved;
+
+          cleanupDrag();
+
+          if (moved) {
+            window._dragJustFinished = Date.now() + 420;
+            if (dropZone && chip._onDropValidCallback) {
               clearSelectedChip();
-              chip._onDropValidCallback(chip, singleSlots[0]);
+              chip._onDropValidCallback(chip, dropZone);
+            } else {
+              playBeep('pop');
+            }
+          } else {
+            // Modo Tap-to-Select / Tap-to-Place para pizarrones táctiles Linux
+            if (selectedChipEl === chip) {
+              clearSelectedChip();
+            } else {
+              clearSelectedChip();
+              selectedChipEl = chip;
+              chip.classList.add('selected-chip');
+              playBeep('pop');
+              // Si en el módulo hay una única ranura evidente (.drop-slot única), permitir colocación directa o esperar toque en ranura
+              const singleSlots = document.querySelectorAll('#arena-container .drop-slot');
+              if (singleSlots.length === 1 && chip._onDropValidCallback) {
+                clearSelectedChip();
+                chip._onDropValidCallback(chip, singleSlots[0]);
+              }
             }
           }
-        }
-      });
+        };
 
-      chip.addEventListener('pointercancel', () => {
-        cleanupDrag();
+        window.__activeDrag = { element: chip, pointerId: activePointerId, cancel: cleanupDrag };
+        window.addEventListener('pointermove', onMove, { passive: false });
+        window.addEventListener('pointerup', onUp, { passive: false });
+        window.addEventListener('pointercancel', onCancel, { passive: false });
+        chip.addEventListener('lostpointercapture', onCancel);
       });
     }
 
