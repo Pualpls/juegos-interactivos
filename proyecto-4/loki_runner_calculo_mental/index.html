@@ -4637,9 +4637,6 @@
         localStorage.setItem('loki_runner_leaderboard', JSON.stringify(list));
       } catch(e) {}
 
-      // Enviar a Google Sheet si hay Web App configurada
-      sendRecordToGoogleSheet(recordItem);
-
       // Deshabilitar botón en modal-victory para confirmar registro
       const btnOpenRecord = document.getElementById('btn-open-record');
       if (btnOpenRecord) {
@@ -4651,7 +4648,11 @@
 
       closeRecordScoreModal();
       openLeaderboardModal('level', recordItem.id, true);
-      setTimeout(() => { syncLeaderboardFromCloud(recordItem.id, false); }, 1400);
+
+      // Enviar a Google Sheet y sincronizar apenas concluya el registro en la nube
+      sendRecordToGoogleSheet(recordItem).then(() => {
+        setTimeout(() => { syncLeaderboardFromCloud(recordItem.id, true); }, 450);
+      });
     }
 
     const DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxGg2LGGbcWXxu6qBEsgbbhQzATamlCAeYeFeqYHrVdokm_uYVZ_BxOP8zWMaKhhpbr/exec";
@@ -4666,28 +4667,34 @@
       return DEFAULT_GOOGLE_SHEET_URL;
     }
 
-    function sendRecordToGoogleSheet(record) {
+    async function sendRecordToGoogleSheet(record) {
       const sheetUrl = getLeaderboardSheetUrl();
-      if (!sheetUrl) return;
+      if (!sheetUrl) return false;
 
       try {
         // Enviar vía POST con text/plain + keepalive para evitar bloqueo CORS preflight y asegurar entrega
-        fetch(sheetUrl, {
+        await fetch(sheetUrl, {
           method: 'POST',
           mode: 'no-cors',
           keepalive: true,
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(record)
-        }).catch(() => {
-          // Fallback con fetch GET o imagen beacon
+        });
+        return true;
+      } catch(e) {
+        // Fallback con fetch GET o imagen beacon
+        try {
+          const p = new URLSearchParams(record).toString();
+          await fetch(`${sheetUrl}?${p}`, { mode: 'no-cors', keepalive: true });
+          return true;
+        } catch(err) {
           try {
             const p = new URLSearchParams(record).toString();
-            fetch(`${sheetUrl}?${p}`, { mode: 'no-cors', keepalive: true }).catch(() => {
-              new Image().src = `${sheetUrl}?${p}`;
-            });
-          } catch(err) {}
-        });
-      } catch(e) {}
+            new Image().src = `${sheetUrl}?${p}`;
+          } catch(_) {}
+          return false;
+        }
+      }
     }
 
     function promptGoogleSheetUrl() {
@@ -4897,6 +4904,7 @@
         } catch(e) {}
 
         setLeaderboardSyncStatus(`☁️ Nube al día (${cloudCount} récords)`, 'ok');
+        lastCloudSyncAt = Date.now();
         const modal = document.getElementById('modal-leaderboard');
         if (modal && modal.classList.contains('active')) {
           renderLeaderboard(currentLeaderboardTab, resolvedHighlightId);
@@ -4907,6 +4915,9 @@
         isSyncingCloudLeaderboard = false;
       }
     }
+
+    let lastCloudSyncAt = 0;
+    let leaderboardPollTimer = null;
 
     function openLeaderboardModal(tab = 'level', highlightId = null, skipImmediateCloud = false) {
       currentLeaderboardTab = tab;
@@ -4919,9 +4930,20 @@
       } else {
         setLeaderboardSyncStatus('☁️ Enviando récord a la nube...', 'syncing');
       }
+      if (leaderboardPollTimer) clearInterval(leaderboardPollTimer);
+      leaderboardPollTimer = setInterval(() => {
+        const m = document.getElementById('modal-leaderboard');
+        if (m && m.classList.contains('active') && !document.hidden) {
+          syncLeaderboardFromCloud(null, false);
+        }
+      }, 15000);
     }
 
     function closeLeaderboardModal() {
+      if (leaderboardPollTimer) {
+        clearInterval(leaderboardPollTimer);
+        leaderboardPollTimer = null;
+      }
       const modal = document.getElementById('modal-leaderboard');
       if (modal) modal.classList.remove('active');
     }
@@ -4929,6 +4951,9 @@
     function switchLeaderboardTab(tab) {
       currentLeaderboardTab = tab;
       renderLeaderboard(tab);
+      if (Date.now() - lastCloudSyncAt > 4000) {
+        syncLeaderboardFromCloud(null, false);
+      }
     }
 
     function renderLeaderboard(tab = 'level', highlightId = null) {
@@ -5721,6 +5746,18 @@
           if (menuLbl) menuLbl.textContent = '📷 Iniciar Cámara Guardada';
         }
       } catch(e) {}
+
+      // Precargar clasificación compartida en segundo plano para mantener cualquier dispositivo al día
+      setTimeout(() => {
+        if (navigator.onLine !== false) syncLeaderboardFromCloud(null, false);
+      }, 900);
+
+      window.addEventListener('focus', () => {
+        const modal = document.getElementById('modal-leaderboard');
+        if (modal && modal.classList.contains('active') && Date.now() - lastCloudSyncAt > 4000) {
+          syncLeaderboardFromCloud(null, false);
+        }
+      });
     });
 
   </script>
