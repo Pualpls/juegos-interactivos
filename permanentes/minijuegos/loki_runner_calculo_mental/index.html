@@ -3998,6 +3998,7 @@
       if (lblL) lblL.textContent = valL;
       if (lblC) lblC.textContent = valC;
       if (lblR) lblR.textContent = valR;
+      releaseAllTurboHolds(true);
       updateHudLaneSelection();
     }
 
@@ -4028,8 +4029,17 @@
     let activeHoldTarget = null;
     let holdTurboTimer = null;
 
+    function hasActiveTargetWave() {
+      return roadWaves.some(w => !w.evaluated && w.z > 40);
+    }
+
     function isTurboActive() {
-      return !!(gameState.gameActive && !gameState.gamePaused && ((gameState.turboPointerHeld && activeHoldPointerId !== null) || gameState.turboKeyHeld));
+      return !!(
+        gameState.gameActive &&
+        !gameState.gamePaused &&
+        hasActiveTargetWave() &&
+        ((gameState.turboPointerHeld && activeHoldPointerId !== null) || gameState.turboKeyHeld)
+      );
     }
 
     function updateTurboUi() {
@@ -4061,9 +4071,10 @@
     function beginLaneHold(pointerId, lane, captureEl) {
       if (!gameState.gameActive || gameState.gamePaused) return;
       cleanupActiveDrag();
+      setPlayerLane(lane);
+      if (!hasActiveTargetWave()) return;
       activeHoldPointerId = pointerId;
       activeHoldTarget = captureEl || null;
-      setPlayerLane(lane);
 
       if (captureEl && typeof captureEl.setPointerCapture === 'function') {
         try { captureEl.setPointerCapture(pointerId); } catch (err) {}
@@ -4072,7 +4083,7 @@
       if (!gameState.turboPointerHeld) {
         holdTurboTimer = setTimeout(() => {
           holdTurboTimer = null;
-          if (activeHoldPointerId === pointerId && gameState.gameActive && !gameState.gamePaused) {
+          if (activeHoldPointerId === pointerId && gameState.gameActive && !gameState.gamePaused && hasActiveTargetWave()) {
             const wasActive = isTurboActive();
             gameState.turboPointerHeld = true;
             if (!wasActive) soundTurboBoost();
@@ -4147,10 +4158,10 @@
         movePlayerRight();
       } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
         e.preventDefault();
-        if (!gameState.gamePaused) {
+        if (!gameState.gamePaused && !e.repeat && hasActiveTargetWave()) {
           const wasActive = isTurboActive();
           gameState.turboKeyHeld = true;
-          if (!wasActive && !e.repeat) soundTurboBoost();
+          if (!wasActive) soundTurboBoost();
           updateTurboUi();
         }
       } else if (e.key === 'p' || e.key === 'P' || e.key === ' ') {
@@ -4347,6 +4358,7 @@
 
           if (collidedHurdle) {
             wave.evaluated = true;
+            releaseAllTurboHolds(true);
             // Despejar inmediatamente TODAS las vallas de esta oleada para dejar el camino despejado
             wave.hurdles.forEach(h => h.hit = true);
 
