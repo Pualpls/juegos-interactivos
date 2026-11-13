@@ -4667,10 +4667,13 @@
       return DEFAULT_GOOGLE_SHEET_URL;
     }
 
+    let pendingCloudPosts = 0;
+
     async function sendRecordToGoogleSheet(record) {
       const sheetUrl = getLeaderboardSheetUrl();
       if (!sheetUrl) return false;
 
+      pendingCloudPosts++;
       try {
         // Enviar vía POST con text/plain + keepalive para evitar bloqueo CORS preflight y asegurar entrega
         await fetch(sheetUrl, {
@@ -4694,6 +4697,8 @@
           } catch(_) {}
           return false;
         }
+      } finally {
+        pendingCloudPosts = Math.max(0, pendingCloudPosts - 1);
       }
     }
 
@@ -4868,7 +4873,7 @@
     }
 
     async function syncLeaderboardFromCloud(highlightId = null, forceManual = false) {
-      if (isSyncingCloudLeaderboard && !forceManual) return;
+      if (!forceManual && (isSyncingCloudLeaderboard || pendingCloudPosts > 0)) return;
       const sheetUrl = getLeaderboardSheetUrl();
       if (!sheetUrl) return;
 
@@ -5749,7 +5754,9 @@
 
       // Precargar clasificación compartida en segundo plano para mantener cualquier dispositivo al día
       setTimeout(() => {
-        if (navigator.onLine !== false) syncLeaderboardFromCloud(null, false);
+        if (navigator.onLine !== false && pendingCloudPosts === 0 && !isSyncingCloudLeaderboard) {
+          syncLeaderboardFromCloud(null, false);
+        }
       }, 900);
 
       window.addEventListener('focus', () => {
