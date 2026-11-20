@@ -1844,7 +1844,7 @@
       { type: 'oracion', wrong: 'jarol viajó a colima en AuTobús.', correct: 'Jarol viajó a Colima en autobús.', hint: 'Oración: Mayúscula en "Jarol" y en el lugar "Colima"; "autobús" va en minúsculas.' }
     ];
 
-    // MÓDULO 12: LETRAS ESPEJO Y DETECTIVE ORTOGRÁFICO (SIN PALABRA DEBAJO DE IMAGEN + BANCO MASIVO DE 52 PALABRAS)
+    // MÓDULO 12: LETRAS ESPEJO Y DETECTIVE ORTOGRÁFICO (SIN PALABRA DEBAJO DE IMAGEN + BANCO MASIVO DE 96 PALABRAS)
     const DATA_M12 = [
       // b vs d (Con sticker propio a color)
       { word: 'bota', masked: '_ota', target: 'b', options: ['b', 'd'], group: 'bd', img: 'ref_bota.webp', hint: 'Calzado para la lluvia: la "b" tiene la pancita a la derecha.' },
@@ -1878,14 +1878,14 @@
       { word: 'pequeño', masked: 'pe_ueño', target: 'q', options: ['p', 'q'], group: 'pq', img: null, hint: 'Lo contrario de grande: lleva "qu" en la segunda sílaba.' },
       { word: 'equipo', masked: 'e_uipo', target: 'q', options: ['p', 'q'], group: 'pq', img: null, hint: 'Grupo de compañeros que trabajan o juegan juntos: lleva "qui".' },
 
-      // Detective Ortográfico (b/v, c/s/z, h, m/n)
-      { word: 'helado', masked: '_elado', target: 'h', options: ['h', 'e'], group: 'orto', img: 'ref_helado.webp', hint: 'Postre frío en cono: inicia con "h" muda.' },
+      // Detective Ortográfico (b/v, c/s/z, h, m/n, ll/y, g/j)
+      { word: 'helado', masked: '_lado', target: 'he', options: ['he', 'e'], group: 'orto', img: 'ref_helado.webp', hint: 'Postre frío en cono: inicia con "h" muda (he-la-do).' },
       { word: 'manzana', masked: 'man_ana', target: 'z', options: ['s', 'z'], group: 'orto', img: 'ref_manzana.webp', hint: 'Fruta roja brillante: se escribe con "z".' },
-      { word: 'huevo', masked: '_uevo', target: 'h', options: ['h', 'g'], group: 'orto', img: 'ref_huevo.webp', hint: 'Todas las palabras que empiezan con "hue-" llevan "h".' },
+      { word: 'huevo', masked: '_vo', target: 'hue', options: ['hue', 'ue'], group: 'orto', img: 'ref_huevo.webp', hint: 'Todas las palabras que empiezan con "hue-" llevan "h".' },
       { word: 'vaca', masked: '_aca', target: 'v', options: ['b', 'v'], group: 'orto', img: 'ref_vaca.webp', hint: 'Animal de la granja que nos da leche: se escribe con "v".' },
       { word: 'abuela', masked: 'a_uela', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_abuela.webp', hint: 'Mamá de tu mamá o papá: se escribe con "b".' },
       { word: 'cielo', masked: '_ielo', target: 'c', options: ['c', 's'], group: 'orto', img: 'ref_cielo.webp', hint: 'Donde están el sol y las nubes: inicia con "c".' },
-      { word: 'hormiga', masked: '_ormiga', target: 'h', options: ['h', 'o'], group: 'orto', img: 'ref_hormiga.webp', hint: 'Insecto trabajador del hormiguero: lleva "h" inicial.' },
+      { word: 'hormiga', masked: '_rmiga', target: 'ho', options: ['ho', 'o'], group: 'orto', img: 'ref_hormiga.webp', hint: 'Insecto trabajador del hormiguero: lleva "h" inicial (hor-mi-ga).' },
       { word: 'lluvia', masked: 'llu_ia', target: 'v', options: ['b', 'v'], group: 'orto', img: 'ref_lluvia.webp', hint: 'Agua que cae de las nubes: después de "llu-" va "v".' },
       { word: 'zapato', masked: '_apato', target: 'z', options: ['s', 'z'], group: 'orto', img: 'ref_zapato.webp', hint: 'Calzado con agujetas: inicia con "z".' },
       { word: 'bicicleta', masked: '_icicleta', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_bicicleta.webp', hint: 'El prefijo "bi-" (dos ruedas) siempre se escribe con "b".' },
@@ -1895,14 +1895,58 @@
       { word: 'trompo', masked: 'tro_po', target: 'm', options: ['m', 'n'], group: 'orto', img: 'ref_trompo.webp', hint: 'Regla de oro: antes de "p" siempre se escribe "m".' },
       { word: 'cebra', masked: '_ebra', target: 'c', options: ['c', 's'], group: 'orto', img: 'ref_cebra.webp', hint: 'Animal africano con rayas: inicia con "c".' },
       { word: 'escoba', masked: 'esco_a', target: 'b', options: ['b', 'v'], group: 'orto', img: 'ref_escoba.webp', hint: 'Utensilio para barrer el piso: se escribe con "b".' },
-      { word: 'almohada', masked: 'almo_ada', target: 'h', options: ['h', 'g'], group: 'orto', img: 'ref_almohada.webp', hint: 'Lleva una "h" intermedia muda: almo-ha-da.' },
+      { word: 'almohada', masked: 'almo_da', target: 'ha', options: ['ha', 'a'], group: 'orto', img: 'ref_almohada.webp', hint: 'Lleva una "h" intermedia muda: almo-ha-da.' },
       { word: 'campana', masked: 'ca_pana', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Suena en la escuela o iglesia: antes de "p" siempre va "m".' },
-      { word: 'también', masked: 'ta_bién', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Antes de "b" siempre escribimos "m".' },
+      { word: 'también', masked: 'ta_bién', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Antes de "b" siempre escribimos "m" (nunca "tanbien").' },
       { word: 'tiempo', masked: 'tie_po', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Lo medimos con el reloj: antes de "p" siempre va "m".' },
-      { word: 'septiembre', masked: 'septie_bre', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Mes de la patria: antes de "br" se escribe "m".' },
-      { word: 'hacer', masked: '_acer', target: 'h', options: ['h', 'a'], group: 'orto', img: null, hint: 'Verbo muy importante (yo hago, tú haces): lleva "h" inicial.' },
-      { word: 'hablar', masked: '_ablar', target: 'h', options: ['h', 'a'], group: 'orto', img: null, hint: 'Conversar con palabras: inicia con "h" y lleva "bl".' },
-      { word: 'vivir', masked: '_ivir', target: 'v', options: ['b', 'v'], group: 'orto', img: null, hint: 'Tener vida o habitar en un lugar: sus dos sílabas llevan "v".' }
+      { word: 'septiembre', masked: 'septie_bre', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Mes de la patria: antes de "br" se escribe "m" (nunca "septienbre").' },
+      { word: 'hacer', masked: '_cer', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Verbo muy importante (yo hago, tú haces): lleva "h" inicial (no se escribe "aser").' },
+      { word: 'hablar', masked: '_blar', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Conversar con palabras: inicia con "h" y lleva "bl" (ha-blar).' },
+      { word: 'vivir', masked: '_ivir', target: 'v', options: ['b', 'v'], group: 'orto', img: null, hint: 'Tener vida o habitar en un lugar: sus dos sílabas llevan "v".' },
+      { word: 'hace', masked: '_ce', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Del verbo hacer (mi mamá hace sopa): inicia con "h" muda (nunca "ase").' },
+      { word: 'hace', masked: 'ha_e', target: 'c', options: ['c', 's'], group: 'orto', img: null, hint: 'Del verbo hacer (él hace la tarea): lleva "h" inicial y "c" (nunca "ase").' },
+      { word: 'hacía', masked: '_cía', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Del verbo hacer en pasado (ayer hacía frío): lleva "h" y "c" (no "asia").' },
+      { word: 'hizo', masked: '_zo', target: 'hi', options: ['hi', 'i'], group: 'orto', img: null, hint: 'Pasado del verbo hacer (él hizo un dibujo): inicia con "h" y lleva "z" (no "iso").' },
+      { word: 'hizo', masked: 'hi_o', target: 'z', options: ['z', 's'], group: 'orto', img: null, hint: 'Pasado del verbo hacer (ella hizo la tarea): se escribe con "z" (hi-zo, no "iso").' },
+      { word: 'hicieron', masked: '_cieron', target: 'hi', options: ['hi', 'i'], group: 'orto', img: null, hint: 'Del verbo hacer (ellos hicieron una piñata): inicia con "h" y lleva "c" (no "isieron").' },
+      { word: 'hagan', masked: '_gan', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Del verbo hacer (que hagan su trabajo): inicia con "h" muda (nunca "agan").' },
+      { word: 'había', masked: '_bía', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Del verbo haber (había una vez): inicia con "h" muda y lleva "b" (no "abia").' },
+      { word: 'había', masked: 'ha_ía', target: 'b', options: ['b', 'v'], group: 'orto', img: null, hint: 'Del verbo haber (había muchos libros): se escribe con "b", nunca con "v".' },
+      { word: 'haya', masked: '_ya', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Del verbo haber (espero que haya paz): inicia con "h" y lleva "y" (nunca "aiga").' },
+      { word: 'ahora', masked: 'a_ra', target: 'ho', options: ['ho', 'o'], group: 'orto', img: null, hint: 'En este momento: lleva una "h" muda intermedia (a-ho-ra, no "aora").' },
+      { word: 'hasta', masked: '_sta', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Indica límite (hasta mañana / hasta la meta): siempre inicia con "h" (no "asta").' },
+      { word: 'hacia', masked: '_cia', target: 'ha', options: ['ha', 'a'], group: 'orto', img: null, hint: 'Indica dirección (caminamos hacia el patio): lleva "h" inicial y "c" (no "asia").' },
+      { word: 'hermano', masked: '_rmano', target: 'he', options: ['he', 'e'], group: 'orto', img: null, hint: 'Familiar que crece contigo: siempre inicia con "h" muda (her-ma-no).' },
+      { word: 'historia', masked: '_storia', target: 'hi', options: ['hi', 'i'], group: 'orto', img: null, hint: 'Relato o estudio del pasado: inicia con "h" muda (his-to-ria, no "istoria").' },
+      { word: 'huella', masked: '_lla', target: 'hue', options: ['hue', 'ue'], group: 'orto', img: null, hint: 'Marca que deja el pie al caminar: inicia con "hue-" y lleva "ll" (no "ueya").' },
+      { word: 'hielo', masked: '_lo', target: 'hie', options: ['hie', 'ie'], group: 'orto', img: null, hint: 'Agua congelada: todas las palabras que empiezan con "hie-" llevan "h".' },
+      { word: 'hoja', masked: '_ja', target: 'ho', options: ['ho', 'o'], group: 'orto', img: null, hint: 'Parte verde del árbol o página del cuaderno: inicia con "h" muda (ho-ja).' },
+      { word: 'honores', masked: '_nores', target: 'ho', options: ['ho', 'o'], group: 'orto', img: null, hint: 'Respeto a los Símbolos Patrios (honores a la Bandera): inicia con "h" (no "onores").' },
+      { word: 'veces', masked: 've_es', target: 'c', options: ['c', 's'], group: 'orto', img: null, hint: 'Plural de "vez" (dos o tres veces): al pasar a plural la "z" cambia a "c" (no "veses").' },
+      { word: 'dice', masked: 'di_e', target: 'c', options: ['c', 's'], group: 'orto', img: null, hint: 'Del verbo decir (el cuento dice...): se escribe con "c", nunca "dise".' },
+      { word: 'entonces', masked: 'enton_es', target: 'c', options: ['c', 's'], group: 'orto', img: null, hint: 'Conector de consecuencia: su última sílaba se escribe con "c" (en-ton-ces).' },
+      { word: 'empezar', masked: 'empe_ar', target: 'z', options: ['z', 's'], group: 'orto', img: null, hint: 'Dar inicio a una actividad: lleva "m" antes de "p" y se escribe con "z".' },
+      { word: 'feliz', masked: 'feli_', target: 'z', options: ['z', 's'], group: 'orto', img: null, hint: 'Que siente alegría: termina con "z" (por eso en plural es "felices").' },
+      { word: 'lápiz', masked: 'lápi_', target: 'z', options: ['z', 's'], group: 'orto', img: null, hint: 'Útil escolar para escribir: lleva tilde en "lá" y termina con "z" (no "lapis").' },
+      { word: 'azul', masked: 'a_ul', target: 'z', options: ['z', 's'], group: 'orto', img: null, hint: 'El color del cielo despejado: se escribe con "z" (a-zul).' },
+      { word: 'necesito', masked: 'ne_esito', target: 'c', options: ['c', 's'], group: 'orto', img: null, hint: 'Del verbo necesitar: primero lleva "c" y después "s" (ne-ce-si-to).' },
+      { word: 'personas', masked: 'per_onas', target: 's', options: ['s', 'z'], group: 'orto', img: null, hint: 'Seres humanos o gente: se escribe con "s" (per-so-nas, nunca "perzonas").' },
+      { word: 'iba', masked: 'i_a', target: 'b', options: ['b', 'v'], group: 'orto', img: null, hint: 'Del verbo ir en pasado (yo iba, él iba): se escribe con "b" y sin h (nunca "iva").' },
+      { word: 'vamos', masked: '_amos', target: 'v', options: ['b', 'v'], group: 'orto', img: null, hint: 'Del verbo ir en presente (voy, vas, va, vamos, van): siempre inicia con "v".' },
+      { word: 'vayan', masked: 'va_an', target: 'y', options: ['y', 'll'], group: 'orto', img: null, hint: 'Del verbo ir (cuando vayan al patio): inicia con "v" y lleva "y" (nunca "vallan").' },
+      { word: 'convivir', masked: 'con_ivir', target: 'v', options: ['b', 'v'], group: 'orto', img: null, hint: 'Vivir en armonía con los demás: después de "n" siempre va "v" (nunca "conbibir").' },
+      { word: 'trabajos', masked: 'tra_ajos', target: 'b', options: ['b', 'v'], group: 'orto', img: null, hint: 'Actividades o tareas escolares: siempre se escribe con "b" (tra-ba-jos).' },
+      { word: 'escribir', masked: 'escri_ir', target: 'b', options: ['b', 'v'], group: 'orto', img: null, hint: 'Trazar palabras en el cuaderno: los verbos en "-bir" (salvo hervir, servir y vivir) van con "b".' },
+      { word: 'siempre', masked: 'sie_pre', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'En todo momento: antes de "p" siempre se escribe "m" (siem-pre).' },
+      { word: 'compartir', masked: 'co_partir', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Prestar y repartir con los amigos: antes de "p" siempre va "m" (com-par-tir).' },
+      { word: 'compañero', masked: 'co_pañero', target: 'm', options: ['m', 'n'], group: 'orto', img: null, hint: 'Amigo del salón de clases: antes de "p" siempre se escribe "m" (com-pa-ñe-ro).' },
+      { word: 'calle', masked: 'ca_e', target: 'll', options: ['ll', 'y'], group: 'orto', img: null, hint: 'Camino o vialidad por donde pasamos: se escribe con doble l (ca-lle, no "caye").' },
+      { word: 'ayudar', masked: 'a_udar', target: 'y', options: ['y', 'll'], group: 'orto', img: null, hint: 'Colaborar y apoyar a alguien: se escribe con "y" (a-yu-dar, no "alludar").' },
+      { word: 'gente', masked: '_ente', target: 'g', options: ['g', 'j'], group: 'orto', img: null, hint: 'Grupo de personas: inicia con "g" (gen-te, nunca "jente").' },
+      { word: 'recoger', masked: 'reco_er', target: 'g', options: ['g', 'j'], group: 'orto', img: null, hint: 'Levantar y ordenar objetos: los verbos terminados en "-ger" van con "g" (no "recojer").' },
+      { word: 'juguete', masked: 'ju_te', target: 'gue', options: ['gue', 'ge'], group: 'orto', img: null, hint: 'Objeto para jugar: lleva una "u" muda en "-gue-" para que la g suene suave (ju-gue-te).' },
+      { word: 'guitarra', masked: '_tarra', target: 'gui', options: ['gui', 'gi'], group: 'orto', img: null, hint: 'Instrumento musical de cuerdas: inicia con "gui-" (con u muda) y lleva "rr".' },
+      { word: 'pelear', masked: 'pe_ar', target: 'le', options: ['le', 'li'], group: 'orto', img: null, hint: 'En la escuela dialogamos para no pelear: se escribe con "e" (pe-le-ar, nunca "peliar").' }
     ];
 
     /* =========================================================================
@@ -3144,7 +3188,7 @@
           <button class="btn ${m12Filter === 'all' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('all')">🌟 Todas (${DATA_M12.length})</button>
           <button class="btn ${m12Filter === 'bd' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('bd')">🪞 b vs d</button>
           <button class="btn ${m12Filter === 'pq' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('pq')">🔍 p vs q</button>
-          <button class="btn ${m12Filter === 'orto' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('orto')">📝 b/v, c/s/z, h, m/n</button>
+          <button class="btn ${m12Filter === 'orto' ? 'btn-primary' : 'btn-secondary'}" style="padding:0.25rem 0.65rem; min-height:34px; font-size:0.84rem;" onclick="setM12Filter('orto')">📝 Ortografía Frecuente (b/v, c/s/z, h, m/n, ll/y, g/j)</button>
         </div>
 
         <div style="display: flex; align-items: center; justify-content: center; gap: 1.1rem; flex-wrap: wrap;">
