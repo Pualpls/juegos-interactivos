@@ -596,6 +596,34 @@
       flex-wrap: nowrap;
     }
 
+    .fam-pair {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.16rem;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0 5px;
+      margin-left: 0.15rem;
+      text-transform: none;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+    .fam-upper {
+      color: #dc2626;
+      font-weight: 900;
+      font-size: 1.08em;
+    }
+    .fam-sep {
+      color: #94a3b8;
+      font-weight: 800;
+    }
+    .fam-lower {
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 1.08em;
+    }
+
     .family-ref-badge {
       display: inline-flex;
       align-items: center;
@@ -1433,15 +1461,23 @@
 
     function getPhoneticReading(syl) {
       if (!syl) return '';
-      // Normalizar quitando cualquier tilde para evitar que el TTS deletree "con acento agudo"
-      const clean = syl.toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g, "");
-      // Mapeo fonético limpio sin ninguna tilde (so->so, do->do, to->to)
-      const map = {
-        ha: 'a', he: 'e', hi: 'i', ho: 'o', hu: 'u',
-        lla: 'ya', lle: 'ye', lli: 'yi', llo: 'yo', llu: 'yu',
-        za: 'sa', ze: 'se', zi: 'si', zo: 'so', zu: 'su'
-      };
-      return map[clean] || clean;
+      // Normalizar quitando cualquier tilde (conservando la ñ) para evitar que el TTS deletree acentos o hable inglés
+      let clean = syl.toLowerCase().trim()
+        .replace(/ñ/g, '__ENIE__')
+        .normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .replace(/__ENIE__/g, 'ñ');
+      clean = clean
+        .replace(/^ll/, 'y')
+        .replace(/^rr/, 'r')
+        .replace(/^h/, '')
+        .replace(/^z/, 's')
+        .replace(/^c([ei])/, 's$1')
+        .replace(/^g([ei])/, 'j$1')
+        .replace(/^gü([ei])/, 'gw$1')
+        .replace(/^k([aou])/, 'c$1')
+        .replace(/^k([ei])/, 'qu$1')
+        .replace(/^k/, 'c');
+      return clean;
     }
 
     function speakSyllable(syl) {
@@ -1652,6 +1688,19 @@
     /* =========================================================================
        RENDERIZADO DEL BANCO Y CASILLAS PARA NIVELES 1 AL 7 (SÍLABAS)
        ========================================================================= */
+    function formatFamilyLabelHtml(labelStr) {
+      return String(labelStr || '')
+        .replace(/Vocales A, E, I, O, U/i, 'Vocales <span class="fam-pair"><span class="fam-upper">A</span><span class="fam-sep">·</span><span class="fam-lower">a</span></span> <span class="fam-pair"><span class="fam-upper">E</span><span class="fam-sep">·</span><span class="fam-lower">e</span></span> <span class="fam-pair"><span class="fam-upper">I</span><span class="fam-sep">·</span><span class="fam-lower">i</span></span> <span class="fam-pair"><span class="fam-upper">O</span><span class="fam-sep">·</span><span class="fam-lower">o</span></span> <span class="fam-pair"><span class="fam-upper">U</span><span class="fam-sep">·</span><span class="fam-lower">u</span></span>')
+        .replace(/(Familia de la |Inversas con |Trabadas )([A-ZÁÉÍÓÚÜÑ]{1,2})(\b|\s)/g, (m, pref, letStr, trail) => {
+          return `${pref}<span class="fam-pair"><span class="fam-upper">${letStr}</span><span class="fam-sep">·</span><span class="fam-lower">${letStr.toLowerCase()}</span></span>${trail}`;
+        })
+        .replace(/(Diptongos con )([A-Z\/\s]+?)(\s*\()/g, (m, pref, group, paren) => {
+          const colored = group.replace(/\b([A-Z]{2})\b/g, a => `<span class="fam-pair"><span class="fam-upper">${a}</span><span class="fam-sep">·</span><span class="fam-lower">${a.toLowerCase()}</span></span>`);
+          return `${pref}${colored}${paren}`;
+        })
+        .replace(/Sílabas con R\/L\/N/i, 'Sílabas con <span class="fam-pair"><span class="fam-upper">R</span><span class="fam-sep">·</span><span class="fam-lower">r</span></span> / <span class="fam-pair"><span class="fam-upper">L</span><span class="fam-sep">·</span><span class="fam-lower">l</span></span> / <span class="fam-pair"><span class="fam-upper">N</span><span class="fam-sep">·</span><span class="fam-lower">n</span></span>');
+    }
+
     function renderBankForWord(wordObj) {
       const container = document.getElementById('familiesContainer');
       const famKeys = wordObj.families || ['m', 's', 'p'];
@@ -1665,7 +1714,7 @@
           : '';
         return `
           <div class="family-group">
-            <div class="family-label" style="color: ${fam.text};">${refHtml}<span>${fam.label}</span></div>
+            <div class="family-label" style="color: ${fam.text};">${refHtml}<span>${formatFamilyLabelHtml(fam.label)}</span></div>
             <div class="cards-grid-row">
               ${fam.syllables.map(syl => `
                 <button class="syllable-card" data-syl="${syl}" data-fam="${fKey}"
