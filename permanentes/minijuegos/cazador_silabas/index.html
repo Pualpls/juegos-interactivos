@@ -469,9 +469,19 @@
       transition: all 0.2s ease;
     }
 
-    .btn-continuar:hover {
+    .btn-continuar:hover:not(:disabled) {
       transform: translateY(-2px) scale(1.04);
       background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    }
+
+    .btn-continuar:disabled {
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+      border-color: #64748b;
+      color: #e2e8f0;
+      cursor: wait;
+      opacity: 0.88;
+      box-shadow: none;
+      animation: none;
     }
 
     /* PISTA / FEEDBACK TEXT */
@@ -822,6 +832,9 @@
     let currentSlotIndex = 0;
     let score = 0;
     let isCompleted = false;
+    let isReadingSentence = false;
+    let pendingIntroSpeechTimer = null;
+    let pendingCompleteSpeechTimer = null;
 
     function getFilteredBank(cat) {
       if (cat === 'all') return [...WORD_BANK];
@@ -830,6 +843,10 @@
     }
 
     function setCategory(cat) {
+      stopTtsAudio();
+      clearTimeout(pendingIntroSpeechTimer);
+      clearTimeout(pendingCompleteSpeechTimer);
+      isReadingSentence = false;
       currentCategory = cat;
       document.querySelectorAll('#categoryBar .cat-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.cat === cat);
@@ -880,6 +897,8 @@
        ========================================================================= */
     let currentTtsAudio = null;
     let currentTtsAbort = false;
+    let ttsSessionId = 0;
+    let activeSafetyTimer = null;
 
     function splitTextForTts(text, maxLen = 160) {
       if (text.length <= maxLen) return [text];
@@ -914,7 +933,12 @@
     }
 
     function stopTtsAudio() {
+      ttsSessionId++;
       currentTtsAbort = true;
+      if (activeSafetyTimer) {
+        clearTimeout(activeSafetyTimer);
+        activeSafetyTimer = null;
+      }
       if (currentTtsAudio) {
         try {
           currentTtsAudio.pause();
@@ -929,20 +953,45 @@
       }
     }
 
-    function speakText(text, pitch = 1.0, rate = 0.95) {
-      if (!text) return;
+    function speakText(text, pitch = 1.0, rate = 0.95, onEnd = null) {
       stopTtsAudio();
+      if (!text) {
+        if (typeof onEnd === 'function') onEnd();
+        return;
+      }
 
       let clean = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (!clean) return;
+      if (!clean) {
+        if (typeof onEnd === 'function') onEnd();
+        return;
+      }
+
+      const mySession = ttsSessionId;
+      let endFired = false;
+      const fireEnd = () => {
+        if (endFired || mySession !== ttsSessionId) return;
+        endFired = true;
+        if (activeSafetyTimer) {
+          clearTimeout(activeSafetyTimer);
+          activeSafetyTimer = null;
+        }
+        if (typeof onEnd === 'function') onEnd();
+      };
+
+      if (typeof onEnd === 'function') {
+        const estimatedMs = Math.max(4000, Math.min(10000, clean.length * 100 + 2000));
+        activeSafetyTimer = setTimeout(fireEnd, estimatedMs);
+      }
 
       const chunks = splitTextForTts(clean, 160);
       currentTtsAbort = false;
 
       let idx = 0;
       function playNextChunk() {
-        if (currentTtsAbort || idx >= chunks.length) {
+        if (currentTtsAbort || mySession !== ttsSessionId) return;
+        if (idx >= chunks.length) {
           currentTtsAudio = null;
+          fireEnd();
           return;
         }
         const chunk = chunks[idx++];
@@ -956,7 +1005,7 @@
 
           let fallbackTriggered = false;
           const triggerNativeFallback = () => {
-            if (fallbackTriggered || currentTtsAbort) return;
+            if (fallbackTriggered || currentTtsAbort || mySession !== ttsSessionId) return;
             fallbackTriggered = true;
             if (window.speechSynthesis) {
               try {
@@ -964,14 +1013,20 @@
                 const utter = new SpeechSynthesisUtterance(remaining);
                 utter.lang = 'es-MX';
                 utter.rate = rate;
+                utter.onend = () => fireEnd();
+                utter.onerror = () => fireEnd();
                 window.speechSynthesis.speak(utter);
-              } catch(e) {}
+              } catch(e) {
+                fireEnd();
+              }
+            } else {
+              fireEnd();
             }
           };
 
           audio.onerror = () => triggerNativeFallback();
           const timeoutId = setTimeout(() => {
-            if (audio.readyState === 0 && !currentTtsAbort) {
+            if (audio.readyState === 0 && !currentTtsAbort && mySession === ttsSessionId) {
               triggerNativeFallback();
             }
           }, 2500);
@@ -989,8 +1044,14 @@
               const utter = new SpeechSynthesisUtterance(clean);
               utter.lang = 'es-MX';
               utter.rate = rate;
+              utter.onend = () => fireEnd();
+              utter.onerror = () => fireEnd();
               window.speechSynthesis.speak(utter);
-            } catch(e) {}
+            } catch(e) {
+              fireEnd();
+            }
+          } else {
+            fireEnd();
           }
         }
       }
@@ -998,17 +1059,28 @@
       playNextChunk();
     }
 
+    function unlockContinueButton() {
+      isReadingSentence = false;
+      const btn = document.getElementById('btnContinuar');
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Continuar</span><span style="font-size: 1.25rem;">➔</span>';
+      }
+    }
+
     function speakCurrentWord() {
+      if (isReadingSentence) unlockContinueButton();
       if (activeWordBank.length > 0 && activeWordBank[currentIndex]) {
         speakText(activeWordBank[currentIndex].word);
       }
     }
 
     function speakCurrentSentence() {
+      if (isReadingSentence) unlockContinueButton();
       if (activeWordBank.length > 0 && activeWordBank[currentIndex]) {
         const item = activeWordBank[currentIndex];
         const fullSent = item.context ? item.context.replace('___', item.word) : item.word;
-        speakText(`${item.word}. ${fullSent}`);
+        speakText(fullSent);
       }
     }
 
@@ -1032,9 +1104,13 @@
 
     // CARGAR PALABRA
     function loadWord(index) {
+      stopTtsAudio();
+      clearTimeout(pendingIntroSpeechTimer);
+      clearTimeout(pendingCompleteSpeechTimer);
       currentIndex = index;
       currentSlotIndex = 0;
       isCompleted = false;
+      isReadingSentence = false;
 
       const item = activeWordBank[currentIndex];
       const imgCard = document.getElementById('imageCard');
@@ -1053,7 +1129,10 @@
       document.getElementById('contextBadge').textContent = item.badge || '🎯 Reto Ortográfico';
       document.getElementById('contextSentence').innerHTML = formatContextHTML(item, false);
       document.getElementById('contextRule').textContent = '💡 Escucha la palabra, lee la oración y elige las sílabas con la ortografía correcta.';
-      document.getElementById('btnContinuar').style.display = 'none';
+      const btnContinuar = document.getElementById('btnContinuar');
+      btnContinuar.style.display = 'none';
+      btnContinuar.disabled = false;
+      btnContinuar.innerHTML = '<span>Continuar</span><span style="font-size: 1.25rem;">➔</span>';
 
       document.getElementById('progressText').textContent = `${currentIndex + 1} / ${activeWordBank.length}`;
       document.getElementById('progressBar').style.width = `${((currentIndex) / activeWordBank.length) * 100}%`;
@@ -1084,7 +1163,7 @@
       });
 
       // Anunciar por voz suave la palabra (y la oración si no lleva imagen)
-      setTimeout(() => {
+      pendingIntroSpeechTimer = setTimeout(() => {
         if (item.img) {
           speakText(item.word);
         } else {
@@ -1100,11 +1179,15 @@
 
       const item = activeWordBank[currentIndex];
       const targetSyllable = item.syllables[currentSlotIndex];
+      const isMatch = selectedSyllable.toLowerCase() === targetSyllable.toLowerCase();
+      const willComplete = isMatch && (currentSlotIndex + 1 >= item.syllables.length);
 
-      // Pronunciar sílaba tocada
-      speakText(selectedSyllable);
+      // Pronunciar sílaba tocada (omitir en la última sílaba para no cortar la lectura de la oración completa)
+      if (!willComplete) {
+        speakText(selectedSyllable);
+      }
 
-      if (selectedSyllable.toLowerCase() === targetSyllable.toLowerCase()) {
+      if (isMatch) {
         // Acierto
         playTone(440 + currentSlotIndex * 80, 'sine', 0.15);
         btnEl.classList.add('used');
@@ -1143,6 +1226,9 @@
     // COMPLETAR PALABRA
     function handleWordComplete() {
       isCompleted = true;
+      isReadingSentence = true;
+      clearTimeout(pendingIntroSpeechTimer);
+      clearTimeout(pendingCompleteSpeechTimer);
       score++;
       const item = activeWordBank[currentIndex];
       document.getElementById('scoreVal').textContent = `${score} / ${activeWordBank.length}`;
@@ -1162,17 +1248,23 @@
       }
       feedback.className = "feedback-msg correct";
 
-      // Pronunciar la palabra completa
-      setTimeout(() => {
-        speakText(item.word);
-      }, 250);
+      // Mostrar botón Continuar bloqueado mientras el motor de voz lee toda la oración
+      const btnContinuar = document.getElementById('btnContinuar');
+      btnContinuar.style.display = 'inline-flex';
+      btnContinuar.disabled = true;
+      btnContinuar.innerHTML = '<span>🔊 Leyendo oración...</span>';
 
-      // Mostrar botón continuar
-      document.getElementById('btnContinuar').style.display = 'inline-flex';
+      // Leer toda la oración completa y habilitar el avance hasta que termine
+      const fullSent = item.context ? item.context.replace('___', item.word) : item.word;
+      pendingCompleteSpeechTimer = setTimeout(() => {
+        speakText(fullSent, 1.0, 0.92, unlockContinueButton);
+      }, 320);
     }
 
     // SIGUIENTE PALABRA
     function nextWord() {
+      if (isReadingSentence) return;
+      stopTtsAudio();
       if (currentIndex + 1 < activeWordBank.length) {
         loadWord(currentIndex + 1);
       } else {
@@ -1202,7 +1294,7 @@
     }, { passive: true });
 
     window.addEventListener('touchend', (e) => {
-      if (multiTouch && isCompleted) {
+      if (multiTouch && isCompleted && !isReadingSentence) {
         const changeX = e.changedTouches[0].clientX - touchStartX;
         if (changeX > 60) {
           nextWord();
@@ -1212,7 +1304,7 @@
     }, { passive: true });
 
     window.addEventListener('keydown', (e) => {
-      if ((e.key === 'Enter' || e.key === ' ') && isCompleted) {
+      if ((e.key === 'Enter' || e.key === ' ') && isCompleted && !isReadingSentence) {
         nextWord();
       }
     });
