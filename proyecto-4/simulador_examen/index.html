@@ -3,71 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Simulador del Examen · Proyecto 4 · Instructivos, Juguetes y Piñatas</title>
+  <title>Simulador del Examen Final · Proyecto 4</title>
   <style>
-    :root { --ink:#0f172a; --muted:#475569; --primary:#7c3aed; --ok:#059669; --err:#dc2626; --radius:16px; }
+    :root { --ink:#0f172a; --muted:#475569; --primary:#6d28d9; --ok:#059669; --err:#dc2626; }
     * { box-sizing:border-box; margin:0; padding:0; user-select:none !important; -webkit-user-select:none !important; -webkit-touch-callout:none !important; -webkit-tap-highlight-color:transparent !important; }
-    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Ubuntu','Roboto','Noto Sans',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#4c1d95 100%); color:#f8fafc; min-height:100vh; overflow-y:auto; padding:1rem; }
-    .app-wrap { max-width:1120px; margin:0 auto; }
-    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; background:rgba(15,23,42,0.8); border:1px solid rgba(148,163,184,0.25); border-radius:var(--radius); padding:0.75rem 1rem; margin-bottom:1rem; }
-    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; }
-    .btn-nav { background:#334155; color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.55rem 0.95rem; font-family:inherit; font-size:0.95rem; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; min-height:44px; }
-    .badge-sim { background:#fef3c7; color:#92400e; font-weight:800; font-size:0.85rem; padding:0.35rem 0.75rem; border-radius:999px; }
-    .pill-progress { background:#1e293b; border:1px solid #c084fc; color:#e9d5ff; padding:0.4rem 0.85rem; border-radius:999px; font-weight:700; font-size:0.92rem; }
-    .btn-sound { background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.5rem 0.85rem; font-family:inherit; font-weight:700; cursor:pointer; min-height:44px; }
+    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Segoe UI',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#3b0764 100%); color:#f8fafc; min-height:100vh; padding:0.75rem 1rem; overflow-x:hidden; }
+    .app-wrap { max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:0.65rem; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.6rem; background:rgba(15,23,42,0.85); border:1px solid rgba(192,132,252,0.3); border-radius:16px; padding:0.6rem 0.95rem; }
+    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; }
+    .btn-nav { background:#334155; color:#fff; border:1.5px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.45rem 0.9rem; font-family:inherit; font-size:0.9rem; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; min-height:40px; }
+    .btn-nav:hover { background:#475569; }
+    .badge-sim { background:#f3e8ff; color:#5b21b6; font-weight:900; font-size:0.86rem; padding:0.35rem 0.75rem; border-radius:999px; }
+    .pill-progress { background:#1e293b; border:1.5px solid #c084fc; color:#f3e8ff; padding:0.35rem 0.8rem; border-radius:999px; font-weight:800; font-size:0.88rem; }
+    .btn-sound { background:rgba(16,185,129,0.2); border:1.5px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.4rem 0.8rem; font-family:inherit; font-weight:800; cursor:pointer; min-height:40px; }
     .btn-sound.muted { background:#334155; border-color:#64748b; color:#cbd5e1; }
-    .stage-card { background:#fff; color:var(--ink); border-radius:20px; padding:1.35rem 1.6rem; box-shadow:0 12px 30px rgba(0,0,0,0.3); }
-    .lock-banner { background:#fef2f2; border:2.5px solid #dc2626; border-radius:16px; padding:1.1rem 1.25rem; color:#7f1d1d; margin-bottom:1rem; }
-    .lock-banner h2 { font-size:1.35rem; margin-bottom:0.35rem; }
-    .req-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.85rem; margin:1rem 0; }
-    .req-card { border-radius:14px; padding:0.95rem 1rem; border:2px solid; display:flex; flex-direction:column; gap:0.55rem; justify-content:space-between; }
-    .req-card.done { background:#ecfdf5; border-color:#059669; color:#065f46; }
-    .req-card.pending { background:#fffbeb; border-color:#f59e0b; color:#78350f; }
-    .req-go { background:#7c3aed; color:#fff; text-decoration:none; font-weight:800; padding:0.6rem 0.9rem; border-radius:10px; text-align:center; display:inline-block; }
-    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap; }
-    .campo-tag { padding:0.3rem 0.75rem; border-radius:999px; font-size:0.84rem; font-weight:800; background:#f3e8ff; color:#6d28d9; }
-    .micro-text { background:#f8fafc; border-left:4px solid #7c3aed; padding:0.8rem 1rem; border-radius:0 12px 12px 0; margin-bottom:0.85rem; font-size:0.96rem; line-height:1.5; color:#1e293b; white-space:pre-line; }
-    .stage-prompt { font-size:1.2rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; line-height:1.35; }
-    .options-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; }
-    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.9rem 1rem; font-family:inherit; font-size:1.02rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:54px; }
-    .opt-btn:hover { border-color:#7c3aed; background:#faf5ff; }
+
+    /* BARRA DE NAVEGACIÓN DE REACTIVOS 1..16 */
+    .q-strip { display:flex; flex-wrap:wrap; gap:0.35rem; background:rgba(15,23,42,0.72); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:0.45rem 0.65rem; align-items:center; justify-content:center; }
+    .q-dot { width:34px; height:34px; border-radius:10px; border:2px solid #475569; background:#1e293b; color:#cbd5e1; font-family:inherit; font-weight:900; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all 0.15s; }
+    .q-dot.current { border-color:#f59e0b; background:#fef3c7; color:#92400e; transform:scale(1.08); }
+    .q-dot.done-ok { border-color:#10b981; background:#065f46; color:#ecfdf5; }
+    .q-dot.done-err { border-color:#f59e0b; background:#78350f; color:#fef3c7; }
+
+    .stage-card { background:#ffffff; color:var(--ink); border-radius:20px; padding:1.1rem 1.25rem; box-shadow:0 14px 34px rgba(0,0,0,0.32); }
+    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.6rem; margin-bottom:0.65rem; flex-wrap:wrap; border-bottom:2px dashed #e2e8f0; padding-bottom:0.5rem; }
+    .campo-tag { background:#f3e8ff; color:#6d28d9; padding:0.25rem 0.75rem; border-radius:999px; font-size:0.82rem; font-weight:900; }
+
+    /* LAYOUT VISUAL 2 COLUMNAS: ESCENA A LA IZQUIERDA, INTERACCIÓN A LA DERECHA */
+    .q-split { display:grid; grid-template-columns:340px 1fr; gap:1.1rem; align-items:center; }
+    @media (max-width:860px) { .q-split { grid-template-columns:1fr; } }
+
+    .visual-panel { background:linear-gradient(145deg,#f8fafc 0%,#f3e8ff 100%); border:2.5px solid #ddd6fe; border-radius:18px; padding:0.9rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.55rem; text-align:center; min-height:230px; }
+    .visual-panel img.hero-img { width:145px; height:145px; object-fit:contain; border-radius:14px; background:#fff; padding:6px; border:2px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
+    .visual-row-imgs { display:flex; gap:0.45rem; justify-content:center; flex-wrap:wrap; }
+    .visual-row-imgs img { width:76px; height:76px; object-fit:contain; border-radius:12px; background:#fff; padding:4px; border:2px solid #cbd5e1; }
+    .visual-caption { font-size:0.88rem; font-weight:800; color:#4c1d95; background:#fff; padding:0.35rem 0.7rem; border-radius:10px; border:1.5px solid #c4b5fd; width:100%; }
+
+    /* WIDGETS VISUALES MATEMÁTICOS Y DE MEDICIÓN */
+    .cdu-card { background:#fff; border:2.5px solid #475569; border-radius:14px; padding:0.65rem 1rem; display:inline-block; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
+    .cdu-grid { border-collapse:collapse; font-size:1.3rem; font-weight:900; margin:0 auto; }
+    .cdu-grid td { width:38px; height:34px; text-align:center; border:1.5px solid #cbd5e1; }
+    .cdu-grid .h-c { background:#fef3c7; color:#b45309; }
+    .cdu-grid .h-d { background:#fee2e2; color:#dc2626; }
+    .cdu-grid .h-u { background:#dbeafe; color:#1d4ed8; }
+    .cdu-grid .op-row td { border-bottom:3px solid #0f172a; }
+    .chip-board { display:flex; flex-direction:column; gap:0.4rem; width:100%; background:#fff; padding:0.65rem; border-radius:12px; border:2px solid #cbd5e1; }
+    .chip-row { display:flex; align-items:center; justify-content:space-between; font-weight:800; font-size:0.88rem; padding:0.25rem 0.5rem; border-radius:8px; }
+    .dot-chip { display:inline-block; width:18px; height:18px; border-radius:50%; margin-right:3px; vertical-align:middle; border:1.5px solid rgba(0,0,0,0.25); }
+
+    .stage-prompt { font-size:1.22rem; font-weight:900; color:#0f172a; margin-bottom:0.75rem; line-height:1.3; }
+    .options-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.65rem; }
+    @media (max-width:560px) { .options-grid { grid-template-columns:1fr; } }
+    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.75rem 0.9rem; font-family:inherit; font-size:1.05rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:58px; display:flex; align-items:center; gap:0.6rem; transition:all 0.15s; }
+    .opt-btn:hover { border-color:#7c3aed; background:#faf5ff; transform:translateY(-2px); }
+    .opt-btn .opt-ico { font-size:1.45rem; flex-shrink:0; }
     .opt-btn.selected-correct { border-color:#059669; background:#d1fae5; color:#065f46; }
     .opt-btn.selected-wrong { border-color:#dc2626; background:#fee2e2; color:#991b1b; }
-    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-    .match-col { display:flex; flex-direction:column; gap:0.65rem; }
-    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.75rem 0.9rem; font-family:inherit; font-size:0.96rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:52px; }
-    .match-btn.active { border-color:#7c3aed; background:#f3e8ff; }
+
+    /* MATCH COMPACTO Y VISUAL */
+    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+    .match-col { display:flex; flex-direction:column; gap:0.55rem; }
+    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.65rem 0.8rem; font-family:inherit; font-size:0.95rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:50px; display:flex; align-items:center; gap:0.45rem; }
+    .match-btn.active { border-color:#7c3aed; background:#f3e8ff; box-shadow:0 0 0 3px rgba(124,58,237,0.2); }
     .match-btn.paired { border-color:#059669; background:#d1fae5; color:#065f46; }
     .match-btn.wrong-flash { border-color:#dc2626; background:#fee2e2; }
-    .order-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; align-items:start; }
-    .order-pool, .order-slots { display:flex; flex-direction:column; gap:0.6rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.85rem; }
-    .seq-card { background:#fff; border:2.5px solid #7c3aed; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; cursor:pointer; text-align:left; font-family:inherit; font-size:0.95rem; color:#0f172a; min-height:48px; }
-    .seq-card.used { opacity:0.4; cursor:default; }
-    .seq-slot { background:#faf5ff; border:2px dashed #a855f7; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; color:#5b21b6; min-height:50px; cursor:pointer; display:flex; align-items:center; gap:0.5rem; text-align:left; font-family:inherit; }
-    .feedback-box { margin-top:1rem; border-radius:14px; padding:0.9rem 1.1rem; font-weight:700; line-height:1.45; display:none; }
+
+    /* ORDENAR TARJETAS VISUALES */
+    .order-wrap { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; align-items:start; }
+    .order-pool, .order-slots { display:flex; flex-direction:column; gap:0.45rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.65rem; }
+    .seq-card { background:#fff; border:2.5px solid #7c3aed; border-radius:11px; padding:0.55rem 0.75rem; font-weight:800; cursor:pointer; text-align:left; font-family:inherit; font-size:0.92rem; color:#0f172a; min-height:44px; }
+    .seq-card.used { opacity:0.35; cursor:default; }
+    .seq-slot { background:#faf5ff; border:2px dashed #a855f7; border-radius:11px; padding:0.55rem 0.75rem; font-weight:800; color:#5b21b6; min-height:44px; cursor:pointer; display:flex; align-items:center; gap:0.45rem; text-align:left; font-family:inherit; font-size:0.92rem; }
+
+    /* TOKENS INTERACTIVOS: COMAS Y MAYÚSCULAS EN ROJO */
+    .token-box { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:16px; padding:1rem; display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center; font-size:1.2rem; font-weight:800; }
+    .word-token { background:#fff; border:2.5px solid #94a3b8; border-radius:10px; padding:0.45rem 0.75rem; font-family:inherit; font-size:1.15rem; font-weight:800; cursor:pointer; color:#0f172a; }
+    .word-token.marked-red { border-color:#dc2626; background:#fef2f2; }
+    .red-cap { color:#dc2626; font-weight:900; font-size:1.25rem; text-decoration:underline; }
+    .comma-slot { width:38px; height:40px; border-radius:10px; border:2.5px dashed #64748b; background:#fff; font-family:inherit; font-size:1.35rem; font-weight:900; color:#64748b; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+    .comma-slot.active { border:2.5px solid #dc2626; background:#fef2f2; color:#dc2626; }
+
+    .feedback-box { margin-top:0.65rem; padding:0.65rem 0.9rem; border-radius:12px; font-weight:800; font-size:0.95rem; display:none; }
     .feedback-box.ok { display:block; background:#d1fae5; color:#065f46; border:2px solid #059669; }
     .feedback-box.err { display:block; background:#fee2e2; color:#991b1b; border:2px solid #dc2626; }
-    .btn-primary { background:var(--primary); color:#fff; border:none; border-radius:12px; padding:0.75rem 1.35rem; font-family:inherit; font-size:1.02rem; font-weight:800; cursor:pointer; min-height:48px; }
-    .stage-footer { margin-top:1rem; display:flex; justify-content:flex-end; gap:0.75rem; flex-wrap:wrap; }
-    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; margin:1rem 0; }
-    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.9rem; }
-    .campo-box h4 { color:#5b21b6; margin-bottom:0.3rem; }
-    @media (max-width:780px) { .match-columns, .order-wrap { grid-template-columns:1fr; } }
+    .stage-footer { margin-top:0.75rem; display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; border-top:1.5px solid #e2e8f0; padding-top:0.65rem; }
+    .btn-primary { background:#6d28d9; color:#fff; border:none; border-radius:12px; padding:0.65rem 1.2rem; font-family:inherit; font-size:0.98rem; font-weight:900; cursor:pointer; min-height:44px; }
+    .btn-primary:disabled { opacity:0.45; cursor:not-allowed; }
+    .btn-sec { background:#e2e8f0; color:#0f172a; border:none; border-radius:12px; padding:0.6rem 1rem; font-family:inherit; font-size:0.92rem; font-weight:800; cursor:pointer; min-height:44px; }
+
+    /* CANDADO Y RESUMEN */
+    .lock-banner { background:#fffbeb; border:2.5px solid #f59e0b; border-radius:16px; padding:1rem 1.15rem; color:#78350f; margin-bottom:0.85rem; }
+    .req-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.65rem; margin:0.85rem 0; }
+    .req-card { display:flex; flex-direction:column; justify-content:space-between; gap:0.6rem; padding:0.85rem 1rem; border-radius:14px; border:2px solid #cbd5e1; background:#f8fafc; }
+    .req-card.done { border-color:#059669; background:#ecfdf5; }
+    .req-card.pending { border-color:#f59e0b; background:#fffbeb; }
+    .req-go { background:#6d28d9; color:#fff; text-decoration:none; padding:0.5rem 0.85rem; border-radius:10px; font-weight:800; font-size:0.88rem; text-align:center; }
+    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:0.65rem; margin:0.85rem 0; }
+    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.8rem; }
   </style>
 </head>
 <body>
   <div class="app-wrap">
     <div class="topbar">
       <div class="topbar-left">
-        <a class="btn-nav" href="../../index.html?openRepaso=p4">⬅ Volver al Portal</a>
-        <span class="badge-sim">📝 Simulador del Examen · Proyecto 4</span>
+        <a class="btn-nav" href="../../index.html">⬅ Portal</a>
+        <span class="badge-sim">📝 Simulador Visual del Examen · Proyecto 4</span>
       </div>
       <div class="topbar-right">
-        <span class="pill-progress" id="pillProgress">Verificando avance...</span>
-        <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido: ON</button>
+        <span class="pill-progress" id="pillProgress">Verificando...</span>
+        <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido</button>
       </div>
     </div>
 
+    <div class="q-strip" id="qStrip" style="display:none;"></div>
     <div class="stage-card" id="stageContainer"></div>
   </div>
 
@@ -79,10 +127,16 @@
     const AULA_PROGRESS_KEY = 'aula3a_pp_progress_v1';
     const PROJ_KEY = 'p4';
     const REQUIRED_PPS = [
-      { id: 'taller_instructivos_juguetes', title: '📋 Taller de Juguetes (PP1 · Instructivos)', href: '../taller_instructivos_juguetes/index.html' },
-      { id: 'laboratorio_masa_longitud', title: '⚖️ Masa y Longitud (PP2 y PP3 · Regla y Balanza)', href: '../laboratorio_masa_longitud/index.html' },
-      { id: 'posadas_y_tradiciones', title: '🪅 Posadas y Tradiciones (PP2 y PP3 · Crónica y Acuerdos)', href: '../posadas_y_tradiciones/index.html' }
+      { id: 'taller_instructivos_juguetes', title: '📋 Taller de Juguetes (Instructivos)', href: '../taller_instructivos_juguetes/index.html' },
+      { id: 'laboratorio_masa_longitud', title: '⚖️ Masa y Longitud (Regla y Balanza)', href: '../laboratorio_masa_longitud/index.html' },
+      { id: 'posadas_y_tradiciones', title: '🪅 Posadas y Tradiciones (Crónica y Acuerdos)', href: '../posadas_y_tradiciones/index.html' }
     ];
+
+    let teacherBypass = false;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('docente') === '1') teacherBypass = true;
+    } catch (e) {}
 
     function readAulaProgress() {
       try {
@@ -92,6 +146,7 @@
         return parsed;
       } catch (e) { return { schemaVersion: 1, projects: {} }; }
     }
+
     function saveExamProgress(score, total) {
       const data = readAulaProgress();
       if (!data.projects[PROJ_KEY]) data.projects[PROJ_KEY] = { pps: {}, exam: null };
@@ -120,119 +175,223 @@
       if (window.__uiClickSfxBound) return; window.__uiClickSfxBound = true;
       document.addEventListener('pointerdown', (e) => { const btn = e.target && e.target.closest ? e.target.closest('button, a.btn-nav, a.req-go') : null; if (btn && !btn.disabled) playSfx('tap'); }, { capture: true, passive: true });
     }
-    function toggleSound() { soundEnabled = !soundEnabled; const b = document.getElementById('btnSound'); b.textContent = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF'; b.classList.toggle('muted', !soundEnabled); }
+    function toggleSound() { soundEnabled = !soundEnabled; const b = document.getElementById('btnSound'); b.textContent = soundEnabled ? '🔊 Sonido' : '🔇 Mudo'; b.classList.toggle('muted', !soundEnabled); }
     function shuffleArray(arr) { const c = arr.slice(); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; }
 
     const EXAM_QUESTIONS = [
-      { type: 'match', campo: 'Lenguajes', prompt: 'Une cada parte de un instructivo con la función exacta que cumple:', pairs: [
-        { left: 'Título del instructivo', right: 'Nombra el juguete u objeto que se va a construir' },
-        { left: 'Lista de materiales', right: 'Menciona los objetos e ingredientes necesarios antes de empezar' },
-        { left: 'Procedimiento', right: 'Indica en orden numerado los pasos para armar el objeto' }
-      ], okMsg: 'Correcto: reconocer la estructura del instructivo permite seguir y redactar indicaciones claras.' },
-      { type: 'mcq', campo: 'Lenguajes', microText: 'Procedimiento del avioncito:\n1. Medir con la regla el centro de dos abatelenguas.\n2. Colocar una gota de pegamento en el broche.\n3. Pegar los dos abatelenguas cruzados.\n4. Cortar una pieza trasera y dejar secar.', prompt: '¿En qué forma verbal están escritos "Medir", "Colocar", "Pegar" y "Cortar" por terminar en -ar, -er, -ir?', options: [
-        { text: 'En infinitivo', correct: true },
-        { text: 'En primera persona del pasado', correct: false },
-        { text: 'En futuro compuesto', correct: false },
-        { text: 'En sustantivo propio', correct: false }
-      ], okMsg: 'Exacto: los verbos terminados en -ar, -er, -ir están en infinitivo.' },
-      { type: 'mcq', campo: 'Lenguajes', prompt: 'Si cambias el verbo "Pegar" al modo IMPERATIVO (como una orden directa) manteniendo el mismo predicado, ¿cuál oración queda correcta?', options: [
-        { text: 'Pega los dos abatelenguas cruzados sobre el broche.', correct: true },
-        { text: 'Pegué los dos abatelenguas cruzados sobre el broche.', correct: false },
-        { text: 'Pegaban los dos abatelenguas cruzados sobre el broche.', correct: false },
-        { text: 'Pegando los dos abatelenguas cruzados sobre el broche.', correct: false }
-      ], okMsg: 'Muy bien: "Pega..." expresa indicación directa en modo imperativo.' },
-      { type: 'order', campo: 'Lenguajes', prompt: 'Ordena del 1 al 4 los pasos para elaborar el casco de una piñata tradicional:', steps: [
-        '1. Inflar un globo grande y hacerle un nudo firme.',
-        '2. Cortar el papel periódico en tiras largas y preparar el engrudo con agua y harina.',
-        '3. Pegar tres capas de tiras de periódico con engrudo alrededor del globo.',
-        '4. Dejar secar la estructura al sol hasta que endurezca el papel.'
-      ], okMsg: '¡Perfecto! Seguiste el procedimiento real paso a paso.' },
-      { type: 'mcq', campo: 'Lenguajes', microText: 'Fragmento descriptivo: "Primero inflamos el globo y pegamos las capas. Después armamos los conos con cartoncillo. Finalmente decoramos la piñata."', prompt: '¿Para qué sirven las palabras "Primero", "Después" y "Finalmente"?', options: [
-        { text: 'Para ordenar cronológicamente los hechos del proceso de principio a fin', correct: true },
-        { text: 'Para indicar la cantidad en gramos y centímetros de cada material', correct: false },
-        { text: 'Para nombrar únicamente a los autores del instructivo escolar', correct: false },
-        { text: 'Para sustituir todos los verbos terminados en -ar e -ir', correct: false }
-      ], okMsg: 'Exacto: ordenan los acontecimientos de manera cronológica.' },
-      { type: 'mcq', campo: 'Lenguajes', prompt: 'Elige la oración que coloca correctamente las comas enumerativas sin poner coma innecesaria antes de la "y":', options: [
-        { text: 'Decoramos la piñata con papel china rojo, verde, amarillo y azul.', correct: true },
-        { text: 'Decoramos, la piñata con papel china rojo verde amarillo y azul.', correct: false },
-        { text: 'Decoramos la piñata con papel china rojo verde, amarillo, y azul.', correct: false },
-        { text: 'Decoramos la piñata, con papel, china rojo verde amarillo y azul.', correct: false }
-      ], okMsg: 'Correcto: las comas separan los elementos de la lista y no van antes de "y".' },
-      { type: 'match', campo: 'Saberes y Pensamiento Científico', prompt: 'Une cada instrumento o unidad con la propiedad física que permite medir:', pairs: [
-        { left: 'El kilogramo (kg) y la balanza', right: 'Unidad e instrumento para medir la masa de una piñata con fruta' },
-        { left: 'El metro (m)', right: 'Unidad básica para medir la distancia o el largo de la cuerda' },
-        { left: 'La regla en centímetros (cm)', right: 'Instrumento graduado para medir el largo de un abatelenguas' }
-      ], okMsg: '¡Excelente dominio de unidades e instrumentos de medición!' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Al comparar dos cajas del mismo tamaño en la balanza de dos platillos, la caja con mandarinas baja su plato y la caja con papel china sube. ¿Cuál caja tiene mayor masa?', options: [
-        { text: 'La caja con mandarinas', correct: true },
-        { text: 'La caja con papel china', correct: false },
-        { text: 'Ambas cajas pesan lo mismo porque tienen igual tamaño', correct: false },
-        { text: 'Ninguna tiene masa porque las cajas son de cartón ligero', correct: false }
-      ], okMsg: 'Exacto: la masa depende de la materia del contenido, no solo del tamaño de la caja.' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Para doblar un barco de papiroflexia hace falta una hoja cuadrada de lados iguales. Si el lado superior mide 20 cm, ¿cuánto debe medir cada uno de los otros tres lados con la regla?', options: [
-        { text: '20 centímetros cada uno', correct: true },
-        { text: '10 centímetros los costados y 20 abajo', correct: false },
-        { text: '40 centímetros los laterales', correct: false },
-        { text: '15 centímetros para doblar las puntas', correct: false }
-      ], okMsg: 'Correcto: los 4 lados del cuadrado miden exactamente 20 centímetros.' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Para la posada se contaron 2 unidades de millar (verde), 4 centenas (amarillo), 3 decenas (rojo) y 5 unidades (azul) de colaciones. ¿Qué número de cuatro cifras se forma?', options: [
-        { text: '2,435 (dos mil cuatrocientos treinta y cinco)', correct: true },
-        { text: '2,345 (dos mil trescientos cuarenta y cinco)', correct: false },
-        { text: '24,035 (veinticuatro mil treinta y cinco)', correct: false },
-        { text: '4,235 (cuatro mil doscientos treinta y cinco)', correct: false }
-      ], okMsg: '¡Exacto! 2 UM + 4 C + 3 D + 5 U = 2,435.' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Observa los precios de cuatro paquetes de insumos: A: $1,850 | B: $1,290 | C: $2,100 | D: $1,540. ¿Qué orden va correctamente de MENOR a MAYOR?', options: [
-        { text: '$1,290 < $1,540 < $1,850 < $2,100', correct: true },
-        { text: '$1,290 < $1,850 < $1,540 < $2,100', correct: false },
-        { text: '$2,100 < $1,850 < $1,540 < $1,290', correct: false },
-        { text: '$1,540 < $1,290 < $1,850 < $2,100', correct: false }
-      ], okMsg: '¡Muy bien! Comparando primero millares y luego centenas, queda en orden ascendente.' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Situación de posada: "Para rellenar las piñatas se compraron 468 mandarinas en 12 bolsas de plástico y más tarde las familias trajeron 85 cañas dulces adicionales."', prompt: '¿Cuál dato numérico es un distractor y cuántas piezas de fruta se reunieron en total?', options: [
-        { text: 'Distractor: 12 bolsas de plástico | Total: 553 piezas de fruta', correct: true },
-        { text: 'Distractor: 85 cañas dulces | Total: 480 piezas de fruta', correct: false },
-        { text: 'Distractor: 468 mandarinas | Total: 565 piezas de fruta', correct: false },
-        { text: 'Distractor: 12 bolsas de plástico | Total: 543 piezas de fruta', correct: false }
-      ], okMsg: '¡Excelente! 12 bolsas no suma frutas; 468 + 85 = 553.' },
-      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Taller escolar: "Se recortaron 530 tiras de papel de colores durante 15 minutos de trabajo. Los equipos ya pegaron 68 tiras en las piñatas."', prompt: '¿Cuántas tiras de papel quedan disponibles al realizar la resta con transformación (530 - 68)?', options: [
-        { text: '462 tiras de papel disponibles', correct: true },
-        { text: '472 tiras de papel disponibles', correct: false },
-        { text: '538 tiras de papel disponibles', correct: false },
-        { text: '438 tiras de papel disponibles', correct: false }
-      ], okMsg: 'Correcto: al desagrupar decena y centena, 530 - 68 = 462.' },
-      { type: 'mcq', campo: 'Ética, Naturaleza y Sociedades', prompt: 'Cuando familias y vecinos se reparten comisiones en una posada (piñata, ponche, limpieza del patio), ¿qué forma de organización practican?', options: [
-        { text: 'La colaboración, la ayuda mutua y la reciprocidad entre vecinos', correct: true },
-        { text: 'El trabajo aislado donde nadie acuerda turnos ni comparte responsabilidades', correct: false },
-        { text: 'El cobro obligatorio de multas sin tomar decisiones colectivas', correct: false },
-        { text: 'La compra individual sin convivencia en el vecindario o la escuela', correct: false }
-      ], okMsg: '¡Exacto! Las formas de organización participativa fortalecen la comunidad.' },
-      { type: 'mcq', campo: 'De lo Humano y lo Comunitario', prompt: 'Con motivo del 3 de Diciembre (Día Internacional de las Personas con Discapacidad), ¿qué acción demuestra inclusión al jugar en el patio escolar?', options: [
-        { text: 'Adaptar las reglas del juego y mantener despejados los espacios para que todas las niñas y los niños participen', correct: true },
-        { text: 'Pedir a quienes requieren apoyo motriz que observen sentados todo el recreo', correct: false },
-        { text: 'Elegir juegos exclusivos de velocidad donde nadie pueda modificar las reglas', correct: false },
-        { text: 'Dejar cajas y obstáculos en el paso de las estaciones de exposición', correct: false }
-      ], okMsg: 'Muy bien: adaptar reglas y espacios permite la participación digna de todo el grupo.' },
-      { type: 'match', campo: 'De lo Humano y lo Comunitario', prompt: 'Une cada situación del taller o juego con la decisión estratégica o acuerdo de seguridad asertivo:', pairs: [
-        { left: 'Al pasar a romper la piñata con los ojos vendados', right: 'Formar fila detrás de la línea de seguridad y esperar a que suelten el palo' },
-        { left: 'Al notar que un avioncito de madera se inclina al lanzarlo', right: 'Medir de nuevo las alas con la regla y centrarlas antes de que seque' }
-      ], okMsg: '¡Excelente cierre! Tanto la seguridad en el juego como el ajuste técnico parten de acuerdos y observación.' }
+      {
+        type: 'match', campo: 'Lenguajes',
+        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_avioncito.png" alt="Instructivo"><div class="visual-caption">📋 Instructivo: Avioncito de madera</div>`,
+        prompt: '1. Une cada parte del instructivo con su función:',
+        pairs: [
+          { left: '📌 Título', right: 'Nombre del juguete' },
+          { left: '🧰 Materiales', right: 'Lista de lo que usamos' },
+          { left: '🔢 Procedimiento', right: 'Pasos ordenados 1, 2, 3' }
+        ],
+        okMsg: '¡Exacto! Título, materiales y procedimiento forman el instructivo.'
+      },
+      {
+        type: 'mcq', campo: 'Lenguajes',
+        visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/accion_doblar.png" alt="Doblar"><img src="../taller_instructivos_juguetes/img/accion_recortar.png" alt="Recortar"><img src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"></div><div class="visual-caption">Doblar · Recortar · Pegar</div>`,
+        prompt: '2. ¿En qué forma están los verbos "Doblar", "Recortar" y "Pegar"?',
+        options: [
+          { ico: '✅', text: 'En infinitivo (-ar, -er, -ir)', correct: true },
+          { ico: '📢', text: 'En imperativo (órdenes)', correct: false },
+          { ico: '⏪', text: 'En tiempo pasado', correct: false },
+          { ico: '🏷️', text: 'Son nombres propios', correct: false }
+        ],
+        okMsg: '¡Muy bien! Los verbos terminados en -ar, -er, -ir están en infinitivo.'
+      },
+      {
+        type: 'mcq', campo: 'Lenguajes',
+        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"><div class="visual-caption">"______ los dos abatelenguas."</div>`,
+        prompt: '3. Cambia el verbo "Pegar" a modo IMPERATIVO (una orden directa):',
+        options: [
+          { ico: '👉', text: 'Pega', correct: true },
+          { ico: '📄', text: 'Pegar', correct: false },
+          { ico: '⏳', text: 'Pegué', correct: false },
+          { ico: '🔄', text: 'Pegando', correct: false }
+        ],
+        okMsg: '¡Correcto! "Pega los dos abatelenguas" es una orden en imperativo.'
+      },
+      {
+        type: 'order', campo: 'Lenguajes',
+        visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/material_globo.png" alt="Globo"><img src="../taller_instructivos_juguetes/img/material_periodico.png" alt="Periódico"><img src="../taller_instructivos_juguetes/img/material_engrudo.png" alt="Engrudo"><img src="../taller_instructivos_juguetes/img/juguete_pinata.png" alt="Piñata"></div><div class="visual-caption">🪅 Elaboración de la piñata</div>`,
+        prompt: '4. Toca en orden (del 1 al 4) los pasos para hacer la piñata:',
+        steps: [
+          '1. 🎈 Inflar y amarrar el globo',
+          '2. 📰 Cortar periódico y hacer engrudo',
+          '3. 🥣 Pegar 3 capas con engrudo',
+          '4. ☀️ Dejar secar la piñata al sol'
+        ],
+        okMsg: '¡Excelente! Ordenaste el procedimiento del 1 al 4.'
+      },
+      {
+        type: 'mcq', campo: 'Lenguajes',
+        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura2_pinata.png" alt="Crónica"><div class="visual-caption">1° Primero · 2° Después · 3° Finalmente</div>`,
+        prompt: '5. ¿Para qué sirven las palabras "Primero", "Después" y "Finalmente"?',
+        options: [
+          { ico: '⏱️', text: 'Ordenar los pasos en el tiempo', correct: true },
+          { ico: '⚖️', text: 'Pesar objetos en gramos', correct: false },
+          { ico: '📏', text: 'Medir con la regla escolar', correct: false },
+          { ico: '🎨', text: 'Dibujar la portada', correct: false }
+        ],
+        okMsg: '¡Así es! Son conectores para ordenar hechos cronológicamente.'
+      },
+      {
+        type: 'commagaps', campo: 'Lenguajes',
+        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Colores"><div class="visual-caption">🎨 Lista de colores de papel China</div>`,
+        prompt: '6. Toca los 2 recuadros donde falta poner una COMA ( , ):',
+        segments: ['Usamos papel rojo', 'verde', 'amarillo', 'y azul.'],
+        commaAfter: [0, 1],
+        okMsg: '¡Muy bien! "rojo, verde, amarillo y azul" (sin coma antes de "y").'
+      },
+      {
+        type: 'redcaps', campo: 'Lenguajes',
+        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura3_posada.png" alt="Nombres propios"><div class="visual-caption">✏️ Nombres propios y lugares con rojo</div>`,
+        prompt: '7. Toca las 3 palabras que deben iniciar con MAYÚSCULA en rojo:',
+        tokens: [
+          { text: 'alexander', needsCap: true },
+          { text: 'gómez', needsCap: true },
+          { text: 'vive', needsCap: false },
+          { text: 'en', needsCap: false },
+          { text: 'sayula.', needsCap: true }
+        ],
+        okMsg: '¡Perfecto! Alexander Gómez y Sayula inician con mayúscula en rojo.'
+      },
+      {
+        type: 'match', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<div class="visual-row-imgs"><img src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><img src="../laboratorio_masa_longitud/img/unit_m.png" alt="Metro"><img src="../laboratorio_masa_longitud/img/instrumento_regla.png" alt="Regla"></div><div class="visual-caption">⚖️ kg · 📐 m · 📏 cm</div>`,
+        prompt: '8. Une cada instrumento o unidad con lo que mide:',
+        pairs: [
+          { left: '⚖️ Balanza (kg)', right: 'Masa de la fruta' },
+          { left: '📐 Metro (m)', right: 'Largo de la cuerda del patio' },
+          { left: '📏 Regla (cm)', right: 'Largo de un abatelenguas' }
+        ],
+        okMsg: '¡Excelente! Balanza para masa (kg) y regla o metro para longitud.'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/regla_abatelenguas.png" alt="Regla"><div style="width:100%;background:#fef3c7;border:2px solid #b45309;border-radius:8px;padding:6px;font-weight:900;color:#78350f;font-size:0.85rem;">📏 0 cm ━━━━━━━━━━━━ 14 cm</div><div class="visual-caption">Alineado desde la marca 0 cm</div>`,
+        prompt: '9. Si el abatelenguas inicia en el 0 y llega al 14 de la regla, ¿cuánto mide?',
+        options: [
+          { ico: '📏', text: '14 centímetros (cm)', correct: true },
+          { ico: '📐', text: '14 metros (m)', correct: false },
+          { ico: '⚖️', text: '14 kilogramos (kg)', correct: false },
+          { ico: '📏', text: '4 centímetros (cm)', correct: false }
+        ],
+        okMsg: '¡Exacto! Un abatelenguas escolar mide 14 centímetros (cm).'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><div style="display:flex;justify-content:space-around;width:100%;font-weight:900;font-size:0.88rem;"><span style="background:#fef3c7;border:2px solid #d97706;padding:4px 8px;border-radius:8px;">🍊 Mandarinas ⬇️ (Baja)</span><span style="background:#e0f2fe;border:2px solid #0284c7;padding:4px 8px;border-radius:8px;">🎊 Papel China ⬆️ (Sube)</span></div>`,
+        prompt: '10. En la balanza, el plato con mandarinas baja y el de papel sube. ¿Cuál tiene MAYOR masa?',
+        options: [
+          { ico: '🍊', text: 'La bolsa con mandarinas', correct: true },
+          { ico: '🎊', text: 'La bolsa con papel China', correct: false },
+          { ico: '⚖️', text: 'Pesan exactamente lo mismo', correct: false },
+          { ico: '📦', text: 'Ninguna tiene masa', correct: false }
+        ],
+        okMsg: '¡Muy bien! El platillo que baja tiene mayor masa.'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_barquito.png" alt="Papiroflexia"><div style="width:110px;height:110px;border:3px solid #2563eb;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:900;color:#1e3a8a;border-radius:8px;">Cuadrado<br>Arriba: 20 cm</div>`,
+        prompt: '11. Una hoja cuadrada tiene sus 4 lados iguales. Si arriba mide 20 cm, ¿cuánto mide cada lado?',
+        options: [
+          { ico: '🟦', text: '20 cm cada lado', correct: true },
+          { ico: '📏', text: '10 cm cada lado', correct: false },
+          { ico: '📐', text: '40 cm cada lado', correct: false },
+          { ico: '✂️', text: '15 cm cada lado', correct: false }
+        ],
+        okMsg: '¡Correcto! Todos los lados de un cuadrado miden lo mismo: 20 cm.'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<div class="chip-board">
+          <div class="chip-row" style="background:#dcfce7;color:#166534;"><span><i class="dot-chip" style="background:#22c55e;"></i><i class="dot-chip" style="background:#22c55e;"></i></span><span>2 Millares (UM)</span></div>
+          <div class="chip-row" style="background:#fef9c3;color:#854d0e;"><span><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i></span><span>4 Centenas (C)</span></div>
+          <div class="chip-row" style="background:#fee2e2;color:#991b1b;"><span><i class="dot-chip" style="background:#ef4444;"></i><i class="dot-chip" style="background:#ef4444;"></i><i class="dot-chip" style="background:#ef4444;"></i></span><span>3 Decenas (D)</span></div>
+          <div class="chip-row" style="background:#dbeafe;color:#1e40af;"><span><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i></span><span>5 Unidades (U)</span></div>
+        </div>`,
+        prompt: '12. ¿Qué número de 4 cifras forman estas fichas?',
+        options: [
+          { ico: '🔢', text: '2,435', correct: true },
+          { ico: '🔢', text: '2,345', correct: false },
+          { ico: '🔢', text: '4,235', correct: false },
+          { ico: '🔢', text: '24,035', correct: false }
+        ],
+        okMsg: '¡Exacto! 2 UM + 4 C + 3 D + 5 U = 2,435.'
+      },
+      {
+        type: 'order', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/posada_aguinaldo.png" alt="Precios"><div class="visual-caption">🏷️ $1,850 · $1,290 · $2,100 · $1,540</div>`,
+        prompt: '13. Toca los precios para ordenarlos del MENOR al MAYOR (1° al 4°):',
+        steps: [
+          '1. 🏷️ $1,290 (Menor)',
+          '2. 🏷️ $1,540',
+          '3. 🏷️ $1,850',
+          '4. 🏷️ $2,100 (Mayor)'
+        ],
+        okMsg: '¡Muy bien! $1,290 < $1,540 < $1,850 < $2,100.'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<div class="cdu-card"><table class="cdu-grid"><tr><td></td><td class="h-c">C</td><td class="h-d">D</td><td class="h-u">U</td></tr><tr><td></td><td>4</td><td>6</td><td>8</td></tr><tr class="op-row"><td>+</td><td></td><td>8</td><td>5</td></tr><tr><td></td><td>?</td><td>?</td><td>?</td></tr></table></div><div class="visual-caption">🍊 468 mandarinas (en 12 bolsas) + 85 cañas</div>`,
+        prompt: '14. Resuelve 468 + 85: ¿cuántas frutas hay en total y cuál dato NO se suma?',
+        options: [
+          { ico: '🍊', text: '553 frutas (Distractor: 12 bolsas)', correct: true },
+          { ico: '🍊', text: '543 frutas (Distractor: 12 bolsas)', correct: false },
+          { ico: '🍊', text: '480 frutas (Distractor: 85 cañas)', correct: false },
+          { ico: '🍊', text: '565 frutas (Distractor: 468)', correct: false }
+        ],
+        okMsg: '¡Excelente! Las 12 bolsas son el distractor y 468 + 85 = 553 frutas.'
+      },
+      {
+        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
+        visualHtml: `<div class="cdu-card"><table class="cdu-grid"><tr><td></td><td class="h-c">C</td><td class="h-d">D</td><td class="h-u">U</td></tr><tr><td></td><td>5</td><td>3</td><td>0</td></tr><tr class="op-row"><td>−</td><td></td><td>6</td><td>8</td></tr><tr><td></td><td>?</td><td>?</td><td>?</td></tr></table></div><div class="visual-caption">✂️ 530 tiras recortadas − 68 pegadas</div>`,
+        prompt: '15. Resuelve la resta 530 − 68: ¿cuántas tiras de papel quedan?',
+        options: [
+          { ico: '✂️', text: '462 tiras', correct: true },
+          { ico: '✂️', text: '472 tiras', correct: false },
+          { ico: '✂️', text: '538 tiras', correct: false },
+          { ico: '✂️', text: '438 tiras', correct: false }
+        ],
+        okMsg: '¡Correcto! Al pedir prestado: 530 − 68 = 462 tiras.'
+      },
+      {
+        type: 'match', campo: 'Ética, Naturaleza y Sociedades / De lo Humano',
+        visualHtml: `<div class="visual-row-imgs"><img src="../posadas_y_tradiciones/img/posada_ponche.png" alt="Posada"><img src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Piñata"><img src="../posadas_y_tradiciones/img/juguete_avioncito.png" alt="Avioncito"></div><div class="visual-caption">🤝 Convivencia, Inclusión (3 dic) y Seguridad</div>`,
+        prompt: '16. Une cada situación con el acuerdo comunitario correcto:',
+        pairs: [
+          { left: '🤝 Organizar la posada', right: 'Repartir comisiones y ayudarse' },
+          { left: '♿ Inclusión (3 de diciembre)', right: 'Adaptar juegos para que todos participen' },
+          { left: '🪅 Pasar a romper la piñata', right: 'Hacer fila detrás de la línea segura' }
+        ],
+        okMsg: '¡Gran trabajo! Colaboración, inclusión y seguridad en nuestra comunidad.'
+      }
     ];
 
-    let deck = [], idx = 0, cleanHits = 0, hadErr = false, resolved = false;
-    let campoStats = {};
+    let deck = [], idx = 0, answersState = [];
+
+    function unlockAsTeacher() {
+      teacherBypass = true;
+      startExam();
+    }
 
     function checkUnlockAndStart() {
       const data = readAulaProgress();
       const pps = (data.projects[PROJ_KEY] && data.projects[PROJ_KEY].pps) || {};
       const missing = REQUIRED_PPS.filter(r => !(pps[r.id] && pps[r.id].completed));
-      if (missing.length > 0) {
+      if (missing.length > 0 && !teacherBypass) {
         playSfx('lock');
-        document.getElementById('pillProgress').textContent = `🔒 Bloqueado (${REQUIRED_PPS.length - missing.length}/${REQUIRED_PPS.length} PP)`;
+        document.getElementById('qStrip').style.display = 'none';
+        document.getElementById('pillProgress').textContent = `🔒 Bloqueado (${REQUIRED_PPS.length - missing.length}/${REQUIRED_PPS.length} juegos)`;
         document.getElementById('stageContainer').innerHTML = `
           <div>
             <div class="lock-banner">
-              <h2>🔒 Simulador del Examen bloqueado</h2>
-              <p>Para practicar en el Simulador del Examen del <strong>Proyecto 4</strong>, primero debes completar exitosamente los <strong>${REQUIRED_PPS.length} repasos de Productos Parciales</strong>. Aún te falta acreditar <strong>${missing.length}</strong>:</p>
+              <h2 style="font-size:1.3rem;margin-bottom:0.3rem;">🔒 Completa primero tus 3 juegos del Proyecto 4</h2>
+              <p style="font-size:0.95rem;">Para desbloquear el Simulador del Examen Final, logra <strong>5 aciertos</strong> en cada uno de los 3 juegos del proyecto:</p>
             </div>
             <div class="req-list">
               ${REQUIRED_PPS.map(r => {
@@ -241,16 +400,17 @@
                 return `
                   <div class="req-card ${isDone ? 'done' : 'pending'}">
                     <div>
-                      <div style="font-weight:800; font-size:1.05rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
-                      <div style="font-size:0.9rem; margin-top:0.25rem;">${isDone ? `Completado · Mejor: ${st.bestPct}%` : 'Pendiente por completar (mínimo 75%)'}</div>
+                      <div style="font-weight:900; font-size:1.02rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
+                      <div style="font-size:0.86rem; color:#475569; margin-top:0.2rem;">${isDone ? 'Juego acreditado' : 'Pendiente (logra 5 aciertos)'}</div>
                     </div>
-                    <a class="req-go" href="${r.href}">${isDone ? 'Repasar de nuevo ➔' : 'Completar este repaso ➔'}</a>
+                    <a class="req-go" href="${r.href}">${isDone ? 'Jugar de nuevo ➔' : 'Ir al juego ➔'}</a>
                   </div>
                 `;
               }).join('')}
             </div>
             <div class="stage-footer">
-              <a class="btn-nav" href="../../index.html?openRepaso=p4" style="background:#1e293b;">⬅ Regresar al Portal</a>
+              <a class="btn-nav" href="../../index.html" style="background:#1e293b;">⬅ Volver al Portal</a>
+              <button type="button" class="btn-sec" onclick="unlockAsTeacher()">👨‍🏫 Modo Docente: Practicar en Pantalla ➔</button>
             </div>
           </div>
         `;
@@ -260,97 +420,256 @@
     }
 
     function startExam() {
-      deck = shuffleArray(EXAM_QUESTIONS);
-      idx = 0; cleanHits = 0; campoStats = {};
-      deck.forEach(q => {
-        if (!campoStats[q.campo]) campoStats[q.campo] = { ok: 0, total: 0 };
-        campoStats[q.campo].total++;
-      });
+      deck = EXAM_QUESTIONS.slice();
+      idx = 0;
+      answersState = deck.map(() => ({ resolved: false, hadErr: false }));
+      document.getElementById('qStrip').style.display = 'flex';
       renderQ();
     }
 
+    function renderStrip() {
+      const strip = document.getElementById('qStrip');
+      strip.innerHTML = deck.map((_, i) => {
+        const st = answersState[i];
+        let cls = 'q-dot';
+        if (i === idx) cls += ' current';
+        else if (st.resolved) cls += st.hadErr ? ' done-err' : ' done-ok';
+        return `<button type="button" class="${cls}" onclick="goToQ(${i})" title="Ir al reactivo ${i + 1}">${i + 1}</button>`;
+      }).join('');
+    }
+
+    function goToQ(newIdx) {
+      if (newIdx < 0 || newIdx >= deck.length) return;
+      idx = newIdx;
+      renderQ();
+    }
+
+    function getCleanHitsCount() {
+      return answersState.filter(s => s.resolved && !s.hadErr).length;
+    }
+
     function renderQ() {
-      document.getElementById('pillProgress').textContent = idx < deck.length ? `Reactivo ${idx + 1} de ${deck.length}` : `Finalizado · ${cleanHits}/${deck.length}`;
-      if (idx >= deck.length) { renderSummary(); return; }
-      const q = deck[idx]; hadErr = false; resolved = false;
+      renderStrip();
+      const doneCount = answersState.filter(s => s.resolved).length;
+      document.getElementById('pillProgress').textContent = `Reactivo ${idx + 1}/${deck.length} · Aciertos: ${getCleanHitsCount()}`;
+      const q = deck[idx];
+      const st = answersState[idx];
+
       document.getElementById('stageContainer').innerHTML = `
         <div class="stage-meta">
           <span class="campo-tag">${q.campo}</span>
-          <span style="font-weight:800; color:#6d28d9;">Aciertos: ${cleanHits}/${idx}</span>
+          <span style="font-weight:900; color:#6d28d9; font-size:0.9rem;">${st.resolved ? '✅ Respondido' : `Resueltos: ${doneCount} de ${deck.length}`}</span>
         </div>
-        ${q.microText ? `<div class="micro-text">${q.microText}</div>` : ''}
-        <h2 class="stage-prompt">${q.prompt}</h2>
-        <div id="qBody"></div>
-        <div id="feedbackBox" class="feedback-box"></div>
-        <div class="stage-footer" id="stageFooter"></div>
+        <div class="q-split">
+          <div class="visual-panel">${q.visualHtml}</div>
+          <div>
+            <h2 class="stage-prompt">${q.prompt}</h2>
+            <div id="qBody"></div>
+            <div id="feedbackBox" class="feedback-box ${st.resolved ? 'ok' : ''}">${st.resolved ? '✅ ' + q.okMsg : ''}</div>
+          </div>
+        </div>
+        <div class="stage-footer">
+          <button type="button" class="btn-sec" onclick="goToQ(${idx - 1})" ${idx === 0 ? 'disabled' : ''}>⬅ Anterior</button>
+          <div id="stageActionSlot"></div>
+          ${idx + 1 < deck.length
+            ? `<button type="button" class="btn-primary" onclick="goToQ(${idx + 1})">Siguiente ➔</button>`
+            : `<button type="button" class="btn-primary" style="background:#059669;" onclick="renderSummary()">📊 Ver Calificación Final ➔</button>`}
+        </div>
       `;
-      if (q.type === 'mcq') renderMcq(q);
-      else if (q.type === 'match') renderMatch(q);
-      else if (q.type === 'order') renderOrder(q);
+
+      if (q.type === 'mcq') renderMcq(q, st);
+      else if (q.type === 'match') renderMatch(q, st);
+      else if (q.type === 'order') renderOrder(q, st);
+      else if (q.type === 'commagaps') renderCommaGaps(q, st);
+      else if (q.type === 'redcaps') renderRedCaps(q, st);
     }
 
-    function showFb(ok, msg) { const fb = document.getElementById('feedbackBox'); fb.className = 'feedback-box ' + (ok ? 'ok' : 'err'); fb.textContent = msg; playSfx(ok ? 'ok' : 'err'); }
+    function showFb(ok, msg) {
+      const fb = document.getElementById('feedbackBox');
+      fb.className = 'feedback-box ' + (ok ? 'ok' : 'err');
+      fb.textContent = msg;
+      playSfx(ok ? 'ok' : 'err');
+    }
+
     function markOk(q) {
-      if (resolved) return; resolved = true;
-      if (!hadErr) { cleanHits++; campoStats[q.campo].ok++; }
+      const st = answersState[idx];
+      if (!st.resolved) {
+        st.resolved = true;
+      }
+      renderStrip();
+      document.getElementById('pillProgress').textContent = `Reactivo ${idx + 1}/${deck.length} · Aciertos: ${getCleanHitsCount()}`;
       showFb(true, '✅ ' + q.okMsg);
-      document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" onclick="idx++; renderQ();">${idx + 1 < deck.length ? 'Siguiente reactivo ➔' : 'Ver diagnóstico del simulador ➔'}</button>`;
     }
 
-    function renderMcq(q) {
-      const body = document.getElementById('qBody'), opts = shuffleArray(q.options);
-      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => `<button type="button" class="opt-btn" data-i="${i}">${o.text}</button>`).join('')}</div>`;
+    function renderMcq(q, st) {
+      const body = document.getElementById('qBody');
+      if (!q._opts) q._opts = shuffleArray(q.options);
+      const opts = q._opts;
+      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => `
+        <button type="button" class="opt-btn ${st.resolved && o.correct ? 'selected-correct' : ''}" data-i="${i}">
+          <span class="opt-ico">${o.ico || '🔹'}</span>
+          <span>${o.text}</span>
+        </button>`).join('')}</div>`;
       body.querySelectorAll('.opt-btn').forEach((btn, i) => btn.addEventListener('click', () => {
-        if (resolved) return;
-        if (opts[i].correct) { btn.classList.add('selected-correct'); markOk(q); }
-        else { hadErr = true; btn.classList.add('selected-wrong'); showFb(false, '💡 Vuelve a revisar los datos o conectores y elige otra respuesta.'); }
+        if (st.resolved) return;
+        if (opts[i].correct) {
+          btn.classList.add('selected-correct');
+          markOk(q);
+        } else {
+          st.hadErr = true;
+          btn.classList.add('selected-wrong');
+          showFb(false, '💡 Observa la imagen de la izquierda e intenta otra opción.');
+        }
       }));
     }
 
-    function renderMatch(q) {
+    function renderMatch(q, st) {
       const body = document.getElementById('qBody');
-      const left = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.left }))), right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
-      let pickedLeft = null, solved = 0;
-      body.innerHTML = `<div class="match-columns"><div class="match-col" id="mL">${left.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div><div class="match-col" id="mR">${right.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div></div>`;
-      body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => { if (b.classList.contains('paired')) return; body.querySelectorAll('#mL .match-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); pickedLeft = b; }));
+      const left = q.pairs.map((p, i) => ({ id: i, text: p.left }));
+      if (!q._right) q._right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
+      const right = q._right;
+      let pickedLeft = null, solved = st.resolved ? q.pairs.length : 0;
+      body.innerHTML = `<div class="match-columns">
+        <div class="match-col" id="mL">${left.map(x => `<button type="button" class="match-btn ${st.resolved ? 'paired' : ''}" data-id="${x.id}">${x.text}</button>`).join('')}</div>
+        <div class="match-col" id="mR">${right.map(x => `<button type="button" class="match-btn ${st.resolved ? 'paired' : ''}" data-id="${x.id}">${x.text}</button>`).join('')}</div>
+      </div>`;
+      if (st.resolved) return;
+      body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => {
+        if (b.classList.contains('paired')) return;
+        body.querySelectorAll('#mL .match-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); pickedLeft = b;
+      }));
       body.querySelectorAll('#mR .match-btn').forEach(r => r.addEventListener('click', () => {
         if (r.classList.contains('paired') || !pickedLeft) return;
-        if (pickedLeft.dataset.id === r.dataset.id) { pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); r.classList.add('paired'); pickedLeft = null; solved++; playSfx('ok'); if (solved === q.pairs.length) markOk(q); }
-        else { hadErr = true; r.classList.add('wrong-flash'); showFb(false, '💡 Esa pareja no coincide. Vuelve a leer.'); setTimeout(() => r.classList.remove('wrong-flash'), 450); }
+        if (pickedLeft.dataset.id === r.dataset.id) {
+          pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); r.classList.add('paired');
+          pickedLeft = null; solved++; playSfx('ok');
+          if (solved === q.pairs.length) markOk(q);
+        } else {
+          st.hadErr = true; r.classList.add('wrong-flash');
+          showFb(false, '💡 Esa pareja no corresponde. Intenta con otra.');
+          setTimeout(() => r.classList.remove('wrong-flash'), 400);
+        }
       }));
     }
 
-    function renderOrder(q) {
+    function renderOrder(q, st) {
       const body = document.getElementById('qBody');
-      const indexed = q.steps.map((txt, idx) => ({ idx, cleanTxt: txt.replace(/^\d+\.\s*/, '') }));
-      const shuffled = shuffleArray(indexed), chosen = new Array(q.steps.length).fill(null);
+      const indexed = q.steps.map((txt, i) => ({ idx: i, cleanTxt: txt.replace(/^\d+\.\s*/, '') }));
+      if (!q._shuffled) q._shuffled = shuffleArray(indexed);
+      const shuffled = q._shuffled;
+      const chosen = st.resolved ? indexed.slice() : new Array(q.steps.length).fill(null);
+
       function draw() {
-        body.innerHTML = `<div class="order-wrap"><div class="order-pool"><div style="font-weight:800; color:#334155;">Pasos:</div>${shuffled.map(st => { const used = chosen.some(c => c && c.idx === st.idx); return `<button type="button" class="seq-card ${used ? 'used' : ''}" ${used ? 'disabled' : ''} data-idx="${st.idx}">${st.cleanTxt}</button>`; }).join('')}</div><div class="order-slots"><div style="font-weight:800; color:#5b21b6;">Orden 1 al 4:</div>${chosen.map((c, pos) => `<button type="button" class="seq-slot" data-pos="${pos}"><strong>${pos + 1}.</strong> ${c ? c.cleanTxt : 'Toca un paso...'}</button>`).join('')}</div></div>`;
-        body.querySelectorAll('.seq-card:not(.used)').forEach(btn => btn.addEventListener('click', () => { if (resolved) return; const fp = chosen.findIndex(x => x === null); if (fp !== -1) { chosen[fp] = shuffled.find(x => x.idx === Number(btn.dataset.idx)); draw(); } }));
-        body.querySelectorAll('.seq-slot').forEach(btn => btn.addEventListener('click', () => { if (resolved) return; const p = Number(btn.dataset.pos); if (chosen[p]) { chosen[p] = null; draw(); } }));
-        document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" id="btnCheckOrder" ${chosen.some(x => x === null) ? 'disabled' : ''}>Comprobar orden ✓</button>`;
-        document.getElementById('btnCheckOrder').addEventListener('click', () => {
-          if (chosen.every((c, pos) => c && c.idx === pos)) markOk(q);
-          else { hadErr = true; showFb(false, '💡 Pista: primero infla el globo, luego prepara tiras y engrudo, después pega capas y al final deja secar.'); }
+        body.innerHTML = `<div class="order-wrap">
+          <div class="order-pool"><div style="font-weight:900;font-size:0.86rem;color:#475569;">Toca en orden:</div>${shuffled.map(item => {
+            const used = chosen.some(c => c && c.idx === item.idx);
+            return `<button type="button" class="seq-card ${used ? 'used' : ''}" ${used ? 'disabled' : ''} data-idx="${item.idx}">${item.cleanTxt}</button>`;
+          }).join('')}</div>
+          <div class="order-slots"><div style="font-weight:900;font-size:0.86rem;color:#5b21b6;">Orden 1° al 4° (toca para quitar):</div>${chosen.map((c, pos) => `
+            <button type="button" class="seq-slot" data-pos="${pos}"><strong>${pos + 1}°.</strong> ${c ? c.cleanTxt : 'Vacío'}</button>`).join('')}</div>
+        </div>`;
+        if (st.resolved) return;
+        body.querySelectorAll('.seq-card:not(.used)').forEach(btn => btn.addEventListener('click', () => {
+          const fp = chosen.findIndex(x => x === null);
+          if (fp !== -1) {
+            chosen[fp] = shuffled.find(x => x.idx === Number(btn.dataset.idx));
+            draw();
+            if (chosen.every(x => x !== null)) checkNow();
+          }
+        }));
+        body.querySelectorAll('.seq-slot').forEach(btn => btn.addEventListener('click', () => {
+          const p = Number(btn.dataset.pos);
+          if (chosen[p]) { chosen[p] = null; draw(); }
+        }));
+      }
+
+      function checkNow() {
+        if (chosen.every((c, pos) => c && c.idx === pos)) {
+          markOk(q);
+        } else {
+          st.hadErr = true;
+          showFb(false, '💡 Algún paso no está en orden. Toca un paso morado para quitarlo y corregirlo.');
+        }
+      }
+      draw();
+    }
+
+    function renderCommaGaps(q, st) {
+      const body = document.getElementById('qBody');
+      const activeGaps = new Set(st.resolved ? q.commaAfter : []);
+      function draw() {
+        let html = '<div class="token-box">';
+        q.segments.forEach((seg, i) => {
+          html += `<span>${seg}</span>`;
+          if (i < q.segments.length - 1) {
+            const on = activeGaps.has(i);
+            html += `<button type="button" class="comma-slot ${on ? 'active' : ''}" data-g="${i}">${on ? ',' : '+'}</button>`;
+          }
+        });
+        html += '</div>';
+        body.innerHTML = html;
+        if (st.resolved) return;
+        body.querySelectorAll('.comma-slot').forEach(btn => btn.addEventListener('click', () => {
+          const g = Number(btn.dataset.g);
+          if (activeGaps.has(g)) activeGaps.delete(g); else activeGaps.add(g);
+          draw();
+        }));
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-primary" id="btnCheckCommas">✓ Comprobar comas</button>`;
+        document.getElementById('btnCheckCommas').addEventListener('click', () => {
+          const ok = q.segments.slice(0, -1).every((_, i) => q.commaAfter.includes(i) === activeGaps.has(i));
+          if (ok) { document.getElementById('stageActionSlot').innerHTML = ''; markOk(q); }
+          else { st.hadErr = true; showFb(false, '💡 Recuerda: pon coma entre colores, pero NO pongas coma antes de "y azul".'); }
+        });
+      }
+      draw();
+    }
+
+    function renderRedCaps(q, st) {
+      const body = document.getElementById('qBody');
+      const marked = new Set(st.resolved ? q.tokens.map((t, i) => t.needsCap ? i : -1).filter(i => i >= 0) : []);
+      function draw() {
+        body.innerHTML = `<div class="token-box">${q.tokens.map((tk, i) => {
+          const on = marked.has(i);
+          const label = on ? `<span class="red-cap">${tk.text[0].toUpperCase()}</span>${tk.text.slice(1)}` : tk.text;
+          return `<button type="button" class="word-token ${on ? 'marked-red' : ''}" data-i="${i}">${label}</button>`;
+        }).join('')}</div>`;
+        if (st.resolved) return;
+        body.querySelectorAll('.word-token').forEach(btn => btn.addEventListener('click', () => {
+          const i = Number(btn.dataset.i);
+          if (marked.has(i)) marked.delete(i); else marked.add(i);
+          draw();
+        }));
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-primary" id="btnCheckCaps">✓ Comprobar mayúsculas</button>`;
+        document.getElementById('btnCheckCaps').addEventListener('click', () => {
+          const ok = q.tokens.every((tk, i) => Boolean(tk.needsCap) === marked.has(i));
+          if (ok) { document.getElementById('stageActionSlot').innerHTML = ''; markOk(q); }
+          else { st.hadErr = true; showFb(false, '💡 Marca solo el nombre, el apellido y el municipio (Alexander, Gómez, Sayula).'); }
         });
       }
       draw();
     }
 
     function renderSummary() {
-      const total = deck.length, pct = Math.round((cleanHits / total) * 100);
+      const total = deck.length, cleanHits = getCleanHitsCount();
+      const pct = Math.round((cleanHits / total) * 100);
       const saved = saveExamProgress(cleanHits, total);
+      const campoStats = {};
+      deck.forEach((q, i) => {
+        if (!campoStats[q.campo]) campoStats[q.campo] = { ok: 0, total: 0 };
+        campoStats[q.campo].total++;
+        if (answersState[i].resolved && !answersState[i].hadErr) campoStats[q.campo].ok++;
+      });
       playSfx('win');
       document.getElementById('stageContainer').innerHTML = `
-        <h2 class="stage-prompt">📝 Resultado de tu Simulador de Examen · Proyecto 4</h2>
-        <p style="font-size:1.05rem; color:#334155; margin-bottom:1rem;">Respondiste al primer intento <strong>${cleanHits} de ${total}</strong> reactivos (<strong>${pct}%</strong>). Tu mejor marca histórica guardada es <strong>${saved.bestPct}%</strong> en <strong>${saved.attempts}</strong> intento(s).</p>
+        <h2 class="stage-prompt">🏆 Resultado del Simulador · Proyecto 4</h2>
+        <p style="font-size:1.05rem; color:#334155; margin-bottom:0.85rem;">Lograste <strong>${cleanHits} de ${total}</strong> reactivos al primer intento (<strong>${pct}%</strong>). Mejor marca guardada: <strong>${saved.bestPct}%</strong>.</p>
         <div class="campos-grid">
-          ${Object.entries(campoStats).map(([campo, st]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:800; color:${st.ok === st.total ? '#059669' : '#d97706'};">${st.ok} de ${st.total} reactivos limpios</p></div>`).join('')}
+          ${Object.entries(campoStats).map(([campo, s]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:900; font-size:1.1rem; color:${s.ok === s.total ? '#059669' : '#d97706'}; margin-top:0.25rem;">${s.ok} / ${s.total} aciertos</p></div>`).join('')}
         </div>
-        <div class="feedback-box ok" style="display:block;">💡 Si algún Campo Formativo tuvo errores, repasa su Producto Parcial en el portal antes de contestar tu examen en clase.</div>
         <div class="stage-footer">
-          <button type="button" class="btn-primary" onclick="startExam()">🔁 Practicar otro examen barajado</button>
-          <a class="btn-nav" href="../../index.html?openRepaso=p4" style="background:#334155;">⬅ Volver al Portal</a>
+          <button type="button" class="btn-primary" onclick="startExam()">🔁 Volver a practicar</button>
+          <a class="btn-nav" href="../../index.html" style="background:#334155;">⬅ Volver al Portal</a>
         </div>
       `;
     }

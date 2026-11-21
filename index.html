@@ -1435,7 +1435,8 @@
           Para practicar en el Simulador del Examen Final primero debes completar todas las actividades de Repaso de Productos Parciales (PP) de este proyecto. Tu avance guardado en este dispositivo se respeta siempre.
         </p>
         <div class="lock-req-list" id="examLockList"></div>
-        <div style="display: flex; justify-content: flex-end;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+          <a id="examTeacherBypassLink" href="#" style="background: #e2e8f0; color: #0f172a; text-decoration: none; border-radius: 10px; padding: 0.65rem 1rem; font-weight: 800; font-size: 0.86rem;">👨‍🏫 Modo Docente: Abrir en Pantalla ➔</a>
           <button type="button" onclick="closeExamLockModal()" style="background: #0f172a; color: #ffffff; border: none; border-radius: 10px; padding: 0.65rem 1.2rem; font-family: inherit; font-weight: 700; cursor: pointer;">Entendido, volver al portal</button>
         </div>
       </div>
@@ -1654,6 +1655,10 @@
       const modal = document.getElementById('examLockModal');
       const subtitle = document.getElementById('examLockSubtitle');
       const list = document.getElementById('examLockList');
+      const teacherLink = document.getElementById('examTeacherBypassLink');
+      if (teacherLink) {
+        teacherLink.setAttribute('href', (simHref || cfg.examHref) + '?docente=1');
+      }
       if (subtitle) {
         subtitle.textContent = `Para ingresar al Simulador del Examen Final de ${cfg.title}, primero completa ${missing.length} juego(s) pendiente(s) del proyecto en este dispositivo:`;
       }
