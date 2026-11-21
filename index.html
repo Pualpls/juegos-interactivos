@@ -987,75 +987,11 @@
         <span class="section-icon">🪅</span>
         <h2 class="section-title">Proyecto 4: Juguetes, Piñatas y Tradiciones</h2>
         <span class="section-tag tag-project4">Diciembre 2026</span>
-        <div class="project-header-actions">
-          <button class="btn-repaso-toggle" id="btn-repaso-p4" onclick="toggleRepasoDrawer('p4')" title="Actividades de repaso por Producto Parcial para estudiar en casa o ponerse al corriente">
-            <span>📚 Repaso de Productos (PP)</span>
-            <span class="repaso-count-pill" id="repaso-badge-p4">0/3</span>
-            <span class="yt-arrow" id="repaso-arrow-p4">▼</span>
-          </button>
-          <button class="btn-yt-toggle" onclick="toggleYtDrawer('p4')" title="Ver videos educativos sugeridos para este proyecto">
-            <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            <span>Videos Sugeridos</span>
-            <span class="yt-arrow" id="arrow-p4">▼</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CAJÓN DESPLEGABLE REPASO DE PRODUCTOS PARCIALES Y SIMULADOR EXAMEN P4 -->
-      <div class="repaso-drawer" id="repaso-drawer-p4" style="display: none;">
-        <div class="yt-drawer-header">
-          <span style="font-weight: 700; color: #a7f3d0;">📚 Repaso de Productos Parciales · Proyecto 4 (Para repasar o ponerte al corriente si faltaste)</span>
-        </div>
-        <div class="repaso-grid">
-          <a class="repaso-pp-card" data-proj="p4" data-pp="pp1" href="proyecto-4/repaso_pp/pp1.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-blue">PP1 · Lenguajes</span>
-                <span class="repaso-status-badge" id="status-p4-pp1">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Instructivos de Juguetes y Piñatas</h3>
-              <p class="card-desc">Partes del instructivo, verbos en infinitivo e imperativo, secuencia de pasos, dos puntos y uso de mayúsculas en rojo.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP1 →</span></div>
-          </a>
-
-          <a class="repaso-pp-card" data-proj="p4" data-pp="pp2" href="proyecto-4/repaso_pp/pp2.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-green">PP2 · Saberes y Lenguajes</span>
-                <span class="repaso-status-badge" id="status-p4-pp2">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Juguetes Reciclados, Medición cm y Crónica</h3>
-              <p class="card-desc">Medición con regla en centímetros, perímetro de figuras, orden cronológico de la crónica y uso de comas al enumerar.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP2 →</span></div>
-          </a>
-
-          <a class="repaso-pp-card" data-proj="p4" data-pp="pp3" href="proyecto-4/repaso_pp/pp3.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-accent">PP3 · Saberes, Ética y Humano</span>
-                <span class="repaso-status-badge" id="status-p4-pp3">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Piñatas, Balanza (kg/g), Metro y Posadas</h3>
-              <p class="card-desc">Comparación de masa con balanza, uso de kg/m/cm, tradiciones decembrinas, inclusión y seguridad al quebrar piñatas.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP3 →</span></div>
-          </a>
-        </div>
-
-        <div class="sim-exam-banner" id="sim-banner-p4">
-          <div style="flex: 1; min-width: 240px;">
-            <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.12rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 4</div>
-            <p id="sim-sub-p4" style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 3 repasos de Productos Parciales (PP1 a PP3) para desbloquear el examen en este dispositivo.</p>
-            <div class="sim-exam-chips" id="sim-chips-p4">
-              <span class="sim-chip">⏳ PP1</span>
-              <span class="sim-chip">⏳ PP2</span>
-              <span class="sim-chip">⏳ PP3</span>
-            </div>
-          </div>
-          <a class="btn-sim-exam locked" id="sim-btn-p4" href="proyecto-4/simulador_examen/index.html" onclick="return handleExamSimClick(event, 'p4', 'proyecto-4/simulador_examen/index.html')">🔒 Candado: Completa tus PP</a>
-        </div>
+        <button class="btn-yt-toggle" onclick="toggleYtDrawer('p4')" title="Ver videos educativos sugeridos para este proyecto">
+          <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Videos Sugeridos</span>
+          <span class="yt-arrow" id="arrow-p4">▼</span>
+        </button>
       </div>
 
       <!-- DRAWER DE VIDEOS SUGERIDOS PROYECTO 4 -->
@@ -1147,7 +1083,10 @@
         <!-- 1. TALLER DE INSTRUCTIVOS -->
         <a class="game-card project4-card" href="proyecto-4/taller_instructivos_juguetes/index.html?v=4.3">
           <div class="card-top">
-            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Lenguajes · Instructivos</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge" style="background:#f3e8ff; color:#6d28d9; margin-bottom:0;">Lenguajes · Instructivos</span>
+              <span class="repaso-status-badge" id="status-p4-taller_instructivos_juguetes">⏳ Por completar</span>
+            </div>
             <div class="card-icon">📋</div>
             <h3 class="card-title">Taller de Juguetes</h3>
             <p class="card-desc">Partes del instructivo, verbos en infinitivo e imperativo, y ordenamiento paso a paso de juguetes reciclados y piñatas.</p>
@@ -1160,7 +1099,10 @@
         <!-- 2. MASA Y LONGITUD -->
         <a class="game-card project4-card" href="proyecto-4/laboratorio_masa_longitud/index.html?v=4.3">
           <div class="card-top">
-            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Saberes y P. Científico</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge" style="background:#f3e8ff; color:#6d28d9; margin-bottom:0;">Saberes y P. Científico</span>
+              <span class="repaso-status-badge" id="status-p4-laboratorio_masa_longitud">⏳ Por completar</span>
+            </div>
             <div class="card-icon">⚖️</div>
             <h3 class="card-title">Masa y Longitud</h3>
             <p class="card-desc">Medición en centímetros y metros con regla desde el 0, y pesaje en gramos y kilogramos en balanza de dos platillos.</p>
@@ -1173,7 +1115,10 @@
         <!-- 3. POSADAS Y TRADICIONES -->
         <a class="game-card project4-card" href="proyecto-4/posadas_y_tradiciones/index.html?v=4.3">
           <div class="card-top">
-            <span class="card-badge" style="background:#f3e8ff; color:#6d28d9;">Ética y Lenguajes</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge" style="background:#f3e8ff; color:#6d28d9; margin-bottom:0;">Ética y Lenguajes</span>
+              <span class="repaso-status-badge" id="status-p4-posadas_y_tradiciones">⏳ Por completar</span>
+            </div>
             <div class="card-icon">🪅</div>
             <h3 class="card-title">Posadas y Tradiciones</h3>
             <p class="card-desc">Descripción cronológica de procesos, uso de comas y mayúsculas en rojo, y acuerdos de colaboración e inclusión.</p>
@@ -1183,6 +1128,19 @@
           </div>
         </a>
       </div>
+
+      <div class="sim-exam-banner" id="sim-banner-p4" style="margin-top: -1.75rem; margin-bottom: 3rem;">
+        <div style="flex: 1; min-width: 240px;">
+          <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 4</div>
+          <p id="sim-sub-p4" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 3 juegos del Proyecto 4 (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.</p>
+          <div class="sim-exam-chips" id="sim-chips-p4">
+            <span class="sim-chip">⏳ Taller de Juguetes</span>
+            <span class="sim-chip">⏳ Masa y Longitud</span>
+            <span class="sim-chip">⏳ Posadas y Tradiciones</span>
+          </div>
+        </div>
+        <a class="btn-sim-exam locked" id="sim-btn-p4" href="proyecto-4/simulador_examen/index.html" onclick="return handleExamSimClick(event, 'p4', 'proyecto-4/simulador_examen/index.html')">🔒 Candado: Completa los 3 juegos</a>
+      </div>
     </section>
 
     <!-- SECTION: PROYECTO 3 -->
@@ -1191,88 +1149,11 @@
         <span class="section-icon">❄️</span>
         <h2 class="section-title">Proyecto 3: Salud y Cuerpo Humano</h2>
         <span class="section-tag tag-project3">Noviembre 2026</span>
-        <div class="project-header-actions">
-          <button class="btn-repaso-toggle" id="btn-repaso-p3" onclick="toggleRepasoDrawer('p3')" title="Actividades de repaso por Producto Parcial para estudiar en casa o ponerse al corriente">
-            <span>📚 Repaso de Productos (PP)</span>
-            <span class="repaso-count-pill" id="repaso-badge-p3">0/4</span>
-            <span class="yt-arrow" id="repaso-arrow-p3">▼</span>
-          </button>
-          <button class="btn-yt-toggle" onclick="toggleYtDrawer('p3')" title="Ver videos educativos sugeridos para este proyecto">
-            <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            <span>Videos Sugeridos</span>
-            <span class="yt-arrow" id="arrow-p3">▼</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CAJÓN DESPLEGABLE REPASO DE PRODUCTOS PARCIALES Y SIMULADOR EXAMEN P3 -->
-      <div class="repaso-drawer" id="repaso-drawer-p3" style="display: none;">
-        <div class="yt-drawer-header">
-          <span style="font-weight: 700; color: #a7f3d0;">📚 Repaso de Productos Parciales · Proyecto 3 (Para repasar o ponerte al corriente si faltaste)</span>
-        </div>
-        <div class="repaso-grid">
-          <a class="repaso-pp-card" data-proj="p3" data-pp="pp1" href="proyecto-3/repaso_pp/pp1.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-blue">PP1 · Lenguajes</span>
-                <span class="repaso-status-badge" id="status-p3-pp1">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Carnet Escolar de Salud y Cartilla</h3>
-              <p class="card-desc">Siglas médicas (SSA, IMSS, ISSSTE), datos oficiales de identidad (CURP, sello, firma) y escritura de nombres propios con mayúscula roja.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP1 →</span></div>
-          </a>
-
-          <a class="repaso-pp-card" data-proj="p3" data-pp="pp2" href="proyecto-3/repaso_pp/pp2.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-green">PP2 · Saberes</span>
-                <span class="repaso-status-badge" id="status-p3-pp2">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Sistema Locomotor y Postura</h3>
-              <p class="card-desc">Huesos, músculos y articulaciones, orden del movimiento coordinado por el sistema nervioso y cuidado de la columna al sentarse o cargar mochila.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP2 →</span></div>
-          </a>
-
-          <a class="repaso-pp-card" data-proj="p3" data-pp="pp3" href="proyecto-3/repaso_pp/pp3.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-accent">PP3 · Ética y Humano</span>
-                <span class="repaso-status-badge" id="status-p3-pp3">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Semáforo de Decisiones ante Riesgos</h3>
-              <p class="card-desc">Prevención de accidentes en casa y escuela, hábitos de higiene para evitar contagios en temporada invernal y manejo de emociones sin golpes.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP3 →</span></div>
-          </a>
-
-          <a class="repaso-pp-card" data-proj="p3" data-pp="pp4" href="proyecto-3/repaso_pp/pp4.html">
-            <div>
-              <div class="repaso-pp-top">
-                <span class="card-badge badge-blue">PP4 · Lenguajes y Saberes</span>
-                <span class="repaso-status-badge" id="status-p3-pp4">⏳ Pendiente</span>
-              </div>
-              <h3 class="card-title" style="font-size: 1.05rem;">Tríptico Expositivo Problema-Solución</h3>
-              <p class="card-desc">Relaciones problema-solución, antecedente y consecuente, nexos causales, uso de comas en enumeraciones y estructura de la portada del tríptico.</p>
-            </div>
-            <div class="card-action"><span class="action-btn">Practicar PP4 →</span></div>
-          </a>
-        </div>
-
-        <div class="sim-exam-banner" id="sim-banner-p3">
-          <div style="flex: 1; min-width: 240px;">
-            <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.12rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 3</div>
-            <p id="sim-sub-p3" style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 4 repasos de Productos Parciales (PP1 a PP4) para desbloquear el examen en este dispositivo.</p>
-            <div class="sim-exam-chips" id="sim-chips-p3">
-              <span class="sim-chip">⏳ PP1</span>
-              <span class="sim-chip">⏳ PP2</span>
-              <span class="sim-chip">⏳ PP3</span>
-              <span class="sim-chip">⏳ PP4</span>
-            </div>
-          </div>
-          <a class="btn-sim-exam locked" id="sim-btn-p3" href="proyecto-3/simulador_examen/index.html" onclick="return handleExamSimClick(event, 'p3', 'proyecto-3/simulador_examen/index.html')">🔒 Candado: Completa tus PP</a>
-        </div>
+        <button class="btn-yt-toggle" onclick="toggleYtDrawer('p3')" title="Ver videos educativos sugeridos para este proyecto">
+          <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>Videos Sugeridos</span>
+          <span class="yt-arrow" id="arrow-p3">▼</span>
+        </button>
       </div>
 
       <!-- DRAWER DE VIDEOS SUGERIDOS PROYECTO 3 -->
@@ -1371,7 +1252,10 @@
         <!-- 1. SIMULADOR LOCOMOTOR -->
         <a class="game-card project3-card" href="proyecto-3/simulador_sistema_locomotor/index.html">
           <div class="card-top">
-            <span class="card-badge badge-blue">Ciencias Naturales</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge badge-blue" style="margin-bottom:0;">Ciencias Naturales</span>
+              <span class="repaso-status-badge" id="status-p3-simulador_sistema_locomotor">⏳ Por completar</span>
+            </div>
             <div class="card-icon">🦴</div>
             <h3 class="card-title">El Cuerpo Humano</h3>
             <p class="card-desc">Exploración táctil del esqueleto, huesos, articulaciones y movimiento muscular.</p>
@@ -1384,7 +1268,10 @@
         <!-- 2. SEMÁFORO DE DECISIONES -->
         <a class="game-card project3-card" href="proyecto-3/semaforo_decisiones_riesgos/index.html">
           <div class="card-top">
-            <span class="card-badge badge-blue">Formación Cívica</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge badge-blue" style="margin-bottom:0;">Formación Cívica</span>
+              <span class="repaso-status-badge" id="status-p3-semaforo_decisiones_riesgos">⏳ Por completar</span>
+            </div>
             <div class="card-icon">🚦</div>
             <h3 class="card-title">Semáforo de Decisiones</h3>
             <p class="card-desc">Clasificación en semáforo (Verde, Amarillo, Rojo) con 20 situaciones reales y explicaciones formativas.</p>
@@ -1397,7 +1284,10 @@
         <!-- 3. CAUSA Y EFECTO EN SALUD -->
         <a class="game-card project3-card" href="proyecto-3/causa_efecto_salud_invierno/index.html">
           <div class="card-top">
-            <span class="card-badge badge-blue">Lenguajes</span>
+            <div class="repaso-pp-top" style="margin-bottom:0.45rem;">
+              <span class="card-badge badge-blue" style="margin-bottom:0;">Lenguajes</span>
+              <span class="repaso-status-badge" id="status-p3-causa_efecto_salud_invierno">⏳ Por completar</span>
+            </div>
             <div class="card-icon">🌡️</div>
             <h3 class="card-title">Causa y Efecto: Salud</h3>
             <p class="card-desc">Vinculación causa-efecto en hábitos higiénicos, vacunas y prevención de resfriados.</p>
@@ -1406,6 +1296,19 @@
             <span class="action-btn">Abrir Actividad ➔</span>
           </div>
         </a>
+      </div>
+
+      <div class="sim-exam-banner" id="sim-banner-p3" style="margin-top: -1.75rem; margin-bottom: 3rem;">
+        <div style="flex: 1; min-width: 240px;">
+          <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 3</div>
+          <p id="sim-sub-p3" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 3 juegos del Proyecto 3 (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.</p>
+          <div class="sim-exam-chips" id="sim-chips-p3">
+            <span class="sim-chip">⏳ El Cuerpo Humano</span>
+            <span class="sim-chip">⏳ Semáforo de Decisiones</span>
+            <span class="sim-chip">⏳ Causa y Efecto: Salud</span>
+          </div>
+        </div>
+        <a class="btn-sim-exam locked" id="sim-btn-p3" href="proyecto-3/simulador_examen/index.html" onclick="return handleExamSimClick(event, 'p3', 'proyecto-3/simulador_examen/index.html')">🔒 Candado: Completa los 3 juegos</a>
       </div>
     </section>
 
@@ -1640,19 +1543,18 @@
         title: 'Proyecto 4: Juguetes, Piñatas y Tradiciones',
         examHref: 'proyecto-4/simulador_examen/index.html',
         pps: [
-          { id: 'pp1', label: 'PP1 · Instructivos de Juguetes y Piñatas', href: 'proyecto-4/repaso_pp/pp1.html' },
-          { id: 'pp2', label: 'PP2 · Juguetes Reciclados, Medición cm y Crónica', href: 'proyecto-4/repaso_pp/pp2.html' },
-          { id: 'pp3', label: 'PP3 · Piñatas, Balanza (kg/g), Metro y Posadas', href: 'proyecto-4/repaso_pp/pp3.html' }
+          { id: 'taller_instructivos_juguetes', shortLabel: 'Taller de Juguetes', label: '📋 Taller de Juguetes (PP1 · Instructivos)', href: 'proyecto-4/taller_instructivos_juguetes/index.html?v=4.3' },
+          { id: 'laboratorio_masa_longitud', shortLabel: 'Masa y Longitud', label: '⚖️ Masa y Longitud (PP2 y PP3 · Regla y Balanza)', href: 'proyecto-4/laboratorio_masa_longitud/index.html?v=4.3' },
+          { id: 'posadas_y_tradiciones', shortLabel: 'Posadas y Tradiciones', label: '🪅 Posadas y Tradiciones (PP2 y PP3 · Crónica y Acuerdos)', href: 'proyecto-4/posadas_y_tradiciones/index.html?v=4.3' }
         ]
       },
       p3: {
         title: 'Proyecto 3: Salud y Cuerpo Humano',
         examHref: 'proyecto-3/simulador_examen/index.html',
         pps: [
-          { id: 'pp1', label: 'PP1 · Carnet Escolar de Salud y Cartilla', href: 'proyecto-3/repaso_pp/pp1.html' },
-          { id: 'pp2', label: 'PP2 · Sistema Locomotor y Postura', href: 'proyecto-3/repaso_pp/pp2.html' },
-          { id: 'pp3', label: 'PP3 · Semáforo de Decisiones ante Riesgos', href: 'proyecto-3/repaso_pp/pp3.html' },
-          { id: 'pp4', label: 'PP4 · Tríptico Expositivo Problema-Solución', href: 'proyecto-3/repaso_pp/pp4.html' }
+          { id: 'simulador_sistema_locomotor', shortLabel: 'El Cuerpo Humano', label: '🦴 El Cuerpo Humano (PP2 · Sistema Locomotor)', href: 'proyecto-3/simulador_sistema_locomotor/index.html' },
+          { id: 'semaforo_decisiones_riesgos', shortLabel: 'Semáforo de Decisiones', label: '🚦 Semáforo de Decisiones (PP3 · Prevención de Riesgos)', href: 'proyecto-3/semaforo_decisiones_riesgos/index.html' },
+          { id: 'causa_efecto_salud_invierno', shortLabel: 'Causa y Efecto: Salud', label: '🌡️ Causa y Efecto: Salud (PP1 y PP4 · Cartilla y Tríptico)', href: 'proyecto-3/causa_efecto_salud_invierno/index.html' }
         ]
       }
     };
@@ -1670,25 +1572,6 @@
 
     function isPpDone(projData, ppId) {
       return Boolean(projData && projData.pps && projData.pps[ppId] && projData.pps[ppId].completed === true);
-    }
-
-    function toggleRepasoDrawer(proj, forceOpen) {
-      const drawer = document.getElementById(`repaso-drawer-${proj}`);
-      const arrow = document.getElementById(`repaso-arrow-${proj}`);
-      const btn = document.getElementById(`btn-repaso-${proj}`);
-      if (!drawer) return;
-
-      const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
-      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
-      if (shouldOpen) {
-        drawer.style.display = 'block';
-        if (arrow) arrow.textContent = '▲';
-        if (btn) btn.classList.add('open');
-      } else {
-        drawer.style.display = 'none';
-        if (arrow) arrow.textContent = '▼';
-        if (btn) btn.classList.remove('open');
-      }
     }
 
     function renderAllRepasoProgress() {
@@ -1712,30 +1595,23 @@
           if (badgeEl) {
             if (done) {
               badgeEl.classList.add('done');
-              const pctTxt = typeof rec.bestPct === 'number' ? ` (${rec.bestPct}%)` : '';
-              badgeEl.textContent = `✅ Completado${pctTxt}`;
-            } else if (rec && typeof rec.bestPct === 'number' && rec.bestPct > 0) {
+              badgeEl.textContent = '✅ Completado';
+            } else if (rec && typeof rec.bestScore === 'number' && rec.bestScore > 0) {
               badgeEl.classList.remove('done');
-              badgeEl.textContent = `🔄 Mejor intento: ${rec.bestPct}%`;
+              badgeEl.textContent = `🔄 Avance: ${rec.bestScore}/5`;
             } else {
               badgeEl.classList.remove('done');
-              badgeEl.textContent = '⏳ Pendiente';
+              badgeEl.textContent = '⏳ Por completar';
             }
           }
 
-          chipsHtml += `<span class="sim-chip${done ? ' done' : ''}">${done ? '✅' : '⏳'} ${pp.id.toUpperCase()}</span>`;
+          chipsHtml += `<span class="sim-chip${done ? ' done' : ''}">${done ? '✅' : '⏳'} ${pp.shortLabel || pp.label}</span>`;
         });
 
         if (chipsEl) chipsEl.innerHTML = chipsHtml;
 
         const total = cfg.pps.length;
         const allDone = doneCount === total;
-        const headerBadge = document.getElementById(`repaso-badge-${projKey}`);
-        if (headerBadge) {
-          headerBadge.textContent = `${doneCount}/${total}`;
-          headerBadge.classList.toggle('all-done', allDone);
-        }
-
         const bannerEl = document.getElementById(`sim-banner-${projKey}`);
         const subEl = document.getElementById(`sim-sub-${projKey}`);
         const btnEl = document.getElementById(`sim-btn-${projKey}`);
@@ -1748,13 +1624,13 @@
             btnEl.textContent = `📝 Practicar Examen Final${examBest}`;
           } else {
             const missing = total - doneCount;
-            btnEl.textContent = `🔒 Bloqueado (Faltan ${missing} PP)`;
+            btnEl.textContent = `🔒 Bloqueado (Faltan ${missing} juego${missing === 1 ? '' : 's'})`;
           }
         }
         if (subEl) {
           subEl.textContent = allDone
-            ? '¡Desbloqueado! Ya completaste todos los Productos Parciales y puedes practicar para el examen.'
-            : `Completa los ${total} repasos de Productos Parciales (PP1 a PP${total}) para desbloquear el examen en este dispositivo.`;
+            ? '¡Desbloqueado! Ya completaste los 3 juegos del proyecto y puedes practicar para el examen.'
+            : `Completa los ${total} juegos interactivos de este proyecto (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.`;
         }
       });
     }
@@ -1779,7 +1655,7 @@
       const subtitle = document.getElementById('examLockSubtitle');
       const list = document.getElementById('examLockList');
       if (subtitle) {
-        subtitle.textContent = `Para ingresar al Simulador del Examen Final de ${cfg.title}, primero completa exitosamente ${missing.length} actividad(es) pendiente(s) en este dispositivo:`;
+        subtitle.textContent = `Para ingresar al Simulador del Examen Final de ${cfg.title}, primero completa ${missing.length} juego(s) pendiente(s) del proyecto en este dispositivo:`;
       }
       if (list) {
         list.innerHTML = cfg.pps.map((pp) => {
@@ -1787,9 +1663,9 @@
           return `<div class="lock-req-row ${done ? 'done' : 'pending'}">
             <div>
               <div style="font-weight: 800; color: #0f172a;">${done ? '✅' : '⏳'} ${pp.label}</div>
-              <div style="font-size: 0.8rem; color: #475569;">${done ? 'Completado exitosamente' : 'Pendiente por completar (mínimo 60%)'}</div>
+              <div style="font-size: 0.8rem; color: #475569;">${done ? 'Juego completado exitosamente' : 'Pendiente por completar (logra 5 aciertos en el juego)'}</div>
             </div>
-            ${done ? '<span style="font-weight: 800; color: #059669; font-size: 0.85rem;">Listo</span>' : `<a class="lock-req-link" href="${pp.href}">Ir a completar →</a>`}
+            ${done ? '<span style="font-weight: 800; color: #059669; font-size: 0.85rem;">Listo</span>' : `<a class="lock-req-link" href="${pp.href}">Ir al juego →</a>`}
           </div>`;
         }).join('');
       }
@@ -1803,22 +1679,7 @@
     }
 
     (function initRepasoAndLockHooks() {
-      const boot = () => {
-        renderAllRepasoProgress();
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const openProj = params.get('openRepaso');
-          if (openProj && PORTAL_REPASO_CONFIG[openProj]) {
-            const sec = document.getElementById(`sec-proyecto-${openProj.replace(/^p/, '')}`);
-            if (sec && window.getComputedStyle(sec).display === 'none') {
-              const allTab = document.querySelector('.tab-btn');
-              if (allTab) allTab.click();
-            }
-            toggleRepasoDrawer(openProj, true);
-            if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        } catch (e) {}
-      };
+      const boot = () => { renderAllRepasoProgress(); };
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', boot);
       } else {
