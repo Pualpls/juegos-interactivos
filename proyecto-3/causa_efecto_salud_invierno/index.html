@@ -645,7 +645,6 @@
       const PP_KEY = 'causa_efecto_salud_invierno';
       const TARGET_HITS = 5;
       let sessionHits = 0;
-      let modalShownThisSession = false;
 
       function readAulaProgress() {
         try {
@@ -677,65 +676,12 @@
         return data.projects[projKey].pps[ppKey];
       }
 
-      const bar = document.createElement('div');
-      bar.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:9990;display:flex;gap:8px;align-items:center;flex-wrap:wrap;';
-      bar.innerHTML = `
-        <a href="../../index.html" style="background:#1e293b;color:#fff;text-decoration:none;padding:8px 13px;border-radius:999px;font-weight:800;font-size:0.82rem;border:1.5px solid #475569;box-shadow:0 4px 12px rgba(0,0,0,0.25);">⬅ Portal</a>
-        <button type="button" id="aulaTrackBtn" style="background:#7c3aed;color:#fff;border:1.5px solid #c4b5fd;padding:8px 14px;border-radius:999px;font-weight:800;font-size:0.82rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,0.25);">🎯 Meta Examen: 0/${TARGET_HITS}</button>
-      `;
-      document.body.appendChild(bar);
-
-      const modal = document.createElement('div');
-      modal.id = 'aulaProdModal';
-      modal.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:99999;padding:1rem;';
-      modal.innerHTML = `
-        <div style="background:#fff;color:#0f172a;border-radius:20px;max-width:600px;width:100%;padding:1.4rem 1.5rem;border-top:6px solid #10b981;box-shadow:0 20px 50px rgba(0,0,0,0.45);">
-          <h3 style="font-size:1.28rem;font-weight:900;color:#065f46;margin-bottom:0.35rem;">🎉 ¡Actividad Acreditada para tu Examen!</h3>
-          <p style="font-size:0.92rem;color:#334155;margin-bottom:0.85rem;">Tu progreso en <strong>Causa y Efecto: Salud (PP1 y PP4)</strong> quedó guardado en este dispositivo. Si faltaste a clase o quieres repasar, realiza esta producción concreta:</p>
-          <div style="background:#fffbeb;border:2px dashed #f59e0b;border-radius:14px;padding:0.9rem 1rem;margin-bottom:1rem;">
-            <div style="font-weight:900;color:#92400e;margin-bottom:0.4rem;">✍️ Producción concreta en tu cuaderno amarillo:</div>
-            <ul style="padding-left:1.2rem;font-size:0.9rem;color:#1e293b;line-height:1.5;">
-              <li>Escribe en tu cuaderno amarillo <strong>2 oraciones de problema y solución</strong> para tu Tríptico de Salud en Invierno usando conectores causales (<em>porque, ya que, por lo tanto</em>) y anota qué institución (SSA, IMSS o ISSSTE) aparece en tu Cartilla de Vacunación.</li>
-              <li>Separa con <strong>comas</strong> las frutas o hábitos de higiene que enumeres y marca con <strong>lápiz rojo las mayúsculas iniciales y puntos</strong>.</li>
-            </ul>
-          </div>
-          <div style="display:flex;justify-content:flex-end;gap:0.65rem;flex-wrap:wrap;">
-            <button type="button" id="aulaCloseModalBtn" style="background:#e2e8f0;color:#0f172a;border:none;padding:0.6rem 1.1rem;border-radius:10px;font-weight:800;cursor:pointer;font-family:inherit;">Seguir jugando aquí</button>
-            <a href="../../index.html" style="background:#059669;color:#fff;text-decoration:none;padding:0.6rem 1.15rem;border-radius:10px;font-weight:800;font-size:0.9rem;">⬅ Volver al Portal</a>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-
-      const trackBtn = document.getElementById('aulaTrackBtn');
-      document.getElementById('aulaCloseModalBtn').addEventListener('click', () => { modal.style.display = 'none'; });
-      trackBtn.addEventListener('click', () => { modal.style.display = 'flex'; });
-
-      function refreshPill() {
-        const db = readAulaProgress();
-        const rec = db.projects[PROJ_KEY] && db.projects[PROJ_KEY].pps && db.projects[PROJ_KEY].pps[PP_KEY];
-        const done = Boolean(rec && rec.completed);
-        if (done) {
-          trackBtn.style.background = '#059669';
-          trackBtn.style.borderColor = '#6ee7b7';
-          trackBtn.textContent = '✅ Acreditado · ✍️ Ver Reto Cuaderno';
-        } else {
-          trackBtn.textContent = `🎯 Meta Examen: ${Math.min(sessionHits, TARGET_HITS)}/${TARGET_HITS}`;
-        }
-      }
-
+      // Producción concreta en cuaderno amarillo (registro silencioso sin modal invasivo)
       window.__recordAulaHit = function(n) {
         sessionHits += (n || 1);
         const passed = sessionHits >= TARGET_HITS;
-        const saved = savePpProgress(PROJ_KEY, PP_KEY, Math.min(sessionHits, TARGET_HITS), TARGET_HITS, passed);
-        refreshPill();
-        if (saved.completed && passed && !modalShownThisSession) {
-          modalShownThisSession = true;
-          setTimeout(() => { modal.style.display = 'flex'; }, 450);
-        }
+        savePpProgress(PROJ_KEY, PP_KEY, Math.min(sessionHits, TARGET_HITS), TARGET_HITS, passed);
       };
-
-      refreshPill();
     })();
 
     function soundError() {

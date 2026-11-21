@@ -7,99 +7,144 @@
   <style>
     :root { --ink:#0f172a; --muted:#475569; --primary:#6d28d9; --ok:#059669; --err:#dc2626; }
     * { box-sizing:border-box; margin:0; padding:0; user-select:none !important; -webkit-user-select:none !important; -webkit-touch-callout:none !important; -webkit-tap-highlight-color:transparent !important; }
-    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Segoe UI',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#3b0764 100%); color:#f8fafc; min-height:100vh; padding:0.75rem 1rem; overflow-x:hidden; }
-    .app-wrap { max-width:1180px; margin:0 auto; display:flex; flex-direction:column; gap:0.65rem; }
-    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.6rem; background:rgba(15,23,42,0.85); border:1px solid rgba(192,132,252,0.3); border-radius:16px; padding:0.6rem 0.95rem; }
-    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; }
-    .btn-nav { background:#334155; color:#fff; border:1.5px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.45rem 0.9rem; font-family:inherit; font-size:0.9rem; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; min-height:40px; }
+    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Segoe UI',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#3b0764 100%); color:#f8fafc; min-height:100vh; padding:0.65rem 0.9rem; overflow-x:hidden; }
+    .app-wrap { max-width:1220px; margin:0 auto; display:flex; flex-direction:column; gap:0.55rem; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.5rem; background:rgba(15,23,42,0.88); border:1px solid rgba(192,132,252,0.35); border-radius:14px; padding:0.5rem 0.85rem; }
+    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+    .btn-nav { background:#334155; color:#fff; border:1.5px solid rgba(255,255,255,0.2); border-radius:10px; padding:0.4rem 0.8rem; font-family:inherit; font-size:0.86rem; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; min-height:38px; }
     .btn-nav:hover { background:#475569; }
-    .badge-sim { background:#f3e8ff; color:#5b21b6; font-weight:900; font-size:0.86rem; padding:0.35rem 0.75rem; border-radius:999px; }
-    .pill-progress { background:#1e293b; border:1.5px solid #c084fc; color:#f3e8ff; padding:0.35rem 0.8rem; border-radius:999px; font-weight:800; font-size:0.88rem; }
-    .btn-sound { background:rgba(16,185,129,0.2); border:1.5px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.4rem 0.8rem; font-family:inherit; font-weight:800; cursor:pointer; min-height:40px; }
+    .btn-reset-run { background:#dc2626; border-color:#fca5a5; }
+    .btn-reset-run:hover { background:#b91c1c; }
+    .badge-sim { background:#f3e8ff; color:#5b21b6; font-weight:900; font-size:0.84rem; padding:0.3rem 0.7rem; border-radius:999px; }
+    .pill-progress { background:#1e293b; border:1.5px solid #c084fc; color:#f3e8ff; padding:0.3rem 0.75rem; border-radius:999px; font-weight:800; font-size:0.85rem; }
+    .btn-sound { background:rgba(16,185,129,0.2); border:1.5px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:10px; padding:0.35rem 0.75rem; font-family:inherit; font-weight:800; cursor:pointer; min-height:38px; }
     .btn-sound.muted { background:#334155; border-color:#64748b; color:#cbd5e1; }
 
-    /* BARRA DE NAVEGACIÓN DE REACTIVOS 1..16 */
-    .q-strip { display:flex; flex-wrap:wrap; gap:0.35rem; background:rgba(15,23,42,0.72); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:0.45rem 0.65rem; align-items:center; justify-content:center; }
-    .q-dot { width:34px; height:34px; border-radius:10px; border:2px solid #475569; background:#1e293b; color:#cbd5e1; font-family:inherit; font-weight:900; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all 0.15s; }
+    /* TABLA NEM EN VIVO + TIRAS DE REACTIVOS */
+    .hud-row { display:grid; grid-template-columns:1fr auto; gap:0.55rem; align-items:center; }
+    @media (max-width:900px) { .hud-row { grid-template-columns:1fr; } }
+    .q-strip { display:flex; flex-wrap:wrap; gap:0.3rem; background:rgba(15,23,42,0.76); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.4rem 0.6rem; align-items:center; }
+    .q-dot { width:32px; height:32px; border-radius:8px; border:2px solid #475569; background:#1e293b; color:#cbd5e1; font-family:inherit; font-weight:900; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all 0.15s; }
     .q-dot.current { border-color:#f59e0b; background:#fef3c7; color:#92400e; transform:scale(1.08); }
-    .q-dot.done-ok { border-color:#10b981; background:#065f46; color:#ecfdf5; }
-    .q-dot.done-err { border-color:#f59e0b; background:#78350f; color:#fef3c7; }
+    .q-dot.done-ok { border-color:#10b981; background:#059669; color:#ffffff; }
+    .q-dot.done-err { border-color:#ef4444; background:#991b1b; color:#fee2e2; }
+    .nem-live { display:flex; gap:0.35rem; flex-wrap:wrap; background:rgba(15,23,42,0.76); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:0.4rem 0.65rem; font-size:0.78rem; font-weight:800; }
+    .nem-pill { padding:0.2rem 0.55rem; border-radius:8px; background:#1e293b; border:1px solid #475569; }
 
-    .stage-card { background:#ffffff; color:var(--ink); border-radius:20px; padding:1.1rem 1.25rem; box-shadow:0 14px 34px rgba(0,0,0,0.32); }
-    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.6rem; margin-bottom:0.65rem; flex-wrap:wrap; border-bottom:2px dashed #e2e8f0; padding-bottom:0.5rem; }
-    .campo-tag { background:#f3e8ff; color:#6d28d9; padding:0.25rem 0.75rem; border-radius:999px; font-size:0.82rem; font-weight:900; }
+    .stage-card { background:#ffffff; color:var(--ink); border-radius:18px; padding:1rem 1.15rem; box-shadow:0 14px 34px rgba(0,0,0,0.34); border-top:5px solid #6d28d9; }
+    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.6rem; flex-wrap:wrap; border-bottom:2px dashed #cbd5e1; padding-bottom:0.45rem; }
+    .campo-tag { background:#f3e8ff; color:#5b21b6; padding:0.22rem 0.7rem; border-radius:999px; font-size:0.8rem; font-weight:900; }
+    .format-tag { background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:0.2rem 0.65rem; border-radius:999px; font-size:0.78rem; font-weight:900; }
 
-    /* LAYOUT VISUAL 2 COLUMNAS: ESCENA A LA IZQUIERDA, INTERACCIÓN A LA DERECHA */
-    .q-split { display:grid; grid-template-columns:340px 1fr; gap:1.1rem; align-items:center; }
+    .q-split { display:grid; grid-template-columns:310px 1fr; gap:1rem; align-items:start; }
     @media (max-width:860px) { .q-split { grid-template-columns:1fr; } }
 
-    .visual-panel { background:linear-gradient(145deg,#f8fafc 0%,#f3e8ff 100%); border:2.5px solid #ddd6fe; border-radius:18px; padding:0.9rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.55rem; text-align:center; min-height:230px; }
-    .visual-panel img.hero-img { width:145px; height:145px; object-fit:contain; border-radius:14px; background:#fff; padding:6px; border:2px solid #cbd5e1; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
-    .visual-row-imgs { display:flex; gap:0.45rem; justify-content:center; flex-wrap:wrap; }
-    .visual-row-imgs img { width:76px; height:76px; object-fit:contain; border-radius:12px; background:#fff; padding:4px; border:2px solid #cbd5e1; }
-    .visual-caption { font-size:0.88rem; font-weight:800; color:#4c1d95; background:#fff; padding:0.35rem 0.7rem; border-radius:10px; border:1.5px solid #c4b5fd; width:100%; }
+    .visual-panel { background:linear-gradient(145deg,#f8fafc 0%,#f3e8ff 100%); border:2px solid #ddd6fe; border-radius:16px; padding:0.8rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; text-align:center; min-height:210px; }
+    .visual-panel img.hero-img { width:135px; height:135px; object-fit:contain; border-radius:12px; background:#fff; padding:5px; border:2px solid #cbd5e1; }
+    .visual-row-imgs { display:flex; gap:0.4rem; justify-content:center; flex-wrap:wrap; }
+    .visual-row-imgs img { width:72px; height:72px; object-fit:contain; border-radius:10px; background:#fff; padding:4px; border:2px solid #cbd5e1; }
+    .visual-caption { font-size:0.84rem; font-weight:800; color:#4c1d95; background:#fff; padding:0.3rem 0.6rem; border-radius:8px; border:1.5px solid #c4b5fd; width:100%; }
 
-    /* WIDGETS VISUALES MATEMÁTICOS Y DE MEDICIÓN */
-    .cdu-card { background:#fff; border:2.5px solid #475569; border-radius:14px; padding:0.65rem 1rem; display:inline-block; box-shadow:0 4px 10px rgba(0,0,0,0.06); }
-    .cdu-grid { border-collapse:collapse; font-size:1.3rem; font-weight:900; margin:0 auto; }
-    .cdu-grid td { width:38px; height:34px; text-align:center; border:1.5px solid #cbd5e1; }
-    .cdu-grid .h-c { background:#fef3c7; color:#b45309; }
-    .cdu-grid .h-d { background:#fee2e2; color:#dc2626; }
-    .cdu-grid .h-u { background:#dbeafe; color:#1d4ed8; }
-    .cdu-grid .op-row td { border-bottom:3px solid #0f172a; }
-    .chip-board { display:flex; flex-direction:column; gap:0.4rem; width:100%; background:#fff; padding:0.65rem; border-radius:12px; border:2px solid #cbd5e1; }
-    .chip-row { display:flex; align-items:center; justify-content:space-between; font-weight:800; font-size:0.88rem; padding:0.25rem 0.5rem; border-radius:8px; }
-    .dot-chip { display:inline-block; width:18px; height:18px; border-radius:50%; margin-right:3px; vertical-align:middle; border:1.5px solid rgba(0,0,0,0.25); }
+    .stage-prompt { font-size:1.14rem; font-weight:900; color:#0f172a; margin-bottom:0.65rem; line-height:1.3; }
 
-    .stage-prompt { font-size:1.22rem; font-weight:900; color:#0f172a; margin-bottom:0.75rem; line-height:1.3; }
-    .options-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.65rem; }
+    /* FORMATO 1: CASILLAS TIPO EXAMEN (MCQ / MULTICHECK) */
+    .options-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.55rem; }
     @media (max-width:560px) { .options-grid { grid-template-columns:1fr; } }
-    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.75rem 0.9rem; font-family:inherit; font-size:1.05rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:58px; display:flex; align-items:center; gap:0.6rem; transition:all 0.15s; }
-    .opt-btn:hover { border-color:#7c3aed; background:#faf5ff; transform:translateY(-2px); }
-    .opt-btn .opt-ico { font-size:1.45rem; flex-shrink:0; }
-    .opt-btn.selected-correct { border-color:#059669; background:#d1fae5; color:#065f46; }
-    .opt-btn.selected-wrong { border-color:#dc2626; background:#fee2e2; color:#991b1b; }
+    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:12px; padding:0.65rem 0.8rem; font-family:inherit; font-size:0.98rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:52px; display:flex; align-items:center; gap:0.55rem; transition:all 0.12s; }
+    .opt-btn:hover:not(:disabled) { border-color:#7c3aed; background:#faf5ff; }
+    .opt-btn:disabled { cursor:default; }
+    .exam-box { width:24px; height:24px; border:2.5px solid #334155; border-radius:6px; background:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem; flex-shrink:0; }
+    .opt-btn.picked { border-color:#6d28d9; background:#f3e8ff; }
+    .opt-btn.picked .exam-box { background:#6d28d9; color:#fff; border-color:#6d28d9; }
+    .opt-btn.selected-correct { border-color:#059669 !important; background:#d1fae5 !important; color:#065f46 !important; }
+    .opt-btn.selected-correct .exam-box { background:#059669 !important; color:#fff !important; border-color:#059669 !important; }
+    .opt-btn.selected-wrong { border-color:#dc2626 !important; background:#fee2e2 !important; color:#991b1b !important; }
+    .opt-btn.selected-wrong .exam-box { background:#dc2626 !important; color:#fff !important; border-color:#dc2626 !important; }
 
-    /* MATCH COMPACTO Y VISUAL */
-    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
-    .match-col { display:flex; flex-direction:column; gap:0.55rem; }
-    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.65rem 0.8rem; font-family:inherit; font-size:0.95rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:50px; display:flex; align-items:center; gap:0.45rem; }
+    /* FORMATO 2: RELACIONAR COLUMNAS (1 SOLO INTENTO POR LÍNEA) */
+    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; }
+    .match-col { display:flex; flex-direction:column; gap:0.45rem; }
+    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:11px; padding:0.55rem 0.75rem; font-family:inherit; font-size:0.92rem; font-weight:800; color:#0f172a; text-align:left; cursor:pointer; min-height:46px; display:flex; align-items:center; justify-content:space-between; gap:0.4rem; }
     .match-btn.active { border-color:#7c3aed; background:#f3e8ff; box-shadow:0 0 0 3px rgba(124,58,237,0.2); }
-    .match-btn.paired { border-color:#059669; background:#d1fae5; color:#065f46; }
-    .match-btn.wrong-flash { border-color:#dc2626; background:#fee2e2; }
+    .match-btn.paired-ok { border-color:#059669; background:#d1fae5; color:#065f46; cursor:default; }
+    .match-btn.paired-err { border-color:#dc2626; background:#fee2e2; color:#991b1b; cursor:default; }
 
-    /* ORDENAR TARJETAS VISUALES */
-    .order-wrap { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; align-items:start; }
-    .order-pool, .order-slots { display:flex; flex-direction:column; gap:0.45rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.65rem; }
-    .seq-card { background:#fff; border:2.5px solid #7c3aed; border-radius:11px; padding:0.55rem 0.75rem; font-weight:800; cursor:pointer; text-align:left; font-family:inherit; font-size:0.92rem; color:#0f172a; min-height:44px; }
-    .seq-card.used { opacity:0.35; cursor:default; }
-    .seq-slot { background:#faf5ff; border:2px dashed #a855f7; border-radius:11px; padding:0.55rem 0.75rem; font-weight:800; color:#5b21b6; min-height:44px; cursor:pointer; display:flex; align-items:center; gap:0.45rem; text-align:left; font-family:inherit; font-size:0.92rem; }
+    /* FORMATO 3: NUMERAR PARÉNTESIS ( 1 ) AL ( 4 ) COMO EN EL EXAMEN IMPRESO */
+    .parens-list { display:flex; flex-direction:column; gap:0.5rem; }
+    .paren-row { display:flex; align-items:center; gap:0.65rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:12px; padding:0.55rem 0.8rem; font-weight:800; font-size:0.95rem; }
+    .paren-btn { background:#fff; border:2.5px solid #6d28d9; color:#5b21b6; font-family:inherit; font-size:1.05rem; font-weight:900; border-radius:10px; min-width:56px; height:40px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+    .paren-btn.filled { background:#f3e8ff; }
 
-    /* TOKENS INTERACTIVOS: COMAS Y MAYÚSCULAS EN ROJO */
-    .token-box { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:16px; padding:1rem; display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center; font-size:1.2rem; font-weight:800; }
-    .word-token { background:#fff; border:2.5px solid #94a3b8; border-radius:10px; padding:0.45rem 0.75rem; font-family:inherit; font-size:1.15rem; font-weight:800; cursor:pointer; color:#0f172a; }
+    /* FORMATO 4: COMPLETAR LÍNEA DE EXAMEN CON BANCO DE PALABRAS */
+    .exam-line-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.85rem 1rem; font-size:1.12rem; font-weight:800; margin-bottom:0.65rem; line-height:1.6; }
+    .line-slot { display:inline-block; min-width:140px; border-bottom:3px solid #0f172a; padding:0 0.5rem; text-align:center; color:#6d28d9; font-weight:900; background:#f3e8ff; border-radius:6px 6px 0 0; margin:0 0.25rem; }
+    .word-bank { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .word-chip { background:#fff; border:2.5px solid #64748b; border-radius:10px; padding:0.45rem 0.9rem; font-family:inherit; font-size:1rem; font-weight:900; cursor:pointer; color:#0f172a; }
+    .word-chip.active { border-color:#6d28d9; background:#f3e8ff; color:#5b21b6; }
+
+    /* FORMATO 5: COMAS Y MAYÚSCULAS EN ROJO */
+    .token-box { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.85rem; display:flex; flex-wrap:wrap; gap:0.4rem; align-items:center; font-size:1.12rem; font-weight:800; }
+    .word-token { background:#fff; border:2.5px solid #94a3b8; border-radius:10px; padding:0.4rem 0.7rem; font-family:inherit; font-size:1.08rem; font-weight:800; cursor:pointer; color:#0f172a; }
     .word-token.marked-red { border-color:#dc2626; background:#fef2f2; }
-    .red-cap { color:#dc2626; font-weight:900; font-size:1.25rem; text-decoration:underline; }
-    .comma-slot { width:38px; height:40px; border-radius:10px; border:2.5px dashed #64748b; background:#fff; font-family:inherit; font-size:1.35rem; font-weight:900; color:#64748b; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+    .red-cap { color:#dc2626; font-weight:900; font-size:1.18rem; text-decoration:underline; }
+    .comma-slot { width:36px; height:38px; border-radius:9px; border:2.5px dashed #64748b; background:#fff; font-family:inherit; font-size:1.25rem; font-weight:900; color:#64748b; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
     .comma-slot.active { border:2.5px solid #dc2626; background:#fef2f2; color:#dc2626; }
 
-    .feedback-box { margin-top:0.65rem; padding:0.65rem 0.9rem; border-radius:12px; font-weight:800; font-size:0.95rem; display:none; }
+    /* FORMATO 6: TALLER MATEMÁTICO INTERACTIVO (COPIADO DE SUITE PENSAMIENTO MATEMÁTICO) */
+    .m7-step-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.7rem 0.85rem; margin-bottom:0.55rem; }
+    .m7-step-title { font-size:0.84rem; font-weight:900; text-transform:uppercase; color:#5b21b6; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between; }
+    .m7-chips-row { display:flex; flex-wrap:wrap; gap:0.45rem; }
+    .m7-data-chip { background:#fff; border:2.5px solid #94a3b8; border-radius:10px; padding:0.4rem 0.75rem; font-family:inherit; font-size:0.9rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; color:#0f172a; }
+    .m7-data-chip.useful { border-color:#16a34a; background:#dcfce7; color:#14532d; }
+    .m7-data-chip.trampa { border-color:#dc2626; background:#fee2e2; color:#991b1b; text-decoration:line-through; }
+
+    .workbench-wrap { display:grid; grid-template-columns:auto 1fr; gap:0.85rem; align-items:center; }
+    @media (max-width:620px) { .workbench-wrap { grid-template-columns:1fr; } }
+    .cdu-grid { border-collapse:separate; border-spacing:4px; margin:0 auto; background:#e2e8f0; padding:6px; border-radius:12px; border:2px solid #64748b; }
+    .cdu-grid th { padding:0.3rem 0.55rem; border-radius:7px; font-size:0.92rem; font-weight:900; text-align:center; }
+    .th-um { background:#dcfce7; color:#166534; border:1.5px solid #16a34a; }
+    .th-c { background:#fef08a; color:#854d0e; border:1.5px solid #ca8a04; }
+    .th-d { background:#fee2e2; color:#991b1b; border:1.5px solid #dc2626; }
+    .th-u { background:#dbeafe; color:#1e40af; border:1.5px solid #2563eb; }
+    .cdu-cell { width:46px; height:44px; background:#fff; border:2.5px dashed #94a3b8; border-radius:8px; text-align:center; vertical-align:middle; font-size:1.25rem; font-weight:900; color:#0f172a; cursor:pointer; }
+    .cdu-cell.carry-cell { height:32px; font-size:0.95rem; background:#fefce8; border-color:#eab308; color:#b45309; }
+    .cdu-cell.sign-cell { background:#faf5ff; border-color:#9333ea; color:#6d28d9; }
+    .cdu-cell.active-target { border:3px solid #2563eb !important; background:#eff6ff !important; box-shadow:0 0 0 3px rgba(37,99,235,0.2); }
+    .cdu-cell.filled { border-style:solid; border-color:#334155; }
+    .cdu-cell.result-cell { border-top:3px solid #0f172a; background:#f0fdf4; border-color:#16a34a; }
+
+    .digit-palette { display:flex; flex-wrap:wrap; gap:0.35rem; justify-content:center; background:#fff; border:2px solid #cbd5e1; border-radius:12px; padding:0.55rem; }
+    .digit-btn { width:42px; height:42px; border-radius:10px; border:2px solid #334155; background:#f8fafc; font-family:inherit; font-size:1.18rem; font-weight:900; color:#0f172a; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+    .digit-btn:hover:not(:disabled) { background:#e0e7ff; border-color:#4f46e5; transform:scale(1.06); }
+    .digit-btn.sign-plus { background:#dbeafe; color:#1d4ed8; border-color:#2563eb; }
+    .digit-btn.sign-minus { background:#fee2e2; color:#dc2626; border-color:#dc2626; }
+    .digit-btn.clear-btn { width:auto; padding:0 0.65rem; font-size:0.85rem; background:#f1f5f9; color:#475569; }
+
+    .chip-board { display:flex; flex-direction:column; gap:0.35rem; width:100%; background:#fff; padding:0.55rem; border-radius:12px; border:2px solid #cbd5e1; }
+    .chip-row { display:flex; align-items:center; justify-content:space-between; font-weight:800; font-size:0.84rem; padding:0.22rem 0.45rem; border-radius:7px; flex-wrap:wrap; gap:4px; }
+    .dot-chip { display:inline-block; width:16px; height:16px; border-radius:50%; margin-right:2px; vertical-align:middle; border:1.5px solid rgba(0,0,0,0.25); }
+
+    .chain-slots { display:flex; align-items:center; flex-wrap:wrap; gap:0.35rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:12px; padding:0.7rem; margin-bottom:0.55rem; justify-content:center; }
+    .chain-slot { min-width:96px; height:42px; border-radius:10px; border:2.5px dashed #7c3aed; background:#faf5ff; font-family:inherit; font-size:1rem; font-weight:900; color:#5b21b6; cursor:pointer; padding:0 0.55rem; }
+
+    .feedback-box { margin-top:0.55rem; padding:0.6rem 0.85rem; border-radius:11px; font-weight:800; font-size:0.9rem; display:none; }
     .feedback-box.ok { display:block; background:#d1fae5; color:#065f46; border:2px solid #059669; }
     .feedback-box.err { display:block; background:#fee2e2; color:#991b1b; border:2px solid #dc2626; }
-    .stage-footer { margin-top:0.75rem; display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; border-top:1.5px solid #e2e8f0; padding-top:0.65rem; }
-    .btn-primary { background:#6d28d9; color:#fff; border:none; border-radius:12px; padding:0.65rem 1.2rem; font-family:inherit; font-size:0.98rem; font-weight:900; cursor:pointer; min-height:44px; }
+    .stage-footer { margin-top:0.65rem; display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; border-top:1.5px solid #e2e8f0; padding-top:0.55rem; }
+    .btn-primary { background:#6d28d9; color:#fff; border:none; border-radius:11px; padding:0.55rem 1.1rem; font-family:inherit; font-size:0.94rem; font-weight:900; cursor:pointer; min-height:42px; }
     .btn-primary:disabled { opacity:0.45; cursor:not-allowed; }
-    .btn-sec { background:#e2e8f0; color:#0f172a; border:none; border-radius:12px; padding:0.6rem 1rem; font-family:inherit; font-size:0.92rem; font-weight:800; cursor:pointer; min-height:44px; }
+    .btn-grade { background:#059669; color:#fff; border:none; border-radius:11px; padding:0.55rem 1.15rem; font-family:inherit; font-size:0.95rem; font-weight:900; cursor:pointer; min-height:42px; box-shadow:0 4px 12px rgba(5,150,105,0.3); }
+    .btn-grade:disabled { opacity:0.4; cursor:not-allowed; box-shadow:none; }
+    .btn-sec { background:#e2e8f0; color:#0f172a; border:none; border-radius:11px; padding:0.5rem 0.95rem; font-family:inherit; font-size:0.88rem; font-weight:800; cursor:pointer; min-height:42px; }
 
-    /* CANDADO Y RESUMEN */
     .lock-banner { background:#fffbeb; border:2.5px solid #f59e0b; border-radius:16px; padding:1rem 1.15rem; color:#78350f; margin-bottom:0.85rem; }
     .req-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.65rem; margin:0.85rem 0; }
     .req-card { display:flex; flex-direction:column; justify-content:space-between; gap:0.6rem; padding:0.85rem 1rem; border-radius:14px; border:2px solid #cbd5e1; background:#f8fafc; }
     .req-card.done { border-color:#059669; background:#ecfdf5; }
     .req-card.pending { border-color:#f59e0b; background:#fffbeb; }
     .req-go { background:#6d28d9; color:#fff; text-decoration:none; padding:0.5rem 0.85rem; border-radius:10px; font-weight:800; font-size:0.88rem; text-align:center; }
-    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:0.65rem; margin:0.85rem 0; }
-    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.8rem; }
+    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.6rem; margin:0.8rem 0; }
+    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.75rem; }
   </style>
 </head>
 <body>
@@ -107,15 +152,20 @@
     <div class="topbar">
       <div class="topbar-left">
         <a class="btn-nav" href="../../index.html">⬅ Portal</a>
-        <span class="badge-sim">📝 Simulador Visual del Examen · Proyecto 4</span>
+        <span class="badge-sim">📝 Examen Sumativo Interactivo · Proyecto 4 (1 intento por reactivo)</span>
       </div>
       <div class="topbar-right">
         <span class="pill-progress" id="pillProgress">Verificando...</span>
+        <button type="button" class="btn-nav btn-reset-run" id="btnResetRun" style="display:none;" onclick="startExam()">🔄 Reiniciar desde 0 (Nuevos datos)</button>
         <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido</button>
       </div>
     </div>
 
-    <div class="q-strip" id="qStrip" style="display:none;"></div>
+    <div class="hud-row" id="hudRow" style="display:none;">
+      <div class="q-strip" id="qStrip"></div>
+      <div class="nem-live" id="nemLive"></div>
+    </div>
+
     <div class="stage-card" id="stageContainer"></div>
   </div>
 
@@ -177,200 +227,226 @@
     }
     function toggleSound() { soundEnabled = !soundEnabled; const b = document.getElementById('btnSound'); b.textContent = soundEnabled ? '🔊 Sonido' : '🔇 Mudo'; b.classList.toggle('muted', !soundEnabled); }
     function shuffleArray(arr) { const c = arr.slice(); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; }
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
-    const EXAM_QUESTIONS = [
-      {
-        type: 'match', campo: 'Lenguajes',
-        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_avioncito.png" alt="Instructivo"><div class="visual-caption">📋 Instructivo: Avioncito de madera</div>`,
-        prompt: '1. Une cada parte del instructivo con su función:',
-        pairs: [
-          { left: '📌 Título', right: 'Nombre del juguete' },
-          { left: '🧰 Materiales', right: 'Lista de lo que usamos' },
-          { left: '🔢 Procedimiento', right: 'Pasos ordenados 1, 2, 3' }
-        ],
-        okMsg: '¡Exacto! Título, materiales y procedimiento forman el instructivo.'
-      },
-      {
-        type: 'mcq', campo: 'Lenguajes',
-        visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/accion_doblar.png" alt="Doblar"><img src="../taller_instructivos_juguetes/img/accion_recortar.png" alt="Recortar"><img src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"></div><div class="visual-caption">Doblar · Recortar · Pegar</div>`,
-        prompt: '2. ¿En qué forma están los verbos "Doblar", "Recortar" y "Pegar"?',
-        options: [
-          { ico: '✅', text: 'En infinitivo (-ar, -er, -ir)', correct: true },
-          { ico: '📢', text: 'En imperativo (órdenes)', correct: false },
-          { ico: '⏪', text: 'En tiempo pasado', correct: false },
-          { ico: '🏷️', text: 'Son nombres propios', correct: false }
-        ],
-        okMsg: '¡Muy bien! Los verbos terminados en -ar, -er, -ir están en infinitivo.'
-      },
-      {
-        type: 'mcq', campo: 'Lenguajes',
-        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"><div class="visual-caption">"______ los dos abatelenguas."</div>`,
-        prompt: '3. Cambia el verbo "Pegar" a modo IMPERATIVO (una orden directa):',
-        options: [
-          { ico: '👉', text: 'Pega', correct: true },
-          { ico: '📄', text: 'Pegar', correct: false },
-          { ico: '⏳', text: 'Pegué', correct: false },
-          { ico: '🔄', text: 'Pegando', correct: false }
-        ],
-        okMsg: '¡Correcto! "Pega los dos abatelenguas" es una orden en imperativo.'
-      },
-      {
-        type: 'order', campo: 'Lenguajes',
-        visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/material_globo.png" alt="Globo"><img src="../taller_instructivos_juguetes/img/material_periodico.png" alt="Periódico"><img src="../taller_instructivos_juguetes/img/material_engrudo.png" alt="Engrudo"><img src="../taller_instructivos_juguetes/img/juguete_pinata.png" alt="Piñata"></div><div class="visual-caption">🪅 Elaboración de la piñata</div>`,
-        prompt: '4. Toca en orden (del 1 al 4) los pasos para hacer la piñata:',
-        steps: [
-          '1. 🎈 Inflar y amarrar el globo',
-          '2. 📰 Cortar periódico y hacer engrudo',
-          '3. 🥣 Pegar 3 capas con engrudo',
-          '4. ☀️ Dejar secar la piñata al sol'
-        ],
-        okMsg: '¡Excelente! Ordenaste el procedimiento del 1 al 4.'
-      },
-      {
-        type: 'mcq', campo: 'Lenguajes',
-        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura2_pinata.png" alt="Crónica"><div class="visual-caption">1° Primero · 2° Después · 3° Finalmente</div>`,
-        prompt: '5. ¿Para qué sirven las palabras "Primero", "Después" y "Finalmente"?',
-        options: [
-          { ico: '⏱️', text: 'Ordenar los pasos en el tiempo', correct: true },
-          { ico: '⚖️', text: 'Pesar objetos en gramos', correct: false },
-          { ico: '📏', text: 'Medir con la regla escolar', correct: false },
-          { ico: '🎨', text: 'Dibujar la portada', correct: false }
-        ],
-        okMsg: '¡Así es! Son conectores para ordenar hechos cronológicamente.'
-      },
-      {
-        type: 'commagaps', campo: 'Lenguajes',
-        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Colores"><div class="visual-caption">🎨 Lista de colores de papel China</div>`,
-        prompt: '6. Toca los 2 recuadros donde falta poner una COMA ( , ):',
-        segments: ['Usamos papel rojo', 'verde', 'amarillo', 'y azul.'],
-        commaAfter: [0, 1],
-        okMsg: '¡Muy bien! "rojo, verde, amarillo y azul" (sin coma antes de "y").'
-      },
-      {
-        type: 'redcaps', campo: 'Lenguajes',
-        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura3_posada.png" alt="Nombres propios"><div class="visual-caption">✏️ Nombres propios y lugares con rojo</div>`,
-        prompt: '7. Toca las 3 palabras que deben iniciar con MAYÚSCULA en rojo:',
-        tokens: [
-          { text: 'alexander', needsCap: true },
-          { text: 'gómez', needsCap: true },
-          { text: 'vive', needsCap: false },
-          { text: 'en', needsCap: false },
-          { text: 'sayula.', needsCap: true }
-        ],
-        okMsg: '¡Perfecto! Alexander Gómez y Sayula inician con mayúscula en rojo.'
-      },
-      {
-        type: 'match', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<div class="visual-row-imgs"><img src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><img src="../laboratorio_masa_longitud/img/unit_m.png" alt="Metro"><img src="../laboratorio_masa_longitud/img/instrumento_regla.png" alt="Regla"></div><div class="visual-caption">⚖️ kg · 📐 m · 📏 cm</div>`,
-        prompt: '8. Une cada instrumento o unidad con lo que mide:',
-        pairs: [
-          { left: '⚖️ Balanza (kg)', right: 'Masa de la fruta' },
-          { left: '📐 Metro (m)', right: 'Largo de la cuerda del patio' },
-          { left: '📏 Regla (cm)', right: 'Largo de un abatelenguas' }
-        ],
-        okMsg: '¡Excelente! Balanza para masa (kg) y regla o metro para longitud.'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/regla_abatelenguas.png" alt="Regla"><div style="width:100%;background:#fef3c7;border:2px solid #b45309;border-radius:8px;padding:6px;font-weight:900;color:#78350f;font-size:0.85rem;">📏 0 cm ━━━━━━━━━━━━ 14 cm</div><div class="visual-caption">Alineado desde la marca 0 cm</div>`,
-        prompt: '9. Si el abatelenguas inicia en el 0 y llega al 14 de la regla, ¿cuánto mide?',
-        options: [
-          { ico: '📏', text: '14 centímetros (cm)', correct: true },
-          { ico: '📐', text: '14 metros (m)', correct: false },
-          { ico: '⚖️', text: '14 kilogramos (kg)', correct: false },
-          { ico: '📏', text: '4 centímetros (cm)', correct: false }
-        ],
-        okMsg: '¡Exacto! Un abatelenguas escolar mide 14 centímetros (cm).'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><div style="display:flex;justify-content:space-around;width:100%;font-weight:900;font-size:0.88rem;"><span style="background:#fef3c7;border:2px solid #d97706;padding:4px 8px;border-radius:8px;">🍊 Mandarinas ⬇️ (Baja)</span><span style="background:#e0f2fe;border:2px solid #0284c7;padding:4px 8px;border-radius:8px;">🎊 Papel China ⬆️ (Sube)</span></div>`,
-        prompt: '10. En la balanza, el plato con mandarinas baja y el de papel sube. ¿Cuál tiene MAYOR masa?',
-        options: [
-          { ico: '🍊', text: 'La bolsa con mandarinas', correct: true },
-          { ico: '🎊', text: 'La bolsa con papel China', correct: false },
-          { ico: '⚖️', text: 'Pesan exactamente lo mismo', correct: false },
-          { ico: '📦', text: 'Ninguna tiene masa', correct: false }
-        ],
-        okMsg: '¡Muy bien! El platillo que baja tiene mayor masa.'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_barquito.png" alt="Papiroflexia"><div style="width:110px;height:110px;border:3px solid #2563eb;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:900;color:#1e3a8a;border-radius:8px;">Cuadrado<br>Arriba: 20 cm</div>`,
-        prompt: '11. Una hoja cuadrada tiene sus 4 lados iguales. Si arriba mide 20 cm, ¿cuánto mide cada lado?',
-        options: [
-          { ico: '🟦', text: '20 cm cada lado', correct: true },
-          { ico: '📏', text: '10 cm cada lado', correct: false },
-          { ico: '📐', text: '40 cm cada lado', correct: false },
-          { ico: '✂️', text: '15 cm cada lado', correct: false }
-        ],
-        okMsg: '¡Correcto! Todos los lados de un cuadrado miden lo mismo: 20 cm.'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<div class="chip-board">
-          <div class="chip-row" style="background:#dcfce7;color:#166534;"><span><i class="dot-chip" style="background:#22c55e;"></i><i class="dot-chip" style="background:#22c55e;"></i></span><span>2 Millares (UM)</span></div>
-          <div class="chip-row" style="background:#fef9c3;color:#854d0e;"><span><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i><i class="dot-chip" style="background:#eab308;"></i></span><span>4 Centenas (C)</span></div>
-          <div class="chip-row" style="background:#fee2e2;color:#991b1b;"><span><i class="dot-chip" style="background:#ef4444;"></i><i class="dot-chip" style="background:#ef4444;"></i><i class="dot-chip" style="background:#ef4444;"></i></span><span>3 Decenas (D)</span></div>
-          <div class="chip-row" style="background:#dbeafe;color:#1e40af;"><span><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i><i class="dot-chip" style="background:#3b82f6;"></i></span><span>5 Unidades (U)</span></div>
-        </div>`,
-        prompt: '12. ¿Qué número de 4 cifras forman estas fichas?',
-        options: [
-          { ico: '🔢', text: '2,435', correct: true },
-          { ico: '🔢', text: '2,345', correct: false },
-          { ico: '🔢', text: '4,235', correct: false },
-          { ico: '🔢', text: '24,035', correct: false }
-        ],
-        okMsg: '¡Exacto! 2 UM + 4 C + 3 D + 5 U = 2,435.'
-      },
-      {
-        type: 'order', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/posada_aguinaldo.png" alt="Precios"><div class="visual-caption">🏷️ $1,850 · $1,290 · $2,100 · $1,540</div>`,
-        prompt: '13. Toca los precios para ordenarlos del MENOR al MAYOR (1° al 4°):',
-        steps: [
-          '1. 🏷️ $1,290 (Menor)',
-          '2. 🏷️ $1,540',
-          '3. 🏷️ $1,850',
-          '4. 🏷️ $2,100 (Mayor)'
-        ],
-        okMsg: '¡Muy bien! $1,290 < $1,540 < $1,850 < $2,100.'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<div class="cdu-card"><table class="cdu-grid"><tr><td></td><td class="h-c">C</td><td class="h-d">D</td><td class="h-u">U</td></tr><tr><td></td><td>4</td><td>6</td><td>8</td></tr><tr class="op-row"><td>+</td><td></td><td>8</td><td>5</td></tr><tr><td></td><td>?</td><td>?</td><td>?</td></tr></table></div><div class="visual-caption">🍊 468 mandarinas (en 12 bolsas) + 85 cañas</div>`,
-        prompt: '14. Resuelve 468 + 85: ¿cuántas frutas hay en total y cuál dato NO se suma?',
-        options: [
-          { ico: '🍊', text: '553 frutas (Distractor: 12 bolsas)', correct: true },
-          { ico: '🍊', text: '543 frutas (Distractor: 12 bolsas)', correct: false },
-          { ico: '🍊', text: '480 frutas (Distractor: 85 cañas)', correct: false },
-          { ico: '🍊', text: '565 frutas (Distractor: 468)', correct: false }
-        ],
-        okMsg: '¡Excelente! Las 12 bolsas son el distractor y 468 + 85 = 553 frutas.'
-      },
-      {
-        type: 'mcq', campo: 'Saberes y Pensamiento Científico',
-        visualHtml: `<div class="cdu-card"><table class="cdu-grid"><tr><td></td><td class="h-c">C</td><td class="h-d">D</td><td class="h-u">U</td></tr><tr><td></td><td>5</td><td>3</td><td>0</td></tr><tr class="op-row"><td>−</td><td></td><td>6</td><td>8</td></tr><tr><td></td><td>?</td><td>?</td><td>?</td></tr></table></div><div class="visual-caption">✂️ 530 tiras recortadas − 68 pegadas</div>`,
-        prompt: '15. Resuelve la resta 530 − 68: ¿cuántas tiras de papel quedan?',
-        options: [
-          { ico: '✂️', text: '462 tiras', correct: true },
-          { ico: '✂️', text: '472 tiras', correct: false },
-          { ico: '✂️', text: '538 tiras', correct: false },
-          { ico: '✂️', text: '438 tiras', correct: false }
-        ],
-        okMsg: '¡Correcto! Al pedir prestado: 530 − 68 = 462 tiras.'
-      },
-      {
-        type: 'match', campo: 'Ética, Naturaleza y Sociedades / De lo Humano',
-        visualHtml: `<div class="visual-row-imgs"><img src="../posadas_y_tradiciones/img/posada_ponche.png" alt="Posada"><img src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Piñata"><img src="../posadas_y_tradiciones/img/juguete_avioncito.png" alt="Avioncito"></div><div class="visual-caption">🤝 Convivencia, Inclusión (3 dic) y Seguridad</div>`,
-        prompt: '16. Une cada situación con el acuerdo comunitario correcto:',
-        pairs: [
-          { left: '🤝 Organizar la posada', right: 'Repartir comisiones y ayudarse' },
-          { left: '♿ Inclusión (3 de diciembre)', right: 'Adaptar juegos para que todos participen' },
-          { left: '🪅 Pasar a romper la piñata', right: 'Hacer fila detrás de la línea segura' }
-        ],
-        okMsg: '¡Gran trabajo! Colaboración, inclusión y seguridad en nuestra comunidad.'
-      }
-    ];
+    /* GENERADOR DINÁMICO DE LOS 16 BLOQUES DEL EXAMEN (30 ACIERTOS NEM) */
+    function buildDynamicExamQuestions() {
+      // Datos dinámicos para medición, valor posicional, precios, suma y resta
+      const cmVal = [11, 12, 13, 14, 15, 16][randInt(0, 5)];
+      const sqSide = [15, 18, 20, 22, 25, 30][randInt(0, 5)];
+
+      const um = randInt(1, 5), c = randInt(1, 6), d = randInt(1, 7), u = randInt(1, 8);
+      const pvNumber = um * 1000 + c * 100 + d * 10 + u;
+
+      const baseP = randInt(11, 16) * 100 + randInt(1, 8) * 10;
+      const sortedPrices = [baseP, baseP + randInt(18, 35) * 10, baseP + randInt(45, 68) * 10, baseP + randInt(78, 105) * 10];
+
+      // Suma con llevada (unidades suman >= 10)
+      const s1C = randInt(3, 5), s1D = randInt(4, 7), s1U = randInt(6, 9);
+      const n1 = s1C * 100 + s1D * 10 + s1U;
+      const s2D = randInt(5, 8), s2U = randInt(5, 9);
+      const n2 = s2D * 10 + s2U;
+      const bolsasTrampa = randInt(9, 18);
+
+      // Resta con transformación / canje (termina en 0 en unidades y decena menor)
+      const r1C = randInt(5, 7), r1D = randInt(2, 4);
+      const minVal = r1C * 100 + r1D * 10;
+      const r2D = randInt(r1D + 2, 8), r2U = randInt(4, 9);
+      const susVal = r2D * 10 + r2U;
+      const minTrampa = randInt(12, 24);
+
+      const chipDots = (n, hex) => Array.from({ length: n }, () => `<i class="dot-chip" style="background:${hex};"></i>`).join('');
+
+      return [
+        {
+          type: 'match', pts: 3, campo: 'Lenguajes', formatLabel: 'Relacionar columnas (Reactivos 1 a 3 · 3 aciertos)',
+          visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_avioncito.png" alt="Instructivo"><div class="visual-caption">📋 Estructura del texto instructivo</div>`,
+          prompt: '1 a 3. Une cada parte del texto instructivo con su función (1 solo intento por línea):',
+          pairs: [
+            { left: '📌 Título del instructivo', right: 'Nombra el juguete a construir' },
+            { left: '🧰 Lista de materiales', right: 'Objetos necesarios antes de empezar' },
+            { left: '🔢 Procedimiento', right: 'Pasos ordenados del 1 al 4' }
+          ],
+          okMsg: 'Identificaste las 3 partes del texto instructivo.'
+        },
+        {
+          type: 'mcq', pts: 1, campo: 'Lenguajes', formatLabel: 'Identificación gramatical (Reactivo 4 · 1 acierto)',
+          visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/accion_doblar.png" alt="Doblar"><img src="../taller_instructivos_juguetes/img/accion_recortar.png" alt="Recortar"><img src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"></div><div class="visual-caption">1. Medir · 2. Colocar · 3. Pegar</div>`,
+          prompt: '4. ¿En qué forma están escritos los verbos "Medir", "Colocar" y "Pegar"?',
+          options: [
+            { text: 'En infinitivo (terminaciones -ar, -er, -ir)', correct: true },
+            { text: 'En modo imperativo (órdenes directas)', correct: false },
+            { text: 'En tiempo pasado', correct: false },
+            { text: 'En plural femenino', correct: false }
+          ],
+          okMsg: 'Los verbos terminados en -ar, -er, -ir están en infinitivo.'
+        },
+        {
+          type: 'wordfill', pts: 1, campo: 'Lenguajes', formatLabel: 'Transformar verbo en la línea (Reactivo 5 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/accion_pegar.png" alt="Pegar"><div class="visual-caption">De infinitivo ("Pegar") a orden directa</div>`,
+          prompt: '5. Completa la línea cambiando el verbo "Pegar" al modo IMPERATIVO (orden directa):',
+          beforeText: '«',
+          afterText: 'los dos abatelenguas cruzados.»',
+          choices: ['Pega', 'Pegar', 'Pegué', 'Pegando'],
+          answer: 'Pega',
+          okMsg: '«Pega los dos abatelenguas» expresa una orden directa en modo imperativo.'
+        },
+        {
+          type: 'parens', pts: 1, campo: 'Lenguajes', formatLabel: 'Numerar paréntesis ( 1 ) al ( 4 ) (Reactivo 6 · 1 acierto)',
+          visualHtml: `<div class="visual-row-imgs"><img src="../taller_instructivos_juguetes/img/material_globo.png" alt="Globo"><img src="../taller_instructivos_juguetes/img/material_periodico.png" alt="Periódico"><img src="../taller_instructivos_juguetes/img/material_engrudo.png" alt="Engrudo"><img src="../taller_instructivos_juguetes/img/juguete_pinata.png" alt="Piñata"></div><div class="visual-caption">🪅 Toca cada paréntesis ( ) para numerar 1 a 4</div>`,
+          prompt: '6. Toca cada paréntesis ( ) para ordenar del 1 al 4 los pasos de la piñata:',
+          items: [
+            { text: 'Dejar secar al sol hasta que endurezca.', correctNum: 4 },
+            { text: 'Inflar un globo grande y amarrarlo.', correctNum: 1 },
+            { text: 'Pegar tres capas de periódico con engrudo.', correctNum: 3 },
+            { text: 'Cortar tiras de periódico y preparar el engrudo.', correctNum: 2 }
+          ],
+          okMsg: 'Orden correcto: (1) Inflar, (2) Cortar/engrudo, (3) Pegar capas, (4) Dejar secar.'
+        },
+        {
+          type: 'mcq', pts: 1, campo: 'Lenguajes', formatLabel: 'Conectores temporales (Reactivo 7 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura2_pinata.png" alt="Crónica"><div class="visual-caption">Primero ➔ Después ➔ Finalmente</div>`,
+          prompt: '7. ¿Para qué sirven las palabras "Primero", "Después" y "Finalmente"?',
+          options: [
+            { text: 'Para ordenar cronológicamente los pasos de principio a fin', correct: true },
+            { text: 'Para indicar los lugares donde ocurrió una historia', correct: false },
+            { text: 'Para medir el peso de la piñata en kilogramos', correct: false },
+            { text: 'Para sustituir las mayúsculas iniciales', correct: false }
+          ],
+          okMsg: 'Los conectores secuenciales ordenan los hechos cronológicamente.'
+        },
+        {
+          type: 'commagaps', pts: 1, campo: 'Lenguajes', formatLabel: 'Colocar comas en la lista (Reactivo 8 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Colores"><div class="visual-caption">🎨 Enumeración de colores</div>`,
+          prompt: '8. Toca únicamente los recuadros donde falta colocar una COMA ( , ):',
+          segments: ['"Usamos papel china rojo', 'verde', 'amarillo', 'y azul."'],
+          commaAfter: [0, 1],
+          okMsg: '«rojo, verde, amarillo y azul» lleva coma entre los primeros elementos y no antes de "y".'
+        },
+        {
+          type: 'redcaps', pts: 1, campo: 'Lenguajes', formatLabel: 'Aplicar mayúsculas en rojo (Reactivo 9 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/lectura3_posada.png" alt="Mayúsculas"><div class="visual-caption">✏️ Nombres propios y municipios</div>`,
+          prompt: '9. Toca las palabras que deben iniciar con MAYÚSCULA en rojo:',
+          tokens: [
+            { text: 'alexander', needsCap: true },
+            { text: 'gómez', needsCap: true },
+            { text: 'vive', needsCap: false },
+            { text: 'en', needsCap: false },
+            { text: 'sayula.', needsCap: true }
+          ],
+          okMsg: 'Alexander Gómez y Sayula son nombres propios y van con mayúscula inicial en rojo.'
+        },
+        {
+          type: 'multicheck', pts: 2, campo: 'Lenguajes', formatLabel: 'Seleccionar 2 pasos cronológicos (Reactivos 10 y 11 · 2 aciertos)',
+          visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_barquito.png" alt="Papiroflexia"><div class="visual-caption">⛵ Pasos para doblar tu figura</div>`,
+          prompt: '10 y 11. Marca con (✓) las DOS oraciones que describen pasos reales para doblar una figura de papiroflexia:',
+          RequiredCount: 2,
+          options: [
+            { text: '1°. Doblar la hoja cuadrada por la mitad marcando bien el pliegue central.', correct: true },
+            { text: '2°. Doblar las esquinas superiores hacia el centro para formar la punta.', correct: true },
+            { text: 'Hervir agua con canela y repartir vasos de ponche en el patio.', correct: false },
+            { text: 'Pesar una bolsa de mandarinas en la báscula de la cocina.', correct: false }
+          ],
+          okMsg: 'Identificaste los 2 pasos cronológicos del doblado de papiroflexia.'
+        },
+        {
+          type: 'match', pts: 3, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Relacionar unidades e instrumentos (Reactivos 12 a 14 · 3 aciertos)',
+          visualHtml: `<div class="visual-row-imgs"><img src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><img src="../laboratorio_masa_longitud/img/unit_m.png" alt="Metro"><img src="../laboratorio_masa_longitud/img/instrumento_regla.png" alt="Regla"></div><div class="visual-caption">⚖️ kg · 📐 m · 📏 cm</div>`,
+          prompt: '12 a 14. Une cada unidad o instrumento con lo que permite medir:',
+          pairs: [
+            { left: '⚖️ El kilogramo (kg) y la balanza', right: 'Masa (peso) de la fruta' },
+            { left: '📐 El metro (m)', right: 'Largo de la cuerda de la piñata' },
+            { left: '📏 La regla en centímetros (cm)', right: 'Largo de un abatelenguas' }
+          ],
+          okMsg: 'Relacionaste correctamente kg/balanza, metro (m) y regla (cm).'
+        },
+        {
+          type: 'mcq', pts: 1, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Comparación de masa en balanza (Reactivo 15 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/instrumento_balanza.png" alt="Balanza"><div style="display:flex;justify-content:space-around;width:100%;font-weight:900;font-size:0.84rem;"><span style="background:#fef3c7;border:2px solid #d97706;padding:4px 7px;border-radius:8px;">🍊 Mandarinas ⬇️ (Baja)</span><span style="background:#e0f2fe;border:2px solid #0284c7;padding:4px 7px;border-radius:8px;">🎊 Papel China ⬆️ (Sube)</span></div>`,
+          prompt: '15. En la balanza, el plato con mandarinas baja y el plato con papel china sube. ¿Cuál tiene MAYOR masa?',
+          options: [
+            { text: 'La bolsa con mandarinas', correct: true },
+            { text: 'La bolsa con papel china', correct: false },
+            { text: 'Ambas tienen la misma masa', correct: false },
+            { text: 'Ninguna tiene masa', correct: false }
+          ],
+          okMsg: 'El platillo que desciende tiene mayor masa (las mandarinas).'
+        },
+        {
+          type: 'wordfill', pts: 1, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Medida dinámica de cuadrado y regla (Reactivo 16 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/regla_abatelenguas.png" alt="Regla"><div style="width:105px;height:105px;border:3px solid #2563eb;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:900;color:#1e3a8a;border-radius:8px;font-size:0.86rem;">Cuadrado<br>Lado = ${sqSide} cm</div><div class="visual-caption">📏 Abatelenguas en regla: 0 a ${cmVal} cm</div>`,
+          prompt: `16. Si un lado de una hoja cuadrada para papiroflexia mide ${sqSide} cm, ¿cuánto mide cada uno de sus otros tres lados?`,
+          beforeText: 'Cada uno de los otros tres lados mide:',
+          afterText: 'cm.',
+          choices: [String(sqSide), String(sqSide - 5), String(sqSide * 2), String(cmVal)],
+          answer: String(sqSide),
+          okMsg: `En un cuadrado todos los lados son iguales: cada lado mide ${sqSide} cm.`
+        },
+        {
+          type: 'pvcdu', pts: 1, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Taller de Valor Posicional Dinámico (Reactivo 17 · 1 acierto)',
+          visualHtml: `<div class="chip-board">
+            <div class="chip-row" style="background:#dcfce7;color:#166534;"><span>${chipDots(um, '#22c55e')}</span><span>${um} UM (Millares)</span></div>
+            <div class="chip-row" style="background:#fef9c3;color:#854d0e;"><span>${chipDots(c, '#eab308')}</span><span>${c} C (Centenas)</span></div>
+            <div class="chip-row" style="background:#fee2e2;color:#991b1b;"><span>${chipDots(d, '#ef4444')}</span><span>${d} D (Decenas)</span></div>
+            <div class="chip-row" style="background:#dbeafe;color:#1e40af;"><span>${chipDots(u, '#3b82f6')}</span><span>${u} U (Unidades)</span></div>
+          </div><div class="visual-caption">🔢 Fichas generadas en esta corrida</div>`,
+          prompt: `17. Coloca con el teclado de dígitos el número de 4 cifras que forman ${um} UM, ${c} C, ${d} D y ${u} U:`,
+          digits: { UM: String(um), C: String(c), D: String(d), U: String(u) },
+          okMsg: `¡Exacto! Se forma el número ${pvNumber.toLocaleString('es-MX')}.`
+        },
+        {
+          type: 'chainlt', pts: 1, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Ordenar precios dinámicos con < (Reactivo 18 · 1 acierto)',
+          visualHtml: `<img class="hero-img" src="../posadas_y_tradiciones/img/posada_aguinaldo.png" alt="Precios"><div class="visual-caption">🏷️ Precios dinámicos de insumos</div>`,
+          prompt: '18. Toca los precios para acomodarlos de MENOR a MAYOR en la línea ($____ < $____ < $____ < $____):',
+          sorted: sortedPrices,
+          okMsg: `Orden correcto: $${sortedPrices[0]} < $${sortedPrices[1]} < $${sortedPrices[2]} < $${sortedPrices[3]}.`
+        },
+        {
+          type: 'mathm7', pts: 3, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Taller de Problemas · Situación 1: Suma (Reactivos 19 a 21 · 3 aciertos)',
+          visualHtml: `<img class="hero-img" src="../laboratorio_masa_longitud/img/pares_fruta.png" alt="Fruta"><div class="visual-caption">🍊 ${n1} mandarinas · 🛍️ ${bolsasTrampa} bolsas · 🎋 ${n2} cañas</div>`,
+          prompt: `19 a 21. Se compraron ${n1} mandarinas en ${bolsasTrampa} bolsas de plástico y trajeron ${n2} cañas más. ¿Cuántas frutas se reunieron en total?`,
+          op: '+',
+          row1: n1,
+          row2: n2,
+          expected: n1 + n2,
+          unitLabel: 'frutas',
+          chips: [
+            { id: 'c1', label: `${n1} mandarinas`, isTrampa: false },
+            { id: 'c2', label: `${bolsasTrampa} bolsas de plástico`, isTrampa: true },
+            { id: 'c3', label: `${n2} cañas`, isTrampa: false }
+          ],
+          okMsg: `¡Problema 1 completo! Distractor tachado (${bolsasTrampa} bolsas) y ${n1} + ${n2} = ${n1 + n2} frutas.`
+        },
+        {
+          type: 'mathm7', pts: 3, campo: 'Saberes y Pensamiento Científico', formatLabel: 'Taller de Problemas · Situación 2: Resta con Canje (Reactivos 22 a 24 · 3 aciertos)',
+          visualHtml: `<img class="hero-img" src="../taller_instructivos_juguetes/img/juguete_pinata.png" alt="Tiras"><div class="visual-caption">✂️ ${minVal} tiras · ⏱️ ${minTrampa} minutos · 🥣 ${susVal} pegadas</div>`,
+          prompt: `22 a 24. Se recortaron ${minVal} tiras de papel durante ${minTrampa} minutos. Si ya pegaron ${susVal} tiras en las piñatas, ¿cuántas tiras quedan disponibles?`,
+          op: '−',
+          row1: minVal,
+          row2: susVal,
+          expected: minVal - susVal,
+          unitLabel: 'tiras',
+          chips: [
+            { id: 'c1', label: `${minVal} tiras recortadas`, isTrampa: false },
+            { id: 'c2', label: `${minTrampa} minutos de trabajo`, isTrampa: true },
+            { id: 'c3', label: `${susVal} tiras pegadas`, isTrampa: false }
+          ],
+          okMsg: `¡Problema 2 completo! Distractor tachado (${minTrampa} minutos) y ${minVal} − ${susVal} = ${minVal - susVal} tiras.`
+        },
+        {
+          type: 'match', pts: 6, campo: 'Ética, Naturaleza y Sociedades / De lo Humano', formatLabel: 'Organización, Inclusión y Seguridad (Reactivos 25 a 30 · 6 aciertos)',
+          visualHtml: `<div class="visual-row-imgs"><img src="../posadas_y_tradiciones/img/posada_ponche.png" alt="Posada"><img src="../posadas_y_tradiciones/img/juguete_pinata.png" alt="Piñata"><img src="../posadas_y_tradiciones/img/juguete_avioncito.png" alt="Avioncito"></div><div class="visual-caption">🤝 Comunidad, Inclusión (3 dic) y Acuerdos</div>`,
+          prompt: '25 a 30. Une cada situación de la posada y del taller con la decisión o valor comunitario que le corresponde:',
+          pairs: [
+            { left: '🤝 Repartir comisiones entre vecinos para la posada', right: 'Colaboración, ayuda mutua y reciprocidad' },
+            { left: '♿ Día de las Personas con Discapacidad (3 de dic.)', right: 'Adaptar reglas y espacios para incluir a todos' },
+            { left: '🪅 Pasar a romper la piñata con ojos vendados', right: 'Formar fila detrás de la línea de seguridad' },
+            { left: '✈️ Si el avioncito de madera se inclina al lanzarlo', right: 'Medir otra vez las alas con regla y centrarlas' }
+          ],
+          okMsg: '¡Excelente cierre del Bloque 5! Colaboración, inclusión y acuerdos de seguridad.'
+        }
+      ];
+    }
 
     let deck = [], idx = 0, answersState = [];
 
@@ -385,13 +461,14 @@
       const missing = REQUIRED_PPS.filter(r => !(pps[r.id] && pps[r.id].completed));
       if (missing.length > 0 && !teacherBypass) {
         playSfx('lock');
-        document.getElementById('qStrip').style.display = 'none';
+        document.getElementById('hudRow').style.display = 'none';
+        document.getElementById('btnResetRun').style.display = 'none';
         document.getElementById('pillProgress').textContent = `🔒 Bloqueado (${REQUIRED_PPS.length - missing.length}/${REQUIRED_PPS.length} juegos)`;
         document.getElementById('stageContainer').innerHTML = `
           <div>
             <div class="lock-banner">
-              <h2 style="font-size:1.3rem;margin-bottom:0.3rem;">🔒 Completa primero tus 3 juegos del Proyecto 4</h2>
-              <p style="font-size:0.95rem;">Para desbloquear el Simulador del Examen Final, logra <strong>5 aciertos</strong> en cada uno de los 3 juegos del proyecto:</p>
+              <h2 style="font-size:1.25rem;margin-bottom:0.3rem;">🔒 Completa primero tus 3 juegos del Proyecto 4</h2>
+              <p style="font-size:0.92rem;">Para desbloquear el Simulador del Examen Final, juega y logra <strong>5 aciertos</strong> en cada uno de los 3 juegos del proyecto:</p>
             </div>
             <div class="req-list">
               ${REQUIRED_PPS.map(r => {
@@ -400,8 +477,8 @@
                 return `
                   <div class="req-card ${isDone ? 'done' : 'pending'}">
                     <div>
-                      <div style="font-weight:900; font-size:1.02rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
-                      <div style="font-size:0.86rem; color:#475569; margin-top:0.2rem;">${isDone ? 'Juego acreditado' : 'Pendiente (logra 5 aciertos)'}</div>
+                      <div style="font-weight:900; font-size:1rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
+                      <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">${isDone ? 'Juego completado' : 'Pendiente por completar'}</div>
                     </div>
                     <a class="req-go" href="${r.href}">${isDone ? 'Jugar de nuevo ➔' : 'Ir al juego ➔'}</a>
                   </div>
@@ -420,22 +497,51 @@
     }
 
     function startExam() {
-      deck = EXAM_QUESTIONS.slice();
+      deck = buildDynamicExamQuestions();
       idx = 0;
-      answersState = deck.map(() => ({ resolved: false, hadErr: false }));
-      document.getElementById('qStrip').style.display = 'flex';
+      answersState = deck.map(q => ({
+        attempted: false,
+        earnedPts: 0,
+        maxPts: q.pts || 1,
+        feedbackMsg: '',
+        isOk: false
+      }));
+      document.getElementById('hudRow').style.display = 'grid';
+      document.getElementById('btnResetRun').style.display = 'inline-flex';
       renderQ();
     }
 
-    function renderStrip() {
+    function getTotalEarned() {
+      return answersState.reduce((acc, s) => acc + s.earnedPts, 0);
+    }
+    function getTotalMax() {
+      return answersState.reduce((acc, s) => acc + s.maxPts, 0);
+    }
+
+    function renderHud() {
       const strip = document.getElementById('qStrip');
       strip.innerHTML = deck.map((_, i) => {
         const st = answersState[i];
         let cls = 'q-dot';
         if (i === idx) cls += ' current';
-        else if (st.resolved) cls += st.hadErr ? ' done-err' : ' done-ok';
-        return `<button type="button" class="${cls}" onclick="goToQ(${i})" title="Ir al reactivo ${i + 1}">${i + 1}</button>`;
+        else if (st.attempted) cls += st.isOk ? ' done-ok' : ' done-err';
+        return `<button type="button" class="${cls}" onclick="goToQ(${i})" title="Bloque ${i + 1}">${i + 1}</button>`;
       }).join('');
+
+      let leng = 0, sab = 0, etiHum = 0;
+      deck.forEach((q, i) => {
+        const pts = answersState[i].earnedPts;
+        if (q.campo.includes('Lenguajes')) leng += pts;
+        else if (q.campo.includes('Saberes')) sab += pts;
+        else etiHum += pts;
+      });
+      document.getElementById('nemLive').innerHTML = `
+        <span class="nem-pill">🔴 Lenguajes: ${leng}/11</span>
+        <span class="nem-pill">🔵 Saberes: ${sab}/13</span>
+        <span class="nem-pill">🟢🟣 Ética y Humano: ${etiHum}/6</span>
+        <span class="nem-pill" style="background:#5b21b6;border-color:#c084fc;color:#fff;">TOTAL: ${getTotalEarned()} / ${getTotalMax()}</span>
+      `;
+      document.getElementById('pillProgress').textContent = `Bloque ${idx + 1}/${deck.length} · Aciertos: ${getTotalEarned()}/${getTotalMax()}`;
     }
 
     function goToQ(newIdx) {
@@ -444,28 +550,36 @@
       renderQ();
     }
 
-    function getCleanHitsCount() {
-      return answersState.filter(s => s.resolved && !s.hadErr).length;
+    function finalizeAttempt(isFullOk, earnedPts, msg) {
+      const st = answersState[idx];
+      if (st.attempted) return;
+      st.attempted = true;
+      st.isOk = isFullOk;
+      st.earnedPts = earnedPts;
+      st.feedbackMsg = msg;
+      playSfx(isFullOk ? 'ok' : 'err');
+      renderQ();
     }
 
     function renderQ() {
-      renderStrip();
-      const doneCount = answersState.filter(s => s.resolved).length;
-      document.getElementById('pillProgress').textContent = `Reactivo ${idx + 1}/${deck.length} · Aciertos: ${getCleanHitsCount()}`;
+      renderHud();
       const q = deck[idx];
       const st = answersState[idx];
 
       document.getElementById('stageContainer').innerHTML = `
         <div class="stage-meta">
           <span class="campo-tag">${q.campo}</span>
-          <span style="font-weight:900; color:#6d28d9; font-size:0.9rem;">${st.resolved ? '✅ Respondido' : `Resueltos: ${doneCount} de ${deck.length}`}</span>
+          <span class="format-tag">${q.formatLabel}</span>
+          <span style="font-weight:900; font-size:0.86rem; color:${st.attempted ? (st.isOk ? '#059669' : '#dc2626') : '#6d28d9'};">
+            ${st.attempted ? (st.isOk ? `✅ Acreditado (${st.earnedPts}/${st.maxPts})` : `❌ Intento agotado (${st.earnedPts}/${st.maxPts}) — Reinicia desde 0 para reintentar`) : '⚡ Tienes 1 solo intento en esta corrida'}
+          </span>
         </div>
         <div class="q-split">
           <div class="visual-panel">${q.visualHtml}</div>
           <div>
             <h2 class="stage-prompt">${q.prompt}</h2>
             <div id="qBody"></div>
-            <div id="feedbackBox" class="feedback-box ${st.resolved ? 'ok' : ''}">${st.resolved ? '✅ ' + q.okMsg : ''}</div>
+            <div id="feedbackBox" class="feedback-box ${st.attempted ? (st.isOk ? 'ok' : 'err') : ''}">${st.attempted ? st.feedbackMsg : ''}</div>
           </div>
         </div>
         <div class="stage-footer">
@@ -473,202 +587,513 @@
           <div id="stageActionSlot"></div>
           ${idx + 1 < deck.length
             ? `<button type="button" class="btn-primary" onclick="goToQ(${idx + 1})">Siguiente ➔</button>`
-            : `<button type="button" class="btn-primary" style="background:#059669;" onclick="renderSummary()">📊 Ver Calificación Final ➔</button>`}
+            : `<button type="button" class="btn-primary" style="background:#059669;" onclick="renderSummary()">📊 Finalizar y Ver Boleta NEM ➔</button>`}
         </div>
       `;
 
       if (q.type === 'mcq') renderMcq(q, st);
+      else if (q.type === 'multicheck') renderMultiCheck(q, st);
       else if (q.type === 'match') renderMatch(q, st);
-      else if (q.type === 'order') renderOrder(q, st);
+      else if (q.type === 'parens') renderParens(q, st);
+      else if (q.type === 'wordfill') renderWordFill(q, st);
       else if (q.type === 'commagaps') renderCommaGaps(q, st);
       else if (q.type === 'redcaps') renderRedCaps(q, st);
+      else if (q.type === 'pvcdu') renderPvCdu(q, st);
+      else if (q.type === 'chainlt') renderChainLt(q, st);
+      else if (q.type === 'mathm7') renderMathM7(q, st);
     }
 
-    function showFb(ok, msg) {
-      const fb = document.getElementById('feedbackBox');
-      fb.className = 'feedback-box ' + (ok ? 'ok' : 'err');
-      fb.textContent = msg;
-      playSfx(ok ? 'ok' : 'err');
-    }
-
-    function markOk(q) {
-      const st = answersState[idx];
-      if (!st.resolved) {
-        st.resolved = true;
-      }
-      renderStrip();
-      document.getElementById('pillProgress').textContent = `Reactivo ${idx + 1}/${deck.length} · Aciertos: ${getCleanHitsCount()}`;
-      showFb(true, '✅ ' + q.okMsg);
-    }
-
+    /* 1. OPCIÓN ÚNICA CON CASILLA [ ✓ ] (1 INTENTO) */
     function renderMcq(q, st) {
       const body = document.getElementById('qBody');
       if (!q._opts) q._opts = shuffleArray(q.options);
       const opts = q._opts;
-      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => `
-        <button type="button" class="opt-btn ${st.resolved && o.correct ? 'selected-correct' : ''}" data-i="${i}">
-          <span class="opt-ico">${o.ico || '🔹'}</span>
+      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => {
+        let cls = 'opt-btn';
+        let boxTxt = '';
+        if (st.attempted) {
+          if (o.correct) { cls += ' selected-correct'; boxTxt = '✓'; }
+          else if (q._pickedIdx === i) { cls += ' selected-wrong'; boxTxt = '✗'; }
+        }
+        return `<button type="button" class="${cls}" ${st.attempted ? 'disabled' : ''} data-i="${i}">
+          <span class="exam-box">${boxTxt}</span>
           <span>${o.text}</span>
-        </button>`).join('')}</div>`;
+        </button>`;
+      }).join('')}</div>`;
+      if (st.attempted) return;
       body.querySelectorAll('.opt-btn').forEach((btn, i) => btn.addEventListener('click', () => {
-        if (st.resolved) return;
-        if (opts[i].correct) {
-          btn.classList.add('selected-correct');
-          markOk(q);
-        } else {
-          st.hadErr = true;
-          btn.classList.add('selected-wrong');
-          showFb(false, '💡 Observa la imagen de la izquierda e intenta otra opción.');
-        }
+        q._pickedIdx = i;
+        const isOk = Boolean(opts[i].correct);
+        const rightTxt = opts.find(x => x.correct).text;
+        finalizeAttempt(isOk, isOk ? q.pts : 0, isOk ? `✅ ¡Correcto! ${q.okMsg}` : `❌ Incorrecto (1 intento por corrida). La respuesta correcta era: «${rightTxt}».`);
       }));
     }
 
-    function renderMatch(q, st) {
+    /* 2. CASILLAS DE VERIFICACIÓN MÚLTIPLE (MARCAR 2 CON ✓ - 1 INTENTO) */
+    function renderMultiCheck(q, st) {
       const body = document.getElementById('qBody');
-      const left = q.pairs.map((p, i) => ({ id: i, text: p.left }));
-      if (!q._right) q._right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
-      const right = q._right;
-      let pickedLeft = null, solved = st.resolved ? q.pairs.length : 0;
-      body.innerHTML = `<div class="match-columns">
-        <div class="match-col" id="mL">${left.map(x => `<button type="button" class="match-btn ${st.resolved ? 'paired' : ''}" data-id="${x.id}">${x.text}</button>`).join('')}</div>
-        <div class="match-col" id="mR">${right.map(x => `<button type="button" class="match-btn ${st.resolved ? 'paired' : ''}" data-id="${x.id}">${x.text}</button>`).join('')}</div>
-      </div>`;
-      if (st.resolved) return;
-      body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => {
-        if (b.classList.contains('paired')) return;
-        body.querySelectorAll('#mL .match-btn').forEach(x => x.classList.remove('active'));
-        b.classList.add('active'); pickedLeft = b;
-      }));
-      body.querySelectorAll('#mR .match-btn').forEach(r => r.addEventListener('click', () => {
-        if (r.classList.contains('paired') || !pickedLeft) return;
-        if (pickedLeft.dataset.id === r.dataset.id) {
-          pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); r.classList.add('paired');
-          pickedLeft = null; solved++; playSfx('ok');
-          if (solved === q.pairs.length) markOk(q);
-        } else {
-          st.hadErr = true; r.classList.add('wrong-flash');
-          showFb(false, '💡 Esa pareja no corresponde. Intenta con otra.');
-          setTimeout(() => r.classList.remove('wrong-flash'), 400);
-        }
-      }));
-    }
-
-    function renderOrder(q, st) {
-      const body = document.getElementById('qBody');
-      const indexed = q.steps.map((txt, i) => ({ idx: i, cleanTxt: txt.replace(/^\d+\.\s*/, '') }));
-      if (!q._shuffled) q._shuffled = shuffleArray(indexed);
-      const shuffled = q._shuffled;
-      const chosen = st.resolved ? indexed.slice() : new Array(q.steps.length).fill(null);
+      if (!q._opts) q._opts = shuffleArray(q.options);
+      if (!q._pickedSet) q._pickedSet = new Set();
+      const opts = q._opts, picked = q._pickedSet;
 
       function draw() {
-        body.innerHTML = `<div class="order-wrap">
-          <div class="order-pool"><div style="font-weight:900;font-size:0.86rem;color:#475569;">Toca en orden:</div>${shuffled.map(item => {
-            const used = chosen.some(c => c && c.idx === item.idx);
-            return `<button type="button" class="seq-card ${used ? 'used' : ''}" ${used ? 'disabled' : ''} data-idx="${item.idx}">${item.cleanTxt}</button>`;
-          }).join('')}</div>
-          <div class="order-slots"><div style="font-weight:900;font-size:0.86rem;color:#5b21b6;">Orden 1° al 4° (toca para quitar):</div>${chosen.map((c, pos) => `
-            <button type="button" class="seq-slot" data-pos="${pos}"><strong>${pos + 1}°.</strong> ${c ? c.cleanTxt : 'Vacío'}</button>`).join('')}</div>
-        </div>`;
-        if (st.resolved) return;
-        body.querySelectorAll('.seq-card:not(.used)').forEach(btn => btn.addEventListener('click', () => {
-          const fp = chosen.findIndex(x => x === null);
-          if (fp !== -1) {
-            chosen[fp] = shuffled.find(x => x.idx === Number(btn.dataset.idx));
-            draw();
-            if (chosen.every(x => x !== null)) checkNow();
+        body.innerHTML = `<div class="options-grid">${opts.map((o, i) => {
+          const isPicked = picked.has(i);
+          let cls = 'opt-btn' + (isPicked ? ' picked' : '');
+          let boxTxt = isPicked ? '✓' : '';
+          if (st.attempted) {
+            if (o.correct) { cls = 'opt-btn selected-correct'; boxTxt = '✓'; }
+            else if (isPicked) { cls = 'opt-btn selected-wrong'; boxTxt = '✗'; }
           }
+          return `<button type="button" class="${cls}" ${st.attempted ? 'disabled' : ''} data-i="${i}">
+            <span class="exam-box">${boxTxt}</span>
+            <span>${o.text}</span>
+          </button>`;
+        }).join('')}</div>`;
+        if (st.attempted) return;
+        body.querySelectorAll('.opt-btn').forEach((btn, i) => btn.addEventListener('click', () => {
+          if (picked.has(i)) picked.delete(i);
+          else if (picked.size < q.RequiredCount) picked.add(i);
+          draw();
         }));
-        body.querySelectorAll('.seq-slot').forEach(btn => btn.addEventListener('click', () => {
-          const p = Number(btn.dataset.pos);
-          if (chosen[p]) { chosen[p] = null; draw(); }
-        }));
-      }
-
-      function checkNow() {
-        if (chosen.every((c, pos) => c && c.idx === pos)) {
-          markOk(q);
-        } else {
-          st.hadErr = true;
-          showFb(false, '💡 Algún paso no está en orden. Toca un paso morado para quitarlo y corregirlo.');
-        }
+        const slot = document.getElementById('stageActionSlot');
+        slot.innerHTML = `<button type="button" class="btn-grade" id="btnGradeMulti" ${picked.size !== q.RequiredCount ? 'disabled' : ''}>✓ Calificar selección (${picked.size}/${q.RequiredCount})</button>`;
+        document.getElementById('btnGradeMulti').addEventListener('click', () => {
+          let hits = 0;
+          picked.forEach(i => { if (opts[i].correct) hits++; });
+          const fullOk = hits === q.RequiredCount;
+          finalizeAttempt(fullOk, hits, fullOk ? `✅ ¡Excelente! (+${hits} aciertos) ${q.okMsg}` : `❌ Obtuviste ${hits} de ${q.RequiredCount} aciertos en esta corrida. Se marcaron en verde las correctas.`);
+        });
       }
       draw();
     }
 
+    /* 3. RELACIONAR COLUMNAS (CADA LÍNEA TIENE 1 SOLO INTENTO) */
+    function renderMatch(q, st) {
+      const body = document.getElementById('qBody');
+      const left = q.pairs.map((p, i) => ({ id: i, text: p.left }));
+      if (!q._right) q._right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
+      if (!q._lineStatus) q._lineStatus = {}; // id -> 'ok' | 'err'
+      const right = q._right, lineStatus = q._lineStatus;
+      let pickedLeftId = null;
+
+      function draw() {
+        body.innerHTML = `<div class="match-columns">
+          <div class="match-col" id="mL">${left.map(x => {
+            const stLine = lineStatus[x.id];
+            const cls = stLine === 'ok' ? 'paired-ok' : (stLine === 'err' ? 'paired-err' : (pickedLeftId === x.id ? 'active' : ''));
+            return `<button type="button" class="match-btn ${cls}" ${stLine || st.attempted ? 'disabled' : ''} data-id="${x.id}"><span>${x.text}</span><span>${stLine === 'ok' ? '✅' : (stLine === 'err' ? '❌' : '•')}</span></button>`;
+          }).join('')}</div>
+          <div class="match-col" id="mR">${right.map(x => {
+            const stLine = lineStatus[x.id];
+            const cls = stLine === 'ok' ? 'paired-ok' : (stLine === 'err' ? 'paired-err' : '');
+            return `<button type="button" class="match-btn ${cls}" ${stLine === 'ok' || st.attempted ? 'disabled' : ''} data-id="${x.id}"><span>•</span><span>${x.text}</span></button>`;
+          }).join('')}</div>
+        </div>`;
+        if (st.attempted) return;
+        body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => {
+          pickedLeftId = Number(b.dataset.id);
+          draw();
+        }));
+        body.querySelectorAll('#mR .match-btn').forEach(r => r.addEventListener('click', () => {
+          if (pickedLeftId === null) return;
+          const rId = Number(r.dataset.id);
+          if (rId === pickedLeftId) {
+            lineStatus[pickedLeftId] = 'ok';
+            playSfx('ok');
+          } else {
+            lineStatus[pickedLeftId] = 'err';
+            playSfx('err');
+          }
+          pickedLeftId = null;
+          if (Object.keys(lineStatus).length === q.pairs.length) {
+            const okCount = Object.values(lineStatus).filter(v => v === 'ok').length;
+            const scalePts = Math.round((okCount / q.pairs.length) * q.pts);
+            finalizeAttempt(okCount === q.pairs.length, scalePts, okCount === q.pairs.length
+              ? `✅ ¡Relacionaste correctamente las ${q.pairs.length} líneas! (+${scalePts} aciertos)`
+              : `❌ Acertaste ${okCount} de ${q.pairs.length} líneas (+${scalePts} aciertos). En modo examen no se puede cambiar una línea fallada.`);
+          } else {
+            draw();
+          }
+        }));
+      }
+      draw();
+    }
+
+    /* 4. NUMERAR PARÉNTESIS ( 1 ) AL ( 4 ) (1 INTENTO AL CALIFICAR) */
+    function renderParens(q, st) {
+      const body = document.getElementById('qBody');
+      if (!q._vals) q._vals = q.items.map(() => null);
+      const vals = q._vals;
+
+      function draw() {
+        body.innerHTML = `<div class="parens-list">${q.items.map((it, i) => {
+          const v = vals[i];
+          let borderCol = '#cbd5e1', bgCol = '#f8fafc';
+          if (st.attempted) {
+            const ok = v === it.correctNum;
+            borderCol = ok ? '#059669' : '#dc2626';
+            bgCol = ok ? '#d1fae5' : '#fee2e2';
+          }
+          return `<div class="paren-row" style="border-color:${borderCol};background:${bgCol};">
+            <button type="button" class="paren-btn ${v ? 'filled' : ''}" ${st.attempted ? 'disabled' : ''} data-i="${i}">( ${v ? v : '&nbsp;&nbsp;'} )</button>
+            <div style="flex:1;">${it.text} ${st.attempted ? `<strong style="color:#065f46;">[Correcto: (${it.correctNum})]</strong>` : ''}</div>
+          </div>`;
+        }).join('')}</div>`;
+        if (st.attempted) return;
+        body.querySelectorAll('.paren-btn').forEach(btn => btn.addEventListener('click', () => {
+          const i = Number(btn.dataset.i);
+          vals[i] = vals[i] === null ? 1 : (vals[i] % q.items.length) + 1;
+          draw();
+        }));
+        const allSet = vals.every(v => v !== null) && new Set(vals).size === q.items.length;
+        const slot = document.getElementById('stageActionSlot');
+        slot.innerHTML = `<button type="button" class="btn-grade" id="btnGradeParens" ${!allSet ? 'disabled' : ''}>✓ Calificar orden 1 al 4 (1 intento)</button>`;
+        document.getElementById('btnGradeParens').addEventListener('click', () => {
+          const ok = q.items.every((it, i) => vals[i] === it.correctNum);
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ¡Perfecto! ${q.okMsg}` : `❌ Orden incorrecto en esta corrida. Revisa los números correctos entre corchetes.`);
+        });
+      }
+      draw();
+    }
+
+    /* 5. COMPLETAR LÍNEA DE EXAMEN CON BANCO DE PALABRAS (1 INTENTO) */
+    function renderWordFill(q, st) {
+      const body = document.getElementById('qBody');
+      if (!q._shuffledChoices) q._shuffledChoices = shuffleArray(q.choices);
+      function draw() {
+        const cur = q._pickedWord || '________';
+        body.innerHTML = `
+          <div class="exam-line-box">${q.beforeText} <span class="line-slot">${cur}</span> ${q.afterText}</div>
+          <div class="word-bank">${q._shuffledChoices.map(w => `
+            <button type="button" class="word-chip ${q._pickedWord === w ? 'active' : ''}" ${st.attempted ? 'disabled' : ''} data-w="${w}">${w}</button>
+          `).join('')}</div>
+        `;
+        if (st.attempted) return;
+        body.querySelectorAll('.word-chip').forEach(btn => btn.addEventListener('click', () => {
+          q._pickedWord = btn.dataset.w;
+          draw();
+        }));
+        const slot = document.getElementById('stageActionSlot');
+        slot.innerHTML = `<button type="button" class="btn-grade" id="btnGradeWord" ${!q._pickedWord ? 'disabled' : ''}>✓ Calificar respuesta (1 intento)</button>`;
+        document.getElementById('btnGradeWord').addEventListener('click', () => {
+          const ok = q._pickedWord === q.answer;
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ¡Correcto! ${q.okMsg}` : `❌ Incorrecto. La respuesta correcta en la línea era: «${q.answer}».`);
+        });
+      }
+      draw();
+    }
+
+    /* 6. COMAS ENUMERATIVAS (1 INTENTO) */
     function renderCommaGaps(q, st) {
       const body = document.getElementById('qBody');
-      const activeGaps = new Set(st.resolved ? q.commaAfter : []);
+      if (!q._gaps) q._gaps = new Set();
+      const activeGaps = q._gaps;
       function draw() {
         let html = '<div class="token-box">';
         q.segments.forEach((seg, i) => {
           html += `<span>${seg}</span>`;
           if (i < q.segments.length - 1) {
             const on = activeGaps.has(i);
-            html += `<button type="button" class="comma-slot ${on ? 'active' : ''}" data-g="${i}">${on ? ',' : '+'}</button>`;
+            html += `<button type="button" class="comma-slot ${on ? 'active' : ''}" ${st.attempted ? 'disabled' : ''} data-g="${i}">${on ? ',' : '+'}</button>`;
           }
         });
         html += '</div>';
         body.innerHTML = html;
-        if (st.resolved) return;
+        if (st.attempted) return;
         body.querySelectorAll('.comma-slot').forEach(btn => btn.addEventListener('click', () => {
           const g = Number(btn.dataset.g);
           if (activeGaps.has(g)) activeGaps.delete(g); else activeGaps.add(g);
           draw();
         }));
-        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-primary" id="btnCheckCommas">✓ Comprobar comas</button>`;
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-grade" id="btnCheckCommas">✓ Calificar comas (1 intento)</button>`;
         document.getElementById('btnCheckCommas').addEventListener('click', () => {
           const ok = q.segments.slice(0, -1).every((_, i) => q.commaAfter.includes(i) === activeGaps.has(i));
-          if (ok) { document.getElementById('stageActionSlot').innerHTML = ''; markOk(q); }
-          else { st.hadErr = true; showFb(false, '💡 Recuerda: pon coma entre colores, pero NO pongas coma antes de "y azul".'); }
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ¡Muy bien! ${q.okMsg}` : `❌ Incorrecto en esta corrida. ${q.okMsg}`);
         });
       }
       draw();
     }
 
+    /* 7. MAYÚSCULAS EN ROJO (1 INTENTO) */
     function renderRedCaps(q, st) {
       const body = document.getElementById('qBody');
-      const marked = new Set(st.resolved ? q.tokens.map((t, i) => t.needsCap ? i : -1).filter(i => i >= 0) : []);
+      if (!q._marked) q._marked = new Set();
+      const marked = q._marked;
       function draw() {
         body.innerHTML = `<div class="token-box">${q.tokens.map((tk, i) => {
           const on = marked.has(i);
           const label = on ? `<span class="red-cap">${tk.text[0].toUpperCase()}</span>${tk.text.slice(1)}` : tk.text;
-          return `<button type="button" class="word-token ${on ? 'marked-red' : ''}" data-i="${i}">${label}</button>`;
+          return `<button type="button" class="word-token ${on ? 'marked-red' : ''}" ${st.attempted ? 'disabled' : ''} data-i="${i}">${label}</button>`;
         }).join('')}</div>`;
-        if (st.resolved) return;
+        if (st.attempted) return;
         body.querySelectorAll('.word-token').forEach(btn => btn.addEventListener('click', () => {
           const i = Number(btn.dataset.i);
           if (marked.has(i)) marked.delete(i); else marked.add(i);
           draw();
         }));
-        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-primary" id="btnCheckCaps">✓ Comprobar mayúsculas</button>`;
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-grade" id="btnCheckCaps">✓ Calificar mayúsculas (1 intento)</button>`;
         document.getElementById('btnCheckCaps').addEventListener('click', () => {
           const ok = q.tokens.every((tk, i) => Boolean(tk.needsCap) === marked.has(i));
-          if (ok) { document.getElementById('stageActionSlot').innerHTML = ''; markOk(q); }
-          else { st.hadErr = true; showFb(false, '💡 Marca solo el nombre, el apellido y el municipio (Alexander, Gómez, Sayula).'); }
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ¡Perfecto! ${q.okMsg}` : `❌ Incorrecto en esta corrida. ${q.okMsg}`);
+        });
+      }
+      draw();
+    }
+
+    /* 8. TALLER DE VALOR POSICIONAL UM-C-D-U CON TECLADO 0-9 (1 INTENTO) */
+    function renderPvCdu(q, st) {
+      const body = document.getElementById('qBody');
+      const cols = ['UM', 'C', 'D', 'U'];
+      if (!q._cells) q._cells = { UM: '', C: '', D: '', U: '' };
+      if (!q._activeCol) q._activeCol = 'UM';
+
+      function draw() {
+        body.innerHTML = `
+          <div class="workbench-wrap">
+            <table class="cdu-grid">
+              <tr><th class="th-um">UM</th><th class="th-c">C</th><th class="th-d">D</th><th class="th-u">U</th></tr>
+              <tr>${cols.map(c => `<td class="cdu-cell ${q._activeCol === c && !st.attempted ? 'active-target' : ''} ${q._cells[c] !== '' ? 'filled' : ''}" data-col="${c}">${q._cells[c] !== '' ? q._cells[c] : '?'}</td>`).join('')}</tr>
+            </table>
+            <div>
+              <div style="font-size:0.84rem;font-weight:800;color:#475569;margin-bottom:0.35rem;">Toca una casilla (UM, C, D, U) y coloca su dígito:</div>
+              <div class="digit-palette">
+                ${[1,2,3,4,5,6,7,8,9,0].map(n => `<button type="button" class="digit-btn" ${st.attempted ? 'disabled' : ''} data-n="${n}">${n}</button>`).join('')}
+                <button type="button" class="digit-btn clear-btn" ${st.attempted ? 'disabled' : ''} id="btnClearPv">🧹 Borrar</button>
+              </div>
+            </div>
+          </div>
+        `;
+        if (st.attempted) return;
+        body.querySelectorAll('.cdu-cell').forEach(cell => cell.addEventListener('click', () => {
+          q._activeCol = cell.dataset.col;
+          draw();
+        }));
+        body.querySelectorAll('.digit-btn[data-n]').forEach(btn => btn.addEventListener('click', () => {
+          q._cells[q._activeCol] = btn.dataset.n;
+          const nextIdx = cols.indexOf(q._activeCol) + 1;
+          if (nextIdx < cols.length) q._activeCol = cols[nextIdx];
+          draw();
+        }));
+        document.getElementById('btnClearPv').addEventListener('click', () => {
+          q._cells = { UM: '', C: '', D: '', U: '' };
+          q._activeCol = 'UM';
+          draw();
+        });
+        const ready = cols.every(c => q._cells[c] !== '');
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-grade" id="btnGradePv" ${!ready ? 'disabled' : ''}>✓ Calificar número (1 intento)</button>`;
+        document.getElementById('btnGradePv').addEventListener('click', () => {
+          const ok = cols.every(c => q._cells[c] === q.digits[c]);
+          const rightNum = `${q.digits.UM},${q.digits.C}${q.digits.D}${q.digits.U}`;
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ${q.okMsg}` : `❌ Incorrecto. El número que formaban las fichas era ${rightNum}.`);
+        });
+      }
+      draw();
+    }
+
+    /* 9. ORDENAR 4 PRECIOS DINÁMICOS CON < (1 INTENTO) */
+    function renderChainLt(q, st) {
+      const body = document.getElementById('qBody');
+      if (!q._pool) q._pool = shuffleArray(q.sorted);
+      if (!q._slots) q._slots = [null, null, null, null];
+      const pool = q._pool, slots = q._slots;
+
+      function draw() {
+        body.innerHTML = `
+          <div class="chain-slots">
+            ${slots.map((v, i) => `
+              <button type="button" class="chain-slot" ${st.attempted ? 'disabled' : ''} data-s="${i}">${v !== null ? '$' + v.toLocaleString('es-MX') : `${i + 1}° menor`}</button>
+              ${i < 3 ? '<strong style="font-size:1.25rem;color:#6d28d9;">&lt;</strong>' : ''}
+            `).join('')}
+          </div>
+          <div class="word-bank" style="justify-content:center;">
+            ${pool.map(p => {
+              const used = slots.includes(p);
+              return `<button type="button" class="word-chip" ${used || st.attempted ? 'disabled' : ''} style="${used ? 'opacity:0.35;' : ''}" data-p="${p}">🏷️ $${p.toLocaleString('es-MX')}</button>`;
+            }).join('')}
+          </div>
+        `;
+        if (st.attempted) return;
+        body.querySelectorAll('.word-chip').forEach(btn => btn.addEventListener('click', () => {
+          const p = Number(btn.dataset.p);
+          const emptyIdx = slots.findIndex(x => x === null);
+          if (emptyIdx !== -1) { slots[emptyIdx] = p; draw(); }
+        }));
+        body.querySelectorAll('.chain-slot').forEach(btn => btn.addEventListener('click', () => {
+          const i = Number(btn.dataset.s);
+          if (slots[i] !== null) { slots[i] = null; draw(); }
+        }));
+        const ready = slots.every(x => x !== null);
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-grade" id="btnGradeChain" ${!ready ? 'disabled' : ''}>✓ Calificar orden (1 intento)</button>`;
+        document.getElementById('btnGradeChain').addEventListener('click', () => {
+          const ok = slots.every((v, i) => v === q.sorted[i]);
+          finalizeAttempt(ok, ok ? q.pts : 0, ok ? `✅ ¡Muy bien! ${q.okMsg}` : `❌ Incorrecto. ${q.okMsg}`);
+        });
+      }
+      draw();
+    }
+
+    /* 10. TALLER MATEMÁTICO M7: TACHAR DATO TRAMPA + ACOMODAR EN CUADRÍCULA C-D-U + RESOLVER (3 ACIERTOS, 1 INTENTO) */
+    function renderMathM7(q, st) {
+      const body = document.getElementById('qBody');
+      if (!q._chipState) q._chipState = {}; // id -> 'useful' | 'trampa' | ''
+      if (!q._grid) {
+        q._grid = {
+          carryC: '', carryD: '',
+          r1C: '', r1D: '', r1U: '',
+          sign: '',
+          r2C: '', r2D: '', r2U: '',
+          resC: '', resD: '', resU: ''
+        };
+        q._activeCell = 'r1C';
+      }
+      const cs = q._chipState, g = q._grid;
+      const cellOrder = ['r1C', 'r1D', 'r1U', 'sign', 'r2C', 'r2D', 'r2U', 'resU', 'resD', 'resC'];
+
+      function cellHtml(key, placeholder, extraCls = '') {
+        const val = g[key];
+        const isAct = !st.attempted && q._activeCell === key;
+        return `<td class="cdu-cell ${extraCls} ${isAct ? 'active-target' : ''} ${val !== '' ? 'filled' : ''}" data-k="${key}">${val !== '' ? val : `<span style="color:#94a3b8;font-size:0.8rem;">${placeholder}</span>`}</td>`;
+      }
+
+      function draw() {
+        body.innerHTML = `
+          <div class="m7-step-box">
+            <div class="m7-step-title"><span>Paso 1 (1 acierto): Toca los datos para marcar ✅ Útil o tachar 🚫 Distractor</span></div>
+            <div class="m7-chips-row">
+              ${q.chips.map(ch => {
+                const mode = cs[ch.id] || '';
+                const ico = mode === 'useful' ? '✅ ' : (mode === 'trampa' ? '🚫 ' : '⚪ ');
+                return `<button type="button" class="m7-data-chip ${mode}" ${st.attempted ? 'disabled' : ''} data-cid="${ch.id}">${ico}${ch.label}</button>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="m7-step-box" style="margin-bottom:0;">
+            <div class="m7-step-title"><span>Paso 2 y 3 (2 aciertos): Acomoda las cantidades, el signo (${q.op}) y el resultado en la cuadrícula C-D-U</span></div>
+            <div class="workbench-wrap">
+              <table class="cdu-grid">
+                <tr>
+                  <th>Signo</th><th class="th-c">C</th><th class="th-d">D</th><th class="th-u">U</th>
+                </tr>
+                <tr>
+                  <td style="text-align:center;font-size:0.72rem;font-weight:800;color:#64748b;">Llevada/Canje</td>
+                  ${cellHtml('carryC', 'c', 'carry-cell')}
+                  ${cellHtml('carryD', 'd', 'carry-cell')}
+                  <td></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;font-size:0.75rem;font-weight:800;color:#334155;">Fila 1</td>
+                  ${cellHtml('r1C', 'C')}
+                  ${cellHtml('r1D', 'D')}
+                  ${cellHtml('r1U', 'U')}
+                </tr>
+                <tr>
+                  ${cellHtml('sign', '+/−', 'sign-cell')}
+                  ${cellHtml('r2C', 'C')}
+                  ${cellHtml('r2D', 'D')}
+                  ${cellHtml('r2U', 'U')}
+                </tr>
+                <tr>
+                  <td style="text-align:center;font-size:0.75rem;font-weight:900;color:#065f46;">Total</td>
+                  ${cellHtml('resC', 'C', 'result-cell')}
+                  ${cellHtml('resD', 'D', 'result-cell')}
+                  ${cellHtml('resU', 'U', 'result-cell')}
+                </tr>
+              </table>
+
+              <div>
+                <div style="font-size:0.82rem;font-weight:800;color:#475569;margin-bottom:0.35rem;">Toca cualquier casilla de la cuadrícula y usa el teclado:</div>
+                <div class="digit-palette">
+                  ${[1,2,3,4,5,6,7,8,9,0].map(n => `<button type="button" class="digit-btn" ${st.attempted ? 'disabled' : ''} data-digit="${n}">${n}</button>`).join('')}
+                  <button type="button" class="digit-btn sign-plus" ${st.attempted ? 'disabled' : ''} data-sign="+">+</button>
+                  <button type="button" class="digit-btn sign-minus" ${st.attempted ? 'disabled' : ''} data-sign="−">−</button>
+                  <button type="button" class="digit-btn clear-btn" ${st.attempted ? 'disabled' : ''} id="btnClearCell">⌫ Casilla</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        if (st.attempted) return;
+
+        body.querySelectorAll('.m7-data-chip').forEach(btn => btn.addEventListener('click', () => {
+          const cid = btn.dataset.cid;
+          const cur = cs[cid] || '';
+          cs[cid] = cur === '' ? 'useful' : (cur === 'useful' ? 'trampa' : '');
+          draw();
+        }));
+
+        body.querySelectorAll('.cdu-cell').forEach(cell => cell.addEventListener('click', () => {
+          q._activeCell = cell.dataset.k;
+          draw();
+        }));
+
+        body.querySelectorAll('.digit-btn[data-digit]').forEach(btn => btn.addEventListener('click', () => {
+          if (q._activeCell === 'sign') q._activeCell = 'r2D';
+          g[q._activeCell] = btn.dataset.digit;
+          const curIdx = cellOrder.indexOf(q._activeCell);
+          if (curIdx !== -1 && curIdx + 1 < cellOrder.length) q._activeCell = cellOrder[curIdx + 1];
+          draw();
+        }));
+
+        body.querySelectorAll('.digit-btn[data-sign]').forEach(btn => btn.addEventListener('click', () => {
+          g.sign = btn.dataset.sign;
+          q._activeCell = 'r2D';
+          draw();
+        }));
+
+        document.getElementById('btnClearCell').addEventListener('click', () => {
+          g[q._activeCell] = '';
+          draw();
+        });
+
+        const hasResult = g.resU !== '' && g.resD !== '';
+        document.getElementById('stageActionSlot').innerHTML = `<button type="button" class="btn-grade" id="btnGradeM7" ${!hasResult ? 'disabled' : ''}>✓ Calificar Problema (3 aciertos · 1 intento)</button>`;
+        document.getElementById('btnGradeM7').addEventListener('click', () => {
+          // 1. Evaluar tachado del dato trampa
+          const trampaOk = q.chips.every(ch => ch.isTrampa ? cs[ch.id] === 'trampa' : cs[ch.id] === 'useful');
+          // 2. Evaluar acomodo en cuadrícula C-D-U + signo
+          const r1Num = parseInt((g.r1C || '0') + (g.r1D || '0') + (g.r1U || '0'), 10);
+          const r2Num = parseInt((g.r2C || '0') + (g.r2D || '0') + (g.r2U || '0'), 10);
+          const signOk = g.sign === q.op;
+          const rowsOk = q.op === '+'
+            ? ((r1Num === q.row1 && r2Num === q.row2) || (r1Num === q.row2 && r2Num === q.row1)) && g.r1U !== '' && g.r2U !== ''
+            : (r1Num === q.row1 && r2Num === q.row2 && g.r1U !== '' && g.r2U !== '');
+          const acomodoOk = signOk && rowsOk;
+          // 3. Evaluar resultado total
+          const resNum = parseInt((g.resC || '0') + (g.resD || '0') + (g.resU || '0'), 10);
+          const resOk = resNum === q.expected;
+
+          const ptsEarned = (trampaOk ? 1 : 0) + (acomodoOk ? 1 : 0) + (resOk ? 1 : 0);
+          const fullOk = ptsEarned === 3;
+          const detail = `[Distractor: ${trampaOk ? '✅ 1/1' : '❌ 0/1'} · Acomodo C-D-U y signo ${q.op}: ${acomodoOk ? '✅ 1/1' : '❌ 0/1'} · Resultado (${q.expected} ${q.unitLabel}): ${resOk ? '✅ 1/1' : '❌ 0/1'}]`;
+          finalizeAttempt(fullOk, ptsEarned, fullOk
+            ? `✅ ¡3 de 3 aciertos! ${q.okMsg} ${detail}`
+            : `❌ Obtuviste ${ptsEarned} de 3 aciertos en este problema. ${detail}`);
         });
       }
       draw();
     }
 
     function renderSummary() {
-      const total = deck.length, cleanHits = getCleanHitsCount();
-      const pct = Math.round((cleanHits / total) * 100);
-      const saved = saveExamProgress(cleanHits, total);
+      const totalPts = getTotalMax(), earnedPts = getTotalEarned();
+      const pct = Math.round((earnedPts / totalPts) * 100);
+      const saved = saveExamProgress(earnedPts, totalPts);
       const campoStats = {};
       deck.forEach((q, i) => {
         if (!campoStats[q.campo]) campoStats[q.campo] = { ok: 0, total: 0 };
-        campoStats[q.campo].total++;
-        if (answersState[i].resolved && !answersState[i].hadErr) campoStats[q.campo].ok++;
+        campoStats[q.campo].total += answersState[i].maxPts;
+        campoStats[q.campo].ok += answersState[i].earnedPts;
       });
       playSfx('win');
       document.getElementById('stageContainer').innerHTML = `
-        <h2 class="stage-prompt">🏆 Resultado del Simulador · Proyecto 4</h2>
-        <p style="font-size:1.05rem; color:#334155; margin-bottom:0.85rem;">Lograste <strong>${cleanHits} de ${total}</strong> reactivos al primer intento (<strong>${pct}%</strong>). Mejor marca guardada: <strong>${saved.bestPct}%</strong>.</p>
+        <h2 class="stage-prompt">🏆 Boleta del Simulador Sumativo · Proyecto 4</h2>
+        <p style="font-size:1.05rem; color:#334155; margin-bottom:0.85rem;">Obtuviste <strong>${earnedPts} de ${totalPts} aciertos</strong> en esta corrida (<strong>${pct}%</strong>). Mejor calificación guardada: <strong>${saved.bestPct}%</strong>.</p>
         <div class="campos-grid">
-          ${Object.entries(campoStats).map(([campo, s]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:900; font-size:1.1rem; color:${s.ok === s.total ? '#059669' : '#d97706'}; margin-top:0.25rem;">${s.ok} / ${s.total} aciertos</p></div>`).join('')}
+          ${Object.entries(campoStats).map(([campo, s]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:900; font-size:1.15rem; color:${s.ok === s.total ? '#059669' : '#d97706'}; margin-top:0.25rem;">${s.ok} / ${s.total} aciertos</p></div>`).join('')}
         </div>
         <div class="stage-footer">
-          <button type="button" class="btn-primary" onclick="startExam()">🔁 Volver a practicar</button>
+          <button type="button" class="btn-primary" onclick="startExam()">🔄 Iniciar Nueva Corrida desde 0 (Nuevos números)</button>
           <a class="btn-nav" href="../../index.html" style="background:#334155;">⬅ Volver al Portal</a>
         </div>
       `;
