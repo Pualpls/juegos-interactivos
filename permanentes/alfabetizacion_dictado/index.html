@@ -1461,11 +1461,13 @@
 
     function getPhoneticReading(syl) {
       if (!syl) return '';
-      // Normalizar quitando cualquier tilde (conservando la ñ) para evitar que el TTS deletree acentos o hable inglés
-      let clean = syl.toLowerCase().trim()
+      // Normalizar quitando cualquier tilde (conservando ñ y diéresis para güe/güi) para evitar que el TTS deletree acentos o hable inglés
+      let clean = String(syl).normalize("NFC").toLowerCase().trim()
         .replace(/ñ/g, '__ENIE__')
-        .normalize("NFD").replace(/[̀-ͯ]/g, "")
-        .replace(/__ENIE__/g, 'ñ');
+        .replace(/ü/g, '__UDIER__')
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/__ENIE__/g, 'ñ')
+        .replace(/__UDIER__/g, 'ü');
       clean = clean
         .replace(/^ll/, 'y')
         .replace(/^rr/, 'r')
@@ -1474,6 +1476,7 @@
         .replace(/^c([ei])/, 's$1')
         .replace(/^g([ei])/, 'j$1')
         .replace(/^gü([ei])/, 'gw$1')
+        .replace(/ü/g, 'u')
         .replace(/^k([aou])/, 'c$1')
         .replace(/^k([ei])/, 'qu$1')
         .replace(/^k/, 'c');

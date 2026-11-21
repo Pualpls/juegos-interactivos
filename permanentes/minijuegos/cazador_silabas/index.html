@@ -1092,10 +1092,12 @@
 
     function getPhoneticSyllable(syl) {
       if (!syl) return '';
-      let s = String(syl).toLowerCase().trim()
+      let s = String(syl).normalize('NFC').toLowerCase().trim()
         .replace(/ñ/g, '__ENIE__')
+        .replace(/ü/g, '__UDIER__')
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        .replace(/__ENIE__/g, 'ñ');
+        .replace(/__ENIE__/g, 'ñ')
+        .replace(/__UDIER__/g, 'ü');
       s = s
         .replace(/^ll/, 'y')
         .replace(/^rr/, 'r')
@@ -1104,6 +1106,7 @@
         .replace(/^c([ei])/, 's$1')
         .replace(/^g([ei])/, 'j$1')
         .replace(/^gü([ei])/, 'gw$1')
+        .replace(/ü/g, 'u')
         .replace(/^k([aou])/, 'c$1')
         .replace(/^k([ei])/, 'qu$1')
         .replace(/^k/, 'c');
