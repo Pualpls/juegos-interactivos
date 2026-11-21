@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Simulador del Examen · Proyecto 4 · Instructivos, Juguetes y Piñatas</title>
+  <style>
+    :root { --ink:#0f172a; --muted:#475569; --primary:#7c3aed; --ok:#059669; --err:#dc2626; --radius:16px; }
+    * { box-sizing:border-box; margin:0; padding:0; user-select:none !important; -webkit-user-select:none !important; -webkit-touch-callout:none !important; -webkit-tap-highlight-color:transparent !important; }
+    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Ubuntu','Roboto','Noto Sans',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#4c1d95 100%); color:#f8fafc; min-height:100vh; overflow-y:auto; padding:1rem; }
+    .app-wrap { max-width:1120px; margin:0 auto; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; background:rgba(15,23,42,0.8); border:1px solid rgba(148,163,184,0.25); border-radius:var(--radius); padding:0.75rem 1rem; margin-bottom:1rem; }
+    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; }
+    .btn-nav { background:#334155; color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.55rem 0.95rem; font-family:inherit; font-size:0.95rem; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; min-height:44px; }
+    .badge-sim { background:#fef3c7; color:#92400e; font-weight:800; font-size:0.85rem; padding:0.35rem 0.75rem; border-radius:999px; }
+    .pill-progress { background:#1e293b; border:1px solid #c084fc; color:#e9d5ff; padding:0.4rem 0.85rem; border-radius:999px; font-weight:700; font-size:0.92rem; }
+    .btn-sound { background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.5rem 0.85rem; font-family:inherit; font-weight:700; cursor:pointer; min-height:44px; }
+    .btn-sound.muted { background:#334155; border-color:#64748b; color:#cbd5e1; }
+    .stage-card { background:#fff; color:var(--ink); border-radius:20px; padding:1.35rem 1.6rem; box-shadow:0 12px 30px rgba(0,0,0,0.3); }
+    .lock-banner { background:#fef2f2; border:2.5px solid #dc2626; border-radius:16px; padding:1.1rem 1.25rem; color:#7f1d1d; margin-bottom:1rem; }
+    .lock-banner h2 { font-size:1.35rem; margin-bottom:0.35rem; }
+    .req-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.85rem; margin:1rem 0; }
+    .req-card { border-radius:14px; padding:0.95rem 1rem; border:2px solid; display:flex; flex-direction:column; gap:0.55rem; justify-content:space-between; }
+    .req-card.done { background:#ecfdf5; border-color:#059669; color:#065f46; }
+    .req-card.pending { background:#fffbeb; border-color:#f59e0b; color:#78350f; }
+    .req-go { background:#7c3aed; color:#fff; text-decoration:none; font-weight:800; padding:0.6rem 0.9rem; border-radius:10px; text-align:center; display:inline-block; }
+    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap; }
+    .campo-tag { padding:0.3rem 0.75rem; border-radius:999px; font-size:0.84rem; font-weight:800; background:#f3e8ff; color:#6d28d9; }
+    .micro-text { background:#f8fafc; border-left:4px solid #7c3aed; padding:0.8rem 1rem; border-radius:0 12px 12px 0; margin-bottom:0.85rem; font-size:0.96rem; line-height:1.5; color:#1e293b; white-space:pre-line; }
+    .stage-prompt { font-size:1.2rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; line-height:1.35; }
+    .options-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; }
+    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.9rem 1rem; font-family:inherit; font-size:1.02rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:54px; }
+    .opt-btn:hover { border-color:#7c3aed; background:#faf5ff; }
+    .opt-btn.selected-correct { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .opt-btn.selected-wrong { border-color:#dc2626; background:#fee2e2; color:#991b1b; }
+    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .match-col { display:flex; flex-direction:column; gap:0.65rem; }
+    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.75rem 0.9rem; font-family:inherit; font-size:0.96rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:52px; }
+    .match-btn.active { border-color:#7c3aed; background:#f3e8ff; }
+    .match-btn.paired { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .match-btn.wrong-flash { border-color:#dc2626; background:#fee2e2; }
+    .order-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; align-items:start; }
+    .order-pool, .order-slots { display:flex; flex-direction:column; gap:0.6rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.85rem; }
+    .seq-card { background:#fff; border:2.5px solid #7c3aed; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; cursor:pointer; text-align:left; font-family:inherit; font-size:0.95rem; color:#0f172a; min-height:48px; }
+    .seq-card.used { opacity:0.4; cursor:default; }
+    .seq-slot { background:#faf5ff; border:2px dashed #a855f7; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; color:#5b21b6; min-height:50px; cursor:pointer; display:flex; align-items:center; gap:0.5rem; text-align:left; font-family:inherit; }
+    .feedback-box { margin-top:1rem; border-radius:14px; padding:0.9rem 1.1rem; font-weight:700; line-height:1.45; display:none; }
+    .feedback-box.ok { display:block; background:#d1fae5; color:#065f46; border:2px solid #059669; }
+    .feedback-box.err { display:block; background:#fee2e2; color:#991b1b; border:2px solid #dc2626; }
+    .btn-primary { background:var(--primary); color:#fff; border:none; border-radius:12px; padding:0.75rem 1.35rem; font-family:inherit; font-size:1.02rem; font-weight:800; cursor:pointer; min-height:48px; }
+    .stage-footer { margin-top:1rem; display:flex; justify-content:flex-end; gap:0.75rem; flex-wrap:wrap; }
+    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; margin:1rem 0; }
+    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.9rem; }
+    .campo-box h4 { color:#5b21b6; margin-bottom:0.3rem; }
+    @media (max-width:780px) { .match-columns, .order-wrap { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a class="btn-nav" href="../../index.html?openRepaso=p4">⬅ Volver al Portal</a>
+        <span class="badge-sim">📝 Simulador del Examen · Proyecto 4</span>
+      </div>
+      <div class="topbar-right">
+        <span class="pill-progress" id="pillProgress">Verificando avance...</span>
+        <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido: ON</button>
+      </div>
+    </div>
+
+    <div class="stage-card" id="stageContainer"></div>
+  </div>
+
+  <script>
+    window.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    const AULA_PROGRESS_KEY = 'aula3a_pp_progress_v1';
+    const PROJ_KEY = 'p4';
+    const REQUIRED_PPS = [
+      { id: 'pp1', title: 'PP1: Instructivos de Juguetes y Piñatas', href: '../repaso_pp/pp1.html' },
+      { id: 'pp2', title: 'PP2: Juguetes Reciclados, Medición cm y Crónica', href: '../repaso_pp/pp2.html' },
+      { id: 'pp3', title: 'PP3: Piñatas, Balanza (kg/g), Metro y Posadas', href: '../repaso_pp/pp3.html' }
+    ];
+
+    function readAulaProgress() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(AULA_PROGRESS_KEY) || '{}');
+        if (!parsed || typeof parsed !== 'object') return { schemaVersion: 1, projects: {} };
+        if (!parsed.projects || typeof parsed.projects !== 'object') parsed.projects = {};
+        return parsed;
+      } catch (e) { return { schemaVersion: 1, projects: {} }; }
+    }
+    function saveExamProgress(score, total) {
+      const data = readAulaProgress();
+      if (!data.projects[PROJ_KEY]) data.projects[PROJ_KEY] = { pps: {}, exam: null };
+      const prev = data.projects[PROJ_KEY].exam || {};
+      const newPct = total > 0 ? Math.round((score / total) * 100) : 0;
+      const nowIso = new Date().toISOString();
+      data.projects[PROJ_KEY].exam = {
+        attempts: (Number(prev.attempts) || 0) + 1,
+        bestPct: Math.max(Number(prev.bestPct) || 0, newPct),
+        bestScore: Math.max(Number(prev.bestScore) || 0, score),
+        total,
+        lastPlayedAt: nowIso
+      };
+      try { localStorage.setItem(AULA_PROGRESS_KEY, JSON.stringify(data)); } catch (e) {}
+      return data.projects[PROJ_KEY].exam;
+    }
+
+    let sharedAudioCtx = null, soundEnabled = true;
+    function getAudioCtx() { const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return null; if (!sharedAudioCtx) sharedAudioCtx = new Ctx(); return sharedAudioCtx; }
+    function playSfx(kind) {
+      if (!soundEnabled) return; const ctx = getAudioCtx(); if (!ctx) return;
+      const run = () => { try { const now = ctx.currentTime, notes = kind === 'ok' ? [[523.25,0,0.08],[659.25,0.07,0.1]] : kind === 'err' ? [[240,0,0.12],[196,0.09,0.14]] : kind === 'lock' ? [[310,0,0.09],[260,0.08,0.12]] : kind === 'win' ? [[523.25,0,0.09],[659.25,0.08,0.09],[783.99,0.16,0.16]] : [[560,0,0.05]]; notes.forEach(([f,o,d])=>{ const osc=ctx.createOscillator(),g=ctx.createGain(); osc.type=(kind==='err'||kind==='lock')?'triangle':'sine'; osc.frequency.setValueAtTime(f,now+o); g.gain.setValueAtTime(0.001,now+o); g.gain.linearRampToValueAtTime(0.08,now+o+0.01); g.gain.exponentialRampToValueAtTime(0.0008,now+o+d); osc.connect(g); g.connect(ctx.destination); osc.start(now+o); osc.stop(now+o+d+0.01); }); } catch(e){} };
+      if (ctx.state === 'suspended') ctx.resume().then(run).catch(()=>{}); else run();
+    }
+    function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return; window.__uiClickSfxBound = true;
+      document.addEventListener('pointerdown', (e) => { const btn = e.target && e.target.closest ? e.target.closest('button, a.btn-nav, a.req-go') : null; if (btn && !btn.disabled) playSfx('tap'); }, { capture: true, passive: true });
+    }
+    function toggleSound() { soundEnabled = !soundEnabled; const b = document.getElementById('btnSound'); b.textContent = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF'; b.classList.toggle('muted', !soundEnabled); }
+    function shuffleArray(arr) { const c = arr.slice(); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; }
+
+    const EXAM_QUESTIONS = [
+      { type: 'match', campo: 'Lenguajes', prompt: 'Une cada parte de un instructivo con la función exacta que cumple:', pairs: [
+        { left: 'Título del instructivo', right: 'Nombra el juguete u objeto que se va a construir' },
+        { left: 'Lista de materiales', right: 'Menciona los objetos e ingredientes necesarios antes de empezar' },
+        { left: 'Procedimiento', right: 'Indica en orden numerado los pasos para armar el objeto' }
+      ], okMsg: 'Correcto: reconocer la estructura del instructivo permite seguir y redactar indicaciones claras.' },
+      { type: 'mcq', campo: 'Lenguajes', microText: 'Procedimiento del avioncito:\n1. Medir con la regla el centro de dos abatelenguas.\n2. Colocar una gota de pegamento en el broche.\n3. Pegar los dos abatelenguas cruzados.\n4. Cortar una pieza trasera y dejar secar.', prompt: '¿En qué forma verbal están escritos "Medir", "Colocar", "Pegar" y "Cortar" por terminar en -ar, -er, -ir?', options: [
+        { text: 'En infinitivo', correct: true },
+        { text: 'En primera persona del pasado', correct: false },
+        { text: 'En futuro compuesto', correct: false },
+        { text: 'En sustantivo propio', correct: false }
+      ], okMsg: 'Exacto: los verbos terminados en -ar, -er, -ir están en infinitivo.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: 'Si cambias el verbo "Pegar" al modo IMPERATIVO (como una orden directa) manteniendo el mismo predicado, ¿cuál oración queda correcta?', options: [
+        { text: 'Pega los dos abatelenguas cruzados sobre el broche.', correct: true },
+        { text: 'Pegué los dos abatelenguas cruzados sobre el broche.', correct: false },
+        { text: 'Pegaban los dos abatelenguas cruzados sobre el broche.', correct: false },
+        { text: 'Pegando los dos abatelenguas cruzados sobre el broche.', correct: false }
+      ], okMsg: 'Muy bien: "Pega..." expresa indicación directa en modo imperativo.' },
+      { type: 'order', campo: 'Lenguajes', prompt: 'Ordena del 1 al 4 los pasos para elaborar el casco de una piñata tradicional:', steps: [
+        '1. Inflar un globo grande y hacerle un nudo firme.',
+        '2. Cortar el papel periódico en tiras largas y preparar el engrudo con agua y harina.',
+        '3. Pegar tres capas de tiras de periódico con engrudo alrededor del globo.',
+        '4. Dejar secar la estructura al sol hasta que endurezca el papel.'
+      ], okMsg: '¡Perfecto! Seguiste el procedimiento real paso a paso.' },
+      { type: 'mcq', campo: 'Lenguajes', microText: 'Fragmento descriptivo: "Primero inflamos el globo y pegamos las capas. Después armamos los conos con cartoncillo. Finalmente decoramos la piñata."', prompt: '¿Para qué sirven las palabras "Primero", "Después" y "Finalmente"?', options: [
+        { text: 'Para ordenar cronológicamente los hechos del proceso de principio a fin', correct: true },
+        { text: 'Para indicar la cantidad en gramos y centímetros de cada material', correct: false },
+        { text: 'Para nombrar únicamente a los autores del instructivo escolar', correct: false },
+        { text: 'Para sustituir todos los verbos terminados en -ar e -ir', correct: false }
+      ], okMsg: 'Exacto: ordenan los acontecimientos de manera cronológica.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: 'Elige la oración que coloca correctamente las comas enumerativas sin poner coma innecesaria antes de la "y":', options: [
+        { text: 'Decoramos la piñata con papel china rojo, verde, amarillo y azul.', correct: true },
+        { text: 'Decoramos, la piñata con papel china rojo verde amarillo y azul.', correct: false },
+        { text: 'Decoramos la piñata con papel china rojo verde, amarillo, y azul.', correct: false },
+        { text: 'Decoramos la piñata, con papel, china rojo verde amarillo y azul.', correct: false }
+      ], okMsg: 'Correcto: las comas separan los elementos de la lista y no van antes de "y".' },
+      { type: 'match', campo: 'Saberes y Pensamiento Científico', prompt: 'Une cada instrumento o unidad con la propiedad física que permite medir:', pairs: [
+        { left: 'El kilogramo (kg) y la balanza', right: 'Unidad e instrumento para medir la masa de una piñata con fruta' },
+        { left: 'El metro (m)', right: 'Unidad básica para medir la distancia o el largo de la cuerda' },
+        { left: 'La regla en centímetros (cm)', right: 'Instrumento graduado para medir el largo de un abatelenguas' }
+      ], okMsg: '¡Excelente dominio de unidades e instrumentos de medición!' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Al comparar dos cajas del mismo tamaño en la balanza de dos platillos, la caja con mandarinas baja su plato y la caja con papel china sube. ¿Cuál caja tiene mayor masa?', options: [
+        { text: 'La caja con mandarinas', correct: true },
+        { text: 'La caja con papel china', correct: false },
+        { text: 'Ambas cajas pesan lo mismo porque tienen igual tamaño', correct: false },
+        { text: 'Ninguna tiene masa porque las cajas son de cartón ligero', correct: false }
+      ], okMsg: 'Exacto: la masa depende de la materia del contenido, no solo del tamaño de la caja.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Para doblar un barco de papiroflexia hace falta una hoja cuadrada de lados iguales. Si el lado superior mide 20 cm, ¿cuánto debe medir cada uno de los otros tres lados con la regla?', options: [
+        { text: '20 centímetros cada uno', correct: true },
+        { text: '10 centímetros los costados y 20 abajo', correct: false },
+        { text: '40 centímetros los laterales', correct: false },
+        { text: '15 centímetros para doblar las puntas', correct: false }
+      ], okMsg: 'Correcto: los 4 lados del cuadrado miden exactamente 20 centímetros.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Para la posada se contaron 2 unidades de millar (verde), 4 centenas (amarillo), 3 decenas (rojo) y 5 unidades (azul) de colaciones. ¿Qué número de cuatro cifras se forma?', options: [
+        { text: '2,435 (dos mil cuatrocientos treinta y cinco)', correct: true },
+        { text: '2,345 (dos mil trescientos cuarenta y cinco)', correct: false },
+        { text: '24,035 (veinticuatro mil treinta y cinco)', correct: false },
+        { text: '4,235 (cuatro mil doscientos treinta y cinco)', correct: false }
+      ], okMsg: '¡Exacto! 2 UM + 4 C + 3 D + 5 U = 2,435.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Observa los precios de cuatro paquetes de insumos: A: $1,850 | B: $1,290 | C: $2,100 | D: $1,540. ¿Qué orden va correctamente de MENOR a MAYOR?', options: [
+        { text: '$1,290 < $1,540 < $1,850 < $2,100', correct: true },
+        { text: '$1,290 < $1,850 < $1,540 < $2,100', correct: false },
+        { text: '$2,100 < $1,850 < $1,540 < $1,290', correct: false },
+        { text: '$1,540 < $1,290 < $1,850 < $2,100', correct: false }
+      ], okMsg: '¡Muy bien! Comparando primero millares y luego centenas, queda en orden ascendente.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Situación de posada: "Para rellenar las piñatas se compraron 468 mandarinas en 12 bolsas de plástico y más tarde las familias trajeron 85 cañas dulces adicionales."', prompt: '¿Cuál dato numérico es un distractor y cuántas piezas de fruta se reunieron en total?', options: [
+        { text: 'Distractor: 12 bolsas de plástico | Total: 553 piezas de fruta', correct: true },
+        { text: 'Distractor: 85 cañas dulces | Total: 480 piezas de fruta', correct: false },
+        { text: 'Distractor: 468 mandarinas | Total: 565 piezas de fruta', correct: false },
+        { text: 'Distractor: 12 bolsas de plástico | Total: 543 piezas de fruta', correct: false }
+      ], okMsg: '¡Excelente! 12 bolsas no suma frutas; 468 + 85 = 553.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Taller escolar: "Se recortaron 530 tiras de papel de colores durante 15 minutos de trabajo. Los equipos ya pegaron 68 tiras en las piñatas."', prompt: '¿Cuántas tiras de papel quedan disponibles al realizar la resta con transformación (530 - 68)?', options: [
+        { text: '462 tiras de papel disponibles', correct: true },
+        { text: '472 tiras de papel disponibles', correct: false },
+        { text: '538 tiras de papel disponibles', correct: false },
+        { text: '438 tiras de papel disponibles', correct: false }
+      ], okMsg: 'Correcto: al desagrupar decena y centena, 530 - 68 = 462.' },
+      { type: 'mcq', campo: 'Ética, Naturaleza y Sociedades', prompt: 'Cuando familias y vecinos se reparten comisiones en una posada (piñata, ponche, limpieza del patio), ¿qué forma de organización practican?', options: [
+        { text: 'La colaboración, la ayuda mutua y la reciprocidad entre vecinos', correct: true },
+        { text: 'El trabajo aislado donde nadie acuerda turnos ni comparte responsabilidades', correct: false },
+        { text: 'El cobro obligatorio de multas sin tomar decisiones colectivas', correct: false },
+        { text: 'La compra individual sin convivencia en el vecindario o la escuela', correct: false }
+      ], okMsg: '¡Exacto! Las formas de organización participativa fortalecen la comunidad.' },
+      { type: 'mcq', campo: 'De lo Humano y lo Comunitario', prompt: 'Con motivo del 3 de Diciembre (Día Internacional de las Personas con Discapacidad), ¿qué acción demuestra inclusión al jugar en el patio escolar?', options: [
+        { text: 'Adaptar las reglas del juego y mantener despejados los espacios para que todas las niñas y los niños participen', correct: true },
+        { text: 'Pedir a quienes requieren apoyo motriz que observen sentados todo el recreo', correct: false },
+        { text: 'Elegir juegos exclusivos de velocidad donde nadie pueda modificar las reglas', correct: false },
+        { text: 'Dejar cajas y obstáculos en el paso de las estaciones de exposición', correct: false }
+      ], okMsg: 'Muy bien: adaptar reglas y espacios permite la participación digna de todo el grupo.' },
+      { type: 'match', campo: 'De lo Humano y lo Comunitario', prompt: 'Une cada situación del taller o juego con la decisión estratégica o acuerdo de seguridad asertivo:', pairs: [
+        { left: 'Al pasar a romper la piñata con los ojos vendados', right: 'Formar fila detrás de la línea de seguridad y esperar a que suelten el palo' },
+        { left: 'Al notar que un avioncito de madera se inclina al lanzarlo', right: 'Medir de nuevo las alas con la regla y centrarlas antes de que seque' }
+      ], okMsg: '¡Excelente cierre! Tanto la seguridad en el juego como el ajuste técnico parten de acuerdos y observación.' }
+    ];
+
+    let deck = [], idx = 0, cleanHits = 0, hadErr = false, resolved = false;
+    let campoStats = {};
+
+    function checkUnlockAndStart() {
+      const data = readAulaProgress();
+      const pps = (data.projects[PROJ_KEY] && data.projects[PROJ_KEY].pps) || {};
+      const missing = REQUIRED_PPS.filter(r => !(pps[r.id] && pps[r.id].completed));
+      if (missing.length > 0) {
+        playSfx('lock');
+        document.getElementById('pillProgress').textContent = `🔒 Bloqueado (${REQUIRED_PPS.length - missing.length}/${REQUIRED_PPS.length} PP)`;
+        document.getElementById('stageContainer').innerHTML = `
+          <div>
+            <div class="lock-banner">
+              <h2>🔒 Simulador del Examen bloqueado</h2>
+              <p>Para practicar en el Simulador del Examen del <strong>Proyecto 4</strong>, primero debes completar exitosamente los <strong>${REQUIRED_PPS.length} repasos de Productos Parciales</strong>. Aún te falta acreditar <strong>${missing.length}</strong>:</p>
+            </div>
+            <div class="req-list">
+              ${REQUIRED_PPS.map(r => {
+                const st = pps[r.id];
+                const isDone = Boolean(st && st.completed);
+                return `
+                  <div class="req-card ${isDone ? 'done' : 'pending'}">
+                    <div>
+                      <div style="font-weight:800; font-size:1.05rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
+                      <div style="font-size:0.9rem; margin-top:0.25rem;">${isDone ? `Completado · Mejor: ${st.bestPct}%` : 'Pendiente por completar (mínimo 75%)'}</div>
+                    </div>
+                    <a class="req-go" href="${r.href}">${isDone ? 'Repasar de nuevo ➔' : 'Completar este repaso ➔'}</a>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div class="stage-footer">
+              <a class="btn-nav" href="../../index.html?openRepaso=p4" style="background:#1e293b;">⬅ Regresar al Portal</a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      startExam();
+    }
+
+    function startExam() {
+      deck = shuffleArray(EXAM_QUESTIONS);
+      idx = 0; cleanHits = 0; campoStats = {};
+      deck.forEach(q => {
+        if (!campoStats[q.campo]) campoStats[q.campo] = { ok: 0, total: 0 };
+        campoStats[q.campo].total++;
+      });
+      renderQ();
+    }
+
+    function renderQ() {
+      document.getElementById('pillProgress').textContent = idx < deck.length ? `Reactivo ${idx + 1} de ${deck.length}` : `Finalizado · ${cleanHits}/${deck.length}`;
+      if (idx >= deck.length) { renderSummary(); return; }
+      const q = deck[idx]; hadErr = false; resolved = false;
+      document.getElementById('stageContainer').innerHTML = `
+        <div class="stage-meta">
+          <span class="campo-tag">${q.campo}</span>
+          <span style="font-weight:800; color:#6d28d9;">Aciertos: ${cleanHits}/${idx}</span>
+        </div>
+        ${q.microText ? `<div class="micro-text">${q.microText}</div>` : ''}
+        <h2 class="stage-prompt">${q.prompt}</h2>
+        <div id="qBody"></div>
+        <div id="feedbackBox" class="feedback-box"></div>
+        <div class="stage-footer" id="stageFooter"></div>
+      `;
+      if (q.type === 'mcq') renderMcq(q);
+      else if (q.type === 'match') renderMatch(q);
+      else if (q.type === 'order') renderOrder(q);
+    }
+
+    function showFb(ok, msg) { const fb = document.getElementById('feedbackBox'); fb.className = 'feedback-box ' + (ok ? 'ok' : 'err'); fb.textContent = msg; playSfx(ok ? 'ok' : 'err'); }
+    function markOk(q) {
+      if (resolved) return; resolved = true;
+      if (!hadErr) { cleanHits++; campoStats[q.campo].ok++; }
+      showFb(true, '✅ ' + q.okMsg);
+      document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" onclick="idx++; renderQ();">${idx + 1 < deck.length ? 'Siguiente reactivo ➔' : 'Ver diagnóstico del simulador ➔'}</button>`;
+    }
+
+    function renderMcq(q) {
+      const body = document.getElementById('qBody'), opts = shuffleArray(q.options);
+      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => `<button type="button" class="opt-btn" data-i="${i}">${o.text}</button>`).join('')}</div>`;
+      body.querySelectorAll('.opt-btn').forEach((btn, i) => btn.addEventListener('click', () => {
+        if (resolved) return;
+        if (opts[i].correct) { btn.classList.add('selected-correct'); markOk(q); }
+        else { hadErr = true; btn.classList.add('selected-wrong'); showFb(false, '💡 Vuelve a revisar los datos o conectores y elige otra respuesta.'); }
+      }));
+    }
+
+    function renderMatch(q) {
+      const body = document.getElementById('qBody');
+      const left = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.left }))), right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
+      let pickedLeft = null, solved = 0;
+      body.innerHTML = `<div class="match-columns"><div class="match-col" id="mL">${left.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div><div class="match-col" id="mR">${right.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div></div>`;
+      body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => { if (b.classList.contains('paired')) return; body.querySelectorAll('#mL .match-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); pickedLeft = b; }));
+      body.querySelectorAll('#mR .match-btn').forEach(r => r.addEventListener('click', () => {
+        if (r.classList.contains('paired') || !pickedLeft) return;
+        if (pickedLeft.dataset.id === r.dataset.id) { pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); r.classList.add('paired'); pickedLeft = null; solved++; playSfx('ok'); if (solved === q.pairs.length) markOk(q); }
+        else { hadErr = true; r.classList.add('wrong-flash'); showFb(false, '💡 Esa pareja no coincide. Vuelve a leer.'); setTimeout(() => r.classList.remove('wrong-flash'), 450); }
+      }));
+    }
+
+    function renderOrder(q) {
+      const body = document.getElementById('qBody');
+      const indexed = q.steps.map((txt, idx) => ({ idx, cleanTxt: txt.replace(/^\d+\.\s*/, '') }));
+      const shuffled = shuffleArray(indexed), chosen = new Array(q.steps.length).fill(null);
+      function draw() {
+        body.innerHTML = `<div class="order-wrap"><div class="order-pool"><div style="font-weight:800; color:#334155;">Pasos:</div>${shuffled.map(st => { const used = chosen.some(c => c && c.idx === st.idx); return `<button type="button" class="seq-card ${used ? 'used' : ''}" ${used ? 'disabled' : ''} data-idx="${st.idx}">${st.cleanTxt}</button>`; }).join('')}</div><div class="order-slots"><div style="font-weight:800; color:#5b21b6;">Orden 1 al 4:</div>${chosen.map((c, pos) => `<button type="button" class="seq-slot" data-pos="${pos}"><strong>${pos + 1}.</strong> ${c ? c.cleanTxt : 'Toca un paso...'}</button>`).join('')}</div></div>`;
+        body.querySelectorAll('.seq-card:not(.used)').forEach(btn => btn.addEventListener('click', () => { if (resolved) return; const fp = chosen.findIndex(x => x === null); if (fp !== -1) { chosen[fp] = shuffled.find(x => x.idx === Number(btn.dataset.idx)); draw(); } }));
+        body.querySelectorAll('.seq-slot').forEach(btn => btn.addEventListener('click', () => { if (resolved) return; const p = Number(btn.dataset.pos); if (chosen[p]) { chosen[p] = null; draw(); } }));
+        document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" id="btnCheckOrder" ${chosen.some(x => x === null) ? 'disabled' : ''}>Comprobar orden ✓</button>`;
+        document.getElementById('btnCheckOrder').addEventListener('click', () => {
+          if (chosen.every((c, pos) => c && c.idx === pos)) markOk(q);
+          else { hadErr = true; showFb(false, '💡 Pista: primero infla el globo, luego prepara tiras y engrudo, después pega capas y al final deja secar.'); }
+        });
+      }
+      draw();
+    }
+
+    function renderSummary() {
+      const total = deck.length, pct = Math.round((cleanHits / total) * 100);
+      const saved = saveExamProgress(cleanHits, total);
+      playSfx('win');
+      document.getElementById('stageContainer').innerHTML = `
+        <h2 class="stage-prompt">📝 Resultado de tu Simulador de Examen · Proyecto 4</h2>
+        <p style="font-size:1.05rem; color:#334155; margin-bottom:1rem;">Respondiste al primer intento <strong>${cleanHits} de ${total}</strong> reactivos (<strong>${pct}%</strong>). Tu mejor marca histórica guardada es <strong>${saved.bestPct}%</strong> en <strong>${saved.attempts}</strong> intento(s).</p>
+        <div class="campos-grid">
+          ${Object.entries(campoStats).map(([campo, st]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:800; color:${st.ok === st.total ? '#059669' : '#d97706'};">${st.ok} de ${st.total} reactivos limpios</p></div>`).join('')}
+        </div>
+        <div class="feedback-box ok" style="display:block;">💡 Si algún Campo Formativo tuvo errores, repasa su Producto Parcial en el portal antes de contestar tu examen en clase.</div>
+        <div class="stage-footer">
+          <button type="button" class="btn-primary" onclick="startExam()">🔁 Practicar otro examen barajado</button>
+          <a class="btn-nav" href="../../index.html?openRepaso=p4" style="background:#334155;">⬅ Volver al Portal</a>
+        </div>
+      `;
+    }
+
+    initUiClickSfx();
+    checkUnlockAndStart();
+  </script>
+</body>
+</html>

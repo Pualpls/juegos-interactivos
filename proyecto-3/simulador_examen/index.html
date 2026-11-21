@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Simulador del Examen · Proyecto 3 · Salud y Cuerpo Humano</title>
+  <style>
+    :root { --ink:#0f172a; --muted:#475569; --primary:#2563eb; --ok:#059669; --err:#dc2626; --radius:16px; }
+    * { box-sizing:border-box; margin:0; padding:0; user-select:none !important; -webkit-user-select:none !important; -webkit-touch-callout:none !important; -webkit-tap-highlight-color:transparent !important; }
+    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Ubuntu','Roboto','Noto Sans',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#1e3a8a 100%); color:#f8fafc; min-height:100vh; overflow-y:auto; padding:1rem; }
+    .app-wrap { max-width:1120px; margin:0 auto; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; background:rgba(15,23,42,0.8); border:1px solid rgba(148,163,184,0.25); border-radius:var(--radius); padding:0.75rem 1rem; margin-bottom:1rem; }
+    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; }
+    .btn-nav { background:#334155; color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.55rem 0.95rem; font-family:inherit; font-size:0.95rem; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; min-height:44px; }
+    .badge-sim { background:#fef3c7; color:#92400e; font-weight:800; font-size:0.85rem; padding:0.35rem 0.75rem; border-radius:999px; }
+    .pill-progress { background:#1e293b; border:1px solid #60a5fa; color:#bfdbfe; padding:0.4rem 0.85rem; border-radius:999px; font-weight:700; font-size:0.92rem; }
+    .btn-sound { background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.5rem 0.85rem; font-family:inherit; font-weight:700; cursor:pointer; min-height:44px; }
+    .btn-sound.muted { background:#334155; border-color:#64748b; color:#cbd5e1; }
+    .stage-card { background:#fff; color:var(--ink); border-radius:20px; padding:1.35rem 1.6rem; box-shadow:0 12px 30px rgba(0,0,0,0.3); }
+    .lock-wall { text-align:left; }
+    .lock-banner { background:#fef2f2; border:2.5px solid #dc2626; border-radius:16px; padding:1.1rem 1.25rem; color:#7f1d1d; margin-bottom:1rem; }
+    .lock-banner h2 { font-size:1.35rem; margin-bottom:0.35rem; }
+    .req-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.85rem; margin:1rem 0; }
+    .req-card { border-radius:14px; padding:0.95rem 1rem; border:2px solid; display:flex; flex-direction:column; gap:0.55rem; justify-content:space-between; }
+    .req-card.done { background:#ecfdf5; border-color:#059669; color:#065f46; }
+    .req-card.pending { background:#fffbeb; border-color:#f59e0b; color:#78350f; }
+    .req-go { background:#2563eb; color:#fff; text-decoration:none; font-weight:800; padding:0.6rem 0.9rem; border-radius:10px; text-align:center; display:inline-block; }
+    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap; }
+    .campo-tag { padding:0.3rem 0.75rem; border-radius:999px; font-size:0.84rem; font-weight:800; background:#dbeafe; color:#1e40af; }
+    .micro-text { background:#f8fafc; border-left:4px solid #2563eb; padding:0.8rem 1rem; border-radius:0 12px 12px 0; margin-bottom:0.85rem; font-size:0.96rem; line-height:1.5; color:#1e293b; }
+    .stage-prompt { font-size:1.2rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; line-height:1.35; }
+    .options-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; }
+    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.9rem 1rem; font-family:inherit; font-size:1.02rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:54px; }
+    .opt-btn:hover { border-color:#2563eb; background:#eff6ff; }
+    .opt-btn.selected-correct { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .opt-btn.selected-wrong { border-color:#dc2626; background:#fee2e2; color:#991b1b; }
+    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .match-col { display:flex; flex-direction:column; gap:0.65rem; }
+    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.75rem 0.9rem; font-family:inherit; font-size:0.96rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:52px; }
+    .match-btn.active { border-color:#2563eb; background:#dbeafe; }
+    .match-btn.paired { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .match-btn.wrong-flash { border-color:#dc2626; background:#fee2e2; }
+    .token-sentence { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:1rem; display:flex; flex-wrap:wrap; gap:0.45rem; align-items:center; }
+    .word-token { background:#fff; border:2px solid #94a3b8; border-radius:10px; padding:0.45rem 0.75rem; font-family:inherit; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; min-height:44px; }
+    .word-token.marked-red { border-color:#dc2626; background:#fef2f2; }
+    .red-cap { color:#dc2626; font-weight:900; text-decoration:underline; }
+    .feedback-box { margin-top:1rem; border-radius:14px; padding:0.9rem 1.1rem; font-weight:700; line-height:1.45; display:none; }
+    .feedback-box.ok { display:block; background:#d1fae5; color:#065f46; border:2px solid #059669; }
+    .feedback-box.err { display:block; background:#fee2e2; color:#991b1b; border:2px solid #dc2626; }
+    .btn-primary { background:var(--primary); color:#fff; border:none; border-radius:12px; padding:0.75rem 1.35rem; font-family:inherit; font-size:1.02rem; font-weight:800; cursor:pointer; min-height:48px; }
+    .stage-footer { margin-top:1rem; display:flex; justify-content:flex-end; gap:0.75rem; flex-wrap:wrap; }
+    .campos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.85rem; margin:1rem 0; }
+    .campo-box { background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.9rem; }
+    .campo-box h4 { color:#1e3a8a; margin-bottom:0.3rem; }
+    @media (max-width:780px) { .match-columns { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a class="btn-nav" href="../../index.html?openRepaso=p3">⬅ Volver al Portal</a>
+        <span class="badge-sim">📝 Simulador del Examen · Proyecto 3</span>
+      </div>
+      <div class="topbar-right">
+        <span class="pill-progress" id="pillProgress">Verificando avance...</span>
+        <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido: ON</button>
+      </div>
+    </div>
+
+    <div class="stage-card" id="stageContainer"></div>
+  </div>
+
+  <script>
+    window.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    const AULA_PROGRESS_KEY = 'aula3a_pp_progress_v1';
+    const PROJ_KEY = 'p3';
+    const REQUIRED_PPS = [
+      { id: 'pp1', title: 'PP1: Carnet Escolar de Salud y Cartilla', href: '../repaso_pp/pp1.html' },
+      { id: 'pp2', title: 'PP2: Sistema Locomotor y Decálogo Postural', href: '../repaso_pp/pp2.html' },
+      { id: 'pp3', title: 'PP3: Semáforo de Decisiones ante Riesgos', href: '../repaso_pp/pp3.html' },
+      { id: 'pp4', title: 'PP4: Tríptico Expositivo Problema-Solución', href: '../repaso_pp/pp4.html' }
+    ];
+
+    function readAulaProgress() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(AULA_PROGRESS_KEY) || '{}');
+        if (!parsed || typeof parsed !== 'object') return { schemaVersion: 1, projects: {} };
+        if (!parsed.projects || typeof parsed.projects !== 'object') parsed.projects = {};
+        return parsed;
+      } catch (e) { return { schemaVersion: 1, projects: {} }; }
+    }
+
+    function saveExamProgress(score, total) {
+      const data = readAulaProgress();
+      if (!data.projects[PROJ_KEY]) data.projects[PROJ_KEY] = { pps: {}, exam: null };
+      const prev = data.projects[PROJ_KEY].exam || {};
+      const newPct = total > 0 ? Math.round((score / total) * 100) : 0;
+      const nowIso = new Date().toISOString();
+      data.projects[PROJ_KEY].exam = {
+        attempts: (Number(prev.attempts) || 0) + 1,
+        bestPct: Math.max(Number(prev.bestPct) || 0, newPct),
+        bestScore: Math.max(Number(prev.bestScore) || 0, score),
+        total,
+        lastPlayedAt: nowIso
+      };
+      try { localStorage.setItem(AULA_PROGRESS_KEY, JSON.stringify(data)); } catch (e) {}
+      return data.projects[PROJ_KEY].exam;
+    }
+
+    let sharedAudioCtx = null, soundEnabled = true;
+    function getAudioCtx() { const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return null; if (!sharedAudioCtx) sharedAudioCtx = new Ctx(); return sharedAudioCtx; }
+    function playSfx(kind) {
+      if (!soundEnabled) return; const ctx = getAudioCtx(); if (!ctx) return;
+      const run = () => { try { const now = ctx.currentTime, notes = kind === 'ok' ? [[523.25,0,0.08],[659.25,0.07,0.1]] : kind === 'err' ? [[240,0,0.12],[196,0.09,0.14]] : kind === 'lock' ? [[310,0,0.09],[260,0.08,0.12]] : kind === 'win' ? [[523.25,0,0.09],[659.25,0.08,0.09],[783.99,0.16,0.16]] : [[560,0,0.05]]; notes.forEach(([f,o,d])=>{ const osc=ctx.createOscillator(),g=ctx.createGain(); osc.type=(kind==='err'||kind==='lock')?'triangle':'sine'; osc.frequency.setValueAtTime(f,now+o); g.gain.setValueAtTime(0.001,now+o); g.gain.linearRampToValueAtTime(0.08,now+o+0.01); g.gain.exponentialRampToValueAtTime(0.0008,now+o+d); osc.connect(g); g.connect(ctx.destination); osc.start(now+o); osc.stop(now+o+d+0.01); }); } catch(e){} };
+      if (ctx.state === 'suspended') ctx.resume().then(run).catch(()=>{}); else run();
+    }
+    function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return; window.__uiClickSfxBound = true;
+      document.addEventListener('pointerdown', (e) => { const btn = e.target && e.target.closest ? e.target.closest('button, a.btn-nav, a.req-go') : null; if (btn && !btn.disabled) playSfx('tap'); }, { capture: true, passive: true });
+    }
+    function toggleSound() { soundEnabled = !soundEnabled; const b = document.getElementById('btnSound'); b.textContent = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF'; b.classList.toggle('muted', !soundEnabled); }
+    function shuffleArray(arr) { const c = arr.slice(); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; }
+
+    const EXAM_QUESTIONS = [
+      { type: 'match', campo: 'Lenguajes', prompt: 'Une cada elemento del documento oficial (Cartilla de Salud) con su función:', pairs: [
+        { left: 'Sello oficial de la institución', right: 'Garantiza la autenticidad y validez del trámite médico' },
+        { left: 'Siglas SSA o IMSS', right: 'Indican la institución pública de salud que expide el documento' },
+        { left: 'Nombre completo y datos escolares', right: 'Identifican de forma única al alumno titular' }
+      ], okMsg: 'Correcto: sellos, siglas y datos personales dan validez a los documentos formales.' },
+      { type: 'redcaps', campo: 'Lenguajes', prompt: 'Toca las palabras donde falta iniciar con mayúscula en rojo en el carnet escolar:', tokens: [
+        { text: 'aurora', needsCap: true }, { text: 'ramírez', needsCap: true }, { text: 'soto', needsCap: true },
+        { text: 'presentó', needsCap: false }, { text: 'su', needsCap: false }, { text: 'cartilla', needsCap: false }
+      ], okMsg: 'Muy bien: nombres propios y apellidos llevan mayúscula inicial con rojo.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: '¿Por qué es indispensable la firma del médico en una cartilla o receta para que sea válida?', options: [
+        { text: 'Para certificar la autorización profesional de la vacuna o atención recibida', correct: true },
+        { text: 'Para adornar la cartulina con diferentes colores de tinta antes de enmicarla', correct: false },
+        { text: 'Para sustituir el nombre completo y la fecha de nacimiento del paciente', correct: false },
+        { text: 'Para saber qué tamaño de letra utilizó el paciente al llenar el encabezado', correct: false }
+      ], okMsg: 'Exacto: la firma médica avala profesionalmente la atención.' },
+      { type: 'match', campo: 'Saberes y Pensamiento Científico', prompt: 'Relaciona cada parte del sistema locomotor con su función principal:', pairs: [
+        { left: 'Esqueleto y columna vertebral', right: 'Sostienen el cuerpo y protegen órganos vitales como corazón y pulmones' },
+        { left: 'Músculos', right: 'Se contraen y estiran para generar fuerza y movimiento' },
+        { left: 'Articulaciones', right: 'Permiten flexionar y doblar extremidades como rodillas y codos' }
+      ], okMsg: 'Correcto: huesos, músculos y articulaciones actúan de forma coordinada.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Al cargar la mochila con libros pesados colgada de un solo hombro, la columna se inclina. ¿Qué hábito previene lesiones?', options: [
+        { text: 'Cargar la mochila con ambos tirantes sobre la espalda recta', correct: true },
+        { text: 'Correr inclinado hacia adelante para llegar más rápido al salón', correct: false },
+        { text: 'Cargar todos los cuadernos en una mano con el brazo estirado', correct: false },
+        { text: 'Colgar la mochila únicamente del codo mientras subes escaleras', correct: false }
+      ], okMsg: 'Muy bien: repartir el peso con ambos tirantes protege la columna vertebral.' },
+      { type: 'mcq', campo: 'De lo Humano y lo Comunitario', prompt: '¿Por qué una niña o niño con dolor muscular o fiebre debe acudir al médico en lugar de automedicarse?', options: [
+        { text: 'Porque solo el personal médico puede diagnosticar la causa y recetar una dosis segura', correct: true },
+        { text: 'Porque todas las pastillas guardadas en casa tienen exactamente el mismo efecto en niños', correct: false },
+        { text: 'Porque acudir al centro de salud sirve únicamente para recibir sellos sin revisión', correct: false },
+        { text: 'Porque es mejor ocultar el dolor para no perder el juego en Educación Física', correct: false }
+      ], okMsg: 'Exacto: evitar la automedicación previene intoxicaciones y complicaciones.' },
+      { type: 'match', campo: 'Ética, Naturaleza y Sociedades', prompt: 'Clasifica uniendo cada acción de temporada invernal con el nivel del Semáforo de Riesgos que corresponde:', pairs: [
+        { left: 'Tomar agua tibia y lavarse las manos con jabón', right: '🟢 Verde (Decisión segura)' },
+        { left: 'Pasar caminando despacio por una zona señalizada con piso húmedo', right: '🟡 Amarillo (Precaución)' },
+        { left: 'Jugar con cohetes o encender anafres en un cuarto cerrado', right: '🔴 Rojo (Peligro alto)' }
+      ], okMsg: 'Excelente valoración crítica de riesgos.' },
+      { type: 'mcq', campo: 'Ética, Naturaleza y Sociedades', prompt: 'En una tarde fría con viento, Carlos acaba de jugar basquetbol y quiere salir del patio en manga corta porque siente calor. ¿Qué decisión responsable debe tomar?', options: [
+        { text: 'Ponerse su suéter para evitar un enfriamiento brusco al descansar', correct: true },
+        { text: 'Salir sin suéter corriendo para que el viento helado lo seque rápido', correct: false },
+        { text: 'Tomar agua helada inmediatamente y sentarse en la corriente de aire', correct: false },
+        { text: 'Quedarse con la ropa empapada sin abrigarse hasta regresar a casa', correct: false }
+      ], okMsg: 'Correcto: abrigarse tras el ejercicio previene cambios bruscos de temperatura.' },
+      { type: 'mcq', campo: 'Lenguajes', microText: 'Texto expositivo: "Durante el invierno aumentan las infecciones respiratorias debido a que los virus se transmiten con facilidad en espacios cerrados. Para solucionar este problema, es necesario ventilar las aulas y aplicar el estornudo de etiqueta."', prompt: '¿Cuál es el problema central que plantea este texto expositivo?', options: [
+        { text: 'El aumento de infecciones respiratorias durante el invierno en espacios cerrados', correct: true },
+        { text: 'La dificultad de abrir las ventanas grandes en los salones durante el verano', correct: false },
+        { text: 'El uso correcto del lápiz rojo al copiar el título del texto en el cuaderno', correct: false },
+        { text: 'La venta de frutas de temporada en los mercados locales', correct: false }
+      ], okMsg: '¡Bien leído! Identificaste el problema central del texto.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: 'En la oración "Los virus se transmiten con facilidad debido a que las personas conviven en lugares cerrados", ¿qué relación establece el nexo "debido a que"?', options: [
+        { text: 'Relación de causa y consecuencia entre dos hechos', correct: true },
+        { text: 'Comparación entre dos frutas distintas de la región', correct: false },
+        { text: 'Enumeración de pasos ordenados para doblar un tríptico', correct: false },
+        { text: 'Lista de alumnos encargados de repartir folletos', correct: false }
+      ], okMsg: 'Exacto: "debido a que" enlaza el efecto con su causa.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: 'En un tríptico preventivo escolar de 6 paneles, ¿en cuál cara va la portada con el título llamativo y la imagen principal?', options: [
+        { text: 'En la carátula o cara exterior frontal visible al doblarlo', correct: true },
+        { text: 'En la cara central oculta que solo aparece al desdoblar las tres partes', correct: false },
+        { text: 'En el borde inferior donde se escribe la fecha única en letra pequeña', correct: false },
+        { text: 'En la última columna trasera después de la despedida', correct: false }
+      ], okMsg: 'Correcto: la portada ocupa la cara exterior frontal del tríptico.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Campaña de vacunación: "Al centro de salud llegaron 368 vacunas de influenza en el refrigerador número 4. Por la tarde recibieron un paquete adicional con 275 dosis de refuerzo."', prompt: '¿Qué dato numérico es un DISTRACTOR que NO se necesita para calcular el total de vacunas reunidas?', options: [
+        { text: 'Refrigerador número 4', correct: true },
+        { text: '368 vacunas de influenza', correct: false },
+        { text: '275 dosis de refuerzo', correct: false },
+        { text: 'El total de dosis que suman ambos paquetes', correct: false }
+      ], okMsg: 'Excelente: el número del refrigerador es solo un dato ubicador, no entra en la suma.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', prompt: 'Con los datos útiles anteriores (368 vacunas + 275 dosis de refuerzo), ¿cuántas vacunas se reunieron en total usando suma con agrupamiento?', options: [
+        { text: '643 vacunas en total', correct: true },
+        { text: '533 vacunas en total', correct: false },
+        { text: '633 vacunas en total', correct: false },
+        { text: '93 vacunas en total', correct: false }
+      ], okMsg: '¡Exacto! 8+5=13 (llevas 1 decena); 6+7+1=14 decenas (llevas 1 centena); 3+2+1=6 centenas -> 643.' },
+      { type: 'mcq', campo: 'Saberes y Pensamiento Científico', microText: 'Botiquín escolar: "La cooperativa escolar compró 620 cubrebocas tricapa en una caja verde. Durante dos semanas frías se repartieron 285 cubrebocas."', prompt: '¿Cuántos cubrebocas quedaron disponibles en el botiquín al restar con desagrupación (620 - 285)?', options: [
+        { text: '335 cubrebocas disponibles', correct: true },
+        { text: '465 cubrebocas disponibles', correct: false },
+        { text: '345 cubrebocas disponibles', correct: false },
+        { text: '435 cubrebocas disponibles', correct: false }
+      ], okMsg: '¡Muy bien! Al desagrupar centenas y decenas sin invertir dígitos, 620 - 285 = 335.' },
+      { type: 'mcq', campo: 'Lenguajes', prompt: 'En la Presentación en la Escuela ante familias, ¿qué pauta oral es indispensable para que los asistentes comprendan con claridad tu módulo?', options: [
+        { text: 'Hablar con tono audible, dicción clara y postura erguida mirando a quien escucha', correct: true },
+        { text: 'Leer muy rápido todo un papel mirando hacia el suelo para terminar pronto', correct: false },
+        { text: 'Hablar en susurro con la hoja cubriendo el rostro frente a la mesa', correct: false },
+        { text: 'Saltar las explicaciones del modelo y entregar folletos sin decir palabra', correct: false }
+      ], okMsg: 'Correcto: proyectar la voz con claridad permite comunicar los aprendizajes.' },
+      { type: 'mcq', campo: 'De lo Humano y lo Comunitario', prompt: '¿Qué hábito diario de hidratación y alimentación fortalece las vías respiratorias durante la temporada invernal?', options: [
+        { text: 'Tomar agua simple potable y consumir frutas ricas en vitamina C como naranja y guayaba', correct: true },
+        { text: 'Beber únicamente refrescos helados con mucha azúcar después de correr', correct: false },
+        { text: 'Evitar tomar líquidos durante todo el horario escolar para no ir al baño', correct: false },
+        { text: 'Sustituir comidas calientes y verduras por frituras empaquetadas en el recreo', correct: false }
+      ], okMsg: '¡Exacto! El agua simple y las frutas con vitamina C protegen e hidratan el cuerpo.' }
+    ];
+
+    let deck = [], idx = 0, cleanHits = 0, hadErr = false, resolved = false;
+    let campoStats = {};
+
+    function checkUnlockAndStart() {
+      const data = readAulaProgress();
+      const pps = (data.projects[PROJ_KEY] && data.projects[PROJ_KEY].pps) || {};
+      const missing = REQUIRED_PPS.filter(r => !(pps[r.id] && pps[r.id].completed));
+      if (missing.length > 0) {
+        playSfx('lock');
+        document.getElementById('pillProgress').textContent = `🔒 Bloqueado (${REQUIRED_PPS.length - missing.length}/${REQUIRED_PPS.length} PP)`;
+        document.getElementById('stageContainer').innerHTML = `
+          <div class="lock-wall">
+            <div class="lock-banner">
+              <h2>🔒 Simulador del Examen bloqueado</h2>
+              <p>Para practicar en el Simulador del Examen del <strong>Proyecto 3</strong>, primero debes completar exitosamente los <strong>${REQUIRED_PPS.length} repasos de Productos Parciales</strong>. Aún te falta acreditar <strong>${missing.length}</strong>:</p>
+            </div>
+            <div class="req-list">
+              ${REQUIRED_PPS.map(r => {
+                const st = pps[r.id];
+                const isDone = Boolean(st && st.completed);
+                return `
+                  <div class="req-card ${isDone ? 'done' : 'pending'}">
+                    <div>
+                      <div style="font-weight:800; font-size:1.05rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
+                      <div style="font-size:0.9rem; margin-top:0.25rem;">${isDone ? `Completado · Mejor: ${st.bestPct}%` : 'Pendiente por completar (mínimo 75%)'}</div>
+                    </div>
+                    <a class="req-go" href="${r.href}">${isDone ? 'Repasar de nuevo ➔' : 'Completar este repaso ➔'}</a>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div class="stage-footer">
+              <a class="btn-nav" href="../../index.html?openRepaso=p3" style="background:#1e293b;">⬅ Regresar al Portal</a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      startExam();
+    }
+
+    function startExam() {
+      deck = shuffleArray(EXAM_QUESTIONS);
+      idx = 0; cleanHits = 0; campoStats = {};
+      deck.forEach(q => {
+        if (!campoStats[q.campo]) campoStats[q.campo] = { ok: 0, total: 0 };
+        campoStats[q.campo].total++;
+      });
+      renderQ();
+    }
+
+    function renderQ() {
+      document.getElementById('pillProgress').textContent = idx < deck.length ? `Reactivo ${idx + 1} de ${deck.length}` : `Finalizado · ${cleanHits}/${deck.length}`;
+      if (idx >= deck.length) { renderSummary(); return; }
+      const q = deck[idx]; hadErr = false; resolved = false;
+      document.getElementById('stageContainer').innerHTML = `
+        <div class="stage-meta">
+          <span class="campo-tag">${q.campo}</span>
+          <span style="font-weight:800; color:#1d4ed8;">Aciertos: ${cleanHits}/${idx}</span>
+        </div>
+        ${q.microText ? `<div class="micro-text">${q.microText}</div>` : ''}
+        <h2 class="stage-prompt">${q.prompt}</h2>
+        <div id="qBody"></div>
+        <div id="feedbackBox" class="feedback-box"></div>
+        <div class="stage-footer" id="stageFooter"></div>
+      `;
+      if (q.type === 'mcq') renderMcq(q);
+      else if (q.type === 'match') renderMatch(q);
+      else if (q.type === 'redcaps') renderRedCaps(q);
+    }
+
+    function showFb(ok, msg) { const fb = document.getElementById('feedbackBox'); fb.className = 'feedback-box ' + (ok ? 'ok' : 'err'); fb.textContent = msg; playSfx(ok ? 'ok' : 'err'); }
+    function markOk(q) {
+      if (resolved) return; resolved = true;
+      if (!hadErr) { cleanHits++; campoStats[q.campo].ok++; }
+      showFb(true, '✅ ' + q.okMsg);
+      document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" onclick="idx++; renderQ();">${idx + 1 < deck.length ? 'Siguiente reactivo ➔' : 'Ver diagnóstico del simulador ➔'}</button>`;
+    }
+
+    function renderMcq(q) {
+      const body = document.getElementById('qBody'), opts = shuffleArray(q.options);
+      body.innerHTML = `<div class="options-grid">${opts.map((o, i) => `<button type="button" class="opt-btn" data-i="${i}">${o.text}</button>`).join('')}</div>`;
+      body.querySelectorAll('.opt-btn').forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          if (resolved) return;
+          if (opts[i].correct) { btn.classList.add('selected-correct'); markOk(q); }
+          else { hadErr = true; btn.classList.add('selected-wrong'); showFb(false, '💡 Vuelve a leer el caso o texto con atención e intenta otra opción.'); }
+        });
+      });
+    }
+
+    function renderMatch(q) {
+      const body = document.getElementById('qBody');
+      const left = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.left }))), right = shuffleArray(q.pairs.map((p, i) => ({ id: i, text: p.right })));
+      let pickedLeft = null, solved = 0;
+      body.innerHTML = `<div class="match-columns"><div class="match-col" id="mL">${left.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div><div class="match-col" id="mR">${right.map(x => `<button type="button" class="match-btn" data-id="${x.id}">${x.text}</button>`).join('')}</div></div>`;
+      body.querySelectorAll('#mL .match-btn').forEach(b => b.addEventListener('click', () => { if (b.classList.contains('paired')) return; body.querySelectorAll('#mL .match-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); pickedLeft = b; }));
+      body.querySelectorAll('#mR .match-btn').forEach(r => r.addEventListener('click', () => {
+        if (r.classList.contains('paired') || !pickedLeft) return;
+        if (pickedLeft.dataset.id === r.dataset.id) { pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); r.classList.add('paired'); pickedLeft = null; solved++; playSfx('ok'); if (solved === q.pairs.length) markOk(q); }
+        else { hadErr = true; r.classList.add('wrong-flash'); showFb(false, '💡 Esa pareja no corresponde. Vuelve a comparar.'); setTimeout(() => r.classList.remove('wrong-flash'), 450); }
+      }));
+    }
+
+    function renderRedCaps(q) {
+      const body = document.getElementById('qBody'), marked = new Set();
+      body.innerHTML = `<div class="token-sentence" id="tokRow"></div>`;
+      const row = document.getElementById('tokRow');
+      function draw() {
+        row.innerHTML = '';
+        q.tokens.forEach((tk, i) => {
+          const b = document.createElement('button'); b.type = 'button'; b.className = 'word-token' + (marked.has(i) ? ' marked-red' : '');
+          b.innerHTML = marked.has(i) ? `<span class="red-cap">${tk.text[0].toUpperCase()}</span>${tk.text.slice(1)}` : tk.text;
+          b.addEventListener('click', () => { if (resolved) return; if (marked.has(i)) marked.delete(i); else marked.add(i); draw(); });
+          row.appendChild(b);
+        });
+      }
+      draw();
+      document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" id="btnCaps">Comprobar mayúsculas ✓</button>`;
+      document.getElementById('btnCaps').addEventListener('click', () => {
+        if (resolved) return;
+        if (q.tokens.every((tk, i) => Boolean(tk.needsCap) === marked.has(i))) markOk(q);
+        else { hadErr = true; showFb(false, '💡 Marca únicamente nombres propios y apellidos.'); }
+      });
+    }
+
+    function renderSummary() {
+      const total = deck.length, pct = Math.round((cleanHits / total) * 100);
+      const saved = saveExamProgress(cleanHits, total);
+      playSfx('win');
+      document.getElementById('stageContainer').innerHTML = `
+        <h2 class="stage-prompt">📝 Resultado de tu Simulador de Examen · Proyecto 3</h2>
+        <p style="font-size:1.05rem; color:#334155; margin-bottom:1rem;">Respondiste al primer intento <strong>${cleanHits} de ${total}</strong> reactivos (<strong>${pct}%</strong>). Tu mejor marca histórica guardada es <strong>${saved.bestPct}%</strong> en <strong>${saved.attempts}</strong> intento(s).</p>
+        <div class="campos-grid">
+          ${Object.entries(campoStats).map(([campo, st]) => `<div class="campo-box"><h4>${campo}</h4><p style="font-weight:800; color:${st.ok === st.total ? '#059669' : '#d97706'};">${st.ok} de ${st.total} reactivos limpios</p></div>`).join('')}
+        </div>
+        <div class="feedback-box ok" style="display:block;">💡 Si algún Campo Formativo salió por debajo del total, regresa al repaso de ese Producto Parcial y revisa las actividades antes del examen escrito en el salón.</div>
+        <div class="stage-footer">
+          <button type="button" class="btn-primary" onclick="startExam()">🔁 Practicar otro examen barajado</button>
+          <a class="btn-nav" href="../../index.html?openRepaso=p3" style="background:#334155;">⬅ Volver al Portal</a>
+        </div>
+      `;
+    }
+
+    initUiClickSfx();
+    checkUnlockAndStart();
+  </script>
+</body>
+</html>

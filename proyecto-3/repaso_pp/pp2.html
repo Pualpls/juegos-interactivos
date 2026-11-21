@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Repaso PP2 · Sistema Locomotor y Postura · Proyecto 3</title>
+  <style>
+    :root { --bg:#0f172a; --ink:#0f172a; --muted:#475569; --primary:#2563eb; --ok:#059669; --err:#dc2626; --radius:16px; }
+    * { box-sizing:border-box; margin:0; padding:0; user-select:none !important; -webkit-user-select:none !important; -webkit-touch-callout:none !important; -webkit-tap-highlight-color:transparent !important; }
+    body { font-family:'Comic Neue','Fredoka','Lexend','Comic Sans MS','Ubuntu','Roboto','Noto Sans',sans-serif; background:linear-gradient(160deg,#0f172a 0%,#1e3a8a 100%); color:#f8fafc; min-height:100vh; overflow-y:auto; padding:1rem; }
+    .app-wrap { max-width:1120px; margin:0 auto; }
+    .topbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.25); border-radius:var(--radius); padding:0.75rem 1rem; margin-bottom:1rem; }
+    .topbar-left, .topbar-right { display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; }
+    .btn-nav { background:#334155; color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:0.55rem 0.95rem; font-family:inherit; font-size:0.95rem; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; min-height:44px; }
+    .btn-nav:hover { background:#475569; }
+    .badge-pp { background:#dbeafe; color:#1e40af; font-weight:800; font-size:0.85rem; padding:0.35rem 0.75rem; border-radius:999px; }
+    .pill-progress { background:#1e293b; border:1px solid #60a5fa; color:#bfdbfe; padding:0.4rem 0.85rem; border-radius:999px; font-weight:700; font-size:0.92rem; }
+    .btn-sound { background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); color:#a7f3d0; border-radius:12px; padding:0.5rem 0.85rem; font-family:inherit; font-weight:700; cursor:pointer; min-height:44px; }
+    .btn-sound.muted { background:#334155; border-color:#64748b; color:#cbd5e1; }
+    .capsule-card { background:#fff; color:var(--ink); border-radius:var(--radius); padding:1rem 1.25rem; margin-bottom:1rem; border-left:6px solid #0284c7; box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+    .capsule-header { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; flex-wrap:wrap; cursor:pointer; }
+    .capsule-title { font-size:1.1rem; font-weight:800; color:#0c4a6e; }
+    .capsule-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0.75rem; margin-top:0.85rem; }
+    .capsule-item { background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:12px; padding:0.75rem 0.9rem; font-size:0.92rem; line-height:1.45; }
+    .capsule-item strong { color:#0369a1; display:block; margin-bottom:0.2rem; }
+    .stage-card { background:#fff; color:var(--ink); border-radius:20px; padding:1.25rem 1.5rem; box-shadow:0 12px 30px rgba(0,0,0,0.28); }
+    .stage-meta { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap; }
+    .type-tag { background:#e0f2fe; color:#0369a1; padding:0.3rem 0.75rem; border-radius:999px; font-size:0.85rem; font-weight:800; }
+    .stage-prompt { font-size:1.22rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem; line-height:1.35; }
+    .stage-sub { font-size:0.95rem; color:var(--muted); margin-bottom:1rem; }
+    .options-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0.8rem; }
+    .opt-btn { background:#f8fafc; border:2.5px solid #cbd5e1; border-radius:14px; padding:0.9rem 1rem; font-family:inherit; font-size:1.02rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:54px; }
+    .opt-btn:hover { border-color:#2563eb; background:#eff6ff; }
+    .opt-btn.selected-correct { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .opt-btn.selected-wrong { border-color:#dc2626; background:#fee2e2; color:#991b1b; }
+    .match-columns { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .match-col { display:flex; flex-direction:column; gap:0.65rem; }
+    .match-btn { background:#f8fafc; border:2.5px solid #94a3b8; border-radius:12px; padding:0.75rem 0.9rem; font-family:inherit; font-size:0.98rem; font-weight:700; color:#0f172a; text-align:left; cursor:pointer; min-height:52px; }
+    .match-btn.active { border-color:#2563eb; background:#dbeafe; box-shadow:0 0 0 3px rgba(37,99,235,0.25); }
+    .match-btn.paired { border-color:#059669; background:#d1fae5; color:#065f46; }
+    .match-btn.wrong-flash { border-color:#dc2626; background:#fee2e2; }
+    .order-wrap { display:grid; grid-template-columns:1fr 1fr; gap:1rem; align-items:start; }
+    .order-pool, .order-slots { display:flex; flex-direction:column; gap:0.6rem; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:0.85rem; }
+    .seq-card { background:#fff; border:2.5px solid #2563eb; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; cursor:pointer; text-align:left; font-family:inherit; font-size:0.96rem; color:#0f172a; min-height:48px; }
+    .seq-card.used { opacity:0.4; cursor:default; }
+    .seq-slot { background:#eff6ff; border:2px dashed #60a5fa; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; color:#1e3a8a; min-height:50px; cursor:pointer; display:flex; align-items:center; gap:0.5rem; text-align:left; font-family:inherit; }
+    .classify-board { display:grid; grid-template-columns:1fr 1fr; gap:1rem; align-items:start; }
+    .cards-tray { background:#f1f5f9; border:2px dashed #94a3b8; border-radius:14px; padding:0.85rem; display:flex; flex-direction:column; gap:0.6rem; min-height:180px; }
+    .drag-card { background:#fff; border:2.5px solid #2563eb; border-radius:12px; padding:0.7rem 0.9rem; font-weight:700; color:#0f172a; cursor:grab; touch-action:none !important; min-height:48px; }
+    .drag-card.picked { border-color:#d97706; background:#fef3c7; }
+    .buckets-col { display:flex; flex-direction:column; gap:0.75rem; }
+    .drop-bucket { background:#f8fafc; border:2.5px solid #64748b; border-radius:14px; padding:0.8rem; min-height:82px; cursor:pointer; touch-action:none !important; }
+    .bucket-title { font-weight:800; color:#0c4a6e; margin-bottom:0.4rem; }
+    .placed-chip { display:inline-block; background:#d1fae5; color:#065f46; border:1px solid #059669; border-radius:8px; padding:0.25rem 0.55rem; font-size:0.88rem; font-weight:700; margin:0.2rem; }
+    .drag-ghost { position:fixed; z-index:9999999; pointer-events:none !important; opacity:0.92; box-shadow:0 10px 25px rgba(0,0,0,0.3); background:#dbeafe; border:2.5px solid #2563eb; border-radius:12px; padding:0.65rem 0.9rem; font-weight:800; color:#0f172a; }
+    .btn-primary { background:var(--primary); color:#fff; border:none; border-radius:12px; padding:0.75rem 1.35rem; font-family:inherit; font-size:1.02rem; font-weight:800; cursor:pointer; min-height:48px; }
+    .btn-primary:hover { background:#1d4ed8; }
+    .feedback-box { margin-top:1rem; border-radius:14px; padding:0.9rem 1.1rem; font-weight:700; line-height:1.45; display:none; }
+    .feedback-box.ok { display:block; background:#d1fae5; color:#065f46; border:2px solid #059669; }
+    .feedback-box.err { display:block; background:#fee2e2; color:#991b1b; border:2px solid #dc2626; }
+    .stage-footer { margin-top:1rem; display:flex; justify-content:flex-end; gap:0.75rem; flex-wrap:wrap; }
+    .production-box { background:#fffbeb; border:2.5px solid #f59e0b; border-radius:16px; padding:1.1rem 1.25rem; margin:1rem 0; color:#451a03; }
+    .production-box h3 { color:#b45309; margin-bottom:0.45rem; font-size:1.15rem; }
+    .production-box ul { padding-left:1.25rem; line-height:1.55; }
+    .pp-status-strip { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.85rem 0; }
+    .pp-chip { padding:0.35rem 0.75rem; border-radius:999px; font-size:0.85rem; font-weight:800; background:#e2e8f0; color:#334155; }
+    .pp-chip.done { background:#d1fae5; color:#065f46; }
+    @media (max-width:780px) { .match-columns, .order-wrap, .classify-board { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="topbar">
+      <div class="topbar-left">
+        <a class="btn-nav" href="../../index.html?openRepaso=p3" id="backLink">⬅ Volver al Portal</a>
+        <span class="badge-pp">Proyecto 3 · PP2 · Saberes y Lenguajes</span>
+      </div>
+      <div class="topbar-right">
+        <span class="pill-progress" id="pillProgress">Reto 1 de 7</span>
+        <button type="button" class="btn-sound" id="btnSound" onclick="toggleSound()">🔊 Sonido: ON</button>
+      </div>
+    </div>
+
+    <div class="capsule-card">
+      <div class="capsule-header" onclick="toggleCapsule()">
+        <div class="capsule-title">🦴 Si faltaste o quieres recordar · Sistema Locomotor, Huesos y Decálogo Postural</div>
+        <span style="font-weight:800; color:#0369a1;" id="capsuleToggleTxt">Ocultar resumen ▲</span>
+      </div>
+      <div class="capsule-grid" id="capsuleBody">
+        <div class="capsule-item">
+          <strong>1. Sistema óseo y muscular</strong>
+          El sistema locomotor une huesos y columna vertebral (soporte y protección) con articulaciones (flexión en codos y rodillas) y músculos (fuerza al contraerse y estirarse). (Nuestros Saberes, págs. 68-75).
+        </div>
+        <div class="capsule-item">
+          <strong>2. Coordinación nerviosa</strong>
+          Al caminar o levantar el brazo, el sistema nervioso envía la señal, los músculos tiran y las articulaciones permiten el movimiento coordinado (Proyectos de Aula, págs. 70-85).
+        </div>
+        <div class="capsule-item">
+          <strong>3. Postura ergonómica y cero automedicación</strong>
+          Cargar la mochila en ambos hombros, sentarse con espalda recta y acudir al médico ante dolor o lesión evitando tomar pastillas sin receta (Nuestros Saberes, págs. 76-77).
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="stageContainer"></div>
+  </div>
+
+  <script>
+    window.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    const AULA_PROGRESS_KEY = 'aula3a_pp_progress_v1';
+    const PROJ_KEY = 'p3';
+    const PP_KEY = 'pp2';
+    const PASS_PCT = 75;
+
+    function readAulaProgress() {
+      try {
+        const raw = localStorage.getItem(AULA_PROGRESS_KEY);
+        if (!raw) return { schemaVersion: 1, projects: {} };
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object') return { schemaVersion: 1, projects: {} };
+        if (!parsed.projects || typeof parsed.projects !== 'object') parsed.projects = {};
+        return parsed;
+      } catch (e) { return { schemaVersion: 1, projects: {} }; }
+    }
+    function savePpProgress(projKey, ppKey, score, total, passedNow) {
+      const data = readAulaProgress();
+      if (!data.projects[projKey]) data.projects[projKey] = { pps: {}, exam: null };
+      if (!data.projects[projKey].pps) data.projects[projKey].pps = {};
+      const prev = data.projects[projKey].pps[ppKey] || {};
+      const newPct = total > 0 ? Math.round((score / total) * 100) : 0;
+      const nowIso = new Date().toISOString();
+      data.projects[projKey].pps[ppKey] = {
+        completed: Boolean(prev.completed || passedNow),
+        bestPct: Math.max(Number(prev.bestPct) || 0, newPct),
+        bestScore: Math.max(Number(prev.bestScore) || 0, score),
+        total: total,
+        attempts: (Number(prev.attempts) || 0) + 1,
+        completedAt: prev.completedAt || (passedNow ? nowIso : null),
+        lastPlayedAt: nowIso
+      };
+      try { localStorage.setItem(AULA_PROGRESS_KEY, JSON.stringify(data)); } catch (e) {}
+      return data.projects[projKey].pps[ppKey];
+    }
+
+    let sharedAudioCtx = null;
+    let soundEnabled = true;
+    function getAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      return sharedAudioCtx;
+    }
+    function playSfx(kind) {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const run = () => {
+        try {
+          const now = ctx.currentTime;
+          const notes = kind === 'ok' ? [[523.25, 0, 0.08], [659.25, 0.07, 0.1]] :
+                        kind === 'err' ? [[240, 0, 0.12], [196, 0.09, 0.14]] :
+                        kind === 'win' ? [[523.25, 0, 0.09], [659.25, 0.08, 0.09], [783.99, 0.16, 0.16]] :
+                        [[560, 0, 0.05]];
+          notes.forEach(([freq, off, dur]) => {
+            const osc = ctx.createOscillator(), g = ctx.createGain();
+            osc.type = kind === 'err' ? 'triangle' : 'sine';
+            osc.frequency.setValueAtTime(freq, now + off);
+            g.gain.setValueAtTime(0.001, now + off);
+            g.gain.linearRampToValueAtTime(0.08, now + off + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.0008, now + off + dur);
+            osc.connect(g); g.connect(ctx.destination);
+            osc.start(now + off); osc.stop(now + off + dur + 0.01);
+          });
+        } catch (e) {}
+      };
+      if (ctx.state === 'suspended') ctx.resume().then(run).catch(() => {}); else run();
+    }
+    function initUiClickSfx() {
+      if (window.__uiClickSfxBound) return;
+      window.__uiClickSfxBound = true;
+      document.addEventListener('pointerdown', (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest('button, a.btn-nav') : null;
+        if (btn && !btn.disabled) playSfx('tap');
+      }, { capture: true, passive: true });
+    }
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const b = document.getElementById('btnSound');
+      b.textContent = soundEnabled ? '🔊 Sonido: ON' : '🔇 Sonido: OFF';
+      b.classList.toggle('muted', !soundEnabled);
+    }
+    function toggleCapsule() {
+      const body = document.getElementById('capsuleBody'), txt = document.getElementById('capsuleToggleTxt');
+      const hidden = body.style.display === 'none';
+      body.style.display = hidden ? 'grid' : 'none';
+      txt.textContent = hidden ? 'Ocultar resumen ▲' : 'Ver resumen ▼';
+    }
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function cleanupAllDragGhosts() {
+      document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost').forEach(el => el.remove());
+      if (window.__activeDrag && window.__activeDrag.originEl) window.__activeDrag.originEl.style.opacity = '1';
+      window.__activeDrag = null;
+    }
+    window.addEventListener('blur', cleanupAllDragGhosts);
+
+    const CHALLENGES = [
+      {
+        type: 'match',
+        tag: 'Relacionar columnas · Componentes del sistema locomotor',
+        prompt: 'Relaciona cada parte del sistema locomotor con la función exacta que cumple en tu cuerpo:',
+        sub: 'Toca un elemento de la izquierda y luego su función en la derecha.',
+        pairs: [
+          { left: 'Cráneo y costillas', right: 'Protegen órganos vitales como el cerebro, corazón y pulmones' },
+          { left: 'Músculos', right: 'Se contraen y estiran para generar fuerza y movimiento' },
+          { left: 'Articulaciones (codos y rodillas)', right: 'Unen dos o más huesos permitiendo doblar y flexionar' },
+          { left: 'Columna vertebral', right: 'Forma el eje central que da soporte y estabilidad a la espalda' }
+        ],
+        okMsg: '¡Excelente! Así trabajan unidos el sistema óseo y el sistema muscular.'
+      },
+      {
+        type: 'order',
+        tag: 'Ordenar secuencia · Acción coordinada del movimiento',
+        prompt: 'Ordena del 1 al 4 cómo ocurre un movimiento voluntario (por ejemplo, levantar la mano o flexionar el brazo):',
+        sub: 'Toca las tarjetas en el orden correcto para llenar los pasos 1 a 4.',
+        steps: [
+          '1. El sistema nervioso recibe la decisión y envía una señal eléctrica desde el cerebro.',
+          '2. La señal llega a los músculos del brazo para que se contraigan.',
+          '3. Al acortarse, el músculo tira del hueso unido a él.',
+          '4. La articulación del codo permite que el hueso gire y el brazo se flexione.'
+        ],
+        okMsg: 'Exacto: el sistema nervioso coordina a los músculos y los huesos se doblan en las articulaciones.'
+      },
+      {
+        type: 'classify',
+        tag: 'Clasificar · Hábitos que protegen vs. hábitos que dañan',
+        prompt: 'Clasifica cada conducta según cuide tu sistema locomotor o pueda causar lesiones físicas:',
+        sub: 'Arrastra o toca la tarjeta y después la caja correcta.',
+        buckets: [
+          { id: 'cuida', title: '✅ Cuida huesos y postura' },
+          { id: 'riesgo', title: '⚠️ Provoca lesión o riesgo' }
+        ],
+        items: [
+          { id: 'p1', text: 'Cargar la mochila con ambos tirantes sobre la espalda recta', bucket: 'cuida' },
+          { id: 'p2', text: 'Sentarse apoyando la espalda completa en el respaldo de la silla', bucket: 'cuida' },
+          { id: 'p3', text: 'Acudir a revisión médica tras una torcedura o golpe fuerte', bucket: 'cuida' },
+          { id: 'p4', text: 'Cargar todo el peso de los libros colgado de un solo hombro', bucket: 'riesgo' },
+          { id: 'p5', text: 'Tomar pastillas guardadas en casa sin receta médica cuando duele un pie', bucket: 'riesgo' }
+        ],
+        okMsg: 'Muy bien: la postura ergonómica y acudir al médico previenen desviaciones de columna y complicaciones.'
+      },
+      {
+        type: 'mcq',
+        tag: 'Caso práctico · Modelo articulado del salón',
+        prompt: 'Al armar su modelo del esqueleto en cartoncillo, Jesús olvidó colocar los broches latonados en hombros, codos y rodillas y pegó todas las piezas fijas con pegamento. ¿Qué propiedad del sistema locomotor dejó de representar su maqueta?',
+        sub: 'Elige la explicación científica correcta.',
+        options: [
+          { text: 'La función de las articulaciones, que permiten la flexión y el movimiento entre huesos', correct: true },
+          { text: 'El peso exacto en kilogramos de la piel y el cabello del cuerpo humano', correct: false },
+          { text: 'La digestión de los alimentos nutritivos dentro del estómago', correct: false },
+          { text: 'El color rojo de las mayúsculas cuando escribimos un decálogo postural', correct: false }
+        ],
+        okMsg: 'Correcto: los broches latonados simulan las articulaciones móviles que unen y permiten doblar las extremidades.'
+      },
+      {
+        type: 'mcq',
+        tag: 'Prevención y cuidado · No automedicación',
+        prompt: 'Durante Educación Física, Dalary siente dolor muscular en la pierna derecha y en su mochila trae unas pastillas que sobraron de una gripa de su hermano. ¿Qué debe hacer siguiendo los cuidados del proyecto?',
+        sub: 'Selecciona la acción responsable de autocuidado.',
+        options: [
+          { text: 'Avisar al docente y a su familia para que la valore personal médico, sin automedicarse', correct: true },
+          { text: 'Tomar media pastilla rápido sin decirle a nadie para seguir corriendo en el patio', correct: false },
+          { text: 'Aplicar pegamento y una venda apretada sin revisar primero si hay inflamación', correct: false },
+          { text: 'Guardar silencio hasta la salida aunque empeore el dolor al caminar', correct: false }
+        ],
+        okMsg: '¡Muy bien! Evitar la automedicación y acudir a los servicios de salud protege el cuerpo.'
+      },
+      {
+        type: 'mcq',
+        tag: 'Decálogo postural · Prevención de accidentes',
+        prompt: 'Alexander nota que para alcanzar su cuaderno del suelo suele doblar toda la espalda como gancho con las piernas estiradas. ¿Qué norma del Decálogo Postural previene lesionar su columna vertebral?',
+        sub: 'Elige la regla ergonómica correcta.',
+        options: [
+          { text: 'Flexionar las rodillas manteniendo la espalda recta al levantar objetos pesados del piso', correct: true },
+          { text: 'Cargar todo en una sola mano mientras corre por las escaleras de la escuela', correct: false },
+          { text: 'Doblar únicamente la parte baja de la espalda sin mover ni doblar las rodillas', correct: false },
+          { text: 'Empujar la mochila con el pie por todo el pasillo para evitar agacharse', correct: false }
+        ],
+        okMsg: 'Exacto: doblar las rodillas protege los discos de la columna vertebral.'
+      },
+      {
+        type: 'match',
+        tag: 'Relacionar columnas · Huesos y soporte en el aula',
+        prompt: 'Une cada hueso con la región del cuerpo donde se ubica:',
+        sub: 'Completa las cuatro parejas anatómicas que ubicaste en el modelo locomotor.',
+        pairs: [
+          { left: 'Fémur', right: 'Hueso largo del muslo que sostiene la pierna' },
+          { left: 'Húmero y cúbito/radio', right: 'Huesos del brazo y antebrazo unidos por el codo' },
+          { left: 'Vértebras', right: 'Piezas articuladas que forman la columna en la espalda' },
+          { left: 'Pelvis', right: 'Estructura ósea en la cadera que conecta tronco y piernas' }
+        ],
+        okMsg: 'Excelente dominio anatómico del sistema óseo.'
+      }
+    ];
+
+    let deck = [], currentIdx = 0, firstTryHits = 0, hadErrorOnCurrent = false, currentResolved = false;
+
+    function startSession() {
+      deck = shuffleArray(CHALLENGES);
+      currentIdx = 0;
+      firstTryHits = 0;
+      renderChallenge();
+    }
+    function updateProgressPill() {
+      const pill = document.getElementById('pillProgress');
+      pill.textContent = currentIdx < deck.length ? `Reto ${currentIdx + 1} de ${deck.length}` : `Completado · ${firstTryHits}/${deck.length}`;
+    }
+    function renderChallenge() {
+      cleanupAllDragGhosts();
+      updateProgressPill();
+      if (currentIdx >= deck.length) { renderComplete(); return; }
+      const ch = deck[currentIdx];
+      hadErrorOnCurrent = false; currentResolved = false;
+      const host = document.getElementById('stageContainer');
+      host.innerHTML = `
+        <div class="stage-meta">
+          <span class="type-tag">${ch.tag}</span>
+          <span style="font-weight:800; color:#0369a1;">Aciertos limpios: ${firstTryHits}/${currentIdx}</span>
+        </div>
+        <h2 class="stage-prompt">${ch.prompt}</h2>
+        <p class="stage-sub">${ch.sub}</p>
+        <div id="challengeBody"></div>
+        <div id="feedbackBox" class="feedback-box"></div>
+        <div class="stage-footer" id="stageFooter"></div>
+      `;
+      if (ch.type === 'mcq') renderMcq(ch);
+      else if (ch.type === 'match') renderMatch(ch);
+      else if (ch.type === 'order') renderOrder(ch);
+      else if (ch.type === 'classify') renderClassify(ch);
+    }
+    function showFeedback(ok, msg) {
+      const fb = document.getElementById('feedbackBox');
+      fb.className = 'feedback-box ' + (ok ? 'ok' : 'err');
+      fb.textContent = msg;
+      playSfx(ok ? 'ok' : 'err');
+    }
+    function markResolved(okMsg) {
+      if (currentResolved) return;
+      currentResolved = true;
+      if (!hadErrorOnCurrent) firstTryHits++;
+      showFeedback(true, okMsg);
+      document.getElementById('stageFooter').innerHTML = `<button type="button" class="btn-primary" onclick="nextChallenge()">${currentIdx + 1 < deck.length ? 'Siguiente reto ➔' : 'Ver resultado y producción ➔'}</button>`;
+    }
+    function nextChallenge() { currentIdx++; renderChallenge(); }
+
+    function renderMcq(ch) {
+      const body = document.getElementById('challengeBody');
+      const opts = shuffleArray(ch.options);
+      body.innerHTML = `<div class="options-grid">${opts.map((o, idx) => `<button type="button" class="opt-btn" data-idx="${idx}">${o.text}</button>`).join('')}</div>`;
+      body.querySelectorAll('.opt-btn').forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          if (currentResolved) return;
+          if (opts[idx].correct) { btn.classList.add('selected-correct'); markResolved('✅ ' + ch.okMsg); }
+          else { hadErrorOnCurrent = true; btn.classList.add('selected-wrong'); showFeedback(false, '💡 Pista: piensa en qué estructura permite moverse y cómo cuidamos el cuerpo de forma segura.'); }
+        });
+      });
+    }
+
+    function renderMatch(ch) {
+      const body = document.getElementById('challengeBody');
+      const leftItems = shuffleArray(ch.pairs.map((p, i) => ({ id: i, text: p.left })));
+      const rightItems = shuffleArray(ch.pairs.map((p, i) => ({ id: i, text: p.right })));
+      let pickedLeft = null, solved = 0;
+      body.innerHTML = `<div class="match-columns"><div class="match-col" id="mLeft">${leftItems.map(it => `<button type="button" class="match-btn" data-id="${it.id}">${it.text}</button>`).join('')}</div><div class="match-col" id="mRight">${rightItems.map(it => `<button type="button" class="match-btn" data-id="${it.id}">${it.text}</button>`).join('')}</div></div>`;
+      body.querySelectorAll('#mLeft .match-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('paired')) return;
+          body.querySelectorAll('#mLeft .match-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active'); pickedLeft = btn;
+        });
+      });
+      body.querySelectorAll('#mRight .match-btn').forEach(rBtn => {
+        rBtn.addEventListener('click', () => {
+          if (rBtn.classList.contains('paired') || !pickedLeft) return;
+          if (pickedLeft.dataset.id === rBtn.dataset.id) {
+            pickedLeft.classList.remove('active'); pickedLeft.classList.add('paired'); rBtn.classList.add('paired');
+            pickedLeft = null; solved++; playSfx('ok');
+            if (solved === ch.pairs.length) markResolved('✅ ' + ch.okMsg);
+          } else {
+            hadErrorOnCurrent = true; rBtn.classList.add('wrong-flash');
+            showFeedback(false, '💡 Esa función corresponde a otra parte anatómica. Intenta relacionarla de nuevo.');
+            setTimeout(() => rBtn.classList.remove('wrong-flash'), 450);
+          }
+        });
+      });
+    }
+
+    function renderOrder(ch) {
+      const body = document.getElementById('challengeBody');
+      const indexed = ch.steps.map((txt, idx) => ({ idx, cleanTxt: txt.replace(/^\d+\.\s*/, '') }));
+      const shuffled = shuffleArray(indexed);
+      const chosen = new Array(ch.steps.length).fill(null);
+
+      function draw() {
+        body.innerHTML = `
+          <div class="order-wrap">
+            <div class="order-pool">
+              <div style="font-weight:800; color:#334155;">Pasos disponibles:</div>
+              ${shuffled.map(st => {
+                const isUsed = chosen.some(c => c && c.idx === st.idx);
+                return `<button type="button" class="seq-card ${isUsed ? 'used' : ''}" ${isUsed ? 'disabled' : ''} data-idx="${st.idx}">${st.cleanTxt}</button>`;
+              }).join('')}
+            </div>
+            <div class="order-slots">
+              <div style="font-weight:800; color:#1e3a8a;">Secuencia ordenada (toca un paso lleno para quitarlo):</div>
+              ${chosen.map((c, pos) => `<button type="button" class="seq-slot" data-pos="${pos}"><strong>${pos + 1}.</strong> ${c ? c.cleanTxt : 'Toca un paso de la izquierda...'}</button>`).join('')}
+            </div>
+          </div>
+        `;
+        body.querySelectorAll('.seq-card:not(.used)').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (currentResolved) return;
+            const freePos = chosen.findIndex(x => x === null);
+            if (freePos !== -1) {
+              chosen[freePos] = shuffled.find(x => x.idx === Number(btn.dataset.idx));
+              draw();
+            }
+          });
+        });
+        body.querySelectorAll('.seq-slot').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (currentResolved) return;
+            const pos = Number(btn.dataset.pos);
+            if (chosen[pos]) { chosen[pos] = null; draw(); }
+          });
+        });
+        const footer = document.getElementById('stageFooter');
+        footer.innerHTML = `<button type="button" class="btn-primary" id="btnCheckOrder" ${chosen.some(x => x === null) ? 'disabled' : ''}>Comprobar orden ✓</button>`;
+        document.getElementById('btnCheckOrder').addEventListener('click', () => {
+          const allOk = chosen.every((c, pos) => c && c.idx === pos);
+          if (allOk) markResolved('✅ ' + ch.okMsg);
+          else { hadErrorOnCurrent = true; showFeedback(false, '💡 Revisa qué sistema envía primero la orden antes de que el músculo tire del hueso y se doble la articulación.'); }
+        });
+      }
+      draw();
+    }
+
+    function renderClassify(ch) {
+      const body = document.getElementById('challengeBody');
+      const items = shuffleArray(ch.items);
+      let pickedCardId = null; const placed = {};
+      body.innerHTML = `<div class="classify-board"><div class="cards-tray"><div style="font-weight:800; color:#334155;">Tarjetas:</div>${items.map(it => `<div class="drag-card" data-id="${it.id}">${it.text}</div>`).join('')}</div><div class="buckets-col">${ch.buckets.map(b => `<div class="drop-bucket" data-bucket="${b.id}"><div class="bucket-title">${b.title}</div><div class="bucket-items"></div></div>`).join('')}</div></div>`;
+      function tryPlace(cardId, bucketId) {
+        const item = ch.items.find(x => x.id === cardId);
+        const cardEl = body.querySelector(`.drag-card[data-id="${cardId}"]`);
+        const bItems = body.querySelector(`.drop-bucket[data-bucket="${bucketId}"] .bucket-items`);
+        if (!item || !cardEl || !bItems || placed[cardId]) return;
+        if (item.bucket === bucketId) {
+          placed[cardId] = true; cardEl.remove(); pickedCardId = null;
+          const chip = document.createElement('span'); chip.className = 'placed-chip'; chip.textContent = item.text; bItems.appendChild(chip);
+          playSfx('ok');
+          if (Object.keys(placed).length === ch.items.length) markResolved('✅ ' + ch.okMsg);
+        } else {
+          hadErrorOnCurrent = true;
+          showFeedback(false, `💡 Analiza si "${item.text}" protege tu salud o pone en riesgo la espalda/cuerpo.`);
+        }
+      }
+      body.querySelectorAll('.drag-card').forEach(card => {
+        card.addEventListener('pointerdown', (e) => {
+          if (e.button !== 0 && e.pointerType === 'mouse') return;
+          cleanupAllDragGhosts();
+          const activePointerId = e.pointerId, sx = e.clientX, sy = e.clientY;
+          let hasMoved = false, ghost = null;
+          try { card.setPointerCapture(activePointerId); } catch (err) {}
+          const onMove = (ev) => {
+            if (ev.pointerId !== activePointerId) return;
+            if (!hasMoved && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 7) {
+              hasMoved = true; ghost = document.createElement('div'); ghost.className = 'drag-ghost';
+              ghost.setAttribute('data-drag-ghost', '1'); ghost.textContent = card.textContent;
+              document.body.appendChild(ghost); card.style.opacity = '0.35';
+            }
+            if (hasMoved && ghost) { ghost.style.left = (ev.clientX - 70) + 'px'; ghost.style.top = (ev.clientY - 22) + 'px'; }
+          };
+          const cleanup = (ev) => {
+            if (ev && ev.pointerId !== undefined && ev.pointerId !== activePointerId) return;
+            card.removeEventListener('pointermove', onMove); card.removeEventListener('pointerup', onUp);
+            card.removeEventListener('pointercancel', cleanup); card.removeEventListener('lostpointercapture', cleanup);
+            cleanupAllDragGhosts();
+          };
+          const onUp = (ev) => {
+            if (ev.pointerId !== activePointerId) return;
+            const moved = hasMoved; cleanup(ev);
+            if (moved) {
+              const target = document.elementFromPoint(ev.clientX, ev.clientY);
+              const bucket = target && target.closest ? target.closest('.drop-bucket') : null;
+              if (bucket) tryPlace(card.dataset.id, bucket.dataset.bucket);
+            } else {
+              body.querySelectorAll('.drag-card').forEach(c => c.classList.remove('picked'));
+              card.classList.add('picked'); pickedCardId = card.dataset.id;
+            }
+          };
+          window.__activeDrag = { originEl: card, cleanup };
+          card.addEventListener('pointermove', onMove); card.addEventListener('pointerup', onUp);
+          card.addEventListener('pointercancel', cleanup); card.addEventListener('lostpointercapture', cleanup);
+        });
+      });
+      body.querySelectorAll('.drop-bucket').forEach(b => b.addEventListener('click', () => { if (pickedCardId) tryPlace(pickedCardId, b.dataset.bucket); }));
+    }
+
+    function renderComplete() {
+      updateProgressPill();
+      const total = deck.length, pct = Math.round((firstTryHits / total) * 100);
+      const saved = savePpProgress(PROJ_KEY, PP_KEY, firstTryHits, total, pct >= PASS_PCT);
+      const prog = readAulaProgress();
+      const pps = (prog.projects[PROJ_KEY] && prog.projects[PROJ_KEY].pps) || {};
+      const ppList = [
+        { id: 'pp1', label: 'PP1: Carnet de Salud' },
+        { id: 'pp2', label: 'PP2: Sistema Locomotor' },
+        { id: 'pp3', label: 'PP3: Semáforo de Decisiones' },
+        { id: 'pp4', label: 'PP4: Tríptico Expositivo' }
+      ];
+      const allDone = ppList.every(p => pps[p.id] && pps[p.id].completed);
+      if (saved.completed) playSfx('win');
+      document.getElementById('stageContainer').innerHTML = `
+        <h2 class="stage-prompt">${saved.completed ? '✅ ¡Repaso de PP2 acreditado!' : '🔄 Completa otro intento con 75% o más'}</h2>
+        <p class="stage-sub">Lograste <strong>${firstTryHits} de ${total}</strong> retos al primer intento (<strong>${pct}%</strong>). Mejor registro: <strong>${saved.bestPct}%</strong>.</p>
+        <div class="pp-status-strip">${ppList.map(p => `<span class="pp-chip ${pps[p.id] && pps[p.id].completed ? 'done' : ''}">${pps[p.id] && pps[p.id].completed ? '✅' : '⏳'} ${p.label}</span>`).join('')}</div>
+        <div class="production-box">
+          <h3>✍️ Producción concreta para tu cuaderno amarillo o portafolio</h3>
+          <ul>
+            <li>Dibuja en tu cuaderno amarillo un esquema sencillo del esqueleto y señala con flechas: <strong>Cráneo</strong>, <strong>Costillas</strong>, <strong>Columna vertebral</strong> y una <strong>Articulación</strong> (codo o rodilla).</li>
+            <li>Redacta <strong>3 normas de tu Decálogo Postural</strong> (ej. cargar la mochila en ambos hombros, espalda recta al sentarse y acudir al médico sin automedicarse), marcando las mayúsculas iniciales con rojo.</li>
+          </ul>
+          <label style="display:inline-flex; align-items:center; gap:0.5rem; margin-top:0.65rem; font-weight:800; cursor:pointer;">
+            <input type="checkbox" style="width:20px; height:20px;"> Ya realicé mi dibujo y mis 3 normas en el cuaderno amarillo
+          </label>
+        </div>
+        <div class="stage-footer">
+          <button type="button" class="btn-nav" style="background:#475569;" onclick="startSession()">🔁 Repasar otra ronda</button>
+          <a class="btn-nav" href="./pp3.html" style="background:#2563eb;">Ir a PP3: Semáforo de Decisiones ➔</a>
+          ${allDone ? `<a class="btn-nav" href="../simulador_examen/index.html" style="background:#059669;">🔓 Abrir Simulador del Examen ➔</a>` : ''}
+        </div>
+      `;
+    }
+
+    initUiClickSfx();
+    startSession();
+  </script>
+</body>
+</html>
