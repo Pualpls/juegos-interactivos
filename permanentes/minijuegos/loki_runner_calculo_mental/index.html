@@ -149,6 +149,77 @@
       font-size: 0.8rem;
       color: #94a3b8;
       font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-sisat-change-grade {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #0f172a;
+      border: 1.5px solid #fef08a;
+      border-radius: 9999px;
+      padding: 0.28rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+      transition: transform 0.15s ease;
+    }
+    .btn-sisat-change-grade:hover { transform: scale(1.04); }
+
+    .sisat-grade-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+    }
+    @media (min-width: 540px) {
+      .sisat-grade-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .btn-sisat-grade {
+      background: #f8fafc;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 0.9rem;
+      padding: 0.75rem 0.6rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.2rem;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      color: #0f172a;
+    }
+    .btn-sisat-grade:hover {
+      transform: translateY(-2px);
+      border-color: #f59e0b;
+      background: #fffbeb;
+      box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+    }
+    .btn-sisat-grade.active {
+      border-color: #d97706;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+    }
+    .sisat-grade-badge {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #b45309;
+      line-height: 1.1;
+    }
+    .sisat-grade-name {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #0f172a;
+    }
+    .sisat-grade-desc {
+      font-size: 0.7rem;
+      color: #475569;
+      font-weight: 600;
+      line-height: 1.25;
     }
 
     .menu-hero-banner {
@@ -1727,9 +1798,9 @@
             <span class="wchoice-title">🟣 Mundo 3: Urbano</span>
             <span class="wchoice-subtitle">Niveles #15 al #20 · Tablas y Series</span>
           </button>
-          <button class="world-choice-btn" id="wbtn-sisat" onclick="switchWorld(4)">
-            <span class="wchoice-title">⭐ Mundo SiSAT 3°</span>
-            <span class="wchoice-subtitle">Niveles #21 al #31 · Examen Oficial</span>
+          <button class="world-choice-btn" id="wbtn-sisat" onclick="openSisatGradeModal()">
+            <span class="wchoice-title">⭐ Mundo SiSAT</span>
+            <span class="wchoice-subtitle" id="wbtn-sisat-sub">1° a 6° Primaria · Cálculo Mental</span>
           </button>
         </div>
       </div>
@@ -1852,6 +1923,59 @@
           <span>DER ▶</span>
           <span class="touch-btn-sub">Mover Carril</span>
         </button>
+      </div>
+    </div>
+
+      <div class="stage-actions-hidden-anchor" style="display:none;"></div>
+    <!-- MODAL 0: SELECTOR DE GRADO OFICIAL SiSAT (1° A 6° DE PRIMARIA) -->
+    <div id="modal-sisat-grade" class="modal-overlay">
+      <div class="modal-card" style="max-width:600px; border-color:#f59e0b;">
+        <div class="modal-header">
+          <img src="recursos/loki_avatar.png" alt="Loki" class="modal-avatar">
+          <div class="modal-title">
+            <h2>⭐ Mundo SiSAT · Cálculo Mental</h2>
+            <p>Elige tu grado de primaria para practicar los 10 reactivos oficiales</p>
+          </div>
+        </div>
+
+        <div class="sisat-grade-grid" id="sisat-grade-grid">
+          <button class="btn-sisat-grade" data-grade="1" onclick="selectSisatGrade(1)">
+            <span class="sisat-grade-badge">1°</span>
+            <span class="sisat-grade-name">Primer Grado</span>
+            <span class="sisat-grade-desc">Sumas y restas hasta 50, decenas y series</span>
+          </button>
+          <button class="btn-sisat-grade" data-grade="2" onclick="selectSisatGrade(2)">
+            <span class="sisat-grade-badge">2°</span>
+            <span class="sisat-grade-name">Segundo Grado</span>
+            <span class="sisat-grade-desc">Suma iterada, decenas, centenas y +10/−10</span>
+          </button>
+          <button class="btn-sisat-grade" data-grade="3" onclick="selectSisatGrade(3)">
+            <span class="sisat-grade-badge">3°</span>
+            <span class="sisat-grade-name">Tercer Grado</span>
+            <span class="sisat-grade-desc">Compensación (+9/−11), tablas y series</span>
+          </button>
+          <button class="btn-sisat-grade" data-grade="4" onclick="selectSisatGrade(4)">
+            <span class="sisat-grade-badge">4°</span>
+            <span class="sisat-grade-name">Cuarto Grado</span>
+            <span class="sisat-grade-desc">Millares, tablas 6–9, mitades y divisiones</span>
+          </button>
+          <button class="btn-sisat-grade" data-grade="5" onclick="selectSisatGrade(5)">
+            <span class="sisat-grade-badge">5°</span>
+            <span class="sisat-grade-name">Quinto Grado</span>
+            <span class="sisat-grade-desc">Decimales, fracciones, múltiplos y %</span>
+          </button>
+          <button class="btn-sisat-grade" data-grade="6" onclick="selectSisatGrade(6)">
+            <span class="sisat-grade-badge">6°</span>
+            <span class="sisat-grade-name">Sexto Grado</span>
+            <span class="sisat-grade-desc">Porcentajes, decimales, fracciones y ÷</span>
+          </button>
+        </div>
+
+        <div class="modal-buttons" style="margin-top:0.25rem;">
+          <button class="btn-modal btn-modal-secondary" onclick="closeSisatGradeModal()">
+            ✕ Cerrar
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2674,7 +2798,7 @@
           "¡Recuerda que siempre termina en 9 y la decena baja en 1!"
         ],
         generator: () => {
-          const decades = [80, 50, 70, 60, 90, 40, 100];
+          const decades = [20, 30, 40, 50, 60, 70, 80, 90, 100];
           const d = decades[Math.floor(Math.random() * decades.length)];
           const expected = d - 11;
           return { text: `${d} − 11`, expected: expected, dist: [expected + 1, expected - 1, d - 10, expected + 10] };
@@ -2806,13 +2930,1280 @@
           "¡Completar los 10 aciertos certifica Nivel Esperado en Cálculo Mental SiSAT!"
         ],
         generator: () => {
-          // Elige aleatoriamente entre los 10 reactivos oficiales SiSAT (#21 al #30)
-          const pick = Math.floor(Math.random() * 10) + 21;
-          const s = STRATEGIES.find(st => st.id === pick);
+          const pickId = pickNextSisatExamStratId(3, [21,22,23,24,25,26,27,28,29,30]);
+          const s = getStrategyById(pickId);
           return s ? s.generator() : { text: "26 + 9", expected: 35, dist: [36, 34, 45] };
         }
       }
     ];
+
+    /* =============================================================
+       4B. REACTIVOS OFICIALES SiSAT POR GRADO (1°, 2°, 4°, 5°, 6° DE PRIMARIA)
+           (3° DE PRIMARIA CONSERVA LOS IDs #21-#31 PARA COMPATIBILIDAD DE RÉCORDS)
+       ============================================================= */
+    const SISAT_GRADE_META = {
+      1: { name: '1° de Primaria', subtitle: 'Iniciación al Cálculo Mental · 10 Reactivos SiSAT' },
+      2: { name: '2° de Primaria', subtitle: 'Consolidación Aditiva · 10 Reactivos SiSAT' },
+      3: { name: '3° de Primaria', subtitle: 'Fase 4 Oficial · 10 Reactivos SiSAT' },
+      4: { name: '4° de Primaria', subtitle: 'Multiplicación y Millares · 10 Reactivos SiSAT' },
+      5: { name: '5° de Primaria', subtitle: 'Decimales, Fracciones y % · 10 Reactivos SiSAT' },
+      6: { name: '6° de Primaria', subtitle: 'Dominio Numérico y Proporcional · 10 Reactivos SiSAT' }
+    };
+
+    const pickOne = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const roundClean = (n) => Number(n.toFixed(4));
+
+    const SISAT_BY_GRADE = {
+      1: [
+        {
+          id: 101, displayNum: 1, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 1: Conteo ascendente y descendente",
+          tag: "SiSAT 1° · Reactivo 1",
+          sample: "24, 23, 22, _  (Sigue: 21)",
+          trickHeading: "Sigue la escalera de 1 en 1:",
+          steps: [
+            "Observa si los números suben o bajan de 1 en 1.",
+            "En 24, 23, 22, cada paso baja 1.",
+            "Después de 22 sigue 21."
+          ],
+          generator: () => {
+            const items = [
+              { t: "24, 23, 22, _", e: 21, d: [20, 22, 25] },
+              { t: "35, 34, 33, _", e: 32, d: [31, 34, 36] },
+              { t: "19, 18, 17, _", e: 16, d: [15, 20, 14] },
+              { t: "42, 41, 40, _", e: 39, d: [38, 43, 41] },
+              { t: "14, 15, 16, _", e: 17, d: [18, 13, 19] },
+              { t: "27, 28, 29, _", e: 30, d: [31, 26, 32] },
+              { t: "38, 39, 40, _", e: 41, d: [42, 37, 43] },
+              { t: "50, 49, 48, _", e: 47, d: [46, 51, 45] },
+              { t: "31, 30, 29, _", e: 28, d: [27, 32, 26] },
+              { t: "11, 12, 13, _", e: 14, d: [15, 10, 16] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 102, displayNum: 2, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 2: Completar 10 y sumar al 10",
+          tag: "SiSAT 1° · Reactivo 2",
+          sample: "6 + ? = 10  (Falta: 4)",
+          trickHeading: "Los amigos que suman 10:",
+          steps: [
+            "Piensa cuántos dedos faltan para juntar 10 completos.",
+            "Si ya tienes 6, te faltan 4 para llegar a 10.",
+            "Y cuando veas 10 + un dígito, solo cambia el cero."
+          ],
+          generator: () => {
+            const items = [
+              { t: "6 + ? = 10", e: 4, d: [5, 3, 6] },
+              { t: "7 + ? = 10", e: 3, d: [4, 2, 5] },
+              { t: "2 + ? = 10", e: 8, d: [7, 9, 6] },
+              { t: "5 + ? = 10", e: 5, d: [4, 6, 3] },
+              { t: "1 + ? = 10", e: 9, d: [8, 7, 10] },
+              { t: "4 + ? = 10", e: 6, d: [5, 7, 4] },
+              { t: "10 + 7", e: 17, d: [16, 18, 70] },
+              { t: "10 + 4", e: 14, d: [15, 13, 40] },
+              { t: "10 + 8", e: 18, d: [17, 19, 80] },
+              { t: "10 + 2", e: 12, d: [11, 13, 20] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 103, displayNum: 3, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 3: Sumas de dígitos sencillos",
+          tag: "SiSAT 1° · Reactivo 3",
+          sample: "5 + 3 = 8",
+          trickHeading: "Guarda el mayor en tu cabeza:",
+          steps: [
+            "Toma el número más grande en tu mente (5).",
+            "Avanza contando los pasos del segundo número: 6, 7, 8.",
+            "¡Llegaste rápido a 8!"
+          ],
+          generator: () => {
+            const items = [
+              { a: 5, b: 3 }, { a: 4, b: 2 }, { a: 6, b: 3 }, { a: 7, b: 2 },
+              { a: 4, b: 5 }, { a: 8, b: 1 }, { a: 3, b: 4 }, { a: 5, b: 5 },
+              { a: 6, b: 5 }, { a: 8, b: 4 }, { a: 9, b: 3 }, { a: 7, b: 6 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a + c.b;
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [ans + 1, Math.max(1, ans - 1), ans + 2] };
+          }
+        },
+        {
+          id: 104, displayNum: 4, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 4: Restas sencillas",
+          tag: "SiSAT 1° · Reactivo 4",
+          sample: "9 − 3 = 6",
+          trickHeading: "Retrocede pasos cortos:",
+          steps: [
+            "Empieza desde el primer número (9).",
+            "Cuenta hacia atrás tantos pasos como indica la resta: 8, 7, 6.",
+            "¡El resultado es 6!"
+          ],
+          generator: () => {
+            const items = [
+              { a: 9, b: 3 }, { a: 8, b: 2 }, { a: 7, b: 4 }, { a: 10, b: 1 },
+              { a: 18, b: 1 }, { a: 25, b: 1 }, { a: 15, b: 3 }, { a: 12, b: 2 },
+              { a: 16, b: 4 }, { a: 19, b: 2 }, { a: 14, b: 3 }, { a: 29, b: 1 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a - c.b;
+            return { text: `${c.a} − ${c.b}`, expected: ans, dist: [ans + 1, Math.max(1, ans - 1), ans + 2] };
+          }
+        },
+        {
+          id: 105, displayNum: 5, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 5: Restar a 10 y 20",
+          tag: "SiSAT 1° · Reactivo 5",
+          sample: "10 − 4 = 6",
+          trickHeading: "Quitar desde una decena cerrada:",
+          steps: [
+            "Imagina tus 10 dedos levantados.",
+            "Baja los 4 dedos que estás restando.",
+            "Los dedos que quedan arriba son la respuesta: 6."
+          ],
+          generator: () => {
+            const items = [
+              { a: 10, b: 4 }, { a: 10, b: 7 }, { a: 10, b: 2 }, { a: 10, b: 8 },
+              { a: 10, b: 5 }, { a: 10, b: 9 }, { a: 10, b: 3 }, { a: 20, b: 5 },
+              { a: 20, b: 4 }, { a: 20, b: 2 }, { a: 20, b: 8 }, { a: 20, b: 6 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a - c.b;
+            return { text: `${c.a} − ${c.b}`, expected: ans, dist: [ans + 1, Math.max(1, ans - 1), ans + 2] };
+          }
+        },
+        {
+          id: 106, displayNum: 6, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 6: Sumas de decenas completas",
+          tag: "SiSAT 1° · Reactivo 6",
+          sample: "20 + 10 = 30",
+          trickHeading: "Suma las cifras y devuelve el cero:",
+          steps: [
+            "Tapa el cero de ambos números: te quedan 2 y 1.",
+            "Suma los números sencillos: 2 + 1 = 3.",
+            "Agrega un cero al final: ¡30!"
+          ],
+          generator: () => {
+            const pairs = [
+              [10, 10], [10, 20], [20, 20], [30, 10], [30, 20], [40, 10],
+              [40, 20], [50, 10], [50, 20], [60, 10], [50, 30], [70, 20]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a + b;
+            return { text: `${a} + ${b}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), ans + 20] };
+          }
+        },
+        {
+          id: 107, displayNum: 7, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 7: Quitar las unidades exactas",
+          tag: "SiSAT 1° · Reactivo 7",
+          sample: "38 − 8 = 30",
+          trickHeading: "Deja la decena limpia:",
+          steps: [
+            "Lee el número completo: 38 es 30 y 8.",
+            "Si quitas las 8 unidades, solo queda el 30 cerrado.",
+            "Siempre termina en cero."
+          ],
+          generator: () => {
+            const items = [38, 25, 47, 54, 69, 16, 73, 82, 95, 41, 63];
+            const n = pickOne(items);
+            const u = n % 10;
+            const ans = n - u;
+            return { text: `${n} − ${u}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), ans + u] };
+          }
+        },
+        {
+          id: 108, displayNum: 8, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 8: ¿Cuánto falta para la siguiente decena?",
+          tag: "SiSAT 1° · Reactivo 8",
+          sample: "¿Cuánto falta de 43 a 50? = 7",
+          trickHeading: "Completa la decena de arriba:",
+          steps: [
+            "Mira en qué unidad termina: 43 termina en 3.",
+            "Busca qué número con 3 suma 10: 3 + 7 = 10.",
+            "¡Faltan 7 para llegar a 50!"
+          ],
+          generator: () => {
+            const pairs = [
+              { f: 43, t: 50, a: 7 }, { f: 15, t: 20, a: 5 }, { f: 22, t: 30, a: 8 },
+              { f: 34, t: 40, a: 6 }, { f: 11, t: 20, a: 9 }, { f: 27, t: 30, a: 3 },
+              { f: 48, t: 50, a: 2 }, { f: 36, t: 40, a: 4 }, { f: 19, t: 20, a: 1 }
+            ];
+            const p = pickOne(pairs);
+            return { text: `¿Cuánto falta de ${p.f} a ${p.t}?`, expected: p.a, dist: [p.a + 1, p.a + 2, Math.max(1, p.a - 1), p.a + 10] };
+          }
+        },
+        {
+          id: 109, displayNum: 9, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 9: Juntar decena más unidad",
+          tag: "SiSAT 1° · Reactivo 9",
+          sample: "20 + 5 = 25",
+          trickHeading: "El cero deja pasar a la unidad:",
+          steps: [
+            "Observa la decena cerrada (20) y la unidad (5).",
+            "Coloca la unidad en el lugar del cero.",
+            "20 y 5 forman 25 al instante."
+          ],
+          generator: () => {
+            const tens = [10, 20, 30, 40, 50];
+            const t = pickOne(tens);
+            const u = Math.floor(Math.random() * 9) + 1;
+            const ans = t + u;
+            return { text: `${t} + ${u}`, expected: ans, dist: [ans + 10, ans + 1, Math.max(10, ans - 1)] };
+          }
+        },
+        {
+          id: 110, displayNum: 10, world: 4, sisatGrade: 1,
+          title: "SiSAT 1° · 10: Sumar cruzando la decena o +10",
+          tag: "SiSAT 1° · Reactivo 10",
+          sample: "19 + 2 = 21",
+          trickHeading: "Salta a la decena siguiente:",
+          steps: [
+            "De 19, usa 1 paso para completar el 20.",
+            "Suma lo que sobra (1): 20 + 1 = 21.",
+            "Si sumas 10, solo sube 1 a las decenas."
+          ],
+          generator: () => {
+            const items = [
+              { t: "19 + 2", e: 21 }, { t: "28 + 3", e: 31 }, { t: "38 + 10", e: 48 },
+              { t: "29 + 4", e: 33 }, { t: "18 + 5", e: 23 }, { t: "45 + 10", e: 55 },
+              { t: "39 + 2", e: 41 }, { t: "27 + 4", e: 31 }, { t: "16 + 10", e: 26 },
+              { t: "29 + 5", e: 34 }, { t: "17 + 5", e: 22 }
+            ];
+            const c = pickOne(items);
+            return { text: c.t, expected: c.e, dist: [c.e - 1, c.e + 1, c.e + 10] };
+          }
+        },
+        {
+          id: 111, displayNum: 11, world: 4, sisatGrade: 1,
+          title: "Simulador SiSAT: Examen Completo 1°",
+          tag: "Simulador Diagnóstico · 1° Grado",
+          sample: "Los 10 reactivos oficiales de 1°",
+          trickHeading: "Evaluación SiSAT 1° de Primaria:",
+          steps: [
+            "Alterna entre los 10 tipos de cálculo mental de 1° grado.",
+            "Usa los trucos de amigos del 10, decenas cerradas y conteo rápido.",
+            "¡Completa 10 aciertos para ganar todas las estrellas!"
+          ],
+          generator: () => {
+            const pickId = pickNextSisatExamStratId(1, [101,102,103,104,105,106,107,108,109,110]);
+            const s = getStrategyById(pickId);
+            return s.generator();
+          }
+        }
+      ],
+      2: [
+        {
+          id: 201, displayNum: 1, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 1: Sumas de dígitos pasando de 10",
+          tag: "SiSAT 2° · Reactivo 1",
+          sample: "8 + 6 = 14",
+          trickHeading: "Completa el 10 primero:",
+          steps: [
+            "Al 8 le faltan 2 para llegar a 10.",
+            "Toma 2 prestados del 6 (te quedan 4).",
+            "10 + 4 = 14. ¡Fácil y veloz!"
+          ],
+          generator: () => {
+            const items = [
+              { a: 8, b: 6 }, { a: 7, b: 5 }, { a: 9, b: 4 }, { a: 6, b: 5 },
+              { a: 8, b: 7 }, { a: 9, b: 8 }, { a: 7, b: 6 }, { a: 9, b: 3 },
+              { a: 8, b: 4 }, { a: 7, b: 9 }, { a: 6, b: 7 }, { a: 9, b: 9 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a + c.b;
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [ans + 1, ans - 1, ans + 2] };
+          }
+        },
+        {
+          id: 202, displayNum: 2, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 2: Suma iterada de 3 iguales",
+          tag: "SiSAT 2° · Reactivo 2",
+          sample: "4 + 4 + 4 = 12",
+          trickHeading: "Junta dos iguales y suma el tercero:",
+          steps: [
+            "Suma los dos primeros: 4 + 4 = 8.",
+            "Agrega el último número: 8 + 4 = 12.",
+            "Si son decenas (20 + 20 + 20), piensa 2 + 2 + 2 = 6 → 60."
+          ],
+          generator: () => {
+            const bases = [2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30];
+            const n = pickOne(bases);
+            const ans = n * 3;
+            return { text: `${n} + ${n} + ${n}`, expected: ans, dist: [n * 2, ans + n, ans + 2] };
+          }
+        },
+        {
+          id: 203, displayNum: 3, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 3: Sumar decenas completas",
+          tag: "SiSAT 2° · Reactivo 3",
+          sample: "70 + 10 = 80",
+          trickHeading: "Suma solo las cifras de decenas:",
+          steps: [
+            "Ignora un segundo los ceros finales: 7 + 1 = 8.",
+            "Devuelve el cero al resultado: 80."
+          ],
+          generator: () => {
+            const pairs = [
+              [70, 10], [40, 20], [60, 10], [50, 30], [80, 10], [30, 40],
+              [20, 50], [40, 40], [50, 20], [30, 20], [60, 30]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a + b;
+            return { text: `${a} + ${b}`, expected: ans, dist: [ans + 10, ans - 10, ans + 20] };
+          }
+        },
+        {
+          id: 204, displayNum: 4, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 4: Composición decena + unidad",
+          tag: "SiSAT 2° · Reactivo 4",
+          sample: "40 + 9 = 49",
+          trickHeading: "Une decena y unidad directo:",
+          steps: [
+            "Toma el lugar del cero de la decena (40).",
+            "Cambia el cero por la unidad (9): ¡49!"
+          ],
+          generator: () => {
+            const t = pickOne([20, 30, 40, 50, 60, 70, 80, 90]);
+            const u = Math.floor(Math.random() * 9) + 1;
+            const ans = t + u;
+            return { text: `${t} + ${u}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), ans + 1] };
+          }
+        },
+        {
+          id: 205, displayNum: 5, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 5: Restar decenas completas",
+          tag: "SiSAT 2° · Reactivo 5",
+          sample: "60 − 30 = 30",
+          trickHeading: "Resta las decenas y conserva el cero:",
+          steps: [
+            "Resta las primeras cifras: 6 − 3 = 3.",
+            "Coloca el cero al final: 30."
+          ],
+          generator: () => {
+            const pairs = [
+              [60, 30], [80, 20], [50, 10], [90, 40], [70, 50], [100, 30],
+              [100, 60], [80, 50], [90, 20], [70, 30], [50, 40]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a - b;
+            return { text: `${a} − ${b}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), ans + 20] };
+          }
+        },
+        {
+          id: 206, displayNum: 6, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 6: Sumas con centenas exactas",
+          tag: "SiSAT 2° · Reactivo 6",
+          sample: "300 + 100 = 400",
+          trickHeading: "Arma el número por posiciones:",
+          steps: [
+            "Si ambos son centenas cerradas (300 + 100), suma 3 + 1 = 4 y pon dos ceros: 400.",
+            "Si es 200 + 50, reemplaza los ceros de decena y unidad: 250."
+          ],
+          generator: () => {
+            const items = [
+              { a: 300, b: 100 }, { a: 200, b: 50 }, { a: 400, b: 200 }, { a: 500, b: 30 },
+              { a: 100, b: 600 }, { a: 300, b: 40 }, { a: 700, b: 100 }, { a: 200, b: 80 },
+              { a: 600, b: 200 }, { a: 400, b: 70 }, { a: 500, b: 400 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a + c.b;
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [ans + 100, ans - 10, ans - 100] };
+          }
+        },
+        {
+          id: 207, displayNum: 7, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 7: Restar 10 a decenas y centenas",
+          tag: "SiSAT 2° · Reactivo 7",
+          sample: "120 − 10 = 110",
+          trickHeading: "Baja 1 a la cifra de las decenas:",
+          steps: [
+            "Mira cuántas decenas tiene: 120 tiene 12 decenas.",
+            "Quita 1 decena: quedan 11 decenas = 110."
+          ],
+          generator: () => {
+            const nums = [70, 90, 60, 120, 240, 350, 430, 50, 180, 260, 310];
+            const n = pickOne(nums);
+            const ans = n - 10;
+            return { text: `${n} − 10`, expected: ans, dist: [ans - 10, ans + 20, Math.max(0, n - 100)] };
+          }
+        },
+        {
+          id: 208, displayNum: 8, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 8: Quitar las unidades a dos cifras",
+          tag: "SiSAT 2° · Reactivo 8",
+          sample: "48 − 8 = 40",
+          trickHeading: "Limpia la cifra final:",
+          steps: [
+            "Separa el número mentalmente: 48 = 40 + 8.",
+            "Al quitar el 8, queda intacto el 40."
+          ],
+          generator: () => {
+            const nums = [39, 48, 67, 54, 85, 76, 92, 28, 63, 45, 71];
+            const n = pickOne(nums);
+            const u = n % 10;
+            const ans = n - u;
+            return { text: `${n} − ${u}`, expected: ans, dist: [ans + 10, ans - 10, ans + u] };
+          }
+        },
+        {
+          id: 209, displayNum: 9, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 9: Quitar las decenas a tres cifras",
+          tag: "SiSAT 2° · Reactivo 9",
+          sample: "250 − 50 = 200",
+          trickHeading: "Deja solo la centena limpia:",
+          steps: [
+            "En 250 hay 200 más 50.",
+            "Quita los 50: ¡te quedas en 200!"
+          ],
+          generator: () => {
+            const items = [
+              { n: 250, s: 50 }, { n: 130, s: 30 }, { n: 380, s: 80 }, { n: 460, s: 60 },
+              { n: 540, s: 40 }, { n: 290, s: 90 }, { n: 620, s: 20 }, { n: 770, s: 70 },
+              { n: 810, s: 10 }, { n: 950, s: 50 }
+            ];
+            const c = pickOne(items);
+            const ans = c.n - c.s;
+            return { text: `${c.n} − ${c.s}`, expected: ans, dist: [ans + 100, Math.max(100, ans - 100), ans + 10] };
+          }
+        },
+        {
+          id: 210, displayNum: 10, world: 4, sisatGrade: 2,
+          title: "SiSAT 2° · 10: Sumar 10 a cualquier número",
+          tag: "SiSAT 2° · Reactivo 10",
+          sample: "67 + 10 = 77",
+          trickHeading: "Sube 1 las decenas, deja las unidades:",
+          steps: [
+            "Observa las decenas de 67 (el 6) y súbela a 7.",
+            "El 7 de las unidades queda idéntico: ¡77!"
+          ],
+          generator: () => {
+            const nums = [67, 25, 48, 83, 54, 39, 72, 16, 86, 125, 243];
+            const n = pickOne(nums);
+            const ans = n + 10;
+            return { text: `${n} + 10`, expected: ans, dist: [ans + 1, ans - 1, ans + 10] };
+          }
+        },
+        {
+          id: 211, displayNum: 11, world: 4, sisatGrade: 2,
+          title: "Simulador SiSAT: Examen Completo 2°",
+          tag: "Simulador Diagnóstico · 2° Grado",
+          sample: "Los 10 reactivos oficiales de 2°",
+          trickHeading: "Evaluación SiSAT 2° de Primaria:",
+          steps: [
+            "Alterna entre los 10 reactivos oficiales del SiSAT de 2° grado.",
+            "Aplica composición posicional, sumas al 10 y cálculo con centenas.",
+            "¡Consigue los 10 aciertos para superar el reto!"
+          ],
+          generator: () => {
+            const pickId = pickNextSisatExamStratId(2, [201,202,203,204,205,206,207,208,209,210]);
+            return getStrategyById(pickId).generator();
+          }
+        }
+      ],
+      4: [
+        {
+          id: 401, displayNum: 1, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 1: Sumas de centenas y decenas",
+          tag: "SiSAT 4° · Reactivo 1",
+          sample: "450 + 200 = 650",
+          trickHeading: "Suma primero las centenas grandes:",
+          steps: [
+            "Suma las centenas (400 + 200 = 600).",
+            "Añade las decenas que sobraron (50): 650."
+          ],
+          generator: () => {
+            const items = [
+              { a: 400, b: 300 }, { a: 450, b: 200 }, { a: 320, b: 180 }, { a: 600, b: 250 },
+              { a: 350, b: 400 }, { a: 280, b: 120 }, { a: 500, b: 350 }, { a: 150, b: 600 },
+              { a: 240, b: 360 }, { a: 700, b: 250 }, { a: 430, b: 300 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a + c.b;
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [ans + 100, ans - 100, ans + 50] };
+          }
+        },
+        {
+          id: 402, displayNum: 2, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 2: Restar centenas a millares",
+          tag: "SiSAT 4° · Reactivo 2",
+          sample: "3400 − 200 = 3200",
+          trickHeading: "Opera solo la cifra de centenas:",
+          steps: [
+            "El millar (3000) se queda igual.",
+            "Resta las centenas: 400 − 200 = 200 → 3200."
+          ],
+          generator: () => {
+            const items = [
+              { a: 1200, b: 200 }, { a: 3400, b: 200 }, { a: 2500, b: 300 }, { a: 4800, b: 500 },
+              { a: 1700, b: 400 }, { a: 3900, b: 600 }, { a: 2600, b: 100 }, { a: 5300, b: 200 },
+              { a: 1900, b: 700 }, { a: 4600, b: 400 }, { a: 2800, b: 500 }
+            ];
+            const c = pickOne(items);
+            const ans = c.a - c.b;
+            return { text: `${c.a} − ${c.b}`, expected: ans, dist: [ans + 100, ans - 100, ans + 200] };
+          }
+        },
+        {
+          id: 403, displayNum: 3, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 3: Complementos a 500 o 1000",
+          tag: "SiSAT 4° · Reactivo 3",
+          sample: "¿Cuánto falta de 450 a 1000? = 550",
+          trickHeading: "Completa la siguiente centena, luego a 1000:",
+          steps: [
+            "De 450 para llegar a 500 faltan 50.",
+            "De 500 para llegar a 1000 faltan 500.",
+            "Junta ambas partes: 500 + 50 = 550."
+          ],
+          generator: () => {
+            const pairs = [
+              { f: 450, t: 1000, a: 550 }, { f: 750, t: 1000, a: 250 }, { f: 350, t: 500, a: 150 },
+              { f: 600, t: 1000, a: 400 }, { f: 280, t: 500, a: 220 }, { f: 820, t: 1000, a: 180 },
+              { f: 150, t: 1000, a: 850 }, { f: 320, t: 1000, a: 680 }, { f: 175, t: 500, a: 325 },
+              { f: 650, t: 1000, a: 350 }
+            ];
+            const p = pickOne(pairs);
+            return { text: `¿Cuánto falta de ${p.f} a ${p.t}?`, expected: p.a, dist: [p.a + 100, Math.max(50, p.a - 100), p.a + 50] };
+          }
+        },
+        {
+          id: 404, displayNum: 4, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 4: Multiplicación tablas del 6 al 9",
+          tag: "SiSAT 4° · Reactivo 4",
+          sample: "7 × 8 = 56",
+          trickHeading: "Apóyate en productos cercanos (×5 o ×10):",
+          steps: [
+            "Calcula 7 × 10 = 70 o 7 × 5 = 35.",
+            "Para 7 × 8, suma 7 × 5 (35) + 7 × 3 (21) = 56."
+          ],
+          generator: () => {
+            const a = pickOne([6, 7, 8, 9]);
+            const b = pickOne([4, 5, 6, 7, 8, 9]);
+            const ans = a * b;
+            return { text: `${a} × ${b}`, expected: ans, dist: [ans + a, Math.max(10, ans - a), ans + 10] };
+          }
+        },
+        {
+          id: 405, displayNum: 5, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 5: Multiplicar por decenas exactas",
+          tag: "SiSAT 4° · Reactivo 5",
+          sample: "40 × 5 = 200",
+          trickHeading: "Multiplica sin el cero y devuélvelo:",
+          steps: [
+            "Multiplica los dígitos: 4 × 5 = 20.",
+            "Agrega el cero de las decenas: ¡200!"
+          ],
+          generator: () => {
+            const pairs = [
+              [40, 5], [30, 6], [50, 4], [60, 3], [20, 8], [70, 3],
+              [40, 7], [80, 5], [90, 2], [30, 9], [60, 7], [50, 9]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a * b;
+            return { text: `${a} × ${b}`, expected: ans, dist: [ans + b * 10, Math.max(20, ans - 20), Math.round(ans / 10)] };
+          }
+        },
+        {
+          id: 406, displayNum: 6, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 6: Mitades y dobles de 3 cifras",
+          tag: "SiSAT 4° · Reactivo 6",
+          sample: "Mitad de 150 = 75",
+          trickHeading: "Descompón por centenas y decenas:",
+          steps: [
+            "Saca la mitad de 100 (= 50) y la mitad de 50 (= 25).",
+            "Suma ambas mitades: 50 + 25 = 75."
+          ],
+          generator: () => {
+            const items = [
+              { t: "Mitad de 150", e: 75, d: [65, 85, 55] },
+              { t: "Doble de 240", e: 480, d: [440, 580, 280] },
+              { t: "Mitad de 300", e: 150, d: [125, 200, 175] },
+              { t: "Doble de 135", e: 270, d: [260, 280, 235] },
+              { t: "Mitad de 450", e: 225, d: [215, 250, 205] },
+              { t: "Doble de 320", e: 640, d: [620, 540, 680] },
+              { t: "Mitad de 520", e: 260, d: [250, 270, 210] },
+              { t: "Mitad de 180", e: 90, d: [80, 95, 70] },
+              { t: "Doble de 410", e: 820, d: [810, 720, 840] },
+              { t: "Mitad de 360", e: 180, d: [160, 170, 190] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 407, displayNum: 7, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 7: Multiplicación de 2 cifras sencillas",
+          tag: "SiSAT 4° · Reactivo 7",
+          sample: "12 × 5 = 60",
+          trickHeading: "Multiplica decenas y unidades aparte:",
+          steps: [
+            "Descompón 12 en 10 + 2.",
+            "10 × 5 = 50 y 2 × 5 = 10.",
+            "50 + 10 = 60."
+          ],
+          generator: () => {
+            const pairs = [
+              [12, 5], [25, 3], [15, 4], [14, 2], [25, 4], [18, 5],
+              [16, 3], [20, 6], [13, 4], [24, 5], [15, 6], [12, 7]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a * b;
+            return { text: `${a} × ${b}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), ans + b] };
+          }
+        },
+        {
+          id: 408, displayNum: 8, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 8: Restas rápidas con millares",
+          tag: "SiSAT 4° · Reactivo 8",
+          sample: "1000 − 350 = 650",
+          trickHeading: "Resta primero centenas y luego decenas:",
+          steps: [
+            "De 1000 quita 300 → te quedan 700.",
+            "Ahora quita 50 → te quedan 650."
+          ],
+          generator: () => {
+            const pairs = [
+              [1250, 500], [1000, 350], [2000, 400], [1500, 250], [1000, 650],
+              [2400, 500], [1800, 900], [3000, 250], [1600, 750], [2000, 650]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a - b;
+            return { text: `${a} − ${b}`, expected: ans, dist: [ans + 100, ans - 100, ans + 50] };
+          }
+        },
+        {
+          id: 409, displayNum: 9, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 9: Series de 25, 50 y centenas",
+          tag: "SiSAT 4° · Reactivo 9",
+          sample: "125, 150, 175, _  (Sigue: 200)",
+          trickHeading: "Descubre el tamaño del salto:",
+          steps: [
+            "Mira la diferencia entre el primero y segundo número.",
+            "De 125 a 150 sube +25.",
+            "Suma 25 al último: 175 + 25 = 200."
+          ],
+          generator: () => {
+            const items = [
+              { t: "125, 150, 175, _", e: 200, s: 25 }, { t: "300, 350, 400, _", e: 450, s: 50 },
+              { t: "900, 800, 700, _", e: 600, s: 100 }, { t: "250, 300, 350, _", e: 400, s: 50 },
+              { t: "1000, 950, 900, _", e: 850, s: 50 }, { t: "420, 440, 460, _", e: 480, s: 20 },
+              { t: "600, 625, 650, _", e: 675, s: 25 }, { t: "850, 800, 750, _", e: 700, s: 50 },
+              { t: "150, 300, 450, _", e: 600, s: 150 }
+            ];
+            const c = pickOne(items);
+            return { text: c.t, expected: c.e, dist: [c.e + c.s, Math.max(50, c.e - c.s), c.e + 25] };
+          }
+        },
+        {
+          id: 410, displayNum: 10, world: 4, sisatGrade: 4,
+          title: "SiSAT 4° · 10: Divisiones exactas de tablas",
+          tag: "SiSAT 4° · Reactivo 10",
+          sample: "36 ÷ 4 = 9",
+          trickHeading: "Usa la multiplicación al revés:",
+          steps: [
+            "Pregúntate: ¿qué número por 4 da 36?",
+            "Como 4 × 9 = 36, entonces 36 ÷ 4 = 9."
+          ],
+          generator: () => {
+            const pairs = [
+              [36, 4], [45, 5], [56, 8], [42, 6], [63, 7], [72, 9],
+              [48, 6], [35, 5], [81, 9], [54, 6], [64, 8], [49, 7]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a / b;
+            return { text: `${a} ÷ ${b}`, expected: ans, dist: [ans + 1, Math.max(2, ans - 1), ans + 2] };
+          }
+        },
+        {
+          id: 411, displayNum: 11, world: 4, sisatGrade: 4,
+          title: "Simulador SiSAT: Examen Completo 4°",
+          tag: "Simulador Diagnóstico · 4° Grado",
+          sample: "Los 10 reactivos oficiales de 4°",
+          trickHeading: "Evaluación SiSAT 4° de Primaria:",
+          steps: [
+            "Combina los 10 reactivos oficiales SiSAT de 4° grado.",
+            "Incluye tablas, decenas, mitades, series y divisiones exactas.",
+            "¡Alcanza los 10 aciertos para Nivel Esperado!"
+          ],
+          generator: () => {
+            const pickId = pickNextSisatExamStratId(4, [401,402,403,404,405,406,407,408,409,410]);
+            return getStrategyById(pickId).generator();
+          }
+        }
+      ],
+      5: [
+        {
+          id: 501, displayNum: 1, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 1: Sumas de decimales simples",
+          tag: "SiSAT 5° · Reactivo 1",
+          sample: "0.5 + 0.7 = 1.2",
+          trickHeading: "Suma décimos como enteros y coloca el punto:",
+          steps: [
+            "Piensa en 5 décimos + 7 décimos = 12 décimos.",
+            "10 décimos forman 1 entero y sobran 2 décimos: 1.2."
+          ],
+          generator: () => {
+            const items = [
+              { a: 0.5, b: 0.7 }, { a: 0.5, b: 0.5 }, { a: 0.8, b: 0.4 }, { a: 0.6, b: 0.9 },
+              { a: 0.3, b: 0.7 }, { a: 0.4, b: 0.5 }, { a: 0.7, b: 0.8 }, { a: 0.9, b: 0.2 },
+              { a: 0.6, b: 0.6 }, { a: 0.5, b: 0.8 }, { a: 0.4, b: 0.9 }
+            ];
+            const c = pickOne(items);
+            const ans = roundClean(c.a + c.b);
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [roundClean(ans + 0.1), roundClean(ans - 0.1), roundClean(ans + 0.2)] };
+          }
+        },
+        {
+          id: 502, displayNum: 2, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 2: Suma de enteros con decimales",
+          tag: "SiSAT 5° · Reactivo 2",
+          sample: "3.5 + 1.25 = 4.75",
+          trickHeading: "Suma enteros aparte y luego decimales:",
+          steps: [
+            "Suma los enteros: 3 + 1 = 4.",
+            "Suma los decimales (0.50 + 0.25 = 0.75).",
+            "Únelos: 4.75."
+          ],
+          generator: () => {
+            const items = [
+              { a: 1.5, b: 2.5 }, { a: 3.5, b: 1.25 }, { a: 2.4, b: 1.6 }, { a: 4.25, b: 1.5 },
+              { a: 2.5, b: 3.75 }, { a: 1.8, b: 2.2 }, { a: 5.5, b: 2.5 }, { a: 3.2, b: 4.3 },
+              { a: 1.75, b: 2.25 }, { a: 6.5, b: 1.75 }
+            ];
+            const c = pickOne(items);
+            const ans = roundClean(c.a + c.b);
+            return { text: `${c.a} + ${c.b}`, expected: ans, dist: [roundClean(ans + 0.25), roundClean(ans - 0.25), roundClean(ans + 1)] };
+          }
+        },
+        {
+          id: 503, displayNum: 3, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 3: Complemento decimal a 1 o 10",
+          tag: "SiSAT 5° · Reactivo 3",
+          sample: "1 − 0.75 = 0.25",
+          trickHeading: "Piensa en centavos para llegar a 100:",
+          steps: [
+            "1 entero equivale a 1.00 (100 centésimos).",
+            "¿Cuánto le falta a 75 para llegar a 100? ¡25!",
+            "Resultado: 0.25."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1 − 0.75", e: 0.25, d: [0.35, 0.15, 0.75] },
+              { t: "¿Cuánto falta de 0.6 a 1?", e: 0.4, d: [0.6, 0.3, 0.5] },
+              { t: "¿Cuánto falta de 0.25 a 1?", e: 0.75, d: [0.65, 0.85, 0.25] },
+              { t: "1 − 0.35", e: 0.65, d: [0.75, 0.55, 0.45] },
+              { t: "10 − 2.5", e: 7.5, d: [8.5, 6.5, 7.25] },
+              { t: "¿Cuánto falta de 0.8 a 1?", e: 0.2, d: [0.3, 0.1, 0.4] },
+              { t: "1 − 0.15", e: 0.85, d: [0.75, 0.95, 0.65] },
+              { t: "¿Cuánto falta de 0.45 a 1?", e: 0.55, d: [0.65, 0.45, 0.35] },
+              { t: "10 − 7.5", e: 2.5, d: [3.5, 1.5, 2.25] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 504, displayNum: 4, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 4: Multiplicar por decimales o ×11",
+          tag: "SiSAT 5° · Reactivo 4",
+          sample: "12 × 11 = 132",
+          trickHeading: "Truco ×11 o repetición decimal:",
+          steps: [
+            "Para 12 × 11: multiplica 12 × 10 (= 120) y súmale un 12 más (= 132).",
+            "Para decimales como 4 × 0.25: recuerda que 4 monedas de 25¢ hacen 1 entero."
+          ],
+          generator: () => {
+            const items = [
+              { t: "3 × 0.1", e: 0.3, d: [0.03, 3, 0.4] },
+              { t: "12 × 11", e: 132, d: [121, 142, 122] },
+              { t: "5 × 0.2", e: 1, d: [0.1, 1.2, 2] },
+              { t: "14 × 11", e: 154, d: [144, 164, 150] },
+              { t: "6 × 0.5", e: 3, d: [3.5, 2.5, 6.5] },
+              { t: "15 × 11", e: 165, d: [155, 175, 160] },
+              { t: "8 × 0.5", e: 4, d: [4.5, 3, 8.5] },
+              { t: "13 × 11", e: 143, d: [133, 153, 140] },
+              { t: "10 × 0.4", e: 4, d: [0.4, 40, 1.4] },
+              { t: "7 × 0.5", e: 3.5, d: [3, 4, 7.5] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 505, displayNum: 5, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 5: Dobles y mitades con decimales",
+          tag: "SiSAT 5° · Reactivo 5",
+          sample: "Doble de 3.5 = 7",
+          trickHeading: "Duplica o divide enteros y medios:",
+          steps: [
+            "El doble de 3 es 6 y el doble de 0.5 es 1.",
+            "6 + 1 = 7."
+          ],
+          generator: () => {
+            const items = [
+              { t: "Doble de 3.5", e: 7, d: [6.5, 7.5, 6] },
+              { t: "Doble de 350", e: 700, d: [650, 750, 600] },
+              { t: "Mitad de 9.6", e: 4.8, d: [4.3, 4.6, 5.2] },
+              { t: "Doble de 1.75", e: 3.5, d: [2.5, 3.25, 4] },
+              { t: "Mitad de 500", e: 250, d: [200, 225, 300] },
+              { t: "Doble de 4.5", e: 9, d: [8.5, 8, 9.5] },
+              { t: "Mitad de 7.4", e: 3.7, d: [3.2, 3.5, 4.2] },
+              { t: "Doble de 2.25", e: 4.5, d: [4.25, 5, 4] },
+              { t: "Mitad de 150", e: 75, d: [65, 85, 70] },
+              { t: "Doble de 6.5", e: 13, d: [12.5, 12, 13.5] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 506, displayNum: 6, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 6: Fracción de una cantidad",
+          tag: "SiSAT 5° · Reactivo 6",
+          sample: "1/4 de 200 = 50",
+          trickHeading: "Divide entre el de abajo y multiplica por el de arriba:",
+          steps: [
+            "El denominador (4) dice en cuántas partes dividir: 200 ÷ 4 = 50.",
+            "El numerador (1) dice cuántas partes tomas: 1 × 50 = 50."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1/2 de 100", e: 50, d: [25, 40, 75] },
+              { t: "1/4 de 200", e: 50, d: [100, 40, 25] },
+              { t: "1/2 de 360", e: 180, d: [160, 190, 90] },
+              { t: "1/4 de 120", e: 30, d: [40, 60, 20] },
+              { t: "1/3 de 90", e: 30, d: [45, 20, 60] },
+              { t: "3/4 de 100", e: 75, d: [50, 25, 80] },
+              { t: "1/5 de 250", e: 50, d: [25, 100, 40] },
+              { t: "1/4 de 400", e: 100, d: [200, 80, 50] },
+              { t: "2/3 de 60", e: 40, d: [20, 30, 50] },
+              { t: "1/2 de 540", e: 270, d: [260, 220, 280] },
+              { t: "3/4 de 80", e: 60, d: [40, 20, 70] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 507, displayNum: 7, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 7: Multiplicación de múltiplos de 10 y 15",
+          tag: "SiSAT 5° · Reactivo 7",
+          sample: "15 × 20 = 300",
+          trickHeading: "Multiplica sin ceros y devuelve al final:",
+          steps: [
+            "Quita el cero del 20 y calcula 15 × 2 = 30.",
+            "Devuelve el cero que quitaste: ¡300!"
+          ],
+          generator: () => {
+            const pairs = [
+              [15, 4], [15, 20], [50, 20], [25, 8], [30, 40],
+              [15, 6], [40, 50], [20, 18], [60, 30], [25, 40]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a * b;
+            return { text: `${a} × ${b}`, expected: ans, dist: [ans + 100, Math.round(ans / 2), ans + 20] };
+          }
+        },
+        {
+          id: 508, displayNum: 8, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 8: Divisiones exactas con ceros",
+          tag: "SiSAT 5° · Reactivo 8",
+          sample: "450 ÷ 9 = 50",
+          trickHeading: "Divide los primeros dígitos y pasa el cero:",
+          steps: [
+            "Divide 45 ÷ 9 = 5.",
+            "Añade el cero de la decena: ¡50!"
+          ],
+          generator: () => {
+            const pairs = [
+              [120, 3], [450, 9], [360, 6], [240, 4], [420, 7], [640, 8],
+              [560, 8], [350, 5], [810, 9], [280, 4], [720, 9]
+            ];
+            const [a, b] = pickOne(pairs);
+            const ans = a / b;
+            return { text: `${a} ÷ ${b}`, expected: ans, dist: [ans + 10, Math.max(10, ans - 10), Math.round(ans / 10)] };
+          }
+        },
+        {
+          id: 509, displayNum: 9, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 9: Compensación y suma de fracciones",
+          tag: "SiSAT 5° · Reactivo 9",
+          sample: "1/2 + 1/4 = 3/4",
+          trickHeading: "Convierte medios en cuartos o completa 1000:",
+          steps: [
+            "Un medio (1/2) vale lo mismo que 2/4.",
+            "2/4 + 1/4 = 3/4.",
+            "Y en 999 + 45: suma 1000 + 45 = 1045 y quita 1 = 1044."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1/2 + 1/4", e: "3/4", d: ["2/6", "1/4", "2/4"] },
+              { t: "999 + 99", e: 1098, d: [1099, 1088, 1100] },
+              { t: "1/4 + 1/4", e: "1/2", d: ["2/8", "3/4", "1/4"] },
+              { t: "999 + 45", e: 1044, d: [1045, 1034, 1054] },
+              { t: "1/2 + 1/2", e: 1, d: ["2/4", "1/4", 2] },
+              { t: "998 + 150", e: 1148, d: [1150, 1146, 1152] },
+              { t: "2/5 + 1/5", e: "3/5", d: ["3/10", "2/5", "4/5"] },
+              { t: "3/8 + 1/8", e: "1/2", d: ["4/16", "3/8", "5/8"] },
+              { t: "999 + 25", e: 1024, d: [1025, 1014, 1034] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 510, displayNum: 10, world: 4, sisatGrade: 5,
+          title: "SiSAT 5° · 10: Porcentajes básicos (10%, 25%, 50%)",
+          tag: "SiSAT 5° · Reactivo 10",
+          sample: "50% de 360 = 180",
+          trickHeading: "Mitad (50%), cuarta parte (25%) o quitar un cero (10%):",
+          steps: [
+            "50% es la mitad exacta del número.",
+            "10% se obtiene quitando el último cero (÷ 10).",
+            "25% es la mitad de la mitad."
+          ],
+          generator: () => {
+            const items = [
+              { t: "50% de 360", e: 180, d: [90, 36, 160] },
+              { t: "10% de 200", e: 20, d: [10, 40, 100] },
+              { t: "50% de 140", e: 70, d: [14, 35, 80] },
+              { t: "10% de 500", e: 50, d: [25, 250, 100] },
+              { t: "25% de 100", e: 25, d: [50, 10, 75] },
+              { t: "25% de 200", e: 50, d: [25, 100, 40] },
+              { t: "50% de 480", e: 240, d: [48, 120, 260] },
+              { t: "10% de 850", e: 85, d: [425, 170, 50] },
+              { t: "25% de 80", e: 20, d: [40, 10, 16] },
+              { t: "50% de 900", e: 450, d: [90, 225, 400] },
+              { t: "10% de 430", e: 43, d: [215, 86, 40] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 511, displayNum: 11, world: 4, sisatGrade: 5,
+          title: "Simulador SiSAT: Examen Completo 5°",
+          tag: "Simulador Diagnóstico · 5° Grado",
+          sample: "Los 10 reactivos oficiales de 5°",
+          trickHeading: "Evaluación SiSAT 5° de Primaria:",
+          steps: [
+            "Alterna entre los 10 reactivos oficiales del SiSAT de 5° grado.",
+            "Domina decimales, fracciones de cantidad y porcentajes mentales.",
+            "¡Completa 10 aciertos para Nivel Esperado!"
+          ],
+          generator: () => {
+            const pickId = pickNextSisatExamStratId(5, [501,502,503,504,505,506,507,508,509,510]);
+            return getStrategyById(pickId).generator();
+          }
+        }
+      ],
+      6: [
+        {
+          id: 601, displayNum: 1, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 1: Porcentajes (10%, 20%, 25%, 50%, 75%)",
+          tag: "SiSAT 6° · Reactivo 1",
+          sample: "25% de 200 = 50",
+          trickHeading: "Calcula el 10% o la mitad y combina:",
+          steps: [
+            "10% = quita un cero; 20% = doble del 10%.",
+            "25% = un cuarto (÷4); 50% = mitad; 75% = 50% + 25%."
+          ],
+          generator: () => {
+            const items = [
+              { t: "10% de 300", e: 30, d: [15, 60, 150] },
+              { t: "50% de 480", e: 240, d: [48, 120, 260] },
+              { t: "25% de 200", e: 50, d: [25, 100, 40] },
+              { t: "20% de 100", e: 20, d: [10, 40, 25] },
+              { t: "75% de 100", e: 75, d: [50, 25, 80] },
+              { t: "25% de 400", e: 100, d: [200, 80, 40] },
+              { t: "10% de 750", e: 75, d: [375, 150, 50] },
+              { t: "50% de 640", e: 320, d: [64, 160, 340] },
+              { t: "20% de 300", e: 60, d: [30, 90, 120] },
+              { t: "75% de 200", e: 150, d: [100, 50, 175] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 602, displayNum: 2, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 2: Multiplicación rápida ×4, ×25, ×1000",
+          tag: "SiSAT 6° · Reactivo 2",
+          sample: "25 × 12 = 300",
+          trickHeading: "Agrupa en paquetes de 100:",
+          steps: [
+            "Recuerda que cuatro veces 25 son 100.",
+            "En 12 caben 3 grupos de 4 → 3 × 100 = 300.",
+            "Para ×1000 solo agrega tres ceros."
+          ],
+          generator: () => {
+            const items = [
+              { t: "25 × 4", e: 100, d: [80, 125, 120] },
+              { t: "25 × 12", e: 300, d: [250, 350, 400] },
+              { t: "23 × 1000", e: 23000, d: [2300, 230, 230000] },
+              { t: "25 × 8", e: 200, d: [150, 250, 180] },
+              { t: "45 × 100", e: 4500, d: [450, 45000, 4050] },
+              { t: "125 × 4", e: 500, d: [400, 600, 450] },
+              { t: "16 × 1000", e: 16000, d: [1600, 160, 160000] },
+              { t: "25 × 16", e: 400, d: [350, 450, 300] },
+              { t: "34 × 100", e: 3400, d: [340, 34000, 3040] },
+              { t: "25 × 6", e: 150, d: [125, 175, 200] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 603, displayNum: 3, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 3: Restas con millares y decimales",
+          tag: "SiSAT 6° · Reactivo 3",
+          sample: "8.75 − 0.25 = 8.5",
+          trickHeading: "Alinea mentalmente enteros y decimales:",
+          steps: [
+            "En 8.75 − 0.25, el 8 entero no cambia.",
+            "75 centésimos menos 25 centésimos = 50 centésimos (0.5).",
+            "Resultado: 8.5."
+          ],
+          generator: () => {
+            const items = [
+              { t: "2750 − 750", e: 2000, d: [2100, 1900, 1750] },
+              { t: "8.75 − 0.25", e: 8.5, d: [8.25, 8.45, 7.5] },
+              { t: "4500 − 1200", e: 3300, d: [3500, 3200, 2300] },
+              { t: "10 − 1.5", e: 8.5, d: [9.5, 7.5, 8.25] },
+              { t: "3600 − 1500", e: 2100, d: [2200, 1900, 2500] },
+              { t: "6.5 − 2.25", e: 4.25, d: [4.75, 3.25, 4.5] },
+              { t: "5000 − 1750", e: 3250, d: [3750, 3350, 2250] },
+              { t: "9.8 − 3.4", e: 6.4, d: [6.2, 5.4, 7.4] },
+              { t: "7.25 − 1.5", e: 5.75, d: [6.25, 5.25, 6.75] },
+              { t: "10 − 3.75", e: 6.25, d: [7.25, 6.75, 5.25] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 604, displayNum: 4, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 4: Sumas y complementos decimales",
+          tag: "SiSAT 6° · Reactivo 4",
+          sample: "0.75 + 0.25 = 1",
+          trickHeading: "Completa los 100 centésimos del entero:",
+          steps: [
+            "Piensa cada decimal en centésimos: 0.75 son 75 y 0.25 son 25.",
+            "75 + 25 = 100 centésimos = 1 entero."
+          ],
+          generator: () => {
+            const items = [
+              { t: "0.75 + 0.25", e: 1, d: [0.95, 1.25, 0.5] },
+              { t: "1 − 0.6", e: 0.4, d: [0.6, 0.3, 0.5] },
+              { t: "1.25 + 0.75", e: 2, d: [1.95, 2.25, 1.5] },
+              { t: "2 − 0.45", e: 1.55, d: [1.65, 1.45, 2.55] },
+              { t: "1 − 0.85", e: 0.15, d: [0.25, 0.05, 0.35] },
+              { t: "2.5 + 1.75", e: 4.25, d: [3.25, 4.75, 3.75] },
+              { t: "3 − 0.75", e: 2.25, d: [2.75, 3.25, 1.25] },
+              { t: "0.8 + 0.7", e: 1.5, d: [0.15, 1.4, 1.6] },
+              { t: "1 − 0.28", e: 0.72, d: [0.82, 0.62, 0.78] },
+              { t: "1.5 + 2.75", e: 4.25, d: [3.75, 4.5, 4.05] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 605, displayNum: 5, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 5: Mitades y multiplicación decimal",
+          tag: "SiSAT 6° · Reactivo 5",
+          sample: "1.25 × 4 = 5",
+          trickHeading: "Separa la parte entera y la decimal:",
+          steps: [
+            "1 × 4 = 4 y 0.25 × 4 = 1.",
+            "Suma los resultados: 4 + 1 = 5."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1.25 × 4", e: 5, d: [4.5, 6, 4.25] },
+              { t: "Mitad de 4.6", e: 2.3, d: [2.6, 2.2, 1.8] },
+              { t: "3.5 ÷ 2", e: 1.75, d: [1.5, 1.25, 2.25] },
+              { t: "2.5 × 4", e: 10, d: [8.5, 9, 12] },
+              { t: "Mitad de 7.8", e: 3.9, d: [3.4, 3.8, 4.4] },
+              { t: "1.5 × 6", e: 9, d: [7.5, 8.5, 6.5] },
+              { t: "0.75 × 4", e: 3, d: [2.5, 3.5, 4] },
+              { t: "Mitad de 9.2", e: 4.6, d: [4.1, 4.5, 5.1] },
+              { t: "4.5 × 2", e: 9, d: [8.5, 8, 9.5] },
+              { t: "1.5 × 3", e: 4.5, d: [3.5, 5, 4] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 606, displayNum: 6, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 6: División mental entre múltiplos de 10",
+          tag: "SiSAT 6° · Reactivo 6",
+          sample: "800 ÷ 20 = 40",
+          trickHeading: "Tacha un cero de ambos lados:",
+          steps: [
+            "Quita un cero al 800 y un cero al 20: queda 80 ÷ 2.",
+            "80 ÷ 2 = 40. ¡Mucho más fácil!"
+          ],
+          generator: () => {
+            const items = [
+              { t: "800 ÷ 20", e: 40, d: [4, 20, 400] },
+              { t: "350 ÷ 5", e: 70, d: [7, 60, 80] },
+              { t: "900 ÷ 30", e: 30, d: [3, 300, 60] },
+              { t: "1200 ÷ 40", e: 30, d: [3, 40, 300] },
+              { t: "450 ÷ 5", e: 90, d: [9, 80, 95] },
+              { t: "600 ÷ 15", e: 40, d: [30, 50, 4] },
+              { t: "1000 ÷ 25", e: 40, d: [25, 50, 400] },
+              { t: "1500 ÷ 50", e: 30, d: [3, 50, 300] },
+              { t: "550 ÷ 5", e: 110, d: [11, 105, 90] },
+              { t: "1800 ÷ 30", e: 60, d: [6, 90, 600] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 607, displayNum: 7, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 7: Series con números decimales",
+          tag: "SiSAT 6° · Reactivo 7",
+          sample: "1.2, 1.5, 1.8, _  (Sigue: 2.1)",
+          trickHeading: "Calcula la diferencia entre dos términos:",
+          steps: [
+            "De 1.2 a 1.5 aumentó +0.3.",
+            "Suma +0.3 al último: 1.8 + 0.3 = 2.1."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1.2, 1.5, 1.8, _", e: 2.1, d: [2.0, 2.3, 1.9] },
+              { t: "0.25, 0.5, 0.75, _", e: 1, d: [1.25, 0.85, 0.9] },
+              { t: "3.5, 4.0, 4.5, _", e: 5, d: [4.8, 5.5, 4.6] },
+              { t: "2.4, 2.2, 2.0, _", e: 1.8, d: [1.6, 1.9, 2.2] },
+              { t: "0.4, 0.8, 1.2, _", e: 1.6, d: [1.4, 1.8, 2.0] },
+              { t: "5.5, 5.0, 4.5, _", e: 4, d: [3.5, 4.2, 4.1] },
+              { t: "0.3, 0.6, 0.9, _", e: 1.2, d: [1.0, 1.1, 1.5] },
+              { t: "1.5, 2.25, 3.0, _", e: 3.75, d: [3.5, 4.0, 3.25] },
+              { t: "4.8, 4.4, 4.0, _", e: 3.6, d: [3.8, 3.4, 3.2] },
+              { t: "0.15, 0.3, 0.45, _", e: 0.6, d: [0.55, 0.75, 0.5] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 608, displayNum: 8, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 8: Suma de fracciones equivalentes",
+          tag: "SiSAT 6° · Reactivo 8",
+          sample: "1/3 + 1/6 = 1/2",
+          trickHeading: "Convierte una fracción al mismo denominador:",
+          steps: [
+            "1/3 equivale a 2/6.",
+            "2/6 + 1/6 = 3/6.",
+            "Simplificando 3/6 es exactamente 1/2."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1/2 + 1/4", e: "3/4", d: ["2/6", "2/4", "1/4"] },
+              { t: "1/3 + 1/6", e: "1/2", d: ["2/9", "2/6", "2/3"] },
+              { t: "1/4 + 1/8", e: "3/8", d: ["2/12", "1/8", "2/4"] },
+              { t: "1/2 + 1/8", e: "5/8", d: ["2/10", "3/8", "3/4"] },
+              { t: "2/3 + 1/6", e: "5/6", d: ["3/9", "3/6", "4/6"] },
+              { t: "1/5 + 2/5", e: "3/5", d: ["3/10", "2/5", "4/5"] },
+              { t: "1/2 + 3/4", e: "5/4", d: ["4/6", "1", "3/4"] },
+              { t: "3/8 + 1/4", e: "5/8", d: ["4/12", "4/8", "7/8"] },
+              { t: "1/2 + 1/6", e: "2/3", d: ["2/8", "1/3", "5/6"] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 609, displayNum: 9, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 9: Resta de fracciones mentales",
+          tag: "SiSAT 6° · Reactivo 9",
+          sample: "3/4 − 1/2 = 1/4",
+          trickHeading: "Pasa a fracciones equivalentes y resta arriba:",
+          steps: [
+            "Convierte 1/2 en 2/4.",
+            "Resta los numeradores: 3/4 − 2/4 = 1/4."
+          ],
+          generator: () => {
+            const items = [
+              { t: "1/2 − 1/8", e: "3/8", d: ["1/6", "2/8", "1/4"] },
+              { t: "3/4 − 1/2", e: "1/4", d: ["2/2", "1/2", "3/8"] },
+              { t: "1 − 1/4", e: "3/4", d: ["1/4", "2/4", "1/2"] },
+              { t: "1 − 2/5", e: "3/5", d: ["2/5", "1/5", "4/5"] },
+              { t: "5/6 − 1/3", e: "1/2", d: ["4/3", "1/3", "2/3"] },
+              { t: "7/8 − 1/4", e: "5/8", d: ["6/4", "3/8", "1/2"] },
+              { t: "4/5 − 1/5", e: "3/5", d: ["3/0", "2/5", "4/5"] },
+              { t: "1 − 3/8", e: "5/8", d: ["3/8", "4/8", "7/8"] },
+              { t: "2/3 − 1/6", e: "1/2", d: ["1/3", "1/6", "2/6"] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 610, displayNum: 10, world: 4, sisatGrade: 6,
+          title: "SiSAT 6° · 10: Fracción de una cantidad",
+          tag: "SiSAT 6° · Reactivo 10",
+          sample: "3/4 de 200 = 150",
+          trickHeading: "Divide entre el denominador y multiplica:",
+          steps: [
+            "Divide 200 ÷ 4 = 50 (esto vale cada cuarto).",
+            "Toma 3 cuartos: 50 × 3 = 150."
+          ],
+          generator: () => {
+            const items = [
+              { t: "3/4 de 200", e: 150, d: [50, 100, 120] },
+              { t: "2/3 de 90", e: 60, d: [30, 45, 75] },
+              { t: "1/4 de 360", e: 90, d: [60, 120, 180] },
+              { t: "3/5 de 100", e: 60, d: [20, 40, 80] },
+              { t: "2/5 de 250", e: 100, d: [50, 150, 125] },
+              { t: "3/4 de 400", e: 300, d: [100, 200, 350] },
+              { t: "1/3 de 180", e: 60, d: [90, 45, 30] },
+              { t: "4/5 de 100", e: 80, d: [20, 60, 75] },
+              { t: "3/4 de 120", e: 90, d: [30, 60, 100] },
+              { t: "2/3 de 150", e: 100, d: [50, 75, 120] },
+              { t: "5/6 de 60", e: 50, d: [10, 40, 30] }
+            ];
+            const c = pickOne(items); return { text: c.t, expected: c.e, dist: c.d };
+          }
+        },
+        {
+          id: 611, displayNum: 11, world: 4, sisatGrade: 6,
+          title: "Simulador SiSAT: Examen Completo 6°",
+          tag: "Simulador Diagnóstico · 6° Grado",
+          sample: "Los 10 reactivos oficiales de 6°",
+          trickHeading: "Evaluación SiSAT 6° de Primaria:",
+          steps: [
+            "Alterna entre los 10 reactivos oficiales del SiSAT de 6° grado.",
+            "Porcentajes, decimales, fracciones y cálculo avanzado.",
+            "¡Alcanza los 10 aciertos para superar todo Primaria!"
+          ],
+          generator: () => {
+            const pickId = pickNextSisatExamStratId(6, [601,602,603,604,605,606,607,608,609,610]);
+            return getStrategyById(pickId).generator();
+          }
+        }
+      ]
+    };
+
+    function getStrategyById(levelId) {
+      const fromMain = STRATEGIES.find(s => s.id === levelId);
+      if (fromMain) return fromMain;
+      for (const gradeList of Object.values(SISAT_BY_GRADE)) {
+        const found = gradeList.find(s => s.id === levelId);
+        if (found) return found;
+      }
+      return STRATEGIES[0];
+    }
+
+    function getGradeStrategiesList(grade) {
+      const g = parseInt(grade, 10) || 3;
+      if (g === 3) return STRATEGIES.filter(s => s.world === 4);
+      return SISAT_BY_GRADE[g] || STRATEGIES.filter(s => s.world === 4);
+    }
+
+    let sisatExamQueues = {};
+    function pickNextSisatExamStratId(grade, idList) {
+      let q = sisatExamQueues[grade];
+      if (!q || q.length === 0) {
+        q = [...idList];
+        for (let i = q.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [q[i], q[j]] = [q[j], q[i]];
+        }
+        sisatExamQueues[grade] = q;
+      }
+      return q.shift();
+    }
 
     /* =============================================================
        5. ESTADO GLOBAL DE LA APLICACIÓN
@@ -2821,8 +4212,11 @@
       soundEnabled: true,
       soundVolume: 1.0,
       currentWorld: 1,
+      sisatGrade: 3,
       currentLevelId: 1,
       difficulty: 'muy_facil',
+      lastQuestionKey: null,
+      lastExpectedAnswer: null,
       cameraControlActive: false,
       voiceSpeechEnabled: false,
       gameActive: false,
@@ -3210,11 +4604,21 @@
       // Casos de complementos (ej: "30 + ? = 100" -> "¿Cuánto le falta a 30 para llegar a 100?")
       clean = clean.replace(/(\d+)\s*\+\s*\?\s*=\s*(\d+)/i, '¿Cuánto le falta a $1 para llegar a $2?');
       // Casos de dobles y mitades
-      clean = clean.replace(/Doble de (\d+)/i, '¿Cuál es el doble de $1?');
-      clean = clean.replace(/Mitad de (\d+)/i, '¿Cuál es la mitad de $1?');
-      // Casos de series numéricas: "53, 56, 59, _" -> "¿Qué número sigue en: 53, 56, 59?"
-      clean = clean.replace(/([0-9,\s]+),\s*_/i, '¿Qué número sigue en: $1?');
-      // Operaciones estándar
+      clean = clean.replace(/Doble de ([0-9.]+)/i, '¿Cuál es el doble de $1?');
+      clean = clean.replace(/Mitad de ([0-9.]+)/i, '¿Cuál es la mitad de $1?');
+      // Casos de series numéricas (enteros y decimales): "1.2, 1.5, 1.8, _" -> "¿Qué número sigue en: 1.2, 1.5, 1.8?"
+      clean = clean.replace(/([0-9.,\s]+),\s*_/i, '¿Qué número sigue en: $1?');
+      // Fracciones comunes antes de reemplazar signos
+      const fracMap = {
+        '1/2': 'un medio', '1/3': 'un tercio', '2/3': 'dos tercios',
+        '1/4': 'un cuarto', '2/4': 'dos cuartos', '3/4': 'tres cuartos', '5/4': 'cinco cuartos',
+        '1/5': 'un quinto', '2/5': 'dos quintos', '3/5': 'tres quintos', '4/5': 'cuatro quintos',
+        '1/6': 'un sexto', '5/6': 'cinco sextos',
+        '1/8': 'un octavo', '3/8': 'tres octavos', '5/8': 'cinco octavos', '7/8': 'siete octavos'
+      };
+      clean = clean.replace(/\b(\d+\/\d+)\b/g, m => fracMap[m] || m.replace('/', ' sobre '));
+      // Operaciones y porcentajes
+      clean = clean.replace(/%/g, ' por ciento').replace(/÷/g, ' entre ');
       clean = clean.replace(/−/g, ' menos ').replace(/\+/g, ' más ').replace(/×/g, ' por ');
       clean = clean.replace(/\?/g, '').replace(/=/g, 'es igual a');
       clean = clean.replace(/\s+/g, ' ').trim();
@@ -3582,8 +4986,37 @@
     /* =============================================================
        8. RENDERIZADO DEL MENÚ Y NIVELES (COMPACTO Y DIRECTO)
        ============================================================= */
-    function switchWorld(worldNum) {
-      gameState.currentWorld = worldNum || 1;
+    function openSisatGradeModal() {
+      const m = document.getElementById('modal-sisat-grade');
+      if (!m) return;
+      document.querySelectorAll('.btn-sisat-grade').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.grade, 10) === (gameState.sisatGrade || 3));
+      });
+      m.classList.add('active');
+    }
+
+    function closeSisatGradeModal() {
+      const m = document.getElementById('modal-sisat-grade');
+      if (m) m.classList.remove('active');
+    }
+
+    function selectSisatGrade(grade) {
+      gameState.sisatGrade = parseInt(grade, 10) || 3;
+      const subEl = document.getElementById('wbtn-sisat-sub');
+      if (subEl) {
+        subEl.textContent = `${gameState.sisatGrade}° Primaria · Cambiar grado`;
+      }
+      closeSisatGradeModal();
+      switchWorld(4, true);
+    }
+
+    function switchWorld(worldNum, skipSisatModal = false) {
+      const targetWorld = worldNum || 1;
+      if (targetWorld === 4 && !skipSisatModal) {
+        openSisatGradeModal();
+        return;
+      }
+      gameState.currentWorld = targetWorld;
       const btnMap = {
         1: 'wbtn-m1',
         2: 'wbtn-m2',
@@ -3615,31 +5048,38 @@
       Object.values(gameState.userStars).forEach(st => starsTotal += st);
       document.getElementById('global-stars-count').textContent = `${starsTotal} / 60`;
 
+      const wId = gameState.currentWorld || 1;
+      const g = gameState.sisatGrade || 3;
+      const gMeta = SISAT_GRADE_META[g] || SISAT_GRADE_META[3];
       const WORLDS_INFO = [
         { id: 1, name: '🟢 MUNDO 1: BOSQUE Y PRADERAS', tag: 'Estrategias Fundamentales #1 a #7' },
         { id: 2, name: '🔵 MUNDO 2: COSTA Y AVENTURA', tag: 'Estrategias de Agilidad #8 a #14' },
         { id: 3, name: '🟣 MUNDO 3: DESAFÍO URBANO', tag: 'Desafíos Avanzados #15 a #20' },
-        { id: 4, name: '⭐ MUNDO SiSAT: REACTIVOS OFICIALES 3° DE PRIMARIA', tag: 'Reactivos Diagnósticos #21 a #31' }
+        { id: 4, name: `⭐ MUNDO SiSAT · ${gMeta.name.toUpperCase()}`, tag: gMeta.subtitle }
       ];
 
-      const wId = gameState.currentWorld || 1;
       const wInfo = WORLDS_INFO.find(w => w.id === wId) || WORLDS_INFO[0];
-      const strats = STRATEGIES.filter(s => s.world === wId);
+      const strats = (wId === 4) ? getGradeStrategiesList(g) : STRATEGIES.filter(s => s.world === wId);
 
       const header = document.createElement('div');
       header.className = 'world-section-header';
-      header.innerHTML = `<h3>${wInfo.name} <span class="world-count-tag">${wInfo.tag}</span></h3>`;
+      const gradeSwitchBtn = (wId === 4)
+        ? `<button class="btn-sisat-change-grade" onclick="openSisatGradeModal()">🎓 Elegir otro grado (1°–6°)</button>`
+        : '';
+      header.innerHTML = `<h3><span>${wInfo.name}</span> <span class="world-count-tag">${wInfo.tag} ${gradeSwitchBtn}</span></h3>`;
       container.appendChild(header);
 
         strats.forEach(strat => {
           const stars = gameState.userStars[strat.id] || 0;
           const starStr = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+          const displayNum = strat.displayNum || strat.id;
+          const badgeLabel = strat.sisatGrade ? `${strat.sisatGrade}° · #${displayNum}` : `#${displayNum}`;
 
           const card = document.createElement('div');
-          card.className = 'level-card' + (strat.id === 6 || strat.id === 21 ? ' featured' : '');
+          card.className = 'level-card' + (strat.id === 6 || strat.id === 21 || strat.id === 31 || strat.displayNum === 11 ? ' featured' : '');
           card.onclick = () => openTutorialModal(strat.id);
           card.innerHTML = `
-            <div class="level-badge-num">#${strat.id}</div>
+            <div class="level-badge-num">${badgeLabel}</div>
             <div class="level-header">
               <span class="level-strategy-tag">${strat.tag}</span>
               <h3>${strat.title}</h3>
@@ -3659,18 +5099,22 @@
 
     function openTutorialModal(levelId) {
       // Cerrar cualquier otro modal que pudiera estar activo (evita superposiciones)
-      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard'].forEach(id => {
+      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard', 'modal-sisat-grade'].forEach(id => {
         const m = document.getElementById(id);
         if (m) m.classList.remove('active');
       });
 
       gameState.currentLevelId = levelId;
-      const strat = STRATEGIES.find(s => s.id === levelId);
+      const strat = getStrategyById(levelId);
       if (!strat) return;
       if (strat.world) gameState.currentWorld = strat.world;
+      if (strat.sisatGrade) gameState.sisatGrade = strat.sisatGrade;
 
-      document.getElementById('modal-tut-strategy-name').textContent = `Nivel #${strat.id}: ${strat.title}`;
-      document.getElementById('modal-tut-grade-tag').textContent = `Mundo ${strat.world} · ${strat.tag}`;
+      const shownNum = strat.displayNum || strat.id;
+      document.getElementById('modal-tut-strategy-name').textContent = `Nivel #${shownNum}: ${strat.title}`;
+      document.getElementById('modal-tut-grade-tag').textContent = strat.sisatGrade
+        ? `Mundo SiSAT ${strat.sisatGrade}° · ${strat.tag}`
+        : `Mundo ${strat.world} · ${strat.tag}`;
       document.getElementById('modal-tut-trick-heading').textContent = strat.trickHeading || "El Secreto de Loki:";
 
       const stepsContainer = document.getElementById('modal-tut-steps');
@@ -3870,6 +5314,9 @@
       gameState.lives = 3;
       gameState.correctCount = 0;
       gameState.solvedQuestions = new Set();
+      gameState.lastQuestionKey = null;
+      gameState.lastExpectedAnswer = null;
+      sisatExamQueues = {};
       gameState.startTime = Date.now();
 
       // Configurar velocidad exacta del modo
@@ -3927,21 +5374,45 @@
       roadWaves = [];
       particles = [];
 
-      document.getElementById('hud-strategy-title').textContent = 
-        `Nivel #${gameState.currentLevelId} · ${STRATEGIES[gameState.currentLevelId - 1].title}`;
+      const activeStrat = getStrategyById(gameState.currentLevelId);
+      const shownNum = activeStrat.displayNum || activeStrat.id;
+      document.getElementById('hud-strategy-title').textContent =
+        `Nivel #${shownNum} · ${activeStrat.title}`;
+    }
+
+    function normalizeQuestionKey(txt) {
+      return String(txt || '').replace(/\s+/g, ' ').trim().toLowerCase();
     }
 
     /* =============================================================
        10. GENERADOR DE RETOS MATEMÁTICOS HOMOGÉNEOS
        ============================================================= */
     function spawnNextProblemWave() {
-      const strat = STRATEGIES[gameState.currentLevelId - 1];
-      let prob;
+      const strat = getStrategyById(gameState.currentLevelId);
+      let prob = null;
       let attempts = 0;
-      do {
-        prob = strat.generator();
+      let fallbackProb = null;
+      while (attempts < 100) {
+        const cand = strat.generator();
+        const qKey = normalizeQuestionKey(cand.text);
+        const ansKey = String(cand.expected).trim().toLowerCase();
+        const sameQ = (qKey === gameState.lastQuestionKey);
+        const sameAns = (ansKey === gameState.lastExpectedAnswer);
+        const alreadySolved = !!(gameState.solvedQuestions && gameState.solvedQuestions.has(qKey));
+
+        if (!sameQ && !sameAns && (!alreadySolved || attempts >= 60)) {
+          prob = cand;
+          break;
+        }
+        if (!sameQ && !sameAns && !fallbackProb) {
+          fallbackProb = cand;
+        }
         attempts++;
-      } while (gameState.solvedQuestions && gameState.solvedQuestions.has(prob.text.trim()) && attempts < 40);
+      }
+      if (!prob) prob = fallbackProb || strat.generator();
+
+      gameState.lastQuestionKey = normalizeQuestionKey(prob.text);
+      gameState.lastExpectedAnswer = String(prob.expected).trim().toLowerCase();
       gameState.currentProblem = prob;
 
       const mathEl = document.getElementById('hud-math-problem');
@@ -3963,7 +5434,30 @@
         { val: prob.expected, isCorrect: true }
       ];
 
-      const shuffledDist = [...prob.dist].sort(() => Math.random() - 0.5);
+      const expectedKey = String(prob.expected).trim().toLowerCase();
+      const uniqueDists = [];
+      const seenDists = new Set([expectedKey]);
+      for (const d of (prob.dist || [])) {
+        const dk = String(d).trim().toLowerCase();
+        if (!seenDists.has(dk)) {
+          seenDists.add(dk);
+          uniqueDists.push(d);
+        }
+      }
+      // Respaldo por si faltara algún distractor distinto
+      if (uniqueDists.length < 2 && typeof prob.expected === 'number') {
+        for (const delta of [1, 2, -1, 10, -10]) {
+          const alt = Number((prob.expected + delta).toFixed(4));
+          const ak = String(alt).trim().toLowerCase();
+          if (alt >= 0 && !seenDists.has(ak)) {
+            seenDists.add(ak);
+            uniqueDists.push(alt);
+            if (uniqueDists.length >= 2) break;
+          }
+        }
+      }
+
+      const shuffledDist = [...uniqueDists].sort(() => Math.random() - 0.5);
       rawOptions.push({ val: shuffledDist[0], isCorrect: false });
       rawOptions.push({ val: shuffledDist[1], isCorrect: false });
 
@@ -4500,10 +5994,11 @@
       const totalBones = baseBones + extraBones;
 
       // Guardar datos para registro voluntario en la tabla de clasificación
+      const activeStrat = getStrategyById(gameState.currentLevelId);
       lastCompletedRunData = {
         levelId: gameState.currentLevelId,
-        levelTitle: STRATEGIES[gameState.currentLevelId - 1].title,
-        world: STRATEGIES[gameState.currentLevelId - 1].world,
+        levelTitle: activeStrat.title,
+        world: activeStrat.world,
         difficulty: gameState.difficulty,
         difficultyName: DIFFICULTY_MODES[gameState.difficulty].name,
         baseBones: baseBones,
@@ -4989,8 +6484,10 @@
           btnLevel.style.color = '#fff';
           btnGlobal.style.background = '#e2e8f0';
           btnGlobal.style.color = '#475569';
-          const lvlTitle = STRATEGIES[gameState.currentLevelId - 1]?.title || `Nivel #${gameState.currentLevelId}`;
-          if (subtitle) subtitle.textContent = `Ranking de Nivel #${gameState.currentLevelId}: ${lvlTitle}`;
+          const lvlObj = getStrategyById(gameState.currentLevelId);
+          const lvlTitle = lvlObj?.title || `Nivel #${gameState.currentLevelId}`;
+          const shownLvl = lvlObj?.displayNum || gameState.currentLevelId;
+          if (subtitle) subtitle.textContent = `Ranking de Nivel #${shownLvl}: ${lvlTitle}`;
         } else {
           btnGlobal.style.background = '#2563eb';
           btnGlobal.style.color = '#fff';
@@ -5079,18 +6576,27 @@
 
     function playNextLevel() {
       // Cerrar modales anteriores
-      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard'].forEach(id => {
+      ['modal-victory', 'modal-gameover', 'modal-record-score', 'modal-leaderboard', 'modal-sisat-grade'].forEach(id => {
         const m = document.getElementById(id);
         if (m) m.classList.remove('active');
       });
 
-      if (gameState.currentLevelId < STRATEGIES.length) {
+      const currStrat = getStrategyById(gameState.currentLevelId);
+      if (currStrat && currStrat.world === 4) {
+        const gradeList = getGradeStrategiesList(currStrat.sisatGrade || gameState.sisatGrade || 3);
+        const idx = gradeList.findIndex(s => s.id === gameState.currentLevelId);
+        if (idx >= 0 && idx + 1 < gradeList.length) {
+          gameState.currentLevelId = gradeList[idx + 1].id;
+          openTutorialModal(gameState.currentLevelId);
+          return;
+        }
+      } else if (gameState.currentLevelId < STRATEGIES.length) {
         gameState.currentLevelId++;
         openTutorialModal(gameState.currentLevelId);
-      } else {
-        alert("¡Felicitaciones! Has completado todos los desafíos de cálculo mental.");
-        exitToMenu();
+        return;
       }
+      alert("¡Felicitaciones! Has completado todos los desafíos de cálculo mental.");
+      exitToMenu();
     }
 
     /* =============================================================
@@ -5511,14 +7017,16 @@
           ctx.fill();
 
           // Número de respuesta proporcional que cabe perfectamente dentro de su panel sin desbordarse
-          const fontSize = Math.max(8, Math.floor(gateW * 0.46));
+          const valStr = String(hurdle.value);
+          const charFactor = valStr.length >= 5 ? 0.26 : valStr.length === 4 ? 0.32 : valStr.length === 3 ? 0.38 : 0.46;
+          const fontSize = Math.max(8, Math.floor(gateW * charFactor));
           if (fontSize >= 8) {
             ctx.save();
             ctx.font = `800 ${fontSize}px 'Fredoka', system-ui, -apple-system, sans-serif`;
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(hurdle.value, pt.x, gateY + (gateH * 0.36));
+            ctx.fillText(valStr, pt.x, gateY + (gateH * 0.36), gateW * 0.88);
             ctx.restore();
           }
 
@@ -5742,11 +7250,17 @@
       renderLevels();
       resizeCanvas();
 
-      // Cerrar modal de truco y reanudar al hacer clic en el fondo oscuro
+      // Cerrar modal de truco y selector SiSAT al hacer clic en el fondo oscuro
       const tutModal = document.getElementById('modal-tutorial');
       if (tutModal) {
         tutModal.addEventListener('click', (e) => {
           if (e.target === tutModal) closeTutorialModal();
+        });
+      }
+      const sisatModal = document.getElementById('modal-sisat-grade');
+      if (sisatModal) {
+        sisatModal.addEventListener('click', (e) => {
+          if (e.target === sisatModal) closeSisatGradeModal();
         });
       }
 
