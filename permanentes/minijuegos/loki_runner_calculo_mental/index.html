@@ -666,10 +666,21 @@
       top: 0.75rem;
       left: 1rem;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.45rem;
       pointer-events: auto;
       z-index: 50;
+    }
+
+    .hud-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .hud-left-col .hud-compact-btn {
+      width: 100%;
+      justify-content: center;
     }
 
     .hud-compact-btn {
@@ -710,10 +721,36 @@
       color: #fef08a;
     }
 
+    .hud-compact-btn.btn-restart-hud {
+      background: rgba(15, 23, 42, 0.90);
+      border-color: rgba(56, 189, 248, 0.48);
+      color: #e0f2fe;
+    }
+
+    .hud-compact-btn.btn-restart-hud:hover {
+      background: #0284c7;
+      border-color: #bae6fd;
+      color: #ffffff;
+    }
+
+    .hud-compact-btn.btn-trick-hud {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      border-color: #fde047;
+      color: #0f172a;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.42);
+    }
+
+    .hud-compact-btn.btn-trick-hud:hover {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border-color: #fef08a;
+      color: #0f172a;
+    }
+
     /* MENÚ DESPLEGABLE FLOTANTE ELEGANTE */
     .hud-settings-dropdown {
       position: absolute;
-      top: 3.25rem;
+      top: 5.35rem;
       left: 1rem;
       width: 295px;
       background: linear-gradient(145deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.98) 100%);
@@ -1582,6 +1619,9 @@
         left: 0.45rem;
         gap: 0.35rem;
       }
+      .hud-left-col {
+        gap: 0.28rem;
+      }
       .hud-compact-btn {
         padding: 0.35rem 0.65rem;
         font-size: 0.78rem;
@@ -1610,7 +1650,7 @@
 
       /* LA TARJETA MATEMÁTICA SE POSICIONA LIMPIAMENTE DEBAJO DE LA BARRA SUPERIOR */
       .hud-top-center {
-        top: 3.35rem;
+        top: 5.05rem;
         left: 50%;
         transform: translateX(-50%);
         width: calc(100% - 1.25rem);
@@ -1642,6 +1682,9 @@
         top: 0.30rem;
         left: 0.5rem;
         gap: 0.3rem;
+      }
+      .hud-left-col {
+        gap: 0.24rem;
       }
       .hud-compact-btn {
         padding: 0.26rem 0.52rem;
@@ -1693,10 +1736,10 @@
 
       /* Dropdown de opciones ajustado a la altura reducida */
       .hud-settings-dropdown {
-        top: 2.5rem;
+        top: 4.35rem;
         left: 0.5rem;
         width: 275px;
-        max-height: 85vh;
+        max-height: calc(100vh - 4.75rem);
         overflow-y: auto;
         padding: 0.65rem 0.85rem;
       }
@@ -1816,14 +1859,24 @@
     <div id="view-game" class="view">
       <canvas id="gameCanvas"></canvas>
 
-      <!-- BARRA DE CONTROLES SUPERIOR IZQUIERDA COMPACTA -->
+      <!-- BARRA DE CONTROLES SUPERIOR IZQUIERDA COMPACTA (2 COLUMNAS × 2 FILAS) -->
       <div class="hud-top-left-bar">
-        <button class="hud-compact-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
-          <span id="btn-pause-icon">⏸️</span> <span id="btn-pause-text">Pausa</span>
-        </button>
-        <button class="hud-compact-btn btn-settings" onclick="toggleSettingsDropdown(event)" id="btn-settings-toggle" title="Ajustes de dificultad, escenario, volumen y cámara">
-          <span>⚙️ Opciones ▾</span>
-        </button>
+        <div class="hud-left-col">
+          <button class="hud-compact-btn btn-pause" onclick="togglePauseGame()" id="btn-pause" title="Pausar o reanudar">
+            <span id="btn-pause-icon">⏸️</span> <span id="btn-pause-text">Pausa</span>
+          </button>
+          <button class="hud-compact-btn btn-restart-hud" onclick="restartCurrentLevel()" id="btn-restart-hud" title="Reiniciar el nivel desde el inicio">
+            <span>🔄</span> <span>Reiniciar</span>
+          </button>
+        </div>
+        <div class="hud-left-col">
+          <button class="hud-compact-btn btn-settings" onclick="toggleSettingsDropdown(event)" id="btn-settings-toggle" title="Ajustes de dificultad, escenario, volumen y cámara">
+            <span>⚙️ Opciones ▾</span>
+          </button>
+          <button class="hud-compact-btn btn-trick-hud" onclick="openExplanationFromGame()" id="btn-trick-hud" title="Ver explicación y ejemplo del truco mental">
+            <span>💡</span> <span>Truco</span>
+          </button>
+        </div>
       </div>
 
       <!-- MENÚ DESPLEGABLE FLOTANTE ELEGANTE DE OPCIONES -->
@@ -1912,12 +1965,6 @@
           <span>◀ IZQ</span>
           <span class="touch-btn-sub">Mover Carril</span>
         </button>
-
-        <div class="touch-center-hint">
-          <button class="btn-trick-floating" onclick="openExplanationFromGame()">
-            <span>💡</span> Truco
-          </button>
-        </div>
 
         <button class="touch-btn" id="btn-touch-right" onpointerdown="handleTouchRight(event)">
           <span>DER ▶</span>
@@ -5134,16 +5181,27 @@
       document.getElementById('modal-tutorial').classList.add('active');
     }
 
+    function setPauseButtonVisual(paused) {
+      const btn = document.getElementById('btn-pause');
+      if (!btn) return;
+      btn.classList.toggle('active', Boolean(paused));
+      let iconEl = document.getElementById('btn-pause-icon');
+      let textEl = document.getElementById('btn-pause-text');
+      if (!iconEl || !textEl) {
+        btn.innerHTML = '<span id="btn-pause-icon">⏸️</span> <span id="btn-pause-text">Pausa</span>';
+        iconEl = document.getElementById('btn-pause-icon');
+        textEl = document.getElementById('btn-pause-text');
+      }
+      iconEl.textContent = paused ? '▶️' : '⏸️';
+      textEl.textContent = paused ? 'Seguir' : 'Pausa';
+    }
+
     function closeTutorialModal() {
       document.getElementById('modal-tutorial').classList.remove('active');
       if (gameState.gameActive && gameState.wasPausedByTrick) {
         gameState.gamePaused = false;
         gameState.wasPausedByTrick = false;
-        const btn = document.getElementById('btn-pause');
-        if (btn) {
-          btn.textContent = '⏸️ Pausa';
-          btn.classList.remove('active');
-        }
+        setPauseButtonVisual(false);
         updateThemeMusic();
       }
     }
@@ -5153,11 +5211,7 @@
         gameState.gamePaused = true;
         gameState.wasPausedByTrick = true;
         releaseAllTurboHolds(true);
-        const btn = document.getElementById('btn-pause');
-        if (btn) {
-          btn.textContent = '▶️ Seguir';
-          btn.classList.add('active');
-        }
+        setPauseButtonVisual(true);
         updateThemeMusic();
       }
       openTutorialModal(gameState.currentLevelId);
@@ -5311,6 +5365,11 @@
       gameState.difficulty = diffId || 'muy_facil';
       gameState.gameActive = true;
       gameState.gamePaused = false;
+      gameState.wasPausedByDropdown = false;
+      gameState.wasPausedByTrick = false;
+      const settingsDrop = document.getElementById('hud-settings-dropdown');
+      if (settingsDrop) settingsDrop.style.display = 'none';
+      setPauseButtonVisual(false);
       gameState.lives = 3;
       gameState.correctCount = 0;
       gameState.solvedQuestions = new Set();
@@ -5750,11 +5809,7 @@
       if (gameState.gamePaused) {
         releaseAllTurboHolds(true);
       }
-      const btn = document.getElementById('btn-pause');
-      if (btn) {
-        btn.textContent = gameState.gamePaused ? '▶️ Seguir' : '⏸️ Pausa';
-        btn.classList.toggle('active', gameState.gamePaused);
-      }
+      setPauseButtonVisual(gameState.gamePaused);
       updateThemeMusic();
     }
 
@@ -7156,12 +7211,7 @@
           gameState.gamePaused = true;
           gameState.wasPausedByDropdown = true;
           releaseAllTurboHolds(true);
-          const btn = document.getElementById('btn-pause');
-          if (btn) {
-            btn.classList.add('active');
-            const txt = document.getElementById('btn-pause-text');
-            if (txt) txt.textContent = 'Reanudar';
-          }
+          setPauseButtonVisual(true);
           updateThemeMusic();
         }
         updateGameThemeChips();
@@ -7177,12 +7227,7 @@
       if (gameState.gameActive && gameState.wasPausedByDropdown) {
         gameState.gamePaused = false;
         gameState.wasPausedByDropdown = false;
-        const btn = document.getElementById('btn-pause');
-        if (btn) {
-          btn.classList.remove('active');
-          const txt = document.getElementById('btn-pause-text');
-          if (txt) txt.textContent = 'Pausa';
-        }
+        setPauseButtonVisual(false);
         updateThemeMusic();
       }
     }
