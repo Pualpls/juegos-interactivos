@@ -1609,6 +1609,279 @@
     .v-stat-card b { font-family: var(--font-display); font-size: 1.25rem; color: #0f172a; }
 
     /* =============================================================
+       SELECTOR DE ESTUDIANTES, EQUIPOS Y EMOJIS PARA RÉCORDS
+       ============================================================= */
+    .record-modal-card {
+      border-color: #f59e0b !important;
+      max-width: 560px !important;
+      width: 94vw !important;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 1.25rem 1.35rem !important;
+      text-align: left !important;
+    }
+
+    .selected-summary-bar {
+      background: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 0.85rem;
+      padding: 0.65rem 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .selected-summary-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.4rem;
+    }
+
+    .selected-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      min-height: 1.9rem;
+      align-items: center;
+    }
+
+    .selected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #16a34a;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.86rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(22, 163, 74, 0.25);
+    }
+
+    .selected-pill:hover {
+      background: #15803d;
+    }
+
+    .roster-tabs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .roster-tab-btn {
+      padding: 0.62rem 0.7rem;
+      border-radius: 0.75rem;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .roster-tab-btn.active {
+      background: #2563eb;
+      border-color: #1d4ed8;
+      color: #ffffff;
+      box-shadow: 0 3px 8px rgba(37, 99, 235, 0.28);
+    }
+
+    .roster-panel-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.9rem;
+      padding: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .roster-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.45rem;
+    }
+
+    .roster-mini-btn {
+      background: #e2e8f0;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 0.22rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .roster-mini-btn.active {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
+    .roster-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      max-height: 150px;
+      overflow-y: auto;
+      padding: 0.15rem 0.05rem;
+    }
+
+    .roster-chip-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .roster-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.48rem 0.78rem;
+      border-radius: 0.8rem;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .roster-chip:hover {
+      border-color: #60a5fa;
+      background: #eff6ff;
+    }
+
+    .roster-chip.selected {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #14532d;
+      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.22);
+    }
+
+    .roster-chip-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .roster-chip-del {
+      width: 1.7rem;
+      height: 1.7rem;
+      border-radius: 999px;
+      border: 1.5px solid #fca5a5;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .roster-mode-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .roster-mode-pill {
+      padding: 0.48rem 0.35rem;
+      border-radius: 0.65rem;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      font-family: var(--font-body);
+      font-size: 0.79rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .roster-mode-pill.active {
+      background: #eff6ff;
+      border-color: #2563eb;
+      color: #1d4ed8;
+    }
+
+    .roster-text-input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 2px solid #94a3b8;
+      border-radius: 0.65rem;
+      font-size: 1rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      outline: none;
+      background: #ffffff;
+      color: #0f172a;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+
+    .roster-text-input:focus {
+      border-color: #2563eb;
+    }
+
+    .emoji-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(2.35rem, 1fr));
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .emoji-btn {
+      height: 2.35rem;
+      border-radius: 0.6rem;
+      border: 2px solid #e2e8f0;
+      background: #ffffff;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease, border-color 0.15s ease;
+    }
+
+    .emoji-btn:hover {
+      transform: scale(1.06);
+      border-color: #93c5fd;
+    }
+
+    .emoji-btn.active {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.28);
+      transform: scale(1.08);
+    }
+
+    .roster-feedback {
+      font-size: 0.83rem;
+      font-weight: 700;
+      min-height: 1.2rem;
+      margin-bottom: 0.55rem;
+      text-align: center;
+    }
+
+    /* =============================================================
        REGLAS RESPONSIVAS PARA MÓVILES (CERO TRASLAPE EN VERTICAL Y HORIZONTAL)
        ============================================================= */
 
@@ -1919,8 +2192,8 @@
           <button class="hud-side-btn" onclick="toggleCameraGlobal()" id="btn-camera-toggle" title="Control corporal por webcam">
             <span>📹</span> <span>Cámara</span>
           </button>
-          <button class="hud-side-btn" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
-            <span>🗣️</span> <span>Voz ON</span>
+          <button class="hud-side-btn active" onclick="toggleVoiceSpeech()" id="btn-voice-toggle" title="Lectura por voz de operaciones">
+            <span>🔊 Voz ON</span>
           </button>
         </div>
 
@@ -2178,26 +2451,96 @@
 
     <!-- MODAL 4: REGISTRO VOLUNTARIO DE RÉCORD EN CLASIFICACIÓN -->
     <div id="modal-record-score" class="modal-overlay">
-      <div class="modal-card" style="border-color:#f59e0b; max-width:440px;">
-        <div class="victory-hero" style="margin-bottom:0.8rem;">
-          <div style="font-size:2.8rem; line-height:1; margin-bottom:0.3rem;">🏆</div>
-          <h2 style="font-family:var(--font-display); font-size:1.6rem; color:#d97706;">
+      <div class="modal-card record-modal-card">
+        <div class="victory-hero" style="margin-bottom:0.7rem; text-align:center;">
+          <div style="font-size:2.4rem; line-height:1; margin-bottom:0.2rem;">🏆</div>
+          <h2 style="font-family:var(--font-display); font-size:1.45rem; color:#d97706;">
             ¡Registrar mi Récord!
           </h2>
-          <p style="font-size:0.9rem; color:#475569; font-weight:600;" id="record-summary-text">
+          <p style="font-size:0.86rem; color:#475569; font-weight:600;" id="record-summary-text">
             Nivel #1 · 13 huesos conseguidos (10 base + 3 vidas)
           </p>
         </div>
 
-        <div style="background:#f8fafc; border:2px dashed #cbd5e1; border-radius:0.85rem; padding:1rem; margin-bottom:1rem; text-align:left;">
-          <label for="record-input-name" style="display:block; font-size:0.92rem; font-weight:700; color:#1e293b; margin-bottom:0.4rem;">
-            👤 Nombre del estudiante o del equipo:
-          </label>
-          <input type="text" id="record-input-name" placeholder="Ej: Sofía y Mateo / Equipo Rayo" maxlength="32" autocomplete="off"
-                 style="width:100%; padding:0.75rem 1rem; border:2px solid #94a3b8; border-radius:0.6rem; font-size:1.05rem; font-family:var(--font-body); font-weight:600; outline:none; transition:border 0.2s;"
-                 onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#94a3b8'"
-                 onkeydown="if(event.key==='Enter') submitRecordScore();" />
+        <div class="selected-summary-bar">
+          <div class="selected-summary-header">
+            <span>✅ Quien(es) superaron el nivel (1 o varios):</span>
+            <button type="button" class="roster-mini-btn" id="btn-clear-selected" onclick="clearRosterSelection()" style="display:none;">
+              Limpiar
+            </button>
+          </div>
+          <div class="selected-chips-wrap" id="record-selected-preview">
+            <span style="font-size:0.8rem; color:#78716c; font-weight:600;">Toca de la lista o registra abajo</span>
+          </div>
         </div>
+
+        <div class="roster-tabs-row">
+          <button type="button" class="roster-tab-btn active" id="tab-btn-roster-list" onclick="switchRosterModalTab('list')">
+            📋 Elegir de la lista
+          </button>
+          <button type="button" class="roster-tab-btn" id="tab-btn-roster-create" onclick="switchRosterModalTab('create')">
+            ➕ Nuevo / Equipo / Ajeno
+          </button>
+        </div>
+
+        <div id="roster-panel-list" class="roster-panel-box">
+          <div class="roster-section-head">
+            <span>👧👦 Estudiantes (toca 1, binas o trinas):</span>
+            <button type="button" class="roster-mini-btn" id="btn-toggle-roster-manage" onclick="toggleRosterManageMode()">
+              ✏️ Editar lista
+            </button>
+          </div>
+          <div class="roster-chips-grid" id="roster-students-grid"></div>
+
+          <div class="roster-section-head" style="margin-top:0.75rem;">
+            <span>🛡️ Equipos guardados:</span>
+          </div>
+          <div class="roster-chips-grid" id="roster-teams-grid"></div>
+        </div>
+
+        <div id="roster-panel-create" class="roster-panel-box" style="display:none;">
+          <div class="roster-mode-pills">
+            <button type="button" class="roster-mode-pill active" id="mode-pill-student" onclick="setRosterCreateMode('student')">
+              👤 Estudiante
+            </button>
+            <button type="button" class="roster-mode-pill" id="mode-pill-team" onclick="setRosterCreateMode('team')">
+              🛡️ Equipo
+            </button>
+            <button type="button" class="roster-mode-pill" id="mode-pill-guest" onclick="setRosterCreateMode('guest')">
+              🎟️ Ajeno (1 vez)
+            </button>
+          </div>
+
+          <div style="margin-bottom:0.55rem;">
+            <label for="roster-new-name" id="roster-name-label" style="display:block; font-size:0.84rem; font-weight:700; color:#1e293b; margin-bottom:0.3rem;">
+              👤 Nombre del estudiante (se guarda en la lista):
+            </label>
+            <input type="text" id="roster-new-name" class="roster-text-input" placeholder="Ej: Sofía" maxlength="36" autocomplete="off"
+                   onkeydown="event.stopPropagation(); if(event.key==='Enter'){ event.preventDefault(); addRosterEntryFromForm(); }" />
+          </div>
+
+          <div id="roster-team-members-box" style="display:none; margin-bottom:0.55rem;">
+            <label for="roster-team-members" style="display:block; font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">
+              👥 Integrantes (opcional, ej: Sofía, Mateo):
+            </label>
+            <input type="text" id="roster-team-members" class="roster-text-input" placeholder="Ej: Sofía, Mateo, Diego" maxlength="64" autocomplete="off"
+                   onkeydown="event.stopPropagation(); if(event.key==='Enter'){ event.preventDefault(); addRosterEntryFromForm(); }" />
+            <div id="roster-quick-members" style="display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.35rem;"></div>
+          </div>
+
+          <div>
+            <div style="font-size:0.82rem; font-weight:700; color:#1e293b;">
+              🎨 Elige su emoji: <span id="roster-picked-emoji-badge">🦁</span>
+            </div>
+            <div class="emoji-picker-grid" id="roster-emoji-grid"></div>
+          </div>
+
+          <button type="button" class="btn-modal btn-modal-blue" id="btn-add-roster-entry" onclick="addRosterEntryFromForm()" style="width:100%; justify-content:center; padding:0.6rem 0.9rem; font-size:0.9rem;">
+            ➕ Guardar en lista y seleccionar
+          </button>
+        </div>
+
+        <div id="roster-feedback-msg" class="roster-feedback"></div>
 
         <div class="modal-buttons" style="margin-top:0;">
           <button class="btn-modal btn-modal-green" onclick="submitRecordScore()" id="btn-submit-record">
@@ -4265,7 +4608,7 @@
       lastQuestionKey: null,
       lastExpectedAnswer: null,
       cameraControlActive: false,
-      voiceSpeechEnabled: false,
+      voiceSpeechEnabled: true,
       gameActive: false,
       gamePaused: false,
       selectedThemeId: 'random',
@@ -4333,7 +4676,7 @@
         currentMusicSrc = targetSrc;
       }
       const isMuted = !gameState.soundEnabled || gameState.soundVolume <= 0;
-      beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.45);
+      beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.09);
     }
 
     function playBeachMusic() {
@@ -4607,7 +4950,7 @@
 
       initBeachMusic();
       if (beachAudio) {
-        beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.45);
+        beachAudio.volume = isMuted ? 0 : (gameState.soundVolume * 0.09);
       }
       updateThemeMusic();
     }
@@ -4691,6 +5034,7 @@
           const utter = new SpeechSynthesisUtterance(clean);
           utter.lang = 'es-MX';
           utter.rate = 0.95;
+          utter.volume = 1.0;
           window.speechSynthesis.speak(utter);
         } catch(e) {}
       };
@@ -4700,6 +5044,7 @@
         audio.referrerPolicy = 'no-referrer';
         audio.src = url;
         audio.playbackRate = 1.0;
+        audio.volume = 1.0;
         currentSpeechAudio = audio;
         let fellBack = false;
         const fallback = () => {
@@ -6123,6 +6468,453 @@
        ============================================================= */
     let currentLeaderboardTab = 'level';
 
+    const ROSTER_STUDENTS_KEY = 'loki_runner_students_v1';
+    const ROSTER_TEAMS_KEY = 'loki_runner_teams_v1';
+    const ROSTER_EMOJIS = ['🦁', '🐯', '🐼', '🦊', '🐸', '🐶', '🐱', '🦄', '🦖', '🦋', '🐝', '🚀', '⭐', '⚡', '🔥', '🌈', '🎯', '⚽', '🎨', '🏆', '💎', '🌟'];
+
+    let rosterModalState = {
+      activeTab: 'list',
+      createMode: 'student',
+      selectedEmoji: '🦁',
+      selectedStudentIds: [],
+      selectedTeamIds: [],
+      guestEntries: [],
+      manageMode: false,
+    };
+
+    function readRosterStorage(storageKey) {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(item => item && typeof item.id === 'string' && typeof item.name === 'string' && item.name.trim());
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function writeRosterStorage(storageKey, items) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(Array.isArray(items) ? items : []));
+      } catch(e) {}
+    }
+
+    function loadStudentsRoster() {
+      return readRosterStorage(ROSTER_STUDENTS_KEY);
+    }
+
+    function saveStudentsRoster(students) {
+      writeRosterStorage(ROSTER_STUDENTS_KEY, students);
+    }
+
+    function loadTeamsRoster() {
+      return readRosterStorage(ROSTER_TEAMS_KEY);
+    }
+
+    function saveTeamsRoster(teams) {
+      writeRosterStorage(ROSTER_TEAMS_KEY, teams);
+    }
+
+    function setRosterFeedback(message, isError = false) {
+      const el = document.getElementById('roster-feedback-msg');
+      if (!el) return;
+      el.textContent = message || '';
+      el.style.color = isError ? '#b91c1c' : '#15803d';
+    }
+
+    function createRosterId(prefix) {
+      return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+    }
+
+    function normalizeParticipantLabel(text) {
+      return String(text || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function formatTeamDisplay(team) {
+      const members = normalizeParticipantLabel(team.membersText);
+      const base = `${team.emoji || '🛡️'} ${team.name}`;
+      return members ? `${base} (${members})` : base;
+    }
+
+    function getSelectedRosterLabels() {
+      const students = loadStudentsRoster();
+      const teams = loadTeamsRoster();
+      const labels = [];
+
+      rosterModalState.selectedTeamIds.forEach(teamId => {
+        const team = teams.find(t => t.id === teamId);
+        if (team) labels.push({ type: 'team', id: team.id, label: formatTeamDisplay(team) });
+      });
+
+      rosterModalState.selectedStudentIds.forEach(studentId => {
+        const student = students.find(s => s.id === studentId);
+        if (student) labels.push({ type: 'student', id: student.id, label: `${student.emoji || '👤'} ${student.name}` });
+      });
+
+      rosterModalState.guestEntries.forEach(guest => {
+        labels.push({ type: 'guest', id: guest.id, label: `${guest.emoji || '🎟️'} ${guest.name}` });
+      });
+
+      return labels;
+    }
+
+    function formatSelectedParticipantName() {
+      const parts = getSelectedRosterLabels().map(item => item.label);
+      if (parts.length === 0) return '';
+      if (parts.length === 1) return parts[0];
+      if (parts.length === 2) return `${parts[0]} y ${parts[1]}`;
+      return `${parts.slice(0, -1).join(', ')} y ${parts[parts.length - 1]}`;
+    }
+
+    function toggleRosterSelection(kind, id) {
+      if (kind === 'student') {
+        const idx = rosterModalState.selectedStudentIds.indexOf(id);
+        if (idx >= 0) rosterModalState.selectedStudentIds.splice(idx, 1);
+        else rosterModalState.selectedStudentIds.push(id);
+      } else if (kind === 'team') {
+        const idx = rosterModalState.selectedTeamIds.indexOf(id);
+        if (idx >= 0) rosterModalState.selectedTeamIds.splice(idx, 1);
+        else rosterModalState.selectedTeamIds.push(id);
+      } else if (kind === 'guest') {
+        rosterModalState.guestEntries = rosterModalState.guestEntries.filter(g => g.id !== id);
+      }
+      setRosterFeedback('');
+      renderRosterModal();
+    }
+
+    function clearRosterSelection() {
+      rosterModalState.selectedStudentIds = [];
+      rosterModalState.selectedTeamIds = [];
+      rosterModalState.guestEntries = [];
+      setRosterFeedback('');
+      renderRosterModal();
+    }
+
+    function deleteRosterItem(kind, id) {
+      if (kind === 'student') {
+        const updated = loadStudentsRoster().filter(s => s.id !== id);
+        saveStudentsRoster(updated);
+        rosterModalState.selectedStudentIds = rosterModalState.selectedStudentIds.filter(x => x !== id);
+      } else if (kind === 'team') {
+        const updated = loadTeamsRoster().filter(t => t.id !== id);
+        saveTeamsRoster(updated);
+        rosterModalState.selectedTeamIds = rosterModalState.selectedTeamIds.filter(x => x !== id);
+      }
+      renderRosterModal();
+    }
+
+    function toggleRosterManageMode() {
+      rosterModalState.manageMode = !rosterModalState.manageMode;
+      renderRosterModal();
+    }
+
+    function switchRosterModalTab(tabName) {
+      rosterModalState.activeTab = tabName === 'create' ? 'create' : 'list';
+      setRosterFeedback('');
+      renderRosterModal();
+      if (rosterModalState.activeTab === 'create') {
+        const input = document.getElementById('roster-new-name');
+        if (input) setTimeout(() => input.focus(), 120);
+      }
+    }
+
+    function setRosterCreateMode(mode) {
+      rosterModalState.createMode = (mode === 'team' || mode === 'guest') ? mode : 'student';
+      setRosterFeedback('');
+      renderRosterCreateControls();
+      const input = document.getElementById('roster-new-name');
+      if (input) setTimeout(() => input.focus(), 80);
+    }
+
+    function selectRosterEmoji(emoji) {
+      rosterModalState.selectedEmoji = emoji;
+      renderEmojiPickerGrid();
+    }
+
+    function appendQuickMemberToTeamInput(studentName) {
+      const input = document.getElementById('roster-team-members');
+      if (!input) return;
+      const existing = input.value.split(',').map(x => normalizeParticipantLabel(x)).filter(Boolean);
+      const alreadyIncluded = existing.some(x => x.toLowerCase() === studentName.toLowerCase());
+      if (!alreadyIncluded) {
+        existing.push(studentName);
+        input.value = existing.join(', ');
+      }
+    }
+
+    function addRosterEntryFromForm(options = {}) {
+      const { quietIfEmpty = false } = options;
+      const nameInput = document.getElementById('roster-new-name');
+      const membersInput = document.getElementById('roster-team-members');
+      const rawName = normalizeParticipantLabel(nameInput ? nameInput.value : '');
+      const emoji = rosterModalState.selectedEmoji || '🦁';
+
+      if (!rawName) {
+        if (!quietIfEmpty) {
+          setRosterFeedback('Escribe primero un nombre antes de agregar.', true);
+          if (nameInput) nameInput.focus();
+        }
+        return false;
+      }
+
+      if (rosterModalState.createMode === 'student') {
+        const students = loadStudentsRoster();
+        let entry = students.find(s => s.name.toLowerCase() === rawName.toLowerCase());
+        if (entry) {
+          entry.emoji = emoji;
+        } else {
+          entry = { id: createRosterId('stu'), name: rawName, emoji };
+          students.push(entry);
+        }
+        saveStudentsRoster(students);
+        if (!rosterModalState.selectedStudentIds.includes(entry.id)) {
+          rosterModalState.selectedStudentIds.push(entry.id);
+        }
+        setRosterFeedback(`✅ ${entry.emoji} ${entry.name} guardado y seleccionado.`);
+      } else if (rosterModalState.createMode === 'team') {
+        const membersText = normalizeParticipantLabel(membersInput ? membersInput.value : '');
+        const teams = loadTeamsRoster();
+        let entry = teams.find(t => t.name.toLowerCase() === rawName.toLowerCase());
+        if (entry) {
+          entry.emoji = emoji;
+          if (membersText) entry.membersText = membersText;
+        } else {
+          entry = { id: createRosterId('team'), name: rawName, emoji, membersText };
+          teams.push(entry);
+        }
+        saveTeamsRoster(teams);
+        if (!rosterModalState.selectedTeamIds.includes(entry.id)) {
+          rosterModalState.selectedTeamIds.push(entry.id);
+        }
+        setRosterFeedback(`✅ Equipo ${entry.emoji} ${entry.name} guardado y seleccionado.`);
+      } else {
+        rosterModalState.guestEntries.push({
+          id: createRosterId('gst'),
+          name: rawName,
+          emoji
+        });
+        setRosterFeedback(`🎟️ ${emoji} ${rawName} agregado solo para este puntaje.`);
+      }
+
+      if (nameInput) nameInput.value = '';
+      if (membersInput) membersInput.value = '';
+      renderRosterModal();
+      return true;
+    }
+
+    function renderEmojiPickerGrid() {
+      const grid = document.getElementById('roster-emoji-grid');
+      const badge = document.getElementById('roster-picked-emoji-badge');
+      if (badge) badge.textContent = rosterModalState.selectedEmoji;
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      ROSTER_EMOJIS.forEach(emoji => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `emoji-btn${rosterModalState.selectedEmoji === emoji ? ' active' : ''}`;
+        btn.textContent = emoji;
+        btn.setAttribute('aria-label', `Elegir emoji ${emoji}`);
+        btn.onclick = () => selectRosterEmoji(emoji);
+        grid.appendChild(btn);
+      });
+    }
+
+    function renderRosterCreateControls() {
+      const mode = rosterModalState.createMode;
+      const pillMap = {
+        student: document.getElementById('mode-pill-student'),
+        team: document.getElementById('mode-pill-team'),
+        guest: document.getElementById('mode-pill-guest')
+      };
+      Object.keys(pillMap).forEach(k => {
+        if (pillMap[k]) pillMap[k].classList.toggle('active', k === mode);
+      });
+
+      const labelEl = document.getElementById('roster-name-label');
+      const nameInput = document.getElementById('roster-new-name');
+      const membersBox = document.getElementById('roster-team-members-box');
+      const quickMembers = document.getElementById('roster-quick-members');
+      const addBtn = document.getElementById('btn-add-roster-entry');
+
+      if (mode === 'student') {
+        if (labelEl) labelEl.textContent = '👤 Nombre del estudiante (se guarda en la lista):';
+        if (nameInput) nameInput.placeholder = 'Ej: Sofía';
+        if (membersBox) membersBox.style.display = 'none';
+        if (addBtn) addBtn.textContent = '➕ Guardar en lista y seleccionar';
+      } else if (mode === 'team') {
+        if (labelEl) labelEl.textContent = '🛡️ Nombre del equipo (se guarda en la lista):';
+        if (nameInput) nameInput.placeholder = 'Ej: Equipo Rayo';
+        if (membersBox) membersBox.style.display = 'block';
+        if (addBtn) addBtn.textContent = '🛡️ Guardar equipo y seleccionar';
+
+        if (quickMembers) {
+          quickMembers.innerHTML = '';
+          const students = loadStudentsRoster();
+          if (students.length > 0) {
+            const hint = document.createElement('span');
+            hint.style.cssText = 'font-size:0.74rem; color:#64748b; font-weight:700; width:100%;';
+            hint.textContent = 'Toca para agregar integrantes rápidos:';
+            quickMembers.appendChild(hint);
+
+            students.forEach(s => {
+              const chip = document.createElement('button');
+              chip.type = 'button';
+              chip.className = 'roster-mini-btn';
+              chip.textContent = `+ ${s.emoji || '👤'} ${s.name}`;
+              chip.onclick = () => appendQuickMemberToTeamInput(s.name);
+              quickMembers.appendChild(chip);
+            });
+          }
+        }
+      } else {
+        if (labelEl) labelEl.textContent = '🎟️ Nombre temporal (no se guarda en la lista del grupo):';
+        if (nameInput) nameInput.placeholder = 'Ej: Primo Alex / Invitado';
+        if (membersBox) membersBox.style.display = 'none';
+        if (addBtn) addBtn.textContent = '🎟️ Agregar solo a este puntaje';
+      }
+
+      renderEmojiPickerGrid();
+    }
+
+    function renderRosterModal() {
+      const students = loadStudentsRoster();
+      const teams = loadTeamsRoster();
+      const totalSaved = students.length + teams.length;
+
+      const listTabBtn = document.getElementById('tab-btn-roster-list');
+      const createTabBtn = document.getElementById('tab-btn-roster-create');
+      const listPanel = document.getElementById('roster-panel-list');
+      const createPanel = document.getElementById('roster-panel-create');
+      const manageBtn = document.getElementById('btn-toggle-roster-manage');
+
+      if (listTabBtn) {
+        listTabBtn.textContent = `📋 Elegir de la lista (${totalSaved})`;
+        listTabBtn.classList.toggle('active', rosterModalState.activeTab === 'list');
+      }
+      if (createTabBtn) {
+        createTabBtn.classList.toggle('active', rosterModalState.activeTab === 'create');
+      }
+      if (listPanel) listPanel.style.display = rosterModalState.activeTab === 'list' ? 'block' : 'none';
+      if (createPanel) createPanel.style.display = rosterModalState.activeTab === 'create' ? 'block' : 'none';
+
+      if (manageBtn) {
+        manageBtn.classList.toggle('active', rosterModalState.manageMode);
+        manageBtn.textContent = rosterModalState.manageMode ? '✔ Terminar edición' : '✏️ Editar lista';
+        manageBtn.style.display = totalSaved > 0 ? 'inline-flex' : 'none';
+      }
+
+      const selectedWrap = document.getElementById('record-selected-preview');
+      const clearBtn = document.getElementById('btn-clear-selected');
+      const selectedItems = getSelectedRosterLabels();
+
+      if (clearBtn) clearBtn.style.display = selectedItems.length > 0 ? 'inline-flex' : 'none';
+      if (selectedWrap) {
+        selectedWrap.innerHTML = '';
+        if (selectedItems.length === 0) {
+          const emptyHint = document.createElement('span');
+          emptyHint.style.cssText = 'font-size:0.8rem; color:#78716c; font-weight:600;';
+          emptyHint.textContent = 'Toca estudiantes o un equipo, o registra alguien nuevo abajo.';
+          selectedWrap.appendChild(emptyHint);
+        } else {
+          selectedItems.forEach(item => {
+            const pill = document.createElement('button');
+            pill.type = 'button';
+            pill.className = 'selected-pill';
+            pill.title = 'Toca para quitar de este puntaje';
+            pill.textContent = `${item.label} ✕`;
+            pill.onclick = () => toggleRosterSelection(item.type, item.id);
+            selectedWrap.appendChild(pill);
+          });
+        }
+      }
+
+      const studentsGrid = document.getElementById('roster-students-grid');
+      if (studentsGrid) {
+        studentsGrid.innerHTML = '';
+        if (students.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.cssText = 'font-size:0.82rem; color:#64748b; padding:0.35rem 0;';
+          empty.textContent = 'Aún no hay estudiantes registrados. Toca "➕ Nuevo / Equipo / Ajeno" para agregar.';
+          studentsGrid.appendChild(empty);
+        } else {
+          students.forEach(student => {
+            const wrap = document.createElement('div');
+            wrap.className = 'roster-chip-wrap';
+            const isSelected = rosterModalState.selectedStudentIds.includes(student.id);
+
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = `roster-chip${isSelected ? ' selected' : ''}`;
+            chip.textContent = `${student.emoji || '👤'} ${student.name}`;
+            chip.onclick = () => toggleRosterSelection('student', student.id);
+            wrap.appendChild(chip);
+
+            if (rosterModalState.manageMode) {
+              const delBtn = document.createElement('button');
+              delBtn.type = 'button';
+              delBtn.className = 'roster-chip-del';
+              delBtn.title = `Quitar a ${student.name} de la lista`;
+              delBtn.textContent = '✕';
+              delBtn.onclick = () => deleteRosterItem('student', student.id);
+              wrap.appendChild(delBtn);
+            }
+
+            studentsGrid.appendChild(wrap);
+          });
+        }
+      }
+
+      const teamsGrid = document.getElementById('roster-teams-grid');
+      if (teamsGrid) {
+        teamsGrid.innerHTML = '';
+        if (teams.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.cssText = 'font-size:0.82rem; color:#64748b; padding:0.25rem 0;';
+          empty.textContent = 'Aún no hay equipos guardados.';
+          teamsGrid.appendChild(empty);
+        } else {
+          teams.forEach(team => {
+            const wrap = document.createElement('div');
+            wrap.className = 'roster-chip-wrap';
+            const isSelected = rosterModalState.selectedTeamIds.includes(team.id);
+
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = `roster-chip${isSelected ? ' selected' : ''}`;
+
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = `${team.emoji || '🛡️'} ${team.name}`;
+            chip.appendChild(titleSpan);
+
+            if (team.membersText) {
+              const subSpan = document.createElement('span');
+              subSpan.className = 'roster-chip-sub';
+              subSpan.textContent = `(${team.membersText})`;
+              chip.appendChild(subSpan);
+            }
+
+            chip.onclick = () => toggleRosterSelection('team', team.id);
+            wrap.appendChild(chip);
+
+            if (rosterModalState.manageMode) {
+              const delBtn = document.createElement('button');
+              delBtn.type = 'button';
+              delBtn.className = 'roster-chip-del';
+              delBtn.title = `Quitar equipo ${team.name}`;
+              delBtn.textContent = '✕';
+              delBtn.onclick = () => deleteRosterItem('team', team.id);
+              wrap.appendChild(delBtn);
+            }
+
+            teamsGrid.appendChild(wrap);
+          });
+        }
+      }
+
+      renderRosterCreateControls();
+    }
+
     function openRecordScoreModal() {
       if (!lastCompletedRunData) return;
       const modal = document.getElementById('modal-record-score');
@@ -6133,13 +6925,28 @@
         summaryText.textContent = `Nivel #${lastCompletedRunData.levelId} · ${lastCompletedRunData.totalBones} huesos conseguidos (${lastCompletedRunData.baseBones} base + ${lastCompletedRunData.extraBones} de vidas) en ${lastCompletedRunData.timeFormatted}`;
       }
 
-      const inputName = document.getElementById('record-input-name');
-      if (inputName) {
-        inputName.value = '';
-        setTimeout(() => inputName.focus(), 300);
-      }
+      const hasSavedRoster = loadStudentsRoster().length > 0 || loadTeamsRoster().length > 0;
+      rosterModalState = {
+        activeTab: hasSavedRoster ? 'list' : 'create',
+        createMode: 'student',
+        selectedEmoji: '🦁',
+        selectedStudentIds: [],
+        selectedTeamIds: [],
+        guestEntries: [],
+        manageMode: false,
+      };
+
+      const nameInput = document.getElementById('roster-new-name');
+      const membersInput = document.getElementById('roster-team-members');
+      if (nameInput) nameInput.value = '';
+      if (membersInput) membersInput.value = '';
+      setRosterFeedback('');
+      renderRosterModal();
 
       modal.classList.add('active');
+      if (!hasSavedRoster && nameInput) {
+        setTimeout(() => nameInput.focus(), 250);
+      }
     }
 
     function closeRecordScoreModal() {
@@ -6148,11 +6955,19 @@
     }
 
     function submitRecordScore() {
-      const inputName = document.getElementById('record-input-name');
-      const name = (inputName ? inputName.value : '').trim();
+      const pendingNameInput = document.getElementById('roster-new-name');
+      if (pendingNameInput && normalizeParticipantLabel(pendingNameInput.value)) {
+        addRosterEntryFromForm({ quietIfEmpty: true });
+      }
+
+      const name = formatSelectedParticipantName();
       if (!name) {
-        alert('Por favor escribe el nombre del estudiante o del equipo antes de registrar.');
-        if (inputName) inputName.focus();
+        setRosterFeedback('Selecciona al menos un estudiante/equipo o escribe un nombre nuevo.', true);
+        if (rosterModalState.activeTab !== 'create') {
+          switchRosterModalTab('create');
+        } else if (pendingNameInput) {
+          pendingNameInput.focus();
+        }
         return;
       }
 
@@ -6598,7 +7413,7 @@
             <div style="display:flex; align-items:center; gap:0.6rem; min-width:0;">
               <div style="font-size:1.4rem; min-width:1.8rem; text-align:center;">${medal}</div>
               <div style="min-width:0;">
-                <div style="font-weight:700; color:#1e293b; font-size:0.95rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                <div style="font-weight:700; color:#1e293b; font-size:0.95rem; white-space:normal; word-break:break-word; line-height:1.25;">
                   ${escapeHtmlSafe(item.nombre)} ${cloudTag}
                 </div>
                 <div style="font-size:0.75rem; color:#64748b; display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
