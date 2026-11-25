@@ -225,16 +225,26 @@
     .station-badge {
       background: var(--st-accent, #4f46e5);
       color: #ffffff;
-      font-size: clamp(0.78rem, 1.15vw, 0.98rem);
+      font-size: clamp(0.82rem, 1.2vw, 1.04rem);
       font-weight: 900;
-      padding: 0.22rem 0.68rem;
+      padding: 0.24rem 0.65rem;
       border-radius: 999px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       white-space: nowrap;
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+
+    .station-icon-emoji {
+      font-size: clamp(1.05rem, 1.55vw, 1.35rem);
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
     }
 
     .station-status-tag {
@@ -330,7 +340,7 @@
       color: #be123c;
     }
 
-    /* BOTONES TÁCTILES GRANDES EN LA BASE DE CADA CRONÓMETRO */
+    /* BOTONES TÁCTILES GRANDES CON TONALIDADES PROPIAS Y DISTINCIÓN CLARA INICIAR / PAUSAR / SEGUIR */
     .station-actions {
       width: 100%;
       display: flex;
@@ -339,22 +349,23 @@
       flex-shrink: 0;
     }
 
+    /* Estado 1: INICIAR (Tono armónico propio de la bina, más intenso que la barra) */
     .btn-st-main {
       width: 100%;
-      padding: 0.62rem 0.35rem;
+      padding: 0.64rem 0.35rem;
       border-radius: 14px;
-      border: 2.5px solid #059669;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border: 2.5px solid var(--st-btn-start-border, #1d4ed8);
+      background: linear-gradient(135deg, var(--st-btn-start, #3b82f6) 0%, var(--st-btn-start-border, #1d4ed8) 100%);
       color: #ffffff;
-      font-size: clamp(0.84rem, 1.1vw, 1rem);
+      font-size: clamp(0.84rem, 1.12vw, 1rem);
       font-weight: 900;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.3rem;
-      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-      transition: transform 0.1s ease;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
+      transition: transform 0.1s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
       touch-action: manipulation;
     }
 
@@ -362,16 +373,28 @@
       transform: scale(0.95);
     }
 
+    /* Estado 2: PAUSAR (Tono pastel claro de la misma gama con borde firme: contraste inmediato al correr) */
     .btn-st-main.running {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      border-color: #b45309;
-      color: #ffffff;
-      box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+      background: var(--st-pause-bg, #eff6ff);
+      border: 3px solid var(--st-accent, #2563eb);
+      color: var(--st-pause-text, #1e3a8a);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 3px 8px rgba(15, 23, 42, 0.12);
     }
 
+    /* Estado 3: SEGUIR (Tono oscuro/profundo de la misma familia con borde punteado claro: distinto de Iniciar y Pausar) */
+    .btn-st-main.resumable {
+      background: linear-gradient(135deg, var(--st-resume-bg, #1e3a8a) 0%, var(--st-accent, #2563eb) 100%);
+      border: 2.5px dashed #ffffff;
+      outline: 2.5px solid var(--st-resume-bg, #1e3a8a);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+    }
+
+    /* Estado 4: TERMINADO */
     .btn-st-main.finished {
       background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
-      border-color: #9f1239;
+      border: 2.5px solid #9f1239;
+      color: #ffffff;
     }
 
     .btn-st-sub-row {
@@ -907,20 +930,20 @@
       else emit();
     }
 
-    /* 3. PALETA ÚNICA E INCONFUNDIBLE POR CADA BINA (CERO COLORES REPETIDOS) */
+    /* 3. PALETA ÚNICA CON ICONO ASOCIADO AL COLOR + TONALIDADES DISTINTIVAS POR ESTADO */
     const STATION_PALETTE = [
-      { accent: '#2563eb', barLight: '#60a5fa', border: '#93c5fd', name: 'Bina 1' },  // Azul Rey
-      { accent: '#059669', barLight: '#34d399', border: '#6ee7b7', name: 'Bina 2' },  // Verde Esmeralda
-      { accent: '#ca8a04', barLight: '#facc15', border: '#fde047', name: 'Bina 3' },  // Amarillo Oro
-      { accent: '#7c3aed', barLight: '#a78bfa', border: '#c4b5fd', name: 'Bina 4' },  // Morado Uva
-      { accent: '#dc2626', barLight: '#f87171', border: '#fca5a5', name: 'Bina 5' },  // Rojo Carmesí
-      { accent: '#0891b2', barLight: '#22d3ee', border: '#67e8f9', name: 'Bina 6' },  // Turquesa Cian
-      { accent: '#ea580c', barLight: '#fb923c', border: '#fdba74', name: 'Bina 7' },  // Naranja Mandarina
-      { accent: '#db2777', barLight: '#f472b6', border: '#f9a8d4', name: 'Bina 8' },  // Rosa Fucsia
-      { accent: '#4d7c0f', barLight: '#a3e635', border: '#bef264', name: 'Bina 9' },  // Verde Lima
-      { accent: '#92400e', barLight: '#d97706', border: '#fcd34d', name: 'Bina 10' }, // Café Ámbar
-      { accent: '#1e3a8a', barLight: '#3b82f6', border: '#93c5fd', name: 'Bina 11' }, // Azul Marino
-      { accent: '#334155', barLight: '#94a3b8', border: '#cbd5e1', name: 'Bina 12' }  // Gris Pizarra
+      { icon: '🐳', name: 'Bina 1',  accent: '#2563eb', barLight: '#60a5fa', border: '#93c5fd', btnStart: '#3b82f6', btnStartBorder: '#1d4ed8', pauseBg: '#dbeafe', pauseText: '#1e3a8a', resumeBg: '#1e3a8a' }, // Azul Ballena
+      { icon: '🐸', name: 'Bina 2',  accent: '#059669', barLight: '#34d399', border: '#6ee7b7', btnStart: '#10b981', btnStartBorder: '#047857', pauseBg: '#d1fae5', pauseText: '#064e3b', resumeBg: '#065f46' }, // Verde Rana
+      { icon: '🍌', name: 'Bina 3',  accent: '#ca8a04', barLight: '#facc15', border: '#fde047', btnStart: '#eab308', btnStartBorder: '#a16207', pauseBg: '#fef9c3', pauseText: '#713f12', resumeBg: '#854d0e' }, // Amarillo Plátano
+      { icon: '🍇', name: 'Bina 4',  accent: '#7c3aed', barLight: '#a78bfa', border: '#c4b5fd', btnStart: '#8b5cf6', btnStartBorder: '#6d28d9', pauseBg: '#ede9fe', pauseText: '#4c1d95', resumeBg: '#4c1d95' }, // Morado Uva
+      { icon: '🍓', name: 'Bina 5',  accent: '#dc2626', barLight: '#f87171', border: '#fca5a5', btnStart: '#ef4444', btnStartBorder: '#b91c1c', pauseBg: '#fee2e2', pauseText: '#7f1d1d', resumeBg: '#991b1b' }, // Rojo Fresa
+      { icon: '💎', name: 'Bina 6',  accent: '#0891b2', barLight: '#22d3ee', border: '#67e8f9', btnStart: '#06b6d4', btnStartBorder: '#0e7490', pauseBg: '#cffafe', pauseText: '#164e63', resumeBg: '#155e75' }, // Turquesa Diamante
+      { icon: '🍊', name: 'Bina 7',  accent: '#ea580c', barLight: '#fb923c', border: '#fdba74', btnStart: '#f97316', btnStartBorder: '#c2410c', pauseBg: '#ffedd5', pauseText: '#7c2d12', resumeBg: '#9a3412' }, // Naranja
+      { icon: '🌸', name: 'Bina 8',  accent: '#db2777', barLight: '#f472b6', border: '#f9a8d4', btnStart: '#ec4899', btnStartBorder: '#be185d', pauseBg: '#fce7f3', pauseText: '#831843', resumeBg: '#831843' }, // Rosa Flor
+      { icon: '🦖', name: 'Bina 9',  accent: '#4d7c0f', barLight: '#a3e635', border: '#bef264', btnStart: '#65a30d', btnStartBorder: '#3f6212', pauseBg: '#ecfccb', pauseText: '#365314', resumeBg: '#365314' }, // Lima Dino
+      { icon: '🐻', name: 'Bina 10', accent: '#92400e', barLight: '#d97706', border: '#fcd34d', btnStart: '#b45309', btnStartBorder: '#78350f', pauseBg: '#fef3c7', pauseText: '#78350f', resumeBg: '#78350f' }, // Café Oso
+      { icon: '🚀', name: 'Bina 11', accent: '#1e40af', barLight: '#60a5fa', border: '#93c5fd', btnStart: '#2563eb', btnStartBorder: '#1e3a8a', pauseBg: '#dbeafe', pauseText: '#172554', resumeBg: '#172554' }, // Marino Cohete
+      { icon: '🐨', name: 'Bina 12', accent: '#475569', barLight: '#94a3b8', border: '#cbd5e1', btnStart: '#64748b', btnStartBorder: '#334155', pauseBg: '#f1f5f9', pauseText: '#1e293b', resumeBg: '#1e293b' }  // Gris Koala
     ];
 
     /* 4. ESTADO DE LOS CRONÓMETROS INDEPENDIENTES */
@@ -969,9 +992,9 @@
       grid.innerHTML = timers.map((t, idx) => {
         const pal = STATION_PALETTE[idx % STATION_PALETTE.length];
         return `
-          <div class="timer-station" id="station-${idx}" style="--st-accent: ${pal.accent}; --st-bar-light: ${pal.barLight}; --st-border: ${pal.border};">
+          <div class="timer-station" id="station-${idx}" style="--st-accent: ${pal.accent}; --st-bar-light: ${pal.barLight}; --st-border: ${pal.border}; --st-btn-start: ${pal.btnStart}; --st-btn-start-border: ${pal.btnStartBorder}; --st-pause-bg: ${pal.pauseBg}; --st-pause-text: ${pal.pauseText}; --st-resume-bg: ${pal.resumeBg};">
             <div class="station-header">
-              <span class="station-badge">${pal.name}</span>
+              <span class="station-badge"><span class="station-icon-emoji">${pal.icon}</span><span>${pal.name}</span></span>
               <span class="station-status-tag" id="status-${idx}">Listo</span>
             </div>
 
@@ -1040,7 +1063,7 @@
       } else if (t.remainingMs < t.totalSec * 1000) {
         statusEl.textContent = 'En pausa';
         btnMain.textContent = '▶ Seguir';
-        btnMain.className = 'btn-st-main';
+        btnMain.className = 'btn-st-main resumable';
       } else {
         statusEl.textContent = 'Listo';
         btnMain.textContent = '▶ Iniciar';
