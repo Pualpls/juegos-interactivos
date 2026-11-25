@@ -50,508 +50,13 @@
       flex-direction: column;
       width: 100%;
       height: 100vh;
-      max-width: 1720px;
+      max-width: 1760px;
       margin: 0 auto;
       overflow: hidden;
       position: relative;
     }
 
-    /* BARRA SUPERIOR LIMPIA Y COMPACTA */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.6rem;
-      padding: 0.45rem 1rem;
-      background: rgba(15, 23, 42, 0.94);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
-      flex-shrink: 0;
-      z-index: 40;
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .btn-back-portal {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: rgba(255, 255, 255, 0.08);
-      color: #e2e8f0;
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      padding: 0.38rem 0.75rem;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 0.82rem;
-      transition: all 0.15s ease;
-    }
-
-    .btn-back-portal:hover {
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-    }
-
-    .brand-title {
-      font-size: 1.15rem;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-
-    .status-summary-pill {
-      background: rgba(30, 41, 59, 0.9);
-      border: 1.5px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn-top-ctrl {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 800;
-      border: 1.5px solid rgba(255, 255, 255, 0.22);
-      background: rgba(30, 41, 59, 0.95);
-      color: #f8fafc;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-    }
-
-    .btn-top-ctrl:hover {
-      background: #334155;
-      border-color: #94a3b8;
-    }
-
-    .btn-top-ctrl.btn-pause-quick {
-      background: #f59e0b;
-      color: #1e1b4b;
-      border-color: #fef08a;
-      font-weight: 900;
-    }
-
-    .btn-top-ctrl.btn-pause-quick.is-paused {
-      background: #10b981;
-      color: #064e3b;
-      border-color: #6ee7b7;
-      animation: pulseBtn 1.4s infinite;
-    }
-
-    .btn-top-ctrl.btn-settings-toggle.open {
-      background: #4f46e5;
-      border-color: #a5b4fc;
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(79, 70, 229, 0.5);
-    }
-
-    .btn-verify-hero {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: #1e1b4b;
-      border: 2px solid #fef08a;
-      padding: 0.46rem 1.1rem;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
-      transition: all 0.15s ease;
-    }
-
-    .btn-verify-hero:hover {
-      transform: translateY(-1px) scale(1.02);
-    }
-
-    @keyframes pulseBtn {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    /* MENÚ DESPLEGABLE DE AJUSTES Y CONFIGURACIÓN (OCULTO HASTA TOCAR EL BOTÓN) */
-    .settings-drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-      z-index: 75;
-      display: none;
-    }
-
-    .settings-drawer-backdrop.open {
-      display: block;
-    }
-
-    .settings-dropdown-drawer {
-      position: fixed;
-      top: 56px;
-      right: 1rem;
-      width: min(94vw, 430px);
-      max-height: calc(100vh - 72px);
-      overflow-y: auto;
-      background: #1e293b;
-      border: 2px solid #6366f1;
-      border-radius: 22px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
-      padding: 0.9rem 1rem;
-      z-index: 80;
-      display: none;
-      flex-direction: column;
-      gap: 0.7rem;
-      animation: dropIn 0.18s ease-out;
-    }
-
-    .settings-dropdown-drawer.open {
-      display: flex;
-    }
-
-    @keyframes dropIn {
-      from { opacity: 0; transform: translateY(-10px) scale(0.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .drawer-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 0.5rem;
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .drawer-title {
-      font-size: 0.95rem;
-      font-weight: 900;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .drawer-close {
-      background: rgba(255, 255, 255, 0.12);
-      color: #f8fafc;
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .side-card {
-      background: rgba(15, 23, 42, 0.65);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 0.65rem 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-
-    .side-card-title {
-      font-size: 0.75rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #93c5fd;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .mode-switch-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-    }
-
-    .mode-opt-btn {
-      padding: 0.48rem 0.6rem;
-      border-radius: 10px;
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      background: rgba(30, 41, 59, 0.8);
-      color: #cbd5e1;
-      font-size: 0.8rem;
-      font-weight: 800;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .mode-opt-btn.active {
-      background: #4f46e5;
-      border-color: #a5b4fc;
-      color: #ffffff;
-    }
-
-    .rhythm-adjuster-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.4rem;
-      background: rgba(30, 41, 59, 0.85);
-      padding: 0.35rem 0.5rem;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .rhythm-step-btn {
-      width: 38px;
-      height: 34px;
-      border-radius: 9px;
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
-      background: #334155;
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .rhythm-readout {
-      text-align: center;
-    }
-
-    .rhythm-val {
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: #fbbf24;
-    }
-
-    .rhythm-lbl {
-      font-size: 0.65rem;
-      color: #94a3b8;
-      font-weight: 700;
-      display: block;
-    }
-
-    .preset-pills-row {
-      display: flex;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-    }
-
-    .preset-pill {
-      flex: 1;
-      padding: 0.26rem 0.35rem;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(30, 41, 59, 0.7);
-      color: #cbd5e1;
-      font-size: 0.72rem;
-      font-weight: 800;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .preset-pill.active {
-      background: #3b82f6;
-      color: #ffffff;
-      border-color: #93c5fd;
-    }
-
-    .whisper-toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      padding: 0.3rem 0.45rem;
-      background: rgba(30, 41, 59, 0.7);
-      border-radius: 10px;
-    }
-
-    .switch-btn {
-      padding: 0.28rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.73rem;
-      font-weight: 900;
-      border: none;
-      cursor: pointer;
-    }
-
-    .switch-btn.on {
-      background: #10b981;
-      color: #064e3b;
-    }
-
-    .switch-btn.off {
-      background: #475569;
-      color: #cbd5e1;
-    }
-
-    .tables-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.3rem;
-    }
-
-    .table-chip {
-      padding: 0.3rem 0.2rem;
-      border-radius: 8px;
-      border: 1.5px solid rgba(255, 255, 255, 0.15);
-      background: rgba(30, 41, 59, 0.7);
-      color: #94a3b8;
-      font-size: 0.76rem;
-      font-weight: 900;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .table-chip.selected {
-      background: rgba(16, 185, 129, 0.28);
-      border-color: #34d399;
-      color: #ffffff;
-    }
-
-    .drawer-tools-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-    }
-
-    /* BARRA EN LÍNEA DE LAS ÚLTIMAS 5 CARTAS + BOTÓN DESPLEGABLE DE TODAS */
-    .recent-strip-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.65rem;
-      padding: 0.35rem 1rem;
-      background: rgba(30, 41, 59, 0.82);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.09);
-      flex-shrink: 0;
-      min-height: 58px;
-    }
-
-    .recent-label-box {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      flex-shrink: 0;
-    }
-
-    .recent-title {
-      font-size: 0.74rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #93c5fd;
-    }
-
-    .recent-five-track {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 0.1rem 0.2rem;
-    }
-
-    .recent-five-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    .recent-empty {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    .mini-past-card {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: #ffffff;
-      color: #0f172a;
-      padding: 0.26rem 0.68rem;
-      border-radius: 11px;
-      border: 2.5px solid #cbd5e1;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      flex-shrink: 0;
-    }
-
-    .mini-past-card.is-latest {
-      background: #eef2ff;
-      border-color: #6366f1;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.45);
-    }
-
-    .mini-turn-badge {
-      background: #312e81;
-      color: #ffffff;
-      font-size: 0.68rem;
-      font-weight: 900;
-      padding: 0.1rem 0.4rem;
-      border-radius: 6px;
-    }
-
-    .mini-past-card.is-latest .mini-turn-badge {
-      background: #4f46e5;
-    }
-
-    .mini-op {
-      font-size: 0.95rem;
-      font-weight: 900;
-      color: #1e293b;
-    }
-
-    .mini-res {
-      font-size: 1.02rem;
-      font-weight: 900;
-      color: #4f46e5;
-      background: #e0e7ff;
-      padding: 0.08rem 0.42rem;
-      border-radius: 6px;
-    }
-
-    .mini-res.hidden-res {
-      color: #64748b;
-      background: #f1f5f9;
-    }
-
-    .btn-all-history {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      background: #334155;
-      color: #ffffff;
-      border: 1.5px solid #64748b;
-      padding: 0.42rem 0.85rem;
-      border-radius: 11px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .btn-all-history:hover {
-      background: #475569;
-    }
-
-    /* ESCENARIO CENTRAL A PANTALLA COMPLETA (MÁXIMA VISIBILIDAD EN EL AULA) */
+    /* ESCENARIO CENTRAL GIGANTE ARRIBA (MÁXIMA VISIBILIDAD EN EL AULA) */
     .fullscreen-arena {
       flex: 1;
       min-height: 0;
@@ -559,26 +64,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 0.65rem 1.2rem 0.8rem 1.2rem;
-      gap: 0.6rem;
+      justify-content: center;
+      padding: 0.65rem 1.1rem 0.45rem 1.1rem;
     }
 
     .loteria-card {
       flex: 1;
       min-height: 0;
-      width: min(96vw, 1340px);
+      width: min(97vw, 1480px);
       background: #ffffff;
       color: #0f172a;
-      border-radius: 36px;
+      border-radius: 34px;
       border: 6px solid #e2e8f0;
-      border-bottom: 14px solid #cbd5e1;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      border-bottom: 12px solid #cbd5e1;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 1.1rem 2rem;
+      padding: 0.9rem 1.8rem;
       position: relative;
       cursor: pointer;
       transition: transform 0.12s ease, border-color 0.2s ease;
@@ -586,7 +90,7 @@
     }
 
     .loteria-card:active {
-      transform: scale(0.988);
+      transform: scale(0.99);
     }
 
     .loteria-card.whispered {
@@ -598,21 +102,41 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 1rem;
+      gap: 0.75rem;
+      font-size: 1.05rem;
       font-weight: 900;
-      color: #64748b;
+      color: #475569;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       flex-shrink: 0;
     }
 
+    .card-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .status-summary-pill {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      color: #334155;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
     .card-result-corner {
-      font-size: clamp(1.8rem, 3.8vh, 2.8rem);
+      font-size: clamp(2rem, 4.4vh, 3.2rem);
       font-weight: 900;
       color: #cbd5e1;
       background: #f8fafc;
       border: 3px solid #e2e8f0;
-      padding: 0.18rem 0.9rem;
+      padding: 0.15rem 0.95rem;
       border-radius: 16px;
       transition: all 0.25s ease;
     }
@@ -639,19 +163,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: clamp(1.2rem, 3.5vw, 3.5rem);
-      line-height: 0.92;
+      gap: clamp(1.4rem, 4vw, 4rem);
+      line-height: 0.9;
     }
 
     .factor-num {
-      font-size: clamp(8.5rem, 31vh, 21rem);
+      font-size: clamp(9rem, 33vh, 22rem);
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.04em;
     }
 
     .times-symbol {
-      font-size: clamp(6rem, 21vh, 14rem);
+      font-size: clamp(6.5rem, 22vh, 14.5rem);
       font-weight: 900;
       color: #4f46e5;
     }
@@ -661,13 +185,13 @@
       background: #f8fafc;
       border: 2px dashed #93c5fd;
       border-radius: 14px;
-      padding: 0.45rem 0.9rem;
+      padding: 0.4rem 0.85rem;
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.22rem;
       flex-shrink: 0;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
 
     .dua-array-box.visible {
@@ -699,7 +223,7 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.25rem;
       flex-shrink: 0;
     }
 
@@ -730,7 +254,7 @@
     }
 
     .card-tap-hint {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 800;
       color: #94a3b8;
       text-align: center;
@@ -738,35 +262,196 @@
       letter-spacing: 0.06em;
     }
 
-    /* FILA DE CONTROLES INFERIORES */
-    .arena-controls-row {
+    /* =========================================================================
+       PANEL INFERIOR ERGONÓMICO (AL ALCANCE DE LOS ALUMNOS EN LA PANTALLA)
+       1. TIRA GRANDE DE LAS ÚLTIMAS 5 CARTAS QUE YA PASARON + VER TODAS
+       2. BARRA INFERIOR DE CONTROLES GRANDES + VERIFICAR + MENÚ Y AJUSTES
+       ========================================================================= */
+    .bottom-dock {
+      flex-shrink: 0;
       width: 100%;
+      background: rgba(15, 23, 42, 0.96);
+      border-top: 2px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+    }
+
+    /* FILA 1 DEL DOCK INFERIOR: ÚLTIMAS 5 CARTAS MÁS GRANDES */
+    .recent-strip-bar {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.65rem;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding: 0.55rem 1.1rem;
+      background: rgba(30, 41, 59, 0.9);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+      min-height: 84px;
+    }
+
+    .recent-label-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
       flex-shrink: 0;
+    }
+
+    .recent-title {
+      font-size: 0.88rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #93c5fd;
+    }
+
+    .recent-sub {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    .recent-five-track {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      overflow-x: auto;
+      padding: 0.15rem 0.25rem;
+    }
+
+    .recent-five-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .recent-empty {
+      font-size: 0.98rem;
+      color: #94a3b8;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    /* TARJETAS DE LAS ÚLTIMAS 5 CARTAS SIGNIFICATIVAMENTE MÁS GRANDES */
+    .mini-past-card {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 0.48rem 1rem;
+      border-radius: 16px;
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+      flex-shrink: 0;
+    }
+
+    .mini-past-card.is-latest {
+      background: #eef2ff;
+      border-color: #6366f1;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.55);
+    }
+
+    .mini-turn-badge {
+      background: #312e81;
+      color: #ffffff;
+      font-size: 0.86rem;
+      font-weight: 900;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9px;
+    }
+
+    .mini-past-card.is-latest .mini-turn-badge {
+      background: #4f46e5;
+    }
+
+    .mini-op {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-res {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #4f46e5;
+      background: #e0e7ff;
+      padding: 0.14rem 0.65rem;
+      border-radius: 10px;
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .mini-res.hidden-res {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .btn-all-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #3b82f6;
+      color: #ffffff;
+      border: 2px solid #93c5fd;
+      padding: 0.68rem 1.15rem;
+      border-radius: 15px;
+      font-size: 0.96rem;
+      font-weight: 900;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-all-history:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    /* FILA 2 DEL DOCK INFERIOR: TODOS LOS BOTONES Y MENÚS GRANDES ABAJO */
+    .bottom-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding: 0.6rem 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .bottom-left-group,
+    .bottom-center-group,
+    .bottom-right-group {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
     }
 
     .ctrl-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      padding: 0.55rem 1.15rem;
-      border-radius: 14px;
-      font-size: 0.9rem;
+      gap: 0.45rem;
+      padding: 0.68rem 1.15rem;
+      border-radius: 16px;
+      font-size: 0.98rem;
       font-weight: 900;
-      border: 2px solid rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       background: #334155;
       color: #ffffff;
       cursor: pointer;
       transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
     .ctrl-btn:hover:not(:disabled) {
       background: #475569;
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn:active:not(:disabled) {
+      transform: scale(0.96);
     }
 
     .ctrl-btn:disabled {
@@ -776,10 +461,308 @@
 
     .ctrl-btn.primary-next {
       background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      border-color: #a5b4fc;
+      padding: 0.72rem 1.55rem;
+      font-size: 1.06rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.45);
+    }
+
+    .ctrl-btn.btn-pause-quick {
+      background: #f59e0b;
+      color: #1e1b4b;
+      border-color: #fef08a;
+      padding: 0.72rem 1.3rem;
+      font-size: 1.02rem;
+    }
+
+    .ctrl-btn.btn-pause-quick.is-paused {
+      background: #10b981;
+      color: #064e3b;
+      border-color: #6ee7b7;
+      animation: pulseBtn 1.4s infinite;
+    }
+
+    .ctrl-btn.btn-settings-toggle {
+      background: #1e293b;
       border-color: #818cf8;
-      padding: 0.58rem 1.5rem;
-      font-size: 0.98rem;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+      color: #e0e7ff;
+      padding: 0.72rem 1.25rem;
+      font-size: 1rem;
+    }
+
+    .ctrl-btn.btn-settings-toggle.open {
+      background: #4f46e5;
+      border-color: #c7d2fe;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-verify-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e1b4b;
+      border: 2.5px solid #fef08a;
+      padding: 0.72rem 1.45rem;
+      border-radius: 16px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(245, 158, 11, 0.45);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-verify-hero:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* MENÚ DESPLEGABLE DE AJUSTES (SE ABRE HACIA ARRIBA DESDE LA BARRA INFERIOR) */
+    .settings-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 75;
+      display: none;
+    }
+
+    .settings-drawer-backdrop.open {
+      display: block;
+    }
+
+    .settings-dropdown-drawer {
+      position: fixed;
+      bottom: 82px;
+      right: 1.1rem;
+      width: min(94vw, 450px);
+      max-height: calc(100vh - 105px);
+      overflow-y: auto;
+      background: #1e293b;
+      border: 2.5px solid #6366f1;
+      border-radius: 24px;
+      box-shadow: 0 -15px 55px rgba(0, 0, 0, 0.7);
+      padding: 1rem 1.1rem;
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: popUpFromBottom 0.18s ease-out;
+    }
+
+    .settings-dropdown-drawer.open {
+      display: flex;
+    }
+
+    @keyframes popUpFromBottom {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .drawer-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .drawer-close {
+      background: rgba(255, 255, 255, 0.14);
+      color: #f8fafc;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .side-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 0.65rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .side-card-title {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mode-switch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+    }
+
+    .mode-opt-btn {
+      padding: 0.55rem 0.65rem;
+      border-radius: 11px;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mode-opt-btn.active {
+      background: #4f46e5;
+      border-color: #a5b4fc;
+      color: #ffffff;
+    }
+
+    .rhythm-adjuster-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 0.4rem 0.55rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .rhythm-step-btn {
+      width: 42px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rhythm-readout {
+      text-align: center;
+    }
+
+    .rhythm-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .rhythm-lbl {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 700;
+      display: block;
+    }
+
+    .preset-pills-row {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-pill {
+      flex: 1;
+      padding: 0.32rem 0.4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.7);
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .preset-pill.active {
+      background: #3b82f6;
+      color: #ffffff;
+      border-color: #93c5fd;
+    }
+
+    .whisper-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 10px;
+    }
+
+    .switch-btn {
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .switch-btn.on {
+      background: #10b981;
+      color: #064e3b;
+    }
+
+    .switch-btn.off {
+      background: #475569;
+      color: #cbd5e1;
+    }
+
+    .tables-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.35rem;
+    }
+
+    .table-chip {
+      padding: 0.36rem 0.2rem;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.7);
+      color: #94a3b8;
+      font-size: 0.82rem;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .table-chip.selected {
+      background: rgba(16, 185, 129, 0.28);
+      border-color: #34d399;
+      color: #ffffff;
+    }
+
+    .drawer-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
     }
 
     /* MODALES (HISTORIAL, VERIFICADOR + CÁMARA, IMPRESIÓN) */
@@ -803,7 +786,7 @@
       background: #ffffff;
       color: #0f172a;
       width: 100%;
-      max-width: 920px;
+      max-width: 940px;
       max-height: 92vh;
       border-radius: 24px;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
@@ -834,10 +817,10 @@
       background: #e2e8f0;
       color: #334155;
       border: none;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 900;
       cursor: pointer;
     }
@@ -859,12 +842,12 @@
     }
 
     .v-tab-btn {
-      padding: 0.48rem 0.95rem;
+      padding: 0.52rem 1rem;
       border-radius: 12px;
       border: 2px solid #cbd5e1;
       background: #f8fafc;
       color: #334155;
-      font-size: 0.84rem;
+      font-size: 0.88rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -901,11 +884,11 @@
 
     .folio-select {
       flex: 1;
-      padding: 0.45rem 0.65rem;
+      padding: 0.48rem 0.65rem;
       border-radius: 10px;
       border: 2px solid #cbd5e1;
       font-weight: 800;
-      font-size: 0.84rem;
+      font-size: 0.86rem;
       color: #0f172a;
       background: #ffffff;
     }
@@ -947,13 +930,13 @@
     }
 
     .cell-num-val {
-      font-size: 1.65rem;
+      font-size: 1.75rem;
       font-weight: 900;
       line-height: 1;
     }
 
     .cell-match-meta {
-      font-size: 0.66rem;
+      font-size: 0.68rem;
       font-weight: 800;
       margin-top: 0.2rem;
       text-align: center;
@@ -976,12 +959,12 @@
     }
 
     .numpad-btn {
-      padding: 0.65rem;
+      padding: 0.7rem;
       border-radius: 12px;
       border: 2px solid #cbd5e1;
       background: #ffffff;
       color: #0f172a;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 900;
       cursor: pointer;
     }
@@ -1043,15 +1026,15 @@
 
     .history-full-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: 0.55rem;
     }
 
     .hist-card-item {
       background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      border-radius: 12px;
-      padding: 0.5rem;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 0.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1144,38 +1127,107 @@
       }
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 860px) {
       .verifier-workspace { grid-template-columns: 1fr; }
-      .status-summary-pill { display: none; }
+      .bottom-controls-bar { justify-content: center; }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <!-- BARRA SUPERIOR MINIMALISTA: TODO EL MENÚ ESTÁ EN EL BOTÓN DESPLEGABLE -->
-    <header class="top-bar">
-      <div class="brand-group">
-        <a class="btn-back-portal" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
-        <div class="brand-title">
-          <span>🎲 LOTERÍA DE MULTIPLICACIONES</span>
+    <!-- 1. ESCENARIO CENTRAL GIGANTE ARRIBA (MÁXIMA VISIBILIDAD DESDE EL FONDO DEL AULA) -->
+    <main class="fullscreen-arena">
+      <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar a la siguiente">
+        <div class="card-top-meta">
+          <div class="card-meta-left">
+            <span id="cardTurnLabel">🎲 LOTERÍA · MAZO LISTO (0 / 100)</span>
+            <span class="status-summary-pill" id="topStatusSummaryPill">👆 Manual · 🤫 Resp. 4.5s (25%)</span>
+          </div>
+          <span class="card-result-corner" id="cardResultCorner">?</span>
         </div>
-        <span class="status-summary-pill" id="topStatusSummaryPill">👆 Manual · 🤫 Resp. 4.5s (25%)</span>
-      </div>
 
-      <div class="top-actions">
-        <button type="button" class="btn-top-ctrl btn-pause-quick" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
-          ⏸️ PAUSAR
-        </button>
-        <button type="button" class="btn-top-ctrl btn-settings-toggle" id="btnSettingsToggle" onclick="toggleSettingsDrawer()">
-          ⚙️ Menú y Ajustes ▾
-        </button>
-        <button type="button" class="btn-verify-hero" onclick="openVerifierModal()">
-          🏆 VERIFICAR
-        </button>
-      </div>
-    </header>
+        <div class="card-math-body" id="cardMathBody">
+          <div style="text-align:center; padding: 1rem;">
+            <div style="font-size: clamp(4.5rem, 13vh, 7.5rem); margin-bottom: 0.4rem;">🎲</div>
+            <div style="font-size: clamp(2rem, 5vh, 3.6rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+            <p style="font-size: clamp(1rem, 2.2vh, 1.35rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              Todos los botones, historial y ajustes están en la parte inferior de la pantalla
+            </p>
+          </div>
+        </div>
 
-    <!-- MENÚ DESPLEGABLE DE CONFIGURACIÓN (OCULTO POR DEFECTO, SE DESPLIEGA AL TOCAR "⚙️ Menú y Ajustes") -->
+        <div class="dua-array-box" id="duaArrayBox">
+          <div class="dua-dots-grid" id="duaDotsGrid"></div>
+          <div class="dua-sum-text" id="duaSumText"></div>
+        </div>
+
+        <div class="card-timer-wrap">
+          <div class="card-timer-track">
+            <div class="whisper-marker" id="whisperMarker" style="left: 64%;" title="Momento en que se dice la respuesta (25% vol)"></div>
+            <div class="card-timer-fill" id="cardTimerFill"></div>
+          </div>
+          <div class="card-tap-hint" id="cardBottomHint">Toca cualquier parte de la carta para sacar la siguiente</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 2. DOCK INFERIOR ERGONÓMICO (AL ALCANCE DE LOS ALUMNOS: ÚLTIMAS 5 CARTAS GRANDES + MENÚS ABAJO) -->
+    <footer class="bottom-dock">
+      <!-- FILA SUPERIOR DEL DOCK: ÚLTIMAS 5 CARTAS QUE YA PASARON (MÁS GRANDES) + VER TODAS -->
+      <section class="recent-strip-bar" aria-label="Últimas cartas cantadas">
+        <div class="recent-label-box">
+          <span class="recent-title">⏮️ Últimas 5 Cartas</span>
+          <span class="recent-sub" id="recentTotalSub">0 cantadas</span>
+        </div>
+
+        <div class="recent-five-track" id="recentFiveTrack">
+          <span class="recent-empty">Aún no han salido cartas. Toca la carta gigante de arriba para comenzar.</span>
+        </div>
+
+        <button type="button" class="btn-all-history" onclick="openHistoryModal()">
+          📜 Ver todas (<span id="btnHistoryCount">0</span>) ▴
+        </button>
+      </section>
+
+      <!-- FILA INFERIOR DEL DOCK: NAVEGACIÓN, PAUSA, VERIFICAR Y MENÚ DE AJUSTES -->
+      <div class="bottom-controls-bar">
+        <div class="bottom-left-group">
+          <a class="ctrl-btn" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
+          <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
+            ⬅ Anterior
+          </button>
+          <button type="button" class="ctrl-btn" onclick="repeatCurrentCardVoice()" title="Repetir voz de la carta actual">
+            🗣️ Repetir Voz
+          </button>
+        </div>
+
+        <div class="bottom-center-group">
+          <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(-0.5)" title="Más rápido (-0.5s)">
+            ⚡ -0.5s
+          </button>
+          <button type="button" class="ctrl-btn btn-pause-quick" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
+            ⏸️ PAUSAR
+          </button>
+          <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
+            Siguiente Carta ➔
+          </button>
+          <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(0.5)" title="Más lento (+0.5s)">
+            🐢 +0.5s
+          </button>
+        </div>
+
+        <div class="bottom-right-group">
+          <button type="button" class="btn-verify-hero" onclick="openVerifierModal()">
+            🏆 VERIFICAR ¡LOTERÍA!
+          </button>
+          <button type="button" class="ctrl-btn btn-settings-toggle" id="btnSettingsToggle" onclick="toggleSettingsDrawer()">
+            ⚙️ Menú y Ajustes ▴
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MENÚ DESPLEGABLE DE CONFIGURACIÓN (SE DESPLIEGA HACIA ARRIBA DESDE EL BOTÓN INFERIOR) -->
     <div class="settings-drawer-backdrop" id="settingsBackdrop" onclick="closeSettingsDrawer()"></div>
     <aside class="settings-dropdown-drawer" id="settingsDropdownDrawer" aria-label="Menú de configuración">
       <div class="drawer-header">
@@ -1229,12 +1281,12 @@
         </div>
 
         <div class="whisper-toggle-row">
-          <span style="font-size:0.78rem; font-weight:800; color:#e2e8f0;">🔊 Voz de la IA (Cantar cartas)</span>
+          <span style="font-size:0.8rem; font-weight:800; color:#e2e8f0;">🔊 Voz de la IA (Cantar cartas)</span>
           <button type="button" class="switch-btn on" id="btnVoiceToggle" onclick="toggleVoiceEnabled()">ENCENDIDA</button>
         </div>
 
         <div class="whisper-toggle-row">
-          <span style="font-size:0.78rem; font-weight:800; color:#e2e8f0;">🤫 Decir respuesta en voz baja</span>
+          <span style="font-size:0.8rem; font-weight:800; color:#e2e8f0;">🤫 Decir respuesta en voz baja</span>
           <button type="button" class="switch-btn on" id="btnSideWhisperSwitch" onclick="toggleWhisperEnabled()">ACTIVO</button>
         </div>
 
@@ -1288,72 +1340,6 @@
         </div>
       </div>
     </aside>
-
-    <!-- TIRA EN LÍNEA DE LAS ÚLTIMAS 5 CARTAS PASADAS + MENÚ DESPLEGABLE PARA VER TODAS -->
-    <section class="recent-strip-bar" aria-label="Últimas cartas cantadas">
-      <div class="recent-label-box">
-        <span class="recent-title">⏮️ Últimas 5:</span>
-      </div>
-
-      <div class="recent-five-track" id="recentFiveTrack">
-        <span class="recent-empty">Aún no han salido cartas. Toca la pantalla central para comenzar.</span>
-      </div>
-
-      <button type="button" class="btn-all-history" onclick="openHistoryModal()">
-        📜 Ver todas (<span id="btnHistoryCount">0</span>) ▾
-      </button>
-    </section>
-
-    <!-- ESCENARIO CENTRAL GIGANTE (OCUPA TODA LA PANTALLA PARA VISIBILIDAD EN EL AULA) -->
-    <main class="fullscreen-arena">
-      <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar a la siguiente">
-        <div class="card-top-meta">
-          <span id="cardTurnLabel">MAZO LISTO · 0 / 100</span>
-          <span class="card-result-corner" id="cardResultCorner">?</span>
-        </div>
-
-        <div class="card-math-body" id="cardMathBody">
-          <div style="text-align:center; padding: 1rem;">
-            <div style="font-size: clamp(4rem, 12vh, 7rem); margin-bottom: 0.4rem;">🎲</div>
-            <div style="font-size: clamp(1.8rem, 4.5vh, 3.2rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
-            <p style="font-size: clamp(0.95rem, 2vh, 1.25rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
-              Usa «⚙️ Menú y Ajustes» arriba a la derecha para cambiar ritmo o modo automático
-            </p>
-          </div>
-        </div>
-
-        <div class="dua-array-box" id="duaArrayBox">
-          <div class="dua-dots-grid" id="duaDotsGrid"></div>
-          <div class="dua-sum-text" id="duaSumText"></div>
-        </div>
-
-        <div class="card-timer-wrap">
-          <div class="card-timer-track">
-            <div class="whisper-marker" id="whisperMarker" style="left: 64%;" title="Momento en que se dice la respuesta (25% vol)"></div>
-            <div class="card-timer-fill" id="cardTimerFill"></div>
-          </div>
-          <div class="card-tap-hint" id="cardBottomHint">Toca la carta para avanzar · Ajusta ritmo o tiempo en «⚙️ Menú y Ajustes»</div>
-        </div>
-      </div>
-
-      <div class="arena-controls-row">
-        <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
-          ⬅ Anterior
-        </button>
-        <button type="button" class="ctrl-btn" onclick="repeatCurrentCardVoice()" title="Repetir voz de la carta actual">
-          🗣️ Repetir Voz
-        </button>
-        <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(-0.5)" title="Más rápido (-0.5s)">
-          ⚡ -0.5s
-        </button>
-        <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(0.5)" title="Más lento (+0.5s)">
-          🐢 +0.5s
-        </button>
-        <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
-          Siguiente Carta ➔
-        </button>
-      </div>
-    </main>
   </div>
 
   <!-- MODAL 1: MENÚ DESPLEGABLE DE TODAS LAS CARTAS CANTADAS -->
@@ -1364,15 +1350,15 @@
         <button type="button" class="modal-close-btn" onclick="closeHistoryModal()">✕</button>
       </div>
       <div class="modal-body">
-        <div style="background:#eef2ff; border:2px solid #c7d2fe; padding:0.65rem 0.9rem; border-radius:14px;">
-          <div style="font-size:0.82rem; font-weight:900; color:#312e81; margin-bottom:0.35rem;">
+        <div style="background:#eef2ff; border:2px solid #c7d2fe; padding:0.75rem 1rem; border-radius:14px;">
+          <div style="font-size:0.88rem; font-weight:900; color:#312e81; margin-bottom:0.4rem;">
             🟢 Resultados numéricos que YA salieron (consulta rápida):
           </div>
-          <div id="uniqueResultsChips" style="display:flex; flex-wrap:wrap; gap:0.35rem;"></div>
+          <div id="uniqueResultsChips" style="display:flex; flex-wrap:wrap; gap:0.4rem;"></div>
         </div>
 
         <div>
-          <div style="font-size:0.85rem; font-weight:900; color:#334155; margin-bottom:0.5rem;">
+          <div style="font-size:0.9rem; font-weight:900; color:#334155; margin-bottom:0.5rem;">
             Orden cronológico (de la más reciente a la primera):
           </div>
           <div class="history-full-grid" id="historyFullGrid"></div>
@@ -1387,7 +1373,7 @@
       <div class="modal-header">
         <div class="modal-title">
           <span>🏆 Verificador de Carta de Lotería</span>
-          <span style="font-size:0.75rem; background:#fef3c7; color:#92400e; padding:0.2rem 0.6rem; border-radius:999px;">⏸️ Juego en Pausa</span>
+          <span style="font-size:0.78rem; background:#fef3c7; color:#92400e; padding:0.22rem 0.65rem; border-radius:999px;">⏸️ Juego en Pausa</span>
         </div>
         <button type="button" class="modal-close-btn" onclick="closeVerifierModal()">✕</button>
       </div>
@@ -1411,27 +1397,27 @@
         <div class="verifier-workspace">
           <div class="board-3x3-panel">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:0.86rem; font-weight:900; color:#1e293b;">Carta del Alumno (3×3)</span>
-              <span id="verifierScorePill" style="font-size:0.9rem; font-weight:900; background:#e2e8f0; color:#0f172a; padding:0.2rem 0.7rem; border-radius:999px;">0 / 9 aciertos</span>
+              <span style="font-size:0.9rem; font-weight:900; color:#1e293b;">Carta del Alumno (3×3)</span>
+              <span id="verifierScorePill" style="font-size:0.95rem; font-weight:900; background:#e2e8f0; color:#0f172a; padding:0.22rem 0.75rem; border-radius:999px;">0 / 9 aciertos</span>
             </div>
 
             <div class="folio-quick-bar">
               <select class="folio-select" id="folioQuickSelect" onchange="loadPresetCardFolio(this.value)">
                 <option value="">⚡ Cargar por Folio de Carta (#01 a #40)...</option>
               </select>
-              <button type="button" class="v-tab-btn" onclick="clearVerifierGrid()" style="padding:0.42rem 0.7rem;">🧹 Limpiar</button>
+              <button type="button" class="v-tab-btn" onclick="clearVerifierGrid()" style="padding:0.45rem 0.75rem;">🧹 Limpiar</button>
             </div>
 
             <div class="grid-3x3" id="verifierGrid3x3"></div>
 
-            <div style="font-size:0.75rem; color:#64748b; font-weight:700; text-align:center;">
+            <div style="font-size:0.78rem; color:#64748b; font-weight:700; text-align:center;">
               Verde = Ya salió (muestra turno y operación) · Rojo = Todavía no sale
             </div>
           </div>
 
           <div>
             <div class="keypad-panel" id="verifierManualPanel">
-              <div style="font-size:0.82rem; font-weight:900; color:#334155;">
+              <div style="font-size:0.85rem; font-weight:900; color:#334155;">
                 Toca una casilla de la izquierda y escribe el número (o elige un folio):
               </div>
               <div class="numpad-grid">
@@ -1444,33 +1430,33 @@
                 <button type="button" class="numpad-btn" onclick="numpadPress('7')">7</button>
                 <button type="button" class="numpad-btn" onclick="numpadPress('8')">8</button>
                 <button type="button" class="numpad-btn" onclick="numpadPress('9')">9</button>
-                <button type="button" class="numpad-btn" onclick="numpadPress('DEL')" style="background:#fee2e2; color:#991b1b; font-size:0.95rem;">⌫ Borrar</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('DEL')" style="background:#fee2e2; color:#991b1b; font-size:0.98rem;">⌫ Borrar</button>
                 <button type="button" class="numpad-btn" onclick="numpadPress('0')">0</button>
-                <button type="button" class="numpad-btn" onclick="numpadNextCell()" style="background:#e0e7ff; color:#312e81; font-size:0.95rem;">Sig. Casilla ➔</button>
+                <button type="button" class="numpad-btn" onclick="numpadNextCell()" style="background:#e0e7ff; color:#312e81; font-size:0.98rem;">Sig. Casilla ➔</button>
               </div>
 
               <div style="margin-top:0.35rem;">
-                <div style="font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:0.3rem;">
+                <div style="font-size:0.78rem; font-weight:800; color:#475569; margin-bottom:0.35rem;">
                   O toca directamente un resultado ya cantado para insertarlo:
                 </div>
-                <div id="verifierDrawnQuickChips" style="display:flex; flex-wrap:wrap; gap:0.3rem; max-height:110px; overflow-y:auto;"></div>
+                <div id="verifierDrawnQuickChips" style="display:flex; flex-wrap:wrap; gap:0.35rem; max-height:115px; overflow-y:auto;"></div>
               </div>
             </div>
 
             <div class="camera-safe-box" id="verifierCameraPanel">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <span style="font-size:0.84rem; font-weight:900; color:#93c5fd;">📷 Visor de Cámara Anti-Crash</span>
+                <span style="font-size:0.86rem; font-weight:900; color:#93c5fd;">📷 Visor de Cámara Anti-Crash</span>
                 <div style="display:flex; gap:0.35rem;">
-                  <button type="button" class="btn-top-ctrl" id="btnStartCam" onclick="startSafeCamera()" style="background:#059669;">▶ Iniciar Cámara</button>
-                  <button type="button" class="btn-top-ctrl" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none; background:#d97706;">📸 Congelar Foto</button>
-                  <button type="button" class="btn-top-ctrl" id="btnStopCam" onclick="stopSafeCamera()" style="display:none;">⏹ Apagar</button>
+                  <button type="button" class="ctrl-btn" id="btnStartCam" onclick="startSafeCamera()" style="background:#059669; padding:0.45rem 0.85rem; font-size:0.84rem;">▶ Iniciar Cámara</button>
+                  <button type="button" class="ctrl-btn" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none; background:#d97706; padding:0.45rem 0.85rem; font-size:0.84rem;">📸 Congelar Foto</button>
+                  <button type="button" class="ctrl-btn" id="btnStopCam" onclick="stopSafeCamera()" style="display:none; padding:0.45rem 0.85rem; font-size:0.84rem;">⏹ Apagar</button>
                 </div>
               </div>
 
               <div class="camera-viewport-wrap">
                 <video id="cameraVideoEl" class="camera-video" playsinline muted style="display:none;"></video>
                 <canvas id="cameraFreezeCanvas" class="camera-snapshot-canvas" style="display:none;"></canvas>
-                <div id="cameraPlaceholderMsg" style="padding:1.2rem; text-align:center; color:#94a3b8; font-size:0.84rem; font-weight:700;">
+                <div id="cameraPlaceholderMsg" style="padding:1.2rem; text-align:center; color:#94a3b8; font-size:0.85rem; font-weight:700;">
                   La cámara está apagada por seguridad para no consumir memoria en Computerland.<br><br>
                   Toca <b>"▶ Iniciar Cámara"</b> para enfocar la carta del alumno o leer el código QR de folio.
                 </div>
@@ -1505,14 +1491,14 @@
         <button type="button" class="modal-close-btn" onclick="closePrintCardsModal()">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:0.86rem; color:#334155; font-weight:600; line-height:1.45;">
+        <p style="font-size:0.88rem; color:#334155; font-weight:600; line-height:1.45;">
           Cada carta del <b>#01 al #40</b> tiene una combinación fija de 9 resultados de las tablas del 1 al 10. Cuando un alumno grita <i>"¡Lotería!"</i>, solo eliges su número de folio (ej. <b>Carta #14</b>) en el verificador y los 9 números se revisan al instante.
         </p>
         <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
           <button type="button" class="btn-verify-hero" onclick="window.print()">
             🖨️ Imprimir 40 Cartas (4 por hoja B&amp;N)
           </button>
-          <span style="font-size:0.78rem; color:#64748b; font-weight:700;">Vista previa de folios:</span>
+          <span style="font-size:0.8rem; color:#64748b; font-weight:700;">Vista previa de folios:</span>
         </div>
         <div id="previewFoliosContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:0.65rem; max-height:52vh; overflow-y:auto; padding:0.25rem;"></div>
       </div>
@@ -1603,7 +1589,7 @@
     /* 3. MOTOR DE VOZ DE LA IA (GOOGLE AI TTS + FALLBACK LOCAL CON VOLUMEN 25%) */
     let voiceEnabled = true;
     let whisperEnabled = true;
-    let whisperVolume = 0.25; // 25% por defecto
+    let whisperVolume = 0.25;
     let currentTtsAudio = null;
     let spanishVoice = null;
 
@@ -1715,8 +1701,8 @@
 
     let gameMode = 'manual'; // 'manual' | 'auto'
     let isAutoPaused = false;
-    let intervalSec = 7.0;      // 7.0 segundos entre cartas por defecto
-    let whisperDelaySec = 4.5;  // 4.5 segundos por defecto para decir la respuesta al 25%
+    let intervalSec = 7.0;
+    let whisperDelaySec = 4.5;
 
     let cornerResultMode = 'whisper';
     let currentCardWhispered = false;
@@ -1735,6 +1721,7 @@
       const isOpen = drawer.classList.toggle('open');
       backdrop.classList.toggle('open', isOpen);
       btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? '⚙️ Cerrar Menú ▾' : '⚙️ Menú y Ajustes ▴';
     }
 
     function closeSettingsDrawer() {
@@ -1743,7 +1730,10 @@
       const btn = document.getElementById('btnSettingsToggle');
       if (drawer) drawer.classList.remove('open');
       if (backdrop) backdrop.classList.remove('open');
-      if (btn) btn.classList.remove('open');
+      if (btn) {
+        btn.classList.remove('open');
+        btn.textContent = '⚙️ Menú y Ajustes ▴';
+      }
     }
 
     function buildDeck() {
@@ -2114,14 +2104,14 @@
       const cardEl = document.getElementById('mainLoteriaCard');
 
       if (currentIndex < 0 || !deck[currentIndex]) {
-        turnLbl.textContent = `MAZO LISTO · 0 / ${deck.length}`;
+        turnLbl.textContent = `🎲 LOTERÍA · MAZO LISTO (0 / ${deck.length})`;
         cardEl.classList.remove('whispered');
         body.innerHTML = `
           <div style="text-align:center; padding: 1rem;">
-            <div style="font-size: clamp(4rem, 12vh, 7rem); margin-bottom: 0.4rem;">🎲</div>
-            <div style="font-size: clamp(1.8rem, 4.5vh, 3.2rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
-            <p style="font-size: clamp(0.95rem, 2vh, 1.25rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
-              ${deck.length} cartas en el mazo · Toca la pantalla o abre «⚙️ Menú y Ajustes»
+            <div style="font-size: clamp(4.5rem, 13vh, 7.5rem); margin-bottom: 0.4rem;">🎲</div>
+            <div style="font-size: clamp(2rem, 5vh, 3.6rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+            <p style="font-size: clamp(1rem, 2.2vh, 1.35rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              ${deck.length} cartas listas · Todos los menús y las últimas 5 cartas están aquí abajo
             </p>
           </div>
         `;
@@ -2131,7 +2121,7 @@
       }
 
       const card = deck[currentIndex];
-      turnLbl.textContent = `CARTA #${currentIndex + 1} DE ${deck.length}`;
+      turnLbl.textContent = `🎲 CARTA #${currentIndex + 1} DE ${deck.length}`;
       body.innerHTML = `
         <div class="math-row-big">
           <span class="factor-num">${card.a}</span>
@@ -2168,12 +2158,14 @@
 
     function renderRecentFiveStrip() {
       const track = document.getElementById('recentFiveTrack');
+      const sub = document.getElementById('recentTotalSub');
       const btnCount = document.getElementById('btnHistoryCount');
 
+      if (sub) sub.textContent = `${history.length} cantada${history.length === 1 ? '' : 's'}`;
       if (btnCount) btnCount.textContent = history.length;
 
       if (history.length === 0) {
-        track.innerHTML = `<span class="recent-empty">Aún no han salido cartas. Toca la pantalla central para comenzar.</span>`;
+        track.innerHTML = `<span class="recent-empty">Aún no han salido cartas. Toca la carta gigante de arriba para comenzar.</span>`;
         return;
       }
 
@@ -2218,11 +2210,11 @@
       const sortedUnique = Array.from(uniqueMap.entries()).sort((a, b) => a[0] - b[0]);
       const chipsContainer = document.getElementById('uniqueResultsChips');
       if (sortedUnique.length === 0) {
-        chipsContainer.innerHTML = '<span style="font-size:0.8rem; color:#64748b;">Ninguna carta cantada todavía.</span>';
+        chipsContainer.innerHTML = '<span style="font-size:0.85rem; color:#64748b;">Ninguna carta cantada todavía.</span>';
       } else {
         chipsContainer.innerHTML = sortedUnique.map(([res, info]) => `
-          <span style="background:#10b981; color:#ffffff; font-weight:900; font-size:0.82rem; padding:0.22rem 0.6rem; border-radius:8px;">
-            ${res} <small style="font-weight:700; opacity:0.9;">(${info.op} · #${info.turn})</small>
+          <span style="background:#10b981; color:#ffffff; font-weight:900; font-size:0.9rem; padding:0.28rem 0.7rem; border-radius:9px;">
+            ${res} <small style="font-weight:700; opacity:0.92;">(${info.op} · #${info.turn})</small>
           </span>
         `).join('');
       }
@@ -2232,9 +2224,9 @@
         const turn = history.length - idx;
         return `
           <div class="hist-card-item ${idx === 0 ? 'latest' : ''}">
-            <span style="font-size:0.7rem; font-weight:900; color:#4f46e5;">Turno #${turn}</span>
-            <span style="font-size:0.95rem; font-weight:800; color:#334155; margin:0.15rem 0;">${c.a} × ${c.b}</span>
-            <span style="font-size:1.45rem; font-weight:900; color:#0f172a;">= ${c.result}</span>
+            <span style="font-size:0.75rem; font-weight:900; color:#4f46e5;">Turno #${turn}</span>
+            <span style="font-size:1.05rem; font-weight:800; color:#334155; margin:0.18rem 0;">${c.a} × ${c.b}</span>
+            <span style="font-size:1.55rem; font-weight:900; color:#0f172a;">= ${c.result}</span>
           </div>
         `;
       }).join('');
@@ -2392,11 +2384,11 @@
       if (!box) return;
       const uniqueResults = Array.from(new Set(history.map(c => c.result))).sort((a, b) => a - b);
       if (uniqueResults.length === 0) {
-        box.innerHTML = '<span style="font-size:0.75rem; color:#94a3b8;">Aún no hay números cantados.</span>';
+        box.innerHTML = '<span style="font-size:0.78rem; color:#94a3b8;">Aún no hay números cantados.</span>';
         return;
       }
       box.innerHTML = uniqueResults.map(r => `
-        <button type="button" onclick="quickInsertResult('${r}')" style="background:#e0e7ff; color:#312e81; border:1.5px solid #818cf8; border-radius:8px; padding:0.25rem 0.55rem; font-weight:900; font-size:0.82rem; cursor:pointer;">
+        <button type="button" onclick="quickInsertResult('${r}')" style="background:#e0e7ff; color:#312e81; border:1.5px solid #818cf8; border-radius:8px; padding:0.28rem 0.6rem; font-weight:900; font-size:0.86rem; cursor:pointer;">
           ${r}
         </button>
       `).join('');
