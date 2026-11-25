@@ -14,25 +14,12 @@
     :root {
       --bg-app: #0f172a;
       --bg-panel: #1e293b;
-      --bg-card: #ffffff;
       --indigo-600: #4f46e5;
       --indigo-700: #4338ca;
-      --indigo-950: #1e1b4b;
-      --blue-500: #3b82f6;
       --emerald-500: #10b981;
       --emerald-600: #059669;
       --amber-400: #fbbf24;
       --amber-500: #f59e0b;
-      --rose-500: #f43f5e;
-      --slate-50: #f8fafc;
-      --slate-100: #f1f5f9;
-      --slate-200: #e2e8f0;
-      --slate-300: #cbd5e1;
-      --slate-400: #94a3b8;
-      --slate-500: #64748b;
-      --slate-700: #334155;
-      --slate-800: #1e293b;
-      --slate-900: #0f172a;
     }
 
     *, *::before, *::after {
@@ -63,134 +50,120 @@
       flex-direction: column;
       width: 100%;
       height: 100vh;
-      max-width: 1600px;
+      max-width: 1720px;
       margin: 0 auto;
       overflow: hidden;
+      position: relative;
     }
 
-    /* TOP BAR */
+    /* BARRA SUPERIOR LIMPIA Y COMPACTA */
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.5rem;
-      padding: 0.45rem 0.9rem;
-      background: rgba(15, 23, 42, 0.92);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+      gap: 0.6rem;
+      padding: 0.45rem 1rem;
+      background: rgba(15, 23, 42, 0.94);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
       flex-shrink: 0;
-      flex-wrap: wrap;
-      z-index: 30;
+      z-index: 40;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.6rem;
     }
 
     .btn-back-portal {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       color: #e2e8f0;
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
       padding: 0.38rem 0.75rem;
       border-radius: 10px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 0.82rem;
       transition: all 0.15s ease;
     }
 
     .btn-back-portal:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.18);
       color: #ffffff;
     }
 
-    .brand-logo {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      color: #ffffff;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 1.2rem;
-      box-shadow: 0 3px 10px rgba(79, 70, 229, 0.4);
-    }
-
-    .brand-title-wrap h1 {
-      font-size: 1.1rem;
+    .brand-title {
+      font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 0.02em;
       color: #ffffff;
-      line-height: 1.1;
-    }
-
-    .brand-sub {
-      font-size: 0.7rem;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-
-    /* TOP CONTROLS */
-    .top-actions {
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      flex-wrap: wrap;
     }
 
-    .pill-btn {
+    .status-summary-pill {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
       display: inline-flex;
       align-items: center;
-      gap: 0.38rem;
-      padding: 0.42rem 0.78rem;
+      gap: 0.45rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-top-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 800;
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      background: rgba(30, 41, 59, 0.9);
-      color: #e2e8f0;
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      background: rgba(30, 41, 59, 0.95);
+      color: #f8fafc;
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
     }
 
-    .pill-btn:hover {
-      background: rgba(51, 65, 85, 0.95);
-      transform: translateY(-1px);
+    .btn-top-ctrl:hover {
+      background: #334155;
+      border-color: #94a3b8;
     }
 
-    .pill-btn:active {
-      transform: scale(0.96);
+    .btn-top-ctrl.btn-pause-quick {
+      background: #f59e0b;
+      color: #1e1b4b;
+      border-color: #fef08a;
+      font-weight: 900;
     }
 
-    .pill-btn.active-green {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: #34d399;
-      color: #a7f3d0;
+    .btn-top-ctrl.btn-pause-quick.is-paused {
+      background: #10b981;
+      color: #064e3b;
+      border-color: #6ee7b7;
+      animation: pulseBtn 1.4s infinite;
     }
 
-    .pill-btn.active-indigo {
+    .btn-top-ctrl.btn-settings-toggle.open {
       background: #4f46e5;
-      border-color: #818cf8;
+      border-color: #a5b4fc;
       color: #ffffff;
-    }
-
-    .pill-btn.active-amber {
-      background: rgba(245, 158, 11, 0.22);
-      border-color: #fbbf24;
-      color: #fde68a;
-    }
-
-    .pill-btn.muted {
-      background: rgba(30, 41, 59, 0.6);
-      border-color: rgba(148, 163, 184, 0.3);
-      color: #64748b;
+      box-shadow: 0 0 14px rgba(79, 70, 229, 0.5);
     }
 
     .btn-verify-hero {
@@ -200,7 +173,7 @@
       background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       color: #1e1b4b;
       border: 2px solid #fef08a;
-      padding: 0.46rem 1.05rem;
+      padding: 0.46rem 1.1rem;
       border-radius: 999px;
       font-size: 0.88rem;
       font-weight: 900;
@@ -211,486 +184,94 @@
 
     .btn-verify-hero:hover {
       transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.55);
-    }
-
-    /* BARRA DE ÚLTIMAS 5 CARTAS + BOTÓN DESPLEGABLE DE TODAS */
-    .recent-strip-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.65rem;
-      padding: 0.4rem 0.9rem;
-      background: rgba(30, 41, 59, 0.85);
-      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
-      flex-shrink: 0;
-      min-height: 68px;
-    }
-
-    .recent-label-box {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-      flex-shrink: 0;
-    }
-
-    .recent-title {
-      font-size: 0.72rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #93c5fd;
-    }
-
-    .recent-sub {
-      font-size: 0.68rem;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-
-    .recent-five-track {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 0.15rem 0.2rem;
-    }
-
-    .recent-five-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    .recent-empty {
-      font-size: 0.8rem;
-      color: #64748b;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    .mini-past-card {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #ffffff;
-      color: #0f172a;
-      padding: 0.32rem 0.7rem;
-      border-radius: 12px;
-      border: 2.5px solid #cbd5e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-
-    .mini-past-card.is-latest {
-      background: #eef2ff;
-      border-color: #6366f1;
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
-    }
-
-    .mini-turn-badge {
-      background: #312e81;
-      color: #ffffff;
-      font-size: 0.68rem;
-      font-weight: 900;
-      padding: 0.12rem 0.42rem;
-      border-radius: 6px;
-    }
-
-    .mini-past-card.is-latest .mini-turn-badge {
-      background: #4f46e5;
-    }
-
-    .mini-op {
-      font-size: 0.95rem;
-      font-weight: 900;
-      color: #1e293b;
-    }
-
-    .mini-res {
-      font-size: 1.05rem;
-      font-weight: 900;
-      color: #4f46e5;
-      background: #e0e7ff;
-      padding: 0.1rem 0.45rem;
-      border-radius: 7px;
-    }
-
-    .mini-res.hidden-res {
-      color: #64748b;
-      background: #f1f5f9;
-    }
-
-    .btn-all-history {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: #334155;
-      color: #ffffff;
-      border: 1.5px solid #64748b;
-      padding: 0.48rem 0.85rem;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: all 0.15s ease;
-    }
-
-    .btn-all-history:hover {
-      background: #475569;
-      border-color: #94a3b8;
-    }
-
-    /* MAIN WORKSPACE (2 COLUMNS ON DESKTOP/SMARTBOARD) */
-    .stage-workspace {
-      flex: 1;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 1fr 370px;
-      gap: 0.9rem;
-      padding: 0.65rem 0.9rem;
-      align-items: stretch;
-      overflow: hidden;
-    }
-
-    /* LEFT: MAIN CARD STAGE */
-    .card-arena {
-      background: rgba(30, 41, 59, 0.55);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 0.75rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .arena-status-row {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .progress-pill {
-      background: rgba(15, 23, 42, 0.75);
-      border: 1.5px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 0.28rem 0.75rem;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
-    }
-
-    .mode-status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 0.28rem 0.8rem;
-      border-radius: 999px;
-      background: rgba(79, 70, 229, 0.25);
-      border: 1.5px solid #818cf8;
-      color: #e0e7ff;
-    }
-
-    .mode-status-badge.paused {
-      background: rgba(245, 158, 11, 0.25);
-      border-color: #fbbf24;
-      color: #fde68a;
-    }
-
-    /* LOTERIA HERO CARD */
-    .hero-card-container {
-      flex: 1;
-      min-height: 0;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.1rem;
-      my: 0.25rem;
-    }
-
-    .loteria-card {
-      width: min(100%, 400px);
-      height: min(100%, 430px);
-      background: #ffffff;
-      color: #0f172a;
-      border-radius: 32px;
-      border: 5px solid #e2e8f0;
-      border-bottom: 12px solid #cbd5e1;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.25rem;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.14s ease, border-color 0.2s ease;
-      overflow: hidden;
-    }
-
-    .loteria-card:active {
-      transform: scale(0.97);
-    }
-
-    .loteria-card.whispered {
-      border-color: #a5b4fc;
-    }
-
-    .card-top-meta {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      font-weight: 900;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .card-result-corner {
-      font-size: 1.65rem;
-      font-weight: 900;
-      color: #cbd5e1;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      padding: 0.15rem 0.65rem;
-      border-radius: 12px;
-      transition: all 0.25s ease;
-    }
-
-    .card-result-corner.revealed-whisper {
-      color: #4f46e5;
-      background: #eef2ff;
-      border-color: #a5b4fc;
-      transform: scale(1.08);
-    }
-
-    .card-math-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: auto 0;
-    }
-
-    .math-row-big {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.65rem;
-      line-height: 1;
-    }
-
-    .factor-num {
-      font-size: clamp(4.2rem, 8.5vh, 6.2rem);
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: -0.03em;
-    }
-
-    .times-symbol {
-      font-size: clamp(2.8rem, 6vh, 4.2rem);
-      font-weight: 900;
-      color: #4f46e5;
-    }
-
-    .card-chant-text {
-      margin-top: 0.55rem;
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #475569;
-      background: #f1f5f9;
-      padding: 0.25rem 0.85rem;
-      border-radius: 999px;
-    }
-
-    /* DUA VISUAL ARRAY OVERLAY INSIDE CARD */
-    .dua-array-box {
-      margin-top: 0.45rem;
-      background: #f8fafc;
-      border: 2px dashed #93c5fd;
-      border-radius: 14px;
-      padding: 0.4rem 0.65rem;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-      max-width: 100%;
-    }
-
-    .dua-array-box.visible {
-      display: flex;
-    }
-
-    .dua-dots-grid {
-      display: grid;
-      gap: 3px;
-      justify-content: center;
-    }
-
-    .dua-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #3b82f6;
-    }
-
-    .dua-sum-text {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #1e40af;
-      text-align: center;
-    }
-
-    /* TIMER PROGRESS BAR ON CARD BOTTOM */
-    .card-timer-wrap {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .card-timer-track {
-      width: 100%;
-      height: 10px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .card-timer-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #4f46e5 0%, #10b981 100%);
-      border-radius: 999px;
-      transition: width 0.1s linear;
-    }
-
-    .whisper-marker {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: #f59e0b;
-      z-index: 2;
-    }
-
-    .card-tap-hint {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #94a3b8;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* NAV CONTROLS UNDER CARD */
-    .arena-controls-row {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
-    }
-
-    .ctrl-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.58rem 1rem;
-      border-radius: 14px;
-      font-size: 0.88rem;
-      font-weight: 900;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      background: #334155;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .ctrl-btn:hover:not(:disabled) {
-      background: #475569;
-      transform: translateY(-1px);
-    }
-
-    .ctrl-btn:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-
-    .ctrl-btn.primary-next {
-      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-      border-color: #818cf8;
-      padding: 0.62rem 1.35rem;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-    }
-
-    .ctrl-btn.pause-btn {
-      background: #f59e0b;
-      color: #1e1b4b;
-      border-color: #fde68a;
-    }
-
-    .ctrl-btn.pause-btn.is-paused {
-      background: #10b981;
-      color: #064e3b;
-      border-color: #6ee7b7;
-      animation: pulseBtn 1.4s infinite;
     }
 
     @keyframes pulseBtn {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
+      50% { transform: scale(1.05); }
     }
 
-    /* RIGHT PANEL: REAL-TIME RHYTHM, VOICE & TABLE FILTER */
-    .control-sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-      min-height: 0;
+    /* MENÚ DESPLEGABLE DE AJUSTES Y CONFIGURACIÓN (OCULTO HASTA TOCAR EL BOTÓN) */
+    .settings-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 75;
+      display: none;
+    }
+
+    .settings-drawer-backdrop.open {
+      display: block;
+    }
+
+    .settings-dropdown-drawer {
+      position: fixed;
+      top: 56px;
+      right: 1rem;
+      width: min(94vw, 430px);
+      max-height: calc(100vh - 72px);
       overflow-y: auto;
-      padding-right: 2px;
+      background: #1e293b;
+      border: 2px solid #6366f1;
+      border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+      padding: 0.9rem 1rem;
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: dropIn 0.18s ease-out;
     }
 
-    .control-sidebar::-webkit-scrollbar {
-      width: 5px;
+    .settings-dropdown-drawer.open {
+      display: flex;
     }
 
-    .control-sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 99px;
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .drawer-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .drawer-close {
+      background: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-weight: 900;
+      cursor: pointer;
     }
 
     .side-card {
-      background: rgba(30, 41, 59, 0.85);
-      border: 1.5px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      padding: 0.7rem 0.85rem;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 0.65rem 0.8rem;
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
     }
 
     .side-card-title {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -707,45 +288,42 @@
     }
 
     .mode-opt-btn {
-      padding: 0.5rem 0.6rem;
-      border-radius: 12px;
+      padding: 0.48rem 0.6rem;
+      border-radius: 10px;
       border: 2px solid rgba(255, 255, 255, 0.14);
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(30, 41, 59, 0.8);
       color: #cbd5e1;
       font-size: 0.8rem;
       font-weight: 800;
       cursor: pointer;
       text-align: center;
-      transition: all 0.15s ease;
     }
 
     .mode-opt-btn.active {
       background: #4f46e5;
       border-color: #a5b4fc;
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(79, 70, 229, 0.4);
     }
 
-    /* RHYTHM ADJUSTER IN REAL TIME */
     .rhythm-adjuster-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.4rem;
-      background: rgba(15, 23, 42, 0.7);
-      padding: 0.4rem 0.55rem;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 0.35rem 0.5rem;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .rhythm-step-btn {
       width: 38px;
-      height: 36px;
-      border-radius: 10px;
+      height: 34px;
+      border-radius: 9px;
       border: 1.5px solid rgba(255, 255, 255, 0.2);
       background: #334155;
       color: #ffffff;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -753,22 +331,18 @@
       justify-content: center;
     }
 
-    .rhythm-step-btn:active {
-      transform: scale(0.92);
-    }
-
     .rhythm-readout {
       text-align: center;
     }
 
     .rhythm-val {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: #fbbf24;
     }
 
     .rhythm-lbl {
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       color: #94a3b8;
       font-weight: 700;
       display: block;
@@ -785,9 +359,9 @@
       padding: 0.26rem 0.35rem;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(15, 23, 42, 0.5);
+      background: rgba(30, 41, 59, 0.7);
       color: #cbd5e1;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       font-weight: 800;
       cursor: pointer;
       text-align: center;
@@ -799,33 +373,20 @@
       border-color: #93c5fd;
     }
 
-    /* WHISPER ANSWER SETTINGS */
     .whisper-toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      padding: 0.35rem 0.5rem;
-      background: rgba(15, 23, 42, 0.55);
+      padding: 0.3rem 0.45rem;
+      background: rgba(30, 41, 59, 0.7);
       border-radius: 10px;
     }
 
-    .whisper-info {
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: #e2e8f0;
-    }
-
-    .whisper-sub {
-      font-size: 0.66rem;
-      color: #94a3b8;
-      display: block;
-    }
-
     .switch-btn {
-      padding: 0.3rem 0.65rem;
+      padding: 0.28rem 0.65rem;
       border-radius: 999px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 900;
       border: none;
       cursor: pointer;
@@ -841,7 +402,6 @@
       color: #cbd5e1;
     }
 
-    /* MULTIPLICATION TABLES FILTER (1 TO 10) */
     .tables-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -849,25 +409,380 @@
     }
 
     .table-chip {
-      padding: 0.32rem 0.2rem;
+      padding: 0.3rem 0.2rem;
       border-radius: 8px;
       border: 1.5px solid rgba(255, 255, 255, 0.15);
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(30, 41, 59, 0.7);
       color: #94a3b8;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 900;
       cursor: pointer;
       text-align: center;
-      transition: all 0.12s ease;
     }
 
     .table-chip.selected {
-      background: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.28);
       border-color: #34d399;
       color: #ffffff;
     }
 
-    /* MODALS (HISTORY, VERIFIER + CAMERA, PRINTABLE CARDS) */
+    .drawer-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    /* BARRA EN LÍNEA DE LAS ÚLTIMAS 5 CARTAS + BOTÓN DESPLEGABLE DE TODAS */
+    .recent-strip-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding: 0.35rem 1rem;
+      background: rgba(30, 41, 59, 0.82);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.09);
+      flex-shrink: 0;
+      min-height: 58px;
+    }
+
+    .recent-label-box {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    .recent-title {
+      font-size: 0.74rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+    }
+
+    .recent-five-track {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.1rem 0.2rem;
+    }
+
+    .recent-five-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .recent-empty {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    .mini-past-card {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 0.26rem 0.68rem;
+      border-radius: 11px;
+      border: 2.5px solid #cbd5e1;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+
+    .mini-past-card.is-latest {
+      background: #eef2ff;
+      border-color: #6366f1;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.45);
+    }
+
+    .mini-turn-badge {
+      background: #312e81;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 0.1rem 0.4rem;
+      border-radius: 6px;
+    }
+
+    .mini-past-card.is-latest .mini-turn-badge {
+      background: #4f46e5;
+    }
+
+    .mini-op {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #1e293b;
+    }
+
+    .mini-res {
+      font-size: 1.02rem;
+      font-weight: 900;
+      color: #4f46e5;
+      background: #e0e7ff;
+      padding: 0.08rem 0.42rem;
+      border-radius: 6px;
+    }
+
+    .mini-res.hidden-res {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .btn-all-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #334155;
+      color: #ffffff;
+      border: 1.5px solid #64748b;
+      padding: 0.42rem 0.85rem;
+      border-radius: 11px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-all-history:hover {
+      background: #475569;
+    }
+
+    /* ESCENARIO CENTRAL A PANTALLA COMPLETA (MÁXIMA VISIBILIDAD EN EL AULA) */
+    .fullscreen-arena {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1.2rem 0.8rem 1.2rem;
+      gap: 0.6rem;
+    }
+
+    .loteria-card {
+      flex: 1;
+      min-height: 0;
+      width: min(96vw, 1340px);
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 36px;
+      border: 6px solid #e2e8f0;
+      border-bottom: 14px solid #cbd5e1;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 2rem;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.2s ease;
+      overflow: hidden;
+    }
+
+    .loteria-card:active {
+      transform: scale(0.988);
+    }
+
+    .loteria-card.whispered {
+      border-color: #818cf8;
+    }
+
+    .card-top-meta {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+    }
+
+    .card-result-corner {
+      font-size: clamp(1.8rem, 3.8vh, 2.8rem);
+      font-weight: 900;
+      color: #cbd5e1;
+      background: #f8fafc;
+      border: 3px solid #e2e8f0;
+      padding: 0.18rem 0.9rem;
+      border-radius: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .card-result-corner.revealed-whisper {
+      color: #4f46e5;
+      background: #eef2ff;
+      border-color: #818cf8;
+      transform: scale(1.06);
+    }
+
+    /* TEXTO DE LA MULTIPLICACIÓN GIGANTE PARA VERSE DESDE EL FONDO DEL SALÓN */
+    .card-math-body {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .math-row-big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1.2rem, 3.5vw, 3.5rem);
+      line-height: 0.92;
+    }
+
+    .factor-num {
+      font-size: clamp(8.5rem, 31vh, 21rem);
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.04em;
+    }
+
+    .times-symbol {
+      font-size: clamp(6rem, 21vh, 14rem);
+      font-weight: 900;
+      color: #4f46e5;
+    }
+
+    /* DUA VISUAL ARRAY OVERLAY INSIDE CARD */
+    .dua-array-box {
+      background: #f8fafc;
+      border: 2px dashed #93c5fd;
+      border-radius: 14px;
+      padding: 0.45rem 0.9rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+    }
+
+    .dua-array-box.visible {
+      display: flex;
+    }
+
+    .dua-dots-grid {
+      display: grid;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .dua-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3b82f6;
+    }
+
+    .dua-sum-text {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #1e40af;
+      text-align: center;
+    }
+
+    /* BARRA DE PROGRESO DE TIEMPO EN LA BASE DE LA CARTA */
+    .card-timer-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .card-timer-track {
+      width: 100%;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-timer-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5 0%, #10b981 100%);
+      border-radius: 999px;
+      transition: width 0.08s linear;
+    }
+
+    .whisper-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #f59e0b;
+      z-index: 2;
+    }
+
+    .card-tap-hint {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* FILA DE CONTROLES INFERIORES */
+    .arena-controls-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.15rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: #334155;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: #475569;
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .ctrl-btn.primary-next {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      border-color: #818cf8;
+      padding: 0.58rem 1.5rem;
+      font-size: 0.98rem;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    }
+
+    /* MODALES (HISTORIAL, VERIFICADOR + CÁMARA, IMPRESIÓN) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -927,11 +842,6 @@
       cursor: pointer;
     }
 
-    .modal-close-btn:hover {
-      background: #fecaca;
-      color: #b91c1c;
-    }
-
     .modal-body {
       padding: 1rem 1.2rem;
       overflow-y: auto;
@@ -940,7 +850,6 @@
       gap: 0.9rem;
     }
 
-    /* VERIFIER TABS & LAYOUT */
     .verifier-tabs {
       display: flex;
       gap: 0.45rem;
@@ -973,7 +882,6 @@
       align-items: start;
     }
 
-    /* 3x3 STUDENT BOARD */
     .board-3x3-panel {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -1019,7 +927,6 @@
       justify-content: center;
       cursor: pointer;
       position: relative;
-      transition: all 0.14s ease;
     }
 
     .cell-3x3.selected-cell {
@@ -1052,7 +959,6 @@
       text-align: center;
     }
 
-    /* NUMERIC KEYPAD / CAMERA PANEL */
     .keypad-panel {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -1078,15 +984,8 @@
       font-size: 1.2rem;
       font-weight: 900;
       cursor: pointer;
-      transition: background 0.1s;
     }
 
-    .numpad-btn:active {
-      background: #e0e7ff;
-      border-color: #6366f1;
-    }
-
-    /* ANTI-CRASH CAMERA BOX */
     .camera-safe-box {
       display: none;
       flex-direction: column;
@@ -1142,7 +1041,6 @@
       text-align: center;
     }
 
-    /* HISTORY FULL GRID */
     .history-full-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
@@ -1157,7 +1055,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
     }
 
     .hist-card-item.latest {
@@ -1165,7 +1062,6 @@
       border-color: #4f46e5;
     }
 
-    /* WIN BANNER */
     .win-banner {
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       color: #ffffff;
@@ -1176,25 +1072,19 @@
       flex-direction: column;
       align-items: center;
       gap: 0.35rem;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
     }
 
     .win-banner.show {
       display: flex;
     }
 
-    /* PRINT STYLES FOR LOTERIA CARDS */
     #printableArea {
       display: none;
     }
 
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #printableArea, #printableArea * {
-        visibility: visible;
-      }
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
       #printableArea {
         display: block !important;
         position: absolute;
@@ -1254,61 +1144,159 @@
       }
     }
 
-    @media (max-width: 960px) {
-      .stage-workspace {
-        grid-template-columns: 1fr;
-        overflow-y: auto;
-      }
-      .verifier-workspace {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 820px) {
+      .verifier-workspace { grid-template-columns: 1fr; }
+      .status-summary-pill { display: none; }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <!-- BARRA SUPERIOR -->
+    <!-- BARRA SUPERIOR MINIMALISTA: TODO EL MENÚ ESTÁ EN EL BOTÓN DESPLEGABLE -->
     <header class="top-bar">
       <div class="brand-group">
         <a class="btn-back-portal" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
-        <div class="brand-logo">🎲</div>
-        <div class="brand-title-wrap">
-          <h1>LOTERÍA DE TABLAS DE MULTIPLICAR</h1>
-          <div class="brand-sub">Recurso de Apoyo Docente · Motor de Voz IA + Verificador Inteligente</div>
+        <div class="brand-title">
+          <span>🎲 LOTERÍA DE MULTIPLICACIONES</span>
         </div>
+        <span class="status-summary-pill" id="topStatusSummaryPill">👆 Manual · 🤫 Resp. 4.5s (25%)</span>
       </div>
 
       <div class="top-actions">
-        <button type="button" class="pill-btn active-green" id="btnVoiceToggle" onclick="toggleVoiceEnabled()" title="Activar o desactivar voz de la IA">
-          🔊 Voz IA: ON
+        <button type="button" class="btn-top-ctrl btn-pause-quick" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
+          ⏸️ PAUSAR
         </button>
-        <button type="button" class="pill-btn active-amber" id="btnWhisperToggle" onclick="toggleWhisperEnabled()" title="Decir respuesta después de unos segundos al 25% de volumen">
-          🤫 Respuesta (25% vol): ON
-        </button>
-        <button type="button" class="pill-btn" id="btnCornerResultToggle" onclick="toggleShowResultOnCard()" title="Mostrar u ocultar el resultado en la esquina de la carta">
-          👁️ Resultado en esquina: Al susurrar
-        </button>
-        <button type="button" class="pill-btn" onclick="openPrintCardsModal()" title="Ver o imprimir cartas de lotería por folio (#01 al #40)">
-          🖨️ Cartas (#01-#40)
-        </button>
-        <button type="button" class="pill-btn" onclick="confirmResetGame()" title="Barajar mazo y reiniciar partida">
-          🔄 Reiniciar
+        <button type="button" class="btn-top-ctrl btn-settings-toggle" id="btnSettingsToggle" onclick="toggleSettingsDrawer()">
+          ⚙️ Menú y Ajustes ▾
         </button>
         <button type="button" class="btn-verify-hero" onclick="openVerifierModal()">
-          🏆 VERIFICAR ¡LOTERÍA!
+          🏆 VERIFICAR
         </button>
       </div>
     </header>
 
+    <!-- MENÚ DESPLEGABLE DE CONFIGURACIÓN (OCULTO POR DEFECTO, SE DESPLIEGA AL TOCAR "⚙️ Menú y Ajustes") -->
+    <div class="settings-drawer-backdrop" id="settingsBackdrop" onclick="closeSettingsDrawer()"></div>
+    <aside class="settings-dropdown-drawer" id="settingsDropdownDrawer" aria-label="Menú de configuración">
+      <div class="drawer-header">
+        <div class="drawer-title">⚙️ Opciones, Voz IA y Ritmo</div>
+        <button type="button" class="drawer-close" onclick="closeSettingsDrawer()">✕</button>
+      </div>
+
+      <!-- 1. MODO DE AVANCE -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>Modo de Avance</span>
+          <span id="autoStateSmall" style="color:#fbbf24;">Manual</span>
+        </div>
+        <div class="mode-switch-grid">
+          <button type="button" class="mode-opt-btn active" id="btnModeManual" onclick="setGameMode('manual')">
+            👆 Manual (Tap)
+          </button>
+          <button type="button" class="mode-opt-btn" id="btnModeAuto" onclick="setGameMode('auto')">
+            ⏱️ Por Tiempo
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. TIEMPO / RITMO EN TIEMPO REAL -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>⏱️ Tiempo para cambiar carta</span>
+        </div>
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(-0.5)">➖</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="intervalSecDisplay">7.0 s</span>
+            <span class="rhythm-lbl">entre cada carta</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(0.5)">➕</button>
+        </div>
+        <div class="preset-pills-row" id="intervalPresetRow">
+          <button type="button" class="preset-pill" onclick="setIntervalSec(4)">4s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(5.5)">5.5s</button>
+          <button type="button" class="preset-pill active" onclick="setIntervalSec(7)">7s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(9)">9s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(12)">12s</button>
+        </div>
+      </div>
+
+      <!-- 3. VOZ IA Y SUSURRO DE RESPUESTA (4.5s POR DEFECTO AL 25% DE VOLUMEN) -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>🗣️ Voz IA y Respuesta (4.5s · 25%)</span>
+          <span id="whisperVolBadge" style="color:#a7f3d0;">Vol: 25%</span>
+        </div>
+
+        <div class="whisper-toggle-row">
+          <span style="font-size:0.78rem; font-weight:800; color:#e2e8f0;">🔊 Voz de la IA (Cantar cartas)</span>
+          <button type="button" class="switch-btn on" id="btnVoiceToggle" onclick="toggleVoiceEnabled()">ENCENDIDA</button>
+        </div>
+
+        <div class="whisper-toggle-row">
+          <span style="font-size:0.78rem; font-weight:800; color:#e2e8f0;">🤫 Decir respuesta en voz baja</span>
+          <button type="button" class="switch-btn on" id="btnSideWhisperSwitch" onclick="toggleWhisperEnabled()">ACTIVO</button>
+        </div>
+
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(-0.5)">➖</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="whisperDelayDisplay" style="color:#a7f3d0;">4.5 s</span>
+            <span class="rhythm-lbl">tiempo para dar la respuesta</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(0.5)">➕</button>
+        </div>
+
+        <div class="preset-pills-row">
+          <button type="button" class="preset-pill" id="volPill15" onclick="setWhisperVolume(0.15)">Vol 15%</button>
+          <button type="button" class="preset-pill active" id="volPill25" onclick="setWhisperVolume(0.25)">Vol 25%</button>
+          <button type="button" class="preset-pill" id="volPill40" onclick="setWhisperVolume(0.40)">Vol 40%</button>
+          <button type="button" class="preset-pill" id="volPill60" onclick="setWhisperVolume(0.60)">Vol 60%</button>
+        </div>
+      </div>
+
+      <!-- 4. FILTRO DE TABLAS ACTIVAS (1 AL 10) -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>🔢 Tablas en Juego</span>
+          <span id="activeTablesCountLabel" style="color:#cbd5e1;">10 tablas</span>
+        </div>
+        <div class="tables-grid" id="tablesFilterGrid"></div>
+        <div class="preset-pills-row">
+          <button type="button" class="preset-pill" onclick="selectTablePreset([1,2,3,4,5,6,7,8,9,10])">Todas (1-10)</button>
+          <button type="button" class="preset-pill" onclick="selectTablePreset([2,3,4,5])">2 al 5</button>
+          <button type="button" class="preset-pill" onclick="selectTablePreset([6,7,8,9])">6 al 9</button>
+        </div>
+      </div>
+
+      <!-- 5. HERRAMIENTAS ADICIONALES -->
+      <div class="side-card">
+        <div class="side-card-title"><span>🛠️ Herramientas de Aula</span></div>
+        <div class="drawer-tools-grid">
+          <button type="button" class="mode-opt-btn" id="btnCornerResultToggle" onclick="toggleShowResultOnCard()">
+            👁️ Esquina: Al susurrar
+          </button>
+          <button type="button" class="mode-opt-btn" id="btnDuaHint" onclick="toggleDuaHint()">
+            💡 Pista Visual DUA
+          </button>
+          <button type="button" class="mode-opt-btn" onclick="closeSettingsDrawer(); openPrintCardsModal();">
+            🖨️ Cartas (#01-#40)
+          </button>
+          <button type="button" class="mode-opt-btn" onclick="confirmResetGame()" style="border-color:rgba(244,63,94,0.4); color:#fda4af;">
+            🔄 Reiniciar Partida
+          </button>
+        </div>
+      </div>
+    </aside>
+
     <!-- TIRA EN LÍNEA DE LAS ÚLTIMAS 5 CARTAS PASADAS + MENÚ DESPLEGABLE PARA VER TODAS -->
     <section class="recent-strip-bar" aria-label="Últimas cartas cantadas">
       <div class="recent-label-box">
-        <span class="recent-title">⏮️ Últimas 5 Cartas</span>
-        <span class="recent-sub" id="recentTotalSub">0 cantadas</span>
+        <span class="recent-title">⏮️ Últimas 5:</span>
       </div>
 
       <div class="recent-five-track" id="recentFiveTrack">
-        <span class="recent-empty">Aún no han salido cartas. Toca la carta central o inicia el modo automático.</span>
+        <span class="recent-empty">Aún no han salido cartas. Toca la pantalla central para comenzar.</span>
       </div>
 
       <button type="button" class="btn-all-history" onclick="openHistoryModal()">
@@ -1316,155 +1304,55 @@
       </button>
     </section>
 
-    <!-- ESCENARIO PRINCIPAL -->
-    <main class="stage-workspace">
-      <!-- IZQUIERDA: CARTA CENTRAL Y CONTROLES DE FLUJO -->
-      <section class="card-arena">
-        <div class="arena-status-row">
-          <span class="progress-pill" id="deckProgressPill">MAZO LISTO: 0 / 100</span>
-          <div style="display:flex; gap:0.4rem; align-items:center;">
-            <button type="button" class="pill-btn" id="btnDuaHint" onclick="toggleDuaHint()" title="Mostrar arreglo rectangular y suma iterada">
-              💡 Pista Visual DUA
-            </button>
-            <button type="button" class="pill-btn" onclick="repeatCurrentCardVoice()" title="Repetir audio de la carta actual">
-              🗣️ Repetir Voz
-            </button>
-            <span class="mode-status-badge" id="modeStatusBadge">👆 Modo Manual (Tap)</span>
+    <!-- ESCENARIO CENTRAL GIGANTE (OCUPA TODA LA PANTALLA PARA VISIBILIDAD EN EL AULA) -->
+    <main class="fullscreen-arena">
+      <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar a la siguiente">
+        <div class="card-top-meta">
+          <span id="cardTurnLabel">MAZO LISTO · 0 / 100</span>
+          <span class="card-result-corner" id="cardResultCorner">?</span>
+        </div>
+
+        <div class="card-math-body" id="cardMathBody">
+          <div style="text-align:center; padding: 1rem;">
+            <div style="font-size: clamp(4rem, 12vh, 7rem); margin-bottom: 0.4rem;">🎲</div>
+            <div style="font-size: clamp(1.8rem, 4.5vh, 3.2rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+            <p style="font-size: clamp(0.95rem, 2vh, 1.25rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              Usa «⚙️ Menú y Ajustes» arriba a la derecha para cambiar ritmo o modo automático
+            </p>
           </div>
         </div>
 
-        <div class="hero-card-container">
-          <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar a la siguiente">
-            <div class="card-top-meta">
-              <span id="cardTurnLabel">LISTO PARA INICIAR</span>
-              <span class="card-result-corner" id="cardResultCorner">?</span>
-            </div>
-
-            <div class="card-math-body" id="cardMathBody">
-              <div style="text-align:center; padding: 1rem;">
-                <div style="font-size: 3.6rem; margin-bottom: 0.4rem;">🎲</div>
-                <div style="font-size: 1.55rem; font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
-                <p style="font-size: 0.86rem; color: #64748b; font-weight: 700; margin-top: 0.35rem;">
-                  Modo Manual (Tap) o Automático con Voz IA
-                </p>
-              </div>
-            </div>
-
-            <div class="dua-array-box" id="duaArrayBox">
-              <div class="dua-dots-grid" id="duaDotsGrid"></div>
-              <div class="dua-sum-text" id="duaSumText"></div>
-            </div>
-
-            <div class="card-timer-wrap">
-              <div class="card-timer-track">
-                <div class="whisper-marker" id="whisperMarker" style="left: 60%;" title="Momento en que se susurra la respuesta (25% vol)"></div>
-                <div class="card-timer-fill" id="cardTimerFill"></div>
-              </div>
-              <div class="card-tap-hint" id="cardBottomHint">Toca la carta o presiona Espacio para sacar la siguiente</div>
-            </div>
-          </div>
+        <div class="dua-array-box" id="duaArrayBox">
+          <div class="dua-dots-grid" id="duaDotsGrid"></div>
+          <div class="dua-sum-text" id="duaSumText"></div>
         </div>
 
-        <div class="arena-controls-row">
-          <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
-            ⬅ Anterior
-          </button>
-          <button type="button" class="ctrl-btn pause-btn" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
-            ⏸️ PAUSAR TIEMPO
-          </button>
-          <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
-            Siguiente Carta ➔
-          </button>
+        <div class="card-timer-wrap">
+          <div class="card-timer-track">
+            <div class="whisper-marker" id="whisperMarker" style="left: 64%;" title="Momento en que se dice la respuesta (25% vol)"></div>
+            <div class="card-timer-fill" id="cardTimerFill"></div>
+          </div>
+          <div class="card-tap-hint" id="cardBottomHint">Toca la carta para avanzar · Ajusta ritmo o tiempo en «⚙️ Menú y Ajustes»</div>
         </div>
-      </section>
+      </div>
 
-      <!-- DERECHA: PANEL DE CONTROL EN TIEMPO REAL -->
-      <aside class="control-sidebar">
-        <!-- 1. MODO DE AVANCE -->
-        <div class="side-card">
-          <div class="side-card-title">
-            <span>⚙️ Modo de Avance</span>
-            <span id="autoStateSmall" style="color:#fbbf24;">Manual</span>
-          </div>
-          <div class="mode-switch-grid">
-            <button type="button" class="mode-opt-btn active" id="btnModeManual" onclick="setGameMode('manual')">
-              👆 Manual (Tap)
-            </button>
-            <button type="button" class="mode-opt-btn" id="btnModeAuto" onclick="setGameMode('auto')">
-              ⏱️ Por Tiempo
-            </button>
-          </div>
-        </div>
-
-        <!-- 2. TIEMPO / RITMO EN TIEMPO REAL -->
-        <div class="side-card">
-          <div class="side-card-title">
-            <span>⏱️ Ritmo entre Cartas (Tiempo Real)</span>
-          </div>
-          <div class="rhythm-adjuster-row">
-            <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(-0.5)" title="Disminuir 0.5 segundos">➖</button>
-            <div class="rhythm-readout">
-              <span class="rhythm-val" id="intervalSecDisplay">6.0 s</span>
-              <span class="rhythm-lbl">por cada carta</span>
-            </div>
-            <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(0.5)" title="Aumentar 0.5 segundos">➕</button>
-          </div>
-          <div class="preset-pills-row">
-            <button type="button" class="preset-pill" onclick="setIntervalSec(3.5)">3.5s</button>
-            <button type="button" class="preset-pill" onclick="setIntervalSec(5)">5s</button>
-            <button type="button" class="preset-pill active" onclick="setIntervalSec(6)">6s</button>
-            <button type="button" class="preset-pill" onclick="setIntervalSec(8)">8s</button>
-            <button type="button" class="preset-pill" onclick="setIntervalSec(10)">10s</button>
-            <button type="button" class="preset-pill" onclick="setIntervalSec(12)">12s</button>
-          </div>
-        </div>
-
-        <!-- 3. SUSURRO DE RESPUESTA AL 25% DE VOLUMEN -->
-        <div class="side-card">
-          <div class="side-card-title">
-            <span>🤫 Respuesta en Voz Baja</span>
-            <span id="whisperVolBadge" style="color:#a7f3d0;">Vol: 25%</span>
-          </div>
-
-          <div class="whisper-toggle-row">
-            <div>
-              <span class="whisper-info">Decir resultado después</span>
-              <span class="whisper-sub">Se canta en volumen suave (25%)</span>
-            </div>
-            <button type="button" class="switch-btn on" id="btnSideWhisperSwitch" onclick="toggleWhisperEnabled()">ACTIVO</button>
-          </div>
-
-          <div class="rhythm-adjuster-row">
-            <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(-0.5)" title="Decir respuesta antes">➖</button>
-            <div class="rhythm-readout">
-              <span class="rhythm-val" id="whisperDelayDisplay" style="color:#a7f3d0;">3.5 s</span>
-              <span class="rhythm-lbl">espera antes de decir respuesta</span>
-            </div>
-            <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(0.5)" title="Decir respuesta después">➕</button>
-          </div>
-
-          <div class="preset-pills-row">
-            <button type="button" class="preset-pill" id="volPill15" onclick="setWhisperVolume(0.15)">Vol 15%</button>
-            <button type="button" class="preset-pill active" id="volPill25" onclick="setWhisperVolume(0.25)">Vol 25%</button>
-            <button type="button" class="preset-pill" id="volPill40" onclick="setWhisperVolume(0.40)">Vol 40%</button>
-            <button type="button" class="preset-pill" id="volPill60" onclick="setWhisperVolume(0.60)">Vol 60%</button>
-          </div>
-        </div>
-
-        <!-- 4. FILTRO DE TABLAS ACTIVAS (1 AL 10) -->
-        <div class="side-card">
-          <div class="side-card-title">
-            <span>🔢 Tablas en Juego</span>
-            <span id="activeTablesCountLabel" style="color:#cbd5e1;">10 tablas</span>
-          </div>
-          <div class="tables-grid" id="tablesFilterGrid"></div>
-          <div class="preset-pills-row" style="margin-top:0.2rem;">
-            <button type="button" class="preset-pill" onclick="selectTablePreset([1,2,3,4,5,6,7,8,9,10])">Todas (1-10)</button>
-            <button type="button" class="preset-pill" onclick="selectTablePreset([2,3,4,5])">2 al 5</button>
-            <button type="button" class="preset-pill" onclick="selectTablePreset([6,7,8,9])">6 al 9</button>
-          </div>
-        </div>
-      </aside>
+      <div class="arena-controls-row">
+        <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
+          ⬅ Anterior
+        </button>
+        <button type="button" class="ctrl-btn" onclick="repeatCurrentCardVoice()" title="Repetir voz de la carta actual">
+          🗣️ Repetir Voz
+        </button>
+        <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(-0.5)" title="Más rápido (-0.5s)">
+          ⚡ -0.5s
+        </button>
+        <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(0.5)" title="Más lento (+0.5s)">
+          🐢 +0.5s
+        </button>
+        <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
+          Siguiente Carta ➔
+        </button>
+      </div>
     </main>
   </div>
 
@@ -1478,7 +1366,7 @@
       <div class="modal-body">
         <div style="background:#eef2ff; border:2px solid #c7d2fe; padding:0.65rem 0.9rem; border-radius:14px;">
           <div style="font-size:0.82rem; font-weight:900; color:#312e81; margin-bottom:0.35rem;">
-            🟢 Resultados numéricos que YA salieron (para consulta rápida):
+            🟢 Resultados numéricos que YA salieron (consulta rápida):
           </div>
           <div id="uniqueResultsChips" style="display:flex; flex-wrap:wrap; gap:0.35rem;"></div>
         </div>
@@ -1514,7 +1402,6 @@
           </button>
         </div>
 
-        <!-- BANNER DE GANADOR -->
         <div class="win-banner" id="loteriaWinBanner">
           <div style="font-size: 2.4rem;">🎉🏆🎉</div>
           <div style="font-size: 1.6rem; font-weight: 900; letter-spacing: 0.03em;">¡LOTERÍA CONFIRMADA!</div>
@@ -1522,7 +1409,6 @@
         </div>
 
         <div class="verifier-workspace">
-          <!-- IZQUIERDA: CUADRÍCULA 3x3 DEL ALUMNO -->
           <div class="board-3x3-panel">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:0.86rem; font-weight:900; color:#1e293b;">Carta del Alumno (3×3)</span>
@@ -1539,13 +1425,11 @@
             <div class="grid-3x3" id="verifierGrid3x3"></div>
 
             <div style="font-size:0.75rem; color:#64748b; font-weight:700; text-align:center;">
-              Verde = Ya salió (muestra el turno y operación) · Rojo = Todavía no sale
+              Verde = Ya salió (muestra turno y operación) · Rojo = Todavía no sale
             </div>
           </div>
 
-          <!-- DERECHA: TECLADO TÁCTIL O VISOR DE CÁMARA ANTI-CRASH -->
           <div>
-            <!-- PANEL A: TECLADO TÁCTIL + CHIPS CANTADOS -->
             <div class="keypad-panel" id="verifierManualPanel">
               <div style="font-size:0.82rem; font-weight:900; color:#334155;">
                 Toca una casilla de la izquierda y escribe el número (o elige un folio):
@@ -1573,14 +1457,13 @@
               </div>
             </div>
 
-            <!-- PANEL B: CÁMARA BLINDADA ANTI-CRASH (COMPUTERLAND SAFE) -->
             <div class="camera-safe-box" id="verifierCameraPanel">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                 <span style="font-size:0.84rem; font-weight:900; color:#93c5fd;">📷 Visor de Cámara Anti-Crash</span>
                 <div style="display:flex; gap:0.35rem;">
-                  <button type="button" class="pill-btn active-green" id="btnStartCam" onclick="startSafeCamera()">▶ Iniciar Cámara</button>
-                  <button type="button" class="pill-btn active-amber" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none;">📸 Congelar Foto</button>
-                  <button type="button" class="pill-btn" id="btnStopCam" onclick="stopSafeCamera()" style="display:none;">⏹ Apagar</button>
+                  <button type="button" class="btn-top-ctrl" id="btnStartCam" onclick="startSafeCamera()" style="background:#059669;">▶ Iniciar Cámara</button>
+                  <button type="button" class="btn-top-ctrl" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none; background:#d97706;">📸 Congelar Foto</button>
+                  <button type="button" class="btn-top-ctrl" id="btnStopCam" onclick="stopSafeCamera()" style="display:none;">⏹ Apagar</button>
                 </div>
               </div>
 
@@ -1599,14 +1482,14 @@
               </div>
 
               <div class="camera-status-msg" id="cameraStatusText">
-                Modo seguro: Si tu carta impresa tiene QR de Folio (#01-#40), se detecta automáticamente. También puedes congelar la foto para capturar los 9 números sin que el alumno se canse de sostener la hoja.
+                Modo seguro: Si tu carta impresa tiene QR de Folio (#01-#40), se detecta automáticamente. También puedes congelar la foto para revisar los 9 números con calma.
               </div>
             </div>
           </div>
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:0.6rem; border-top:2px solid #e2e8f0; padding-top:0.75rem;">
-          <button type="button" class="ctrl-btn pause-btn is-paused" onclick="closeVerifierAndResume()">
+          <button type="button" class="ctrl-btn primary-next" onclick="closeVerifierAndResume()">
             ▶️ Cerrar y Continuar Partida
           </button>
         </div>
@@ -1623,7 +1506,7 @@
       </div>
       <div class="modal-body">
         <p style="font-size:0.86rem; color:#334155; font-weight:600; line-height:1.45;">
-          Cada carta del <b>#01 al #40</b> tiene una combinación fija de 9 resultados de las tablas del 1 al 10. Cuando un alumno grita <i>"¡Lotería!"</i>, solo necesitas elegir su número de folio (ej. <b>Carta #14</b>) en el verificador o escanear su QR y los 9 números se revisan al instante.
+          Cada carta del <b>#01 al #40</b> tiene una combinación fija de 9 resultados de las tablas del 1 al 10. Cuando un alumno grita <i>"¡Lotería!"</i>, solo eliges su número de folio (ej. <b>Carta #14</b>) en el verificador y los 9 números se revisan al instante.
         </p>
         <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
           <button type="button" class="btn-verify-hero" onclick="window.print()">
@@ -1636,20 +1519,15 @@
     </div>
   </div>
 
-  <!-- ÁREA OCULTA PARA IMPRESIÓN B&N DE LAS 40 CARTAS -->
   <div id="printableArea"></div>
 
   <script>
-    /* =========================================================================
-       1. BLOQUEO DE MENÚS CONTEXTUALES Y GESTOS PARÁSITOS (ESTÁNDAR AULA)
-       ========================================================================= */
+    /* 1. BLOQUEO DE MENÚS CONTEXTUALES Y GESTOS PARÁSITOS */
     window.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
     document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
     document.oncontextmenu = () => false;
 
-    /* =========================================================================
-       2. WEB AUDIO API SINGLETON (SONIDOS DE FERIA Y FEEDBACK TÁCTIL 100% OFFLINE)
-       ========================================================================= */
+    /* 2. WEB AUDIO API SINGLETON */
     let sharedAudioCtx = null;
     function getAudioCtx() {
       const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -1722,12 +1600,10 @@
       else emit();
     }
 
-    /* =========================================================================
-       3. MOTOR DE VOZ DE LA IA (GOOGLE AI TTS + FALLBACK LOCAL CON VOLUMEN 25%)
-       ========================================================================= */
+    /* 3. MOTOR DE VOZ DE LA IA (GOOGLE AI TTS + FALLBACK LOCAL CON VOLUMEN 25%) */
     let voiceEnabled = true;
     let whisperEnabled = true;
-    let whisperVolume = 0.25; // 25% del volumen total por defecto
+    let whisperVolume = 0.25; // 25% por defecto
     let currentTtsAudio = null;
     let spanishVoice = null;
 
@@ -1831,29 +1707,44 @@
       }
     }
 
-    /* =========================================================================
-       4. ESTADO PRINCIPAL DEL JUEGO, TEMPORIZADOR EN TIEMPO REAL Y SUSURRO
-       ========================================================================= */
+    /* 4. ESTADO PRINCIPAL DEL JUEGO (4.5s POR DEFECTO PARA LA RESPUESTA) */
     let activeTables = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let deck = [];
     let currentIndex = -1;
-    let history = []; // [newest, ..., oldest]
+    let history = [];
 
     let gameMode = 'manual'; // 'manual' | 'auto'
     let isAutoPaused = false;
-    let intervalSec = 6.0;
-    let whisperDelaySec = 3.5;
+    let intervalSec = 7.0;      // 7.0 segundos entre cartas por defecto
+    let whisperDelaySec = 4.5;  // 4.5 segundos por defecto para decir la respuesta al 25%
 
-    // Modos de visualización del resultado en la esquina: 'whisper' | 'always' | 'hidden'
     let cornerResultMode = 'whisper';
     let currentCardWhispered = false;
     let duaHintVisible = false;
 
-    // Reloj de alta precisión en tiempo real
     let cardElapsedMs = 0;
     let lastTickTs = 0;
     let tickerIntervalId = null;
     let whisperTriggeredForCard = false;
+
+    function toggleSettingsDrawer() {
+      playSfx('tap');
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      const isOpen = drawer.classList.toggle('open');
+      backdrop.classList.toggle('open', isOpen);
+      btn.classList.toggle('open', isOpen);
+    }
+
+    function closeSettingsDrawer() {
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      if (btn) btn.classList.remove('open');
+    }
 
     function buildDeck() {
       const newDeck = [];
@@ -1888,7 +1779,6 @@
         if (currentIndex < 0 || currentIndex >= deck.length) return;
         if (isAutoPaused) return;
 
-        // En modo manual también corre el reloj sólo hasta disparar el susurro al 25% si está activo
         if (gameMode === 'manual') {
           if (whisperEnabled && !whisperTriggeredForCard) {
             cardElapsedMs += dt;
@@ -1901,10 +1791,9 @@
           return;
         }
 
-        // En modo automático
         cardElapsedMs += dt;
         const totalMs = intervalSec * 1000;
-        const effectiveWhisperMs = Math.min(whisperDelaySec * 1000, totalMs * 0.82);
+        const effectiveWhisperMs = Math.min(whisperDelaySec * 1000, totalMs * 0.85);
 
         if (whisperEnabled && !whisperTriggeredForCard && cardElapsedMs >= effectiveWhisperMs) {
           triggerAnswerWhisper();
@@ -1936,6 +1825,7 @@
       const card = deck[currentIndex];
       if (!card) return;
       renderCardCornerResult();
+      renderRecentFiveStrip();
       const cardEl = document.getElementById('mainLoteriaCard');
       if (cardEl) cardEl.classList.add('whispered');
       if (whisperEnabled && voiceEnabled) {
@@ -1957,10 +1847,6 @@
     }
 
     function handleCardTap() {
-      if (currentIndex < 0) {
-        nextCard(true);
-        return;
-      }
       nextCard(true);
     }
 
@@ -1972,7 +1858,6 @@
       const nextIdx = currentIndex + 1;
       currentIndex = nextIdx;
       const drawn = deck[nextIdx];
-      // Agregar al historial si no estaba ya
       if (!history.some(c => c.id === drawn.id)) {
         history = [drawn, ...history];
       }
@@ -1997,9 +1882,7 @@
       announceCurrentCard();
     }
 
-    /* =========================================================================
-       5. CONTROLES DE MODO, PAUSA, TIEMPO REAL Y VOLUMEN DE SUSURRO
-       ========================================================================= */
+    /* 5. CONTROLES DE MODO, PAUSA, TIEMPO REAL Y VOLUMEN DE SUSURRO */
     function setGameMode(mode) {
       playSfx('tap');
       gameMode = mode;
@@ -2017,9 +1900,7 @@
       playSfx('tap');
       isAutoPaused = !isAutoPaused;
       lastTickTs = performance.now();
-      if (isAutoPaused) {
-        stopAllSpeech();
-      }
+      if (isAutoPaused) stopAllSpeech();
       renderControlsState();
     }
 
@@ -2031,7 +1912,7 @@
     function setIntervalSec(val) {
       intervalSec = Math.max(2.0, Math.min(20.0, val));
       if (whisperDelaySec >= intervalSec - 0.5) {
-        whisperDelaySec = Math.max(1.0, Math.round((intervalSec * 0.6) * 2) / 2);
+        whisperDelaySec = Math.max(1.0, Math.round((intervalSec - 1.0) * 2) / 2);
       }
       lastTickTs = performance.now();
       renderControlsState();
@@ -2073,6 +1954,7 @@
       else cornerResultMode = 'whisper';
       renderControlsState();
       renderCardCornerResult();
+      renderRecentFiveStrip();
     }
 
     function toggleDuaHint() {
@@ -2083,12 +1965,11 @@
 
     function confirmResetGame() {
       playSfx('tap');
+      closeSettingsDrawer();
       buildDeck();
     }
 
-    /* =========================================================================
-       6. FILTRO DE TABLAS DEL 1 AL 10
-       ========================================================================= */
+    /* 6. FILTRO DE TABLAS DEL 1 AL 10 */
     function renderTablesFilter() {
       const grid = document.getElementById('tablesFilterGrid');
       if (!grid) return;
@@ -2103,7 +1984,7 @@
     function toggleTableNum(num) {
       playSfx('tap');
       if (activeTables.includes(num)) {
-        if (activeTables.length <= 1) return; // Al menos 1 tabla activa
+        if (activeTables.length <= 1) return;
         activeTables = activeTables.filter(n => n !== num);
       } else {
         activeTables = [...activeTables, num].sort((a, b) => a - b);
@@ -2117,9 +1998,7 @@
       buildDeck();
     }
 
-    /* =========================================================================
-       7. RENDERIZADO DE LA INTERFAZ Y TIRA DE ÚLTIMAS 5 CARTAS
-       ========================================================================= */
+    /* 7. RENDERIZADO GENERAL */
     function renderAll() {
       renderControlsState();
       renderTablesFilter();
@@ -2131,17 +2010,12 @@
     function renderControlsState() {
       const btnVoice = document.getElementById('btnVoiceToggle');
       if (btnVoice) {
-        btnVoice.textContent = voiceEnabled ? '🔊 Voz IA: ON' : '🔇 Voz IA: OFF';
-        btnVoice.className = `pill-btn ${voiceEnabled ? 'active-green' : 'muted'}`;
+        btnVoice.textContent = voiceEnabled ? 'ENCENDIDA' : 'APAGADA';
+        btnVoice.className = `switch-btn ${voiceEnabled ? 'on' : 'off'}`;
       }
 
-      const btnWhisper = document.getElementById('btnWhisperToggle');
       const btnSideWhisper = document.getElementById('btnSideWhisperSwitch');
       const pctVol = Math.round(whisperVolume * 100);
-      if (btnWhisper) {
-        btnWhisper.textContent = whisperEnabled ? `🤫 Respuesta (${pctVol}% vol): ON` : '🤫 Respuesta: OFF';
-        btnWhisper.className = `pill-btn ${whisperEnabled ? 'active-amber' : 'muted'}`;
-      }
       if (btnSideWhisper) {
         btnSideWhisper.textContent = whisperEnabled ? 'ACTIVO' : 'APAGADO';
         btnSideWhisper.className = `switch-btn ${whisperEnabled ? 'on' : 'off'}`;
@@ -2157,9 +2031,9 @@
       const btnCorner = document.getElementById('btnCornerResultToggle');
       if (btnCorner) {
         const labels = {
-          whisper: '👁️ Resultado: Al susurrar',
-          always: '👁️ Resultado: Siempre visible',
-          hidden: '🙈 Resultado: Oculto'
+          whisper: '👁️ Esquina: Al susurrar',
+          always: '👁️ Esquina: Siempre',
+          hidden: '🙈 Esquina: Oculto'
         };
         btnCorner.textContent = labels[cornerResultMode];
       }
@@ -2171,7 +2045,7 @@
       document.getElementById('intervalSecDisplay').textContent = `${intervalSec.toFixed(1)} s`;
       document.getElementById('whisperDelayDisplay').textContent = `${whisperDelaySec.toFixed(1)} s`;
 
-      document.querySelectorAll('.side-card:nth-child(2) .preset-pill').forEach(btn => {
+      document.querySelectorAll('#intervalPresetRow .preset-pill').forEach(btn => {
         const v = parseFloat(btn.textContent);
         btn.classList.toggle('active', Math.abs(v - intervalSec) < 0.05);
       });
@@ -2183,25 +2057,25 @@
         marker.style.left = `${ratio}%`;
       }
 
-      const badge = document.getElementById('modeStatusBadge');
+      const summaryPill = document.getElementById('topStatusSummaryPill');
+      if (summaryPill) {
+        const modeTxt = gameMode === 'auto' ? (isAutoPaused ? '⏸️ Pausado' : `⏱️ Cada ${intervalSec.toFixed(1)}s`) : '👆 Manual';
+        const whispTxt = whisperEnabled ? `🤫 Resp: ${whisperDelaySec.toFixed(1)}s (${pctVol}%)` : '🤫 Sin resp.';
+        summaryPill.textContent = `${modeTxt} · ${whispTxt}`;
+      }
+
       const btnPause = document.getElementById('btnPauseAuto');
       if (gameMode === 'auto') {
         btnPause.style.display = 'inline-flex';
         if (isAutoPaused) {
-          badge.textContent = '⏸️ PAUSADO (Revisando)';
-          badge.classList.add('paused');
-          btnPause.textContent = '▶️ CONTINUAR TIEMPO';
+          btnPause.textContent = '▶️ CONTINUAR';
           btnPause.classList.add('is-paused');
         } else {
-          badge.textContent = `⏱️ Automático (${intervalSec.toFixed(1)}s)`;
-          badge.classList.remove('paused');
-          btnPause.textContent = '⏸️ PAUSAR TIEMPO';
+          btnPause.textContent = '⏸️ PAUSAR';
           btnPause.classList.remove('is-paused');
         }
       } else {
         btnPause.style.display = 'none';
-        badge.textContent = '👆 Modo Manual (Tap)';
-        badge.classList.remove('paused');
       }
 
       document.getElementById('btnPrevCard').disabled = currentIndex <= 0;
@@ -2235,21 +2109,19 @@
     }
 
     function renderMainCard() {
-      const pill = document.getElementById('deckProgressPill');
       const turnLbl = document.getElementById('cardTurnLabel');
       const body = document.getElementById('cardMathBody');
       const cardEl = document.getElementById('mainLoteriaCard');
 
       if (currentIndex < 0 || !deck[currentIndex]) {
-        pill.textContent = `MAZO LISTO: 0 / ${deck.length}`;
-        turnLbl.textContent = 'LISTO PARA INICIAR';
+        turnLbl.textContent = `MAZO LISTO · 0 / ${deck.length}`;
         cardEl.classList.remove('whispered');
         body.innerHTML = `
           <div style="text-align:center; padding: 1rem;">
-            <div style="font-size: 3.6rem; margin-bottom: 0.4rem;">🎲</div>
-            <div style="font-size: 1.55rem; font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
-            <p style="font-size: 0.86rem; color: #64748b; font-weight: 700; margin-top: 0.35rem;">
-              ${deck.length} cartas en el mazo · Toca aquí o activa Por Tiempo
+            <div style="font-size: clamp(4rem, 12vh, 7rem); margin-bottom: 0.4rem;">🎲</div>
+            <div style="font-size: clamp(1.8rem, 4.5vh, 3.2rem); font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+            <p style="font-size: clamp(0.95rem, 2vh, 1.25rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              ${deck.length} cartas en el mazo · Toca la pantalla o abre «⚙️ Menú y Ajustes»
             </p>
           </div>
         `;
@@ -2259,15 +2131,13 @@
       }
 
       const card = deck[currentIndex];
-      pill.textContent = `CARTA: ${currentIndex + 1} / ${deck.length}`;
-      turnLbl.textContent = `TURNO #${currentIndex + 1}`;
+      turnLbl.textContent = `CARTA #${currentIndex + 1} DE ${deck.length}`;
       body.innerHTML = `
         <div class="math-row-big">
           <span class="factor-num">${card.a}</span>
           <span class="times-symbol">×</span>
           <span class="factor-num">${card.b}</span>
         </div>
-        <div class="card-chant-text">« ${card.a} por ${card.b} »</div>
       `;
       renderCardCornerResult();
       renderDuaHint();
@@ -2277,7 +2147,7 @@
       const box = document.getElementById('duaArrayBox');
       const btn = document.getElementById('btnDuaHint');
       if (!box || !btn) return;
-      btn.classList.toggle('active-indigo', duaHintVisible);
+      btn.classList.toggle('active', duaHintVisible);
 
       if (!duaHintVisible || currentIndex < 0 || !deck[currentIndex]) {
         box.classList.remove('visible');
@@ -2286,7 +2156,7 @@
       const card = deck[currentIndex];
       box.classList.add('visible');
       const dotsGrid = document.getElementById('duaDotsGrid');
-      dotsGrid.style.gridTemplateColumns = `repeat(${card.b}, 9px)`;
+      dotsGrid.style.gridTemplateColumns = `repeat(${card.b}, 10px)`;
       let dotsHtml = '';
       for (let i = 0; i < card.a * card.b; i++) {
         dotsHtml += '<span class="dua-dot"></span>';
@@ -2298,18 +2168,15 @@
 
     function renderRecentFiveStrip() {
       const track = document.getElementById('recentFiveTrack');
-      const sub = document.getElementById('recentTotalSub');
       const btnCount = document.getElementById('btnHistoryCount');
 
-      if (sub) sub.textContent = `${history.length} cantada${history.length === 1 ? '' : 's'}`;
       if (btnCount) btnCount.textContent = history.length;
 
       if (history.length === 0) {
-        track.innerHTML = `<span class="recent-empty">Aún no han salido cartas. Toca la carta central o inicia el modo automático.</span>`;
+        track.innerHTML = `<span class="recent-empty">Aún no han salido cartas. Toca la pantalla central para comenzar.</span>`;
         return;
       }
 
-      // Mostrar las últimas 5 cartas (la actual y las 4 anteriores en línea)
       const lastFive = history.slice(0, 5);
       track.innerHTML = lastFive.map((c, idx) => {
         const turnNum = history.length - idx;
@@ -2325,12 +2192,11 @@
       }).join('');
     }
 
-    /* =========================================================================
-       8. MODAL DE HISTORIAL COMPLETO (TODAS LAS CARTAS QUE YA PASARON)
-       ========================================================================= */
+    /* 8. MODAL DE HISTORIAL COMPLETO */
     let wasPausedBeforeModal = false;
 
     function pauseForModal() {
+      closeSettingsDrawer();
       wasPausedBeforeModal = isAutoPaused;
       isAutoPaused = true;
       stopAllSpeech();
@@ -2342,7 +2208,6 @@
       pauseForModal();
       document.getElementById('modalHistoryTotal').textContent = history.length;
 
-      // Mapa rápido de resultados únicos ordenados de menor a mayor
       const uniqueMap = new Map();
       history.forEach((c, idx) => {
         const turn = history.length - idx;
@@ -2387,10 +2252,7 @@
       }
     }
 
-    /* =========================================================================
-       9. GENERADOR DETERMINISTA DE 40 CARTAS CON FOLIO (#01 AL #40)
-       ========================================================================= */
-    // Todos los productos únicos posibles del 1 al 10
+    /* 9. GENERADOR DETERMINISTA DE 40 CARTAS CON FOLIO (#01 AL #40) */
     const ALL_UNIQUE_PRODUCTS = (() => {
       const s = new Set();
       for (let i = 1; i <= 10; i++) {
@@ -2436,9 +2298,7 @@
       renderVerifierGrid();
     }
 
-    /* =========================================================================
-       10. VERIFICADOR DE CARTA + CÁMARA BLINDADA ANTI-CRASH (COMPUTERLAND SAFE)
-       ========================================================================= */
+    /* 10. VERIFICADOR DE CARTA + CÁMARA BLINDADA ANTI-CRASH */
     let verifierCells = Array(9).fill('');
     let selectedCellIdx = 0;
     let lastWinState = false;
@@ -2472,9 +2332,7 @@
       document.getElementById('vTabCamera').classList.toggle('active', tab === 'camera');
       document.getElementById('verifierManualPanel').style.display = tab === 'manual' ? 'flex' : 'none';
       document.getElementById('verifierCameraPanel').classList.toggle('active', tab === 'camera');
-      if (tab !== 'camera') {
-        stopSafeCamera();
-      }
+      if (tab !== 'camera') stopSafeCamera();
     }
 
     function findDrawnCardByResult(numStr) {
@@ -2587,9 +2445,7 @@
       renderVerifierGrid();
     }
 
-    /* =========================================================================
-       11. LECTOR CON CÁMARA BLINDADO (ZERO-CRASH / LAZY INIT / AUTO CLEANUP)
-       ========================================================================= */
+    /* 11. LECTOR CON CÁMARA BLINDADO (ZERO-CRASH) */
     let activeMediaStream = null;
     let cameraFrozen = false;
     let barcodeScanInterval = null;
@@ -2604,14 +2460,13 @@
       stopSafeCamera();
 
       if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
-        statusEl.textContent = '⚠️ Este navegador o pantalla Computerland no tiene cámara web habilitada. Usa el teclado táctil o el selector de Folio (#01-#40).';
+        statusEl.textContent = '⚠️ Este equipo no tiene cámara web habilitada. Usa el teclado táctil o el selector de Folio (#01-#40).';
         return;
       }
 
       statusEl.textContent = '⏳ Conectando con la cámara en modo seguro (640×480)...';
 
       try {
-        // Timeout de 4.5s para evitar bloqueo del hilo si un driver USB de cámara en Linux no responde
         const streamPromise = navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: { ideal: 'environment' },
@@ -2644,7 +2499,7 @@
         startNativeBarcodeWatcher(videoEl);
       } catch (err) {
         stopSafeCamera();
-        statusEl.textContent = 'ℹ️ No se detectó cámara web conectada o se denegó el permiso. El sistema sigue funcionando sin errores con el verificador táctil y por Folio.';
+        statusEl.textContent = 'ℹ️ No se detectó cámara web conectada o se denegó el permiso. El verificador táctil y por Folio sigue listo.';
       }
     }
 
@@ -2679,7 +2534,6 @@
       const statusEl = document.getElementById('cameraStatusText');
 
       if (!cameraFrozen && activeMediaStream) {
-        // Congelar fotograma actual en canvas y liberar la cámara inmediatamente para ahorrar RAM en Computerland
         canvasEl.width = videoEl.videoWidth || 640;
         canvasEl.height = videoEl.videoHeight || 480;
         const ctx = canvasEl.getContext('2d');
@@ -2696,7 +2550,7 @@
         canvasEl.style.display = 'block';
         cameraFrozen = true;
         btnFreeze.textContent = '🔄 Tomar Otra Foto';
-        statusEl.textContent = '📸 Foto congelada (cámara liberada de memoria). Puedes verificar los 9 números de la foto con total comodidad.';
+        statusEl.textContent = '📸 Foto congelada (cámara liberada de memoria). Puedes revisar los 9 números con total comodidad.';
       } else {
         startSafeCamera();
       }
@@ -2731,9 +2585,7 @@
       cameraFrozen = false;
     }
 
-    /* =========================================================================
-       12. MODAL DE IMPRESIÓN Y VISTA PREVIA DE LAS 40 CARTAS CON FOLIO
-       ========================================================================= */
+    /* 12. MODAL DE IMPRESIÓN DE LAS 40 CARTAS CON FOLIO */
     function openPrintCardsModal() {
       playSfx('tap');
       pauseForModal();
@@ -2765,7 +2617,6 @@
         </div>
       `).join('');
 
-      // Construir páginas imprimibles (4 cartas por hoja)
       let pagesHtml = '';
       for (let i = 0; i < list.length; i += 4) {
         const chunk = list.slice(i, i + 4);
@@ -2789,9 +2640,7 @@
       printBox.innerHTML = pagesHtml;
     }
 
-    /* =========================================================================
-       13. ATAJOS DE TECLADO Y CONTROL REMOTO DE PRESENTACIÓN
-       ========================================================================= */
+    /* 13. ATAJOS DE TECLADO Y PRESENTADOR */
     window.addEventListener('keydown', (e) => {
       const anyModalOpen = document.querySelector('.modal-overlay.open');
       if (anyModalOpen) {
@@ -2800,6 +2649,10 @@
           closeVerifierModal();
           closePrintCardsModal();
         }
+        return;
+      }
+      if (e.key === 'Escape') {
+        closeSettingsDrawer();
         return;
       }
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
@@ -2817,7 +2670,6 @@
       }
     });
 
-    /* INICIALIZACIÓN */
     populateFolioSelect();
     buildDeck();
     startRealtimeTicker();
