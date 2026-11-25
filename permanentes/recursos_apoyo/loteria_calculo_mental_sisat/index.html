@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Lotería de Cálculo Mental SiSAT · Recurso de Apoyo Docente</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg-app: #0f172a;
+      --bg-panel: #1e293b;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --indigo-600: #4f46e5;
+      --amber-400: #fbbf24;
+      --amber-500: #f59e0b;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      font-family: 'Lexend', 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    input, select, button {
+      font-family: inherit;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #064e3b 0%, #0f172a 100%);
+      color: #f8fafc;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      max-width: 1760px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ESCENARIO CENTRAL GIGANTE ARRIBA */
+    .fullscreen-arena {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.1rem 0.45rem 1.1rem;
+    }
+
+    .loteria-card {
+      flex: 1;
+      min-height: 0;
+      width: min(97vw, 1480px);
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 34px;
+      border: 6px solid #d1fae5;
+      border-bottom: 12px solid #a7f3d0;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.8rem;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.2s ease;
+      overflow: hidden;
+    }
+
+    .loteria-card:active {
+      transform: scale(0.99);
+    }
+
+    .loteria-card.whispered {
+      border-color: #34d399;
+    }
+
+    .card-top-meta {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .card-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .sisat-cat-badge {
+      background: #ecfdf5;
+      border: 2px solid #6ee7b7;
+      color: #065f46;
+      font-size: 0.88rem;
+      font-weight: 900;
+      padding: 0.24rem 0.8rem;
+      border-radius: 999px;
+    }
+
+    .status-summary-pill {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      color: #334155;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .card-result-corner {
+      font-size: clamp(2rem, 4.4vh, 3.2rem);
+      font-weight: 900;
+      color: #cbd5e1;
+      background: #f8fafc;
+      border: 3px solid #e2e8f0;
+      padding: 0.15rem 0.95rem;
+      border-radius: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .card-result-corner.revealed-whisper {
+      color: #059669;
+      background: #ecfdf5;
+      border-color: #34d399;
+      transform: scale(1.06);
+    }
+
+    /* TEXTO DE LA OPERACIÓN SiSAT GIGANTE PARA VERSE DESDE EL FONDO DEL SALÓN */
+    .card-math-body {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      text-align: center;
+    }
+
+    .sisat-giant-expr {
+      font-size: clamp(5.5rem, 23vh, 16.5rem);
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      word-break: keep-all;
+    }
+
+    .sisat-giant-expr.is-medium {
+      font-size: clamp(4.2rem, 16.5vh, 11.5rem);
+    }
+
+    .sisat-giant-expr.is-long {
+      font-size: clamp(3.3rem, 13vh, 9rem);
+    }
+
+    .sisat-op-accent {
+      color: #059669;
+    }
+
+    /* TRUCO MENTAL SiSAT (PISTA DUA) */
+    .dua-trick-box {
+      background: #ecfdf5;
+      border: 2.5px dashed #34d399;
+      border-radius: 16px;
+      padding: 0.5rem 1.1rem;
+      display: none;
+      align-items: center;
+      gap: 0.55rem;
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+      color: #065f46;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .dua-trick-box.visible {
+      display: inline-flex;
+    }
+
+    /* BARRA DE PROGRESO DE TIEMPO */
+    .card-timer-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .card-timer-track {
+      width: 100%;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-timer-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #059669 0%, #3b82f6 100%);
+      border-radius: 999px;
+      transition: width 0.08s linear;
+    }
+
+    .whisper-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #f59e0b;
+      z-index: 2;
+    }
+
+    .card-tap-hint {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* DOCK INFERIOR ERGONÓMICO */
+    .bottom-dock {
+      flex-shrink: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.96);
+      border-top: 2px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+    }
+
+    .recent-strip-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding: 0.55rem 1.1rem;
+      background: rgba(30, 41, 59, 0.9);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+      min-height: 84px;
+    }
+
+    .recent-label-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .recent-title {
+      font-size: 0.88rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6ee7b7;
+    }
+
+    .recent-sub {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    .recent-five-track {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      overflow-x: auto;
+      padding: 0.15rem 0.25rem;
+    }
+
+    .recent-five-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .recent-empty {
+      font-size: 0.98rem;
+      color: #94a3b8;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .mini-past-card {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 0.48rem 1rem;
+      border-radius: 16px;
+      border: 3px solid #cbd5e1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+      flex-shrink: 0;
+    }
+
+    .mini-past-card.is-latest {
+      background: #ecfdf5;
+      border-color: #10b981;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.55);
+    }
+
+    .mini-turn-badge {
+      background: #064e3b;
+      color: #ffffff;
+      font-size: 0.86rem;
+      font-weight: 900;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9px;
+    }
+
+    .mini-past-card.is-latest .mini-turn-badge {
+      background: #059669;
+    }
+
+    .mini-op {
+      font-size: 1.32rem;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .mini-res {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #059669;
+      background: #d1fae5;
+      padding: 0.14rem 0.65rem;
+      border-radius: 10px;
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .mini-res.hidden-res {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .btn-all-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: #059669;
+      color: #ffffff;
+      border: 2px solid #6ee7b7;
+      padding: 0.68rem 1.15rem;
+      border-radius: 15px;
+      font-size: 0.96rem;
+      font-weight: 900;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-all-history:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    .bottom-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding: 0.6rem 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .bottom-left-group,
+    .bottom-center-group,
+    .bottom-right-group {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.68rem 1.15rem;
+      border-radius: 16px;
+      font-size: 0.98rem;
+      font-weight: 900;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .ctrl-btn.primary-next {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border-color: #6ee7b7;
+      padding: 0.72rem 1.55rem;
+      font-size: 1.06rem;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.45);
+    }
+
+    .ctrl-btn.btn-pause-quick {
+      background: #f59e0b;
+      color: #1e1b4b;
+      border-color: #fef08a;
+      padding: 0.72rem 1.3rem;
+      font-size: 1.02rem;
+    }
+
+    .ctrl-btn.btn-pause-quick.is-paused {
+      background: #10b981;
+      color: #064e3b;
+      border-color: #6ee7b7;
+      animation: pulseBtn 1.4s infinite;
+    }
+
+    .ctrl-btn.btn-settings-toggle {
+      background: #1e293b;
+      border-color: #6ee7b7;
+      color: #d1fae5;
+      padding: 0.72rem 1.25rem;
+      font-size: 1rem;
+    }
+
+    .ctrl-btn.btn-settings-toggle.open {
+      background: #059669;
+      border-color: #a7f3d0;
+      color: #ffffff;
+    }
+
+    .btn-verify-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e1b4b;
+      border: 2.5px solid #fef08a;
+      padding: 0.72rem 1.45rem;
+      border-radius: 16px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(245, 158, 11, 0.45);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* MENÚ DESPLEGABLE DE AJUSTES HACIA ARRIBA */
+    .settings-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 75;
+      display: none;
+    }
+
+    .settings-drawer-backdrop.open {
+      display: block;
+    }
+
+    .settings-dropdown-drawer {
+      position: fixed;
+      bottom: 82px;
+      right: 1.1rem;
+      width: min(94vw, 470px);
+      max-height: calc(100vh - 105px);
+      overflow-y: auto;
+      background: #1e293b;
+      border: 2.5px solid #10b981;
+      border-radius: 24px;
+      box-shadow: 0 -15px 55px rgba(0, 0, 0, 0.7);
+      padding: 1rem 1.1rem;
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: popUpFromBottom 0.18s ease-out;
+    }
+
+    .settings-dropdown-drawer.open {
+      display: flex;
+    }
+
+    @keyframes popUpFromBottom {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .drawer-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .drawer-close {
+      background: rgba(255, 255, 255, 0.14);
+      color: #f8fafc;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .side-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 0.65rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .side-card-title {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6ee7b7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mode-switch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+    }
+
+    .mode-opt-btn {
+      padding: 0.55rem 0.65rem;
+      border-radius: 11px;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mode-opt-btn.active {
+      background: #059669;
+      border-color: #6ee7b7;
+      color: #ffffff;
+    }
+
+    .rhythm-adjuster-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 0.4rem 0.55rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .rhythm-step-btn {
+      width: 42px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rhythm-readout {
+      text-align: center;
+    }
+
+    .rhythm-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .rhythm-lbl {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 700;
+      display: block;
+    }
+
+    .preset-pills-row {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-pill {
+      flex: 1;
+      padding: 0.32rem 0.4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.7);
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .preset-pill.active {
+      background: #059669;
+      color: #ffffff;
+      border-color: #6ee7b7;
+    }
+
+    .whisper-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 10px;
+    }
+
+    .switch-btn {
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .switch-btn.on {
+      background: #10b981;
+      color: #064e3b;
+    }
+
+    .switch-btn.off {
+      background: #475569;
+      color: #cbd5e1;
+    }
+
+    .sisat-filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.32rem;
+    }
+
+    .table-chip {
+      padding: 0.35rem 0.45rem;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.7);
+      color: #94a3b8;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .table-chip.selected {
+      background: rgba(16, 185, 129, 0.28);
+      border-color: #34d399;
+      color: #ffffff;
+    }
+
+    .drawer-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.45rem;
+    }
+
+    /* MODALES */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.84);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+      max-width: 940px;
+      max-height: 92vh;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.2rem;
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-close-btn {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1rem 1.2rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .verifier-tabs {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.6rem;
+    }
+
+    .v-tab-btn {
+      padding: 0.52rem 1rem;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .v-tab-btn.active {
+      background: #059669;
+      border-color: #064e3b;
+      color: #ffffff;
+    }
+
+    .verifier-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .board-3x3-panel {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .folio-quick-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .folio-select {
+      flex: 1;
+      padding: 0.48rem 0.65rem;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      font-weight: 800;
+      font-size: 0.86rem;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    .grid-3x3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+    }
+
+    .cell-3x3 {
+      aspect-ratio: 1.15 / 1;
+      border-radius: 14px;
+      border: 3px solid #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .cell-3x3.selected-cell {
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    }
+
+    .cell-3x3.match-yes {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    .cell-3x3.match-no {
+      background: #fef2f2;
+      border-color: #f87171;
+      color: #991b1b;
+    }
+
+    .cell-num-val {
+      font-size: 1.75rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .cell-match-meta {
+      font-size: 0.66rem;
+      font-weight: 800;
+      margin-top: 0.2rem;
+      text-align: center;
+    }
+
+    .keypad-panel {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+
+    .numpad-btn {
+      padding: 0.7rem;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .camera-safe-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 0.85rem;
+      border-radius: 18px;
+    }
+
+    .camera-safe-box.active {
+      display: flex;
+    }
+
+    .camera-viewport-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-video, .camera-snapshot-canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-overlay-grid {
+      position: absolute;
+      inset: 12%;
+      border: 2.5px dashed #fbbf24;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      pointer-events: none;
+    }
+
+    .camera-overlay-cell {
+      border: 1px dashed rgba(251, 191, 36, 0.45);
+    }
+
+    .camera-status-msg {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fde68a;
+      text-align: center;
+    }
+
+    .history-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 0.55rem;
+    }
+
+    .hist-card-item {
+      background: #f8fafc;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hist-card-item.latest {
+      background: #ecfdf5;
+      border-color: #059669;
+    }
+
+    .win-banner {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      padding: 1rem;
+      border-radius: 16px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .win-banner.show {
+      display: flex;
+    }
+
+    #printableArea {
+      display: none;
+    }
+
+    /* IMPRESIÓN AHORRADORA DE TINTA Y PAPEL: 2 CARTAS POR HOJA TAMAÑO CARTA CON CORTE A LA MITAD */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 8mm 10mm;
+      }
+      html, body {
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .app-shell, .modal-overlay {
+        display: none !important;
+      }
+      #printableArea {
+        display: block !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+        width: 100%;
+        height: 258mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #ffffff !important;
+      }
+      .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .print-loteria-card {
+        height: 121mm;
+        border: 2px solid #000000;
+        border-radius: 10px;
+        padding: 4.5mm 6mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .print-cut-line {
+        width: 100%;
+        border-top: 1.5px dashed #000000;
+        text-align: center;
+        font-size: 8.5pt;
+        font-weight: 700;
+        line-height: 1;
+        margin: 1mm 0;
+        color: #000000;
+      }
+      .print-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1.5px solid #000000;
+        padding-bottom: 2.5mm;
+        font-weight: 900;
+        font-size: 12.5pt;
+      }
+      .print-card-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 3.5mm;
+        margin: 3.5mm 0;
+      }
+      .print-card-cell {
+        border: 1.5px solid #000000;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27pt;
+        font-weight: 900;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .print-card-footer {
+        font-size: 8.5pt;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 700;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .verifier-workspace { grid-template-columns: 1fr; }
+      .bottom-controls-bar { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 1. ESCENARIO CENTRAL GIGANTE ARRIBA -->
+    <main class="fullscreen-arena">
+      <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar al siguiente reto SiSAT">
+        <div class="card-top-meta">
+          <div class="card-meta-left">
+            <span id="cardTurnLabel">🧠 LOTERÍA SiSAT · MAZO LISTO (0 / 80)</span>
+            <span class="sisat-cat-badge" id="cardCatBadge">10 Reactivos Oficiales SiSAT 3°</span>
+            <span class="status-summary-pill" id="topStatusSummaryPill">👆 Manual · 🤫 Resp. 4.5s (25%)</span>
+          </div>
+          <span class="card-result-corner" id="cardResultCorner">?</span>
+        </div>
+
+        <div class="card-math-body" id="cardMathBody">
+          <div style="text-align:center; padding: 1rem;">
+            <div style="font-size: clamp(4.5rem, 13vh, 7.5rem); margin-bottom: 0.4rem;">🧠</div>
+            <div style="font-size: clamp(2rem, 5vh, 3.6rem); font-weight: 900; color: #059669; text-transform: uppercase;">¡Lotería de Cálculo Mental SiSAT!</div>
+            <p style="font-size: clamp(1rem, 2.2vh, 1.35rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              Toca la pantalla para cantar el primer reto · Imprime tus cartas (2 por hoja Carta) en «⚙️ Menú y Ajustes»
+            </p>
+          </div>
+        </div>
+
+        <div class="dua-trick-box" id="duaTrickBox">
+          <span>💡</span>
+          <span id="duaTrickText">Truco mental SiSAT</span>
+        </div>
+
+        <div class="card-timer-wrap">
+          <div class="card-timer-track">
+            <div class="whisper-marker" id="whisperMarker" style="left: 64%;" title="Momento en que se susurra la respuesta (25% vol)"></div>
+            <div class="card-timer-fill" id="cardTimerFill"></div>
+          </div>
+          <div class="card-tap-hint" id="cardBottomHint">Toca cualquier parte de la carta para sacar el siguiente reto SiSAT</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 2. DOCK INFERIOR ERGONÓMICO -->
+    <footer class="bottom-dock">
+      <section class="recent-strip-bar" aria-label="Últimas cartas cantadas">
+        <div class="recent-label-box">
+          <span class="recent-title">⏮️ Últimas 5 Cartas</span>
+          <span class="recent-sub" id="recentTotalSub">0 cantadas</span>
+        </div>
+
+        <div class="recent-five-track" id="recentFiveTrack">
+          <span class="recent-empty">Aún no han salido retos. Toca la carta gigante de arriba para comenzar.</span>
+        </div>
+
+        <button type="button" class="btn-all-history" onclick="openHistoryModal()">
+          📜 Ver todas (<span id="btnHistoryCount">0</span>) ▴
+        </button>
+      </section>
+
+      <div class="bottom-controls-bar">
+        <div class="bottom-left-group">
+          <a class="ctrl-btn" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
+          <a class="ctrl-btn" href="../loteria_tablas/index.html" style="border-color:#818cf8; color:#e0e7ff;" title="Cambiar a Lotería de Tablas de Multiplicar">🎲 Lotería Tablas</a>
+          <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
+            ⬅ Anterior
+          </button>
+          <button type="button" class="ctrl-btn" onclick="repeatCurrentCardVoice()" title="Repetir voz del reto actual">
+            🗣️ Repetir Voz
+          </button>
+        </div>
+
+        <div class="bottom-center-group">
+          <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(-0.5)" title="Más rápido (-0.5s)">
+            ⚡ -0.5s
+          </button>
+          <button type="button" class="ctrl-btn btn-pause-quick" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
+            ⏸️ PAUSAR
+          </button>
+          <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
+            Siguiente Carta ➔
+          </button>
+          <button type="button" class="ctrl-btn" onclick="adjustIntervalSec(0.5)" title="Más lento (+0.5s)">
+            🐢 +0.5s
+          </button>
+        </div>
+
+        <div class="bottom-right-group">
+          <button type="button" class="btn-verify-hero" onclick="openVerifierModal()">
+            🏆 VERIFICAR ¡LOTERÍA!
+          </button>
+          <button type="button" class="ctrl-btn btn-settings-toggle" id="btnSettingsToggle" onclick="toggleSettingsDrawer()">
+            ⚙️ Menú y Ajustes ▴
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MENÚ DESPLEGABLE DE CONFIGURACIÓN HACIA ARRIBA -->
+    <div class="settings-drawer-backdrop" id="settingsBackdrop" onclick="closeSettingsDrawer()"></div>
+    <aside class="settings-dropdown-drawer" id="settingsDropdownDrawer" aria-label="Menú de configuración">
+      <div class="drawer-header">
+        <div class="drawer-title">⚙️ Opciones SiSAT, Voz IA y Ritmo</div>
+        <button type="button" class="drawer-close" onclick="closeSettingsDrawer()">✕</button>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>Modo de Avance</span>
+          <span id="autoStateSmall" style="color:#fbbf24;">Manual</span>
+        </div>
+        <div class="mode-switch-grid">
+          <button type="button" class="mode-opt-btn active" id="btnModeManual" onclick="setGameMode('manual')">
+            👆 Manual (Tap)
+          </button>
+          <button type="button" class="mode-opt-btn" id="btnModeAuto" onclick="setGameMode('auto')">
+            ⏱️ Por Tiempo
+          </button>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>⏱️ Tiempo para cambiar carta</span>
+        </div>
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(-0.5)">➖</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="intervalSecDisplay">7.0 s</span>
+            <span class="rhythm-lbl">entre cada carta</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(0.5)">➕</button>
+        </div>
+        <div class="preset-pills-row" id="intervalPresetRow">
+          <button type="button" class="preset-pill" onclick="setIntervalSec(5)">5s</button>
+          <button type="button" class="preset-pill active" onclick="setIntervalSec(7)">7s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(9)">9s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(12)">12s</button>
+          <button type="button" class="preset-pill" onclick="setIntervalSec(15)">15s</button>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>🗣️ Voz IA y Respuesta (4.5s · 25%)</span>
+          <span id="whisperVolBadge" style="color:#a7f3d0;">Vol: 25%</span>
+        </div>
+
+        <div class="whisper-toggle-row">
+          <span style="font-size:0.8rem; font-weight:800; color:#e2e8f0;">🔊 Voz de la IA (Cantar retos)</span>
+          <button type="button" class="switch-btn on" id="btnVoiceToggle" onclick="toggleVoiceEnabled()">ENCENDIDA</button>
+        </div>
+
+        <div class="whisper-toggle-row">
+          <span style="font-size:0.8rem; font-weight:800; color:#e2e8f0;">🤫 Decir respuesta en voz baja</span>
+          <button type="button" class="switch-btn on" id="btnSideWhisperSwitch" onclick="toggleWhisperEnabled()">ACTIVO</button>
+        </div>
+
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(-0.5)">➖</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="whisperDelayDisplay" style="color:#a7f3d0;">4.5 s</span>
+            <span class="rhythm-lbl">tiempo para dar la respuesta</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(0.5)">➕</button>
+        </div>
+
+        <div class="preset-pills-row">
+          <button type="button" class="preset-pill" id="volPill15" onclick="setWhisperVolume(0.15)">Vol 15%</button>
+          <button type="button" class="preset-pill active" id="volPill25" onclick="setWhisperVolume(0.25)">Vol 25%</button>
+          <button type="button" class="preset-pill" id="volPill40" onclick="setWhisperVolume(0.40)">Vol 40%</button>
+          <button type="button" class="preset-pill" id="volPill60" onclick="setWhisperVolume(0.60)">Vol 60%</button>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>🧠 Bloques de Reactivos SiSAT 3°</span>
+          <span id="activeTablesCountLabel" style="color:#cbd5e1;">10 bloques</span>
+        </div>
+        <div class="sisat-filter-grid" id="tablesFilterGrid"></div>
+        <div class="preset-pills-row">
+          <button type="button" class="preset-pill" onclick="selectTablePreset([1,2,3,4,5,6,7,8,9,10])">Todos (SiSAT 1-10)</button>
+          <button type="button" class="preset-pill" onclick="selectTablePreset([1,2,3,4,5,6])">Sumas y Restas</button>
+          <button type="button" class="preset-pill" onclick="selectTablePreset([7,8,9,10])">Series y Mult.</button>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-title"><span>🛠️ Herramientas e Impresión Ahorradora</span></div>
+        <div class="drawer-tools-grid">
+          <button type="button" class="mode-opt-btn" id="btnCornerResultToggle" onclick="toggleShowResultOnCard()">
+            👁️ Esquina: Al susurrar
+          </button>
+          <button type="button" class="mode-opt-btn" id="btnDuaHint" onclick="toggleDuaHint()">
+            💡 Truco Mental SiSAT
+          </button>
+          <button type="button" class="mode-opt-btn" onclick="closeSettingsDrawer(); openPrintCardsModal();" style="border-color:#fbbf24; color:#fde68a;">
+            🖨️ Imprimir (2 por Hoja)
+          </button>
+          <button type="button" class="mode-opt-btn" onclick="confirmResetGame()" style="border-color:rgba(244,63,94,0.4); color:#fda4af;">
+            🔄 Reiniciar Partida
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- MODAL 1: HISTORIAL COMPLETO -->
+  <div class="modal-overlay" id="historyModal" onclick="if(event.target===this) closeHistoryModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📜 Historial Completo de Retos SiSAT Cantados (<span id="modalHistoryTotal">0</span>)</div>
+        <button type="button" class="modal-close-btn" onclick="closeHistoryModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#ecfdf5; border:2px solid #6ee7b7; padding:0.75rem 1rem; border-radius:14px;">
+          <div style="font-size:0.88rem; font-weight:900; color:#065f46; margin-bottom:0.4rem;">
+            🟢 Resultados numéricos que YA salieron (consulta rápida):
+          </div>
+          <div id="uniqueResultsChips" style="display:flex; flex-wrap:wrap; gap:0.4rem;"></div>
+        </div>
+
+        <div>
+          <div style="font-size:0.9rem; font-weight:900; color:#334155; margin-bottom:0.5rem;">
+            Orden cronológico (del más reciente al primero):
+          </div>
+          <div class="history-full-grid" id="historyFullGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: VERIFICADOR + CÁMARA ANTI-CRASH -->
+  <div class="modal-overlay" id="verifierModal" onclick="if(event.target===this) closeVerifierModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🏆 Verificador de Carta SiSAT</span>
+          <span style="font-size:0.78rem; background:#fef3c7; color:#92400e; padding:0.22rem 0.65rem; border-radius:999px;">⏸️ Juego en Pausa</span>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeVerifierModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="verifier-tabs">
+          <button type="button" class="v-tab-btn active" id="vTabManual" onclick="switchVerifierTab('manual')">
+            🔢 Teclado Táctil y Folio (#01-#40)
+          </button>
+          <button type="button" class="v-tab-btn" id="vTabCamera" onclick="switchVerifierTab('camera')">
+            📷 Lector con Cámara (QR / Visor 3×3 Seguro)
+          </button>
+        </div>
+
+        <div class="win-banner" id="loteriaWinBanner">
+          <div style="font-size: 2.4rem;">🎉🏆🎉</div>
+          <div style="font-size: 1.6rem; font-weight: 900; letter-spacing: 0.03em;">¡LOTERÍA SiSAT CONFIRMADA!</div>
+          <div style="font-size: 0.9rem; font-weight: 700;">¡Los 9 resultados de cálculo mental ya salieron! Felicidades al ganador(a).</div>
+        </div>
+
+        <div class="verifier-workspace">
+          <div class="board-3x3-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.9rem; font-weight:900; color:#1e293b;">Carta del Alumno (3×3)</span>
+              <span id="verifierScorePill" style="font-size:0.95rem; font-weight:900; background:#e2e8f0; color:#0f172a; padding:0.22rem 0.75rem; border-radius:999px;">0 / 9 aciertos</span>
+            </div>
+
+            <div class="folio-quick-bar">
+              <select class="folio-select" id="folioQuickSelect" onchange="loadPresetCardFolio(this.value)">
+                <option value="">⚡ Cargar por Folio de Carta SiSAT (#01 a #40)...</option>
+              </select>
+              <button type="button" class="v-tab-btn" onclick="clearVerifierGrid()" style="padding:0.45rem 0.75rem;">🧹 Limpiar</button>
+            </div>
+
+            <div class="grid-3x3" id="verifierGrid3x3"></div>
+
+            <div style="font-size:0.78rem; color:#64748b; font-weight:700; text-align:center;">
+              Verde = Ya salió (muestra turno y reto) · Rojo = Todavía no sale
+            </div>
+          </div>
+
+          <div>
+            <div class="keypad-panel" id="verifierManualPanel">
+              <div style="font-size:0.85rem; font-weight:900; color:#334155;">
+                Toca una casilla de la izquierda y escribe el número (o elige su folio):
+              </div>
+              <div class="numpad-grid">
+                <button type="button" class="numpad-btn" onclick="numpadPress('1')">1</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('2')">2</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('3')">3</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('4')">4</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('5')">5</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('6')">6</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('7')">7</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('8')">8</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('9')">9</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('DEL')" style="background:#fee2e2; color:#991b1b; font-size:0.98rem;">⌫ Borrar</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('0')">0</button>
+                <button type="button" class="numpad-btn" onclick="numpadNextCell()" style="background:#d1fae5; color:#065f46; font-size:0.98rem;">Sig. Casilla ➔</button>
+              </div>
+
+              <div style="margin-top:0.35rem;">
+                <div style="font-size:0.78rem; font-weight:800; color:#475569; margin-bottom:0.35rem;">
+                  O toca directamente un resultado ya cantado para insertarlo:
+                </div>
+                <div id="verifierDrawnQuickChips" style="display:flex; flex-wrap:wrap; gap:0.35rem; max-height:115px; overflow-y:auto;"></div>
+              </div>
+            </div>
+
+            <div class="camera-safe-box" id="verifierCameraPanel">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span style="font-size:0.86rem; font-weight:900; color:#6ee7b7;">📷 Visor de Cámara Anti-Crash</span>
+                <div style="display:flex; gap:0.35rem;">
+                  <button type="button" class="ctrl-btn" id="btnStartCam" onclick="startSafeCamera()" style="background:#059669; padding:0.45rem 0.85rem; font-size:0.84rem;">▶ Iniciar Cámara</button>
+                  <button type="button" class="ctrl-btn" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none; background:#d97706; padding:0.45rem 0.85rem; font-size:0.84rem;">📸 Congelar Foto</button>
+                  <button type="button" class="ctrl-btn" id="btnStopCam" onclick="stopSafeCamera()" style="display:none; padding:0.45rem 0.85rem; font-size:0.84rem;">⏹ Apagar</button>
+                </div>
+              </div>
+
+              <div class="camera-viewport-wrap">
+                <video id="cameraVideoEl" class="camera-video" playsinline muted style="display:none;"></video>
+                <canvas id="cameraFreezeCanvas" class="camera-snapshot-canvas" style="display:none;"></canvas>
+                <div id="cameraPlaceholderMsg" style="padding:1.2rem; text-align:center; color:#94a3b8; font-size:0.85rem; font-weight:700;">
+                  La cámara está apagada por seguridad para no consumir memoria en Computerland.<br><br>
+                  Toca <b>"▶ Iniciar Cámara"</b> para enfocar la carta del alumno.
+                </div>
+                <div class="camera-overlay-grid" id="cameraOverlayGrid" style="display:none;">
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                </div>
+              </div>
+
+              <div class="camera-status-msg" id="cameraStatusText">
+                Modo seguro: Congela la foto para revisar los 9 números sin que el alumno sostenga la hoja todo el tiempo.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.6rem; border-top:2px solid #e2e8f0; padding-top:0.75rem;">
+          <button type="button" class="ctrl-btn primary-next" onclick="closeVerifierAndResume()">
+            ▶️ Cerrar y Continuar Partida
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: IMPRESIÓN AHORRADORA DE TINTA Y PAPEL (2 LOTERÍAS POR HOJA TAMAÑO CARTA) -->
+  <div class="modal-overlay" id="printCardsModal" onclick="if(event.target===this) closePrintCardsModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🖨️ Cartas SiSAT Imprimibles (#01 al #40 · 2 por Hoja Carta)</div>
+        <button type="button" class="modal-close-btn" onclick="closePrintCardsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.88rem; color:#334155; font-weight:600; line-height:1.45;">
+          <b>Formato Ahorrador de Tinta y Papel:</b> Se imprimen <b>2 loterías grandes por cada hoja tamaño carta</b> (una en la mitad superior y otra en la mitad inferior, con línea punteada ✂️ para recortar por la mitad), sin fondos oscuros. Con 20 hojas tienes las 40 cartas individuales para todo el grupo.
+        </p>
+        <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-verify-hero" onclick="window.print()">
+            🖨️ Imprimir 40 Cartas (2 por hoja Carta · 20 hojas B&amp;N)
+          </button>
+          <span style="font-size:0.8rem; color:#64748b; font-weight:700;">Vista previa de folios SiSAT:</span>
+        </div>
+        <div id="previewFoliosContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:0.65rem; max-height:52vh; overflow-y:auto; padding:0.25rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="printableArea"></div>
+
+  <script>
+    /* 1. BLOQUEO DE MENÚS CONTEXTUALES */
+    window.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    /* 2. WEB AUDIO API SINGLETON */
+    let sharedAudioCtx = null;
+    function getAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      return sharedAudioCtx;
+    }
+
+    function playSfx(type = 'tap') {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const emit = () => {
+        try {
+          const now = ctx.currentTime;
+          if (type === 'card') {
+            [[523.25, 0, 0.07, 0.14], [659.25, 0.055, 0.09, 0.14], [783.99, 0.115, 0.12, 0.12]].forEach(([f, off, dur, vol]) => {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, now + off);
+              g.gain.setValueAtTime(0.001, now + off);
+              g.gain.linearRampToValueAtTime(vol, now + off + 0.01);
+              g.gain.exponentialRampToValueAtTime(0.001, now + off + dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.01);
+            });
+          } else if (type === 'whisper') {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(660, now + 0.11);
+            g.gain.setValueAtTime(0.04, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.13);
+          } else if (type === 'win') {
+            [[523.25, 0, 0.14], [659.25, 0.12, 0.14], [783.99, 0.24, 0.14], [1046.5, 0.36, 0.35]].forEach(([f, off, dur]) => {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, now + off);
+              g.gain.setValueAtTime(0.2, now + off);
+              g.gain.exponentialRampToValueAtTime(0.001, now + off + dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.02);
+            });
+          } else {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+            g.gain.setValueAtTime(0.06, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.055);
+          }
+        } catch (e) {}
+      };
+      if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+      else emit();
+    }
+
+    /* 3. MOTOR DE VOZ DE LA IA (GOOGLE AI TTS + FALLBACK LOCAL CON VOLUMEN 25%) */
+    let voiceEnabled = true;
+    let whisperEnabled = true;
+    let whisperVolume = 0.25;
+    let currentTtsAudio = null;
+    let spanishVoice = null;
+
+    if ('speechSynthesis' in window) {
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        spanishVoice = voices.find(v => v.lang === 'es-MX') ||
+                       voices.find(v => v.lang && v.lang.startsWith('es-')) ||
+                       voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+      };
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function stopAllSpeech() {
+      if (currentTtsAudio) {
+        try {
+          currentTtsAudio.pause();
+          currentTtsAudio.src = '';
+        } catch (e) {}
+        currentTtsAudio = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+    }
+
+    function speakAI(text, volume = 1.0, rate = 0.92, onEndCallback = null) {
+      stopAllSpeech();
+      if (!voiceEnabled || !text) {
+        if (onEndCallback) onEndCallback();
+        return;
+      }
+
+      const clampedVol = Math.max(0.05, Math.min(1.0, volume));
+      let finished = false;
+      const done = () => {
+        if (!finished) {
+          finished = true;
+          if (onEndCallback) onEndCallback();
+        }
+      };
+
+      const cleanText = String(text).trim();
+      try {
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.volume = clampedVol;
+        audio.src = url;
+        audio.playbackRate = Math.min(1.15, Math.max(0.75, rate));
+        currentTtsAudio = audio;
+
+        let fellBack = false;
+        const fallback = () => {
+          if (fellBack || currentTtsAudio !== audio) return;
+          fellBack = true;
+          currentTtsAudio = null;
+          speakDeviceFallback(cleanText, clampedVol, rate, done);
+        };
+
+        const timeoutId = setTimeout(() => {
+          if (audio.readyState === 0) fallback();
+        }, 2200);
+
+        audio.onplay = () => clearTimeout(timeoutId);
+        audio.onended = () => {
+          clearTimeout(timeoutId);
+          if (currentTtsAudio === audio) currentTtsAudio = null;
+          done();
+        };
+        audio.onerror = () => {
+          clearTimeout(timeoutId);
+          fallback();
+        };
+        audio.play().catch(() => {
+          clearTimeout(timeoutId);
+          fallback();
+        });
+      } catch (err) {
+        speakDeviceFallback(cleanText, clampedVol, rate, done);
+      }
+    }
+
+    function speakDeviceFallback(cleanText, clampedVol, rate, done) {
+      if (!('speechSynthesis' in window)) {
+        done();
+        return;
+      }
+      try {
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.lang = spanishVoice ? spanishVoice.lang : 'es-MX';
+        if (spanishVoice) utter.voice = spanishVoice;
+        utter.volume = clampedVol;
+        utter.rate = rate;
+        utter.onend = done;
+        utter.onerror = done;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        done();
+      }
+    }
+
+    /* 4. BANCO OFICIAL DE 80 RETOS SiSAT 3° DE PRIMARIA (10 BLOQUES OFICIALES) */
+    const SISAT_BLOCKS = [
+      { id: 1, short: 'R1: +9 a 2 cifras', name: 'SiSAT 1 · Sumar 9 (Compensación +10 − 1)' },
+      { id: 2, short: 'R2: ¿Cuánto falta?', name: 'SiSAT 2 · Complementos a la decena' },
+      { id: 3, short: 'R3: −10 a 2 cifras', name: 'SiSAT 3 · Restar 10 a dos cifras' },
+      { id: 4, short: 'R4: Centenas ±10/100', name: 'SiSAT 4 · Restar 10 o 100 a centenas' },
+      { id: 5, short: 'R5: Cerrar decena/100', name: 'SiSAT 5 · Suma cerrando decena y amigos del 100' },
+      { id: 6, short: 'R6: −11 y +11', name: 'SiSAT 6 · Decena cerrada menos 11 y sumar 11' },
+      { id: 7, short: 'R7: Serie ascendente', name: 'SiSAT 7 · Serie numérica ascendente' },
+      { id: 8, short: 'R8: Serie descendente', name: 'SiSAT 8 · Serie numérica descendente' },
+      { id: 9, short: 'R9: Dobles/Mitad/×2-5', name: 'SiSAT 9 · Dobles, mitades y tablas 2 a 5' },
+      { id: 10, short: 'R10: Tablas 6 a 9 y ×10', name: 'SiSAT 10 · Multiplicación tablas 6 a 9' }
+    ];
+
+    const SISAT_CARDS_CATALOG = [
+      // Bloque 1: Sumar 9 a dos cifras
+      { block: 1, display: '26 + 9', speech: '26 más 9', result: 35, trick: 'Suma 10 (36) y quita 1 = 35' },
+      { block: 1, display: '35 + 9', speech: '35 más 9', result: 44, trick: 'Suma 10 (45) y quita 1 = 44' },
+      { block: 1, display: '47 + 9', speech: '47 más 9', result: 56, trick: 'Suma 10 (57) y quita 1 = 56' },
+      { block: 1, display: '58 + 9', speech: '58 más 9', result: 67, trick: 'Suma 10 (68) y quita 1 = 67' },
+      { block: 1, display: '64 + 9', speech: '64 más 9', result: 73, trick: 'Suma 10 (74) y quita 1 = 73' },
+      { block: 1, display: '73 + 9', speech: '73 más 9', result: 82, trick: 'Suma 10 (83) y quita 1 = 82' },
+      { block: 1, display: '85 + 9', speech: '85 más 9', result: 94, trick: 'Suma 10 (95) y quita 1 = 94' },
+      { block: 1, display: '18 + 9', speech: '18 más 9', result: 27, trick: 'Suma 10 (28) y quita 1 = 27' },
+
+      // Bloque 2: ¿Cuánto falta para llegar?
+      { block: 2, display: 'De 35 a 50', speech: '¿Cuánto falta de 35 para llegar a 50?', result: 15, trick: 'De 35 a 40 faltan 5, más 10 = 15' },
+      { block: 2, display: 'De 45 a 70', speech: '¿Cuánto falta de 45 para llegar a 70?', result: 25, trick: 'De 45 a 50 faltan 5, más 20 = 25' },
+      { block: 2, display: 'De 28 a 40', speech: '¿Cuánto falta de 28 para llegar a 40?', result: 12, trick: 'De 28 a 30 faltan 2, más 10 = 12' },
+      { block: 2, display: 'De 36 a 50', speech: '¿Cuánto falta de 36 para llegar a 50?', result: 14, trick: 'De 36 a 40 faltan 4, más 10 = 14' },
+      { block: 2, display: 'De 44 a 60', speech: '¿Cuánto falta de 44 para llegar a 60?', result: 16, trick: 'De 44 a 50 faltan 6, más 10 = 16' },
+      { block: 2, display: 'De 63 a 80', speech: '¿Cuánto falta de 63 para llegar a 80?', result: 17, trick: 'De 63 a 70 faltan 7, más 10 = 17' },
+      { block: 2, display: 'De 57 a 80', speech: '¿Cuánto falta de 57 para llegar a 80?', result: 23, trick: 'De 57 a 60 faltan 3, más 20 = 23' },
+      { block: 2, display: 'De 47 a 50', speech: '¿Cuánto falta de 47 para llegar a 50?', result: 3, trick: 'A 7 le faltan 3 para completar la decena' },
+
+      // Bloque 3: Restar 10 a dos cifras
+      { block: 3, display: '45 − 10', speech: '45 menos 10', result: 35, trick: 'Baja 1 a la cifra de las decenas = 35' },
+      { block: 3, display: '38 − 10', speech: '38 menos 10', result: 28, trick: 'Baja 1 a la cifra de las decenas = 28' },
+      { block: 3, display: '56 − 10', speech: '56 menos 10', result: 46, trick: 'Baja 1 a la cifra de las decenas = 46' },
+      { block: 3, display: '72 − 10', speech: '72 menos 10', result: 62, trick: 'Baja 1 a la cifra de las decenas = 62' },
+      { block: 3, display: '84 − 10', speech: '84 menos 10', result: 74, trick: 'Baja 1 a la cifra de las decenas = 74' },
+      { block: 3, display: '93 − 10', speech: '93 menos 10', result: 83, trick: 'Baja 1 a la cifra de las decenas = 83' },
+      { block: 3, display: '67 − 10', speech: '67 menos 10', result: 57, trick: 'Baja 1 a la cifra de las decenas = 57' },
+      { block: 3, display: '29 − 10', speech: '29 menos 10', result: 19, trick: 'Baja 1 a la cifra de las decenas = 19' },
+
+      // Bloque 4: Restar 10 y 100 a centenas
+      { block: 4, display: '260 − 10', speech: '260 menos 10', result: 250, trick: '26 decenas menos 1 decena = 250' },
+      { block: 4, display: '180 − 10', speech: '180 menos 10', result: 170, trick: '18 decenas menos 1 decena = 170' },
+      { block: 4, display: '340 − 10', speech: '340 menos 10', result: 330, trick: '34 decenas menos 1 decena = 330' },
+      { block: 4, display: '450 − 10', speech: '450 menos 10', result: 440, trick: '45 decenas menos 1 decena = 440' },
+      { block: 4, display: '230 − 10', speech: '230 menos 10', result: 220, trick: '23 decenas menos 1 decena = 220' },
+      { block: 4, display: '150 − 10', speech: '150 menos 10', result: 140, trick: '15 decenas menos 1 decena = 140' },
+      { block: 4, display: '300 + 100', speech: '300 más 100', result: 400, trick: '3 centenas más 1 centena = 400' },
+      { block: 4, display: '500 − 100', speech: '500 menos 100', result: 400, trick: '5 centenas menos 1 centena = 400' },
+
+      // Bloque 5: Suma cerrando decena y amigos del 100
+      { block: 5, display: '58 + 12', speech: '58 más 12', result: 70, trick: '50 + 10 = 60, y 8 + 2 = 10 -> 70' },
+      { block: 5, display: '47 + 13', speech: '47 más 13', result: 60, trick: '40 + 10 = 50, y 7 + 3 = 10 -> 60' },
+      { block: 5, display: '36 + 14', speech: '36 más 14', result: 50, trick: '30 + 10 = 40, y 6 + 4 = 10 -> 50' },
+      { block: 5, display: '68 + 22', speech: '68 más 22', result: 90, trick: '60 + 20 = 80, y 8 + 2 = 10 -> 90' },
+      { block: 5, display: '48 + 32', speech: '48 más 32', result: 80, trick: '40 + 30 = 70, y 8 + 2 = 10 -> 80' },
+      { block: 5, display: '28 + 12', speech: '28 más 12', result: 40, trick: '20 + 10 = 30, y 8 + 2 = 10 -> 40' },
+      { block: 5, display: '70 + ? = 100', speech: '70 más qué número da 100', result: 30, trick: 'A 7 decenas le faltan 3 decenas (30) para 100' },
+      { block: 5, display: '75 + 25', speech: '75 más 25', result: 100, trick: '70 + 20 = 90, y 5 + 5 = 10 -> 100' },
+
+      // Bloque 6: Decena cerrada menos 11 y sumar 11
+      { block: 6, display: '80 − 11', speech: '80 menos 11', result: 69, trick: '80 − 10 = 70, y 70 − 1 = 69' },
+      { block: 6, display: '60 − 11', speech: '60 menos 11', result: 49, trick: '60 − 10 = 50, y 50 − 1 = 49' },
+      { block: 6, display: '50 − 11', speech: '50 menos 11', result: 39, trick: '50 − 10 = 40, y 40 − 1 = 39' },
+      { block: 6, display: '40 − 11', speech: '40 menos 11', result: 29, trick: '40 − 10 = 30, y 30 − 1 = 29' },
+      { block: 6, display: '70 − 11', speech: '70 menos 11', result: 59, trick: '70 − 10 = 60, y 60 − 1 = 59' },
+      { block: 6, display: '90 − 11', speech: '90 menos 11', result: 79, trick: '90 − 10 = 80, y 80 − 1 = 79' },
+      { block: 6, display: '100 − 11', speech: '100 menos 11', result: 89, trick: '100 − 10 = 90, y 90 − 1 = 89' },
+      { block: 6, display: '34 + 11', speech: '34 más 11', result: 45, trick: '34 + 10 = 44, más 1 = 45' },
+
+      // Bloque 7: Serie numérica ascendente
+      { block: 7, display: '53, 56, 59, __', speech: 'Serie: 53, 56, 59. ¿Qué número sigue?', result: 62, trick: 'Va subiendo de 3 en 3: 59 + 3 = 62' },
+      { block: 7, display: '34, 38, 42, __', speech: 'Serie: 34, 38, 42. ¿Qué número sigue?', result: 46, trick: 'Va subiendo de 4 en 4: 42 + 4 = 46' },
+      { block: 7, display: '25, 30, 35, __', speech: 'Serie: 25, 30, 35. ¿Qué número sigue?', result: 40, trick: 'Va subiendo de 5 en 5: 35 + 5 = 40' },
+      { block: 7, display: '41, 44, 47, __', speech: 'Serie: 41, 44, 47. ¿Qué número sigue?', result: 50, trick: 'Va subiendo de 3 en 3: 47 + 3 = 50' },
+      { block: 7, display: '62, 66, 70, __', speech: 'Serie: 62, 66, 70. ¿Qué número sigue?', result: 74, trick: 'Va subiendo de 4 en 4: 70 + 4 = 74' },
+      { block: 7, display: '18, 24, 30, __', speech: 'Serie: 18, 24, 30. ¿Qué número sigue?', result: 36, trick: 'Va subiendo de 6 en 6: 30 + 6 = 36' },
+      { block: 7, display: '73, 76, 79, __', speech: 'Serie: 73, 76, 79. ¿Qué número sigue?', result: 82, trick: 'Va subiendo de 3 en 3: 79 + 3 = 82' },
+      { block: 7, display: '42, 47, 52, __', speech: 'Serie: 42, 47, 52. ¿Qué número sigue?', result: 57, trick: 'Va subiendo de 5 en 5: 52 + 5 = 57' },
+
+      // Bloque 8: Serie numérica descendente
+      { block: 8, display: '98, 96, 94, __', speech: 'Serie: 98, 96, 94. ¿Qué número sigue?', result: 92, trick: 'Va bajando de 2 en 2: 94 − 2 = 92' },
+      { block: 8, display: '85, 80, 75, __', speech: 'Serie: 85, 80, 75. ¿Qué número sigue?', result: 70, trick: 'Va bajando de 5 en 5: 75 − 5 = 70' },
+      { block: 8, display: '77, 74, 71, __', speech: 'Serie: 77, 74, 71. ¿Qué número sigue?', result: 68, trick: 'Va bajando de 3 en 3: 71 − 3 = 68' },
+      { block: 8, display: '68, 64, 60, __', speech: 'Serie: 68, 64, 60. ¿Qué número sigue?', result: 56, trick: 'Va bajando de 4 en 4: 60 − 4 = 56' },
+      { block: 8, display: '50, 47, 44, __', speech: 'Serie: 50, 47, 44. ¿Qué número sigue?', result: 41, trick: 'Va bajando de 3 en 3: 44 − 3 = 41' },
+      { block: 8, display: '95, 90, 85, __', speech: 'Serie: 95, 90, 85. ¿Qué número sigue?', result: 80, trick: 'Va bajando de 5 en 5: 85 − 5 = 80' },
+      { block: 8, display: '84, 82, 80, __', speech: 'Serie: 84, 82, 80. ¿Qué número sigue?', result: 78, trick: 'Va bajando de 2 en 2: 80 − 2 = 78' },
+      { block: 8, display: '63, 60, 57, __', speech: 'Serie: 63, 60, 57. ¿Qué número sigue?', result: 54, trick: 'Va bajando de 3 en 3: 57 − 3 = 54' },
+
+      // Bloque 9: Dobles, mitades y tablas 2 a 5
+      { block: 9, display: 'Doble de 35', speech: 'El doble de 35', result: 70, trick: 'Doble de 30 (60) + doble de 5 (10) = 70' },
+      { block: 9, display: 'Doble de 45', speech: 'El doble de 45', result: 90, trick: 'Doble de 40 (80) + doble de 5 (10) = 90' },
+      { block: 9, display: 'Mitad de 80', speech: 'La mitad de 80', result: 40, trick: 'La mitad de 8 decenas son 4 decenas = 40' },
+      { block: 9, display: 'Mitad de 50', speech: 'La mitad de 50', result: 25, trick: 'Mitad de 40 (20) + mitad de 10 (5) = 25' },
+      { block: 9, display: '4 × 8', speech: '4 por 8', result: 32, trick: 'El doble del doble de 8: 16 y 32' },
+      { block: 9, display: '3 × 7', speech: '3 por 7', result: 21, trick: '7 + 7 + 7 = 21' },
+      { block: 9, display: '4 × 7', speech: '4 por 7', result: 28, trick: 'El doble de 14 es 28' },
+      { block: 9, display: '3 × 8', speech: '3 por 8', result: 24, trick: '8 + 8 + 8 = 24' },
+
+      // Bloque 10: Multiplicación tablas 6 a 9
+      { block: 10, display: '9 × 7', speech: '9 por 7', result: 63, trick: '7 − 1 = 6 decenas, y 6 + 3 = 9 -> 63' },
+      { block: 10, display: '8 × 6', speech: '8 por 6', result: 48, trick: '6 × 8 = 48' },
+      { block: 10, display: '7 × 8', speech: '7 por 8', result: 56, trick: '5, 6, 7, 8 -> 56 = 7 × 8' },
+      { block: 10, display: '6 × 9', speech: '6 por 9', result: 54, trick: '6 − 1 = 5 decenas, y 5 + 4 = 9 -> 54' },
+      { block: 10, display: '8 × 8', speech: '8 por 8', result: 64, trick: '8 veces 8 = 64' },
+      { block: 10, display: '7 × 7', speech: '7 por 7', result: 49, trick: '7 veces 7 = 49' },
+      { block: 10, display: '9 × 8', speech: '9 por 8', result: 72, trick: '8 − 1 = 7 decenas, y 7 + 2 = 9 -> 72' },
+      { block: 10, display: '9 × 9', speech: '9 por 9', result: 81, trick: '9 − 1 = 8 decenas, y 8 + 1 = 9 -> 81' }
+    ];
+
+    /* 5. ESTADO PRINCIPAL DEL JUEGO (4.5s POR DEFECTO) */
+    let activeBlocks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    let deck = [];
+    let currentIndex = -1;
+    let history = [];
+
+    let gameMode = 'manual';
+    let isAutoPaused = false;
+    let intervalSec = 7.0;
+    let whisperDelaySec = 4.5;
+
+    let cornerResultMode = 'whisper';
+    let currentCardWhispered = false;
+    let duaHintVisible = false;
+
+    let cardElapsedMs = 0;
+    let lastTickTs = 0;
+    let tickerIntervalId = null;
+    let whisperTriggeredForCard = false;
+
+    function toggleSettingsDrawer() {
+      playSfx('tap');
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      const isOpen = drawer.classList.toggle('open');
+      backdrop.classList.toggle('open', isOpen);
+      btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? '⚙️ Cerrar Menú ▾' : '⚙️ Menú y Ajustes ▴';
+    }
+
+    function closeSettingsDrawer() {
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      if (btn) {
+        btn.classList.remove('open');
+        btn.textContent = '⚙️ Menú y Ajustes ▴';
+      }
+    }
+
+    function buildDeck() {
+      const blocksToUse = activeBlocks.length > 0 ? activeBlocks : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const newDeck = SISAT_CARDS_CATALOG
+        .filter(item => blocksToUse.includes(item.block))
+        .map((item, idx) => ({ ...item, id: `sisat_${item.block}_${idx}` }));
+
+      for (let i = newDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
+      }
+      deck = newDeck;
+      currentIndex = -1;
+      history = [];
+      currentCardWhispered = false;
+      whisperTriggeredForCard = false;
+      cardElapsedMs = 0;
+      stopAllSpeech();
+      renderAll();
+    }
+
+    function startRealtimeTicker() {
+      if (tickerIntervalId) clearInterval(tickerIntervalId);
+      lastTickTs = performance.now();
+      tickerIntervalId = setInterval(() => {
+        const now = performance.now();
+        const dt = now - lastTickTs;
+        lastTickTs = now;
+
+        if (currentIndex < 0 || currentIndex >= deck.length) return;
+        if (isAutoPaused) return;
+
+        if (gameMode === 'manual') {
+          if (whisperEnabled && !whisperTriggeredForCard) {
+            cardElapsedMs += dt;
+            const targetWhisperMs = whisperDelaySec * 1000;
+            updateTimerProgressBar(Math.min(100, (cardElapsedMs / targetWhisperMs) * 100));
+            if (cardElapsedMs >= targetWhisperMs) {
+              triggerAnswerWhisper();
+            }
+          }
+          return;
+        }
+
+        cardElapsedMs += dt;
+        const totalMs = intervalSec * 1000;
+        const effectiveWhisperMs = Math.min(whisperDelaySec * 1000, totalMs * 0.85);
+
+        if (whisperEnabled && !whisperTriggeredForCard && cardElapsedMs >= effectiveWhisperMs) {
+          triggerAnswerWhisper();
+        }
+
+        const pct = Math.min(100, (cardElapsedMs / totalMs) * 100);
+        updateTimerProgressBar(pct);
+
+        if (cardElapsedMs >= totalMs) {
+          if (currentIndex < deck.length - 1) {
+            nextCard(false);
+          } else {
+            isAutoPaused = true;
+            renderControlsState();
+          }
+        }
+      }, 60);
+    }
+
+    function updateTimerProgressBar(pct) {
+      const fill = document.getElementById('cardTimerFill');
+      if (fill) fill.style.width = `${pct}%`;
+    }
+
+    function triggerAnswerWhisper() {
+      if (whisperTriggeredForCard || currentIndex < 0) return;
+      whisperTriggeredForCard = true;
+      currentCardWhispered = true;
+      const card = deck[currentIndex];
+      if (!card) return;
+      renderCardCornerResult();
+      renderRecentFiveStrip();
+      const cardEl = document.getElementById('mainLoteriaCard');
+      if (cardEl) cardEl.classList.add('whispered');
+      if (whisperEnabled && voiceEnabled) {
+        playSfx('whisper');
+        speakAI(`${card.result}`, whisperVolume, 0.9);
+      }
+    }
+
+    function announceCurrentCard() {
+      if (currentIndex < 0 || !deck[currentIndex]) return;
+      const card = deck[currentIndex];
+      playSfx('card');
+      speakAI(card.speech, 1.0, 0.92);
+    }
+
+    function repeatCurrentCardVoice() {
+      if (currentIndex < 0 || !deck[currentIndex]) return;
+      announceCurrentCard();
+    }
+
+    function handleCardTap() {
+      nextCard(true);
+    }
+
+    function nextCard(fromUserTap = false) {
+      if (currentIndex >= deck.length - 1) return;
+      if (fromUserTap && gameMode === 'auto' && isAutoPaused) {
+        isAutoPaused = false;
+      }
+      const nextIdx = currentIndex + 1;
+      currentIndex = nextIdx;
+      const drawn = deck[nextIdx];
+      if (!history.some(c => c.id === drawn.id)) {
+        history = [drawn, ...history];
+      }
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      whisperTriggeredForCard = false;
+      currentCardWhispered = false;
+      updateTimerProgressBar(0);
+      renderAll();
+      announceCurrentCard();
+    }
+
+    function prevCard() {
+      if (currentIndex <= 0) return;
+      currentIndex -= 1;
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      whisperTriggeredForCard = false;
+      currentCardWhispered = true;
+      updateTimerProgressBar(0);
+      renderAll();
+      announceCurrentCard();
+    }
+
+    /* 6. CONTROLES DE MODO, PAUSA, TIEMPO REAL Y VOLUMEN */
+    function setGameMode(mode) {
+      playSfx('tap');
+      gameMode = mode;
+      isAutoPaused = false;
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      updateTimerProgressBar(0);
+      renderControlsState();
+      if (mode === 'auto' && currentIndex < 0) {
+        nextCard(false);
+      }
+    }
+
+    function togglePauseAuto() {
+      playSfx('tap');
+      isAutoPaused = !isAutoPaused;
+      lastTickTs = performance.now();
+      if (isAutoPaused) stopAllSpeech();
+      renderControlsState();
+    }
+
+    function adjustIntervalSec(delta) {
+      playSfx('tap');
+      setIntervalSec(Math.round((intervalSec + delta) * 10) / 10);
+    }
+
+    function setIntervalSec(val) {
+      intervalSec = Math.max(2.5, Math.min(22.0, val));
+      if (whisperDelaySec >= intervalSec - 0.5) {
+        whisperDelaySec = Math.max(1.0, Math.round((intervalSec - 1.0) * 2) / 2);
+      }
+      lastTickTs = performance.now();
+      renderControlsState();
+    }
+
+    function adjustWhisperDelaySec(delta) {
+      playSfx('tap');
+      const maxWhisper = gameMode === 'auto' ? Math.max(1.0, intervalSec - 0.5) : 15.0;
+      whisperDelaySec = Math.max(1.0, Math.min(maxWhisper, Math.round((whisperDelaySec + delta) * 10) / 10));
+      renderControlsState();
+    }
+
+    function setWhisperVolume(vol) {
+      playSfx('tap');
+      whisperVolume = vol;
+      renderControlsState();
+      if (voiceEnabled) {
+        speakAI('Veinticinco', whisperVolume, 0.92);
+      }
+    }
+
+    function toggleVoiceEnabled() {
+      voiceEnabled = !voiceEnabled;
+      if (!voiceEnabled) stopAllSpeech();
+      else playSfx('tap');
+      renderControlsState();
+    }
+
+    function toggleWhisperEnabled() {
+      playSfx('tap');
+      whisperEnabled = !whisperEnabled;
+      renderControlsState();
+    }
+
+    function toggleShowResultOnCard() {
+      playSfx('tap');
+      if (cornerResultMode === 'whisper') cornerResultMode = 'always';
+      else if (cornerResultMode === 'always') cornerResultMode = 'hidden';
+      else cornerResultMode = 'whisper';
+      renderControlsState();
+      renderCardCornerResult();
+      renderRecentFiveStrip();
+    }
+
+    function toggleDuaHint() {
+      playSfx('tap');
+      duaHintVisible = !duaHintVisible;
+      renderDuaHint();
+    }
+
+    function confirmResetGame() {
+      playSfx('tap');
+      closeSettingsDrawer();
+      buildDeck();
+    }
+
+    /* 7. FILTRO DE BLOQUES SiSAT */
+    function renderTablesFilter() {
+      const grid = document.getElementById('tablesFilterGrid');
+      if (!grid) return;
+      grid.innerHTML = SISAT_BLOCKS.map(b => {
+        const sel = activeBlocks.includes(b.id);
+        return `<button type="button" class="table-chip ${sel ? 'selected' : ''}" onclick="toggleTableNum(${b.id})" title="${b.name}">${b.short}</button>`;
+      }).join('');
+      const lbl = document.getElementById('activeTablesCountLabel');
+      if (lbl) lbl.textContent = `${activeBlocks.length} bloques (${activeBlocks.length * 8} cartas)`;
+    }
+
+    function toggleTableNum(num) {
+      playSfx('tap');
+      if (activeBlocks.includes(num)) {
+        if (activeBlocks.length <= 1) return;
+        activeBlocks = activeBlocks.filter(n => n !== num);
+      } else {
+        activeBlocks = [...activeBlocks, num].sort((a, b) => a - b);
+      }
+      buildDeck();
+    }
+
+    function selectTablePreset(arr) {
+      playSfx('tap');
+      activeBlocks = [...arr];
+      buildDeck();
+    }
+
+    /* 8. RENDERIZADO GENERAL */
+    function renderAll() {
+      renderControlsState();
+      renderTablesFilter();
+      renderMainCard();
+      renderRecentFiveStrip();
+      renderVerifierGrid();
+    }
+
+    function renderControlsState() {
+      const btnVoice = document.getElementById('btnVoiceToggle');
+      if (btnVoice) {
+        btnVoice.textContent = voiceEnabled ? 'ENCENDIDA' : 'APAGADA';
+        btnVoice.className = `switch-btn ${voiceEnabled ? 'on' : 'off'}`;
+      }
+
+      const btnSideWhisper = document.getElementById('btnSideWhisperSwitch');
+      const pctVol = Math.round(whisperVolume * 100);
+      if (btnSideWhisper) {
+        btnSideWhisper.textContent = whisperEnabled ? 'ACTIVO' : 'APAGADO';
+        btnSideWhisper.className = `switch-btn ${whisperEnabled ? 'on' : 'off'}`;
+      }
+
+      const volBadge = document.getElementById('whisperVolBadge');
+      if (volBadge) volBadge.textContent = `Vol: ${pctVol}%`;
+      [15, 25, 40, 60].forEach(p => {
+        const el = document.getElementById(`volPill${p}`);
+        if (el) el.classList.toggle('active', Math.round(whisperVolume * 100) === p);
+      });
+
+      const btnCorner = document.getElementById('btnCornerResultToggle');
+      if (btnCorner) {
+        const labels = {
+          whisper: '👁️ Esquina: Al susurrar',
+          always: '👁️ Esquina: Siempre',
+          hidden: '🙈 Esquina: Oculto'
+        };
+        btnCorner.textContent = labels[cornerResultMode];
+      }
+
+      document.getElementById('btnModeManual').classList.toggle('active', gameMode === 'manual');
+      document.getElementById('btnModeAuto').classList.toggle('active', gameMode === 'auto');
+      document.getElementById('autoStateSmall').textContent = gameMode === 'auto' ? (isAutoPaused ? 'En Pausa' : 'Automático') : 'Manual';
+
+      document.getElementById('intervalSecDisplay').textContent = `${intervalSec.toFixed(1)} s`;
+      document.getElementById('whisperDelayDisplay').textContent = `${whisperDelaySec.toFixed(1)} s`;
+
+      document.querySelectorAll('#intervalPresetRow .preset-pill').forEach(btn => {
+        const v = parseFloat(btn.textContent);
+        btn.classList.toggle('active', Math.abs(v - intervalSec) < 0.05);
+      });
+
+      const marker = document.getElementById('whisperMarker');
+      if (marker) {
+        marker.style.display = whisperEnabled ? 'block' : 'none';
+        const ratio = gameMode === 'auto' ? Math.min(85, Math.round((whisperDelaySec / intervalSec) * 100)) : 100;
+        marker.style.left = `${ratio}%`;
+      }
+
+      const summaryPill = document.getElementById('topStatusSummaryPill');
+      if (summaryPill) {
+        const modeTxt = gameMode === 'auto' ? (isAutoPaused ? '⏸️ Pausado' : `⏱️ Cada ${intervalSec.toFixed(1)}s`) : '👆 Manual';
+        const whispTxt = whisperEnabled ? `🤫 Resp: ${whisperDelaySec.toFixed(1)}s (${pctVol}%)` : '🤫 Sin resp.';
+        summaryPill.textContent = `${modeTxt} · ${whispTxt}`;
+      }
+
+      const btnPause = document.getElementById('btnPauseAuto');
+      if (gameMode === 'auto') {
+        btnPause.style.display = 'inline-flex';
+        if (isAutoPaused) {
+          btnPause.textContent = '▶️ CONTINUAR';
+          btnPause.classList.add('is-paused');
+        } else {
+          btnPause.textContent = '⏸️ PAUSAR';
+          btnPause.classList.remove('is-paused');
+        }
+      } else {
+        btnPause.style.display = 'none';
+      }
+
+      document.getElementById('btnPrevCard').disabled = currentIndex <= 0;
+      document.getElementById('btnNextCard').disabled = currentIndex >= deck.length - 1;
+    }
+
+    function renderCardCornerResult() {
+      const cornerEl = document.getElementById('cardResultCorner');
+      if (!cornerEl) return;
+      if (currentIndex < 0 || !deck[currentIndex]) {
+        cornerEl.textContent = '?';
+        cornerEl.classList.remove('revealed-whisper');
+        return;
+      }
+      const res = deck[currentIndex].result;
+      if (cornerResultMode === 'always') {
+        cornerEl.textContent = `= ${res}`;
+        cornerEl.classList.remove('revealed-whisper');
+      } else if (cornerResultMode === 'whisper') {
+        if (currentCardWhispered) {
+          cornerEl.textContent = `= ${res}`;
+          cornerEl.classList.add('revealed-whisper');
+        } else {
+          cornerEl.textContent = '= ?';
+          cornerEl.classList.remove('revealed-whisper');
+        }
+      } else {
+        cornerEl.textContent = '= ?';
+        cornerEl.classList.remove('revealed-whisper');
+      }
+    }
+
+    function formatDisplayHtml(str) {
+      return String(str)
+        .replace(/([+−×=])/g, '<span class="sisat-op-accent">$1</span>');
+    }
+
+    function renderMainCard() {
+      const turnLbl = document.getElementById('cardTurnLabel');
+      const catBadge = document.getElementById('cardCatBadge');
+      const body = document.getElementById('cardMathBody');
+      const cardEl = document.getElementById('mainLoteriaCard');
+
+      if (currentIndex < 0 || !deck[currentIndex]) {
+        turnLbl.textContent = `🧠 LOTERÍA SiSAT · MAZO LISTO (0 / ${deck.length})`;
+        catBadge.textContent = '10 Bloques Oficiales SiSAT 3°';
+        cardEl.classList.remove('whispered');
+        body.innerHTML = `
+          <div style="text-align:center; padding: 1rem;">
+            <div style="font-size: clamp(4.5rem, 13vh, 7.5rem); margin-bottom: 0.4rem;">🧠</div>
+            <div style="font-size: clamp(2rem, 5vh, 3.6rem); font-weight: 900; color: #059669; text-transform: uppercase;">¡Lotería de Cálculo Mental SiSAT!</div>
+            <p style="font-size: clamp(1rem, 2.2vh, 1.35rem); color: #64748b; font-weight: 700; margin-top: 0.45rem;">
+              ${deck.length} retos SiSAT listos · Imprime 2 cartas por hoja tamaño carta en «⚙️ Menú y Ajustes»
+            </p>
+          </div>
+        `;
+        renderCardCornerResult();
+        renderDuaHint();
+        return;
+      }
+
+      const card = deck[currentIndex];
+      const blockObj = SISAT_BLOCKS.find(b => b.id === card.block);
+      turnLbl.textContent = `🧠 CARTA #${currentIndex + 1} DE ${deck.length}`;
+      catBadge.textContent = blockObj ? blockObj.name : `Reactivo SiSAT #${card.block}`;
+
+      const len = card.display.length;
+      const sizeClass = len >= 13 ? 'is-long' : (len >= 9 ? 'is-medium' : '');
+      body.innerHTML = `
+        <div class="sisat-giant-expr ${sizeClass}">${formatDisplayHtml(card.display)}</div>
+      `;
+      renderCardCornerResult();
+      renderDuaHint();
+    }
+
+    function renderDuaHint() {
+      const box = document.getElementById('duaTrickBox');
+      const txt = document.getElementById('duaTrickText');
+      const btn = document.getElementById('btnDuaHint');
+      if (!box || !btn || !txt) return;
+      btn.classList.toggle('active', duaHintVisible);
+
+      if (!duaHintVisible || currentIndex < 0 || !deck[currentIndex]) {
+        box.classList.remove('visible');
+        return;
+      }
+      box.classList.add('visible');
+      txt.textContent = `Truco SiSAT: ${deck[currentIndex].trick}`;
+    }
+
+    function renderRecentFiveStrip() {
+      const track = document.getElementById('recentFiveTrack');
+      const sub = document.getElementById('recentTotalSub');
+      const btnCount = document.getElementById('btnHistoryCount');
+
+      if (sub) sub.textContent = `${history.length} cantada${history.length === 1 ? '' : 's'}`;
+      if (btnCount) btnCount.textContent = history.length;
+
+      if (history.length === 0) {
+        track.innerHTML = `<span class="recent-empty">Aún no han salido retos. Toca la carta gigante de arriba para comenzar.</span>`;
+        return;
+      }
+
+      const lastFive = history.slice(0, 5);
+      track.innerHTML = lastFive.map((c, idx) => {
+        const turnNum = history.length - idx;
+        const isLatest = idx === 0;
+        const showRes = cornerResultMode !== 'hidden' && (!isLatest || currentCardWhispered || cornerResultMode === 'always');
+        return `
+          <div class="mini-past-card ${isLatest ? 'is-latest' : ''}">
+            <span class="mini-turn-badge">#${turnNum}</span>
+            <span class="mini-op">${c.display}</span>
+            <span class="mini-res ${showRes ? '' : 'hidden-res'}">${showRes ? c.result : '?'}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* 9. MODAL DE HISTORIAL COMPLETO */
+    let wasPausedBeforeModal = false;
+
+    function pauseForModal() {
+      closeSettingsDrawer();
+      wasPausedBeforeModal = isAutoPaused;
+      isAutoPaused = true;
+      stopAllSpeech();
+      renderControlsState();
+    }
+
+    function openHistoryModal() {
+      playSfx('tap');
+      pauseForModal();
+      document.getElementById('modalHistoryTotal').textContent = history.length;
+
+      const uniqueMap = new Map();
+      history.forEach((c, idx) => {
+        const turn = history.length - idx;
+        if (!uniqueMap.has(c.result) || turn < uniqueMap.get(c.result).turn) {
+          uniqueMap.set(c.result, { turn, op: c.display });
+        }
+      });
+      const sortedUnique = Array.from(uniqueMap.entries()).sort((a, b) => a[0] - b[0]);
+      const chipsContainer = document.getElementById('uniqueResultsChips');
+      if (sortedUnique.length === 0) {
+        chipsContainer.innerHTML = '<span style="font-size:0.85rem; color:#64748b;">Ningún reto cantado todavía.</span>';
+      } else {
+        chipsContainer.innerHTML = sortedUnique.map(([res, info]) => `
+          <span style="background:#059669; color:#ffffff; font-weight:900; font-size:0.9rem; padding:0.28rem 0.7rem; border-radius:9px;">
+            ${res} <small style="font-weight:700; opacity:0.92;">(${info.op} · #${info.turn})</small>
+          </span>
+        `).join('');
+      }
+
+      const fullGrid = document.getElementById('historyFullGrid');
+      fullGrid.innerHTML = history.map((c, idx) => {
+        const turn = history.length - idx;
+        return `
+          <div class="hist-card-item ${idx === 0 ? 'latest' : ''}">
+            <span style="font-size:0.75rem; font-weight:900; color:#059669;">Turno #${turn}</span>
+            <span style="font-size:0.98rem; font-weight:800; color:#334155; margin:0.18rem 0;">${c.display}</span>
+            <span style="font-size:1.55rem; font-weight:900; color:#0f172a;">= ${c.result}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('historyModal').classList.add('open');
+    }
+
+    function closeHistoryModal() {
+      playSfx('tap');
+      document.getElementById('historyModal').classList.remove('open');
+      if (!wasPausedBeforeModal && gameMode === 'auto') {
+        isAutoPaused = false;
+        lastTickTs = performance.now();
+        renderControlsState();
+      }
+    }
+
+    /* 10. GENERADOR DETERMINISTA DE 40 CARTAS SiSAT (#01 AL #40) */
+    const ALL_UNIQUE_PRODUCTS = (() => {
+      const s = new Set();
+      SISAT_CARDS_CATALOG.forEach(c => s.add(c.result));
+      return Array.from(s).sort((a, b) => a - b);
+    })();
+
+    const PRESET_CARDS_DB = (() => {
+      const cards = {};
+      for (let folio = 1; folio <= 40; folio++) {
+        let seed = (folio * 2654435761 + 99991) >>> 0;
+        const pool = [...ALL_UNIQUE_PRODUCTS];
+        const chosen = [];
+        for (let k = 0; k < 9; k++) {
+          seed = (seed * 1664525 + 1013904223) >>> 0;
+          const idx = seed % pool.length;
+          chosen.push(pool[idx]);
+          pool.splice(idx, 1);
+        }
+        chosen.sort((a, b) => a - b);
+        const code = `SISAT-${String(folio).padStart(2, '0')}`;
+        cards[code] = { folio, code, numbers: chosen };
+      }
+      return cards;
+    })();
+
+    function populateFolioSelect() {
+      const sel = document.getElementById('folioQuickSelect');
+      if (!sel) return;
+      let html = '<option value="">⚡ Cargar por Folio de Carta SiSAT (#01 a #40)...</option>';
+      Object.values(PRESET_CARDS_DB).forEach(c => {
+        html += `<option value="${c.code}">Carta SiSAT #${String(c.folio).padStart(2, '0')} (${c.numbers.join(', ')})</option>`;
+      });
+      sel.innerHTML = html;
+    }
+
+    function loadPresetCardFolio(code) {
+      if (!code || !PRESET_CARDS_DB[code]) return;
+      playSfx('tap');
+      verifierCells = PRESET_CARDS_DB[code].numbers.map(n => String(n));
+      selectedCellIdx = 0;
+      renderVerifierGrid();
+    }
+
+    /* 11. VERIFICADOR DE CARTA + CÁMARA BLINDADA ANTI-CRASH */
+    let verifierCells = Array(9).fill('');
+    let selectedCellIdx = 0;
+    let lastWinState = false;
+
+    function openVerifierModal() {
+      playSfx('tap');
+      pauseForModal();
+      renderVerifierGrid();
+      renderVerifierDrawnChips();
+      document.getElementById('verifierModal').classList.add('open');
+    }
+
+    function closeVerifierModal() {
+      playSfx('tap');
+      stopSafeCamera();
+      document.getElementById('verifierModal').classList.remove('open');
+    }
+
+    function closeVerifierAndResume() {
+      closeVerifierModal();
+      if (gameMode === 'auto') {
+        isAutoPaused = false;
+        lastTickTs = performance.now();
+        renderControlsState();
+      }
+    }
+
+    function switchVerifierTab(tab) {
+      playSfx('tap');
+      document.getElementById('vTabManual').classList.toggle('active', tab === 'manual');
+      document.getElementById('vTabCamera').classList.toggle('active', tab === 'camera');
+      document.getElementById('verifierManualPanel').style.display = tab === 'manual' ? 'flex' : 'none';
+      document.getElementById('verifierCameraPanel').classList.toggle('active', tab === 'camera');
+      if (tab !== 'camera') stopSafeCamera();
+    }
+
+    function findDrawnCardByResult(numStr) {
+      if (!numStr) return null;
+      const target = parseInt(numStr, 10);
+      if (isNaN(target)) return null;
+      for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].result === target) {
+          return { card: history[i], turn: history.length - i };
+        }
+      }
+      return null;
+    }
+
+    function renderVerifierGrid() {
+      const grid = document.getElementById('verifierGrid3x3');
+      if (!grid) return;
+
+      let matches = 0;
+      grid.innerHTML = verifierCells.map((val, idx) => {
+        const hit = findDrawnCardByResult(val);
+        if (hit) matches++;
+        const stateClass = val === '' ? '' : (hit ? 'match-yes' : 'match-no');
+        const selClass = idx === selectedCellIdx ? 'selected-cell' : '';
+        const metaText = val === ''
+          ? `Casilla ${idx + 1}`
+          : (hit ? `✅ #${hit.turn} (${hit.card.display})` : '❌ No ha salido');
+        return `
+          <div class="cell-3x3 ${stateClass} ${selClass}" onclick="selectVerifierCell(${idx})">
+            <span class="cell-num-val">${val || '?'}</span>
+            <span class="cell-match-meta">${metaText}</span>
+          </div>
+        `;
+      }).join('');
+
+      const scorePill = document.getElementById('verifierScorePill');
+      if (scorePill) {
+        scorePill.textContent = `${matches} / 9 aciertos`;
+        scorePill.style.background = matches === 9 ? '#10b981' : '#e2e8f0';
+        scorePill.style.color = matches === 9 ? '#ffffff' : '#0f172a';
+      }
+
+      const winBanner = document.getElementById('loteriaWinBanner');
+      if (winBanner) {
+        const isWin = matches === 9;
+        winBanner.classList.toggle('show', isWin);
+        if (isWin && !lastWinState) {
+          playSfx('win');
+          speakAI('¡Lotería de cálculo mental confirmada! Los nueve números son correctos.', 1.0, 0.95);
+        }
+        lastWinState = isWin;
+      }
+    }
+
+    function renderVerifierDrawnChips() {
+      const box = document.getElementById('verifierDrawnQuickChips');
+      if (!box) return;
+      const uniqueResults = Array.from(new Set(history.map(c => c.result))).sort((a, b) => a - b);
+      if (uniqueResults.length === 0) {
+        box.innerHTML = '<span style="font-size:0.78rem; color:#94a3b8;">Aún no hay números cantados.</span>';
+        return;
+      }
+      box.innerHTML = uniqueResults.map(r => `
+        <button type="button" onclick="quickInsertResult('${r}')" style="background:#d1fae5; color:#065f46; border:1.5px solid #34d399; border-radius:8px; padding:0.28rem 0.6rem; font-weight:900; font-size:0.86rem; cursor:pointer;">
+          ${r}
+        </button>
+      `).join('');
+    }
+
+    function selectVerifierCell(idx) {
+      playSfx('tap');
+      selectedCellIdx = idx;
+      renderVerifierGrid();
+    }
+
+    function numpadPress(key) {
+      playSfx('tap');
+      let cur = verifierCells[selectedCellIdx] || '';
+      if (key === 'DEL') {
+        cur = cur.slice(0, -1);
+      } else {
+        if (cur.length >= 3) cur = key;
+        else cur += key;
+        if (parseInt(cur, 10) > 400) cur = '400';
+      }
+      verifierCells[selectedCellIdx] = cur;
+      renderVerifierGrid();
+    }
+
+    function numpadNextCell() {
+      playSfx('tap');
+      selectedCellIdx = (selectedCellIdx + 1) % 9;
+      renderVerifierGrid();
+    }
+
+    function quickInsertResult(valStr) {
+      playSfx('tap');
+      verifierCells[selectedCellIdx] = String(valStr);
+      selectedCellIdx = (selectedCellIdx + 1) % 9;
+      renderVerifierGrid();
+    }
+
+    function clearVerifierGrid() {
+      playSfx('tap');
+      verifierCells = Array(9).fill('');
+      selectedCellIdx = 0;
+      lastWinState = false;
+      const sel = document.getElementById('folioQuickSelect');
+      if (sel) sel.value = '';
+      renderVerifierGrid();
+    }
+
+    /* 12. LECTOR CON CÁMARA BLINDADO */
+    let activeMediaStream = null;
+    let cameraFrozen = false;
+    let barcodeScanInterval = null;
+
+    async function startSafeCamera() {
+      const statusEl = document.getElementById('cameraStatusText');
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const placeholderEl = document.getElementById('cameraPlaceholderMsg');
+      const overlayEl = document.getElementById('cameraOverlayGrid');
+
+      stopSafeCamera();
+
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+        statusEl.textContent = '⚠️ Este equipo no tiene cámara web habilitada. Usa el teclado táctil o el selector de Folio (#01-#40).';
+        return;
+      }
+
+      statusEl.textContent = '⏳ Conectando con la cámara en modo seguro (640×480)...';
+
+      try {
+        const streamPromise = navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 640, max: 1280 },
+            height: { ideal: 480, max: 720 }
+          },
+          audio: false
+        });
+
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('TIMEOUT_CAMERA')), 4500)
+        );
+
+        const stream = await Promise.race([streamPromise, timeoutPromise]);
+        activeMediaStream = stream;
+        videoEl.srcObject = stream;
+        await videoEl.play();
+
+        placeholderEl.style.display = 'none';
+        canvasEl.style.display = 'none';
+        videoEl.style.display = 'block';
+        overlayEl.style.display = 'grid';
+        document.getElementById('btnStartCam').style.display = 'none';
+        document.getElementById('btnFreezeCam').style.display = 'inline-flex';
+        document.getElementById('btnFreezeCam').textContent = '📸 Congelar Foto';
+        document.getElementById('btnStopCam').style.display = 'inline-flex';
+        cameraFrozen = false;
+
+        statusEl.textContent = '✅ Cámara activa. Alinea la carta en la cuadrícula 3×3 y toca "📸 Congelar Foto".';
+        startNativeBarcodeWatcher(videoEl);
+      } catch (err) {
+        stopSafeCamera();
+        statusEl.textContent = 'ℹ️ No se detectó cámara web conectada o se denegó el permiso. El verificador táctil y por Folio sigue listo.';
+      }
+    }
+
+    function startNativeBarcodeWatcher(videoEl) {
+      if (barcodeScanInterval) clearInterval(barcodeScanInterval);
+      if (!('BarcodeDetector' in window)) return;
+      try {
+        const detector = new window.BarcodeDetector({ formats: ['qr_code', 'code_128'] });
+        barcodeScanInterval = setInterval(async () => {
+          if (!activeMediaStream || cameraFrozen || videoEl.readyState < 2) return;
+          try {
+            const codes = await detector.detect(videoEl);
+            if (codes && codes.length > 0) {
+              const raw = (codes[0].rawValue || '').trim().toUpperCase();
+              if (PRESET_CARDS_DB[raw]) {
+                loadPresetCardFolio(raw);
+                const sel = document.getElementById('folioQuickSelect');
+                if (sel) sel.value = raw;
+                document.getElementById('cameraStatusText').textContent = `🎯 ¡Código detectado (${raw})! Los 9 números se cargaron automáticamente.`;
+                toggleFreezeCamera();
+              }
+            }
+          } catch (_) {}
+        }, 500);
+      } catch (_) {}
+    }
+
+    function toggleFreezeCamera() {
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const btnFreeze = document.getElementById('btnFreezeCam');
+      const statusEl = document.getElementById('cameraStatusText');
+
+      if (!cameraFrozen && activeMediaStream) {
+        canvasEl.width = videoEl.videoWidth || 640;
+        canvasEl.height = videoEl.videoHeight || 480;
+        const ctx = canvasEl.getContext('2d');
+        ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+        if (barcodeScanInterval) {
+          clearInterval(barcodeScanInterval);
+          barcodeScanInterval = null;
+        }
+        activeMediaStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+        activeMediaStream = null;
+        videoEl.srcObject = null;
+        videoEl.style.display = 'none';
+        canvasEl.style.display = 'block';
+        cameraFrozen = true;
+        btnFreeze.textContent = '🔄 Tomar Otra Foto';
+        statusEl.textContent = '📸 Foto congelada (cámara liberada de memoria). Puedes revisar los 9 números con total comodidad.';
+      } else {
+        startSafeCamera();
+      }
+    }
+
+    function stopSafeCamera() {
+      if (barcodeScanInterval) {
+        clearInterval(barcodeScanInterval);
+        barcodeScanInterval = null;
+      }
+      if (activeMediaStream) {
+        activeMediaStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+        activeMediaStream = null;
+      }
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const placeholderEl = document.getElementById('cameraPlaceholderMsg');
+      const overlayEl = document.getElementById('cameraOverlayGrid');
+      if (videoEl) {
+        videoEl.srcObject = null;
+        videoEl.style.display = 'none';
+      }
+      if (canvasEl) canvasEl.style.display = 'none';
+      if (placeholderEl) placeholderEl.style.display = 'block';
+      if (overlayEl) overlayEl.style.display = 'none';
+      const btnStart = document.getElementById('btnStartCam');
+      const btnFreeze = document.getElementById('btnFreezeCam');
+      const btnStop = document.getElementById('btnStopCam');
+      if (btnStart) btnStart.style.display = 'inline-flex';
+      if (btnFreeze) btnFreeze.style.display = 'none';
+      if (btnStop) btnStop.style.display = 'none';
+      cameraFrozen = false;
+    }
+
+    /* 13. IMPRESIÓN DE 40 CARTAS SiSAT (2 CARTAS POR HOJA TAMAÑO CARTA CON CORTE A LA MITAD) */
+    function openPrintCardsModal() {
+      playSfx('tap');
+      pauseForModal();
+      renderPrintCardsPreviewAndDOM();
+      document.getElementById('printCardsModal').classList.add('open');
+    }
+
+    function closePrintCardsModal() {
+      playSfx('tap');
+      document.getElementById('printCardsModal').classList.remove('open');
+    }
+
+    function renderPrintCardsPreviewAndDOM() {
+      const previewBox = document.getElementById('previewFoliosContainer');
+      const printBox = document.getElementById('printableArea');
+      const list = Object.values(PRESET_CARDS_DB);
+
+      previewBox.innerHTML = list.map(c => `
+        <div style="border:2px solid #cbd5e1; border-radius:12px; padding:0.55rem; background:#f8fafc;">
+          <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; color:#065f46; margin-bottom:0.35rem;">
+            <span>🧠 CARTA #${String(c.folio).padStart(2, '0')}</span>
+            <button type="button" onclick="closePrintCardsModal(); openVerifierModal(); loadPresetCardFolio('${c.code}'); document.getElementById('folioQuickSelect').value='${c.code}';" style="font-size:0.68rem; background:#d1fae5; color:#065f46; border:1px solid #34d399; border-radius:6px; padding:0.1rem 0.4rem; cursor:pointer; font-weight:800;">
+              Probar ➔
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:4px;">
+            ${c.numbers.map(n => `<div style="background:#ffffff; border:1.5px solid #94a3b8; border-radius:6px; text-align:center; font-weight:900; font-size:0.9rem; padding:0.25rem 0;">${n}</div>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      let pagesHtml = '';
+      for (let i = 0; i < list.length; i += 2) {
+        const pair = list.slice(i, i + 2);
+        pagesHtml += `<div class="print-page">
+          ${pair.map((c, idx) => `
+            <div class="print-loteria-card">
+              <div class="print-card-header">
+                <span>🧠 LOTERÍA DE CÁLCULO MENTAL SiSAT · 3° PRIMARIA</span>
+                <span>FOLIO: #${String(c.folio).padStart(2, '0')}</span>
+              </div>
+              <div class="print-card-grid">
+                ${c.numbers.map(n => `<div class="print-card-cell">${n}</div>`).join('')}
+              </div>
+              <div class="print-card-footer">
+                <span>Primaria Federal "José Clemente Orozco"</span>
+                <span>Código Verificador: ${c.code}</span>
+              </div>
+            </div>
+            ${idx === 0 && pair.length > 1 ? '<div class="print-cut-line">✂️ Recortar por la mitad · 2 cartas individuales por hoja tamaño carta (Ahorro de tinta y papel)</div>' : ''}
+          `).join('')}
+        </div>`;
+      }
+      printBox.innerHTML = pagesHtml;
+    }
+
+    /* 14. ATAJOS DE TECLADO Y PRESENTADOR */
+    window.addEventListener('keydown', (e) => {
+      const anyModalOpen = document.querySelector('.modal-overlay.open');
+      if (anyModalOpen) {
+        if (e.key === 'Escape') {
+          closeHistoryModal();
+          closeVerifierModal();
+          closePrintCardsModal();
+        }
+        return;
+      }
+      if (e.key === 'Escape') {
+        closeSettingsDrawer();
+        return;
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextCard(true);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevCard();
+      } else if (e.key.toLowerCase() === 'p') {
+        if (gameMode === 'auto') togglePauseAuto();
+      } else if (e.key.toLowerCase() === 'r') {
+        repeatCurrentCardVoice();
+      } else if (e.key.toLowerCase() === 'v') {
+        openVerifierModal();
+      }
+    });
+
+    populateFolioSelect();
+    buildDeck();
+    startRealtimeTicker();
+  </script>
+</body>
+</html>

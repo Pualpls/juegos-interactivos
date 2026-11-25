@@ -1066,40 +1066,67 @@
     }
 
     @media print {
-      body * { visibility: hidden; }
-      #printableArea, #printableArea * { visibility: visible; }
+      @page {
+        size: letter portrait;
+        margin: 8mm 10mm;
+      }
+      html, body {
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .app-shell, .modal-overlay {
+        display: none !important;
+      }
       #printableArea {
         display: block !important;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: #ffffff;
-        color: #000000;
+        width: 100% !important;
+        background: #ffffff !important;
+        color: #000000 !important;
       }
       .print-page {
         page-break-after: always;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 14px;
-        padding: 10mm;
-        height: 265mm;
-      }
-      .print-loteria-card {
-        border: 3px solid #000000;
-        border-radius: 12px;
-        padding: 10px;
+        break-after: page;
+        width: 100%;
+        height: 258mm;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        background: #ffffff !important;
+      }
+      .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .print-loteria-card {
+        height: 121mm;
+        border: 2px solid #000000;
+        border-radius: 10px;
+        padding: 4.5mm 6mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .print-cut-line {
+        width: 100%;
+        border-top: 1.5px dashed #000000;
+        text-align: center;
+        font-size: 8.5pt;
+        font-weight: 700;
+        line-height: 1;
+        margin: 1mm 0;
+        color: #000000;
       }
       .print-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid #000000;
-        padding-bottom: 6px;
+        border-bottom: 1.5px solid #000000;
+        padding-bottom: 2.5mm;
         font-weight: 900;
         font-size: 13pt;
       }
@@ -1108,21 +1135,24 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        gap: 6px;
-        margin: 8px 0;
+        gap: 3.5mm;
+        margin: 3.5mm 0;
       }
       .print-card-cell {
-        border: 2px solid #000000;
+        border: 1.5px solid #000000;
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24pt;
+        font-size: 28pt;
         font-weight: 900;
+        background: #ffffff !important;
+        color: #000000 !important;
       }
       .print-card-footer {
         font-size: 8.5pt;
-        text-align: center;
+        display: flex;
+        justify-content: space-between;
         font-weight: 700;
       }
     }
@@ -1193,6 +1223,7 @@
       <div class="bottom-controls-bar">
         <div class="bottom-left-group">
           <a class="ctrl-btn" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
+          <a class="ctrl-btn" href="../loteria_calculo_mental_sisat/index.html" style="border-color:#34d399; color:#a7f3d0;" title="Cambiar a Lotería de Cálculo Mental SiSAT">🧠 Lotería SiSAT</a>
           <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
             ⬅ Anterior
           </button>
@@ -1496,9 +1527,9 @@
         </p>
         <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
           <button type="button" class="btn-verify-hero" onclick="window.print()">
-            🖨️ Imprimir 40 Cartas (4 por hoja B&amp;N)
+            🖨️ Imprimir 40 Cartas (2 por hoja Carta · Ahorro de Tinta)
           </button>
-          <span style="font-size:0.8rem; color:#64748b; font-weight:700;">Vista previa de folios:</span>
+          <span style="font-size:0.8rem; color:#64748b; font-weight:700;">Se imprimen 2 loterías por hoja tamaño carta con línea punteada a la mitad para recortar (20 hojas en total).</span>
         </div>
         <div id="previewFoliosContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:0.65rem; max-height:52vh; overflow-y:auto; padding:0.25rem;"></div>
       </div>
@@ -2610,22 +2641,24 @@
       `).join('');
 
       let pagesHtml = '';
-      for (let i = 0; i < list.length; i += 4) {
-        const chunk = list.slice(i, i + 4);
+      for (let i = 0; i < list.length; i += 2) {
+        const pair = list.slice(i, i + 2);
         pagesHtml += `<div class="print-page">
-          ${chunk.map(c => `
+          ${pair.map((c, idx) => `
             <div class="print-loteria-card">
               <div class="print-card-header">
-                <span>🎲 LOTERÍA DE MULTIPLICACIONES</span>
+                <span>🎲 LOTERÍA DE MULTIPLICACIONES · 3° PRIMARIA</span>
                 <span>FOLIO: #${String(c.folio).padStart(2, '0')}</span>
               </div>
               <div class="print-card-grid">
                 ${c.numbers.map(n => `<div class="print-card-cell">${n}</div>`).join('')}
               </div>
               <div class="print-card-footer">
-                Primaria Federal "José Clemente Orozco" · 3° Grado · Código Verificador: ${c.code}
+                <span>Primaria Federal "José Clemente Orozco"</span>
+                <span>Código Verificador: ${c.code}</span>
               </div>
             </div>
+            ${idx === 0 && pair.length > 1 ? '<div class="print-cut-line">✂️ Recortar por la mitad · 2 cartas individuales por hoja tamaño carta (Ahorro de tinta y papel)</div>' : ''}
           `).join('')}
         </div>`;
       }
