@@ -110,6 +110,32 @@
       color: #a7f3d0;
     }
 
+    .btn-tiktak-top {
+      background: rgba(59, 130, 246, 0.22);
+      border: 1.5px solid #60a5fa;
+      color: #dbeafe;
+      font-size: 0.86rem;
+      font-weight: 800;
+      padding: 0.38rem 0.9rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-tiktak-top:hover {
+      background: rgba(59, 130, 246, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-tiktak-top.muted {
+      background: rgba(51, 65, 85, 0.75);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #94a3b8;
+    }
+
     /* ESPACIADOR SUPERIOR PARA ANCLAR LOS CRONÓMETROS EN LA PARTE BAJA (AL ALCANCE DE LOS NIÑOS) */
     .top-ergonomic-spacer {
       flex: 0.22 1 12px;
@@ -166,12 +192,12 @@
     }
 
     .timer-station.is-running {
-      box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 14px 30px rgba(0, 0, 0, 0.35);
-      border-color: #10b981;
+      box-shadow: 0 0 24px color-mix(in srgb, var(--st-accent, #10b981) 55%, transparent), 0 14px 30px rgba(0, 0, 0, 0.35);
+      border-color: var(--st-accent, #10b981);
     }
 
     .timer-station.is-warning {
-      border-color: #f59e0b;
+      border-color: var(--st-accent, #f59e0b);
       box-shadow: 0 0 24px rgba(245, 158, 11, 0.55);
     }
 
@@ -199,15 +225,16 @@
     .station-badge {
       background: var(--st-accent, #4f46e5);
       color: #ffffff;
-      font-size: clamp(0.76rem, 1.15vw, 0.96rem);
+      font-size: clamp(0.78rem, 1.15vw, 0.98rem);
       font-weight: 900;
-      padding: 0.2rem 0.65rem;
+      padding: 0.22rem 0.68rem;
       border-radius: 999px;
       letter-spacing: 0.03em;
       white-space: nowrap;
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
     }
 
     .station-status-tag {
@@ -218,11 +245,11 @@
       letter-spacing: 0.04em;
     }
 
-    .timer-station.is-running .station-status-tag { color: #059669; }
-    .timer-station.is-warning .station-status-tag { color: #d97706; }
+    .timer-station.is-running .station-status-tag { color: var(--st-accent, #059669); }
+    .timer-station.is-warning .station-status-tag { color: #d97706; font-weight: 900; }
     .timer-station.is-finished .station-status-tag { color: #e11d48; font-weight: 900; }
 
-    /* BARRA VISUAL GRANDE (VERTICAL EN 1 FILA / HORIZONTAL EN 2 FILAS) */
+    /* BARRA VISUAL GRANDE CON EL COLOR PROPIO DE CADA BINA */
     .bar-visual-area {
       flex: 1 1 auto;
       min-height: 44px;
@@ -234,11 +261,11 @@
     }
 
     .vertical-bar-track {
-      width: clamp(32px, 3.8vw, 56px);
+      width: clamp(36px, 4.4vw, 64px);
       height: 100%;
-      min-height: 85px;
+      min-height: 95px;
       background: #e2e8f0;
-      border-radius: 16px;
+      border-radius: 18px;
       border: 2.5px solid #cbd5e1;
       overflow: hidden;
       display: flex;
@@ -250,23 +277,24 @@
     .vertical-bar-fill {
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #34d399 0%, #059669 100%);
-      border-radius: 12px;
-      transition: height 0.18s linear, background 0.3s ease;
-    }
-
-    .vertical-bar-fill.phase-warn {
-      background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+      background: linear-gradient(180deg, var(--st-bar-light, #34d399) 0%, var(--st-accent, #059669) 100%);
+      border-radius: 14px;
+      transition: height 0.18s linear, opacity 0.2s ease;
     }
 
     .vertical-bar-fill.phase-danger {
-      background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+      animation: barUrgentBlink 0.7s ease-in-out infinite;
+    }
+
+    @keyframes barUrgentBlink {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.25) saturate(1.25); }
     }
 
     .timers-grid.layout-two-rows .vertical-bar-track {
       width: 100%;
-      height: 28px;
-      min-height: 28px;
+      height: 32px;
+      min-height: 32px;
       flex-direction: row;
       justify-content: flex-start;
     }
@@ -274,31 +302,23 @@
     .timers-grid.layout-two-rows .vertical-bar-fill {
       height: 100% !important;
       width: var(--bar-pct, 100%);
-      background: linear-gradient(90deg, #059669 0%, #34d399 100%);
-      transition: width 0.18s linear, background 0.3s ease;
+      background: linear-gradient(90deg, var(--st-accent, #059669) 0%, var(--st-bar-light, #34d399) 100%);
+      transition: width 0.18s linear;
     }
 
-    .timers-grid.layout-two-rows .vertical-bar-fill.phase-warn {
-      background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
-    }
-
-    .timers-grid.layout-two-rows .vertical-bar-fill.phase-danger {
-      background: linear-gradient(90deg, #e11d48 0%, #fb7185 100%);
-    }
-
-    /* TIEMPO DIGITAL GIGANTE + BARRA HORIZONTAL DE APOYO */
+    /* TIEMPO DIGITAL GIGANTE (SIN BARRA REDUNDANTE DEBAJO) */
     .time-readout-block {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
       flex-shrink: 0;
       cursor: pointer;
+      padding: 0.1rem 0;
     }
 
     .time-digits {
-      font-size: clamp(1.65rem, 3.1vw, 2.75rem);
+      font-size: clamp(1.75rem, 3.25vw, 2.85rem);
       font-weight: 900;
       color: #0f172a;
       font-variant-numeric: tabular-nums;
@@ -308,29 +328,6 @@
 
     .timer-station.is-finished .time-digits {
       color: #be123c;
-    }
-
-    .mini-horiz-bar {
-      width: 100%;
-      height: 9px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .mini-horiz-fill {
-      height: 100%;
-      width: 100%;
-      background: #10b981;
-      border-radius: 999px;
-      transition: width 0.18s linear, background 0.3s ease;
-    }
-
-    .mini-horiz-fill.phase-warn { background: #f59e0b; }
-    .mini-horiz-fill.phase-danger { background: #f43f5e; }
-
-    .timers-grid.layout-two-rows .mini-horiz-bar {
-      display: none;
     }
 
     /* BOTONES TÁCTILES GRANDES EN LA BASE DE CADA CRONÓMETRO */
@@ -667,9 +664,7 @@
       .timers-grid.layout-row .vertical-bar-fill {
         height: 100% !important;
         width: var(--bar-pct, 100%);
-      }
-      .timers-grid.layout-row .mini-horiz-bar {
-        display: none;
+        background: linear-gradient(90deg, var(--st-accent, #059669) 0%, var(--st-bar-light, #34d399) 100%);
       }
     }
 
@@ -696,6 +691,9 @@
       </div>
 
       <div class="live-summary-pills">
+        <button type="button" class="btn-tiktak-top" id="btnTikTakTop" onclick="toggleTikTakEnabled()" aria-pressed="true" title="Activar o silenciar el sonido Tik-Tak mientras haya un cronómetro activo">
+          🕰️ Tik-Tak: ON
+        </button>
         <span class="summary-pill" id="pillDefaultTime">⏱️ Tiempo base: 02:00</span>
         <span class="summary-pill active-run" id="pillActiveCount">▶ En marcha: 0 / 8</span>
       </div>
@@ -792,6 +790,11 @@
         <div class="side-card-title"><span>🔔 Avisos y Diseño</span></div>
 
         <div class="toggle-row">
+          <span style="font-size:0.82rem; font-weight:800; color:#e2e8f0;">🕰️ Sonido Tik-Tak (al correr)</span>
+          <button type="button" class="switch-btn on" id="btnTikTakDrawer" onclick="toggleTikTakEnabled()">ACTIVO</button>
+        </div>
+
+        <div class="toggle-row">
           <span style="font-size:0.82rem; font-weight:800; color:#e2e8f0;">🔔 Campanita suave al terminar</span>
           <button type="button" class="switch-btn on" id="btnSoundToggle" onclick="toggleSoundEnabled()">ACTIVA</button>
         </div>
@@ -810,15 +813,46 @@
     document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
     document.oncontextmenu = () => false;
 
-    /* 2. WEB AUDIO API SINGLETON (SONIDOS TÁCTILES Y CAMPANITA SUAVE OFFLINE) */
+    /* 2. WEB AUDIO API SINGLETON (SONIDOS TÁCTILES, TIK-TAK DE RELOJ Y CAMPANITA) */
     let sharedAudioCtx = null;
     let soundEnabled = true;
+    let tikTakEnabled = true;
+    let tikTakBeatToggle = false;
+    let tikTakAccumMs = 0;
 
     function getAudioCtx() {
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return null;
       if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
       return sharedAudioCtx;
+    }
+
+    function playTikTakStep(isTik) {
+      if (!tikTakEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const emit = () => {
+        try {
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          // Tik (agudo limpio de madera) / Tak (grave suave)
+          const startFreq = isTik ? 1180 : 860;
+          const endFreq = isTik ? 720 : 520;
+          osc.frequency.setValueAtTime(startFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.026);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.065, now + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.034);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } catch (e) {}
+      };
+      if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+      else emit();
     }
 
     function playSfx(type = 'tap') {
@@ -873,20 +907,20 @@
       else emit();
     }
 
-    /* 3. PALETA DISTINTIVA PARA CADA BINA (FÁCIL DE IDENTIFICAR PARA NIÑOS DE 3°) */
+    /* 3. PALETA ÚNICA E INCONFUNDIBLE POR CADA BINA (CERO COLORES REPETIDOS) */
     const STATION_PALETTE = [
-      { accent: '#2563eb', border: '#93c5fd', name: 'Bina 1' },
-      { accent: '#059669', border: '#6ee7b7', name: 'Bina 2' },
-      { accent: '#d97706', border: '#fcd34d', name: 'Bina 3' },
-      { accent: '#7c3aed', border: '#c4b5fd', name: 'Bina 4' },
-      { accent: '#e11d48', border: '#fda4af', name: 'Bina 5' },
-      { accent: '#0891b2', border: '#67e8f9', name: 'Bina 6' },
-      { accent: '#ea580c', border: '#fdba74', name: 'Bina 7' },
-      { accent: '#4f46e5', border: '#a5b4fc', name: 'Bina 8' },
-      { accent: '#16a34a', border: '#86efac', name: 'Bina 9' },
-      { accent: '#db2777', border: '#f9a8d4', name: 'Bina 10' },
-      { accent: '#0284c7', border: '#7dd3fc', name: 'Bina 11' },
-      { accent: '#9333ea', border: '#d8b4fe', name: 'Bina 12' }
+      { accent: '#2563eb', barLight: '#60a5fa', border: '#93c5fd', name: 'Bina 1' },  // Azul Rey
+      { accent: '#059669', barLight: '#34d399', border: '#6ee7b7', name: 'Bina 2' },  // Verde Esmeralda
+      { accent: '#ca8a04', barLight: '#facc15', border: '#fde047', name: 'Bina 3' },  // Amarillo Oro
+      { accent: '#7c3aed', barLight: '#a78bfa', border: '#c4b5fd', name: 'Bina 4' },  // Morado Uva
+      { accent: '#dc2626', barLight: '#f87171', border: '#fca5a5', name: 'Bina 5' },  // Rojo Carmesí
+      { accent: '#0891b2', barLight: '#22d3ee', border: '#67e8f9', name: 'Bina 6' },  // Turquesa Cian
+      { accent: '#ea580c', barLight: '#fb923c', border: '#fdba74', name: 'Bina 7' },  // Naranja Mandarina
+      { accent: '#db2777', barLight: '#f472b6', border: '#f9a8d4', name: 'Bina 8' },  // Rosa Fucsia
+      { accent: '#4d7c0f', barLight: '#a3e635', border: '#bef264', name: 'Bina 9' },  // Verde Lima
+      { accent: '#92400e', barLight: '#d97706', border: '#fcd34d', name: 'Bina 10' }, // Café Ámbar
+      { accent: '#1e3a8a', barLight: '#3b82f6', border: '#93c5fd', name: 'Bina 11' }, // Azul Marino
+      { accent: '#334155', barLight: '#94a3b8', border: '#cbd5e1', name: 'Bina 12' }  // Gris Pizarra
     ];
 
     /* 4. ESTADO DE LOS CRONÓMETROS INDEPENDIENTES */
@@ -935,7 +969,7 @@
       grid.innerHTML = timers.map((t, idx) => {
         const pal = STATION_PALETTE[idx % STATION_PALETTE.length];
         return `
-          <div class="timer-station" id="station-${idx}" style="--st-accent: ${pal.accent}; --st-border: ${pal.border};">
+          <div class="timer-station" id="station-${idx}" style="--st-accent: ${pal.accent}; --st-bar-light: ${pal.barLight}; --st-border: ${pal.border};">
             <div class="station-header">
               <span class="station-badge">${pal.name}</span>
               <span class="station-status-tag" id="status-${idx}">Listo</span>
@@ -949,9 +983,6 @@
 
             <div class="time-readout-block" data-action="toggle" data-idx="${idx}" title="Toca para iniciar o pausar">
               <div class="time-digits" id="digits-${idx}">${formatMMSS(t.remainingMs / 1000)}</div>
-              <div class="mini-horiz-bar">
-                <div class="mini-horiz-fill" id="hbar-${idx}" style="width: 100%;"></div>
-              </div>
             </div>
 
             <div class="station-actions">
@@ -978,7 +1009,6 @@
       const card = document.getElementById(`station-${idx}`);
       const statusEl = document.getElementById(`status-${idx}`);
       const vbar = document.getElementById(`vbar-${idx}`);
-      const hbar = document.getElementById(`hbar-${idx}`);
       const digits = document.getElementById(`digits-${idx}`);
       const btnMain = document.getElementById(`btnMain-${idx}`);
       if (!card) return;
@@ -989,15 +1019,11 @@
       digits.textContent = formatMMSS(secsLeft);
       vbar.style.height = `${pct}%`;
       vbar.style.setProperty('--bar-pct', `${pct}%`);
-      hbar.style.width = `${pct}%`;
 
-      const isDanger = secsLeft <= 10 || t.finished;
-      const isWarn = !isDanger && secsLeft <= 30 && t.totalSec > 30;
+      const isDanger = (secsLeft <= 10 && t.running) || t.finished;
+      const isWarn = !isDanger && secsLeft <= 30 && t.totalSec > 30 && t.running;
 
       vbar.classList.toggle('phase-danger', isDanger);
-      vbar.classList.toggle('phase-warn', isWarn);
-      hbar.classList.toggle('phase-danger', isDanger);
-      hbar.classList.toggle('phase-warn', isWarn);
 
       card.classList.toggle('is-running', t.running && !t.finished && !isWarn && !isDanger);
       card.classList.toggle('is-warning', t.running && !t.finished && (isWarn || isDanger));
@@ -1166,6 +1192,12 @@
       updateSettingsUI();
     }
 
+    function toggleTikTakEnabled() {
+      tikTakEnabled = !tikTakEnabled;
+      if (tikTakEnabled) playTikTakStep(true);
+      updateSettingsUI();
+    }
+
     function toggleSettingsDrawer() {
       playSfx('tap');
       const drawer = document.getElementById('settingsDropdownDrawer');
@@ -1210,6 +1242,19 @@
         btnSound.className = `switch-btn ${soundEnabled ? 'on' : 'off'}`;
       }
 
+      const btnTikTakTop = document.getElementById('btnTikTakTop');
+      if (btnTikTakTop) {
+        btnTikTakTop.textContent = tikTakEnabled ? '🕰️ Tik-Tak: ON' : '🔇 Tik-Tak: OFF';
+        btnTikTakTop.classList.toggle('muted', !tikTakEnabled);
+        btnTikTakTop.setAttribute('aria-pressed', String(tikTakEnabled));
+      }
+
+      const btnTikTakDrawer = document.getElementById('btnTikTakDrawer');
+      if (btnTikTakDrawer) {
+        btnTikTakDrawer.textContent = tikTakEnabled ? 'ACTIVO' : 'SILENCIO';
+        btnTikTakDrawer.className = `switch-btn ${tikTakEnabled ? 'on' : 'off'}`;
+      }
+
       const layoutText = layoutMode === 'row' ? `1 Fila (${timerCount})` : `2 Filas (${Math.ceil(timerCount / 2)}×2)`;
       const btnQuick = document.getElementById('btnLayoutQuick');
       const btnDrawerLayout = document.getElementById('btnLayoutDrawerToggle');
@@ -1224,7 +1269,7 @@
       const dt = now - lastTick;
       lastTick = now;
 
-      let anyChanged = false;
+      let anyRunningNow = false;
       let anyJustFinished = false;
 
       for (let i = 0; i < timers.length; i++) {
@@ -1237,16 +1282,27 @@
           t.running = false;
           t.finished = true;
           anyJustFinished = true;
+        } else {
+          anyRunningNow = true;
         }
         renderSingleStation(i);
-        anyChanged = true;
+      }
+
+      // Sonido Tik-Tak rítmico cada 1 segundo SOLO mientras algún cronómetro esté corriendo
+      if (anyRunningNow) {
+        tikTakAccumMs += dt;
+        if (tikTakAccumMs >= 1000) {
+          tikTakAccumMs = tikTakAccumMs % 1000;
+          tikTakBeatToggle = !tikTakBeatToggle;
+          playTikTakStep(tikTakBeatToggle);
+        }
+      } else {
+        tikTakAccumMs = 0;
       }
 
       if (anyJustFinished) {
         playSfx('finish');
         updateActiveSummary();
-      } else if (anyChanged) {
-        // Actualizar resumen cuando termina o cambia estado
       }
     }, 100);
 
