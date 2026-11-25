@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cronómetros de Lectura entre Pares · Recurso de Apoyo Docente</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg-app: #0f172a;
+      --bg-panel: #1e293b;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --blue: #3b82f6;
+      --indigo: #4f46e5;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      font-family: 'Lexend', 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      width: 100%;
+      height: 100vh;
+      max-width: 1860px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ZONA SUPERIOR CALMA E INFORMATIVA (LIBRE PARA QUE LOS CRONÓMETROS QUEDEN EN LA PARTE BAJA) */
+    .top-calm-header {
+      flex: 0 0 auto;
+      padding: 0.75rem 1.25rem 0.4rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .header-title-wrap h1 {
+      font-size: clamp(1.2rem, 2.3vw, 1.8rem);
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      line-height: 1.15;
+    }
+
+    .header-sub {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    .live-summary-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .summary-pill {
+      background: rgba(30, 41, 59, 0.88);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      color: #e2e8f0;
+      font-size: 0.84rem;
+      font-weight: 800;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .summary-pill.active-run {
+      border-color: #34d399;
+      background: rgba(16, 185, 129, 0.18);
+      color: #a7f3d0;
+    }
+
+    /* ESPACIADOR SUPERIOR PARA ANCLAR LOS CRONÓMETROS EN LA PARTE BAJA (AL ALCANCE DE LOS NIÑOS) */
+    .top-ergonomic-spacer {
+      flex: 0.22 1 12px;
+      min-height: 4px;
+    }
+
+    /* CONTENEDOR DE LOS CRONÓMETROS EN LA PARTE BAJA (ESPACIADOS E INDEPENDIENTES) */
+    .timers-stage {
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      padding: 0.45rem 1rem 0.7rem 1rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .timers-grid {
+      width: 100%;
+      height: min(100%, 540px);
+      display: grid;
+      gap: clamp(0.65rem, 1.3vw, 1.25rem);
+      align-items: stretch;
+    }
+
+    .timers-grid.layout-row {
+      grid-template-columns: repeat(var(--cols, 8), minmax(0, 1fr));
+      grid-template-rows: 1fr;
+    }
+
+    .timers-grid.layout-two-rows {
+      grid-template-columns: repeat(var(--half-cols, 4), minmax(0, 1fr));
+      grid-template-rows: 1fr 1fr;
+    }
+
+    /* TARJETA DE CADA CRONÓMETRO INDIVIDUAL */
+    .timer-station {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 24px;
+      border: 4px solid var(--st-border, #cbd5e1);
+      border-bottom: 10px solid var(--st-accent, #64748b);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+      padding: 0.65rem 0.55rem 0.6rem 0.55rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.14s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .timer-station.is-running {
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 14px 30px rgba(0, 0, 0, 0.35);
+      border-color: #10b981;
+    }
+
+    .timer-station.is-warning {
+      border-color: #f59e0b;
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.55);
+    }
+
+    .timer-station.is-finished {
+      background: #fff1f2;
+      border-color: #f43f5e;
+      border-bottom-color: #be123c;
+      animation: finishPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes finishPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.6); }
+      50% { transform: scale(1.02); box-shadow: 0 0 28px 4px rgba(244, 63, 94, 0.75); }
+    }
+
+    .station-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.18rem;
+      flex-shrink: 0;
+    }
+
+    .station-badge {
+      background: var(--st-accent, #4f46e5);
+      color: #ffffff;
+      font-size: clamp(0.76rem, 1.15vw, 0.96rem);
+      font-weight: 900;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .station-status-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 0.04em;
+    }
+
+    .timer-station.is-running .station-status-tag { color: #059669; }
+    .timer-station.is-warning .station-status-tag { color: #d97706; }
+    .timer-station.is-finished .station-status-tag { color: #e11d48; font-weight: 900; }
+
+    /* BARRA VISUAL GRANDE (VERTICAL EN 1 FILA / HORIZONTAL EN 2 FILAS) */
+    .bar-visual-area {
+      flex: 1 1 auto;
+      min-height: 44px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .vertical-bar-track {
+      width: clamp(32px, 3.8vw, 56px);
+      height: 100%;
+      min-height: 85px;
+      background: #e2e8f0;
+      border-radius: 16px;
+      border: 2.5px solid #cbd5e1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .vertical-bar-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+      border-radius: 12px;
+      transition: height 0.18s linear, background 0.3s ease;
+    }
+
+    .vertical-bar-fill.phase-warn {
+      background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+    }
+
+    .vertical-bar-fill.phase-danger {
+      background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+    }
+
+    .timers-grid.layout-two-rows .vertical-bar-track {
+      width: 100%;
+      height: 28px;
+      min-height: 28px;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    .timers-grid.layout-two-rows .vertical-bar-fill {
+      height: 100% !important;
+      width: var(--bar-pct, 100%);
+      background: linear-gradient(90deg, #059669 0%, #34d399 100%);
+      transition: width 0.18s linear, background 0.3s ease;
+    }
+
+    .timers-grid.layout-two-rows .vertical-bar-fill.phase-warn {
+      background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
+    }
+
+    .timers-grid.layout-two-rows .vertical-bar-fill.phase-danger {
+      background: linear-gradient(90deg, #e11d48 0%, #fb7185 100%);
+    }
+
+    /* TIEMPO DIGITAL GIGANTE + BARRA HORIZONTAL DE APOYO */
+    .time-readout-block {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .time-digits {
+      font-size: clamp(1.65rem, 3.1vw, 2.75rem);
+      font-weight: 900;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .timer-station.is-finished .time-digits {
+      color: #be123c;
+    }
+
+    .mini-horiz-bar {
+      width: 100%;
+      height: 9px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mini-horiz-fill {
+      height: 100%;
+      width: 100%;
+      background: #10b981;
+      border-radius: 999px;
+      transition: width 0.18s linear, background 0.3s ease;
+    }
+
+    .mini-horiz-fill.phase-warn { background: #f59e0b; }
+    .mini-horiz-fill.phase-danger { background: #f43f5e; }
+
+    .timers-grid.layout-two-rows .mini-horiz-bar {
+      display: none;
+    }
+
+    /* BOTONES TÁCTILES GRANDES EN LA BASE DE CADA CRONÓMETRO */
+    .station-actions {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .btn-st-main {
+      width: 100%;
+      padding: 0.62rem 0.35rem;
+      border-radius: 14px;
+      border: 2.5px solid #059669;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-size: clamp(0.84rem, 1.1vw, 1rem);
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+      transition: transform 0.1s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-st-main:active {
+      transform: scale(0.95);
+    }
+
+    .btn-st-main.running {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      border-color: #b45309;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-st-main.finished {
+      background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+      border-color: #9f1239;
+    }
+
+    .btn-st-sub-row {
+      display: flex;
+      gap: 0.3rem;
+      width: 100%;
+    }
+
+    .btn-st-mini {
+      flex: 1;
+      padding: 0.36rem 0.2rem;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: center;
+      touch-action: manipulation;
+    }
+
+    .btn-st-mini:active {
+      background: #e2e8f0;
+      transform: scale(0.94);
+    }
+
+    /* BARRA INFERIOR DE CONTROL DOCENTE */
+    .bottom-dock-bar {
+      flex-shrink: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.96);
+      border-top: 2px solid rgba(255, 255, 255, 0.14);
+      padding: 0.55rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      z-index: 40;
+    }
+
+    .dock-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.05rem;
+      border-radius: 14px;
+      font-size: 0.94rem;
+      font-weight: 900;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .ctrl-btn:hover {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn:active {
+      transform: scale(0.96);
+    }
+
+    .ctrl-btn.btn-emerald {
+      background: #059669;
+      border-color: #6ee7b7;
+    }
+
+    .ctrl-btn.btn-amber {
+      background: #f59e0b;
+      border-color: #fef08a;
+      color: #1e1b4b;
+    }
+
+    .ctrl-btn.btn-settings-toggle {
+      background: #1e293b;
+      border-color: #818cf8;
+      color: #e0e7ff;
+    }
+
+    .ctrl-btn.btn-settings-toggle.open {
+      background: #4f46e5;
+      border-color: #c7d2fe;
+      color: #ffffff;
+    }
+
+    /* MENÚ DESPLEGABLE DE AJUSTES HACIA ARRIBA */
+    .settings-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 75;
+      display: none;
+    }
+
+    .settings-drawer-backdrop.open {
+      display: block;
+    }
+
+    .settings-dropdown-drawer {
+      position: fixed;
+      bottom: 76px;
+      right: 1.1rem;
+      width: min(94vw, 440px);
+      max-height: calc(100vh - 95px);
+      overflow-y: auto;
+      background: #1e293b;
+      border: 2.5px solid #6366f1;
+      border-radius: 24px;
+      box-shadow: 0 -15px 55px rgba(0, 0, 0, 0.7);
+      padding: 1rem 1.1rem;
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: popUpFromBottom 0.18s ease-out;
+    }
+
+    .settings-dropdown-drawer.open {
+      display: flex;
+    }
+
+    @keyframes popUpFromBottom {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .drawer-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .drawer-close {
+      background: rgba(255, 255, 255, 0.14);
+      color: #f8fafc;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .side-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 0.65rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .side-card-title {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .rhythm-adjuster-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 0.4rem 0.55rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .rhythm-step-btn {
+      width: 42px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rhythm-readout {
+      text-align: center;
+    }
+
+    .rhythm-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .rhythm-lbl {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 700;
+      display: block;
+    }
+
+    .preset-pills-row {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-pill {
+      flex: 1;
+      padding: 0.34rem 0.4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 41, 59, 0.7);
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .preset-pill.active {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #a5b4fc;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 10px;
+    }
+
+    .switch-btn {
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .switch-btn.on { background: #10b981; color: #064e3b; }
+    .switch-btn.off { background: #475569; color: #cbd5e1; }
+
+    @media (max-width: 1050px) {
+      .timers-grid.layout-row {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: 1fr 1fr;
+      }
+      .timers-grid.layout-row .vertical-bar-track {
+        width: 100%;
+        height: 22px;
+        min-height: 22px;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      .timers-grid.layout-row .vertical-bar-fill {
+        height: 100% !important;
+        width: var(--bar-pct, 100%);
+      }
+      .timers-grid.layout-row .mini-horiz-bar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .timers-grid.layout-row,
+      .timers-grid.layout-two-rows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        height: auto;
+        max-height: 100%;
+        overflow-y: auto;
+      }
+      .bottom-dock-bar { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ZONA SUPERIOR LIMPIA -->
+    <header class="top-calm-header">
+      <div class="header-title-wrap">
+        <h1>⏱️ Cronómetros de Lectura entre Pares</h1>
+        <p class="header-sub">Cada bina toca su propio cronómetro independiente para medir su fluidez lectora (2:00 min por defecto)</p>
+      </div>
+
+      <div class="live-summary-pills">
+        <span class="summary-pill" id="pillDefaultTime">⏱️ Tiempo base: 02:00</span>
+        <span class="summary-pill active-run" id="pillActiveCount">▶ En marcha: 0 / 8</span>
+      </div>
+    </header>
+
+    <!-- ESPACIADOR SUPERIOR PARA MANTENER LOS 8 CRONÓMETROS EN LA PARTE BAJA -->
+    <div class="top-ergonomic-spacer"></div>
+
+    <!-- ZONA DE LOS 8 CRONÓMETROS INDEPENDIENTES Y ESPACIADOS EN LA PARTE BAJA -->
+    <main class="timers-stage">
+      <div class="timers-grid layout-row" id="timersGrid" style="--cols: 8; --half-cols: 4;"></div>
+    </main>
+
+    <!-- BARRA DE CONTROL INFERIOR -->
+    <footer class="bottom-dock-bar">
+      <div class="dock-group">
+        <a class="ctrl-btn" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
+        <button type="button" class="ctrl-btn btn-emerald" onclick="startAllTimers()" title="Iniciar todos los cronómetros a la vez">
+          ▶ Iniciar Todos
+        </button>
+        <button type="button" class="ctrl-btn btn-amber" onclick="pauseAllTimers()" title="Pausar todos los cronómetros">
+          ⏸ Pausar Todos
+        </button>
+        <button type="button" class="ctrl-btn" onclick="resetAllTimers()" title="Reiniciar todos los cronómetros a su tiempo base">
+          ↺ Reiniciar Todos
+        </button>
+      </div>
+
+      <div class="dock-group">
+        <button type="button" class="ctrl-btn" id="btnLayoutQuick" onclick="toggleLayoutMode()" title="Cambiar entre 1 fila (8 columnas) o 2 filas (4×2)">
+          📐 Vista: 1 Fila (8)
+        </button>
+        <button type="button" class="ctrl-btn btn-settings-toggle" id="btnSettingsToggle" onclick="toggleSettingsDrawer()">
+          ⚙️ Ajustes ▴
+        </button>
+      </div>
+    </footer>
+
+    <!-- MENÚ DESPLEGABLE DE AJUSTES HACIA ARRIBA -->
+    <div class="settings-drawer-backdrop" id="settingsBackdrop" onclick="closeSettingsDrawer()"></div>
+    <aside class="settings-dropdown-drawer" id="settingsDropdownDrawer" aria-label="Ajustes de cronómetros">
+      <div class="drawer-header">
+        <div class="drawer-title">⚙️ Configurar Cronómetros de Lectura</div>
+        <button type="button" class="drawer-close" onclick="closeSettingsDrawer()">✕</button>
+      </div>
+
+      <!-- 1. TIEMPO BASE POR DEFECTO (2:00 MINUTOS) -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>⏱️ Tiempo Base de Lectura</span>
+        </div>
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="adjustDefaultSeconds(-15)">-15s</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="defaultTimeDisplay">02:00</span>
+            <span class="rhythm-lbl">se aplica al reiniciar</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="adjustDefaultSeconds(15)">+15s</button>
+        </div>
+        <div class="preset-pills-row" id="timePresetRow">
+          <button type="button" class="preset-pill" onclick="setDefaultSeconds(60)">1:00</button>
+          <button type="button" class="preset-pill" onclick="setDefaultSeconds(90)">1:30</button>
+          <button type="button" class="preset-pill active" onclick="setDefaultSeconds(120)">2:00</button>
+          <button type="button" class="preset-pill" onclick="setDefaultSeconds(180)">3:00</button>
+          <button type="button" class="preset-pill" onclick="setDefaultSeconds(300)">5:00</button>
+        </div>
+      </div>
+
+      <!-- 2. CANTIDAD DE CRONÓMETROS (8 POR DEFECTO) -->
+      <div class="side-card">
+        <div class="side-card-title">
+          <span>👥 Cantidad de Cronómetros</span>
+          <span id="countReadoutBadge" style="color:#fbbf24;">8 binas</span>
+        </div>
+        <div class="rhythm-adjuster-row">
+          <button type="button" class="rhythm-step-btn" onclick="changeTimerCount(timerCount - 1)">➖</button>
+          <div class="rhythm-readout">
+            <span class="rhythm-val" id="timerCountVal">8</span>
+            <span class="rhythm-lbl">estaciones independientes</span>
+          </div>
+          <button type="button" class="rhythm-step-btn" onclick="changeTimerCount(timerCount + 1)">➕</button>
+        </div>
+        <div class="preset-pills-row" id="countPresetRow">
+          <button type="button" class="preset-pill" onclick="changeTimerCount(4)">4</button>
+          <button type="button" class="preset-pill" onclick="changeTimerCount(6)">6</button>
+          <button type="button" class="preset-pill active" onclick="changeTimerCount(8)">8</button>
+          <button type="button" class="preset-pill" onclick="changeTimerCount(10)">10</button>
+          <button type="button" class="preset-pill" onclick="changeTimerCount(12)">12</button>
+        </div>
+      </div>
+
+      <!-- 3. SONIDO DE AVISO SUAVE Y DISTRIBUCIÓN -->
+      <div class="side-card">
+        <div class="side-card-title"><span>🔔 Avisos y Diseño</span></div>
+
+        <div class="toggle-row">
+          <span style="font-size:0.82rem; font-weight:800; color:#e2e8f0;">🔔 Campanita suave al terminar</span>
+          <button type="button" class="switch-btn on" id="btnSoundToggle" onclick="toggleSoundEnabled()">ACTIVA</button>
+        </div>
+
+        <div class="toggle-row">
+          <span style="font-size:0.82rem; font-weight:800; color:#e2e8f0;">📐 Acomodo en pantalla</span>
+          <button type="button" class="switch-btn on" id="btnLayoutDrawerToggle" onclick="toggleLayoutMode()" style="background:#4f46e5; color:#ffffff;">1 Fila (8 col.)</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    /* 1. BLOQUEO DE MENÚS CONTEXTUALES Y GESTOS PARÁSITOS (ESTÁNDAR COMPUTERLAND) */
+    window.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    /* 2. WEB AUDIO API SINGLETON (SONIDOS TÁCTILES Y CAMPANITA SUAVE OFFLINE) */
+    let sharedAudioCtx = null;
+    let soundEnabled = true;
+
+    function getAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      return sharedAudioCtx;
+    }
+
+    function playSfx(type = 'tap') {
+      if (!soundEnabled && type === 'finish') return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const emit = () => {
+        try {
+          const now = ctx.currentTime;
+          if (type === 'finish') {
+            [[659.25, 0, 0.16, 0.16], [880, 0.14, 0.24, 0.16], [1046.5, 0.30, 0.36, 0.14]].forEach(([f, off, dur, vol]) => {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(f, now + off);
+              g.gain.setValueAtTime(0.001, now + off);
+              g.gain.linearRampToValueAtTime(vol, now + off + 0.015);
+              g.gain.exponentialRampToValueAtTime(0.001, now + off + dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.02);
+            });
+          } else if (type === 'start') {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.exponentialRampToValueAtTime(780, now + 0.07);
+            g.gain.setValueAtTime(0.08, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.09);
+          } else {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(760, now + 0.045);
+            g.gain.setValueAtTime(0.06, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.055);
+          }
+        } catch (e) {}
+      };
+      if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+      else emit();
+    }
+
+    /* 3. PALETA DISTINTIVA PARA CADA BINA (FÁCIL DE IDENTIFICAR PARA NIÑOS DE 3°) */
+    const STATION_PALETTE = [
+      { accent: '#2563eb', border: '#93c5fd', name: 'Bina 1' },
+      { accent: '#059669', border: '#6ee7b7', name: 'Bina 2' },
+      { accent: '#d97706', border: '#fcd34d', name: 'Bina 3' },
+      { accent: '#7c3aed', border: '#c4b5fd', name: 'Bina 4' },
+      { accent: '#e11d48', border: '#fda4af', name: 'Bina 5' },
+      { accent: '#0891b2', border: '#67e8f9', name: 'Bina 6' },
+      { accent: '#ea580c', border: '#fdba74', name: 'Bina 7' },
+      { accent: '#4f46e5', border: '#a5b4fc', name: 'Bina 8' },
+      { accent: '#16a34a', border: '#86efac', name: 'Bina 9' },
+      { accent: '#db2777', border: '#f9a8d4', name: 'Bina 10' },
+      { accent: '#0284c7', border: '#7dd3fc', name: 'Bina 11' },
+      { accent: '#9333ea', border: '#d8b4fe', name: 'Bina 12' }
+    ];
+
+    /* 4. ESTADO DE LOS CRONÓMETROS INDEPENDIENTES */
+    let defaultSeconds = 120; // 2 minutos por defecto
+    let timerCount = 8;       // 8 cronómetros por defecto
+    let layoutMode = 'row';   // 'row' (1x8 abajo) | 'two-rows' (4x2 abajo)
+    let timers = [];
+
+    function formatMMSS(totalSecFloat) {
+      const s = Math.max(0, Math.ceil(totalSecFloat));
+      const mins = Math.floor(s / 60);
+      const secs = s % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function initTimers(count) {
+      timerCount = Math.max(2, Math.min(12, count));
+      const newTimers = [];
+      for (let i = 0; i < timerCount; i++) {
+        if (timers[i]) {
+          newTimers.push(timers[i]);
+        } else {
+          newTimers.push({
+            id: i,
+            totalSec: defaultSeconds,
+            remainingMs: defaultSeconds * 1000,
+            running: false,
+            finished: false
+          });
+        }
+      }
+      timers = newTimers;
+      buildTimersDOM();
+      updateSettingsUI();
+    }
+
+    function buildTimersDOM() {
+      const grid = document.getElementById('timersGrid');
+      if (!grid) return;
+
+      const halfCols = Math.ceil(timerCount / 2);
+      grid.style.setProperty('--cols', timerCount);
+      grid.style.setProperty('--half-cols', halfCols);
+      grid.className = `timers-grid ${layoutMode === 'two-rows' ? 'layout-two-rows' : 'layout-row'}`;
+
+      grid.innerHTML = timers.map((t, idx) => {
+        const pal = STATION_PALETTE[idx % STATION_PALETTE.length];
+        return `
+          <div class="timer-station" id="station-${idx}" style="--st-accent: ${pal.accent}; --st-border: ${pal.border};">
+            <div class="station-header">
+              <span class="station-badge">${pal.name}</span>
+              <span class="station-status-tag" id="status-${idx}">Listo</span>
+            </div>
+
+            <div class="bar-visual-area" data-action="toggle" data-idx="${idx}" title="Toca para iniciar o pausar">
+              <div class="vertical-bar-track">
+                <div class="vertical-bar-fill" id="vbar-${idx}" style="height: 100%; --bar-pct: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="time-readout-block" data-action="toggle" data-idx="${idx}" title="Toca para iniciar o pausar">
+              <div class="time-digits" id="digits-${idx}">${formatMMSS(t.remainingMs / 1000)}</div>
+              <div class="mini-horiz-bar">
+                <div class="mini-horiz-fill" id="hbar-${idx}" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="station-actions">
+              <button type="button" class="btn-st-main" id="btnMain-${idx}" data-action="toggle" data-idx="${idx}">
+                ▶ Iniciar
+              </button>
+              <div class="btn-st-sub-row">
+                <button type="button" class="btn-st-mini" data-action="add30" data-idx="${idx}" title="Sumar 30 segundos a esta bina">+30s</button>
+                <button type="button" class="btn-st-mini" data-action="reset" data-idx="${idx}" title="Reiniciar solo esta bina">↺</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      timers.forEach((_, idx) => renderSingleStation(idx));
+      updateActiveSummary();
+    }
+
+    function renderSingleStation(idx) {
+      const t = timers[idx];
+      if (!t) return;
+
+      const card = document.getElementById(`station-${idx}`);
+      const statusEl = document.getElementById(`status-${idx}`);
+      const vbar = document.getElementById(`vbar-${idx}`);
+      const hbar = document.getElementById(`hbar-${idx}`);
+      const digits = document.getElementById(`digits-${idx}`);
+      const btnMain = document.getElementById(`btnMain-${idx}`);
+      if (!card) return;
+
+      const secsLeft = t.remainingMs / 1000;
+      const pct = t.totalSec > 0 ? Math.max(0, Math.min(100, (secsLeft / t.totalSec) * 100)) : 0;
+
+      digits.textContent = formatMMSS(secsLeft);
+      vbar.style.height = `${pct}%`;
+      vbar.style.setProperty('--bar-pct', `${pct}%`);
+      hbar.style.width = `${pct}%`;
+
+      const isDanger = secsLeft <= 10 || t.finished;
+      const isWarn = !isDanger && secsLeft <= 30 && t.totalSec > 30;
+
+      vbar.classList.toggle('phase-danger', isDanger);
+      vbar.classList.toggle('phase-warn', isWarn);
+      hbar.classList.toggle('phase-danger', isDanger);
+      hbar.classList.toggle('phase-warn', isWarn);
+
+      card.classList.toggle('is-running', t.running && !t.finished && !isWarn && !isDanger);
+      card.classList.toggle('is-warning', t.running && !t.finished && (isWarn || isDanger));
+      card.classList.toggle('is-finished', t.finished);
+
+      if (t.finished) {
+        statusEl.textContent = '¡TIEMPO!';
+        btnMain.textContent = '↺ Listo';
+        btnMain.className = 'btn-st-main finished';
+      } else if (t.running) {
+        statusEl.textContent = 'Leyendo...';
+        btnMain.textContent = '⏸ Pausar';
+        btnMain.className = 'btn-st-main running';
+      } else if (t.remainingMs < t.totalSec * 1000) {
+        statusEl.textContent = 'En pausa';
+        btnMain.textContent = '▶ Seguir';
+        btnMain.className = 'btn-st-main';
+      } else {
+        statusEl.textContent = 'Listo';
+        btnMain.textContent = '▶ Iniciar';
+        btnMain.className = 'btn-st-main';
+      }
+    }
+
+    function updateActiveSummary() {
+      const activeCnt = timers.filter(t => t.running).length;
+      const pillAct = document.getElementById('pillActiveCount');
+      const pillDef = document.getElementById('pillDefaultTime');
+      if (pillAct) pillAct.textContent = `▶ En marcha: ${activeCnt} / ${timerCount}`;
+      if (pillDef) pillDef.textContent = `⏱️ Tiempo base: ${formatMMSS(defaultSeconds)}`;
+    }
+
+    /* 5. ACCIONES INDEPENDIENTES CON SOPORTE MULTI-TOUCH (POINTERDOWN) */
+    const lastTapByStation = {};
+
+    document.getElementById('timersGrid').addEventListener('pointerdown', (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+      e.preventDefault();
+      const idx = parseInt(target.dataset.idx, 10);
+      const action = target.dataset.action;
+      if (isNaN(idx) || !timers[idx]) return;
+
+      const now = Date.now();
+      const key = `${idx}_${action}`;
+      if (lastTapByStation[key] && (now - lastTapByStation[key] < 160)) return;
+      lastTapByStation[key] = now;
+
+      if (action === 'toggle') {
+        toggleSingleTimer(idx);
+      } else if (action === 'reset') {
+        resetSingleTimer(idx);
+      } else if (action === 'add30') {
+        addSecondsToSingleTimer(idx, 30);
+      }
+    }, { passive: false });
+
+    function toggleSingleTimer(idx) {
+      const t = timers[idx];
+      if (!t) return;
+      if (t.finished) {
+        resetSingleTimer(idx);
+        return;
+      }
+      t.running = !t.running;
+      playSfx(t.running ? 'start' : 'tap');
+      renderSingleStation(idx);
+      updateActiveSummary();
+    }
+
+    function resetSingleTimer(idx) {
+      const t = timers[idx];
+      if (!t) return;
+      playSfx('tap');
+      t.totalSec = defaultSeconds;
+      t.remainingMs = defaultSeconds * 1000;
+      t.running = false;
+      t.finished = false;
+      renderSingleStation(idx);
+      updateActiveSummary();
+    }
+
+    function addSecondsToSingleTimer(idx, secDelta) {
+      const t = timers[idx];
+      if (!t) return;
+      playSfx('tap');
+      t.finished = false;
+      t.remainingMs += secDelta * 1000;
+      if (t.remainingMs > t.totalSec * 1000) {
+        t.totalSec = Math.ceil(t.remainingMs / 1000);
+      }
+      renderSingleStation(idx);
+      updateActiveSummary();
+    }
+
+    /* 6. CONTROLES GLOBALES Y AJUSTES */
+    function startAllTimers() {
+      playSfx('start');
+      timers.forEach((t, idx) => {
+        if (t.finished) {
+          t.totalSec = defaultSeconds;
+          t.remainingMs = defaultSeconds * 1000;
+          t.finished = false;
+        }
+        t.running = true;
+        renderSingleStation(idx);
+      });
+      updateActiveSummary();
+    }
+
+    function pauseAllTimers() {
+      playSfx('tap');
+      timers.forEach((t, idx) => {
+        t.running = false;
+        renderSingleStation(idx);
+      });
+      updateActiveSummary();
+    }
+
+    function resetAllTimers() {
+      playSfx('tap');
+      timers.forEach((t, idx) => {
+        t.totalSec = defaultSeconds;
+        t.remainingMs = defaultSeconds * 1000;
+        t.running = false;
+        t.finished = false;
+        renderSingleStation(idx);
+      });
+      updateActiveSummary();
+    }
+
+    function setDefaultSeconds(sec) {
+      playSfx('tap');
+      defaultSeconds = Math.max(15, Math.min(900, sec));
+      // Actualizar automáticamente los cronómetros que aún no han iniciado
+      timers.forEach((t, idx) => {
+        if (!t.running && !t.finished && t.remainingMs === t.totalSec * 1000) {
+          t.totalSec = defaultSeconds;
+          t.remainingMs = defaultSeconds * 1000;
+          renderSingleStation(idx);
+        }
+      });
+      updateSettingsUI();
+      updateActiveSummary();
+    }
+
+    function adjustDefaultSeconds(delta) {
+      setDefaultSeconds(defaultSeconds + delta);
+    }
+
+    function changeTimerCount(newCount) {
+      playSfx('tap');
+      initTimers(newCount);
+    }
+
+    function toggleLayoutMode() {
+      playSfx('tap');
+      layoutMode = layoutMode === 'row' ? 'two-rows' : 'row';
+      buildTimersDOM();
+      updateSettingsUI();
+    }
+
+    function toggleSoundEnabled() {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) playSfx('tap');
+      updateSettingsUI();
+    }
+
+    function toggleSettingsDrawer() {
+      playSfx('tap');
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      const isOpen = drawer.classList.toggle('open');
+      backdrop.classList.toggle('open', isOpen);
+      btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? '⚙️ Cerrar ▾' : '⚙️ Ajustes ▴';
+    }
+
+    function closeSettingsDrawer() {
+      const drawer = document.getElementById('settingsDropdownDrawer');
+      const backdrop = document.getElementById('settingsBackdrop');
+      const btn = document.getElementById('btnSettingsToggle');
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      if (btn) {
+        btn.classList.remove('open');
+        btn.textContent = '⚙️ Ajustes ▴';
+      }
+    }
+
+    function updateSettingsUI() {
+      document.getElementById('defaultTimeDisplay').textContent = formatMMSS(defaultSeconds);
+      document.getElementById('timerCountVal').textContent = timerCount;
+      document.getElementById('countReadoutBadge').textContent = `${timerCount} binas`;
+
+      document.querySelectorAll('#timePresetRow .preset-pill').forEach(btn => {
+        const parts = btn.textContent.split(':');
+        const sec = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+        btn.classList.toggle('active', sec === defaultSeconds);
+      });
+
+      document.querySelectorAll('#countPresetRow .preset-pill').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.textContent, 10) === timerCount);
+      });
+
+      const btnSound = document.getElementById('btnSoundToggle');
+      if (btnSound) {
+        btnSound.textContent = soundEnabled ? 'ACTIVA' : 'SILENCIO';
+        btnSound.className = `switch-btn ${soundEnabled ? 'on' : 'off'}`;
+      }
+
+      const layoutText = layoutMode === 'row' ? `1 Fila (${timerCount})` : `2 Filas (${Math.ceil(timerCount / 2)}×2)`;
+      const btnQuick = document.getElementById('btnLayoutQuick');
+      const btnDrawerLayout = document.getElementById('btnLayoutDrawerToggle');
+      if (btnQuick) btnQuick.textContent = `📐 Vista: ${layoutText}`;
+      if (btnDrawerLayout) btnDrawerLayout.textContent = layoutText;
+    }
+
+    /* 7. MOTOR DE TIEMPO DE ALTA PRECISIÓN (INDEPENDIENTE POR BINA) */
+    let lastTick = performance.now();
+    setInterval(() => {
+      const now = performance.now();
+      const dt = now - lastTick;
+      lastTick = now;
+
+      let anyChanged = false;
+      let anyJustFinished = false;
+
+      for (let i = 0; i < timers.length; i++) {
+        const t = timers[i];
+        if (!t.running || t.finished) continue;
+
+        t.remainingMs = Math.max(0, t.remainingMs - dt);
+        if (t.remainingMs <= 0) {
+          t.remainingMs = 0;
+          t.running = false;
+          t.finished = true;
+          anyJustFinished = true;
+        }
+        renderSingleStation(i);
+        anyChanged = true;
+      }
+
+      if (anyJustFinished) {
+        playSfx('finish');
+        updateActiveSummary();
+      } else if (anyChanged) {
+        // Actualizar resumen cuando termina o cambia estado
+      }
+    }, 100);
+
+    /* INICIALIZACIÓN CON 8 CRONÓMETROS DE 2:00 MINUTOS */
+    initTimers(8);
+  </script>
+</body>
+</html>

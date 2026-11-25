@@ -58,13 +58,46 @@
     header {
       text-align: center;
       margin-bottom: 2rem;
-      padding: 1.5rem 1rem;
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1.85rem 1.25rem;
+      background: #0f172a;
+      border: 1.5px solid rgba(147, 197, 253, 0.28);
       border-radius: var(--radius-xl);
-      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-lg);
       position: relative;
       z-index: 40;
+    }
+
+    .header-bg-layer {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .header-bg-layer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('header_bg_portal.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.65;
+    }
+
+    .header-bg-layer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.5) 56%, rgba(15, 23, 42, 0.35) 100%);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 9.5rem;
     }
 
     /* MENÚ DESPLEGABLE DE RECURSOS DE APOYO EN ESQUINA */
@@ -183,24 +216,27 @@
 
     .school-badge {
       display: inline-block;
-      background: rgba(37, 99, 235, 0.2);
-      border: 1px solid rgba(37, 99, 235, 0.4);
-      color: #93c5fd;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.35rem 0.85rem;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1.5px solid rgba(96, 165, 250, 0.55);
+      color: #dbeafe;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 0.38rem 0.95rem;
       border-radius: 9999px;
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.03em;
+      margin-bottom: 0.85rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
     }
 
     h1 {
       font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 2.2rem;
+      font-size: 2.35rem;
       font-weight: 700;
       color: #ffffff;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
+      line-height: 1.18;
+      margin-bottom: 0;
+      text-shadow: 0 3px 16px rgba(15, 23, 42, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
     }
 
     .subtitle {
@@ -925,6 +961,12 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @media (max-width: 960px) {
+      .header-content { padding: 0; }
+      .corner-support-menu { position: static; display: flex; justify-content: center; margin-top: 0.95rem; }
+      .support-dropdown-panel { right: auto; left: 50%; transform: translateX(-50%); width: min(92vw, 350px); }
+    }
+
     @media (max-width: 640px) {
       h1 { font-size: 1.7rem; }
       .games-grid { grid-template-columns: 1fr; }
@@ -932,8 +974,6 @@
       .tab-btn { font-size: 0.88rem; padding: 0.6rem 1rem; }
       .project-header-actions { width: 100%; margin-left: 0; }
       .btn-yt-toggle, .btn-repaso-toggle { flex: 1; justify-content: center; margin-left: 0; }
-      .corner-support-menu { position: static; display: flex; justify-content: center; margin-top: 0.85rem; }
-      .support-dropdown-panel { right: auto; left: 50%; transform: translateX(-50%); width: min(92vw, 335px); }
     }
   </style>
 </head>
@@ -942,9 +982,11 @@
   <div class="container">
     <!-- HEADER -->
     <header>
-      <span class="school-badge">🏫 Primaria Federal "José Clemente Orozco" · CCT: 14DPR0334N · Sayula, Jalisco</span>
-      <h1>Portal de Juegos y Recursos Interactivos · 3°</h1>
-      <p class="subtitle">3° Grado de Primaria · CCT: 14DPR0334N · Ciclo Escolar 2026-2027 · Plataforma optimizada para pantalla táctil y aula digital</p>
+      <div class="header-bg-layer" aria-hidden="true"></div>
+      <div class="header-content">
+        <span class="school-badge">🏫 Primaria Federal "José Clemente Orozco" · 3° Grado · Ciclo Escolar 2026-2027 · CCT: 14DPR0334N · Sayula, Jalisco</span>
+        <h1>Portal de Juegos y Recursos Interactivos</h1>
+      </div>
 
       <!-- MENÚ DESPLEGABLE EN ESQUINA: RECURSOS DE APOYO DOCENTE -->
       <div class="corner-support-menu" id="cornerSupportMenu">
@@ -958,17 +1000,24 @@
             <span class="support-item-icon">🎲</span>
             <div>
               <div class="support-item-title">Lotería de Tablas de Multiplicar</div>
-              <div class="support-item-desc">Cantador gigante con motor de voz IA, respuesta al 25% de volumen (4.5s), verificador de cartas e impresión 2 por hoja Carta.</div>
+              <div class="support-item-desc">Cantador gigante con voz IA, respuesta al 25% de volumen (4.5s), verificador e impresión 2 por hoja Carta.</div>
             </div>
           </a>
           <a class="support-item-link" href="permanentes/recursos_apoyo/loteria_calculo_mental_sisat/index.html" role="menuitem">
             <span class="support-item-icon">🧠</span>
             <div>
               <div class="support-item-title">Lotería de Cálculo Mental SiSAT</div>
-              <div class="support-item-desc">80 retos de los 10 reactivos oficiales SiSAT 3° con voz IA, truco mental, verificador por folio/cámara e impresión 2 por hoja Carta.</div>
+              <div class="support-item-desc">80 retos de los 10 reactivos oficiales SiSAT 3° con voz IA, truco mental, verificador e impresión 2 por hoja Carta.</div>
             </div>
           </a>
-          <div class="support-dropdown-footer">Próximamente más recursos de apoyo para el aula</div>
+          <a class="support-item-link" href="permanentes/recursos_apoyo/cronometros_lectura/index.html" role="menuitem">
+            <span class="support-item-icon">⏱️</span>
+            <div>
+              <div class="support-item-title">Cronómetros de Lectura entre Pares</div>
+              <div class="support-item-desc">8 cronómetros independientes abajo en pantalla (2:00 min por defecto) con tiempo y barra visual para medir fluidez lectora.</div>
+            </div>
+          </a>
+          <div class="support-dropdown-footer">Espacio reservado para herramientas de apoyo docente</div>
         </div>
       </div>
     </header>
@@ -977,7 +1026,6 @@
     <nav class="filter-tabs" aria-label="Filtro de actividades">
       <button class="tab-btn active" onclick="filterCategory('todos')">🎮 Todos los Juegos</button>
       <button class="tab-btn" onclick="filterCategory('permanentes')">⭐ Juegos Permanentes</button>
-      <button class="tab-btn" onclick="filterCategory('minijuegos')">🧪 Minijuegos (En desarrollo)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-4')">🪅 Proyecto 4 (Diciembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-3')">❄️ Proyecto 3 (Noviembre)</button>
       <button class="tab-btn" onclick="filterCategory('proyecto-2')">🇲🇽 Proyecto 2 (Octubre)</button>
@@ -1044,69 +1092,58 @@
             <span class="action-btn btn-accent">Abrir Actividad ➔</span>
           </div>
         </a>
-      </div>
-    </section>
 
-    <!-- SECTION: MINIJUEGOS DE ALFABETIZACIÓN Y LECTURA -->
-    <section class="section-block" id="sec-minijuegos">
-      <div class="section-title-wrap">
-        <span class="section-icon">🧪</span>
-        <h2 class="section-title">Minijuegos de Alfabetización y Lectura</h2>
-        <span class="section-tag tag-minijuegos">🛠️ En producción · Preliminar</span>
-      </div>
-
-      <div class="games-grid">
-        <!-- 1. CAZADOR DE SÍLABAS -->
-        <a class="game-card minijuego-card" href="permanentes/minijuegos/cazador_silabas/index.html">
+        <!-- 5. CAZADOR DE SÍLABAS -->
+        <a class="game-card permanent-card" href="permanentes/minijuegos/cazador_silabas/index.html">
           <div class="card-top">
-            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🎯 110 Palabras y Retos Ortográficos</span>
+            <span class="card-badge badge-accent">Ortografía · 110 Retos</span>
             <div class="card-icon">🏹</div>
             <h3 class="card-title">El Cazador de Sílabas</h3>
             <p class="card-desc">Constructor de palabras ilustradas y retos de ortografía frecuente (hace/ase, había, vayan, b/v, c/s/z, h muda, mb/mp) con burbujas silábicas y voz.</p>
           </div>
           <div class="card-action">
-            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
+            <span class="action-btn btn-accent">Abrir Juego ➔</span>
           </div>
         </a>
 
-        <!-- 2. DETECTIVE DE ENIGMAS -->
-        <a class="game-card minijuego-card" href="permanentes/minijuegos/detective_enigmas/index.html">
+        <!-- 6. DETECTIVE DE ENIGMAS -->
+        <a class="game-card permanent-card" href="permanentes/minijuegos/detective_enigmas/index.html">
           <div class="card-top">
-            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🛠️ En producción · 8 Enigmas</span>
+            <span class="card-badge badge-accent">Comprensión Lectora · 8 Enigmas</span>
             <div class="card-icon">🕵️‍♂️</div>
             <h3 class="card-title">Detective de Enigmas</h3>
             <p class="card-desc">Ruleta táctil giratoria de preguntas clave (¿Quién?, ¿Por qué?, ¿Dónde?, ¿Qué hacer?) con microlecturas y pistas textuales.</p>
           </div>
           <div class="card-action">
-            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
+            <span class="action-btn btn-accent">Abrir Juego ➔</span>
           </div>
         </a>
 
-        <!-- 3. PISTA DE CARRERAS DE FLUIDEZ -->
-        <a class="game-card minijuego-card" href="permanentes/minijuegos/carreras_fluidez/index.html?v=4.3">
+        <!-- 7. PISTA DE CARRERAS DE FLUIDEZ -->
+        <a class="game-card permanent-card" href="permanentes/minijuegos/carreras_fluidez/index.html?v=4.3">
           <div class="card-top">
-            <span class="card-badge" style="background: #ffe4e6; color: #be123c;">🛠️ En producción · 10 Tramos</span>
+            <span class="card-badge badge-accent">Fluidez y Vocabulario · 10 Tramos</span>
             <div class="card-icon">🏎️</div>
             <h3 class="card-title">Carrera de Lectura</h3>
             <p class="card-desc">Circuito interactivo donde el bólido escolar avanza con retos rápidos de palabra intrusa, ortografía y familias de palabras.</p>
           </div>
           <div class="card-action">
-            <span class="action-btn" style="background: #f43f5e; color: #ffffff;">Abrir Minijuego ➔</span>
+            <span class="action-btn btn-accent">Abrir Juego ➔</span>
           </div>
         </a>
 
-        <!-- 4. LOKI RUNNER: CÁLCULO MENTAL 3D -->
-        <a class="game-card minijuego-card" href="permanentes/minijuegos/loki_runner_calculo_mental/index.html" style="border-color: #f59e0b; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);">
+        <!-- 8. LOKI RUNNER: CÁLCULO MENTAL 3D -->
+        <a class="game-card permanent-card" href="permanentes/minijuegos/loki_runner_calculo_mental/index.html">
           <div class="card-top">
-            <span class="card-badge" style="background: #fef3c7; color: #b45309; font-weight: 700;">⚡ Nuevo · 20 Estrategias SiSAT</span>
-            <div class="card-icon" style="display:flex; justify-content:center; margin: 0.25rem 0;">
-              <img src="permanentes/minijuegos/loki_runner_calculo_mental/recursos/loki_avatar.png" alt="Loki" style="width:54px; height:54px; border-radius:50%; border:2px solid #f59e0b; object-fit:cover;">
+            <span class="card-badge badge-accent">⚡ Cálculo Mental · 20 Estrategias SiSAT</span>
+            <div class="card-icon" style="display:flex; align-items:center; margin: 0.25rem 0 0.65rem 0;">
+              <img src="permanentes/minijuegos/loki_runner_calculo_mental/recursos/loki_avatar.png" alt="Loki" style="width:52px; height:52px; border-radius:50%; border:2.5px solid #f59e0b; object-fit:cover;">
             </div>
-            <h3 class="card-title" style="color:#0f172a;">Loki Runner · Cálculo Mental 3D</h3>
-            <p class="card-desc">Runner 3D tipo Subway Surfers con Loki. Esquiva trampas, impacta respuestas correctas, entrena en modo lento con explicaciones paso a paso de cada truco.</p>
+            <h3 class="card-title">Loki Runner · Cálculo Mental 3D</h3>
+            <p class="card-desc">Runner 3D con Loki. Esquiva trampas, impacta respuestas correctas y entrena con explicaciones paso a paso de cada truco SiSAT.</p>
           </div>
           <div class="card-action">
-            <span class="action-btn" style="background: #f59e0b; color: #0f172a; font-weight: 700;">Correr con Loki ➔</span>
+            <span class="action-btn btn-accent">Correr con Loki ➔</span>
           </div>
         </a>
       </div>
@@ -1627,7 +1664,6 @@
       if (event && event.target) event.target.classList.add('active');
 
       const secPermanentes = document.getElementById('sec-permanentes');
-      const secMinijuegos = document.getElementById('sec-minijuegos');
       const accordionWrap = document.querySelector('.proyectos-accordion-container');
       const containerProyectos = document.getElementById('container-proyectos-mensuales');
       const secP4 = document.getElementById('sec-proyecto-4');
@@ -1635,50 +1671,39 @@
       const secP2 = document.getElementById('sec-proyecto-2');
 
       if (cat === 'todos') {
-        secPermanentes.style.display = 'block';
-        secMinijuegos.style.display = 'block';
+        if (secPermanentes) secPermanentes.style.display = 'block';
         if (accordionWrap) accordionWrap.style.display = 'block';
         if (secP4) secP4.style.display = 'block';
-        secP3.style.display = 'block';
-        secP2.style.display = 'block';
-        // En "todos", los proyectos mensuales permanecen colapsados tras el botón por defecto para evitar scroll
+        if (secP3) secP3.style.display = 'block';
+        if (secP2) secP2.style.display = 'block';
         if (containerProyectos && !proyectosVisible) {
           containerProyectos.style.display = 'none';
         }
       } else if (cat === 'permanentes') {
-        secPermanentes.style.display = 'block';
-        secMinijuegos.style.display = 'block';
-        if (accordionWrap) accordionWrap.style.display = 'none';
-        if (containerProyectos) containerProyectos.style.display = 'none';
-      } else if (cat === 'minijuegos') {
-        secPermanentes.style.display = 'none';
-        secMinijuegos.style.display = 'block';
+        if (secPermanentes) secPermanentes.style.display = 'block';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'none';
       } else if (cat === 'proyecto-4') {
-        secPermanentes.style.display = 'none';
-        secMinijuegos.style.display = 'none';
+        if (secPermanentes) secPermanentes.style.display = 'none';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'block';
         if (secP4) secP4.style.display = 'block';
-        secP3.style.display = 'none';
-        secP2.style.display = 'none';
+        if (secP3) secP3.style.display = 'none';
+        if (secP2) secP2.style.display = 'none';
       } else if (cat === 'proyecto-3') {
-        secPermanentes.style.display = 'none';
-        secMinijuegos.style.display = 'none';
+        if (secPermanentes) secPermanentes.style.display = 'none';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'block';
         if (secP4) secP4.style.display = 'none';
-        secP3.style.display = 'block';
-        secP2.style.display = 'none';
+        if (secP3) secP3.style.display = 'block';
+        if (secP2) secP2.style.display = 'none';
       } else if (cat === 'proyecto-2') {
-        secPermanentes.style.display = 'none';
-        secMinijuegos.style.display = 'none';
+        if (secPermanentes) secPermanentes.style.display = 'none';
         if (accordionWrap) accordionWrap.style.display = 'none';
         if (containerProyectos) containerProyectos.style.display = 'block';
         if (secP4) secP4.style.display = 'none';
-        secP3.style.display = 'none';
-        secP2.style.display = 'block';
+        if (secP3) secP3.style.display = 'none';
+        if (secP2) secP2.style.display = 'block';
       }
     }
 
