@@ -63,6 +63,122 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: var(--radius-xl);
       backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 40;
+    }
+
+    /* MENÚ DESPLEGABLE DE RECURSOS DE APOYO EN ESQUINA */
+    .corner-support-menu {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 60;
+      text-align: left;
+    }
+
+    .btn-support-corner {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.5rem 0.95rem;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(251, 191, 36, 0.55);
+      background: rgba(15, 23, 42, 0.88);
+      color: #fde68a;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-support-corner:hover,
+    .btn-support-corner.open {
+      background: #f59e0b;
+      border-color: #fef08a;
+      color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+    }
+
+    .support-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 0.55rem);
+      right: 0;
+      width: 335px;
+      background: #1e293b;
+      border: 2px solid rgba(251, 191, 36, 0.5);
+      border-radius: 1rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+      padding: 0.75rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      animation: fadeIn 0.18s ease;
+    }
+
+    .support-dropdown-panel.open {
+      display: flex;
+    }
+
+    .support-dropdown-header {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fde68a;
+      padding: 0.2rem 0.4rem 0.45rem 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .support-item-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.65rem 0.75rem;
+      border-radius: 0.75rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-decoration: none;
+      color: #f8fafc;
+      transition: all 0.18s ease;
+    }
+
+    .support-item-link:hover {
+      background: rgba(37, 99, 235, 0.25);
+      border-color: #60a5fa;
+      transform: translateX(-2px);
+    }
+
+    .support-item-icon {
+      font-size: 1.55rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .support-item-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.15rem;
+    }
+
+    .support-item-desc {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      line-height: 1.35;
+    }
+
+    .support-dropdown-footer {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      text-align: center;
+      padding-top: 0.3rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      font-style: italic;
     }
 
     .school-badge {
@@ -816,6 +932,8 @@
       .tab-btn { font-size: 0.88rem; padding: 0.6rem 1rem; }
       .project-header-actions { width: 100%; margin-left: 0; }
       .btn-yt-toggle, .btn-repaso-toggle { flex: 1; justify-content: center; margin-left: 0; }
+      .corner-support-menu { position: static; display: flex; justify-content: center; margin-top: 0.85rem; }
+      .support-dropdown-panel { right: auto; left: 50%; transform: translateX(-50%); width: min(92vw, 335px); }
     }
   </style>
 </head>
@@ -827,6 +945,25 @@
       <span class="school-badge">🏫 Primaria Federal "José Clemente Orozco" · CCT: 14DPR0334N · Sayula, Jalisco</span>
       <h1>Portal de Juegos y Recursos Interactivos · 3°</h1>
       <p class="subtitle">3° Grado de Primaria · CCT: 14DPR0334N · Ciclo Escolar 2026-2027 · Plataforma optimizada para pantalla táctil y aula digital</p>
+
+      <!-- MENÚ DESPLEGABLE EN ESQUINA: RECURSOS DE APOYO DOCENTE -->
+      <div class="corner-support-menu" id="cornerSupportMenu">
+        <button type="button" class="btn-support-corner" id="btnSupportCorner" onclick="toggleSupportCornerMenu(event)" aria-expanded="false" title="Abrir menú de recursos de apoyo docente">
+          <span>🧰 Recursos de Apoyo</span>
+          <span id="supportCornerArrow">▾</span>
+        </button>
+        <div class="support-dropdown-panel" id="supportDropdownPanel" role="menu">
+          <div class="support-dropdown-header">🛠️ Herramientas y Recursos de Apoyo</div>
+          <a class="support-item-link" href="permanentes/recursos_apoyo/loteria_tablas/index.html" role="menuitem">
+            <span class="support-item-icon">🎲</span>
+            <div>
+              <div class="support-item-title">Lotería de Tablas de Multiplicar</div>
+              <div class="support-item-desc">Cantador con motor de voz IA, respuesta opcional al 25% de volumen, ritmo en tiempo real, últimas 5 cartas y verificador con cámara segura.</div>
+            </div>
+          </a>
+          <div class="support-dropdown-footer">Próximamente más recursos de apoyo para el aula</div>
+        </div>
+      </div>
     </header>
 
     <!-- FILTER TABS -->
@@ -1803,9 +1940,31 @@
       if (portalSoundEnabled) playPortalUiSfx('tab');
     }
 
+    function toggleSupportCornerMenu(ev) {
+      if (ev) ev.stopPropagation();
+      const panel = document.getElementById('supportDropdownPanel');
+      const btn = document.getElementById('btnSupportCorner');
+      const arrow = document.getElementById('supportCornerArrow');
+      if (!panel) return;
+      const isOpen = panel.classList.toggle('open');
+      if (btn) {
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', String(isOpen));
+      }
+      if (arrow) arrow.textContent = isOpen ? '▴' : '▾';
+    }
+
+    document.addEventListener('click', (e) => {
+      const wrap = document.getElementById('cornerSupportMenu');
+      const panel = document.getElementById('supportDropdownPanel');
+      if (panel && panel.classList.contains('open') && wrap && !wrap.contains(e.target)) {
+        toggleSupportCornerMenu();
+      }
+    });
+
     (function initPortalUiAudio() {
       updatePortalSoundBtn();
-      const selector = '.tab-btn, #btnToggleProyectos, .btn-repaso-toggle, .btn-yt-toggle, a.game-card, a.repaso-pp-card, a.yt-video-card, .btn-sim-exam, a.lock-req-link, .exam-lock-modal button';
+      const selector = '.tab-btn, #btnToggleProyectos, .btn-repaso-toggle, .btn-yt-toggle, .btn-support-corner, a.support-item-link, a.game-card, a.repaso-pp-card, a.yt-video-card, .btn-sim-exam, a.lock-req-link, .exam-lock-modal button';
       let lastPtrTs = 0;
       let lastPtrEl = null;
 

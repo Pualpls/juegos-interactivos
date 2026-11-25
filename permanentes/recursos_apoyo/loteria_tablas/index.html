@@ -1,0 +1,2826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Lotería de Tablas de Multiplicar · Recurso de Apoyo Docente</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg-app: #0f172a;
+      --bg-panel: #1e293b;
+      --bg-card: #ffffff;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --indigo-950: #1e1b4b;
+      --blue-500: #3b82f6;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --amber-400: #fbbf24;
+      --amber-500: #f59e0b;
+      --rose-500: #f43f5e;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      font-family: 'Lexend', 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    input, select, button {
+      font-family: inherit;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      max-width: 1600px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      background: rgba(15, 23, 42, 0.92);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      z-index: 30;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .btn-back-portal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      padding: 0.38rem 0.75rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.82rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-back-portal:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .brand-logo {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      box-shadow: 0 3px 10px rgba(79, 70, 229, 0.4);
+    }
+
+    .brand-title-wrap h1 {
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    /* TOP CONTROLS */
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      padding: 0.42rem 0.78rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      background: rgba(30, 41, 59, 0.9);
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .pill-btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .pill-btn:active {
+      transform: scale(0.96);
+    }
+
+    .pill-btn.active-green {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #34d399;
+      color: #a7f3d0;
+    }
+
+    .pill-btn.active-indigo {
+      background: #4f46e5;
+      border-color: #818cf8;
+      color: #ffffff;
+    }
+
+    .pill-btn.active-amber {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: #fbbf24;
+      color: #fde68a;
+    }
+
+    .pill-btn.muted {
+      background: rgba(30, 41, 59, 0.6);
+      border-color: rgba(148, 163, 184, 0.3);
+      color: #64748b;
+    }
+
+    .btn-verify-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e1b4b;
+      border: 2px solid #fef08a;
+      padding: 0.46rem 1.05rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+      transition: all 0.15s ease;
+    }
+
+    .btn-verify-hero:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.55);
+    }
+
+    /* BARRA DE ÚLTIMAS 5 CARTAS + BOTÓN DESPLEGABLE DE TODAS */
+    .recent-strip-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(30, 41, 59, 0.85);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      min-height: 68px;
+    }
+
+    .recent-label-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex-shrink: 0;
+    }
+
+    .recent-title {
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+    }
+
+    .recent-sub {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .recent-five-track {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.15rem 0.2rem;
+    }
+
+    .recent-five-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .recent-empty {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    .mini-past-card {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 0.32rem 0.7rem;
+      border-radius: 12px;
+      border: 2.5px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .mini-past-card.is-latest {
+      background: #eef2ff;
+      border-color: #6366f1;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
+    }
+
+    .mini-turn-badge {
+      background: #312e81;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 0.12rem 0.42rem;
+      border-radius: 6px;
+    }
+
+    .mini-past-card.is-latest .mini-turn-badge {
+      background: #4f46e5;
+    }
+
+    .mini-op {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #1e293b;
+    }
+
+    .mini-res {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #4f46e5;
+      background: #e0e7ff;
+      padding: 0.1rem 0.45rem;
+      border-radius: 7px;
+    }
+
+    .mini-res.hidden-res {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .btn-all-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #334155;
+      color: #ffffff;
+      border: 1.5px solid #64748b;
+      padding: 0.48rem 0.85rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .btn-all-history:hover {
+      background: #475569;
+      border-color: #94a3b8;
+    }
+
+    /* MAIN WORKSPACE (2 COLUMNS ON DESKTOP/SMARTBOARD) */
+    .stage-workspace {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 370px;
+      gap: 0.9rem;
+      padding: 0.65rem 0.9rem;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    /* LEFT: MAIN CARD STAGE */
+    .card-arena {
+      background: rgba(30, 41, 59, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arena-status-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .progress-pill {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.28rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .mode-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.28rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.25);
+      border: 1.5px solid #818cf8;
+      color: #e0e7ff;
+    }
+
+    .mode-status-badge.paused {
+      background: rgba(245, 158, 11, 0.25);
+      border-color: #fbbf24;
+      color: #fde68a;
+    }
+
+    /* LOTERIA HERO CARD */
+    .hero-card-container {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.1rem;
+      my: 0.25rem;
+    }
+
+    .loteria-card {
+      width: min(100%, 400px);
+      height: min(100%, 430px);
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 32px;
+      border: 5px solid #e2e8f0;
+      border-bottom: 12px solid #cbd5e1;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.2s ease;
+      overflow: hidden;
+    }
+
+    .loteria-card:active {
+      transform: scale(0.97);
+    }
+
+    .loteria-card.whispered {
+      border-color: #a5b4fc;
+    }
+
+    .card-top-meta {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .card-result-corner {
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #cbd5e1;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 0.15rem 0.65rem;
+      border-radius: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .card-result-corner.revealed-whisper {
+      color: #4f46e5;
+      background: #eef2ff;
+      border-color: #a5b4fc;
+      transform: scale(1.08);
+    }
+
+    .card-math-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+    }
+
+    .math-row-big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      line-height: 1;
+    }
+
+    .factor-num {
+      font-size: clamp(4.2rem, 8.5vh, 6.2rem);
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+    }
+
+    .times-symbol {
+      font-size: clamp(2.8rem, 6vh, 4.2rem);
+      font-weight: 900;
+      color: #4f46e5;
+    }
+
+    .card-chant-text {
+      margin-top: 0.55rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    /* DUA VISUAL ARRAY OVERLAY INSIDE CARD */
+    .dua-array-box {
+      margin-top: 0.45rem;
+      background: #f8fafc;
+      border: 2px dashed #93c5fd;
+      border-radius: 14px;
+      padding: 0.4rem 0.65rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      max-width: 100%;
+    }
+
+    .dua-array-box.visible {
+      display: flex;
+    }
+
+    .dua-dots-grid {
+      display: grid;
+      gap: 3px;
+      justify-content: center;
+    }
+
+    .dua-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #3b82f6;
+    }
+
+    .dua-sum-text {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #1e40af;
+      text-align: center;
+    }
+
+    /* TIMER PROGRESS BAR ON CARD BOTTOM */
+    .card-timer-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .card-timer-track {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-timer-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5 0%, #10b981 100%);
+      border-radius: 999px;
+      transition: width 0.1s linear;
+    }
+
+    .whisper-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #f59e0b;
+      z-index: 2;
+    }
+
+    .card-tap-hint {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* NAV CONTROLS UNDER CARD */
+    .arena-controls-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.58rem 1rem;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      font-weight: 900;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: #334155;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: #475569;
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .ctrl-btn.primary-next {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      border-color: #818cf8;
+      padding: 0.62rem 1.35rem;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    }
+
+    .ctrl-btn.pause-btn {
+      background: #f59e0b;
+      color: #1e1b4b;
+      border-color: #fde68a;
+    }
+
+    .ctrl-btn.pause-btn.is-paused {
+      background: #10b981;
+      color: #064e3b;
+      border-color: #6ee7b7;
+      animation: pulseBtn 1.4s infinite;
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* RIGHT PANEL: REAL-TIME RHYTHM, VOICE & TABLE FILTER */
+    .control-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .control-sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .control-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 99px;
+    }
+
+    .side-card {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 0.7rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .side-card-title {
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mode-switch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .mode-opt-btn {
+      padding: 0.5rem 0.6rem;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      background: rgba(15, 23, 42, 0.6);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .mode-opt-btn.active {
+      background: #4f46e5;
+      border-color: #a5b4fc;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.4);
+    }
+
+    /* RHYTHM ADJUSTER IN REAL TIME */
+    .rhythm-adjuster-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 0.4rem 0.55rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .rhythm-step-btn {
+      width: 38px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: #334155;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rhythm-step-btn:active {
+      transform: scale(0.92);
+    }
+
+    .rhythm-readout {
+      text-align: center;
+    }
+
+    .rhythm-val {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #fbbf24;
+    }
+
+    .rhythm-lbl {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      font-weight: 700;
+      display: block;
+    }
+
+    .preset-pills-row {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    .preset-pill {
+      flex: 1;
+      padding: 0.26rem 0.35rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.5);
+      color: #cbd5e1;
+      font-size: 0.73rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .preset-pill.active {
+      background: #3b82f6;
+      color: #ffffff;
+      border-color: #93c5fd;
+    }
+
+    /* WHISPER ANSWER SETTINGS */
+    .whisper-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(15, 23, 42, 0.55);
+      border-radius: 10px;
+    }
+
+    .whisper-info {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .whisper-sub {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      display: block;
+    }
+
+    .switch-btn {
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+    }
+
+    .switch-btn.on {
+      background: #10b981;
+      color: #064e3b;
+    }
+
+    .switch-btn.off {
+      background: #475569;
+      color: #cbd5e1;
+    }
+
+    /* MULTIPLICATION TABLES FILTER (1 TO 10) */
+    .tables-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.3rem;
+    }
+
+    .table-chip {
+      padding: 0.32rem 0.2rem;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.12s ease;
+    }
+
+    .table-chip.selected {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: #34d399;
+      color: #ffffff;
+    }
+
+    /* MODALS (HISTORY, VERIFIER + CAMERA, PRINTABLE CARDS) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.84);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+      max-width: 920px;
+      max-height: 92vh;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.2rem;
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-close-btn {
+      background: #e2e8f0;
+      color: #334155;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .modal-close-btn:hover {
+      background: #fecaca;
+      color: #b91c1c;
+    }
+
+    .modal-body {
+      padding: 1rem 1.2rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    /* VERIFIER TABS & LAYOUT */
+    .verifier-tabs {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.6rem;
+    }
+
+    .v-tab-btn {
+      padding: 0.48rem 0.95rem;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .v-tab-btn.active {
+      background: #4f46e5;
+      border-color: #312e81;
+      color: #ffffff;
+    }
+
+    .verifier-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    /* 3x3 STUDENT BOARD */
+    .board-3x3-panel {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .folio-quick-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .folio-select {
+      flex: 1;
+      padding: 0.45rem 0.65rem;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      font-weight: 800;
+      font-size: 0.84rem;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    .grid-3x3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+    }
+
+    .cell-3x3 {
+      aspect-ratio: 1.15 / 1;
+      border-radius: 14px;
+      border: 3px solid #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.14s ease;
+    }
+
+    .cell-3x3.selected-cell {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+    }
+
+    .cell-3x3.match-yes {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    .cell-3x3.match-no {
+      background: #fef2f2;
+      border-color: #f87171;
+      color: #991b1b;
+    }
+
+    .cell-num-val {
+      font-size: 1.65rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .cell-match-meta {
+      font-size: 0.66rem;
+      font-weight: 800;
+      margin-top: 0.2rem;
+      text-align: center;
+    }
+
+    /* NUMERIC KEYPAD / CAMERA PANEL */
+    .keypad-panel {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+
+    .numpad-btn {
+      padding: 0.65rem;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .numpad-btn:active {
+      background: #e0e7ff;
+      border-color: #6366f1;
+    }
+
+    /* ANTI-CRASH CAMERA BOX */
+    .camera-safe-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 0.85rem;
+      border-radius: 18px;
+    }
+
+    .camera-safe-box.active {
+      display: flex;
+    }
+
+    .camera-viewport-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-video, .camera-snapshot-canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-overlay-grid {
+      position: absolute;
+      inset: 12%;
+      border: 2.5px dashed #fbbf24;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      pointer-events: none;
+    }
+
+    .camera-overlay-cell {
+      border: 1px dashed rgba(251, 191, 36, 0.45);
+    }
+
+    .camera-status-msg {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fde68a;
+      text-align: center;
+    }
+
+    /* HISTORY FULL GRID */
+    .history-full-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .hist-card-item {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .hist-card-item.latest {
+      background: #eef2ff;
+      border-color: #4f46e5;
+    }
+
+    /* WIN BANNER */
+    .win-banner {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      padding: 1rem;
+      border-radius: 16px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+    }
+
+    .win-banner.show {
+      display: flex;
+    }
+
+    /* PRINT STYLES FOR LOTERIA CARDS */
+    #printableArea {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableArea, #printableArea * {
+        visibility: visible;
+      }
+      #printableArea {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #ffffff;
+        color: #000000;
+      }
+      .print-page {
+        page-break-after: always;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 14px;
+        padding: 10mm;
+        height: 265mm;
+      }
+      .print-loteria-card {
+        border: 3px solid #000000;
+        border-radius: 12px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .print-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 6px;
+        font-weight: 900;
+        font-size: 13pt;
+      }
+      .print-card-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 6px;
+        margin: 8px 0;
+      }
+      .print-card-cell {
+        border: 2px solid #000000;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24pt;
+        font-weight: 900;
+      }
+      .print-card-footer {
+        font-size: 8.5pt;
+        text-align: center;
+        font-weight: 700;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .stage-workspace {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+      .verifier-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- BARRA SUPERIOR -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <a class="btn-back-portal" href="../../../index.html" title="Volver al Portal Principal">⬅ Portal</a>
+        <div class="brand-logo">🎲</div>
+        <div class="brand-title-wrap">
+          <h1>LOTERÍA DE TABLAS DE MULTIPLICAR</h1>
+          <div class="brand-sub">Recurso de Apoyo Docente · Motor de Voz IA + Verificador Inteligente</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button type="button" class="pill-btn active-green" id="btnVoiceToggle" onclick="toggleVoiceEnabled()" title="Activar o desactivar voz de la IA">
+          🔊 Voz IA: ON
+        </button>
+        <button type="button" class="pill-btn active-amber" id="btnWhisperToggle" onclick="toggleWhisperEnabled()" title="Decir respuesta después de unos segundos al 25% de volumen">
+          🤫 Respuesta (25% vol): ON
+        </button>
+        <button type="button" class="pill-btn" id="btnCornerResultToggle" onclick="toggleShowResultOnCard()" title="Mostrar u ocultar el resultado en la esquina de la carta">
+          👁️ Resultado en esquina: Al susurrar
+        </button>
+        <button type="button" class="pill-btn" onclick="openPrintCardsModal()" title="Ver o imprimir cartas de lotería por folio (#01 al #40)">
+          🖨️ Cartas (#01-#40)
+        </button>
+        <button type="button" class="pill-btn" onclick="confirmResetGame()" title="Barajar mazo y reiniciar partida">
+          🔄 Reiniciar
+        </button>
+        <button type="button" class="btn-verify-hero" onclick="openVerifierModal()">
+          🏆 VERIFICAR ¡LOTERÍA!
+        </button>
+      </div>
+    </header>
+
+    <!-- TIRA EN LÍNEA DE LAS ÚLTIMAS 5 CARTAS PASADAS + MENÚ DESPLEGABLE PARA VER TODAS -->
+    <section class="recent-strip-bar" aria-label="Últimas cartas cantadas">
+      <div class="recent-label-box">
+        <span class="recent-title">⏮️ Últimas 5 Cartas</span>
+        <span class="recent-sub" id="recentTotalSub">0 cantadas</span>
+      </div>
+
+      <div class="recent-five-track" id="recentFiveTrack">
+        <span class="recent-empty">Aún no han salido cartas. Toca la carta central o inicia el modo automático.</span>
+      </div>
+
+      <button type="button" class="btn-all-history" onclick="openHistoryModal()">
+        📜 Ver todas (<span id="btnHistoryCount">0</span>) ▾
+      </button>
+    </section>
+
+    <!-- ESCENARIO PRINCIPAL -->
+    <main class="stage-workspace">
+      <!-- IZQUIERDA: CARTA CENTRAL Y CONTROLES DE FLUJO -->
+      <section class="card-arena">
+        <div class="arena-status-row">
+          <span class="progress-pill" id="deckProgressPill">MAZO LISTO: 0 / 100</span>
+          <div style="display:flex; gap:0.4rem; align-items:center;">
+            <button type="button" class="pill-btn" id="btnDuaHint" onclick="toggleDuaHint()" title="Mostrar arreglo rectangular y suma iterada">
+              💡 Pista Visual DUA
+            </button>
+            <button type="button" class="pill-btn" onclick="repeatCurrentCardVoice()" title="Repetir audio de la carta actual">
+              🗣️ Repetir Voz
+            </button>
+            <span class="mode-status-badge" id="modeStatusBadge">👆 Modo Manual (Tap)</span>
+          </div>
+        </div>
+
+        <div class="hero-card-container">
+          <div class="loteria-card" id="mainLoteriaCard" onclick="handleCardTap()" title="Toca la carta para avanzar a la siguiente">
+            <div class="card-top-meta">
+              <span id="cardTurnLabel">LISTO PARA INICIAR</span>
+              <span class="card-result-corner" id="cardResultCorner">?</span>
+            </div>
+
+            <div class="card-math-body" id="cardMathBody">
+              <div style="text-align:center; padding: 1rem;">
+                <div style="font-size: 3.6rem; margin-bottom: 0.4rem;">🎲</div>
+                <div style="font-size: 1.55rem; font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+                <p style="font-size: 0.86rem; color: #64748b; font-weight: 700; margin-top: 0.35rem;">
+                  Modo Manual (Tap) o Automático con Voz IA
+                </p>
+              </div>
+            </div>
+
+            <div class="dua-array-box" id="duaArrayBox">
+              <div class="dua-dots-grid" id="duaDotsGrid"></div>
+              <div class="dua-sum-text" id="duaSumText"></div>
+            </div>
+
+            <div class="card-timer-wrap">
+              <div class="card-timer-track">
+                <div class="whisper-marker" id="whisperMarker" style="left: 60%;" title="Momento en que se susurra la respuesta (25% vol)"></div>
+                <div class="card-timer-fill" id="cardTimerFill"></div>
+              </div>
+              <div class="card-tap-hint" id="cardBottomHint">Toca la carta o presiona Espacio para sacar la siguiente</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arena-controls-row">
+          <button type="button" class="ctrl-btn" id="btnPrevCard" onclick="prevCard()" disabled>
+            ⬅ Anterior
+          </button>
+          <button type="button" class="ctrl-btn pause-btn" id="btnPauseAuto" onclick="togglePauseAuto()" style="display: none;">
+            ⏸️ PAUSAR TIEMPO
+          </button>
+          <button type="button" class="ctrl-btn primary-next" id="btnNextCard" onclick="nextCard(true)">
+            Siguiente Carta ➔
+          </button>
+        </div>
+      </section>
+
+      <!-- DERECHA: PANEL DE CONTROL EN TIEMPO REAL -->
+      <aside class="control-sidebar">
+        <!-- 1. MODO DE AVANCE -->
+        <div class="side-card">
+          <div class="side-card-title">
+            <span>⚙️ Modo de Avance</span>
+            <span id="autoStateSmall" style="color:#fbbf24;">Manual</span>
+          </div>
+          <div class="mode-switch-grid">
+            <button type="button" class="mode-opt-btn active" id="btnModeManual" onclick="setGameMode('manual')">
+              👆 Manual (Tap)
+            </button>
+            <button type="button" class="mode-opt-btn" id="btnModeAuto" onclick="setGameMode('auto')">
+              ⏱️ Por Tiempo
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. TIEMPO / RITMO EN TIEMPO REAL -->
+        <div class="side-card">
+          <div class="side-card-title">
+            <span>⏱️ Ritmo entre Cartas (Tiempo Real)</span>
+          </div>
+          <div class="rhythm-adjuster-row">
+            <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(-0.5)" title="Disminuir 0.5 segundos">➖</button>
+            <div class="rhythm-readout">
+              <span class="rhythm-val" id="intervalSecDisplay">6.0 s</span>
+              <span class="rhythm-lbl">por cada carta</span>
+            </div>
+            <button type="button" class="rhythm-step-btn" onclick="adjustIntervalSec(0.5)" title="Aumentar 0.5 segundos">➕</button>
+          </div>
+          <div class="preset-pills-row">
+            <button type="button" class="preset-pill" onclick="setIntervalSec(3.5)">3.5s</button>
+            <button type="button" class="preset-pill" onclick="setIntervalSec(5)">5s</button>
+            <button type="button" class="preset-pill active" onclick="setIntervalSec(6)">6s</button>
+            <button type="button" class="preset-pill" onclick="setIntervalSec(8)">8s</button>
+            <button type="button" class="preset-pill" onclick="setIntervalSec(10)">10s</button>
+            <button type="button" class="preset-pill" onclick="setIntervalSec(12)">12s</button>
+          </div>
+        </div>
+
+        <!-- 3. SUSURRO DE RESPUESTA AL 25% DE VOLUMEN -->
+        <div class="side-card">
+          <div class="side-card-title">
+            <span>🤫 Respuesta en Voz Baja</span>
+            <span id="whisperVolBadge" style="color:#a7f3d0;">Vol: 25%</span>
+          </div>
+
+          <div class="whisper-toggle-row">
+            <div>
+              <span class="whisper-info">Decir resultado después</span>
+              <span class="whisper-sub">Se canta en volumen suave (25%)</span>
+            </div>
+            <button type="button" class="switch-btn on" id="btnSideWhisperSwitch" onclick="toggleWhisperEnabled()">ACTIVO</button>
+          </div>
+
+          <div class="rhythm-adjuster-row">
+            <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(-0.5)" title="Decir respuesta antes">➖</button>
+            <div class="rhythm-readout">
+              <span class="rhythm-val" id="whisperDelayDisplay" style="color:#a7f3d0;">3.5 s</span>
+              <span class="rhythm-lbl">espera antes de decir respuesta</span>
+            </div>
+            <button type="button" class="rhythm-step-btn" onclick="adjustWhisperDelaySec(0.5)" title="Decir respuesta después">➕</button>
+          </div>
+
+          <div class="preset-pills-row">
+            <button type="button" class="preset-pill" id="volPill15" onclick="setWhisperVolume(0.15)">Vol 15%</button>
+            <button type="button" class="preset-pill active" id="volPill25" onclick="setWhisperVolume(0.25)">Vol 25%</button>
+            <button type="button" class="preset-pill" id="volPill40" onclick="setWhisperVolume(0.40)">Vol 40%</button>
+            <button type="button" class="preset-pill" id="volPill60" onclick="setWhisperVolume(0.60)">Vol 60%</button>
+          </div>
+        </div>
+
+        <!-- 4. FILTRO DE TABLAS ACTIVAS (1 AL 10) -->
+        <div class="side-card">
+          <div class="side-card-title">
+            <span>🔢 Tablas en Juego</span>
+            <span id="activeTablesCountLabel" style="color:#cbd5e1;">10 tablas</span>
+          </div>
+          <div class="tables-grid" id="tablesFilterGrid"></div>
+          <div class="preset-pills-row" style="margin-top:0.2rem;">
+            <button type="button" class="preset-pill" onclick="selectTablePreset([1,2,3,4,5,6,7,8,9,10])">Todas (1-10)</button>
+            <button type="button" class="preset-pill" onclick="selectTablePreset([2,3,4,5])">2 al 5</button>
+            <button type="button" class="preset-pill" onclick="selectTablePreset([6,7,8,9])">6 al 9</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- MODAL 1: MENÚ DESPLEGABLE DE TODAS LAS CARTAS CANTADAS -->
+  <div class="modal-overlay" id="historyModal" onclick="if(event.target===this) closeHistoryModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📜 Historial Completo de Cartas Cantadas (<span id="modalHistoryTotal">0</span>)</div>
+        <button type="button" class="modal-close-btn" onclick="closeHistoryModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#eef2ff; border:2px solid #c7d2fe; padding:0.65rem 0.9rem; border-radius:14px;">
+          <div style="font-size:0.82rem; font-weight:900; color:#312e81; margin-bottom:0.35rem;">
+            🟢 Resultados numéricos que YA salieron (para consulta rápida):
+          </div>
+          <div id="uniqueResultsChips" style="display:flex; flex-wrap:wrap; gap:0.35rem;"></div>
+        </div>
+
+        <div>
+          <div style="font-size:0.85rem; font-weight:900; color:#334155; margin-bottom:0.5rem;">
+            Orden cronológico (de la más reciente a la primera):
+          </div>
+          <div class="history-full-grid" id="historyFullGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: VERIFICADOR DE TABLA + LECTOR CON CÁMARA ANTI-CRASH -->
+  <div class="modal-overlay" id="verifierModal" onclick="if(event.target===this) closeVerifierModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🏆 Verificador de Carta de Lotería</span>
+          <span style="font-size:0.75rem; background:#fef3c7; color:#92400e; padding:0.2rem 0.6rem; border-radius:999px;">⏸️ Juego en Pausa</span>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeVerifierModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="verifier-tabs">
+          <button type="button" class="v-tab-btn active" id="vTabManual" onclick="switchVerifierTab('manual')">
+            🔢 Teclado Táctil y Folio (#01-#40)
+          </button>
+          <button type="button" class="v-tab-btn" id="vTabCamera" onclick="switchVerifierTab('camera')">
+            📷 Lector con Cámara (QR / Visor 3×3 Seguro)
+          </button>
+        </div>
+
+        <!-- BANNER DE GANADOR -->
+        <div class="win-banner" id="loteriaWinBanner">
+          <div style="font-size: 2.4rem;">🎉🏆🎉</div>
+          <div style="font-size: 1.6rem; font-weight: 900; letter-spacing: 0.03em;">¡LOTERÍA CONFIRMADA!</div>
+          <div style="font-size: 0.9rem; font-weight: 700;">¡Los 9 números de la carta ya fueron cantados! Felicidades al ganador(a).</div>
+        </div>
+
+        <div class="verifier-workspace">
+          <!-- IZQUIERDA: CUADRÍCULA 3x3 DEL ALUMNO -->
+          <div class="board-3x3-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.86rem; font-weight:900; color:#1e293b;">Carta del Alumno (3×3)</span>
+              <span id="verifierScorePill" style="font-size:0.9rem; font-weight:900; background:#e2e8f0; color:#0f172a; padding:0.2rem 0.7rem; border-radius:999px;">0 / 9 aciertos</span>
+            </div>
+
+            <div class="folio-quick-bar">
+              <select class="folio-select" id="folioQuickSelect" onchange="loadPresetCardFolio(this.value)">
+                <option value="">⚡ Cargar por Folio de Carta (#01 a #40)...</option>
+              </select>
+              <button type="button" class="v-tab-btn" onclick="clearVerifierGrid()" style="padding:0.42rem 0.7rem;">🧹 Limpiar</button>
+            </div>
+
+            <div class="grid-3x3" id="verifierGrid3x3"></div>
+
+            <div style="font-size:0.75rem; color:#64748b; font-weight:700; text-align:center;">
+              Verde = Ya salió (muestra el turno y operación) · Rojo = Todavía no sale
+            </div>
+          </div>
+
+          <!-- DERECHA: TECLADO TÁCTIL O VISOR DE CÁMARA ANTI-CRASH -->
+          <div>
+            <!-- PANEL A: TECLADO TÁCTIL + CHIPS CANTADOS -->
+            <div class="keypad-panel" id="verifierManualPanel">
+              <div style="font-size:0.82rem; font-weight:900; color:#334155;">
+                Toca una casilla de la izquierda y escribe el número (o elige un folio):
+              </div>
+              <div class="numpad-grid">
+                <button type="button" class="numpad-btn" onclick="numpadPress('1')">1</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('2')">2</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('3')">3</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('4')">4</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('5')">5</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('6')">6</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('7')">7</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('8')">8</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('9')">9</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('DEL')" style="background:#fee2e2; color:#991b1b; font-size:0.95rem;">⌫ Borrar</button>
+                <button type="button" class="numpad-btn" onclick="numpadPress('0')">0</button>
+                <button type="button" class="numpad-btn" onclick="numpadNextCell()" style="background:#e0e7ff; color:#312e81; font-size:0.95rem;">Sig. Casilla ➔</button>
+              </div>
+
+              <div style="margin-top:0.35rem;">
+                <div style="font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:0.3rem;">
+                  O toca directamente un resultado ya cantado para insertarlo:
+                </div>
+                <div id="verifierDrawnQuickChips" style="display:flex; flex-wrap:wrap; gap:0.3rem; max-height:110px; overflow-y:auto;"></div>
+              </div>
+            </div>
+
+            <!-- PANEL B: CÁMARA BLINDADA ANTI-CRASH (COMPUTERLAND SAFE) -->
+            <div class="camera-safe-box" id="verifierCameraPanel">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span style="font-size:0.84rem; font-weight:900; color:#93c5fd;">📷 Visor de Cámara Anti-Crash</span>
+                <div style="display:flex; gap:0.35rem;">
+                  <button type="button" class="pill-btn active-green" id="btnStartCam" onclick="startSafeCamera()">▶ Iniciar Cámara</button>
+                  <button type="button" class="pill-btn active-amber" id="btnFreezeCam" onclick="toggleFreezeCamera()" style="display:none;">📸 Congelar Foto</button>
+                  <button type="button" class="pill-btn" id="btnStopCam" onclick="stopSafeCamera()" style="display:none;">⏹ Apagar</button>
+                </div>
+              </div>
+
+              <div class="camera-viewport-wrap">
+                <video id="cameraVideoEl" class="camera-video" playsinline muted style="display:none;"></video>
+                <canvas id="cameraFreezeCanvas" class="camera-snapshot-canvas" style="display:none;"></canvas>
+                <div id="cameraPlaceholderMsg" style="padding:1.2rem; text-align:center; color:#94a3b8; font-size:0.84rem; font-weight:700;">
+                  La cámara está apagada por seguridad para no consumir memoria en Computerland.<br><br>
+                  Toca <b>"▶ Iniciar Cámara"</b> para enfocar la carta del alumno o leer el código QR de folio.
+                </div>
+                <div class="camera-overlay-grid" id="cameraOverlayGrid" style="display:none;">
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                  <div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div><div class="camera-overlay-cell"></div>
+                </div>
+              </div>
+
+              <div class="camera-status-msg" id="cameraStatusText">
+                Modo seguro: Si tu carta impresa tiene QR de Folio (#01-#40), se detecta automáticamente. También puedes congelar la foto para capturar los 9 números sin que el alumno se canse de sostener la hoja.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.6rem; border-top:2px solid #e2e8f0; padding-top:0.75rem;">
+          <button type="button" class="ctrl-btn pause-btn is-paused" onclick="closeVerifierAndResume()">
+            ▶️ Cerrar y Continuar Partida
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: GENERADOR E IMPRESOR DE CARTAS CON FOLIO (#01 AL #40) -->
+  <div class="modal-overlay" id="printCardsModal" onclick="if(event.target===this) closePrintCardsModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🖨️ Cartas Oficiales con Folio (#01 al #40)</div>
+        <button type="button" class="modal-close-btn" onclick="closePrintCardsModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.86rem; color:#334155; font-weight:600; line-height:1.45;">
+          Cada carta del <b>#01 al #40</b> tiene una combinación fija de 9 resultados de las tablas del 1 al 10. Cuando un alumno grita <i>"¡Lotería!"</i>, solo necesitas elegir su número de folio (ej. <b>Carta #14</b>) en el verificador o escanear su QR y los 9 números se revisan al instante.
+        </p>
+        <div style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+          <button type="button" class="btn-verify-hero" onclick="window.print()">
+            🖨️ Imprimir 40 Cartas (4 por hoja B&amp;N)
+          </button>
+          <span style="font-size:0.78rem; color:#64748b; font-weight:700;">Vista previa de folios:</span>
+        </div>
+        <div id="previewFoliosContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:0.65rem; max-height:52vh; overflow-y:auto; padding:0.25rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÁREA OCULTA PARA IMPRESIÓN B&N DE LAS 40 CARTAS -->
+  <div id="printableArea"></div>
+
+  <script>
+    /* =========================================================================
+       1. BLOQUEO DE MENÚS CONTEXTUALES Y GESTOS PARÁSITOS (ESTÁNDAR AULA)
+       ========================================================================= */
+    window.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
+    document.oncontextmenu = () => false;
+
+    /* =========================================================================
+       2. WEB AUDIO API SINGLETON (SONIDOS DE FERIA Y FEEDBACK TÁCTIL 100% OFFLINE)
+       ========================================================================= */
+    let sharedAudioCtx = null;
+    function getAudioCtx() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      return sharedAudioCtx;
+    }
+
+    function playSfx(type = 'tap') {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const emit = () => {
+        try {
+          const now = ctx.currentTime;
+          if (type === 'card') {
+            [[523.25, 0, 0.07, 0.14], [659.25, 0.055, 0.09, 0.14], [783.99, 0.115, 0.12, 0.12]].forEach(([f, off, dur, vol]) => {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, now + off);
+              g.gain.setValueAtTime(0.001, now + off);
+              g.gain.linearRampToValueAtTime(vol, now + off + 0.01);
+              g.gain.exponentialRampToValueAtTime(0.001, now + off + dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.01);
+            });
+          } else if (type === 'whisper') {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(660, now + 0.11);
+            g.gain.setValueAtTime(0.04, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.13);
+          } else if (type === 'win') {
+            [[523.25, 0, 0.14], [659.25, 0.12, 0.14], [783.99, 0.24, 0.14], [1046.5, 0.36, 0.35]].forEach(([f, off, dur]) => {
+              const osc = ctx.createOscillator();
+              const g = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, now + off);
+              g.gain.setValueAtTime(0.2, now + off);
+              g.gain.exponentialRampToValueAtTime(0.001, now + off + dur);
+              osc.connect(g);
+              g.connect(ctx.destination);
+              osc.start(now + off);
+              osc.stop(now + off + dur + 0.02);
+            });
+          } else {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(790, now + 0.045);
+            g.gain.setValueAtTime(0.06, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.055);
+          }
+        } catch (e) {}
+      };
+      if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+      else emit();
+    }
+
+    /* =========================================================================
+       3. MOTOR DE VOZ DE LA IA (GOOGLE AI TTS + FALLBACK LOCAL CON VOLUMEN 25%)
+       ========================================================================= */
+    let voiceEnabled = true;
+    let whisperEnabled = true;
+    let whisperVolume = 0.25; // 25% del volumen total por defecto
+    let currentTtsAudio = null;
+    let spanishVoice = null;
+
+    if ('speechSynthesis' in window) {
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        spanishVoice = voices.find(v => v.lang === 'es-MX') ||
+                       voices.find(v => v.lang && v.lang.startsWith('es-')) ||
+                       voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+      };
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function stopAllSpeech() {
+      if (currentTtsAudio) {
+        try {
+          currentTtsAudio.pause();
+          currentTtsAudio.src = '';
+        } catch (e) {}
+        currentTtsAudio = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+    }
+
+    function speakAI(text, volume = 1.0, rate = 0.92, onEndCallback = null) {
+      stopAllSpeech();
+      if (!voiceEnabled || !text) {
+        if (onEndCallback) onEndCallback();
+        return;
+      }
+
+      const clampedVol = Math.max(0.05, Math.min(1.0, volume));
+      let finished = false;
+      const done = () => {
+        if (!finished) {
+          finished = true;
+          if (onEndCallback) onEndCallback();
+        }
+      };
+
+      const cleanText = String(text).trim();
+      try {
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=es-MX&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+        const audio = new Audio();
+        audio.referrerPolicy = 'no-referrer';
+        audio.volume = clampedVol;
+        audio.src = url;
+        audio.playbackRate = Math.min(1.15, Math.max(0.75, rate));
+        currentTtsAudio = audio;
+
+        let fellBack = false;
+        const fallback = () => {
+          if (fellBack || currentTtsAudio !== audio) return;
+          fellBack = true;
+          currentTtsAudio = null;
+          speakDeviceFallback(cleanText, clampedVol, rate, done);
+        };
+
+        const timeoutId = setTimeout(() => {
+          if (audio.readyState === 0) fallback();
+        }, 2200);
+
+        audio.onplay = () => clearTimeout(timeoutId);
+        audio.onended = () => {
+          clearTimeout(timeoutId);
+          if (currentTtsAudio === audio) currentTtsAudio = null;
+          done();
+        };
+        audio.onerror = () => {
+          clearTimeout(timeoutId);
+          fallback();
+        };
+        audio.play().catch(() => {
+          clearTimeout(timeoutId);
+          fallback();
+        });
+      } catch (err) {
+        speakDeviceFallback(cleanText, clampedVol, rate, done);
+      }
+    }
+
+    function speakDeviceFallback(cleanText, clampedVol, rate, done) {
+      if (!('speechSynthesis' in window)) {
+        done();
+        return;
+      }
+      try {
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.lang = spanishVoice ? spanishVoice.lang : 'es-MX';
+        if (spanishVoice) utter.voice = spanishVoice;
+        utter.volume = clampedVol;
+        utter.rate = rate;
+        utter.onend = done;
+        utter.onerror = done;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        done();
+      }
+    }
+
+    /* =========================================================================
+       4. ESTADO PRINCIPAL DEL JUEGO, TEMPORIZADOR EN TIEMPO REAL Y SUSURRO
+       ========================================================================= */
+    let activeTables = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    let deck = [];
+    let currentIndex = -1;
+    let history = []; // [newest, ..., oldest]
+
+    let gameMode = 'manual'; // 'manual' | 'auto'
+    let isAutoPaused = false;
+    let intervalSec = 6.0;
+    let whisperDelaySec = 3.5;
+
+    // Modos de visualización del resultado en la esquina: 'whisper' | 'always' | 'hidden'
+    let cornerResultMode = 'whisper';
+    let currentCardWhispered = false;
+    let duaHintVisible = false;
+
+    // Reloj de alta precisión en tiempo real
+    let cardElapsedMs = 0;
+    let lastTickTs = 0;
+    let tickerIntervalId = null;
+    let whisperTriggeredForCard = false;
+
+    function buildDeck() {
+      const newDeck = [];
+      const tablesToUse = activeTables.length > 0 ? activeTables : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      for (const a of tablesToUse) {
+        for (let b = 1; b <= 10; b++) {
+          newDeck.push({ a, b, result: a * b, id: `${a}x${b}` });
+        }
+      }
+      for (let i = newDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
+      }
+      deck = newDeck;
+      currentIndex = -1;
+      history = [];
+      currentCardWhispered = false;
+      whisperTriggeredForCard = false;
+      cardElapsedMs = 0;
+      stopAllSpeech();
+      renderAll();
+    }
+
+    function startRealtimeTicker() {
+      if (tickerIntervalId) clearInterval(tickerIntervalId);
+      lastTickTs = performance.now();
+      tickerIntervalId = setInterval(() => {
+        const now = performance.now();
+        const dt = now - lastTickTs;
+        lastTickTs = now;
+
+        if (currentIndex < 0 || currentIndex >= deck.length) return;
+        if (isAutoPaused) return;
+
+        // En modo manual también corre el reloj sólo hasta disparar el susurro al 25% si está activo
+        if (gameMode === 'manual') {
+          if (whisperEnabled && !whisperTriggeredForCard) {
+            cardElapsedMs += dt;
+            const targetWhisperMs = whisperDelaySec * 1000;
+            updateTimerProgressBar(Math.min(100, (cardElapsedMs / targetWhisperMs) * 100));
+            if (cardElapsedMs >= targetWhisperMs) {
+              triggerAnswerWhisper();
+            }
+          }
+          return;
+        }
+
+        // En modo automático
+        cardElapsedMs += dt;
+        const totalMs = intervalSec * 1000;
+        const effectiveWhisperMs = Math.min(whisperDelaySec * 1000, totalMs * 0.82);
+
+        if (whisperEnabled && !whisperTriggeredForCard && cardElapsedMs >= effectiveWhisperMs) {
+          triggerAnswerWhisper();
+        }
+
+        const pct = Math.min(100, (cardElapsedMs / totalMs) * 100);
+        updateTimerProgressBar(pct);
+
+        if (cardElapsedMs >= totalMs) {
+          if (currentIndex < deck.length - 1) {
+            nextCard(false);
+          } else {
+            isAutoPaused = true;
+            renderControlsState();
+          }
+        }
+      }, 60);
+    }
+
+    function updateTimerProgressBar(pct) {
+      const fill = document.getElementById('cardTimerFill');
+      if (fill) fill.style.width = `${pct}%`;
+    }
+
+    function triggerAnswerWhisper() {
+      if (whisperTriggeredForCard || currentIndex < 0) return;
+      whisperTriggeredForCard = true;
+      currentCardWhispered = true;
+      const card = deck[currentIndex];
+      if (!card) return;
+      renderCardCornerResult();
+      const cardEl = document.getElementById('mainLoteriaCard');
+      if (cardEl) cardEl.classList.add('whispered');
+      if (whisperEnabled && voiceEnabled) {
+        playSfx('whisper');
+        speakAI(`${card.result}`, whisperVolume, 0.9);
+      }
+    }
+
+    function announceCurrentCard() {
+      if (currentIndex < 0 || !deck[currentIndex]) return;
+      const card = deck[currentIndex];
+      playSfx('card');
+      speakAI(`${card.a} por ${card.b}`, 1.0, 0.92);
+    }
+
+    function repeatCurrentCardVoice() {
+      if (currentIndex < 0 || !deck[currentIndex]) return;
+      announceCurrentCard();
+    }
+
+    function handleCardTap() {
+      if (currentIndex < 0) {
+        nextCard(true);
+        return;
+      }
+      nextCard(true);
+    }
+
+    function nextCard(fromUserTap = false) {
+      if (currentIndex >= deck.length - 1) return;
+      if (fromUserTap && gameMode === 'auto' && isAutoPaused) {
+        isAutoPaused = false;
+      }
+      const nextIdx = currentIndex + 1;
+      currentIndex = nextIdx;
+      const drawn = deck[nextIdx];
+      // Agregar al historial si no estaba ya
+      if (!history.some(c => c.id === drawn.id)) {
+        history = [drawn, ...history];
+      }
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      whisperTriggeredForCard = false;
+      currentCardWhispered = false;
+      updateTimerProgressBar(0);
+      renderAll();
+      announceCurrentCard();
+    }
+
+    function prevCard() {
+      if (currentIndex <= 0) return;
+      currentIndex -= 1;
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      whisperTriggeredForCard = false;
+      currentCardWhispered = true;
+      updateTimerProgressBar(0);
+      renderAll();
+      announceCurrentCard();
+    }
+
+    /* =========================================================================
+       5. CONTROLES DE MODO, PAUSA, TIEMPO REAL Y VOLUMEN DE SUSURRO
+       ========================================================================= */
+    function setGameMode(mode) {
+      playSfx('tap');
+      gameMode = mode;
+      isAutoPaused = false;
+      cardElapsedMs = 0;
+      lastTickTs = performance.now();
+      updateTimerProgressBar(0);
+      renderControlsState();
+      if (mode === 'auto' && currentIndex < 0) {
+        nextCard(false);
+      }
+    }
+
+    function togglePauseAuto() {
+      playSfx('tap');
+      isAutoPaused = !isAutoPaused;
+      lastTickTs = performance.now();
+      if (isAutoPaused) {
+        stopAllSpeech();
+      }
+      renderControlsState();
+    }
+
+    function adjustIntervalSec(delta) {
+      playSfx('tap');
+      setIntervalSec(Math.round((intervalSec + delta) * 10) / 10);
+    }
+
+    function setIntervalSec(val) {
+      intervalSec = Math.max(2.0, Math.min(20.0, val));
+      if (whisperDelaySec >= intervalSec - 0.5) {
+        whisperDelaySec = Math.max(1.0, Math.round((intervalSec * 0.6) * 2) / 2);
+      }
+      lastTickTs = performance.now();
+      renderControlsState();
+    }
+
+    function adjustWhisperDelaySec(delta) {
+      playSfx('tap');
+      const maxWhisper = gameMode === 'auto' ? Math.max(1.0, intervalSec - 0.5) : 15.0;
+      whisperDelaySec = Math.max(1.0, Math.min(maxWhisper, Math.round((whisperDelaySec + delta) * 10) / 10));
+      renderControlsState();
+    }
+
+    function setWhisperVolume(vol) {
+      playSfx('tap');
+      whisperVolume = vol;
+      renderControlsState();
+      if (voiceEnabled) {
+        speakAI('Veinticinco', whisperVolume, 0.92);
+      }
+    }
+
+    function toggleVoiceEnabled() {
+      voiceEnabled = !voiceEnabled;
+      if (!voiceEnabled) stopAllSpeech();
+      else playSfx('tap');
+      renderControlsState();
+    }
+
+    function toggleWhisperEnabled() {
+      playSfx('tap');
+      whisperEnabled = !whisperEnabled;
+      renderControlsState();
+    }
+
+    function toggleShowResultOnCard() {
+      playSfx('tap');
+      if (cornerResultMode === 'whisper') cornerResultMode = 'always';
+      else if (cornerResultMode === 'always') cornerResultMode = 'hidden';
+      else cornerResultMode = 'whisper';
+      renderControlsState();
+      renderCardCornerResult();
+    }
+
+    function toggleDuaHint() {
+      playSfx('tap');
+      duaHintVisible = !duaHintVisible;
+      renderDuaHint();
+    }
+
+    function confirmResetGame() {
+      playSfx('tap');
+      buildDeck();
+    }
+
+    /* =========================================================================
+       6. FILTRO DE TABLAS DEL 1 AL 10
+       ========================================================================= */
+    function renderTablesFilter() {
+      const grid = document.getElementById('tablesFilterGrid');
+      if (!grid) return;
+      grid.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => {
+        const sel = activeTables.includes(num);
+        return `<button type="button" class="table-chip ${sel ? 'selected' : ''}" onclick="toggleTableNum(${num})">×${num}</button>`;
+      }).join('');
+      const lbl = document.getElementById('activeTablesCountLabel');
+      if (lbl) lbl.textContent = `${activeTables.length} tabla${activeTables.length === 1 ? '' : 's'} (${activeTables.length * 10} cartas)`;
+    }
+
+    function toggleTableNum(num) {
+      playSfx('tap');
+      if (activeTables.includes(num)) {
+        if (activeTables.length <= 1) return; // Al menos 1 tabla activa
+        activeTables = activeTables.filter(n => n !== num);
+      } else {
+        activeTables = [...activeTables, num].sort((a, b) => a - b);
+      }
+      buildDeck();
+    }
+
+    function selectTablePreset(arr) {
+      playSfx('tap');
+      activeTables = [...arr];
+      buildDeck();
+    }
+
+    /* =========================================================================
+       7. RENDERIZADO DE LA INTERFAZ Y TIRA DE ÚLTIMAS 5 CARTAS
+       ========================================================================= */
+    function renderAll() {
+      renderControlsState();
+      renderTablesFilter();
+      renderMainCard();
+      renderRecentFiveStrip();
+      renderVerifierGrid();
+    }
+
+    function renderControlsState() {
+      const btnVoice = document.getElementById('btnVoiceToggle');
+      if (btnVoice) {
+        btnVoice.textContent = voiceEnabled ? '🔊 Voz IA: ON' : '🔇 Voz IA: OFF';
+        btnVoice.className = `pill-btn ${voiceEnabled ? 'active-green' : 'muted'}`;
+      }
+
+      const btnWhisper = document.getElementById('btnWhisperToggle');
+      const btnSideWhisper = document.getElementById('btnSideWhisperSwitch');
+      const pctVol = Math.round(whisperVolume * 100);
+      if (btnWhisper) {
+        btnWhisper.textContent = whisperEnabled ? `🤫 Respuesta (${pctVol}% vol): ON` : '🤫 Respuesta: OFF';
+        btnWhisper.className = `pill-btn ${whisperEnabled ? 'active-amber' : 'muted'}`;
+      }
+      if (btnSideWhisper) {
+        btnSideWhisper.textContent = whisperEnabled ? 'ACTIVO' : 'APAGADO';
+        btnSideWhisper.className = `switch-btn ${whisperEnabled ? 'on' : 'off'}`;
+      }
+
+      const volBadge = document.getElementById('whisperVolBadge');
+      if (volBadge) volBadge.textContent = `Vol: ${pctVol}%`;
+      [15, 25, 40, 60].forEach(p => {
+        const el = document.getElementById(`volPill${p}`);
+        if (el) el.classList.toggle('active', Math.round(whisperVolume * 100) === p);
+      });
+
+      const btnCorner = document.getElementById('btnCornerResultToggle');
+      if (btnCorner) {
+        const labels = {
+          whisper: '👁️ Resultado: Al susurrar',
+          always: '👁️ Resultado: Siempre visible',
+          hidden: '🙈 Resultado: Oculto'
+        };
+        btnCorner.textContent = labels[cornerResultMode];
+      }
+
+      document.getElementById('btnModeManual').classList.toggle('active', gameMode === 'manual');
+      document.getElementById('btnModeAuto').classList.toggle('active', gameMode === 'auto');
+      document.getElementById('autoStateSmall').textContent = gameMode === 'auto' ? (isAutoPaused ? 'En Pausa' : 'Automático') : 'Manual';
+
+      document.getElementById('intervalSecDisplay').textContent = `${intervalSec.toFixed(1)} s`;
+      document.getElementById('whisperDelayDisplay').textContent = `${whisperDelaySec.toFixed(1)} s`;
+
+      document.querySelectorAll('.side-card:nth-child(2) .preset-pill').forEach(btn => {
+        const v = parseFloat(btn.textContent);
+        btn.classList.toggle('active', Math.abs(v - intervalSec) < 0.05);
+      });
+
+      const marker = document.getElementById('whisperMarker');
+      if (marker) {
+        marker.style.display = whisperEnabled ? 'block' : 'none';
+        const ratio = gameMode === 'auto' ? Math.min(85, Math.round((whisperDelaySec / intervalSec) * 100)) : 100;
+        marker.style.left = `${ratio}%`;
+      }
+
+      const badge = document.getElementById('modeStatusBadge');
+      const btnPause = document.getElementById('btnPauseAuto');
+      if (gameMode === 'auto') {
+        btnPause.style.display = 'inline-flex';
+        if (isAutoPaused) {
+          badge.textContent = '⏸️ PAUSADO (Revisando)';
+          badge.classList.add('paused');
+          btnPause.textContent = '▶️ CONTINUAR TIEMPO';
+          btnPause.classList.add('is-paused');
+        } else {
+          badge.textContent = `⏱️ Automático (${intervalSec.toFixed(1)}s)`;
+          badge.classList.remove('paused');
+          btnPause.textContent = '⏸️ PAUSAR TIEMPO';
+          btnPause.classList.remove('is-paused');
+        }
+      } else {
+        btnPause.style.display = 'none';
+        badge.textContent = '👆 Modo Manual (Tap)';
+        badge.classList.remove('paused');
+      }
+
+      document.getElementById('btnPrevCard').disabled = currentIndex <= 0;
+      document.getElementById('btnNextCard').disabled = currentIndex >= deck.length - 1;
+    }
+
+    function renderCardCornerResult() {
+      const cornerEl = document.getElementById('cardResultCorner');
+      if (!cornerEl) return;
+      if (currentIndex < 0 || !deck[currentIndex]) {
+        cornerEl.textContent = '?';
+        cornerEl.classList.remove('revealed-whisper');
+        return;
+      }
+      const res = deck[currentIndex].result;
+      if (cornerResultMode === 'always') {
+        cornerEl.textContent = `= ${res}`;
+        cornerEl.classList.remove('revealed-whisper');
+      } else if (cornerResultMode === 'whisper') {
+        if (currentCardWhispered) {
+          cornerEl.textContent = `= ${res}`;
+          cornerEl.classList.add('revealed-whisper');
+        } else {
+          cornerEl.textContent = '= ?';
+          cornerEl.classList.remove('revealed-whisper');
+        }
+      } else {
+        cornerEl.textContent = '= ?';
+        cornerEl.classList.remove('revealed-whisper');
+      }
+    }
+
+    function renderMainCard() {
+      const pill = document.getElementById('deckProgressPill');
+      const turnLbl = document.getElementById('cardTurnLabel');
+      const body = document.getElementById('cardMathBody');
+      const cardEl = document.getElementById('mainLoteriaCard');
+
+      if (currentIndex < 0 || !deck[currentIndex]) {
+        pill.textContent = `MAZO LISTO: 0 / ${deck.length}`;
+        turnLbl.textContent = 'LISTO PARA INICIAR';
+        cardEl.classList.remove('whispered');
+        body.innerHTML = `
+          <div style="text-align:center; padding: 1rem;">
+            <div style="font-size: 3.6rem; margin-bottom: 0.4rem;">🎲</div>
+            <div style="font-size: 1.55rem; font-weight: 900; color: #4f46e5; text-transform: uppercase;">¡Toca para empezar!</div>
+            <p style="font-size: 0.86rem; color: #64748b; font-weight: 700; margin-top: 0.35rem;">
+              ${deck.length} cartas en el mazo · Toca aquí o activa Por Tiempo
+            </p>
+          </div>
+        `;
+        renderCardCornerResult();
+        renderDuaHint();
+        return;
+      }
+
+      const card = deck[currentIndex];
+      pill.textContent = `CARTA: ${currentIndex + 1} / ${deck.length}`;
+      turnLbl.textContent = `TURNO #${currentIndex + 1}`;
+      body.innerHTML = `
+        <div class="math-row-big">
+          <span class="factor-num">${card.a}</span>
+          <span class="times-symbol">×</span>
+          <span class="factor-num">${card.b}</span>
+        </div>
+        <div class="card-chant-text">« ${card.a} por ${card.b} »</div>
+      `;
+      renderCardCornerResult();
+      renderDuaHint();
+    }
+
+    function renderDuaHint() {
+      const box = document.getElementById('duaArrayBox');
+      const btn = document.getElementById('btnDuaHint');
+      if (!box || !btn) return;
+      btn.classList.toggle('active-indigo', duaHintVisible);
+
+      if (!duaHintVisible || currentIndex < 0 || !deck[currentIndex]) {
+        box.classList.remove('visible');
+        return;
+      }
+      const card = deck[currentIndex];
+      box.classList.add('visible');
+      const dotsGrid = document.getElementById('duaDotsGrid');
+      dotsGrid.style.gridTemplateColumns = `repeat(${card.b}, 9px)`;
+      let dotsHtml = '';
+      for (let i = 0; i < card.a * card.b; i++) {
+        dotsHtml += '<span class="dua-dot"></span>';
+      }
+      dotsGrid.innerHTML = dotsHtml;
+      const sumParts = Array(card.a).fill(card.b).join(' + ');
+      document.getElementById('duaSumText').textContent = `${card.a} veces ${card.b}: ${sumParts}`;
+    }
+
+    function renderRecentFiveStrip() {
+      const track = document.getElementById('recentFiveTrack');
+      const sub = document.getElementById('recentTotalSub');
+      const btnCount = document.getElementById('btnHistoryCount');
+
+      if (sub) sub.textContent = `${history.length} cantada${history.length === 1 ? '' : 's'}`;
+      if (btnCount) btnCount.textContent = history.length;
+
+      if (history.length === 0) {
+        track.innerHTML = `<span class="recent-empty">Aún no han salido cartas. Toca la carta central o inicia el modo automático.</span>`;
+        return;
+      }
+
+      // Mostrar las últimas 5 cartas (la actual y las 4 anteriores en línea)
+      const lastFive = history.slice(0, 5);
+      track.innerHTML = lastFive.map((c, idx) => {
+        const turnNum = history.length - idx;
+        const isLatest = idx === 0;
+        const showRes = cornerResultMode !== 'hidden' && (!isLatest || currentCardWhispered || cornerResultMode === 'always');
+        return `
+          <div class="mini-past-card ${isLatest ? 'is-latest' : ''}">
+            <span class="mini-turn-badge">#${turnNum}</span>
+            <span class="mini-op">${c.a}×${c.b}</span>
+            <span class="mini-res ${showRes ? '' : 'hidden-res'}">${showRes ? c.result : '?'}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* =========================================================================
+       8. MODAL DE HISTORIAL COMPLETO (TODAS LAS CARTAS QUE YA PASARON)
+       ========================================================================= */
+    let wasPausedBeforeModal = false;
+
+    function pauseForModal() {
+      wasPausedBeforeModal = isAutoPaused;
+      isAutoPaused = true;
+      stopAllSpeech();
+      renderControlsState();
+    }
+
+    function openHistoryModal() {
+      playSfx('tap');
+      pauseForModal();
+      document.getElementById('modalHistoryTotal').textContent = history.length;
+
+      // Mapa rápido de resultados únicos ordenados de menor a mayor
+      const uniqueMap = new Map();
+      history.forEach((c, idx) => {
+        const turn = history.length - idx;
+        if (!uniqueMap.has(c.result) || turn < uniqueMap.get(c.result).turn) {
+          uniqueMap.set(c.result, { turn, op: `${c.a}×${c.b}` });
+        }
+      });
+      const sortedUnique = Array.from(uniqueMap.entries()).sort((a, b) => a[0] - b[0]);
+      const chipsContainer = document.getElementById('uniqueResultsChips');
+      if (sortedUnique.length === 0) {
+        chipsContainer.innerHTML = '<span style="font-size:0.8rem; color:#64748b;">Ninguna carta cantada todavía.</span>';
+      } else {
+        chipsContainer.innerHTML = sortedUnique.map(([res, info]) => `
+          <span style="background:#10b981; color:#ffffff; font-weight:900; font-size:0.82rem; padding:0.22rem 0.6rem; border-radius:8px;">
+            ${res} <small style="font-weight:700; opacity:0.9;">(${info.op} · #${info.turn})</small>
+          </span>
+        `).join('');
+      }
+
+      const fullGrid = document.getElementById('historyFullGrid');
+      fullGrid.innerHTML = history.map((c, idx) => {
+        const turn = history.length - idx;
+        return `
+          <div class="hist-card-item ${idx === 0 ? 'latest' : ''}">
+            <span style="font-size:0.7rem; font-weight:900; color:#4f46e5;">Turno #${turn}</span>
+            <span style="font-size:0.95rem; font-weight:800; color:#334155; margin:0.15rem 0;">${c.a} × ${c.b}</span>
+            <span style="font-size:1.45rem; font-weight:900; color:#0f172a;">= ${c.result}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('historyModal').classList.add('open');
+    }
+
+    function closeHistoryModal() {
+      playSfx('tap');
+      document.getElementById('historyModal').classList.remove('open');
+      if (!wasPausedBeforeModal && gameMode === 'auto') {
+        isAutoPaused = false;
+        lastTickTs = performance.now();
+        renderControlsState();
+      }
+    }
+
+    /* =========================================================================
+       9. GENERADOR DETERMINISTA DE 40 CARTAS CON FOLIO (#01 AL #40)
+       ========================================================================= */
+    // Todos los productos únicos posibles del 1 al 10
+    const ALL_UNIQUE_PRODUCTS = (() => {
+      const s = new Set();
+      for (let i = 1; i <= 10; i++) {
+        for (let j = 1; j <= 10; j++) s.add(i * j);
+      }
+      return Array.from(s).sort((a, b) => a - b);
+    })();
+
+    const PRESET_CARDS_DB = (() => {
+      const cards = {};
+      for (let folio = 1; folio <= 40; folio++) {
+        let seed = folio * 2654435761;
+        const pool = [...ALL_UNIQUE_PRODUCTS];
+        const chosen = [];
+        for (let k = 0; k < 9; k++) {
+          seed = (seed * 1664525 + 1013904223) >>> 0;
+          const idx = seed % pool.length;
+          chosen.push(pool[idx]);
+          pool.splice(idx, 1);
+        }
+        chosen.sort((a, b) => a - b);
+        const code = `CARTA-${String(folio).padStart(2, '0')}`;
+        cards[code] = { folio, code, numbers: chosen };
+      }
+      return cards;
+    })();
+
+    function populateFolioSelect() {
+      const sel = document.getElementById('folioQuickSelect');
+      if (!sel) return;
+      let html = '<option value="">⚡ Cargar por Folio de Carta (#01 a #40)...</option>';
+      Object.values(PRESET_CARDS_DB).forEach(c => {
+        html += `<option value="${c.code}">Carta #${String(c.folio).padStart(2, '0')} (${c.numbers.join(', ')})</option>`;
+      });
+      sel.innerHTML = html;
+    }
+
+    function loadPresetCardFolio(code) {
+      if (!code || !PRESET_CARDS_DB[code]) return;
+      playSfx('tap');
+      verifierCells = PRESET_CARDS_DB[code].numbers.map(n => String(n));
+      selectedCellIdx = 0;
+      renderVerifierGrid();
+    }
+
+    /* =========================================================================
+       10. VERIFICADOR DE CARTA + CÁMARA BLINDADA ANTI-CRASH (COMPUTERLAND SAFE)
+       ========================================================================= */
+    let verifierCells = Array(9).fill('');
+    let selectedCellIdx = 0;
+    let lastWinState = false;
+
+    function openVerifierModal() {
+      playSfx('tap');
+      pauseForModal();
+      renderVerifierGrid();
+      renderVerifierDrawnChips();
+      document.getElementById('verifierModal').classList.add('open');
+    }
+
+    function closeVerifierModal() {
+      playSfx('tap');
+      stopSafeCamera();
+      document.getElementById('verifierModal').classList.remove('open');
+    }
+
+    function closeVerifierAndResume() {
+      closeVerifierModal();
+      if (gameMode === 'auto') {
+        isAutoPaused = false;
+        lastTickTs = performance.now();
+        renderControlsState();
+      }
+    }
+
+    function switchVerifierTab(tab) {
+      playSfx('tap');
+      document.getElementById('vTabManual').classList.toggle('active', tab === 'manual');
+      document.getElementById('vTabCamera').classList.toggle('active', tab === 'camera');
+      document.getElementById('verifierManualPanel').style.display = tab === 'manual' ? 'flex' : 'none';
+      document.getElementById('verifierCameraPanel').classList.toggle('active', tab === 'camera');
+      if (tab !== 'camera') {
+        stopSafeCamera();
+      }
+    }
+
+    function findDrawnCardByResult(numStr) {
+      if (!numStr) return null;
+      const target = parseInt(numStr, 10);
+      if (isNaN(target)) return null;
+      for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].result === target) {
+          return { card: history[i], turn: history.length - i };
+        }
+      }
+      return null;
+    }
+
+    function renderVerifierGrid() {
+      const grid = document.getElementById('verifierGrid3x3');
+      if (!grid) return;
+
+      let matches = 0;
+      grid.innerHTML = verifierCells.map((val, idx) => {
+        const hit = findDrawnCardByResult(val);
+        if (hit) matches++;
+        const stateClass = val === '' ? '' : (hit ? 'match-yes' : 'match-no');
+        const selClass = idx === selectedCellIdx ? 'selected-cell' : '';
+        const metaText = val === ''
+          ? `Casilla ${idx + 1}`
+          : (hit ? `✅ #${hit.turn} (${hit.card.a}×${hit.card.b})` : '❌ No ha salido');
+        return `
+          <div class="cell-3x3 ${stateClass} ${selClass}" onclick="selectVerifierCell(${idx})">
+            <span class="cell-num-val">${val || '?'}</span>
+            <span class="cell-match-meta">${metaText}</span>
+          </div>
+        `;
+      }).join('');
+
+      const scorePill = document.getElementById('verifierScorePill');
+      if (scorePill) {
+        scorePill.textContent = `${matches} / 9 aciertos`;
+        scorePill.style.background = matches === 9 ? '#10b981' : '#e2e8f0';
+        scorePill.style.color = matches === 9 ? '#ffffff' : '#0f172a';
+      }
+
+      const winBanner = document.getElementById('loteriaWinBanner');
+      if (winBanner) {
+        const isWin = matches === 9;
+        winBanner.classList.toggle('show', isWin);
+        if (isWin && !lastWinState) {
+          playSfx('win');
+          speakAI('¡Lotería confirmada! Los nueve números son correctos.', 1.0, 0.95);
+        }
+        lastWinState = isWin;
+      }
+    }
+
+    function renderVerifierDrawnChips() {
+      const box = document.getElementById('verifierDrawnQuickChips');
+      if (!box) return;
+      const uniqueResults = Array.from(new Set(history.map(c => c.result))).sort((a, b) => a - b);
+      if (uniqueResults.length === 0) {
+        box.innerHTML = '<span style="font-size:0.75rem; color:#94a3b8;">Aún no hay números cantados.</span>';
+        return;
+      }
+      box.innerHTML = uniqueResults.map(r => `
+        <button type="button" onclick="quickInsertResult('${r}')" style="background:#e0e7ff; color:#312e81; border:1.5px solid #818cf8; border-radius:8px; padding:0.25rem 0.55rem; font-weight:900; font-size:0.82rem; cursor:pointer;">
+          ${r}
+        </button>
+      `).join('');
+    }
+
+    function selectVerifierCell(idx) {
+      playSfx('tap');
+      selectedCellIdx = idx;
+      renderVerifierGrid();
+    }
+
+    function numpadPress(key) {
+      playSfx('tap');
+      let cur = verifierCells[selectedCellIdx] || '';
+      if (key === 'DEL') {
+        cur = cur.slice(0, -1);
+      } else {
+        if (cur.length >= 3) cur = key;
+        else cur += key;
+        if (parseInt(cur, 10) > 100) cur = '100';
+      }
+      verifierCells[selectedCellIdx] = cur;
+      renderVerifierGrid();
+    }
+
+    function numpadNextCell() {
+      playSfx('tap');
+      selectedCellIdx = (selectedCellIdx + 1) % 9;
+      renderVerifierGrid();
+    }
+
+    function quickInsertResult(valStr) {
+      playSfx('tap');
+      verifierCells[selectedCellIdx] = String(valStr);
+      selectedCellIdx = (selectedCellIdx + 1) % 9;
+      renderVerifierGrid();
+    }
+
+    function clearVerifierGrid() {
+      playSfx('tap');
+      verifierCells = Array(9).fill('');
+      selectedCellIdx = 0;
+      lastWinState = false;
+      const sel = document.getElementById('folioQuickSelect');
+      if (sel) sel.value = '';
+      renderVerifierGrid();
+    }
+
+    /* =========================================================================
+       11. LECTOR CON CÁMARA BLINDADO (ZERO-CRASH / LAZY INIT / AUTO CLEANUP)
+       ========================================================================= */
+    let activeMediaStream = null;
+    let cameraFrozen = false;
+    let barcodeScanInterval = null;
+
+    async function startSafeCamera() {
+      const statusEl = document.getElementById('cameraStatusText');
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const placeholderEl = document.getElementById('cameraPlaceholderMsg');
+      const overlayEl = document.getElementById('cameraOverlayGrid');
+
+      stopSafeCamera();
+
+      if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== 'function') {
+        statusEl.textContent = '⚠️ Este navegador o pantalla Computerland no tiene cámara web habilitada. Usa el teclado táctil o el selector de Folio (#01-#40).';
+        return;
+      }
+
+      statusEl.textContent = '⏳ Conectando con la cámara en modo seguro (640×480)...';
+
+      try {
+        // Timeout de 4.5s para evitar bloqueo del hilo si un driver USB de cámara en Linux no responde
+        const streamPromise = navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 640, max: 1280 },
+            height: { ideal: 480, max: 720 }
+          },
+          audio: false
+        });
+
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('TIMEOUT_CAMERA')), 4500)
+        );
+
+        const stream = await Promise.race([streamPromise, timeoutPromise]);
+        activeMediaStream = stream;
+        videoEl.srcObject = stream;
+        await videoEl.play();
+
+        placeholderEl.style.display = 'none';
+        canvasEl.style.display = 'none';
+        videoEl.style.display = 'block';
+        overlayEl.style.display = 'grid';
+        document.getElementById('btnStartCam').style.display = 'none';
+        document.getElementById('btnFreezeCam').style.display = 'inline-flex';
+        document.getElementById('btnFreezeCam').textContent = '📸 Congelar Foto';
+        document.getElementById('btnStopCam').style.display = 'inline-flex';
+        cameraFrozen = false;
+
+        statusEl.textContent = '✅ Cámara activa. Alinea la carta en la cuadrícula 3×3 y toca "📸 Congelar Foto" (o muestra el QR de Folio).';
+        startNativeBarcodeWatcher(videoEl);
+      } catch (err) {
+        stopSafeCamera();
+        statusEl.textContent = 'ℹ️ No se detectó cámara web conectada o se denegó el permiso. El sistema sigue funcionando sin errores con el verificador táctil y por Folio.';
+      }
+    }
+
+    function startNativeBarcodeWatcher(videoEl) {
+      if (barcodeScanInterval) clearInterval(barcodeScanInterval);
+      if (!('BarcodeDetector' in window)) return;
+      try {
+        const detector = new window.BarcodeDetector({ formats: ['qr_code', 'code_128'] });
+        barcodeScanInterval = setInterval(async () => {
+          if (!activeMediaStream || cameraFrozen || videoEl.readyState < 2) return;
+          try {
+            const codes = await detector.detect(videoEl);
+            if (codes && codes.length > 0) {
+              const raw = (codes[0].rawValue || '').trim().toUpperCase();
+              if (PRESET_CARDS_DB[raw]) {
+                loadPresetCardFolio(raw);
+                const sel = document.getElementById('folioQuickSelect');
+                if (sel) sel.value = raw;
+                document.getElementById('cameraStatusText').textContent = `🎯 ¡Código detectado (${raw})! Los 9 números se cargaron automáticamente.`;
+                toggleFreezeCamera();
+              }
+            }
+          } catch (_) {}
+        }, 500);
+      } catch (_) {}
+    }
+
+    function toggleFreezeCamera() {
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const btnFreeze = document.getElementById('btnFreezeCam');
+      const statusEl = document.getElementById('cameraStatusText');
+
+      if (!cameraFrozen && activeMediaStream) {
+        // Congelar fotograma actual en canvas y liberar la cámara inmediatamente para ahorrar RAM en Computerland
+        canvasEl.width = videoEl.videoWidth || 640;
+        canvasEl.height = videoEl.videoHeight || 480;
+        const ctx = canvasEl.getContext('2d');
+        ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+        if (barcodeScanInterval) {
+          clearInterval(barcodeScanInterval);
+          barcodeScanInterval = null;
+        }
+        activeMediaStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+        activeMediaStream = null;
+        videoEl.srcObject = null;
+        videoEl.style.display = 'none';
+        canvasEl.style.display = 'block';
+        cameraFrozen = true;
+        btnFreeze.textContent = '🔄 Tomar Otra Foto';
+        statusEl.textContent = '📸 Foto congelada (cámara liberada de memoria). Puedes verificar los 9 números de la foto con total comodidad.';
+      } else {
+        startSafeCamera();
+      }
+    }
+
+    function stopSafeCamera() {
+      if (barcodeScanInterval) {
+        clearInterval(barcodeScanInterval);
+        barcodeScanInterval = null;
+      }
+      if (activeMediaStream) {
+        activeMediaStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+        activeMediaStream = null;
+      }
+      const videoEl = document.getElementById('cameraVideoEl');
+      const canvasEl = document.getElementById('cameraFreezeCanvas');
+      const placeholderEl = document.getElementById('cameraPlaceholderMsg');
+      const overlayEl = document.getElementById('cameraOverlayGrid');
+      if (videoEl) {
+        videoEl.srcObject = null;
+        videoEl.style.display = 'none';
+      }
+      if (canvasEl) canvasEl.style.display = 'none';
+      if (placeholderEl) placeholderEl.style.display = 'block';
+      if (overlayEl) overlayEl.style.display = 'none';
+      const btnStart = document.getElementById('btnStartCam');
+      const btnFreeze = document.getElementById('btnFreezeCam');
+      const btnStop = document.getElementById('btnStopCam');
+      if (btnStart) btnStart.style.display = 'inline-flex';
+      if (btnFreeze) btnFreeze.style.display = 'none';
+      if (btnStop) btnStop.style.display = 'none';
+      cameraFrozen = false;
+    }
+
+    /* =========================================================================
+       12. MODAL DE IMPRESIÓN Y VISTA PREVIA DE LAS 40 CARTAS CON FOLIO
+       ========================================================================= */
+    function openPrintCardsModal() {
+      playSfx('tap');
+      pauseForModal();
+      renderPrintCardsPreviewAndDOM();
+      document.getElementById('printCardsModal').classList.add('open');
+    }
+
+    function closePrintCardsModal() {
+      playSfx('tap');
+      document.getElementById('printCardsModal').classList.remove('open');
+    }
+
+    function renderPrintCardsPreviewAndDOM() {
+      const previewBox = document.getElementById('previewFoliosContainer');
+      const printBox = document.getElementById('printableArea');
+      const list = Object.values(PRESET_CARDS_DB);
+
+      previewBox.innerHTML = list.map(c => `
+        <div style="border:2px solid #cbd5e1; border-radius:12px; padding:0.55rem; background:#f8fafc;">
+          <div style="display:flex; justify-content:space-between; font-weight:900; font-size:0.8rem; color:#312e81; margin-bottom:0.35rem;">
+            <span>🎲 CARTA #${String(c.folio).padStart(2, '0')}</span>
+            <button type="button" onclick="closePrintCardsModal(); openVerifierModal(); loadPresetCardFolio('${c.code}'); document.getElementById('folioQuickSelect').value='${c.code}';" style="font-size:0.68rem; background:#e0e7ff; color:#312e81; border:1px solid #818cf8; border-radius:6px; padding:0.1rem 0.4rem; cursor:pointer; font-weight:800;">
+              Probar ➔
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:4px;">
+            ${c.numbers.map(n => `<div style="background:#ffffff; border:1.5px solid #94a3b8; border-radius:6px; text-align:center; font-weight:900; font-size:0.9rem; padding:0.25rem 0;">${n}</div>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      // Construir páginas imprimibles (4 cartas por hoja)
+      let pagesHtml = '';
+      for (let i = 0; i < list.length; i += 4) {
+        const chunk = list.slice(i, i + 4);
+        pagesHtml += `<div class="print-page">
+          ${chunk.map(c => `
+            <div class="print-loteria-card">
+              <div class="print-card-header">
+                <span>🎲 LOTERÍA DE MULTIPLICACIONES</span>
+                <span>FOLIO: #${String(c.folio).padStart(2, '0')}</span>
+              </div>
+              <div class="print-card-grid">
+                ${c.numbers.map(n => `<div class="print-card-cell">${n}</div>`).join('')}
+              </div>
+              <div class="print-card-footer">
+                Primaria Federal "José Clemente Orozco" · 3° Grado · Código Verificador: ${c.code}
+              </div>
+            </div>
+          `).join('')}
+        </div>`;
+      }
+      printBox.innerHTML = pagesHtml;
+    }
+
+    /* =========================================================================
+       13. ATAJOS DE TECLADO Y CONTROL REMOTO DE PRESENTACIÓN
+       ========================================================================= */
+    window.addEventListener('keydown', (e) => {
+      const anyModalOpen = document.querySelector('.modal-overlay.open');
+      if (anyModalOpen) {
+        if (e.key === 'Escape') {
+          closeHistoryModal();
+          closeVerifierModal();
+          closePrintCardsModal();
+        }
+        return;
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextCard(true);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevCard();
+      } else if (e.key.toLowerCase() === 'p') {
+        if (gameMode === 'auto') togglePauseAuto();
+      } else if (e.key.toLowerCase() === 'r') {
+        repeatCurrentCardVoice();
+      } else if (e.key.toLowerCase() === 'v') {
+        openVerifierModal();
+      }
+    });
+
+    /* INICIALIZACIÓN */
+    populateFolioSelect();
+    buildDeck();
+    startRealtimeTicker();
+  </script>
+</body>
+</html>
