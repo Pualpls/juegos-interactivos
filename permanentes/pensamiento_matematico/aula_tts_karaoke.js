@@ -1,8 +1,12 @@
 /* ============================================================================
-   AULA TTS KARAOKE ENGINE (3° "A" · Escuela Primaria Federal "José Clemente Orozco")
-   - Lectura en voz alta con Google AI TTS (es-MX) + respaldo offline (speechSynthesis)
-   - Subrayado suave sincronizado palabra por palabra y pausas en signos (, ; : . ? !)
-   - Botones de lectura para situaciones/preguntas y botones compactos en opciones
+   AULA TTS KARAOKE ENGINE v2 (3° "A" · Escuela Primaria Federal "José Clemente Orozco")
+   - Lectura en voz alta con Voz IA de Google (es-MX) + respaldo offline (speechSynthesis)
+   - Sincronización exacta inmune a Transfer-Encoding: chunked:
+     * Pre-carga canplaythrough + escucha activa de durationchange/progress
+     * Micro-fragmentación por oraciones/cláusulas con pre-carga en segundo plano
+     * Modelo fonético español calibrado (hiatos, cifras, unidades, alargamiento prepausal y espacios ___)
+     * Compensación de latencia de salida de audio (50 ms) para cero adelanto visual
+   - Subrayado suave palabra por palabra y pausas en signos (, ; : . ? !)
    - 100% Vanilla JS, cero dependencias externas, cero contaminación de textContent
    ============================================================================ */
 (function (global) {
@@ -12,6 +16,8 @@
 
   const STYLE_ID = 'aula-tts-karaoke-styles';
   const TTS_BASE = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=es-MX&q=';
+  // Compensación de latencia física del buffer de audio HDMI/altavoces (evita que el subrayado se adelante al sonido)
+  const AUDIO_OUTPUT_LATENCY_SEC = 0.055;
 
   const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'SVG', 'NOSCRIPT', 'TEMPLATE', 'INPUT', 'TEXTAREA', 'SELECT', 'CANVAS']);
   const SKIP_CLASSES = [
@@ -28,11 +34,23 @@
     'slot-label'
   ];
 
-  // Estado global de reproducción
+  const FAST_WORDS = new Set([
+    'el', 'la', 'lo', 'los', 'las', 'de', 'del', 'y', 'e', 'o', 'u',
+    'a', 'al', 'en', 'un', 'es', 'se', 'su', 'le', 'me', 'te', 'si',
+    'no', 'por', 'con', 'que', 'mas', 'más', 'sin', 'mi', 'tu'
+  ]);
+
+  const ABBR_SYLLABLES = {
+    'cm': 4, 'mm': 4, 'km': 4, 'kg': 4, 'ml': 4, 'mg': 4,
+    'm': 2, 'g': 2, 'l': 2, 'hrs': 2, 'min': 3, 'seg': 3,
+    'pts': 2, 'opm': 3, 'ppm': 3
+  };
+
   const player = {
     activeEl: null,
     activeBtn: null,
     audio: null,
+    preloadedAudio: null,
     rafId: null,
     sessionId: 0,
     tokens: [],
@@ -212,70 +230,94 @@
   }
 
   /* --------------------------------------------------------------------------
-     2. MODELO ACÚSTICO DE ESPAÑOL (SÍLABAS, NÚMEROS Y PAUSAS DE PUNTUACIÓN)
+     2. MODELO FONÉTICO CALIBRADO DE ESPAÑOL (SÍLABAS, HIATOS, CIFRAS Y PAUSAS)
      -------------------------------------------------------------------------- */
+  function countSpanishSyllables(lowerWord) {
+    const clean = lowerWord.replace(/[^a-záéíóúüñ]/g, '');
+    if (!clean) return 1;
+    const groups = clean.match(/[aeiouáéíóúü]+/g);
+    let count = groups ? groups.length : 1;
+    // Sumar hiatos reales en español (dos vocales fuertes seguidas o débil tónica junto a vocal: Ga-el, ma-es-tro, ha-bí-a, frí-o)
+    const hiatusStrong = clean.match(/[aeoáéó][aeoáéó]/g);
+    const hiatusAccent = clean.match(/(?:[íú][aeiouáéó]|[aeiouáéó][íú])/g);
+    if (hiatusStrong) count += hiatusStrong.length;
+    if (hiatusAccent) count += hiatusAccent.length;
+    return Math.max(1, count);
+  }
+
   function estimateNumberSyllables(numStr) {
     const clean = numStr.replace(/[^\d]/g, '');
     if (!clean) return 1;
     const n = parseInt(clean, 10);
-    if (isNaN(n)) return 2;
-    if (n <= 15) return n === 0 ? 2 : (n <= 10 ? 2 : 3);
-    if (n < 30) return 3.5;
-    if (n < 100) return (n % 10 === 0) ? 3 : 4.5;
+    if (isNaN(n)) return 2.5;
+    if (n <= 15) return (n <= 10 && n !== 0) ? 2.2 : 3.0;
+    if (n < 30) return 3.9;
+    if (n < 100) return (n % 10 === 0) ? 3.3 : 5.4;
     if (n < 1000) {
       const rem = n % 100;
-      return 3.5 + (rem > 0 ? estimateNumberSyllables(String(rem)) : 0);
+      return 4.2 + (rem > 0 ? estimateNumberSyllables(String(rem)) : 0);
     }
-    return 6 + Math.min(4, clean.length);
+    return 6.8 + Math.min(4, clean.length);
   }
 
-  function estimateWordWeight(rawText) {
-    const t = rawText.replace(/[¿¡"«»()\[\]{}]/g, '').trim();
-    if (!t) return 0.2;
+  function estimateTokenSeconds(tok, isBeforePunct, isLastInChunk) {
+    if (tok.isBlank) {
+      // Se lee como "espacio en blanco" (~0.92s)
+      return 0.92;
+    }
+    if (tok.isPunct) {
+      if (/[.!?…]/.test(tok.text)) return isLastInChunk ? 0.15 : 0.46;
+      if (/[,;:—–]/.test(tok.text)) return isLastInChunk ? 0.18 : 0.35;
+      return 0.10;
+    }
 
-    // Números (ej. 206, $35, 3°, 1,250)
+    const t = tok.text.replace(/[¿¡"«»()\[\]{}]/g, '').trim();
+    if (!t) return 0.08;
+
+    let sec;
+    // Números, moneda, grados y porcentajes (Google TTS articula los números con pausa clara)
     if (/^[\$]?\d+(?:[.,]\d+)*[°%]?$/.test(t)) {
       let extra = 0;
-      if (t.includes('$')) extra += 2; // "pesos"
-      if (t.includes('°')) extra += 2.5; // "grados / tercero"
-      if (t.includes('%')) extra += 3; // "por ciento"
+      if (t.includes('$')) extra += 2.2;
+      if (t.includes('°')) extra += 2.6;
+      if (t.includes('%')) extra += 3.0;
       const syl = estimateNumberSyllables(t) + extra;
-      return 0.45 + syl * 0.62;
+      sec = 0.20 + syl * 0.175;
+    } else if (/^[A-Da-d]\)$/.test(t)) {
+      // Incisos A) B) C) D) tienen breve pausa posterior
+      sec = 0.36;
+    } else {
+      const lower = t.toLowerCase();
+      if (ABBR_SYLLABLES[lower]) {
+        sec = 0.14 + ABBR_SYLLABLES[lower] * 0.165;
+      } else if (FAST_WORDS.has(lower)) {
+        sec = 0.175;
+      } else {
+        const syl = countSpanishSyllables(lower);
+        sec = 0.115 + syl * 0.168 + Math.min(t.length, 15) * 0.008;
+      }
     }
 
-    // Abreviaturas comunes de medidas
-    const lower = t.toLowerCase();
-    const abbrMap = {
-      'cm': 4, 'mm': 4, 'km': 4, 'kg': 4, 'ml': 4, 'mg': 4,
-      'm': 2, 'g': 2, 'l': 2, 'hrs': 2, 'min': 3, 'seg': 3
-    };
-    if (abbrMap[lower]) {
-      return 0.45 + abbrMap[lower] * 0.60;
+    // Alargamiento prepausal natural antes de coma o punto en español
+    if (isBeforePunct) {
+      sec *= 1.22;
     }
-
-    // Conteo aproximado de sílabas en español (grupos vocálicos)
-    const vowelGroups = lower.match(/[aeiouáéíóúü]+/g);
-    const sylCount = vowelGroups ? vowelGroups.length : 1;
-    // Palabras monosílabas funcionales (el, la, de, y, a, en, con, que, se, su) son ligeramente más rápidas
-    const fastWords = new Set(['el', 'la', 'lo', 'los', 'las', 'de', 'del', 'y', 'e', 'o', 'u', 'a', 'al', 'en', 'un', 'es', 'se', 'su', 'le', 'me', 'te', 'si', 'no', 'por', 'con', 'que', 'mas', 'más']);
-    if (fastWords.has(lower)) {
-      return 0.85;
-    }
-    return 0.44 + sylCount * 0.62 + Math.min(t.length, 15) * 0.032;
+    return sec;
   }
 
-  function estimatePunctWeight(punct, isLastInChunk) {
-    if (/[.!?…]/.test(punct)) {
-      return isLastInChunk ? 0.65 : 2.35;
+  function estimateChunkDurationSec(chunkTokens) {
+    let total = 0.12; // lead-in + tail-out promedio medido en MP3 de Google TTS (24ms + 48ms + margen)
+    for (let i = 0; i < chunkTokens.length; i++) {
+      const tok = chunkTokens[i];
+      const isLast = (i === chunkTokens.length - 1);
+      const beforePunct = !tok.isPunct && (i + 1 < chunkTokens.length && chunkTokens[i + 1].isPunct);
+      total += estimateTokenSeconds(tok, beforePunct, isLast);
     }
-    if (/[,;:—–]/.test(punct)) {
-      return isLastInChunk ? 0.85 : 1.45;
-    }
-    return 0.35;
+    return Math.max(0.45, total);
   }
 
   /* --------------------------------------------------------------------------
-     3. TOKENIZACIÓN SEGURA DEL DOM (PALABRAS + PAUSAS SIN ROMPER ESTRUCTURA)
+     3. TOKENIZACIÓN SEGURA DEL DOM (PALABRAS + PAUSAS + ESPACIOS EN BLANCO)
      -------------------------------------------------------------------------- */
   function shouldSkipNode(node) {
     let cur = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
@@ -320,14 +362,17 @@
       }
     }
 
-    // Regex que separa:
-    // 1. Espacios en blanco
-    // 2. Números con separadores internos ($1,250, 3.5, 3°, 50%)
-    // 3. Incisos como A) B) C) D) o 1.
-    // 4. Signos de pausa: , ; : . ! ? … — –
-    // 5. Palabras (incluyendo signos de apertura ¿ ¡ « " ( pegados a la palabra)
-    // 6. Otros caracteres sueltos
-    const TOKEN_RE = /(\s+)|([\$]?\d+(?:[.,]\d+)*[°%]?)|([A-Da-d]\))|([,;:.!?…—–]+)|([¿¡«"'(]*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9'-]+[»"')]*)|([^\s])/g;
+    // Grupos:
+    // 1. Espacios
+    // 2. Espacios en blanco didácticos: ___ , ¿ ? , [ ? ]
+    // 3. Cifras / monedas / grados / porcentajes
+    // 4. Incisos A) B) C) D)
+    // 5. Signos de pausa: , ; : . ! ? … — –
+    // 6. Palabras (incluyendo signos de apertura ¿ ¡ « " ( pegados)
+    // 7. Símbolos matemáticos (+, -, ×, =, > , <)
+    // 8. Otros caracteres
+    const TOKEN_RE = /(\s+)|(_{2,}|\[\s*\?\s*\]|¿\s*\?)|([\$]?\d+(?:[.,]\d+)*[°%]?)|([A-Da-d]\))|([,;:.!?…—–]+)|([¿¡«"'(]*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9'-]+[»"')]*)|([+\-×÷=])|([^\s])/g;
+    const MATH_SPOKEN = { '+': 'más', '-': 'menos', '×': 'por', '÷': 'entre', '=': 'igual a' };
 
     textNodes.forEach((textNode) => {
       const parent = textNode.parentNode;
@@ -341,16 +386,17 @@
       while ((match = TOKEN_RE.exec(originalText)) !== null) {
         const piece = match[0];
         if (match[1]) {
-          // Espacio en blanco: se deja intacto como nodo de texto
           const ws = document.createTextNode(piece);
           frag.appendChild(ws);
           insertedNodes.push(ws);
           continue;
         }
 
-        const isPunct = Boolean(match[4]);
-        // Ignorar emojis puros para no frenar el resaltado, pero conservarlos en pantalla
-        const hasSpeakable = isPunct || /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]/.test(piece);
+        const isBlank = Boolean(match[2]);
+        const isPunct = Boolean(match[5]);
+        const isMathOp = Boolean(match[7]);
+        const hasSpeakable = isBlank || isPunct || isMathOp || /[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]/.test(piece);
+
         if (!hasSpeakable) {
           const raw = document.createTextNode(piece);
           frag.appendChild(raw);
@@ -364,10 +410,16 @@
         const tokIdx = tokens.length;
         span.dataset.ttsIdx = String(tokIdx);
 
+        let spokenText = piece;
+        if (isBlank) spokenText = 'espacio en blanco';
+        else if (isMathOp && MATH_SPOKEN[piece]) spokenText = MATH_SPOKEN[piece];
+
         tokens.push({
           idx: tokIdx,
           text: piece,
+          spokenText: spokenText,
           isPunct: isPunct,
+          isBlank: isBlank,
           span: span
         });
 
@@ -427,33 +479,42 @@
   }
 
   /* --------------------------------------------------------------------------
-     4. SEGMENTACIÓN EN BLOQUES (<= 165 CARACTERES PARA GOOGLE AI TTS)
+     4. MICRO-FRAGMENTACIÓN POR ORACIONES Y CLÁUSULAS (CERO ACUMULACIÓN DE DESFASE)
      -------------------------------------------------------------------------- */
-  function buildChunks(tokens, maxChars) {
-    const limit = maxChars || 165;
+  function joinTokensSpokenText(list) {
+    let out = '';
+    for (let i = 0; i < list.length; i++) {
+      const t = list[i];
+      const spoken = t.spokenText || t.text;
+      out += ((i === 0 || t.isPunct) ? '' : ' ') + spoken;
+    }
+    return out.replace(/\s+/g, ' ').trim();
+  }
+
+  function buildChunks(tokens) {
+    const MAX_CHARS = 95;
     const chunks = [];
     let current = [];
-    let currentText = '';
+    let currentLen = 0;
 
     function flush() {
       if (current.length === 0) return;
-      const text = currentText.trim();
+      const text = joinTokensSpokenText(current);
       if (text) {
         chunks.push({ tokens: current.slice(), text: text });
       }
       current = [];
-      currentText = '';
+      currentLen = 0;
     }
 
     for (let i = 0; i < tokens.length; i++) {
       const tok = tokens[i];
-      const sep = (current.length === 0 || tok.isPunct) ? '' : ' ';
-      const candidate = currentText + sep + tok.text;
+      const spoken = tok.spokenText || tok.text;
+      const addLen = (current.length === 0 || tok.isPunct ? 0 : 1) + spoken.length;
 
-      if (candidate.length > limit && current.length > 0) {
-        // Intentar cortar en la última pausa dentro del bloque actual
+      if (currentLen + addLen > MAX_CHARS && current.length > 0) {
         let splitAt = -1;
-        for (let k = current.length - 1; k >= Math.floor(current.length * 0.45); k--) {
+        for (let k = current.length - 1; k >= Math.floor(current.length * 0.4); k--) {
           if (current[k].isPunct) {
             splitAt = k;
             break;
@@ -462,25 +523,23 @@
         if (splitAt >= 0 && splitAt < current.length - 1) {
           const head = current.slice(0, splitAt + 1);
           const tail = current.slice(splitAt + 1);
-          const headTxt = joinTokensText(head);
+          const headTxt = joinTokensSpokenText(head);
           if (headTxt) chunks.push({ tokens: head, text: headTxt });
           current = tail;
-          currentText = joinTokensText(tail);
-          const sep2 = (current.length === 0 || tok.isPunct) ? '' : ' ';
-          current.push(tok);
-          currentText += sep2 + tok.text;
+          currentLen = joinTokensSpokenText(tail).length;
         } else {
           flush();
-          current.push(tok);
-          currentText = tok.text;
         }
-      } else {
-        current.push(tok);
-        currentText = candidate;
       }
 
-      // Corte natural en final de oración si ya acumuló un tramo sustancial
-      if (tok.isPunct && /[.!?…]/.test(tok.text) && currentText.length >= 65) {
+      current.push(tok);
+      currentLen += (current.length === 1 || tok.isPunct ? 0 : 1) + spoken.length;
+
+      // Cortar siempre al terminar una oración (. ! ? ; :) para re-anclar el reloj a 0.00s
+      if (tok.isPunct && /[.!?;:…]/.test(tok.text) && currentLen >= 14) {
+        flush();
+      } else if (tok.isPunct && /[,—–]/.test(tok.text) && currentLen >= 46) {
+        // En oraciones largas, cortar también en la coma para descargar MP3 pequeños e instantáneos
         flush();
       }
     }
@@ -488,23 +547,15 @@
     return chunks;
   }
 
-  function joinTokensText(list) {
-    let out = '';
-    for (let i = 0; i < list.length; i++) {
-      const t = list[i];
-      out += ((i === 0 || t.isPunct) ? '' : ' ') + t.text;
-    }
-    return out.trim();
-  }
-
   function buildTimelineForChunk(chunkTokens, totalDurationSec) {
-    const leadIn = Math.min(0.08, totalDurationSec * 0.04);
-    const tailOut = Math.min(0.11, totalDurationSec * 0.05);
+    const leadIn = Math.min(0.045, totalDurationSec * 0.025);
+    const tailOut = Math.min(0.065, totalDurationSec * 0.035);
     const usable = Math.max(0.22, totalDurationSec - leadIn - tailOut);
 
     const weights = chunkTokens.map((tok, i) => {
       const isLast = (i === chunkTokens.length - 1);
-      return tok.isPunct ? estimatePunctWeight(tok.text, isLast) : estimateWordWeight(tok.text);
+      const beforePunct = !tok.isPunct && (i + 1 < chunkTokens.length && chunkTokens[i + 1].isPunct);
+      return estimateTokenSeconds(tok, beforePunct, isLast);
     });
     const sumW = weights.reduce((a, b) => a + b, 0) || 1;
 
@@ -522,8 +573,22 @@
   }
 
   /* --------------------------------------------------------------------------
-     5. REPRODUCCIÓN GOOGLE AI TTS + RESPALDO OFFLINE SPEECHSYNTHESIS
+     5. REPRODUCCIÓN CON VOZ IA (PRE-CARGA + DURATIONCHANGE VIVO) Y RESPALDO
      -------------------------------------------------------------------------- */
+  function cleanupAudioObj(a) {
+    if (!a) return;
+    try {
+      a.onended = null;
+      a.onerror = null;
+      a.onloadedmetadata = null;
+      a.ondurationchange = null;
+      a.oncanplaythrough = null;
+      a.onplay = null;
+      a.pause();
+      a.src = '';
+    } catch (e) {}
+  }
+
   function stop() {
     player.sessionId++;
     player.speaking = false;
@@ -533,16 +598,10 @@
       player.rafId = null;
     }
 
-    if (player.audio) {
-      try {
-        player.audio.onended = null;
-        player.audio.onerror = null;
-        player.audio.onloadedmetadata = null;
-        player.audio.pause();
-        player.audio.src = '';
-      } catch (e) {}
-      player.audio = null;
-    }
+    cleanupAudioObj(player.audio);
+    player.audio = null;
+    cleanupAudioObj(player.preloadedAudio);
+    player.preloadedAudio = null;
 
     try {
       if (global.speechSynthesis) {
@@ -568,6 +627,14 @@
     }
   }
 
+  function createChunkAudio(text) {
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = TTS_BASE + encodeURIComponent(text);
+    try { a.load(); } catch (e) {}
+    return a;
+  }
+
   function pickSpanishVoice() {
     if (!global.speechSynthesis || !global.speechSynthesis.getVoices) return null;
     const voices = global.speechSynthesis.getVoices() || [];
@@ -586,14 +653,14 @@
         return;
       }
 
-      // Construir mapa de charIndex -> tokenIdx para sincronizar onboundary
       let assembled = '';
       const spansMap = [];
       for (let i = 0; i < chunk.tokens.length; i++) {
         const tok = chunk.tokens[i];
+        const spoken = tok.spokenText || tok.text;
         if (i > 0 && !tok.isPunct) assembled += ' ';
         const startChar = assembled.length;
-        assembled += tok.text;
+        assembled += spoken;
         spansMap.push({
           startChar: startChar,
           endChar: assembled.length,
@@ -610,17 +677,14 @@
 
       let boundarySeen = false;
       let finished = false;
-      const estDuration = Math.max(0.7, chunk.tokens.reduce((s, t, i) => {
-        const isLast = (i === chunk.tokens.length - 1);
-        return s + (t.isPunct ? estimatePunctWeight(t.text, isLast) : estimateWordWeight(t.text)) * 0.21;
-      }, 0));
+      const estDuration = estimateChunkDurationSec(chunk.tokens) * 1.06;
       const timeline = buildTimelineForChunk(chunk.tokens, estDuration);
       const startTime = performance.now();
 
       function tickFallback() {
         if (finished || sid !== player.sessionId) return;
-        const elapsed = (performance.now() - startTime) / 1000;
-        if (!boundarySeen && elapsed >= 0.08) {
+        const elapsed = Math.max(0, (performance.now() - startTime) / 1000 - AUDIO_OUTPUT_LATENCY_SEC);
+        if (!boundarySeen && elapsed >= 0.04) {
           for (let i = 0; i < timeline.length; i++) {
             if (elapsed >= timeline[i].start && elapsed <= timeline[i].end) {
               setActiveToken(timeline[i].tokIdx);
@@ -649,7 +713,6 @@
         }
         if (foundPos < 0) foundPos = spansMap.length - 1;
 
-        // Si entre la palabra anterior y la nueva había un signo de pausa (coma/punto), mostrarlo brevemente
         if (lastBoundarySpanPos >= 0 && foundPos > lastBoundarySpanPos + 1) {
           const between = spansMap[lastBoundarySpanPos + 1];
           if (between && between.isPunct) {
@@ -657,7 +720,7 @@
             const targetIdx = spansMap[foundPos].tokIdx;
             setTimeout(() => {
               if (!finished && sid === player.sessionId) setActiveToken(targetIdx);
-            }, 130);
+            }, 140);
             lastBoundarySpanPos = foundPos;
             return;
           }
@@ -689,7 +752,7 @@
     });
   }
 
-  function speakChunkViaGoogleTTS(chunk, sid) {
+  function speakChunkViaGoogleTTS(chunk, sid, preloadedAudioInstance, nextChunkText) {
     return new Promise((resolve, reject) => {
       if (sid !== player.sessionId) {
         resolve();
@@ -702,14 +765,38 @@
         return;
       }
 
-      const audio = new Audio();
-      audio.referrerPolicy = 'no-referrer';
-      audio.preload = 'auto';
-      audio.src = TTS_BASE + encodeURIComponent(cleanForUrl);
+      const audio = preloadedAudioInstance || createChunkAudio(cleanForUrl);
       player.audio = audio;
+      player.preloadedAudio = null;
 
+      const acousticEstSec = estimateChunkDurationSec(chunk.tokens);
+      let timeline = buildTimelineForChunk(chunk.tokens, acousticEstSec);
+      let lastBuiltDur = acousticEstSec;
       let settled = false;
-      let timeline = null;
+      let playStarted = false;
+
+      // Resolver la duración real confiable evitando lecturas parciales de Transfer-Encoding: chunked
+      function getTrustedDuration() {
+        const rawDur = audio.duration;
+        if (rawDur && isFinite(rawDur) && rawDur > 0.15) {
+          // Si ya descargó todo el clip (readyState >= 4) o la duración reportada es consistente con el texto completo
+          if (audio.readyState >= 4 || rawDur >= acousticEstSec * 0.85) {
+            return rawDur;
+          }
+          // Si el stream aún va a medio descargar y reporta una duración truncada, proteger con el piso fonético
+          return Math.max(rawDur, acousticEstSec);
+        }
+        return acousticEstSec;
+      }
+
+      function refreshTimelineIfNeeded() {
+        if (settled || sid !== player.sessionId) return;
+        const trusted = getTrustedDuration();
+        if (Math.abs(trusted - lastBuiltDur) > 0.025) {
+          lastBuiltDur = trusted;
+          timeline = buildTimelineForChunk(chunk.tokens, trusted);
+        }
+      }
 
       function finishOk() {
         if (settled) return;
@@ -728,36 +815,31 @@
           cancelAnimationFrame(player.rafId);
           player.rafId = null;
         }
+        cleanupAudioObj(audio);
+        if (player.audio === audio) player.audio = null;
         reject(new Error('GoogleTTSUnavailable'));
       }
 
-      // Timeout de seguridad si no hay internet o no llega respuesta alguna
       const loadTimeout = setTimeout(() => {
         if (!settled && audio.readyState === 0) {
-          try { audio.pause(); audio.src = ''; } catch (e) {}
           failAndFallback();
         }
-      }, 3500);
+      }, 3600);
 
-      audio.onloadedmetadata = () => {
-        if (sid !== player.sessionId) return;
-        const dur = (audio.duration && isFinite(audio.duration) && audio.duration > 0.1)
-          ? audio.duration
-          : Math.max(0.8, chunk.tokens.length * 0.34);
-        timeline = buildTimelineForChunk(chunk.tokens, dur);
-      };
+      audio.onloadedmetadata = refreshTimelineIfNeeded;
+      audio.ondurationchange = refreshTimelineIfNeeded;
 
       audio.onplay = () => {
         clearTimeout(loadTimeout);
         if (sid !== player.sessionId) {
-          try { audio.pause(); } catch (e) {}
+          cleanupAudioObj(audio);
           return;
         }
-        if (!timeline) {
-          const dur = (audio.duration && isFinite(audio.duration) && audio.duration > 0.1)
-            ? audio.duration
-            : Math.max(0.8, chunk.tokens.length * 0.34);
-          timeline = buildTimelineForChunk(chunk.tokens, dur);
+        refreshTimelineIfNeeded();
+
+        // Pre-cargar desde ya el siguiente fragmento en segundo plano para transición instantánea y duración exacta
+        if (nextChunkText && !player.preloadedAudio) {
+          player.preloadedAudio = createChunkAudio(nextChunkText);
         }
 
         function syncFrame() {
@@ -766,7 +848,10 @@
             stop();
             return;
           }
-          const ct = audio.currentTime || 0;
+          refreshTimelineIfNeeded();
+
+          // Restar latencia física de salida para que el subrayado nunca vaya adelantado a la voz
+          const ct = Math.max(0, (audio.currentTime || 0) - AUDIO_OUTPUT_LATENCY_SEC);
           if (timeline && timeline.length > 0) {
             let matchedIdx = -1;
             for (let i = 0; i < timeline.length; i++) {
@@ -799,21 +884,67 @@
         failAndFallback();
       };
 
-      audio.playbackRate = 1.0;
-      const playPromise = audio.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => {
-          clearTimeout(loadTimeout);
-          failAndFallback();
-        });
+      function triggerPlay() {
+        if (playStarted || settled || sid !== player.sessionId) return;
+        playStarted = true;
+        refreshTimelineIfNeeded();
+        audio.playbackRate = 1.0;
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {
+            clearTimeout(loadTimeout);
+            failAndFallback();
+          });
+        }
+      }
+
+      // Si el fragmento ya está completo en memoria (ej. pre-cargado), iniciar de inmediato;
+      // si no, esperar brevemente (máx. 260 ms) a canplaythrough para obtener la duración exacta del MP3 completo.
+      if (audio.readyState >= 4) {
+        triggerPlay();
+      } else {
+        const readyWait = setTimeout(triggerPlay, 260);
+        audio.oncanplaythrough = () => {
+          clearTimeout(readyWait);
+          triggerPlay();
+        };
       }
     });
+  }
+
+  async function playChunksForCurrentTokens(chunks, sid, forceOfflineState) {
+    let forceOffline = forceOfflineState.value;
+
+    for (let c = 0; c < chunks.length; c++) {
+      if (sid !== player.sessionId) return;
+      if (!player.activeEl || !player.activeEl.isConnected) {
+        stop();
+        return;
+      }
+
+      const nextText = (c + 1 < chunks.length) ? chunks[c + 1].text : null;
+      const preloaded = player.preloadedAudio;
+      player.preloadedAudio = null;
+
+      if (!forceOffline) {
+        try {
+          await speakChunkViaGoogleTTS(chunks[c], sid, preloaded, nextText);
+        } catch (err) {
+          if (sid !== player.sessionId) return;
+          forceOffline = true;
+          forceOfflineState.value = true;
+          await speakChunkViaSpeechSynthesis(chunks[c], sid);
+        }
+      } else {
+        cleanupAudioObj(preloaded);
+        await speakChunkViaSpeechSynthesis(chunks[c], sid);
+      }
+    }
   }
 
   async function speakElement(targetEl, triggerBtn) {
     if (!targetEl || !targetEl.isConnected) return;
 
-    // Si ya está leyendo este mismo elemento, detenerlo (toggle)
     if (player.speaking && player.activeEl === targetEl) {
       stop();
       return;
@@ -839,28 +970,9 @@
       updateBtnVisual(player.activeBtn, true);
     }
 
-    const chunks = buildChunks(tokens, 165);
-    let forceOffline = (typeof navigator !== 'undefined' && navigator.onLine === false);
-
-    for (let c = 0; c < chunks.length; c++) {
-      if (sid !== player.sessionId) return;
-      if (!targetEl.isConnected) {
-        stop();
-        return;
-      }
-
-      if (!forceOffline) {
-        try {
-          await speakChunkViaGoogleTTS(chunks[c], sid);
-        } catch (err) {
-          if (sid !== player.sessionId) return;
-          forceOffline = true;
-          await speakChunkViaSpeechSynthesis(chunks[c], sid);
-        }
-      } else {
-        await speakChunkViaSpeechSynthesis(chunks[c], sid);
-      }
-    }
+    const chunks = buildChunks(tokens);
+    const forceOfflineState = { value: (typeof navigator !== 'undefined' && navigator.onLine === false) };
+    await playChunksForCurrentTokens(chunks, sid, forceOfflineState);
 
     if (sid === player.sessionId) {
       stop();
@@ -884,14 +996,17 @@
     player.speaking = true;
     if (player.activeBtn) updateBtnVisual(player.activeBtn, true);
 
-    let forceOffline = (typeof navigator !== 'undefined' && navigator.onLine === false);
+    const forceOfflineState = { value: (typeof navigator !== 'undefined' && navigator.onLine === false) };
 
     for (let idx = 0; idx < valid.length; idx++) {
       if (sid !== player.sessionId) return;
       const el = valid[idx];
       if (!el.isConnected) continue;
 
+      cleanupAudioObj(player.preloadedAudio);
+      player.preloadedAudio = null;
       restoreElementDom();
+
       const { tokens, restoreRecords } = tokenizeElement(el);
       if (tokens.length === 0) continue;
 
@@ -899,25 +1014,8 @@
       player.tokens = tokens;
       player.restoreRecords = restoreRecords;
 
-      const chunks = buildChunks(tokens, 165);
-      for (let c = 0; c < chunks.length; c++) {
-        if (sid !== player.sessionId) return;
-        if (!el.isConnected) {
-          stop();
-          return;
-        }
-        if (!forceOffline) {
-          try {
-            await speakChunkViaGoogleTTS(chunks[c], sid);
-          } catch (err) {
-            if (sid !== player.sessionId) return;
-            forceOffline = true;
-            await speakChunkViaSpeechSynthesis(chunks[c], sid);
-          }
-        } else {
-          await speakChunkViaSpeechSynthesis(chunks[c], sid);
-        }
-      }
+      const chunks = buildChunks(tokens);
+      await playChunksForCurrentTokens(chunks, sid, forceOfflineState);
     }
 
     if (sid === player.sessionId) {
@@ -1006,7 +1104,6 @@
   function scanAndWire() {
     if (!player.config) return;
 
-    // Limpiar barras huérfanas si el elemento original fue reemplazado dinámicamente
     player.promptBindings = player.promptBindings.filter((b) => {
       if (!b.el.isConnected) {
         if (b.bar && b.bar.parentNode) b.bar.parentNode.removeChild(b.bar);
@@ -1015,7 +1112,6 @@
       return true;
     });
 
-    // Si el elemento activo en lectura desapareció o se ocultó, detener voz
     if (player.speaking && player.activeEl && (!player.activeEl.isConnected || !isElementVisible(player.activeEl))) {
       stop();
     }
@@ -1036,7 +1132,6 @@
     if (global.__aulaTtsEventsBound) return;
     global.__aulaTtsEventsBound = true;
 
-    // Bloquear propagación de toque/arrastre en el botón de bocina sin impedir el evento click
     ['pointerdown', 'mousedown', 'touchstart'].forEach((evtName) => {
       document.addEventListener(evtName, (e) => {
         const spk = e.target && e.target.closest ? e.target.closest('.aula-tts-opt-btn, .aula-tts-prompt-btn') : null;
@@ -1046,7 +1141,6 @@
       }, true);
     });
 
-    // Interceptar clic en fase de captura: lee la opción/situación SIN seleccionar ni responder
     document.addEventListener('click', (e) => {
       const spk = e.target && e.target.closest ? e.target.closest('.aula-tts-opt-btn, .aula-tts-prompt-btn') : null;
       if (!spk) return;
@@ -1060,7 +1154,6 @@
       }
     }, true);
 
-    // Soporte de teclado accesible en la bocina de opciones
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       const spk = e.target && e.target.closest ? e.target.closest('.aula-tts-opt-btn') : null;
@@ -1071,7 +1164,6 @@
       if (targetEl) speakElement(targetEl, spk);
     }, true);
 
-    // Detener audio al cerrar o salir de la pestaña
     global.addEventListener('pagehide', stop);
     global.addEventListener('beforeunload', stop);
   }
@@ -1085,7 +1177,6 @@
       scanAndWire();
       if (player.observer) player.observer.disconnect();
       player.observer = new MutationObserver((mutations) => {
-        // Ignorar mutaciones causadas únicamente por nuestro resaltado karaoke
         let relevant = false;
         for (let i = 0; i < mutations.length; i++) {
           const m = mutations[i];
@@ -1117,7 +1208,6 @@
     }
   }
 
-  // Precargar voces de respaldo en navegadores que las cargan de forma asíncrona
   try {
     if (global.speechSynthesis && global.speechSynthesis.onvoiceschanged !== undefined) {
       global.speechSynthesis.getVoices();
