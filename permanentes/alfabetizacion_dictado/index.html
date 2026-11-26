@@ -2278,7 +2278,7 @@
           updateStats();
           updateNavButtons();
 
-          speakText(`¡Muy bien! ${wordObj.fullSentence}`, 0.88);
+          speakText(`${wordObj.fullSentence} ¡Muy bien!`, 0.88);
         } else {
           feedback.className = 'feedback-message feedback-error';
           feedback.innerHTML = `❌ El orden aún no suena bien. Recuerda iniciar con la <b style="color:#0f172a;">${colorizeBicolor('Mayúscula')}</b> roja y terminar con el <b class="bicolor-punct">.</b> azul.`;
@@ -2325,7 +2325,7 @@
           updateStats();
           updateNavButtons();
 
-          speakText(`¡Muy bien! ${wordObj.text}.`, 0.88);
+          speakText(`${wordObj.text}. ¡Muy bien!`, 0.88);
         } else {
           // SONIDO IGUAL PERO OTRA LETRA (ej. pusieron "ba-ca" en lugar de "va-ca", o "ta-sa" en lugar de "ta-za")
           const diffs = [];
@@ -2361,7 +2361,7 @@
           updateStats();
           updateNavButtons();
 
-          speakText(`¡Suena igual y se te vale! Pero en ${wordObj.text}, observa el cambio en la casilla.`, 0.86);
+          speakText(`${wordObj.text}. ¡Suena igual y se te vale! Observa el cambio en la casilla.`, 0.86);
         }
       } else {
         const formedRaw = userSyllables.join('');
