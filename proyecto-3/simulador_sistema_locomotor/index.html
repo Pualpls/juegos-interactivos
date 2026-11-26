@@ -2026,5 +2026,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#case-text", "label": "Escuchar situación", "insert": "before"}, {"selector": "#case-feedback", "label": "Escuchar explicación", "insert": "before"}, {"selector": "#bone-info-card .info-card-desc", "label": "Escuchar función", "insert": "before"}, {"selector": "#joint-desc-text", "label": "Escuchar movimiento", "insert": "before"}, {"selector": "#joint-detail-text", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#case-options-box .option-btn", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

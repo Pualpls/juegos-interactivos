@@ -2087,6 +2087,13 @@
 
     function readSnippetAloud() {
       stopTtsAudio();
+      if (window.AulaTTS) {
+        AulaTTS.speakSequence([
+          document.getElementById('book-snippet'),
+          document.getElementById('prompt-question-text')
+        ], document.getElementById('btn-read-aloud'));
+        return;
+      }
       const story = STORIES_DATA[gameState.currentStoryIndex];
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = story.snippetHtml;
@@ -2203,5 +2210,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#prompt-question-text", "label": "Escuchar pregunta", "insert": "after", "inline": true}, {"selector": "#feedback-text", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#cards-container .choice-card", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

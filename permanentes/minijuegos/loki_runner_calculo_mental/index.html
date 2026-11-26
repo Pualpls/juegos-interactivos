@@ -1848,6 +1848,73 @@
       border-color: #2563eb;
     }
 
+    .roster-dropdown-row {
+      display: flex;
+      gap: 0.4rem;
+      align-items: stretch;
+      margin-bottom: 0.4rem;
+    }
+
+    .roster-select {
+      flex: 1;
+      min-width: 0;
+      padding: 0.55rem 0.7rem;
+      border: 2px solid #94a3b8;
+      border-radius: 0.65rem;
+      font-size: 0.92rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .roster-select:focus {
+      border-color: #2563eb;
+    }
+
+    .roster-add-select-btn {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+      border-radius: 0.65rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .roster-add-select-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .roster-member-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+    }
+
+    .roster-member-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1.5px solid #93c5fd;
+      border-radius: 999px;
+      padding: 0.22rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .roster-member-pill:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
     .emoji-picker-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(2.35rem, 1fr));
@@ -2528,11 +2595,21 @@
           </div>
 
           <div id="roster-team-members-box" style="display:none; margin-bottom:0.55rem;">
-            <label for="roster-team-members" style="display:block; font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">
-              👥 Integrantes (opcional, ej: Sofía, Mateo):
+            <label for="roster-team-student-select" style="display:block; font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:0.25rem;">
+              👥 Integrantes del equipo (elige de la lista desplegable o escribe):
             </label>
-            <input type="text" id="roster-team-members" class="roster-text-input" placeholder="Ej: Sofía, Mateo, Diego" maxlength="64" autocomplete="off"
+            <div class="roster-dropdown-row">
+              <select id="roster-team-student-select" class="roster-select" onchange="addSelectedStudentToTeamInput(true)">
+                <option value="">📋 Seleccionar alumno registrado...</option>
+              </select>
+              <button type="button" class="roster-mini-btn roster-add-select-btn" onclick="addSelectedStudentToTeamInput(false)">
+                ➕ Agregar
+              </button>
+            </div>
+            <input type="text" id="roster-team-members" class="roster-text-input" placeholder="Ej: Sofía, Mateo, Diego" maxlength="96" autocomplete="off"
+                   oninput="renderTeamMemberPills()"
                    onkeydown="event.stopPropagation(); if(event.key==='Enter'){ event.preventDefault(); addRosterEntryFromForm(); }" />
+            <div id="roster-team-members-pills" class="roster-member-pills"></div>
             <div id="roster-quick-members" style="display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.35rem;"></div>
           </div>
 
@@ -6639,15 +6716,86 @@
       renderEmojiPickerGrid();
     }
 
-    function appendQuickMemberToTeamInput(studentName) {
+    function parseTeamMembersInput() {
+      const input = document.getElementById('roster-team-members');
+      if (!input) return [];
+      return input.value.split(',').map(x => normalizeParticipantLabel(x)).filter(Boolean);
+    }
+
+    function renderTeamMemberPills() {
+      const pillsWrap = document.getElementById('roster-team-members-pills');
+      const selectEl = document.getElementById('roster-team-student-select');
+      const members = parseTeamMembersInput();
+      const students = loadStudentsRoster();
+
+      if (pillsWrap) {
+        pillsWrap.innerHTML = '';
+        members.forEach(name => {
+          const matched = students.find(s => s.name.toLowerCase() === name.toLowerCase());
+          const pill = document.createElement('button');
+          pill.type = 'button';
+          pill.className = 'roster-member-pill';
+          pill.title = `Quitar a ${name} del equipo`;
+          pill.textContent = `${matched && matched.emoji ? matched.emoji + ' ' : ''}${name} ✕`;
+          pill.onclick = () => removeMemberFromTeamInput(name);
+          pillsWrap.appendChild(pill);
+        });
+      }
+
+      if (selectEl) {
+        const lowerSet = new Set(members.map(m => m.toLowerCase()));
+        selectEl.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = students.length > 0
+          ? '📋 Seleccionar alumno registrado...'
+          : 'Sin alumnos registrados aún (crea uno en 👤 Estudiante)';
+        selectEl.appendChild(placeholder);
+
+        students.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.name;
+          const added = lowerSet.has(s.name.toLowerCase());
+          opt.textContent = `${added ? '✓ ' : ''}${s.emoji || '👤'} ${s.name}`;
+          selectEl.appendChild(opt);
+        });
+        selectEl.value = '';
+      }
+    }
+
+    function removeMemberFromTeamInput(studentName) {
       const input = document.getElementById('roster-team-members');
       if (!input) return;
-      const existing = input.value.split(',').map(x => normalizeParticipantLabel(x)).filter(Boolean);
+      const filtered = parseTeamMembersInput().filter(x => x.toLowerCase() !== studentName.toLowerCase());
+      input.value = filtered.join(', ');
+      renderTeamMemberPills();
+    }
+
+    function appendQuickMemberToTeamInput(studentName) {
+      const input = document.getElementById('roster-team-members');
+      if (!input || !studentName) return;
+      const existing = parseTeamMembersInput();
       const alreadyIncluded = existing.some(x => x.toLowerCase() === studentName.toLowerCase());
       if (!alreadyIncluded) {
         existing.push(studentName);
         input.value = existing.join(', ');
       }
+      renderTeamMemberPills();
+    }
+
+    function addSelectedStudentToTeamInput(fromChange = false) {
+      const selectEl = document.getElementById('roster-team-student-select');
+      if (!selectEl) return;
+      const pickedName = normalizeParticipantLabel(selectEl.value);
+      if (!pickedName) {
+        if (!fromChange) {
+          setRosterFeedback('Elige un alumno de la lista desplegable para agregarlo al equipo.', true);
+        }
+        return;
+      }
+      appendQuickMemberToTeamInput(pickedName);
+      selectEl.value = '';
+      setRosterFeedback(`✅ ${pickedName} agregado al equipo.`);
     }
 
     function addRosterEntryFromForm(options = {}) {
@@ -6756,23 +6904,15 @@
         if (membersBox) membersBox.style.display = 'block';
         if (addBtn) addBtn.textContent = '🛡️ Guardar equipo y seleccionar';
 
+        renderTeamMemberPills();
         if (quickMembers) {
           quickMembers.innerHTML = '';
           const students = loadStudentsRoster();
-          if (students.length > 0) {
+          if (students.length === 0) {
             const hint = document.createElement('span');
-            hint.style.cssText = 'font-size:0.74rem; color:#64748b; font-weight:700; width:100%;';
-            hint.textContent = 'Toca para agregar integrantes rápidos:';
+            hint.style.cssText = 'font-size:0.75rem; color:#64748b; font-weight:600; width:100%;';
+            hint.textContent = '💡 Registra primero a tus alumnos en 👤 Estudiante para seleccionarlos en la lista desplegable.';
             quickMembers.appendChild(hint);
-
-            students.forEach(s => {
-              const chip = document.createElement('button');
-              chip.type = 'button';
-              chip.className = 'roster-mini-btn';
-              chip.textContent = `+ ${s.emoji || '👤'} ${s.name}`;
-              chip.onclick = () => appendQuickMemberToTeamInput(s.name);
-              quickMembers.appendChild(chip);
-            });
           }
         }
       } else {

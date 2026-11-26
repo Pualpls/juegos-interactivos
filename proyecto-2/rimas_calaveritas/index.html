@@ -2156,5 +2156,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#contenedor-versos-juego", "label": "Escuchar con subrayado", "insert": "before"}, {"selector": "#texto-instruccion-banco", "label": "Escuchar indicación", "insert": "before"}, {"selector": "#feedback-cuerpo-texto", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#banco-fichas-palabras .ficha-palabra-boton", "minLength": 2}, {"selector": ".btn-opcion-taller", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

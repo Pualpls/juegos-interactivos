@@ -2249,5 +2249,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#problemStatementText", "label": "Escuchar situación", "insert": "before"}, {"selector": "#mentorAdviceText", "label": "Escuchar consejo", "insert": "before"}], "options": []});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

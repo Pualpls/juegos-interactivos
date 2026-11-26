@@ -1841,5 +1841,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": ".prop-situation-title", "label": "Escuchar situación", "insert": "before"}, {"selector": ".unit-challenge-card", "label": "Escuchar reto", "insert": "inside-top"}, {"selector": "#s1Feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#s2Feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#s3Feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#s4Feedback", "label": "Escuchar", "insert": "before"}], "options": [{"selector": ".property-interactive-card", "minLength": 3}, {"selector": ".unit-choice-btn", "minLength": 2}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

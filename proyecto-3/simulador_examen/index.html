@@ -972,5 +972,14 @@
     initUiClickSfx();
     checkUnlockAndStart();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": ".stage-prompt", "label": "Escuchar pregunta", "insert": "before"}, {"selector": "#feedbackBox", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#qBody .opt-btn", "minLength": 2}, {"selector": "#qBody .match-btn", "minLength": 2}, {"selector": "#qBody .traffic-row > div:first-child", "minLength": 4}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

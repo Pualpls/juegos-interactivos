@@ -954,5 +954,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#quiz-phrase", "label": "Escuchar oración", "insert": "before"}, {"selector": "#quiz-feedback", "label": "Escuchar explicación", "insert": "before"}, {"selector": ".instruction-text", "label": "Escuchar indicación", "insert": "before"}], "options": [{"selector": "#causas-list .card-item", "minLength": 3}, {"selector": "#efectos-list .card-item", "minLength": 3}, {"selector": "#quiz-options .option-btn", "minLength": 2}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

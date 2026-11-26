@@ -746,6 +746,15 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": ".story-box", "label": "Escuchar situación", "insert": "before"}, {"selector": "#boardFeedback", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": ".choice-btn", "minLength": 2}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 
 </html>

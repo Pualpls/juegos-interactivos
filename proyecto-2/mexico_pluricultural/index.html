@@ -2950,5 +2950,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#trivia-question", "label": "Escuchar pregunta", "insert": "before"}, {"selector": "#trivia-hint", "label": "Escuchar pista", "insert": "before"}, {"selector": "#clue-location", "label": "Escuchar pista", "insert": "before"}, {"selector": "#clue-symbol", "label": "Escuchar pista", "insert": "before"}, {"selector": "#clue-tradition", "label": "Escuchar pista", "insert": "before"}, {"selector": "#feedback-desc", "label": "Escuchar explicación", "insert": "before"}, {"selector": "#det-feedback-desc", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#trivia-options .option-btn", "minLength": 2}, {"selector": "#detective-options .option-btn", "minLength": 2}, {"selector": ".card-match", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

@@ -1250,6 +1250,15 @@
             }, { capture: true });
         })();
     </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#active-situation-chip", "label": "Escuchar situación", "insert": "before"}, {"selector": "#feedback-desc-text", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": ".light-bin .bin-header", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 
 </html>

@@ -1024,6 +1024,15 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": ".sentence-card", "label": "Escuchar oración", "insert": "before"}, {"selector": "#m1Feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m2Feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m3Feedback", "label": "Escuchar", "insert": "before"}], "options": [{"selector": ".option-card", "minLength": 2}, {"selector": ".step-item", "minLength": 4}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 
 </html>

@@ -4833,6 +4833,13 @@
     }
 
     function m4_readTTS() {
+      if (window.AulaTTS) {
+        AulaTTS.speakSequence([
+          document.getElementById('m4-situation-text'),
+          document.getElementById('m4-question-text')
+        ], document.getElementById('m4-btn-tts'));
+        return;
+      }
       const prob = m4ActiveProb;
       speakText(`${prob.situation}. ¿Qué nos preguntan? ${prob.question}`);
     }
@@ -5404,6 +5411,13 @@
     }
 
     function m5_readTTS() {
+      if (window.AulaTTS) {
+        AulaTTS.speakSequence([
+          document.getElementById('m5-situation-text'),
+          document.getElementById('m5-question-text')
+        ]);
+        return;
+      }
       const prob = m5ActiveProb;
       speakText(`${prob.situation}. ¿Qué nos preguntan? ${prob.question}`);
     }
@@ -6325,6 +6339,13 @@
     }
 
     function m7_readTTS() {
+      if (window.AulaTTS) {
+        AulaTTS.speakSequence([
+          document.getElementById('m7-problem-text'),
+          document.getElementById('m7-problem-question')
+        ]);
+        return;
+      }
       if (m7State.currentProblem && m7State.currentProblem.tts) {
         speakText(m7State.currentProblem.tts);
       }
@@ -7804,5 +7825,14 @@
       }, { capture: true });
     })();
   </script>
+
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#m6-challenge-text", "label": "Escuchar reto", "insert": "before"}, {"selector": "#m1-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m2-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m3-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m4-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m5-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m6-feedback", "label": "Escuchar", "insert": "before"}, {"selector": "#m7-feedback", "label": "Escuchar", "insert": "before"}], "options": [{"selector": ".action-btn-card", "minLength": 3}, {"selector": "#m4-chips-source .draggable-chip", "minLength": 3}, {"selector": ".m7-data-chip", "minLength": 3}, {"selector": ".m7-op-choice", "minLength": 3}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>
