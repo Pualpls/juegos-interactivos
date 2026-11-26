@@ -1459,33 +1459,43 @@
       }
     }
 
-    function accentSpanishSyllable(clean) {
-      if (!clean) return '';
-      const map = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
-      // Proteger qu/gu antes de e/i para no acentuar la u muda
-      let s = clean
-        .replace(/qu([ei])/g, '__QU__$1')
-        .replace(/gu([ei])/g, '__GU__$1');
-
-      if (/[aeo]/.test(s)) {
-        s = s.replace(/([aeo])/, (m) => map[m]);
-      } else if (/[iu]/.test(s)) {
-        s = s.replace(/([iu])([^iu]*)$/, (m, v, rest) => map[v] + rest);
-      }
-
-      return s.replace(/__QU__/g, 'qu').replace(/__GU__/g, 'gu');
-    }
+    // Mapa fonético auditado en audio real contra Google TTS (es-MX) para corregir únicamente las sílabas que se deletreaban o salían en inglés
+    const TTS_SYLLABLE_OVERRIDES = {
+      so: 'soh',
+      to: 'tho',
+      cu: 'cuh',
+      ba: 'bah',
+      be: 'beh',
+      go: 'goh',
+      je: 'ge',
+      ji: 'gi',
+      jo: 'hoo',
+      ju: 'juu',
+      ul: 'hul',
+      us: 'hus',
+      rue: 'rué',
+      cue: 'cué',
+      sie: 'sié',
+      ble: 'bleh',
+      cra: 'crah',
+      fla: 'flah',
+      fli: 'flih',
+      fro: 'froh',
+      gla: 'glah',
+      gre: 'greh',
+      dra: 'drah'
+    };
 
     function getPhoneticReading(syl) {
       if (!syl) return '';
-      // Normalizar en minúsculas conservando ñ y diéresis (güe/güi)
+      // Normalizar quitando cualquier tilde previa (conservando ñ y diéresis) para que el TTS jamás diga "con acento"
       let clean = String(syl).normalize("NFC").toLowerCase().trim()
         .replace(/ñ/g, '__ENIE__')
         .replace(/ü/g, '__UDIER__')
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         .replace(/__ENIE__/g, 'ñ')
         .replace(/__UDIER__/g, 'ü');
-      // Ajustar grafías homófonas al sonido español de México
+      // Ajustar grafías homófonas al sonido español de México (manteniendo ge/gi que Google TTS lee limpio como /xe/, /xi/)
       clean = clean
         .replace(/^ll/, 'y')
         .replace(/^rr/, 'r')
@@ -1493,12 +1503,10 @@
         .replace(/^v/, 'b')
         .replace(/^z/, 's')
         .replace(/^c([ei])/, 's$1')
-        .replace(/^g([ei])/, 'j$1')
         .replace(/^k([aou])/, 'c$1')
         .replace(/^k([ei])/, 'qu$1')
         .replace(/^k/, 'c');
-      // Acentuar la vocal tónica de la sílaba aislada para evitar que Google TTS la deletree ("cu" -> "c, u") o la lea en inglés ("be" -> "bi", "in", "man", "cia")
-      return accentSpanishSyllable(clean);
+      return TTS_SYLLABLE_OVERRIDES[clean] || clean;
     }
 
     function speakSyllable(syl, onEndCallback = null) {
