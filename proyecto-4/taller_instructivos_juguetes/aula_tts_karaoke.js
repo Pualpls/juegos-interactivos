@@ -47,10 +47,24 @@
     promptBindings: []
   };
 
+  function ensureNoReferrerMeta() {
+    if (!document.head) return;
+    let meta = document.querySelector('meta[name="referrer"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'referrer');
+      meta.setAttribute('content', 'no-referrer');
+      document.head.insertBefore(meta, document.head.firstChild);
+    } else if (meta.getAttribute('content') !== 'no-referrer') {
+      meta.setAttribute('content', 'no-referrer');
+    }
+  }
+
   /* --------------------------------------------------------------------------
      1. INYECCIÓN DE ESTILOS (CERO CAMBIO DE LAYOUT / COMPATIBLE CLARO Y OSCURO)
      -------------------------------------------------------------------------- */
   function injectStyles() {
+    ensureNoReferrerMeta();
     if (document.getElementById(STYLE_ID)) return;
     const style = document.createElement('style');
     style.id = STYLE_ID;
@@ -717,13 +731,13 @@
         reject(new Error('GoogleTTSUnavailable'));
       }
 
-      // Timeout de seguridad si no hay internet o tarda demasiado en cargar
+      // Timeout de seguridad si no hay internet o no llega respuesta alguna
       const loadTimeout = setTimeout(() => {
-        if (!settled && audio.readyState < 2) {
+        if (!settled && audio.readyState === 0) {
           try { audio.pause(); audio.src = ''; } catch (e) {}
           failAndFallback();
         }
-      }, 2800);
+      }, 3500);
 
       audio.onloadedmetadata = () => {
         if (sid !== player.sessionId) return;
@@ -785,7 +799,7 @@
         failAndFallback();
       };
 
-      audio.playbackRate = 0.96;
+      audio.playbackRate = 1.0;
       const playPromise = audio.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {
