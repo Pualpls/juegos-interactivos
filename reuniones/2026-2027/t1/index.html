@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reunión de Primer Trimestre · 3° "A" · 2026-2027</title>
+  <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper-bg: #f6f4ec;
+      --paper-dot: #d2cec2;
+      --ink: #111827;
+      --ink-soft: #334155;
+      --muted: #64748b;
+      --blue: #2563eb;
+      --blue-soft: #dbeafe;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --yellow: #eab308;
+      --yellow-soft: #fef9c3;
+      --orange: #f97316;
+      --orange-soft: #ffedd5;
+      --red: #dc2626;
+      --red-soft: #fee2e2;
+      --purple: #7c3aed;
+      --purple-soft: #ede9fe;
+      --teal: #0d9488;
+      --teal-soft: #ccfbf1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0f172a;
+      font-family: 'Lexend', 'Segoe UI', system-ui, sans-serif;
+      color: var(--ink);
+      user-select: none;
+    }
+
+    /* VIEWPORT STAGE */
+    .deck-viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-stage {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      transform-origin: center center;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--paper-bg);
+    }
+
+    body.export-mode .deck-viewport {
+      background: var(--paper-bg);
+    }
+    body.export-mode .slide-stage {
+      box-shadow: none;
+      border-radius: 0;
+    }
+    body.export-mode .deck-controls,
+    body.export-mode .top-pill {
+      display: none !important;
+    }
+
+    /* BASE SLIDE STYLES */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1280px;
+      height: 720px;
+      display: none;
+      flex-direction: column;
+      padding: 42px 54px 36px 54px;
+      background-color: var(--paper-bg);
+      background-image: radial-gradient(var(--paper-dot) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .slide-footer {
+      margin-top: auto;
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .slide-footer strong { color: #334155; }
+
+    /* HEADINGS & WASHI TAPE */
+    .slide-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #1e3a8a;
+      background: #dbeafe;
+      border: 2px solid #93c5fd;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .slide-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.12;
+      margin-bottom: 18px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .underline-accent {
+      position: relative;
+      display: inline-block;
+    }
+    .underline-accent::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 6px;
+      border-radius: 999px;
+      background: #facc15;
+      opacity: 0.8;
+    }
+
+    .tape {
+      position: absolute;
+      width: 96px;
+      height: 24px;
+      opacity: 0.72;
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+    .tape-yellow { background: rgba(250, 204, 21, 0.78); }
+    .tape-blue   { background: rgba(96, 165, 250, 0.72); }
+    .tape-pink   { background: rgba(244, 114, 182, 0.65); }
+    .tape-green  { background: rgba(74, 222, 128, 0.68); }
+
+    /* CARDS & PAPER PANELS */
+    .paper-card {
+      background: #ffffff;
+      border: 2.5px solid #1e293b;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 5px 6px 0 rgba(15, 23, 42, 0.12);
+      position: relative;
+    }
+
+    .soft-card {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 18px 22px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+      position: relative;
+    }
+
+    .postit {
+      background: #fef08a;
+      border: 1.5px solid #eab308;
+      border-radius: 4px;
+      padding: 18px 20px;
+      box-shadow: 4px 8px 16px rgba(15, 23, 42, 0.16);
+      position: relative;
+    }
+
+    .callout-box {
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-size: 17px;
+      line-height: 1.42;
+      font-weight: 600;
+    }
+
+    /* SLIDE 1: PORTADA ESTILO LIBRETA T0 */
+    .slide-cover {
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .notebook-cover {
+      width: 890px;
+      height: 615px;
+      background: linear-gradient(135deg, #272a30 0%, #17191d 55%, #23262c 100%);
+      border-radius: 14px 28px 28px 14px;
+      box-shadow: 0 26px 55px rgba(15, 23, 42, 0.42), inset 16px 0 0 #111317, inset 22px 0 0 #343942;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 46px 64px 46px 84px;
+    }
+
+    .notebook-label {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 42px 46px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .cover-school {
+      font-size: 16px;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .cover-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .cover-sub {
+      font-size: 22px;
+      color: #334155;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+
+    .cover-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cover-chip {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      color: #1e293b;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .rubber-stamp {
+      position: absolute;
+      right: -18px;
+      bottom: -24px;
+      transform: rotate(-11deg);
+      border: 4.5px solid #b91c1c;
+      border-radius: 12px;
+      padding: 10px 20px;
+      color: #b91c1c;
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: inset 0 0 0 2px rgba(185, 28, 28, 0.25);
+    }
+
+    /* SLIDE 2: ORDEN DEL DÍA */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px 20px;
+      margin-top: 2px;
+    }
+
+    .agenda-pill {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .agenda-pill.highlight {
+      background: #eff6ff;
+      border-color: #2563eb;
+      box-shadow: 3px 4px 0 rgba(37, 99, 235, 0.16);
+    }
+
+    .agenda-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #1e3a8a;
+      color: #ffffff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .agenda-pill.highlight .agenda-num { background: #16a34a; }
+
+    .agenda-pill-text {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.24;
+    }
+
+    .agenda-pill-sub {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* SLIDE 3: DIAGNÓSTICO GRÁFICAS SISAT + PALEM */
+    .diag-layout {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .chart-card-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-card-sub {
+      font-size: 13.5px;
+      color: #475569;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .legend-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      display: inline-block;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+    }
+
+    .pie-wrap {
+      display: grid;
+      grid-template-columns: 232px 1fr;
+      gap: 14px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .palem-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .palem-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .palem-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+    }
+
+    .palem-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.15;
+    }
+
+    .palem-desc {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    /* SLIDE 4: AVANCES Y RETOS */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      flex: 1;
+    }
+
+    .col-heading {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 18px;
+      line-height: 1.38;
+      color: #1e293b;
+    }
+
+    .check-icon {
+      font-size: 20px;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+
+    /* SLIDE 5: ESCALA 0 A 3 */
+    .rubric-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: -4px;
+    }
+
+    .rubric-table th {
+      background: #475569;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      padding: 10px 16px;
+      text-align: left;
+    }
+    .rubric-table th:first-child { border-radius: 10px 0 0 10px; text-align: center; width: 110px; }
+    .rubric-table th:nth-child(2) { width: 220px; text-align: center; }
+    .rubric-table th:nth-child(3) { width: 155px; text-align: center; }
+    .rubric-table th:last-child { border-radius: 0 10px 10px 0; }
+
+    .rubric-table td {
+      padding: 13px 16px;
+      font-size: 16.5px;
+      line-height: 1.32;
+      border-top: 2px solid #1e293b;
+      border-bottom: 2px solid #1e293b;
+    }
+
+    .rubric-table td:first-child {
+      border-left: 2px solid #1e293b;
+      border-radius: 12px 0 0 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .rubric-table td:nth-child(2) {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      color: #ffffff;
+      border-left: 2px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .rubric-table td:nth-child(3) {
+      text-align: center;
+      font-weight: 800;
+      font-size: 19px;
+      border-left: 2px solid #1e293b;
+    }
+
+    .rubric-table td:last-child {
+      border-right: 2px solid #1e293b;
+      border-left: 1.5px solid rgba(30, 41, 59, 0.25);
+      border-radius: 0 12px 12px 0;
+      color: #0f172a;
+      font-weight: 500;
+    }
+
+    .row-3 td:nth-child(1), .row-3 td:nth-child(2) { background: #16a34a; }
+    .row-3 td:nth-child(3), .row-3 td:nth-child(4) { background: #dcfce7; }
+
+    .row-2 td:nth-child(1), .row-2 td:nth-child(2) { background: #ca8a04; }
+    .row-2 td:nth-child(3), .row-2 td:nth-child(4) { background: #fef9c3; }
+
+    .row-1 td:nth-child(1), .row-1 td:nth-child(2) { background: #ea580c; }
+    .row-1 td:nth-child(3), .row-1 td:nth-child(4) { background: #ffedd5; }
+
+    .row-0 td:nth-child(1), .row-0 td:nth-child(2) { background: #dc2626; }
+    .row-0 td:nth-child(3), .row-0 td:nth-child(4) { background: #fee2e2; }
+
+    /* SLIDE 6: FÓRMULA ASISTENCIA */
+    .formula-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin: 10px 0 22px 0;
+    }
+
+    .formula-group {
+      background: #ffffff;
+      border: 3px solid #1e293b;
+      border-radius: 22px;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 370px;
+      box-shadow: 5px 6px 0 rgba(15, 23, 42, 0.12);
+    }
+
+    .formula-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .formula-op {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .formula-warn {
+      background: #fef08a;
+      border: 3px solid #1e293b;
+      border-radius: 22px;
+      padding: 22px 26px;
+      width: 260px;
+      text-align: center;
+      box-shadow: 5px 6px 0 rgba(15, 23, 42, 0.14);
+    }
+
+    .formula-result {
+      background: #1e3a8a;
+      color: #ffffff;
+      border: 3px solid #0f172a;
+      border-radius: 22px;
+      padding: 26px 28px;
+      width: 260px;
+      text-align: center;
+      box-shadow: 5px 6px 0 rgba(15, 23, 42, 0.22);
+    }
+
+    /* SLIDE 7: PLATAFORMA */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .module-chips {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .mod-chip {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .mod-chip strong {
+      display: block;
+      font-size: 15.5px;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .mod-chip span {
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .live-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 13px 22px;
+      border-radius: 14px;
+      border: 2.5px solid #1e3a8a;
+      box-shadow: 0 5px 0 #1e3a8a;
+      transition: transform 0.15s ease;
+    }
+    .live-launch-btn:hover { transform: translateY(-2px); }
+
+    /* SLIDE 8: CALENDARIO DICIEMBRE */
+    .cal-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-bottom: 20px;
+    }
+
+    .cal-day {
+      background: #ffffff;
+      border: 2.5px solid #1e293b;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 5px 0 rgba(15, 23, 42, 0.12);
+    }
+
+    .cal-top {
+      padding: 8px 10px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cal-body {
+      padding: 12px 12px 14px 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .cal-num {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1;
+      color: #0f172a;
+    }
+
+    .cal-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.24;
+    }
+
+    .cal-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-top: auto;
+    }
+
+    /* SLIDE 12: TABLERO DE CORCHO */
+    .slide-cork {
+      background-color: #c28e5a;
+      background-image:
+        radial-gradient(rgba(92, 52, 20, 0.28) 1.5px, transparent 1.5px),
+        radial-gradient(rgba(255, 236, 205, 0.22) 1.5px, transparent 1.5px),
+        linear-gradient(135deg, #c6925e 0%, #b37d4a 100%);
+      background-size: 18px 18px, 27px 27px, 100% 100%;
+      background-position: 0 0, 9px 9px, 0 0;
+      padding: 36px 52px 30px 52px;
+    }
+
+    .cork-banner {
+      background: #ffffff;
+      padding: 12px 38px;
+      border-radius: 6px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+      margin: 0 auto 26px auto;
+      position: relative;
+      width: fit-content;
+    }
+
+    .cork-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px 36px;
+      flex: 1;
+      align-items: center;
+    }
+
+    .cork-note {
+      padding: 24px 28px;
+      border-radius: 4px;
+      box-shadow: 6px 10px 22px rgba(0, 0, 0, 0.28);
+      position: relative;
+      min-height: 205px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .pin {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset -3px -3px 5px rgba(0, 0, 0, 0.25), inset 3px 3px 5px rgba(255, 255, 255, 0.45);
+    }
+
+    .cork-note h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 27px;
+      margin-bottom: 10px;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+
+    .cork-note p, .cork-note li {
+      font-size: 18.5px;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    /* FLOATING CONTROLS */
+    .top-pill {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.45;
+      transition: opacity 0.2s ease;
+    }
+    .top-pill:hover { opacity: 1; }
+
+    .top-pill a, .top-pill button {
+      background: rgba(15, 23, 42, 0.85);
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .deck-controls {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 7px 14px;
+      border-radius: 999px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+      opacity: 0.72;
+      transition: opacity 0.2s ease;
+    }
+    .deck-controls:hover { opacity: 1; }
+
+    .ctrl-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .ctrl-btn:hover { background: #2563eb; border-color: #60a5fa; }
+
+    .slide-counter {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f8fafc;
+      min-width: 68px;
+      text-align: center;
+    }
+
+    /* PRINT / PDF SUPPORT */
+    @media print {
+      @page { size: landscape; margin: 0; }
+      html, body {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        background: #ffffff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .top-pill, .deck-controls { display: none !important; }
+      .deck-viewport { display: block; width: auto; height: auto; overflow: visible; }
+      .slide-stage {
+        width: auto;
+        height: auto;
+        transform: none !important;
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+      .slide {
+        position: relative;
+        display: flex !important;
+        page-break-after: always;
+        break-after: page;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-pill">
+    <a href="../../index.html">← Reuniones</a>
+    <a href="../../../index.html" target="_blank" rel="noopener">🎮 Abrir Portal</a>
+    <button type="button" onclick="window.print()">🖨️ Imprimir / PDF</button>
+  </div>
+
+  <div class="deck-viewport" id="deckViewport">
+    <div class="slide-stage" id="slideStage">
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 1: PORTADA                                               -->
+      <!-- ============================================================== -->
+      <section class="slide slide-cover active" data-slug="portada">
+        <div class="notebook-cover">
+          <div class="notebook-label">
+            <div class="cover-school">Escuela Primaria Federal "José Clemente Orozco" · CCT: 14DPR0334N</div>
+            <h1 class="cover-title">Reunión de Primer Trimestre</h1>
+            <p class="cover-sub">
+              Seguimiento académico, herramientas de apoyo en casa, fechas de diciembre y organización de nuestro cierre de año.
+            </p>
+            <div class="cover-meta-row">
+              <span class="cover-chip">🏫 3° Grado "A"</span>
+              <span class="cover-chip">📅 Jueves 26 de noviembre de 2026</span>
+              <span class="cover-chip">👨‍🏫 Prof. Paul Germán Durán López</span>
+            </div>
+            <div class="rubber-stamp">TRIMESTRE 1<br>2026-2027</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 2: BIENVENIDA Y ORDEN DEL DÍA                            -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="bienvenida_orden_del_dia">
+        <span class="slide-kicker">📌 Punto 1 · Inicio de la reunión</span>
+        <h2 class="slide-title">Bienvenida y <span class="underline-accent">Orden del Día</span></h2>
+
+        <div class="callout-box" style="background: #fef9c3; border: 2px solid #eab308; color: #713f12; margin-bottom: 16px; display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 28px;">✍️</span>
+          <span><strong>Antes de iniciar:</strong> elegiremos a una madre, padre o tutor voluntario para apoyarnos redactando el <strong>Acta de Acuerdos</strong> del día.</span>
+        </div>
+
+        <div class="agenda-grid">
+          <div class="agenda-pill">
+            <div class="agenda-num">1</div>
+            <div><div class="agenda-pill-text">Bienvenida y Acta de Acuerdos</div><div class="agenda-pill-sub">Designación de persona voluntaria</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">6</div>
+            <div><div class="agenda-pill-text">Temporada respiratoria y salud</div><div class="agenda-pill-sub">Cuidados ante cambio de clima</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">2</div>
+            <div><div class="agenda-pill-text">Diagnóstico y avances del trimestre</div><div class="agenda-pill-sub">Hallazgos generales (sin nombres)</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">7</div>
+            <div><div class="agenda-pill-text">Curso de Protección Civil</div><div class="agenda-pill-sub">Invitación abierta a vocales y familias</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">3</div>
+            <div><div class="agenda-pill-text">Calificaciones y rúbricas (0 a 3)</div><div class="agenda-pill-sub">Conversión a 5–10, redondeo y asistencia</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">8</div>
+            <div><div class="agenda-pill-text">Fondo del grupo ($500 disponibles)</div><div class="agenda-pill-sub">Premio compartido del Día de Muertos</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">4</div>
+            <div><div class="agenda-pill-text">Plataforma de Juegos Interactivos</div><div class="agenda-pill-sub">Demostración y uso en casa</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">9</div>
+            <div><div class="agenda-pill-text">Organización de la Posada</div><div class="agenda-pill-sub">Comida, postre, piñatas, vestuario y pastorela</div></div>
+          </div>
+          <div class="agenda-pill">
+            <div class="agenda-num">5</div>
+            <div><div class="agenda-pill-text">Fechas de diciembre y suspensiones</div><div class="agenda-pill-sub">Cursos de formación y posada tentativa</div></div>
+          </div>
+          <div class="agenda-pill highlight">
+            <div class="agenda-num">10</div>
+            <div><div class="agenda-pill-text">Entrega y firma de calificaciones</div><div class="agenda-pill-sub">Lectura de observaciones al cierre</div></div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>3° "A"</strong> · Reunión de Primer Trimestre · 26 de noviembre de 2026</span>
+          <span>2 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 3: PANORAMA GENERAL DEL DIAGNÓSTICO (SISAT + PALEM)      -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="diagnostico_general">
+        <span class="slide-kicker">📊 Punto 2 · Diagnóstico inicial (sin nombres)</span>
+        <h2 class="slide-title" style="margin-bottom: 12px;">¿Dónde arrancamos el ciclo escolar?</h2>
+
+        <div class="diag-layout">
+          <!-- IZQUIERDA: BARRAS APILADAS SISAT -->
+          <div class="paper-card" style="display: flex; flex-direction: column; padding: 16px 20px;">
+            <div class="tape tape-blue" style="top: -12px; left: 26px; transform: rotate(-3deg);"></div>
+            <div class="chart-card-title">📈 Resultados SisAT (Diagnóstico Inicial)</div>
+            <div class="chart-card-sub">Distribución del grupo por nivel de desempeño en cada área</div>
+
+            <svg viewBox="0 0 540 290" width="100%" style="flex: 1; display: block;" role="img" aria-label="Gráfica de barras apiladas de resultados SisAT">
+              <!-- Líneas guía horizontales (escala 0 a 15 alumnos -> y: 245 a 20, paso 15px por alumno) -->
+              <g stroke="#e2e8f0" stroke-width="1.2">
+                <line x1="42" y1="245" x2="520" y2="245" stroke="#94a3b8" stroke-width="1.6"/>
+                <line x1="42" y1="200" x2="520" y2="200"/>
+                <line x1="42" y1="155" x2="520" y2="155"/>
+                <line x1="42" y1="110" x2="520" y2="110"/>
+                <line x1="42" y1="65"  x2="520" y2="65"/>
+                <line x1="42" y1="20"  x2="520" y2="20"/>
+              </g>
+              <!-- Etiquetas eje Y -->
+              <g fill="#64748b" font-size="12" font-weight="600" text-anchor="end">
+                <text x="34" y="249">0</text>
+                <text x="34" y="204">3</text>
+                <text x="34" y="159">6</text>
+                <text x="34" y="114">9</text>
+                <text x="34" y="69">12</text>
+                <text x="34" y="24">15</text>
+              </g>
+
+              <!-- COLUMNA 1: CÁLCULO MENTAL (Rojo 6, Amarillo 1, Verde 8) -->
+              <g>
+                <!-- Verde (8 -> 120px, y=20..140) -->
+                <rect x="78" y="20" width="84" height="120" rx="6" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
+                <text x="120" y="77" fill="#ffffff" font-size="18" font-weight="800" text-anchor="middle">8</text>
+                <text x="120" y="96" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">53.3%</text>
+                <!-- Amarillo (1 -> 15px, y=140..155) -->
+                <rect x="78" y="140" width="84" height="15" fill="#facc15" stroke="#ffffff" stroke-width="1.5"/>
+                <text x="120" y="152" fill="#422006" font-size="11.5" font-weight="800" text-anchor="middle">1 (6.7%)</text>
+                <!-- Rojo (6 -> 90px, y=155..245) -->
+                <rect x="78" y="155" width="84" height="90" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                <text x="120" y="198" fill="#ffffff" font-size="18" font-weight="800" text-anchor="middle">6</text>
+                <text x="120" y="216" fill="#fef2f2" font-size="12" font-weight="700" text-anchor="middle">40.0%</text>
+                <text x="120" y="272" fill="#0f172a" font-size="14.5" font-weight="800" text-anchor="middle">Cálculo mental</text>
+              </g>
+
+              <!-- COLUMNA 2: TOMA DE LECTURA (Rojo 6, Amarillo 7, Verde 2) -->
+              <g>
+                <!-- Verde (2 -> 30px, y=20..50) -->
+                <rect x="236" y="20" width="84" height="30" rx="6" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
+                <text x="278" y="40" fill="#ffffff" font-size="13.5" font-weight="800" text-anchor="middle">2 (13.3%)</text>
+                <!-- Amarillo (7 -> 105px, y=50..155) -->
+                <rect x="236" y="50" width="84" height="105" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+                <text x="278" y="99" fill="#422006" font-size="18" font-weight="800" text-anchor="middle">7</text>
+                <text x="278" y="117" fill="#713f12" font-size="12" font-weight="700" text-anchor="middle">46.7%</text>
+                <!-- Rojo (6 -> 90px, y=155..245) -->
+                <rect x="236" y="155" width="84" height="90" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                <text x="278" y="198" fill="#ffffff" font-size="18" font-weight="800" text-anchor="middle">6</text>
+                <text x="278" y="216" fill="#fef2f2" font-size="12" font-weight="700" text-anchor="middle">40.0%</text>
+                <text x="278" y="272" fill="#0f172a" font-size="14.5" font-weight="800" text-anchor="middle">Toma de lectura</text>
+              </g>
+
+              <!-- COLUMNA 3: PRODUCCIÓN DE TEXTOS (Rojo 10, Amarillo 5, Verde 0) -->
+              <g>
+                <!-- Amarillo (5 -> 75px, y=20..95) -->
+                <rect x="394" y="20" width="84" height="75" rx="6" fill="#facc15" stroke="#ffffff" stroke-width="2"/>
+                <text x="436" y="55" fill="#422006" font-size="18" font-weight="800" text-anchor="middle">5</text>
+                <text x="436" y="73" fill="#713f12" font-size="12" font-weight="700" text-anchor="middle">33.3%</text>
+                <!-- Rojo (10 -> 150px, y=95..245) -->
+                <rect x="394" y="95" width="84" height="150" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                <text x="436" y="168" fill="#ffffff" font-size="19" font-weight="800" text-anchor="middle">10</text>
+                <text x="436" y="187" fill="#fef2f2" font-size="12" font-weight="700" text-anchor="middle">66.7%</text>
+                <text x="436" y="272" fill="#0f172a" font-size="14.5" font-weight="800" text-anchor="middle">Prod. de textos</text>
+              </g>
+            </svg>
+
+            <div class="legend-row">
+              <span class="legend-item"><span class="legend-dot" style="background: #ef4444;"></span>Requiere Apoyo</span>
+              <span class="legend-item"><span class="legend-dot" style="background: #facc15;"></span>En Desarrollo</span>
+              <span class="legend-item"><span class="legend-dot" style="background: #22c55e;"></span>Nivel Esperado</span>
+            </div>
+          </div>
+
+          <!-- DERECHA: GRÁFICA DE PASTEL ALFABETIZACIÓN (PALEM) -->
+          <div class="paper-card" style="display: flex; flex-direction: column; padding: 16px 20px;">
+            <div class="tape tape-yellow" style="top: -12px; right: 26px; transform: rotate(3deg);"></div>
+            <div class="chart-card-title">🔤 Alfabetización Inicial (PALEM)</div>
+            <div class="chart-card-sub">Niveles de lectoescritura identificados al arranque del ciclo</div>
+
+            <div class="pie-wrap">
+              <svg viewBox="0 0 260 260" width="232" height="232" role="img" aria-label="Gráfica de pastel de niveles de alfabetización PALEM">
+                <!-- Alfabético: 53.3% (8/15) -> -90° a 102° -->
+                <path d="M 130 130 L 130 18 A 112 112 0 1 1 106.71 239.55 Z" fill="#22c55e" stroke="#ffffff" stroke-width="3"/>
+                <text x="188" y="133" fill="#ffffff" font-size="18" font-weight="800" text-anchor="middle">53.3%</text>
+                <text x="188" y="151" fill="#ecfdf5" font-size="12.5" font-weight="700" text-anchor="middle">(8)</text>
+
+                <!-- Silábico-Alfabético: 20.0% (3/15) -> 102° a 174° -->
+                <path d="M 130 130 L 106.71 239.55 A 112 112 0 0 1 18.61 141.71 Z" fill="#84cc16" stroke="#ffffff" stroke-width="3"/>
+                <text x="80" y="177" fill="#1a2e05" font-size="16" font-weight="800" text-anchor="middle">20%</text>
+                <text x="80" y="193" fill="#365314" font-size="12" font-weight="700" text-anchor="middle">(3)</text>
+
+                <!-- Silábico: 13.3% (2/15) -> 174° a 222° -->
+                <path d="M 130 130 L 18.61 141.71 A 112 112 0 0 1 46.77 55.06 Z" fill="#facc15" stroke="#ffffff" stroke-width="3"/>
+                <text x="61" y="109" fill="#422006" font-size="13.5" font-weight="800" text-anchor="middle">13.3%</text>
+
+                <!-- Presilábico: 13.3% (2/15) -> 222° a 270° -->
+                <path d="M 130 130 L 46.77 55.06 A 112 112 0 0 1 130 18 Z" fill="#ef4444" stroke="#ffffff" stroke-width="3"/>
+                <text x="101" y="69" fill="#ffffff" font-size="13.5" font-weight="800" text-anchor="middle">13.3%</text>
+              </svg>
+
+              <div class="palem-legend">
+                <div class="palem-row">
+                  <span class="palem-swatch" style="background: #22c55e;"></span>
+                  <div>
+                    <div class="palem-name">Alfabético · 53.3% (8)</div>
+                    <div class="palem-desc">Lee y escribe de manera convencional.</div>
+                  </div>
+                </div>
+                <div class="palem-row">
+                  <span class="palem-swatch" style="background: #84cc16;"></span>
+                  <div>
+                    <div class="palem-name">Silábico-Alfabético · 20% (3)</div>
+                    <div class="palem-desc">En transición final hacia la escritura completa.</div>
+                  </div>
+                </div>
+                <div class="palem-row">
+                  <span class="palem-swatch" style="background: #facc15;"></span>
+                  <div>
+                    <div class="palem-name">Silábico · 13.3% (2)</div>
+                    <div class="palem-desc">Relaciona sonidos por sílaba; requiere práctica.</div>
+                  </div>
+                </div>
+                <div class="palem-row">
+                  <span class="palem-swatch" style="background: #ef4444;"></span>
+                  <div>
+                    <div class="palem-name">Presilábico · 13.3% (2)</div>
+                    <div class="palem-desc">Etapa inicial; acompañamiento prioritario.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout-box" style="margin-top: 12px; background: #fef9c3; border: 2px solid #eab308; color: #713f12; font-size: 15.5px; padding: 10px 18px; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 22px;">📆</span>
+          <span><strong>Próxima evaluación formal SisAT: febrero.</strong> En esa fecha volveremos a aplicar estos instrumentos para medir con precisión los avances de cada área.</span>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>3° "A"</strong> · Diagnóstico inicial de inicio de ciclo presentado de forma general (sin nombres)</span>
+          <span>3 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 4: AVANCES DEL 1ER TRIMESTRE Y RETOS                     -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="avances_primer_trimestre">
+        <span class="slide-kicker">🌱 Punto 2 · Avances observados en el aula</span>
+        <h2 class="slide-title">Primer Trimestre: <span class="underline-accent">Logros y Metas</span></h2>
+
+        <div class="two-col">
+          <div class="paper-card" style="background: #f0fdf4; border-color: #15803d;">
+            <div class="tape tape-green" style="top: -12px; left: 32px; transform: rotate(-4deg);"></div>
+            <div class="col-heading" style="color: #166534;"><span>✅</span> Lo que ya hemos avanzado</div>
+            <ul class="check-list">
+              <li><span class="check-icon">🌟</span><span><strong>Mayor autonomía:</strong> al inicio costaba seguir indicaciones y arrancar; hoy comprenden mucho mejor el trabajo por proyectos.</span></li>
+              <li><span class="check-icon">📚</span><span><strong>Gusto por la lectura y la escuela:</strong> participan más y se muestran más motivados en las actividades diarias.</span></li>
+              <li><span class="check-icon">🤝</span><span><strong>Convivencia sana:</strong> dialogan ante conflictos y cuidan sus materiales.</span></li>
+              <li><span class="check-icon">🔢</span><span><strong>Gran paso en Matemáticas:</strong> la mayoría ya comprende el acomodo por valor posicional (U, D, C) y la transformación ("llevada").</span></li>
+            </ul>
+          </div>
+
+          <div class="paper-card" style="background: #fffbeb; border-color: #b45309;">
+            <div class="tape tape-pink" style="top: -12px; right: 32px; transform: rotate(4deg);"></div>
+            <div class="col-heading" style="color: #92400e;"><span>🎯</span> Lo que seguimos fortaleciendo</div>
+            <ul class="check-list">
+              <li><span class="check-icon">🗣️</span><span><strong>Fluidez lectora:</strong> practicar lectura en voz alta breve en casa todos los días.</span></li>
+              <li><span class="check-icon">✍️</span><span><strong>Separación entre palabras</strong> y uso de <strong>mayúsculas y punto</strong> al escribir.</span></li>
+              <li><span class="check-icon">🦒</span><span><strong>Ubicación en el renglón:</strong> trabajamos con letras <em>tortuga</em> (bajas), <em>jirafa</em> (altas) y <em>que cuelgan</em> (p, q, g, j, y), además del nombre completo.</span></li>
+              <li><span class="check-icon">🧩</span><span><strong>Apoyo diferenciado:</strong> seguimiento continuo en lectoescritura para quienes están consolidando esta etapa.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>Trabajo en equipo:</strong> pequeños hábitos diarios en casa marcan una gran diferencia rumbo a febrero</span>
+          <span>4 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 5: ESCALA DE RÚBRICAS 0 A 3                              -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="escala_calificaciones_0_a_3">
+        <span class="slide-kicker">📏 Punto 3 · Criterios de evaluación</span>
+        <h2 class="slide-title">¿Cómo se construye la calificación? (Escala 0 a 3)</h2>
+
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th>Puntaje</th>
+              <th>Valoración</th>
+              <th>Equivalencia</th>
+              <th>¿Qué significa en el trabajo diario?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-3">
+              <td>3</td>
+              <td>Satisfactorio</td>
+              <td style="color: #166534;">➔ 10</td>
+              <td>Presenta evidencia completa; cumple cabalmente con lo esperado, con claridad y consistencia.</td>
+            </tr>
+            <tr class="row-2">
+              <td>2</td>
+              <td>Suficiente</td>
+              <td style="color: #854d0e;">En progreso</td>
+              <td>Presenta evidencia clara y cumple en lo general, con algunos detalles por perfeccionar.</td>
+            </tr>
+            <tr class="row-1">
+              <td>1</td>
+              <td>Insuficiente</td>
+              <td style="color: #9a3412;">Requiere apoyo</td>
+              <td>Evidencia limitada o mínima; intenta cumplir, pero aún por debajo de lo esperado.</td>
+            </tr>
+            <tr class="row-0">
+              <td>0</td>
+              <td>Sin evidencia</td>
+              <td style="color: #991b1b;">➔ 5</td>
+              <td>No entregó, no realizó la actividad o faltó sin justificante médico u oficial.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout-box" style="margin-top: 10px; background: #eff6ff; border: 2px solid #2563eb; color: #1e3a8a; display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 26px;">ℹ️</span>
+          <span><strong>Redondeo oficial en boleta:</strong> los promedios del 0 al 3 se convierten a la escala del <strong>5 al 10</strong> y se <strong>redondean a números enteros</strong>, ya que la plataforma oficial de calificaciones no permite decimales.</span>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>3° "A"</strong> · Escala explicada desde la reunión de inicio de ciclo</span>
+          <span>5 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 6: ASISTENCIA Y JUSTIFICACIÓN                            -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="asistencia_y_justificantes">
+        <span class="slide-kicker">⚠️ Punto 3 · Asistencia y evidencias</span>
+        <h2 class="slide-title">¿Por qué impactan tanto las inasistencias?</h2>
+
+        <div class="formula-stage">
+          <div class="formula-group">
+            <div class="formula-item"><span>📝</span> Trabajo en clase y productos</div>
+            <div class="formula-item"><span>📖</span> Lectura, escritura y cálculo</div>
+            <div class="formula-item"><span>🎯</span> Participación y actividades</div>
+          </div>
+
+          <div class="formula-op">×</div>
+
+          <div class="formula-warn">
+            <div style="font-size: 62px; line-height: 1; margin-bottom: 10px;">⚠️</div>
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 28px; color: #713f12;">La Asistencia</div>
+            <p style="font-size: 14.5px; color: #422006; margin-top: 6px; font-weight: 600;">Base para contar con evidencia diaria</p>
+          </div>
+
+          <div class="formula-op">=</div>
+
+          <div class="formula-result">
+            <div style="font-size: 46px; line-height: 1; margin-bottom: 8px;">📊</div>
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 30px;">Calificación</div>
+            <p style="font-size: 14.5px; color: #bfdbfe; margin-top: 6px;">Escala oficial 5 a 10</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 20px;">
+          <div class="paper-card" style="background: #fee2e2; border-color: #b91c1c;">
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 24px; color: #991b1b; margin-bottom: 6px;">❌ Falta sin justificante = Sin evidencia (0)</div>
+            <p style="font-size: 17.5px; color: #7f1d1d; line-height: 1.4;">
+              Si el alumno falta y <strong>no se presenta justificante médico u oficial</strong>, no hay evidencia para valorar el criterio de ese día y queda en <strong>0</strong>, lo que baja su promedio.
+            </p>
+          </div>
+
+          <div class="paper-card" style="background: #dcfce7; border-color: #15803d;">
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 24px; color: #166534; margin-bottom: 6px;">✅ Con justificante</div>
+            <p style="font-size: 17px; color: #14532d; line-height: 1.4;">
+              La falta justificada <strong>no perjudica ni promedia como 0</strong>; además pueden repasar desde casa en la plataforma.
+            </p>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>Recuerden:</strong> de 2° a 6° grado sí se puede reprobar; la constancia diaria es clave</span>
+          <span>6 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 7: PLATAFORMA DE JUEGOS INTERACTIVOS                     -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="plataforma_juegos_interactivos">
+        <span class="slide-kicker">🎮 Punto 4 · Recurso gratuito para casa</span>
+        <h2 class="slide-title">Nuestra Plataforma de <span class="underline-accent">Juegos Educativos</span></h2>
+
+        <div class="platform-grid">
+          <div class="paper-card" style="display: flex; flex-direction: column;">
+            <div class="tape tape-green" style="top: -12px; left: 26px; transform: rotate(-3deg);"></div>
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 22px; color: #1e3a8a; margin-bottom: 6px;">¿Cómo aprovecharla mejor en casa?</div>
+            <ul class="check-list" style="gap: 9px;">
+              <li style="font-size: 16px;"><span class="check-icon">🎯</span><span><strong>Según la necesidad de cada alumno:</strong> elijan juntos el taller que más le ayude a reforzar.</span></li>
+              <li style="font-size: 16px;"><span class="check-icon">🏠</span><span><strong>Días sin clases o inasistencia:</strong> ahí hay materiales listos para repasar sin atrasarse.</span></li>
+              <li style="font-size: 16px;"><span class="check-icon">📁</span><span><strong>Minijuegos por proyecto mensual:</strong> cada mes se suben juegos de los temas que estamos viendo.</span></li>
+              <li style="font-size: 16px;"><span class="check-icon">🔓</span><span><strong>Simulador de examen:</strong> se desbloquea <em>únicamente</em> cuando el alumno completa todos los juegos de ese proyecto.</span></li>
+            </ul>
+
+            <div class="module-chips">
+              <div class="mod-chip"><strong>🔤 Dictado y Cazador de Sílabas</strong><span>Apoyo en lectoescritura inicial</span></div>
+              <div class="mod-chip"><strong>📖 Fluidez y Detective de Enigmas</strong><span>Lectura y comprensión</span></div>
+              <div class="mod-chip"><strong>✏️ Ortografía y Redacción</strong><span>Separación, mayúsculas y puntuación</span></div>
+              <div class="mod-chip"><strong>🧮 Retos Matemáticos y Loki Runner</strong><span>Valor posicional y cálculo mental</span></div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="paper-card" style="background: #0f172a; color: #ffffff; border-color: #1e3a8a; flex: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: center; padding: 24px;">
+              <div>
+                <div style="width: 158px; height: 158px; margin: 0 auto 12px auto; background: #ffffff; border-radius: 14px; padding: 8px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" role="img" aria-label="Código QR https://pualpls.github.io/juegos-interactivos/"><rect width="37" height="37" fill="#ffffff"/><g fill="#0f172a"><rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/><rect x="12" y="2" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="2" width="1" height="1"/><rect x="18" y="2" width="1" height="1"/><rect x="19" y="2" width="1" height="1"/><rect x="20" y="2" width="1" height="1"/><rect x="21" y="2" width="1" height="1"/><rect x="22" y="2" width="1" height="1"/><rect x="23" y="2" width="1" height="1"/><rect x="25" y="2" width="1" height="1"/><rect x="28" y="2" width="1" height="1"/><rect x="29" y="2" width="1" height="1"/><rect x="30" y="2" width="1" height="1"/><rect x="31" y="2" width="1" height="1"/><rect x="32" y="2" width="1" height="1"/><rect x="33" y="2" width="1" height="1"/><rect x="34" y="2" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/><rect x="15" y="3" width="1" height="1"/><rect x="16" y="3" width="1" height="1"/><rect x="17" y="3" width="1" height="1"/><rect x="18" y="3" width="1" height="1"/><rect x="19" y="3" width="1" height="1"/><rect x="22" y="3" width="1" height="1"/><rect x="26" y="3" width="1" height="1"/><rect x="28" y="3" width="1" height="1"/><rect x="34" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="5" y="4" width="1" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="10" y="4" width="1" height="1"/><rect x="11" y="4" width="1" height="1"/><rect x="12" y="4" width="1" height="1"/><rect x="14" y="4" width="1" height="1"/><rect x="15" y="4" width="1" height="1"/><rect x="17" y="4" width="1" height="1"/><rect x="18" y="4" width="1" height="1"/><rect x="19" y="4" width="1" height="1"/><rect x="20" y="4" width="1" height="1"/><rect x="22" y="4" width="1" height="1"/><rect x="23" y="4" width="1" height="1"/><rect x="24" y="4" width="1" height="1"/><rect x="26" y="4" width="1" height="1"/><rect x="28" y="4" width="1" height="1"/><rect x="30" y="4" width="1" height="1"/><rect x="31" y="4" width="1" height="1"/><rect x="32" y="4" width="1" height="1"/><rect x="34" y="4" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="8" y="5" width="1" height="1"/><rect x="10" y="5" width="1" height="1"/><rect x="12" y="5" width="1" height="1"/><rect x="13" y="5" width="1" height="1"/><rect x="16" y="5" width="1" height="1"/><rect x="17" y="5" width="1" height="1"/><rect x="18" y="5" width="1" height="1"/><rect x="22" y="5" width="1" height="1"/><rect x="28" y="5" width="1" height="1"/><rect x="30" y="5" width="1" height="1"/><rect x="31" y="5" width="1" height="1"/><rect x="32" y="5" width="1" height="1"/><rect x="34" y="5" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="4" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="11" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/><rect x="17" y="6" width="1" height="1"/><rect x="20" y="6" width="1" height="1"/><rect x="25" y="6" width="1" height="1"/><rect x="28" y="6" width="1" height="1"/><rect x="30" y="6" width="1" height="1"/><rect x="31" y="6" width="1" height="1"/><rect x="32" y="6" width="1" height="1"/><rect x="34" y="6" width="1" height="1"/><rect x="2" y="7" width="1" height="1"/><rect x="8" y="7" width="1" height="1"/><rect x="10" y="7" width="1" height="1"/><rect x="12" y="7" width="1" height="1"/><rect x="13" y="7" width="1" height="1"/><rect x="14" y="7" width="1" height="1"/><rect x="15" y="7" width="1" height="1"/><rect x="16" y="7" width="1" height="1"/><rect x="17" y="7" width="1" height="1"/><rect x="18" y="7" width="1" height="1"/><rect x="19" y="7" width="1" height="1"/><rect x="20" y="7" width="1" height="1"/><rect x="22" y="7" width="1" height="1"/><rect x="23" y="7" width="1" height="1"/><rect x="24" y="7" width="1" height="1"/><rect x="28" y="7" width="1" height="1"/><rect x="34" y="7" width="1" height="1"/><rect x="2" y="8" width="1" height="1"/><rect x="3" y="8" width="1" height="1"/><rect x="4" y="8" width="1" height="1"/><rect x="5" y="8" width="1" height="1"/><rect x="6" y="8" width="1" height="1"/><rect x="7" y="8" width="1" height="1"/><rect x="8" y="8" width="1" height="1"/><rect x="10" y="8" width="1" height="1"/><rect x="12" y="8" width="1" height="1"/><rect x="14" y="8" width="1" height="1"/><rect x="16" y="8" width="1" height="1"/><rect x="18" y="8" width="1" height="1"/><rect x="20" y="8" width="1" height="1"/><rect x="22" y="8" width="1" height="1"/><rect x="24" y="8" width="1" height="1"/><rect x="26" y="8" width="1" height="1"/><rect x="28" y="8" width="1" height="1"/><rect x="29" y="8" width="1" height="1"/><rect x="30" y="8" width="1" height="1"/><rect x="31" y="8" width="1" height="1"/><rect x="32" y="8" width="1" height="1"/><rect x="33" y="8" width="1" height="1"/><rect x="34" y="8" width="1" height="1"/><rect x="10" y="9" width="1" height="1"/><rect x="11" y="9" width="1" height="1"/><rect x="12" y="9" width="1" height="1"/><rect x="13" y="9" width="1" height="1"/><rect x="14" y="9" width="1" height="1"/><rect x="16" y="9" width="1" height="1"/><rect x="17" y="9" width="1" height="1"/><rect x="20" y="9" width="1" height="1"/><rect x="23" y="9" width="1" height="1"/><rect x="25" y="9" width="1" height="1"/><rect x="2" y="10" width="1" height="1"/><rect x="4" y="10" width="1" height="1"/><rect x="5" y="10" width="1" height="1"/><rect x="6" y="10" width="1" height="1"/><rect x="7" y="10" width="1" height="1"/><rect x="8" y="10" width="1" height="1"/><rect x="12" y="10" width="1" height="1"/><rect x="13" y="10" width="1" height="1"/><rect x="14" y="10" width="1" height="1"/><rect x="15" y="10" width="1" height="1"/><rect x="16" y="10" width="1" height="1"/><rect x="17" y="10" width="1" height="1"/><rect x="19" y="10" width="1" height="1"/><rect x="20" y="10" width="1" height="1"/><rect x="22" y="10" width="1" height="1"/><rect x="24" y="10" width="1" height="1"/><rect x="25" y="10" width="1" height="1"/><rect x="28" y="10" width="1" height="1"/><rect x="29" y="10" width="1" height="1"/><rect x="30" y="10" width="1" height="1"/><rect x="31" y="10" width="1" height="1"/><rect x="32" y="10" width="1" height="1"/><rect x="2" y="11" width="1" height="1"/><rect x="3" y="11" width="1" height="1"/><rect x="5" y="11" width="1" height="1"/><rect x="7" y="11" width="1" height="1"/><rect x="10" y="11" width="1" height="1"/><rect x="11" y="11" width="1" height="1"/><rect x="14" y="11" width="1" height="1"/><rect x="18" y="11" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="21" y="11" width="1" height="1"/><rect x="22" y="11" width="1" height="1"/><rect x="24" y="11" width="1" height="1"/><rect x="25" y="11" width="1" height="1"/><rect x="28" y="11" width="1" height="1"/><rect x="29" y="11" width="1" height="1"/><rect x="31" y="11" width="1" height="1"/><rect x="32" y="11" width="1" height="1"/><rect x="34" y="11" width="1" height="1"/><rect x="2" y="12" width="1" height="1"/><rect x="5" y="12" width="1" height="1"/><rect x="6" y="12" width="1" height="1"/><rect x="7" y="12" width="1" height="1"/><rect x="8" y="12" width="1" height="1"/><rect x="9" y="12" width="1" height="1"/><rect x="12" y="12" width="1" height="1"/><rect x="13" y="12" width="1" height="1"/><rect x="17" y="12" width="1" height="1"/><rect x="18" y="12" width="1" height="1"/><rect x="20" y="12" width="1" height="1"/><rect x="24" y="12" width="1" height="1"/><rect x="26" y="12" width="1" height="1"/><rect x="30" y="12" width="1" height="1"/><rect x="32" y="12" width="1" height="1"/><rect x="33" y="12" width="1" height="1"/><rect x="3" y="13" width="1" height="1"/><rect x="4" y="13" width="1" height="1"/><rect x="5" y="13" width="1" height="1"/><rect x="6" y="13" width="1" height="1"/><rect x="7" y="13" width="1" height="1"/><rect x="9" y="13" width="1" height="1"/><rect x="10" y="13" width="1" height="1"/><rect x="14" y="13" width="1" height="1"/><rect x="16" y="13" width="1" height="1"/><rect x="17" y="13" width="1" height="1"/><rect x="18" y="13" width="1" height="1"/><rect x="23" y="13" width="1" height="1"/><rect x="24" y="13" width="1" height="1"/><rect x="27" y="13" width="1" height="1"/><rect x="30" y="13" width="1" height="1"/><rect x="31" y="13" width="1" height="1"/><rect x="32" y="13" width="1" height="1"/><rect x="33" y="13" width="1" height="1"/><rect x="2" y="14" width="1" height="1"/><rect x="3" y="14" width="1" height="1"/><rect x="5" y="14" width="1" height="1"/><rect x="6" y="14" width="1" height="1"/><rect x="7" y="14" width="1" height="1"/><rect x="8" y="14" width="1" height="1"/><rect x="11" y="14" width="1" height="1"/><rect x="14" y="14" width="1" height="1"/><rect x="17" y="14" width="1" height="1"/><rect x="20" y="14" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="23" y="14" width="1" height="1"/><rect x="25" y="14" width="1" height="1"/><rect x="26" y="14" width="1" height="1"/><rect x="27" y="14" width="1" height="1"/><rect x="29" y="14" width="1" height="1"/><rect x="30" y="14" width="1" height="1"/><rect x="31" y="14" width="1" height="1"/><rect x="33" y="14" width="1" height="1"/><rect x="34" y="14" width="1" height="1"/><rect x="4" y="15" width="1" height="1"/><rect x="10" y="15" width="1" height="1"/><rect x="11" y="15" width="1" height="1"/><rect x="14" y="15" width="1" height="1"/><rect x="16" y="15" width="1" height="1"/><rect x="17" y="15" width="1" height="1"/><rect x="18" y="15" width="1" height="1"/><rect x="19" y="15" width="1" height="1"/><rect x="22" y="15" width="1" height="1"/><rect x="23" y="15" width="1" height="1"/><rect x="25" y="15" width="1" height="1"/><rect x="28" y="15" width="1" height="1"/><rect x="33" y="15" width="1" height="1"/><rect x="34" y="15" width="1" height="1"/><rect x="4" y="16" width="1" height="1"/><rect x="5" y="16" width="1" height="1"/><rect x="6" y="16" width="1" height="1"/><rect x="8" y="16" width="1" height="1"/><rect x="10" y="16" width="1" height="1"/><rect x="13" y="16" width="1" height="1"/><rect x="16" y="16" width="1" height="1"/><rect x="19" y="16" width="1" height="1"/><rect x="21" y="16" width="1" height="1"/><rect x="26" y="16" width="1" height="1"/><rect x="27" y="16" width="1" height="1"/><rect x="28" y="16" width="1" height="1"/><rect x="29" y="16" width="1" height="1"/><rect x="30" y="16" width="1" height="1"/><rect x="31" y="16" width="1" height="1"/><rect x="32" y="16" width="1" height="1"/><rect x="33" y="16" width="1" height="1"/><rect x="4" y="17" width="1" height="1"/><rect x="6" y="17" width="1" height="1"/><rect x="9" y="17" width="1" height="1"/><rect x="11" y="17" width="1" height="1"/><rect x="13" y="17" width="1" height="1"/><rect x="16" y="17" width="1" height="1"/><rect x="18" y="17" width="1" height="1"/><rect x="20" y="17" width="1" height="1"/><rect x="21" y="17" width="1" height="1"/><rect x="22" y="17" width="1" height="1"/><rect x="23" y="17" width="1" height="1"/><rect x="24" y="17" width="1" height="1"/><rect x="25" y="17" width="1" height="1"/><rect x="27" y="17" width="1" height="1"/><rect x="28" y="17" width="1" height="1"/><rect x="29" y="17" width="1" height="1"/><rect x="31" y="17" width="1" height="1"/><rect x="32" y="17" width="1" height="1"/><rect x="2" y="18" width="1" height="1"/><rect x="6" y="18" width="1" height="1"/><rect x="7" y="18" width="1" height="1"/><rect x="8" y="18" width="1" height="1"/><rect x="9" y="18" width="1" height="1"/><rect x="11" y="18" width="1" height="1"/><rect x="13" y="18" width="1" height="1"/><rect x="15" y="18" width="1" height="1"/><rect x="18" y="18" width="1" height="1"/><rect x="19" y="18" width="1" height="1"/><rect x="21" y="18" width="1" height="1"/><rect x="26" y="18" width="1" height="1"/><rect x="27" y="18" width="1" height="1"/><rect x="29" y="18" width="1" height="1"/><rect x="30" y="18" width="1" height="1"/><rect x="34" y="18" width="1" height="1"/><rect x="2" y="19" width="1" height="1"/><rect x="4" y="19" width="1" height="1"/><rect x="7" y="19" width="1" height="1"/><rect x="9" y="19" width="1" height="1"/><rect x="12" y="19" width="1" height="1"/><rect x="15" y="19" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/><rect x="18" y="19" width="1" height="1"/><rect x="19" y="19" width="1" height="1"/><rect x="20" y="19" width="1" height="1"/><rect x="21" y="19" width="1" height="1"/><rect x="22" y="19" width="1" height="1"/><rect x="25" y="19" width="1" height="1"/><rect x="27" y="19" width="1" height="1"/><rect x="28" y="19" width="1" height="1"/><rect x="29" y="19" width="1" height="1"/><rect x="31" y="19" width="1" height="1"/><rect x="32" y="19" width="1" height="1"/><rect x="34" y="19" width="1" height="1"/><rect x="4" y="20" width="1" height="1"/><rect x="5" y="20" width="1" height="1"/><rect x="6" y="20" width="1" height="1"/><rect x="7" y="20" width="1" height="1"/><rect x="8" y="20" width="1" height="1"/><rect x="15" y="20" width="1" height="1"/><rect x="16" y="20" width="1" height="1"/><rect x="17" y="20" width="1" height="1"/><rect x="19" y="20" width="1" height="1"/><rect x="24" y="20" width="1" height="1"/><rect x="29" y="20" width="1" height="1"/><rect x="30" y="20" width="1" height="1"/><rect x="32" y="20" width="1" height="1"/><rect x="5" y="21" width="1" height="1"/><rect x="6" y="21" width="1" height="1"/><rect x="7" y="21" width="1" height="1"/><rect x="11" y="21" width="1" height="1"/><rect x="12" y="21" width="1" height="1"/><rect x="14" y="21" width="1" height="1"/><rect x="16" y="21" width="1" height="1"/><rect x="19" y="21" width="1" height="1"/><rect x="20" y="21" width="1" height="1"/><rect x="22" y="21" width="1" height="1"/><rect x="26" y="21" width="1" height="1"/><rect x="27" y="21" width="1" height="1"/><rect x="28" y="21" width="1" height="1"/><rect x="29" y="21" width="1" height="1"/><rect x="30" y="21" width="1" height="1"/><rect x="31" y="21" width="1" height="1"/><rect x="32" y="21" width="1" height="1"/><rect x="33" y="21" width="1" height="1"/><rect x="34" y="21" width="1" height="1"/><rect x="3" y="22" width="1" height="1"/><rect x="4" y="22" width="1" height="1"/><rect x="6" y="22" width="1" height="1"/><rect x="8" y="22" width="1" height="1"/><rect x="9" y="22" width="1" height="1"/><rect x="10" y="22" width="1" height="1"/><rect x="13" y="22" width="1" height="1"/><rect x="14" y="22" width="1" height="1"/><rect x="15" y="22" width="1" height="1"/><rect x="18" y="22" width="1" height="1"/><rect x="22" y="22" width="1" height="1"/><rect x="23" y="22" width="1" height="1"/><rect x="24" y="22" width="1" height="1"/><rect x="27" y="22" width="1" height="1"/><rect x="30" y="22" width="1" height="1"/><rect x="31" y="22" width="1" height="1"/><rect x="2" y="23" width="1" height="1"/><rect x="3" y="23" width="1" height="1"/><rect x="5" y="23" width="1" height="1"/><rect x="6" y="23" width="1" height="1"/><rect x="7" y="23" width="1" height="1"/><rect x="12" y="23" width="1" height="1"/><rect x="13" y="23" width="1" height="1"/><rect x="14" y="23" width="1" height="1"/><rect x="15" y="23" width="1" height="1"/><rect x="16" y="23" width="1" height="1"/><rect x="17" y="23" width="1" height="1"/><rect x="19" y="23" width="1" height="1"/><rect x="20" y="23" width="1" height="1"/><rect x="25" y="23" width="1" height="1"/><rect x="27" y="23" width="1" height="1"/><rect x="28" y="23" width="1" height="1"/><rect x="31" y="23" width="1" height="1"/><rect x="34" y="23" width="1" height="1"/><rect x="2" y="24" width="1" height="1"/><rect x="4" y="24" width="1" height="1"/><rect x="5" y="24" width="1" height="1"/><rect x="7" y="24" width="1" height="1"/><rect x="8" y="24" width="1" height="1"/><rect x="10" y="24" width="1" height="1"/><rect x="11" y="24" width="1" height="1"/><rect x="13" y="24" width="1" height="1"/><rect x="14" y="24" width="1" height="1"/><rect x="16" y="24" width="1" height="1"/><rect x="17" y="24" width="1" height="1"/><rect x="18" y="24" width="1" height="1"/><rect x="20" y="24" width="1" height="1"/><rect x="22" y="24" width="1" height="1"/><rect x="24" y="24" width="1" height="1"/><rect x="33" y="24" width="1" height="1"/><rect x="2" y="25" width="1" height="1"/><rect x="5" y="25" width="1" height="1"/><rect x="6" y="25" width="1" height="1"/><rect x="7" y="25" width="1" height="1"/><rect x="9" y="25" width="1" height="1"/><rect x="10" y="25" width="1" height="1"/><rect x="12" y="25" width="1" height="1"/><rect x="13" y="25" width="1" height="1"/><rect x="14" y="25" width="1" height="1"/><rect x="15" y="25" width="1" height="1"/><rect x="17" y="25" width="1" height="1"/><rect x="23" y="25" width="1" height="1"/><rect x="26" y="25" width="1" height="1"/><rect x="31" y="25" width="1" height="1"/><rect x="32" y="25" width="1" height="1"/><rect x="34" y="25" width="1" height="1"/><rect x="2" y="26" width="1" height="1"/><rect x="4" y="26" width="1" height="1"/><rect x="5" y="26" width="1" height="1"/><rect x="6" y="26" width="1" height="1"/><rect x="8" y="26" width="1" height="1"/><rect x="10" y="26" width="1" height="1"/><rect x="15" y="26" width="1" height="1"/><rect x="17" y="26" width="1" height="1"/><rect x="19" y="26" width="1" height="1"/><rect x="22" y="26" width="1" height="1"/><rect x="24" y="26" width="1" height="1"/><rect x="25" y="26" width="1" height="1"/><rect x="26" y="26" width="1" height="1"/><rect x="27" y="26" width="1" height="1"/><rect x="28" y="26" width="1" height="1"/><rect x="29" y="26" width="1" height="1"/><rect x="30" y="26" width="1" height="1"/><rect x="31" y="26" width="1" height="1"/><rect x="33" y="26" width="1" height="1"/><rect x="34" y="26" width="1" height="1"/><rect x="10" y="27" width="1" height="1"/><rect x="11" y="27" width="1" height="1"/><rect x="13" y="27" width="1" height="1"/><rect x="14" y="27" width="1" height="1"/><rect x="15" y="27" width="1" height="1"/><rect x="16" y="27" width="1" height="1"/><rect x="18" y="27" width="1" height="1"/><rect x="20" y="27" width="1" height="1"/><rect x="21" y="27" width="1" height="1"/><rect x="22" y="27" width="1" height="1"/><rect x="23" y="27" width="1" height="1"/><rect x="26" y="27" width="1" height="1"/><rect x="30" y="27" width="1" height="1"/><rect x="32" y="27" width="1" height="1"/><rect x="33" y="27" width="1" height="1"/><rect x="34" y="27" width="1" height="1"/><rect x="2" y="28" width="1" height="1"/><rect x="3" y="28" width="1" height="1"/><rect x="4" y="28" width="1" height="1"/><rect x="5" y="28" width="1" height="1"/><rect x="6" y="28" width="1" height="1"/><rect x="7" y="28" width="1" height="1"/><rect x="8" y="28" width="1" height="1"/><rect x="12" y="28" width="1" height="1"/><rect x="16" y="28" width="1" height="1"/><rect x="17" y="28" width="1" height="1"/><rect x="18" y="28" width="1" height="1"/><rect x="20" y="28" width="1" height="1"/><rect x="22" y="28" width="1" height="1"/><rect x="23" y="28" width="1" height="1"/><rect x="25" y="28" width="1" height="1"/><rect x="26" y="28" width="1" height="1"/><rect x="28" y="28" width="1" height="1"/><rect x="30" y="28" width="1" height="1"/><rect x="32" y="28" width="1" height="1"/><rect x="33" y="28" width="1" height="1"/><rect x="2" y="29" width="1" height="1"/><rect x="8" y="29" width="1" height="1"/><rect x="10" y="29" width="1" height="1"/><rect x="11" y="29" width="1" height="1"/><rect x="12" y="29" width="1" height="1"/><rect x="13" y="29" width="1" height="1"/><rect x="14" y="29" width="1" height="1"/><rect x="18" y="29" width="1" height="1"/><rect x="23" y="29" width="1" height="1"/><rect x="24" y="29" width="1" height="1"/><rect x="25" y="29" width="1" height="1"/><rect x="26" y="29" width="1" height="1"/><rect x="30" y="29" width="1" height="1"/><rect x="31" y="29" width="1" height="1"/><rect x="32" y="29" width="1" height="1"/><rect x="33" y="29" width="1" height="1"/><rect x="34" y="29" width="1" height="1"/><rect x="2" y="30" width="1" height="1"/><rect x="4" y="30" width="1" height="1"/><rect x="5" y="30" width="1" height="1"/><rect x="6" y="30" width="1" height="1"/><rect x="8" y="30" width="1" height="1"/><rect x="10" y="30" width="1" height="1"/><rect x="11" y="30" width="1" height="1"/><rect x="12" y="30" width="1" height="1"/><rect x="15" y="30" width="1" height="1"/><rect x="20" y="30" width="1" height="1"/><rect x="21" y="30" width="1" height="1"/><rect x="23" y="30" width="1" height="1"/><rect x="26" y="30" width="1" height="1"/><rect x="27" y="30" width="1" height="1"/><rect x="28" y="30" width="1" height="1"/><rect x="29" y="30" width="1" height="1"/><rect x="30" y="30" width="1" height="1"/><rect x="31" y="30" width="1" height="1"/><rect x="33" y="30" width="1" height="1"/><rect x="34" y="30" width="1" height="1"/><rect x="2" y="31" width="1" height="1"/><rect x="4" y="31" width="1" height="1"/><rect x="5" y="31" width="1" height="1"/><rect x="6" y="31" width="1" height="1"/><rect x="8" y="31" width="1" height="1"/><rect x="10" y="31" width="1" height="1"/><rect x="11" y="31" width="1" height="1"/><rect x="15" y="31" width="1" height="1"/><rect x="16" y="31" width="1" height="1"/><rect x="17" y="31" width="1" height="1"/><rect x="18" y="31" width="1" height="1"/><rect x="19" y="31" width="1" height="1"/><rect x="22" y="31" width="1" height="1"/><rect x="23" y="31" width="1" height="1"/><rect x="24" y="31" width="1" height="1"/><rect x="25" y="31" width="1" height="1"/><rect x="26" y="31" width="1" height="1"/><rect x="27" y="31" width="1" height="1"/><rect x="30" y="31" width="1" height="1"/><rect x="31" y="31" width="1" height="1"/><rect x="32" y="31" width="1" height="1"/><rect x="34" y="31" width="1" height="1"/><rect x="2" y="32" width="1" height="1"/><rect x="4" y="32" width="1" height="1"/><rect x="5" y="32" width="1" height="1"/><rect x="6" y="32" width="1" height="1"/><rect x="8" y="32" width="1" height="1"/><rect x="10" y="32" width="1" height="1"/><rect x="19" y="32" width="1" height="1"/><rect x="21" y="32" width="1" height="1"/><rect x="24" y="32" width="1" height="1"/><rect x="25" y="32" width="1" height="1"/><rect x="26" y="32" width="1" height="1"/><rect x="27" y="32" width="1" height="1"/><rect x="28" y="32" width="1" height="1"/><rect x="29" y="32" width="1" height="1"/><rect x="32" y="32" width="1" height="1"/><rect x="2" y="33" width="1" height="1"/><rect x="8" y="33" width="1" height="1"/><rect x="11" y="33" width="1" height="1"/><rect x="13" y="33" width="1" height="1"/><rect x="14" y="33" width="1" height="1"/><rect x="16" y="33" width="1" height="1"/><rect x="18" y="33" width="1" height="1"/><rect x="21" y="33" width="1" height="1"/><rect x="22" y="33" width="1" height="1"/><rect x="23" y="33" width="1" height="1"/><rect x="24" y="33" width="1" height="1"/><rect x="27" y="33" width="1" height="1"/><rect x="30" y="33" width="1" height="1"/><rect x="31" y="33" width="1" height="1"/><rect x="32" y="33" width="1" height="1"/><rect x="2" y="34" width="1" height="1"/><rect x="3" y="34" width="1" height="1"/><rect x="4" y="34" width="1" height="1"/><rect x="5" y="34" width="1" height="1"/><rect x="6" y="34" width="1" height="1"/><rect x="7" y="34" width="1" height="1"/><rect x="8" y="34" width="1" height="1"/><rect x="10" y="34" width="1" height="1"/><rect x="13" y="34" width="1" height="1"/><rect x="15" y="34" width="1" height="1"/><rect x="16" y="34" width="1" height="1"/><rect x="19" y="34" width="1" height="1"/><rect x="20" y="34" width="1" height="1"/><rect x="21" y="34" width="1" height="1"/><rect x="24" y="34" width="1" height="1"/><rect x="25" y="34" width="1" height="1"/><rect x="26" y="34" width="1" height="1"/><rect x="29" y="34" width="1" height="1"/><rect x="33" y="34" width="1" height="1"/></g></svg>
+                </div>
+                <div style="font-family: 'Fredoka', sans-serif; font-size: 24px; color: #fde047; margin-bottom: 4px;">¡Escanea o pruébala hoy!</div>
+                <p style="font-size: 14.5px; color: #cbd5e1; line-height: 1.38;">
+                  Celular, tablet o computadora · Sin anuncios y 100% gratuita.
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(147, 197, 253, 0.4); border-radius: 12px; padding: 12px 14px; margin: 14px 0;">
+                <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #93c5fd; font-weight: 700; margin-bottom: 4px;">Dirección web del portal</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: #ffffff; word-break: break-all;">pualpls.github.io/juegos-interactivos</div>
+              </div>
+
+              <a class="live-launch-btn" href="../../../index.html" target="_blank" rel="noopener">
+                🚀 Abrir Portal en Pantalla
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>Invitación:</strong> pruébenla hoy aquí y recomiéndenle 10–15 minutos de práctica en casa</span>
+          <span>7 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 8: FECHAS DE DICIEMBRE Y SUSPENSIONES                    -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="fechas_diciembre_suspensiones">
+        <span class="slide-kicker">📅 Punto 5 · Planeación del próximo mes</span>
+        <h2 class="slide-title">Fechas a Considerar en <span class="underline-accent">Diciembre</span></h2>
+
+        <div class="cal-cards">
+          <div class="cal-day">
+            <div class="cal-top" style="background: #2563eb;">Viernes · Diciembre</div>
+            <div class="cal-body" style="padding: 16px 18px 18px 18px;">
+              <div class="cal-num" style="font-size: 50px;">4</div>
+              <div class="cal-name" style="font-size: 17px;">Curso de Formación del Carácter</div>
+              <span class="cal-badge" style="background: #dbeafe; color: #1e40af; font-size: 13px; padding: 4px 12px;">Actividad de repaso en plataforma</span>
+            </div>
+          </div>
+
+          <div class="cal-day">
+            <div class="cal-top" style="background: #2563eb;">Viernes · Diciembre</div>
+            <div class="cal-body" style="padding: 16px 18px 18px 18px;">
+              <div class="cal-num" style="font-size: 50px;">11</div>
+              <div class="cal-name" style="font-size: 17px;">Curso de Formación del Carácter</div>
+              <span class="cal-badge" style="background: #dbeafe; color: #1e40af; font-size: 13px; padding: 4px 12px;">Actividad de repaso en plataforma</span>
+            </div>
+          </div>
+
+          <div class="cal-day" style="border-color: #16a34a;">
+            <div class="cal-top" style="background: #16a34a;">Viernes · Diciembre *</div>
+            <div class="cal-body" style="padding: 16px 18px 18px 18px;">
+              <div class="cal-num" style="font-size: 50px;">18</div>
+              <div class="cal-name" style="font-size: 17px;">Posada de los Alumnos</div>
+              <span class="cal-badge" style="background: #dcfce7; color: #166534; font-size: 13px; padding: 4px 12px;">Tentativa · sujeta a supervisión</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="paper-card" style="background: #fffbeb; border-color: #d97706; padding: 18px 24px;">
+          <div class="tape tape-yellow" style="top: -11px; right: 36px; transform: rotate(3deg);"></div>
+          <div style="font-family: 'Fredoka', sans-serif; font-size: 22px; color: #92400e; margin-bottom: 6px;">💬 Aclaración importante sobre suspensiones oficiales</div>
+          <p style="font-size: 16.5px; line-height: 1.44; color: #1e293b;">
+            Las fechas de cursos y suspensiones <strong>son indicaciones oficiales superiores</strong>, no una decisión del docente ni de la escuela. Por lineamientos institucionales y protección legal, no es posible abrir la escuela ni atender únicamente a un grupo esos días. <strong>Para aprovechar esas fechas sin perder continuidad se diseñaron las actividades de nuestra plataforma interactiva.</strong>
+          </p>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>* Nota:</strong> La posada de los alumnos es tentativamente el 18 de diciembre; cualquier ajuste se confirmará según supervisión</span>
+          <span>8 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 9: SALUD RESPIRATORIA Y PROTECCIÓN CIVIL                 -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="salud_y_proteccion_civil">
+        <span class="slide-kicker">🩺 Puntos 6 y 7 · Prevención y cuidado</span>
+        <h2 class="slide-title">Salud Escolar y <span class="underline-accent">Protección Civil</span></h2>
+
+        <div class="two-col">
+          <div class="paper-card" style="background: #fef2f2; border-color: #dc2626; display: flex; flex-direction: column;">
+            <div class="tape tape-pink" style="top: -12px; left: 30px; transform: rotate(-3deg);"></div>
+            <div class="col-heading" style="color: #991b1b;"><span>🌡️</span> Temporada de Enfermedades Respiratorias</div>
+            <ul class="check-list" style="gap: 14px;">
+              <li><span class="check-icon">🧣</span><span>Con el cambio de clima llegan resfriados e infecciones respiratorias: <strong>estar muy atentos a síntomas en casa</strong>.</span></li>
+              <li><span class="check-icon">🏥</span><span>Si el alumno presenta <strong>fiebre o síntomas respiratorios</strong>, aplicar el protocolo de salud y priorizar su recuperación en casa.</span></li>
+              <li><span class="check-icon">📄</span><span>Recordar entregar <strong>justificante médico</strong> cuando corresponda para cuidar tanto la salud como su evaluación.</span></li>
+            </ul>
+          </div>
+
+          <div class="paper-card" style="background: #eff6ff; border-color: #1d4ed8; display: flex; flex-direction: column;">
+            <div class="tape tape-blue" style="top: -12px; right: 30px; transform: rotate(3deg);"></div>
+            <div class="col-heading" style="color: #1e3a8a;"><span>🦺</span> Curso Escolar de Protección Civil</div>
+            <ul class="check-list" style="gap: 14px;">
+              <li><span class="check-icon">🏫</span><span>Como escuela estamos participando en un <strong>curso de capacitación en Protección Civil</strong> para fortalecer la seguridad del plantel.</span></li>
+              <li><span class="check-icon">🤝</span><span><strong>Invitación abierta:</strong> pueden asistir las vocales del grupo o cualquier madre, padre o tutor interesado.</span></li>
+            </ul>
+            <div class="callout-box" style="margin-top: auto; background: #dbeafe; border: 2px solid #3b82f6; color: #1e3a8a; font-size: 16px;">
+              📅 <strong>Fecha por confirmar:</strong> les avisaré en cuanto me confirmen el día y horario.
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>Cuidar a las infancias</strong> es una tarea compartida entre escuela y familia</span>
+          <span>9 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 10: FONDO $500 Y POSADA (CONVIVIO)                       -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="fondo_y_posada_convivio">
+        <span class="slide-kicker">🎉 Puntos 8 y 9 · Organización de diciembre</span>
+        <h2 class="slide-title">Fondo del Grupo y <span class="underline-accent">Posada Navideña</span> (1/2)</h2>
+
+        <div style="display: grid; grid-template-columns: 0.78fr 1.22fr; gap: 24px; flex: 1;">
+          <div class="paper-card" style="background: #f0fdf4; border-color: #15803d; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="tape tape-green" style="top: -12px; left: 30px; transform: rotate(-3deg);"></div>
+            <div>
+              <div style="font-size: 44px; margin-bottom: 6px;">💰🌼</div>
+              <div style="font-family: 'Fredoka', sans-serif; font-size: 24px; color: #166534; margin-bottom: 8px;">Fondo del Grupo</div>
+              <div style="font-family: 'Fredoka', sans-serif; font-size: 54px; font-weight: 700; color: #15803d; line-height: 1; margin-bottom: 12px;">$500</div>
+              <p style="font-size: 16.5px; line-height: 1.42; color: #14532d;">
+                Disponibles gracias al apoyo de los alumnos y alumnas que participaron en el evento del <strong>Día de Muertos</strong> <em>(premio de $1,000 compartido con 4° grado)</em>.
+              </p>
+            </div>
+            <div class="callout-box" style="background: #dcfce7; border: 2px dashed #16a34a; color: #166534; font-size: 15.5px;">
+              🗳️ Acordemos en grupo en qué aprovechar mejor este recurso.
+            </div>
+          </div>
+
+          <div class="paper-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="tape tape-yellow" style="top: -12px; right: 34px; transform: rotate(3deg);"></div>
+            <div class="col-heading" style="color: #b91c1c; margin-bottom: 10px;"><span>🎄</span> Convivio de la Posada de Alumnos</div>
+            <ul class="check-list" style="gap: 11px;">
+              <li style="font-size: 17px;"><span class="check-icon">🌮</span><span><strong>Comida (Sociedad de Padres):</strong> por votación de los alumnos eligieron <strong>tacos de adobada</strong>.</span></li>
+              <li style="font-size: 17px;"><span class="check-icon">🍮</span><span><strong>Postre:</strong> gelatina y cortadillo.</span></li>
+              <li style="font-size: 17px;"><span class="check-icon">🪅</span><span><strong>Piñatas:</strong> de 1 a 2 piñatas compradas <em>(regalo del docente)</em>.</span></li>
+              <li style="font-size: 17px;"><span class="check-icon">🚫</span><span><strong>Acuerdo saludable:</strong> evitar dulces.</span></li>
+              <li style="font-size: 17px;"><span class="check-icon">🎟️</span><span><strong>Rifa navideña:</strong> organizada por la Sociedad de Padres de Familia.</span></li>
+            </ul>
+            <div class="callout-box" style="margin-top: 10px; background: #fef9c3; border: 2px solid #eab308; color: #713f12; font-size: 15.5px;">
+              🍽️ <strong>Plato y vaso:</strong> les confirmaré si deberán traerlos en cuanto tenga el dato oficial.
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>Fecha tentativa de Posada:</strong> sujeta a confirmación de supervisión escolar</span>
+          <span>10 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 11: POSADA (VESTUARIO Y PASTORELA)                       -->
+      <!-- ============================================================== -->
+      <section class="slide" data-slug="posada_vestuario_y_pastorela">
+        <span class="slide-kicker">🎭 Punto 9 · Participación artística</span>
+        <h2 class="slide-title">Posada Navideña: <span class="underline-accent">Vestuario y Programa</span> (2/2)</h2>
+
+        <div class="two-col">
+          <div class="paper-card" style="background: #fff7ed; border-color: #c2410c; display: flex; flex-direction: column;">
+            <div class="tape tape-yellow" style="top: -12px; left: 30px; transform: rotate(-3deg);"></div>
+            <div class="col-heading" style="color: #9a3412;"><span>👗👔</span> Vestuario (Indicación de Danza)</div>
+            <p style="font-size: 16.5px; color: #431407; margin-bottom: 14px; font-weight: 600;">
+              La maestra de Danza solicita que acudan vestidos con <strong>colores navideños</strong>:
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div class="soft-card" style="border-color: #fb923c; background: #ffffff;">
+                <div style="font-family: 'Fredoka', sans-serif; font-size: 21px; color: #be123c; margin-bottom: 4px;">👧 Niñas</div>
+                <p style="font-size: 17px; color: #1e293b; line-height: 1.4;">
+                  <strong>Falda azul o café</strong> (estilo galleta navideña / motivos navideños).
+                </p>
+              </div>
+              <div class="soft-card" style="border-color: #60a5fa; background: #ffffff;">
+                <div style="font-family: 'Fredoka', sans-serif; font-size: 21px; color: #1d4ed8; margin-bottom: 4px;">👦 Niños</div>
+                <p style="font-size: 17px; color: #1e293b; line-height: 1.4;">
+                  <strong>Camisa blanca y pantalón</strong>; si cuentan con tonos navideños excelente, y si no, <strong>pantalón azul</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="paper-card" style="background: #f5f3ff; border-color: #6d28d9; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="tape tape-blue" style="top: -12px; right: 30px; transform: rotate(3deg);"></div>
+            <div>
+              <div class="col-heading" style="color: #5b21b6;"><span>⭐</span> Números Artísticos y Pastorela</div>
+              <ul class="check-list" style="gap: 15px;">
+                <li><span class="check-icon">🎶</span><span>Habrá <strong>participaciones y números artísticos</strong> de todos los grados de la escuela.</span></li>
+                <li><span class="check-icon">👑</span><span>Se presentará una <strong>Pastorela escolar</strong> donde <strong>3 alumnos de nuestro grupo</strong> se ofrecieron voluntariamente para representar a los <strong>Reyes Magos</strong>.</span></li>
+              </ul>
+            </div>
+            <div class="callout-box" style="background: #ede9fe; border: 2px solid #7c3aed; color: #4c1d95; font-size: 16.5px;">
+              🌟 ¡Agradecemos muchísimo el entusiasmo de nuestras familias y estudiantes!
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span><strong>3° "A"</strong> · Cualquier ajuste de horario o logística se avisará oportunamente</span>
+          <span>11 / 12</span>
+        </div>
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- SLIDE 12: CIERRE Y ENTREGA DE BOLETAS (CORCHO T0)              -->
+      <!-- ============================================================== -->
+      <section class="slide slide-cork" data-slug="cierre_entrega_boletas">
+        <div class="cork-banner">
+          <div class="tape tape-yellow" style="top: -10px; left: -24px; transform: rotate(-28deg); width: 70px;"></div>
+          <div class="tape tape-blue" style="bottom: -10px; right: -24px; transform: rotate(-28deg); width: 70px;"></div>
+          <h2 style="font-family: 'Fredoka', sans-serif; font-size: 36px; color: #0f172a;">Tablero de Cierre y Entrega de Boletas</h2>
+        </div>
+
+        <div class="cork-grid">
+          <div class="cork-note" style="background: #86efac; transform: rotate(-1.5deg);">
+            <div class="pin" style="background: #16a34a;"></div>
+            <h3 style="color: #14532d;">10. Entrega de Calificaciones</h3>
+            <p>Pasaremos a <strong>firmar la hoja de registro</strong> y revisar de forma individual las <strong>observaciones y sugerencias</strong> de cada estudiante para casa.</p>
+          </div>
+
+          <div class="cork-note" style="background: #fef08a; transform: rotate(1.2deg);">
+            <div class="pin" style="background: #eab308;"></div>
+            <h3 style="color: #713f12;">Pendientes por Confirmar</h3>
+            <p>• Fecha oficial de la Posada (supervisión)<br>• Fecha del curso de Protección Civil<br>• Confirmación de plato y vaso</p>
+          </div>
+
+          <div class="cork-note" style="background: #fbcfe8; transform: rotate(0.9deg);">
+            <div class="pin" style="background: #db2777;"></div>
+            <h3 style="color: #831843;">Apoyo en Casa</h3>
+            <p>Practica 10–15 min en la plataforma:<br><strong>pualpls.github.io/juegos-interactivos</strong><br>Lectura diaria y cuidado de la asistencia.</p>
+          </div>
+
+          <div class="cork-note" style="background: #ffffff; transform: rotate(-0.8deg); text-align: center;">
+            <div class="pin" style="background: #2563eb;"></div>
+            <div style="font-family: 'Fredoka', sans-serif; font-size: 34px; color: #0f172a; line-height: 1.2; margin-bottom: 10px;">
+              ¡Gracias por hacer equipo por 3° "A"!
+            </div>
+            <p style="font-size: 18px; color: #334155;">Prof. Paul Germán Durán López · Ciclo 2026-2027</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="deck-controls">
+    <button class="ctrl-btn" id="btnPrev" type="button">← Anterior</button>
+    <span class="slide-counter" id="slideCounter">1 / 12</span>
+    <button class="ctrl-btn" id="btnNext" type="button">Siguiente →</button>
+    <button class="ctrl-btn" id="btnFs" type="button" title="Pantalla completa (F)">⛶ Pantalla</button>
+  </div>
+
+  <script>
+    (function initDeck() {
+      const stage = document.getElementById('slideStage');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const counter = document.getElementById('slideCounter');
+      const params = new URLSearchParams(window.location.search);
+      const isExport = params.get('export') === '1';
+
+      if (isExport) {
+        document.body.classList.add('export-mode');
+      }
+
+      let current = 0;
+      const requested = parseInt(params.get('slide') || '1', 10);
+      if (!Number.isNaN(requested) && requested >= 1 && requested <= slides.length) {
+        current = requested - 1;
+      }
+
+      function fitStage() {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const scale = Math.min(vw / 1280, vh / 720);
+        stage.style.transform = `scale(${scale})`;
+      }
+
+      function showSlide(index) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+        if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+        if (!isExport) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('slide', String(current + 1));
+          window.history.replaceState(null, '', url.toString());
+        }
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch(() => {});
+        } else {
+          document.exitFullscreen?.().catch(() => {});
+        }
+      }
+
+      document.getElementById('btnPrev')?.addEventListener('click', () => showSlide(current - 1));
+      document.getElementById('btnNext')?.addEventListener('click', () => showSlide(current + 1));
+      document.getElementById('btnFs')?.addEventListener('click', toggleFullscreen);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          showSlide(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          showSlide(current - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          showSlide(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          showSlide(slides.length - 1);
+        } else if (e.key === 'f' || e.key === 'F') {
+          toggleFullscreen();
+        }
+      });
+
+      window.addEventListener('resize', fitStage);
+      fitStage();
+      showSlide(current);
+    })();
+  </script>
+</body>
+</html>
