@@ -1,5 +1,7 @@
+es
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <!-- Favicon e iconos de aplicacion -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -21,7 +23,9 @@
       --text-scale: 1;
     }
 
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -32,7 +36,8 @@
       font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', 'Trebuchet MS', sans-serif;
     }
 
-    html, body {
+    html,
+    body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
@@ -47,6 +52,7 @@
       color: #dc2626 !important;
       font-weight: 900;
     }
+
     .bicolor-punct {
       color: #2563eb !important;
       font-weight: 900;
@@ -102,8 +108,17 @@
       white-space: nowrap;
     }
 
-    .stat-pill.achieved { color: #047857; border-color: #6ee7b7; background: #ecfdf5; }
-    .stat-pill.remaining { color: #b45309; border-color: #fcd34d; background: #fffbeb; }
+    .stat-pill.achieved {
+      color: #047857;
+      border-color: #6ee7b7;
+      background: #ecfdf5;
+    }
+
+    .stat-pill.remaining {
+      color: #b45309;
+      border-color: #fcd34d;
+      background: #fffbeb;
+    }
 
     .tool-btn {
       border: 2px solid #cbd5e1;
@@ -115,7 +130,10 @@
       border-radius: 0.45rem;
       cursor: pointer;
     }
-    .tool-btn:hover { background: #f1f5f9; }
+
+    .tool-btn:hover {
+      background: #f1f5f9;
+    }
 
     /* Fila de 8 Pestañas de Niveles Progresivos */
     .level-tabs {
@@ -272,8 +290,15 @@
     }
 
     @keyframes popBadge {
-      0% { transform: scale(0.4); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .audio-controls-col {
@@ -299,8 +324,14 @@
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .main-speaker-btn:hover { transform: translateY(-2px) scale(1.04); }
-    .main-speaker-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #312e81; }
+    .main-speaker-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+    }
+
+    .main-speaker-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #312e81;
+    }
 
     .speaker-label {
       font-size: calc(0.88rem * var(--text-scale));
@@ -326,7 +357,11 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .audio-hint-btn:hover { background: #e2e8f0; border-color: #64748b; }
+
+    .audio-hint-btn:hover {
+      background: #e2e8f0;
+      border-color: #64748b;
+    }
 
     /* Zona de Ranuras de Sílabas o Palabras (Nivel 8) */
     .slots-area-box {
@@ -414,6 +449,7 @@
     .syllable-slot.filled .slot-num {
       color: rgba(255, 255, 255, 0.82);
     }
+
     .syllable-slot.filled.word-slot .slot-num {
       color: #64748b;
     }
@@ -435,12 +471,17 @@
       font-weight: 900;
       padding: 0 0.4rem;
       white-space: nowrap;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
     }
 
     @keyframes pulseOrtho {
-      from { transform: scale(1); }
-      to { transform: scale(1.08); }
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.08);
+      }
     }
 
     /* Botones de Acción y Retroalimentación */
@@ -478,7 +519,10 @@
       border: 2px solid #047857;
       box-shadow: 0 4px 0 #047857;
     }
-    .btn-check:hover { background: #059669; }
+
+    .btn-check:hover {
+      background: #059669;
+    }
 
     .btn-clear {
       background: #fee2e2;
@@ -486,7 +530,10 @@
       border: 2px solid #f87171;
       box-shadow: 0 4px 0 #ef4444;
     }
-    .btn-clear:hover { background: #fecaca; }
+
+    .btn-clear:hover {
+      background: #fecaca;
+    }
 
     .btn-next-now {
       background: #e2e8f0;
@@ -495,6 +542,7 @@
       box-shadow: 0 4px 0 #64748b;
       display: inline-flex;
     }
+
     .btn-next-now.ready-next {
       background: #f59e0b;
       color: #ffffff;
@@ -502,9 +550,17 @@
       box-shadow: 0 4px 0 #b45309;
       animation: pulseNextBtn 1.5s infinite;
     }
+
     @keyframes pulseNextBtn {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.04);
+      }
     }
 
     .btn-prev {
@@ -513,7 +569,10 @@
       border: 2px solid #38bdf8;
       box-shadow: 0 4px 0 #0284c7;
     }
-    .btn-prev:hover:not(:disabled) { background: #bae6fd; }
+
+    .btn-prev:hover:not(:disabled) {
+      background: #bae6fd;
+    }
 
     .action-btn:disabled {
       opacity: 0.45;
@@ -533,9 +592,24 @@
       border-radius: 10px;
       line-height: 1.25;
     }
-    .feedback-success { color: #065f46; background: #d1fae5; border: 2px solid #34d399; }
-    .feedback-ortho { color: #92400e; background: #fef3c7; border: 2px solid #f59e0b; }
-    .feedback-error { color: #991b1b; background: #fee2e2; border: 2px solid #f87171; }
+
+    .feedback-success {
+      color: #065f46;
+      background: #d1fae5;
+      border: 2px solid #34d399;
+    }
+
+    .feedback-ortho {
+      color: #92400e;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+    }
+
+    .feedback-error {
+      color: #991b1b;
+      background: #fee2e2;
+      border: 2px solid #f87171;
+    }
 
     /* Columna Derecha: Banco de Sílabas / Palabras */
     .syllables-bank-card {
@@ -609,15 +683,18 @@
       letter-spacing: 0;
       line-height: 1.15;
     }
+
     .fam-upper {
       color: #dc2626;
       font-weight: 900;
       font-size: 1.08em;
     }
+
     .fam-sep {
       color: #94a3b8;
       font-weight: 800;
     }
+
     .fam-lower {
       color: #0f172a;
       font-weight: 900;
@@ -673,8 +750,15 @@
       touch-action: none;
     }
 
-    .syllable-card:hover { transform: translateY(-2px) scale(1.03); }
-    .syllable-card:active { cursor: grabbing; transform: translateY(2px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.22); }
+    .syllable-card:hover {
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .syllable-card:active {
+      cursor: grabbing;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
+    }
 
     /* Tarjetas de Palabras para el Nivel 8 (Oraciones con Mayúsculas en Rojo) */
     .words-bank-grid {
@@ -700,7 +784,11 @@
       touch-action: none;
       transition: transform 0.12s ease;
     }
-    .word-bank-card:hover { transform: translateY(-2px) scale(1.04); background: #eff6ff; }
+
+    .word-bank-card:hover {
+      transform: translateY(-2px) scale(1.04);
+      background: #eff6ff;
+    }
 
     /* Clon flotante durante arrastre Pointer Events (Linux / Touch / Mouse) */
     .drag-ghost {
@@ -750,9 +838,22 @@
       gap: 0.7rem;
     }
 
-    .win-modal img { width: 115px; height: 115px; object-fit: contain; }
-    .win-modal h2 { font-size: 1.9rem; color: #1e1b4b; }
-    .win-modal p { font-size: 1.1rem; color: #475569; font-weight: 700; }
+    .win-modal img {
+      width: 115px;
+      height: 115px;
+      object-fit: contain;
+    }
+
+    .win-modal h2 {
+      font-size: 1.9rem;
+      color: #1e1b4b;
+    }
+
+    .win-modal p {
+      font-size: 1.1rem;
+      color: #475569;
+      font-weight: 700;
+    }
 
     .celebrate-btn {
       background: #4f46e5;
@@ -767,11 +868,21 @@
     }
 
     @media (max-width: 860px) {
-      html, body { overflow-y: auto; height: auto; min-height: 100vh; }
-      .game-layout { grid-template-columns: 1fr; }
+
+      html,
+      body {
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Barra Superior con los 8 Niveles Graduales -->
@@ -826,8 +937,10 @@
           <button class="main-speaker-btn" title="Toca para escuchar" onclick="speakTargetWord()">🔊</button>
           <div class="speaker-label" id="speakerLabel">¡Escucha y observa el dibujo!</div>
           <div class="hint-btns-row">
-            <button class="audio-hint-btn" id="btnSyllableAudio" onclick="speakTargetSyllables()">🗣️ Escuchar por sílabas</button>
-            <button class="audio-hint-btn" onclick="skipToNextWord()" title="Pasar este reto al final de la fila">🎲 Otro reto</button>
+            <button class="audio-hint-btn" id="btnSyllableAudio" onclick="speakTargetSyllables()">🗣️ Escuchar por
+              sílabas</button>
+            <button class="audio-hint-btn" onclick="skipToNextWord()" title="Pasar este reto al final de la fila">🎲
+              Otro reto</button>
           </div>
         </div>
       </div>
@@ -869,7 +982,8 @@
       <p id="winModalText">¡Completaste todos los retos de este nivel en orden aleatorio!</p>
       <div style="display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;">
         <button class="celebrate-btn" onclick="restartCurrentLevel()">🔄 Repetir Nivel</button>
-        <button class="celebrate-btn" style="background:#059669; border-color:#065f46; box-shadow:0 4px 0 #065f46;" onclick="advanceToNextLevel()">🚀 Siguiente Nivel</button>
+        <button class="celebrate-btn" style="background:#059669; border-color:#065f46; box-shadow:0 4px 0 #065f46;"
+          onclick="advanceToNextLevel()">🚀 Siguiente Nivel</button>
       </div>
     </div>
   </div>
@@ -878,15 +992,15 @@
     /* =========================================================================
        BLOQUEO GLOBAL DE MENÚ CONTEXTUAL Y GESTOS PARÁSITOS (LONG-PRESS / TOUCH)
        ========================================================================= */
-    window.addEventListener('contextmenu', function(e) {
+    window.addEventListener('contextmenu', function (e) {
       e.preventDefault();
       return false;
     }, { capture: true, passive: false });
-    document.addEventListener('contextmenu', function(e) {
+    document.addEventListener('contextmenu', function (e) {
       e.preventDefault();
       return false;
     }, { capture: true, passive: false });
-    document.oncontextmenu = function() { return false; };
+    document.oncontextmenu = function () { return false; };
 
     /* =========================================================================
        FAMILIAS SILÁBICAS DIRECTAS, INVERSAS, DIPTONGOS Y TRABADAS
@@ -1315,8 +1429,8 @@
       if ('speechSynthesis' in window) {
         const voices = window.speechSynthesis.getVoices();
         spanishVoice = voices.find(v => v.lang === 'es-MX') ||
-                       voices.find(v => v.lang.startsWith('es-')) ||
-                       voices.find(v => v.lang.includes('es'));
+          voices.find(v => v.lang.startsWith('es-')) ||
+          voices.find(v => v.lang.includes('es'));
       }
     }
     if ('speechSynthesis' in window) {
@@ -1363,27 +1477,27 @@
               osc.connect(gain); gain.connect(ctx.destination);
               osc.start(now); osc.stop(now + 0.26);
             }
-          } catch (e) {}
+          } catch (e) { }
         };
-        if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
+        if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => { });
         else emit();
-      } catch (e) {}
+      } catch (e) { }
     }
 
-        let currentTtsAudio = null;
-        function speakText(text, rate = 0.85, onEndCallback = null) {
+    let currentTtsAudio = null;
+    function speakText(text, rate = 0.85, onEndCallback = null) {
       // 1. Detener inmediatamente cualquier audio previo y cancelar síntesis activa
       if (currentTtsAudio) {
         try {
           currentTtsAudio.pause();
           currentTtsAudio.src = '';
-        } catch(e) {}
+        } catch (e) { }
         currentTtsAudio = null;
       }
       if ('speechSynthesis' in window) {
         try {
           window.speechSynthesis.cancel();
-        } catch(e) {}
+        } catch (e) { }
       }
 
       if (!text) {
@@ -1415,8 +1529,8 @@
         if (!spanishVoice) {
           const voices = window.speechSynthesis.getVoices();
           spanishVoice = voices.find(v => v.lang === 'es-MX') ||
-                         voices.find(v => v.lang && v.lang.startsWith('es-')) ||
-                         voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+            voices.find(v => v.lang && v.lang.startsWith('es-')) ||
+            voices.find(v => v.lang && v.lang.startsWith('es')) || null;
         }
         utter.lang = spanishVoice ? spanishVoice.lang : 'es-MX';
         if (spanishVoice) utter.voice = spanishVoice;
@@ -1424,7 +1538,7 @@
         utter.onend = doCallback;
         utter.onerror = doCallback;
         window.speechSynthesis.speak(utter);
-      } catch(e) {
+      } catch (e) {
         doCallback();
       }
     }
@@ -1454,7 +1568,7 @@
         };
         audio.onerror = () => { clearTimeout(timeoutId); fallback(); };
         audio.play().catch(() => { clearTimeout(timeoutId); fallback(); });
-      } catch(err) {
+      } catch (err) {
         speakWithDeviceVoice(cleanText, rate, doCallback);
       }
     }
@@ -1850,14 +1964,14 @@
        ========================================================================= */
     if (!window.cleanupAllDragGhosts) {
       window.__activeDrag = null;
-      window.cleanupAllDragGhosts = function() {
+      window.cleanupAllDragGhosts = function () {
         if (window.__activeDrag && typeof window.__activeDrag.cancel === 'function') {
           const prev = window.__activeDrag;
           window.__activeDrag = null;
-          try { prev.cancel(); } catch (_) {}
+          try { prev.cancel(); } catch (_) { }
         }
         document.querySelectorAll('[data-drag-ghost="1"], .drag-ghost, .dragging-ghost, #active-drag-ghost').forEach(el => {
-          try { el.remove(); } catch (_) {}
+          try { el.remove(); } catch (_) { }
         });
         document.querySelectorAll('.syllable-slot.drag-over, .drag-over, .hovered, .dragging').forEach(s => {
           s.classList.remove('drag-over', 'hovered', 'dragging');
@@ -1885,7 +1999,7 @@
         startY = e.clientY;
         isDragging = false;
         activePointerId = e.pointerId;
-        try { cardEl.setPointerCapture(e.pointerId); } catch (_) {}
+        try { cardEl.setPointerCapture(e.pointerId); } catch (_) { }
 
         const cleanup = () => {
           window.removeEventListener('pointermove', onMove);
@@ -1895,7 +2009,7 @@
           const pid = activePointerId;
           activePointerId = null;
           if (pid !== null) {
-            try { cardEl.releasePointerCapture(pid); } catch (_) {}
+            try { cardEl.releasePointerCapture(pid); } catch (_) { }
           }
           document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
           if (ghost) {
@@ -1984,7 +2098,7 @@
         startY = e.clientY;
         isDragging = false;
         activePointerId = e.pointerId;
-        try { cardEl.setPointerCapture(e.pointerId); } catch (_) {}
+        try { cardEl.setPointerCapture(e.pointerId); } catch (_) { }
 
         const cleanup = () => {
           window.removeEventListener('pointermove', onMove);
@@ -1994,7 +2108,7 @@
           const pid = activePointerId;
           activePointerId = null;
           if (pid !== null) {
-            try { cardEl.releasePointerCapture(pid); } catch (_) {}
+            try { cardEl.releasePointerCapture(pid); } catch (_) { }
           }
           document.querySelectorAll('.syllable-slot').forEach(s => s.classList.remove('drag-over'));
           if (ghost) {
@@ -2389,7 +2503,7 @@
       document.addEventListener('pointerdown', () => {
         if (isMutedSafe()) return;
         const c = getCtxSafe();
-        if (c && c.state === 'suspended') c.resume().catch(() => {});
+        if (c && c.state === 'suspended') c.resume().catch(() => { });
       }, { capture: true, passive: true });
       document.addEventListener('click', (e) => {
         const ctrl = e.target && e.target.closest ? e.target.closest(sel) : null;
@@ -2397,7 +2511,7 @@
         const beforeTs = window.__lastGameAudioTs || 0;
         if (!isMutedSafe()) {
           const c = getCtxSafe();
-          if (c && c.state === 'suspended') c.resume().catch(() => {});
+          if (c && c.state === 'suspended') c.resume().catch(() => { });
         }
         queueMicrotask(() => {
           if (isMutedSafe()) return;
@@ -2420,13 +2534,14 @@
               gain.connect(c.destination);
               osc.start(now);
               osc.stop(now + 0.065);
-            } catch (err) {}
+            } catch (err) { }
           };
-          if (c.state === 'suspended') c.resume().then(emit).catch(() => {});
+          if (c.state === 'suspended') c.resume().then(emit).catch(() => { });
           else emit();
         });
       }, { capture: true });
     })();
   </script>
 </body>
+
 </html>
