@@ -1459,32 +1459,50 @@
       }
     }
 
+    function accentSpanishSyllable(clean) {
+      if (!clean) return '';
+      const map = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
+      // Proteger qu/gu antes de e/i para no acentuar la u muda
+      let s = clean
+        .replace(/qu([ei])/g, '__QU__$1')
+        .replace(/gu([ei])/g, '__GU__$1');
+
+      if (/[aeo]/.test(s)) {
+        s = s.replace(/([aeo])/, (m) => map[m]);
+      } else if (/[iu]/.test(s)) {
+        s = s.replace(/([iu])([^iu]*)$/, (m, v, rest) => map[v] + rest);
+      }
+
+      return s.replace(/__QU__/g, 'qu').replace(/__GU__/g, 'gu');
+    }
+
     function getPhoneticReading(syl) {
       if (!syl) return '';
-      // Normalizar quitando cualquier tilde (conservando ñ y diéresis para güe/güi) para evitar que el TTS deletree acentos o hable inglés
+      // Normalizar en minúsculas conservando ñ y diéresis (güe/güi)
       let clean = String(syl).normalize("NFC").toLowerCase().trim()
         .replace(/ñ/g, '__ENIE__')
         .replace(/ü/g, '__UDIER__')
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         .replace(/__ENIE__/g, 'ñ')
         .replace(/__UDIER__/g, 'ü');
+      // Ajustar grafías homófonas al sonido español de México
       clean = clean
         .replace(/^ll/, 'y')
         .replace(/^rr/, 'r')
         .replace(/^h/, '')
+        .replace(/^v/, 'b')
         .replace(/^z/, 's')
         .replace(/^c([ei])/, 's$1')
         .replace(/^g([ei])/, 'j$1')
-        .replace(/^gü([ei])/, 'gw$1')
-        .replace(/ü/g, 'u')
         .replace(/^k([aou])/, 'c$1')
         .replace(/^k([ei])/, 'qu$1')
         .replace(/^k/, 'c');
-      return clean;
+      // Acentuar la vocal tónica de la sílaba aislada para evitar que Google TTS la deletree ("cu" -> "c, u") o la lea en inglés ("be" -> "bi", "in", "man", "cia")
+      return accentSpanishSyllable(clean);
     }
 
-    function speakSyllable(syl) {
-      speakText(getPhoneticReading(syl), 0.86);
+    function speakSyllable(syl, onEndCallback = null) {
+      speakText(getPhoneticReading(syl), 0.86, onEndCallback);
     }
 
     function getCurrentWordObj() {
@@ -2058,7 +2076,22 @@
 
       const allFilled = currentSlots.every(s => s !== null);
       if (allFilled) {
-        setTimeout(checkWord, 250);
+        const expectedWordIdx = currentWordIdx;
+        const expectedLevel = currentLevel;
+        let checkFired = false;
+        const triggerCheck = () => {
+          if (checkFired) return;
+          checkFired = true;
+          if (currentWordIdx !== expectedWordIdx || currentLevel !== expectedLevel) return;
+          if (currentSlots.every(s => s !== null) && !isTransitioning && !getCurrentWordState()?.completed) {
+            checkWord();
+          }
+        };
+        // Pronunciar primero la última sílaba completa y después validar y decir toda la palabra
+        speakSyllable(syllable, () => {
+          setTimeout(triggerCheck, 180);
+        });
+        setTimeout(triggerCheck, 1500);
       } else {
         speakSyllable(syllable);
       }
@@ -2085,7 +2118,21 @@
 
       const allFilled = currentSlots.every(s => s !== null);
       if (allFilled) {
-        setTimeout(checkWord, 250);
+        const expectedWordIdx = currentWordIdx;
+        const expectedLevel = currentLevel;
+        let checkFired = false;
+        const triggerCheck = () => {
+          if (checkFired) return;
+          checkFired = true;
+          if (currentWordIdx !== expectedWordIdx || currentLevel !== expectedLevel) return;
+          if (currentSlots.every(s => s !== null) && !isTransitioning && !getCurrentWordState()?.completed) {
+            checkWord();
+          }
+        };
+        speakText(wordText.replace('.', ''), 0.9, () => {
+          setTimeout(triggerCheck, 180);
+        });
+        setTimeout(triggerCheck, 1600);
       } else {
         speakText(wordText.replace('.', ''), 0.9);
       }

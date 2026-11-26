@@ -46,19 +46,19 @@
       background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
       color: #f8fafc;
       min-height: 100vh;
-      padding: 1.5rem 1rem 3rem 1rem;
+      padding: 0.75rem 1rem 1.5rem 1rem;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1360px;
       margin: 0 auto;
     }
 
-    /* HEADER */
+    /* HEADER COMPACTO CON FONDO ESCOLAR */
     header {
       text-align: center;
-      margin-bottom: 2rem;
-      padding: 1.85rem 1.25rem;
+      margin-bottom: 0.9rem;
+      padding: 1.05rem 1.25rem;
       background: #0f172a;
       border: 1.5px solid rgba(147, 197, 253, 0.28);
       border-radius: var(--radius-xl);
@@ -91,139 +91,33 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.5) 56%, rgba(15, 23, 42, 0.35) 100%);
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.84) 0%, rgba(15, 23, 42, 0.52) 56%, rgba(15, 23, 42, 0.36) 100%);
     }
 
     .header-content {
       position: relative;
       z-index: 2;
-      padding: 0 9.5rem;
+      padding: 0 7.5rem;
     }
 
-    /* MENÚ DESPLEGABLE DE RECURSOS DE APOYO EN ESQUINA */
-    .corner-support-menu {
+    /* CONTROL GLOBAL DE SONIDO EN LA ESQUINA DEL HEADER (FUERA DE LA BARRA DE SECCIONES) */
+    .header-sound-corner {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
-      z-index: 60;
-      text-align: left;
-    }
-
-    .btn-support-corner {
-      font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 0.5rem 0.95rem;
-      border-radius: 9999px;
-      border: 1.5px solid rgba(251, 191, 36, 0.55);
-      background: rgba(15, 23, 42, 0.88);
-      color: #fde68a;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-      transition: all 0.2s ease;
-    }
-
-    .btn-support-corner:hover,
-    .btn-support-corner.open {
-      background: #f59e0b;
-      border-color: #fef08a;
-      color: #0f172a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
-    }
-
-    .support-dropdown-panel {
-      position: absolute;
-      top: calc(100% + 0.55rem);
-      right: 0;
-      width: 335px;
-      background: #1e293b;
-      border: 2px solid rgba(251, 191, 36, 0.5);
-      border-radius: 1rem;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
-      padding: 0.75rem;
-      display: none;
-      flex-direction: column;
-      gap: 0.5rem;
-      animation: fadeIn 0.18s ease;
-    }
-
-    .support-dropdown-panel.open {
-      display: flex;
-    }
-
-    .support-dropdown-header {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #fde68a;
-      padding: 0.2rem 0.4rem 0.45rem 0.4rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .support-item-link {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-      padding: 0.65rem 0.75rem;
-      border-radius: 0.75rem;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      text-decoration: none;
-      color: #f8fafc;
-      transition: all 0.18s ease;
-    }
-
-    .support-item-link:hover {
-      background: rgba(37, 99, 235, 0.25);
-      border-color: #60a5fa;
-      transform: translateX(-2px);
-    }
-
-    .support-item-icon {
-      font-size: 1.55rem;
-      line-height: 1;
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    .support-item-title {
-      font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 0.15rem;
-    }
-
-    .support-item-desc {
-      font-size: 0.75rem;
-      color: #cbd5e1;
-      line-height: 1.35;
-    }
-
-    .support-dropdown-footer {
-      font-size: 0.68rem;
-      color: #94a3b8;
-      text-align: center;
-      padding-top: 0.3rem;
-      border-top: 1px dashed rgba(255, 255, 255, 0.1);
-      font-style: italic;
+      top: 0.85rem;
+      right: 0.9rem;
+      z-index: 50;
     }
 
     .school-badge {
       display: inline-block;
-      background: rgba(15, 23, 42, 0.82);
+      background: rgba(15, 23, 42, 0.84);
       border: 1.5px solid rgba(96, 165, 250, 0.55);
       color: #dbeafe;
-      font-size: 0.86rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      padding: 0.38rem 0.95rem;
+      padding: 0.28rem 0.85rem;
       border-radius: 9999px;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.5rem;
       letter-spacing: 0.02em;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(4px);
@@ -231,28 +125,172 @@
 
     h1 {
       font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 2.35rem;
+      font-size: 1.95rem;
       font-weight: 700;
       color: #ffffff;
-      line-height: 1.18;
+      line-height: 1.15;
       margin-bottom: 0;
       text-shadow: 0 3px 16px rgba(15, 23, 42, 0.95), 0 1px 4px rgba(0, 0, 0, 0.85);
     }
 
-    .subtitle {
-      color: #94a3b8;
-      font-size: 1rem;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    /* NAV FILTER TABS */
+    /* NAV FILTER TABS CON DESPLEGABLES DE PROYECTOS Y RECURSOS DE APOYO */
     .filter-tabs {
       display: flex;
       justify-content: center;
-      gap: 0.75rem;
+      align-items: center;
+      gap: 0.7rem;
       flex-wrap: wrap;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 55;
+    }
+
+    .nav-dropdown-wrap {
+      position: relative;
+    }
+
+    .nav-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 0.45rem);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 345px;
+      background: #1e293b;
+      border: 2px solid rgba(96, 165, 250, 0.55);
+      border-radius: 1rem;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6);
+      padding: 0.65rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.45rem;
+      z-index: 90;
+      animation: fadeIn 0.16s ease;
+      text-align: left;
+    }
+
+    .nav-dropdown-panel.support-panel {
+      border-color: rgba(251, 191, 36, 0.6);
+      width: 360px;
+    }
+
+    .nav-dropdown-panel.open {
+      display: flex;
+    }
+
+    .dropdown-header-lbl {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+      padding: 0.15rem 0.4rem 0.4rem 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .support-panel .dropdown-header-lbl {
+      color: #fde68a;
+    }
+
+    .proj-option-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.75rem;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.16s ease;
+    }
+
+    .proj-option-btn:hover,
+    .proj-option-btn.selected {
+      background: rgba(37, 99, 235, 0.3);
+      border-color: #60a5fa;
+    }
+
+    .proj-opt-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .proj-opt-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .proj-opt-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .support-item-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.62rem 0.72rem;
+      border-radius: 0.75rem;
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-decoration: none;
+      color: #f8fafc;
+      transition: all 0.18s ease;
+    }
+
+    .support-item-link:hover {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: #fbbf24;
+      transform: translateX(2px);
+    }
+
+    .support-item-icon {
+      font-size: 1.45rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .support-item-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.12rem;
+    }
+
+    .support-item-desc {
+      font-size: 0.73rem;
+      color: #cbd5e1;
+      line-height: 1.32;
+    }
+
+    .support-dropdown-footer {
+      font-size: 0.68rem;
+      color: #94a3b8;
+      text-align: center;
+      padding-top: 0.25rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      font-style: italic;
+    }
+
+    .tab-btn.btn-support-tab {
+      border-color: rgba(251, 191, 36, 0.55);
+      background: rgba(245, 158, 11, 0.14);
+      color: #fde68a;
+    }
+
+    .tab-btn.btn-support-tab:hover,
+    .tab-btn.btn-support-tab.open {
+      background: #f59e0b;
+      border-color: #fef08a;
+      color: #0f172a;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.45);
     }
 
     .tab-btn {
@@ -285,28 +323,30 @@
 
     .portal-sound-btn {
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      padding: 0.7rem 1.15rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.38rem 0.8rem;
       border-radius: 9999px;
-      border: 1px solid rgba(16, 185, 129, 0.45);
-      background: rgba(16, 185, 129, 0.15);
+      border: 1.5px solid rgba(52, 211, 153, 0.55);
+      background: rgba(15, 23, 42, 0.85);
       color: #a7f3d0;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.35rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     }
 
     .portal-sound-btn:hover {
-      background: rgba(16, 185, 129, 0.28);
-      transform: translateY(-2px);
+      background: rgba(16, 185, 129, 0.3);
+      transform: translateY(-1px);
     }
 
     .portal-sound-btn.muted {
-      border-color: rgba(148, 163, 184, 0.35);
-      background: rgba(51, 65, 85, 0.7);
+      border-color: rgba(148, 163, 184, 0.45);
+      background: rgba(30, 41, 59, 0.85);
       color: #94a3b8;
     }
 
@@ -314,20 +354,20 @@
     .section-title-wrap {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.6rem;
+      gap: 0.65rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
       border-bottom: 2px solid rgba(255, 255, 255, 0.1);
       flex-wrap: wrap;
     }
 
     .section-icon {
-      font-size: 1.6rem;
+      font-size: 1.35rem;
     }
 
     .section-title {
       font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: #ffffff;
     }
@@ -808,86 +848,101 @@
       flex-shrink: 0;
     }
 
-    /* GRID DE JUEGOS */
+    /* GRID DE JUEGOS COMPACTO (4×2 EN UNA SOLA VISTA SIN SCROLL EXCESIVO) */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 1.35rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
     }
 
-    /* GAME CARDS */
+    /* GAME CARDS COMPACTAS */
     .game-card {
       background: var(--bg-card);
       color: var(--text-dark);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
-      border: 3px solid transparent;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+      border: 2.5px solid transparent;
       text-decoration: none;
     }
 
     .game-card:hover, .game-card:focus-visible {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
       border-color: #60a5fa;
     }
 
     .game-card.permanent-card {
-      border-top: 5px solid var(--accent);
+      border-top: 4px solid var(--accent);
       background: linear-gradient(to bottom, #ffffff 0%, #fffbeb 100%);
     }
 
     .game-card.project4-card {
-      border-top: 5px solid var(--purple);
+      border-top: 4px solid var(--purple);
     }
 
     .game-card.project3-card {
-      border-top: 5px solid var(--primary);
+      border-top: 4px solid var(--primary);
     }
 
     .game-card.project2-card {
-      border-top: 5px solid var(--emerald);
+      border-top: 4px solid var(--emerald);
     }
 
     .card-top {
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .card-head-inline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      margin-bottom: 0.45rem;
     }
 
     .card-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
-      display: inline-block;
+      font-size: 1.85rem;
+      line-height: 1;
+      margin-bottom: 0;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
     }
 
     .card-title {
       font-family: 'Fredoka', 'Lexend', sans-serif;
-      font-size: 1.25rem;
+      font-size: 1.08rem;
       font-weight: 700;
       color: #0f172a;
-      line-height: 1.3;
-      margin-bottom: 0.5rem;
+      line-height: 1.22;
+      margin-bottom: 0.3rem;
     }
 
     .card-desc {
-      font-size: 0.88rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.34;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card-badge {
       display: inline-block;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 0.5rem;
-      margin-bottom: 0.65rem;
+      padding: 0.16rem 0.5rem;
+      border-radius: 0.45rem;
+      margin-bottom: 0;
       background: #e2e8f0;
       color: #475569;
     }
@@ -909,7 +964,7 @@
 
     .card-action {
       margin-top: auto;
-      padding-top: 0.85rem;
+      padding-top: 0.55rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -922,15 +977,15 @@
       background: var(--primary);
       color: #ffffff;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
+      font-size: 0.88rem;
       font-weight: 600;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-lg);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem;
       transition: background 0.2s ease, transform 0.1s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .game-card:hover .action-btn {
@@ -949,11 +1004,11 @@
     /* FOOTER */
     footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1rem 1rem;
       color: #64748b;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      margin-top: 2rem;
+      margin-top: 0.75rem;
     }
 
     @keyframes fadeIn {
@@ -961,17 +1016,21 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 1060px) {
+      .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 860px) {
       .header-content { padding: 0; }
-      .corner-support-menu { position: static; display: flex; justify-content: center; margin-top: 0.95rem; }
-      .support-dropdown-panel { right: auto; left: 50%; transform: translateX(-50%); width: min(92vw, 350px); }
+      .header-sound-corner { position: static; display: flex; justify-content: center; margin-top: 0.65rem; }
     }
 
     @media (max-width: 640px) {
-      h1 { font-size: 1.7rem; }
+      h1 { font-size: 1.55rem; }
       .games-grid { grid-template-columns: 1fr; }
       .filter-tabs { gap: 0.5rem; }
-      .tab-btn { font-size: 0.88rem; padding: 0.6rem 1rem; }
+      .tab-btn { font-size: 0.88rem; padding: 0.55rem 0.95rem; }
+      .nav-dropdown-panel, .nav-dropdown-panel.support-panel { width: min(92vw, 345px); }
       .project-header-actions { width: 100%; margin-left: 0; }
       .btn-yt-toggle, .btn-repaso-toggle { flex: 1; justify-content: center; margin-left: 0; }
     }
@@ -988,19 +1047,68 @@
         <h1>Portal de Juegos y Recursos Interactivos</h1>
       </div>
 
-      <!-- MENÚ DESPLEGABLE EN ESQUINA: RECURSOS DE APOYO DOCENTE -->
-      <div class="corner-support-menu" id="cornerSupportMenu">
-        <button type="button" class="btn-support-corner" id="btnSupportCorner" onclick="toggleSupportCornerMenu(event)" aria-expanded="false" title="Abrir menú de recursos de apoyo docente">
-          <span>🧰 Recursos de Apoyo</span>
-          <span id="supportCornerArrow">▾</span>
+      <!-- SONIDO GLOBAL EN LA ESQUINA DEL ENCABEZADO (SEPARADO DE LAS SECCIONES) -->
+      <div class="header-sound-corner">
+        <button type="button" class="portal-sound-btn" id="btnPortalSound" onclick="togglePortalSound()" aria-pressed="true" title="Activar o silenciar sonidos del portal">🔊 Sonido: ON</button>
+      </div>
+    </header>
+
+    <!-- FILTER TABS: JUEGOS PERMANENTES · PROYECTOS (DESPLEGABLE) · RECURSOS DE APOYO (DESPLEGABLE) -->
+    <nav class="filter-tabs" aria-label="Navegación principal del portal">
+      <button type="button" class="tab-btn active" id="tabPermanentes" onclick="selectMainView('permanentes')">⭐ Juegos Permanentes</button>
+
+      <!-- MENÚ DESPLEGABLE ESCALABLE DE PROYECTOS MENSUALES -->
+      <div class="nav-dropdown-wrap" id="projectsMenuWrap">
+        <button type="button" class="tab-btn" id="btnProjectsDropdown" onclick="toggleNavDropdown('projects', event)" aria-expanded="false">
+          <span id="btnProjectsLabel">📁 Proyectos</span>
+          <span id="projectsArrow">▾</span>
         </button>
-        <div class="support-dropdown-panel" id="supportDropdownPanel" role="menu">
-          <div class="support-dropdown-header">🛠️ Herramientas y Recursos de Apoyo</div>
+        <div class="nav-dropdown-panel" id="projectsDropdownPanel" role="menu">
+          <div class="dropdown-header-lbl">📁 Elegir Proyecto Mensual</div>
+          <button type="button" class="proj-option-btn" onclick="selectProjectFromMenu('proyecto-4', '🪅 Proyecto 4')">
+            <span class="proj-opt-icon">🪅</span>
+            <div>
+              <div class="proj-opt-title">Proyecto 4 · Diciembre</div>
+              <div class="proj-opt-sub">Juguetes, Piñatas y Tradiciones</div>
+            </div>
+          </button>
+          <button type="button" class="proj-option-btn" onclick="selectProjectFromMenu('proyecto-3', '❄️ Proyecto 3')">
+            <span class="proj-opt-icon">❄️</span>
+            <div>
+              <div class="proj-opt-title">Proyecto 3 · Noviembre</div>
+              <div class="proj-opt-sub">Salud y Cuerpo Humano</div>
+            </div>
+          </button>
+          <button type="button" class="proj-option-btn" onclick="selectProjectFromMenu('proyecto-2', '🇲🇽 Proyecto 2')">
+            <span class="proj-opt-icon">🇲🇽</span>
+            <div>
+              <div class="proj-opt-title">Proyecto 2 · Octubre</div>
+              <div class="proj-opt-sub">Tradiciones y Comunidad</div>
+            </div>
+          </button>
+          <button type="button" class="proj-option-btn" onclick="selectProjectFromMenu('proyectos-todos', '📚 Todos los Proyectos')">
+            <span class="proj-opt-icon">📚</span>
+            <div>
+              <div class="proj-opt-title">Ver Todos los Proyectos</div>
+              <div class="proj-opt-sub">Desplegar todos los proyectos del ciclo escolar</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- MENÚ DESPLEGABLE DE RECURSOS DE APOYO DOCENTE -->
+      <div class="nav-dropdown-wrap" id="supportMenuWrap">
+        <button type="button" class="tab-btn btn-support-tab" id="btnSupportDropdown" onclick="toggleNavDropdown('support', event)" aria-expanded="false">
+          <span>🧰 Recursos de Apoyo</span>
+          <span id="supportArrow">▾</span>
+        </button>
+        <div class="nav-dropdown-panel support-panel" id="supportDropdownPanel" role="menu">
+          <div class="dropdown-header-lbl">🛠️ Herramientas y Recursos de Apoyo</div>
           <a class="support-item-link" href="permanentes/recursos_apoyo/loteria_tablas/index.html" role="menuitem">
             <span class="support-item-icon">🎲</span>
             <div>
               <div class="support-item-title">Lotería de Tablas de Multiplicar</div>
-              <div class="support-item-desc">Cantador gigante con voz IA, respuesta al 25% de volumen (4.5s), verificador e impresión 2 por hoja Carta.</div>
+              <div class="support-item-desc">Cantador gigante con voz IA, respuesta al 25% (4.5s), verificador e impresión 2 por hoja Carta.</div>
             </div>
           </a>
           <a class="support-item-link" href="permanentes/recursos_apoyo/loteria_calculo_mental_sisat/index.html" role="menuitem">
@@ -1014,40 +1122,32 @@
             <span class="support-item-icon">⏱️</span>
             <div>
               <div class="support-item-title">Cronómetros de Lectura entre Pares</div>
-              <div class="support-item-desc">8 cronómetros independientes abajo en pantalla (2:00 min por defecto) con tiempo y barra visual para medir fluidez lectora.</div>
+              <div class="support-item-desc">8 cronómetros independientes con color, ícono y barra visual (2:00 min) + sonido Tik-Tak.</div>
             </div>
           </a>
-          <div class="support-dropdown-footer">Espacio reservado para herramientas de apoyo docente</div>
+          <div class="support-dropdown-footer">Herramientas de apoyo para el aula · 3° Primaria</div>
         </div>
       </div>
-    </header>
-
-    <!-- FILTER TABS -->
-    <nav class="filter-tabs" aria-label="Filtro de actividades">
-      <button class="tab-btn active" onclick="filterCategory('todos')">🎮 Todos los Juegos</button>
-      <button class="tab-btn" onclick="filterCategory('permanentes')">⭐ Juegos Permanentes</button>
-      <button class="tab-btn" onclick="filterCategory('proyecto-4')">🪅 Proyecto 4 (Diciembre)</button>
-      <button class="tab-btn" onclick="filterCategory('proyecto-3')">❄️ Proyecto 3 (Noviembre)</button>
-      <button class="tab-btn" onclick="filterCategory('proyecto-2')">🇲🇽 Proyecto 2 (Octubre)</button>
-      <button type="button" class="portal-sound-btn" id="btnPortalSound" onclick="togglePortalSound()" aria-pressed="true" title="Activar o silenciar sonidos del portal">🔊 Sonido: ON</button>
     </nav>
 
-    <!-- SECTION: PERMANENTES -->
+    <!-- SECTION: PERMANENTES (COMPACTO 4x2 PARA VERSE COMPLETO SIN SCROLLEAR) -->
     <section class="section-block" id="sec-permanentes">
       <div class="section-title-wrap">
         <span class="section-icon">⭐</span>
         <h2 class="section-title">Juegos Permanentes</h2>
-        <span class="section-tag tag-permanent">Uso Diario</span>
+        <span class="section-tag tag-permanent">Uso Diario · 8 Actividades</span>
       </div>
 
       <div class="games-grid">
         <!-- 1. FLUIDEZ LECTORA -->
         <a class="game-card permanent-card" href="permanentes/fluidez_lectora/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Lectura y Escritura</span>
-            <div class="card-icon">📖</div>
+            <div class="card-head-inline">
+              <div class="card-icon">📖</div>
+              <span class="card-badge badge-accent">Lectura</span>
+            </div>
             <h3 class="card-title">Fluidez Lectora</h3>
-            <p class="card-desc">Cronómetro interactivo de palabras por minuto, torneo por equipos y preguntas de comprensión.</p>
+            <p class="card-desc">Cronómetro interactivo de palabras por minuto, torneo por equipos y comprensión.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Juego ➔</span>
@@ -1057,10 +1157,12 @@
         <!-- 2. PENSAMIENTO MATEMÁTICO -->
         <a class="game-card permanent-card" href="permanentes/pensamiento_matematico/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Matemáticas</span>
-            <div class="card-icon">🔢</div>
+            <div class="card-head-inline">
+              <div class="card-icon">🔢</div>
+              <span class="card-badge badge-accent">Matemáticas</span>
+            </div>
             <h3 class="card-title">Retos Matemáticos</h3>
-            <p class="card-desc">7 módulos: valor posicional, descomposición aditiva, caja registradora, cálculo mental y problemas multiplicativos.</p>
+            <p class="card-desc">7 módulos: valor posicional, descomposición, caja registradora y cálculo mental.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Suite ➔</span>
@@ -1070,10 +1172,12 @@
         <!-- 3. ORTOGRAFÍA Y MECÁNICA -->
         <a class="game-card permanent-card" href="permanentes/ortografia_mecanica/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Ortografía</span>
-            <div class="card-icon">✍️</div>
+            <div class="card-head-inline">
+              <div class="card-icon">✍️</div>
+              <span class="card-badge badge-accent">Ortografía</span>
+            </div>
             <h3 class="card-title">Ortografía y Redacción</h3>
-            <p class="card-desc">Separación de palabras, sílabas trabadas (br/bl, tr/tl), signos de puntuación, mayúsculas y conectores lógicos.</p>
+            <p class="card-desc">Separación de palabras, sílabas trabadas, signos de puntuación y conectores.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Taller ➔</span>
@@ -1083,10 +1187,12 @@
         <!-- 4. DICTADO SILÁBICO Y ALFABETIZACIÓN -->
         <a class="game-card permanent-card" href="permanentes/alfabetizacion_dictado/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Alfabetización DUA</span>
-            <div class="card-icon">🔤</div>
+            <div class="card-head-inline">
+              <div class="card-icon">🔤</div>
+              <span class="card-badge badge-accent">Alfabetización</span>
+            </div>
             <h3 class="card-title">Dictado y Palabras</h3>
-            <p class="card-desc">Dictado silábico progresivo, oraciones ilustradas con apoyo visual y síntesis grafomotora.</p>
+            <p class="card-desc">Dictado silábico progresivo con voz en español, ilustraciones y oraciones.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Actividad ➔</span>
@@ -1096,10 +1202,12 @@
         <!-- 5. CAZADOR DE SÍLABAS -->
         <a class="game-card permanent-card" href="permanentes/minijuegos/cazador_silabas/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Ortografía · 110 Retos</span>
-            <div class="card-icon">🏹</div>
+            <div class="card-head-inline">
+              <div class="card-icon">🏹</div>
+              <span class="card-badge badge-accent">110 Retos</span>
+            </div>
             <h3 class="card-title">El Cazador de Sílabas</h3>
-            <p class="card-desc">Constructor de palabras ilustradas y retos de ortografía frecuente (hace/ase, había, vayan, b/v, c/s/z, h muda, mb/mp) con burbujas silábicas y voz.</p>
+            <p class="card-desc">Palabras ilustradas y ortografía frecuente (b/v, c/s/z, h muda, mb/mp) con voz.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Juego ➔</span>
@@ -1109,10 +1217,12 @@
         <!-- 6. DETECTIVE DE ENIGMAS -->
         <a class="game-card permanent-card" href="permanentes/minijuegos/detective_enigmas/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">Comprensión Lectora · 8 Enigmas</span>
-            <div class="card-icon">🕵️‍♂️</div>
+            <div class="card-head-inline">
+              <div class="card-icon">🕵️‍♂️</div>
+              <span class="card-badge badge-accent">8 Enigmas</span>
+            </div>
             <h3 class="card-title">Detective de Enigmas</h3>
-            <p class="card-desc">Ruleta táctil giratoria de preguntas clave (¿Quién?, ¿Por qué?, ¿Dónde?, ¿Qué hacer?) con microlecturas y pistas textuales.</p>
+            <p class="card-desc">Ruleta táctil de preguntas clave (¿Quién?, ¿Por qué?, ¿Dónde?) y pistas textuales.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Juego ➔</span>
@@ -1122,10 +1232,12 @@
         <!-- 7. PISTA DE CARRERAS DE FLUIDEZ -->
         <a class="game-card permanent-card" href="permanentes/minijuegos/carreras_fluidez/index.html?v=4.3">
           <div class="card-top">
-            <span class="card-badge badge-accent">Fluidez y Vocabulario · 10 Tramos</span>
-            <div class="card-icon">🏎️</div>
+            <div class="card-head-inline">
+              <div class="card-icon">🏎️</div>
+              <span class="card-badge badge-accent">10 Tramos</span>
+            </div>
             <h3 class="card-title">Carrera de Lectura</h3>
-            <p class="card-desc">Circuito interactivo donde el bólido escolar avanza con retos rápidos de palabra intrusa, ortografía y familias de palabras.</p>
+            <p class="card-desc">Circuito veloz con retos de palabra intrusa, ortografía y familias de palabras.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Abrir Juego ➔</span>
@@ -1135,12 +1247,14 @@
         <!-- 8. LOKI RUNNER: CÁLCULO MENTAL 3D -->
         <a class="game-card permanent-card" href="permanentes/minijuegos/loki_runner_calculo_mental/index.html">
           <div class="card-top">
-            <span class="card-badge badge-accent">⚡ Cálculo Mental · 20 Estrategias SiSAT</span>
-            <div class="card-icon" style="display:flex; align-items:center; margin: 0.25rem 0 0.65rem 0;">
-              <img src="permanentes/minijuegos/loki_runner_calculo_mental/recursos/loki_avatar.png" alt="Loki" style="width:52px; height:52px; border-radius:50%; border:2.5px solid #f59e0b; object-fit:cover;">
+            <div class="card-head-inline">
+              <div class="card-icon">
+                <img src="permanentes/minijuegos/loki_runner_calculo_mental/recursos/loki_avatar.png" alt="Loki" style="width:36px; height:36px; border-radius:50%; border:2px solid #f59e0b; object-fit:cover;">
+              </div>
+              <span class="card-badge badge-accent">⚡ SiSAT 3D</span>
             </div>
-            <h3 class="card-title">Loki Runner · Cálculo Mental 3D</h3>
-            <p class="card-desc">Runner 3D con Loki. Esquiva trampas, impacta respuestas correctas y entrena con explicaciones paso a paso de cada truco SiSAT.</p>
+            <h3 class="card-title">Loki Runner · Cálculo</h3>
+            <p class="card-desc">Runner 3D con Loki para entrenar las 20 estrategias y reactivos oficiales SiSAT.</p>
           </div>
           <div class="card-action">
             <span class="action-btn btn-accent">Correr con Loki ➔</span>
@@ -1149,17 +1263,7 @@
       </div>
     </section>
 
-    <!-- BOTÓN DESPLEGABLE DE PROYECTOS MENSUALES (OCULTOS POR DEFECTO PARA EVITAR SCROLL) -->
-    <div class="proyectos-accordion-container">
-      <button id="btnToggleProyectos" class="btn-toggle-proyectos" onclick="toggleProyectosMensuales()">
-        <span class="proyectos-btn-icon">📁</span>
-        <span id="proyectosBtnText">Ver Proyectos de Aula Mensuales (Proyecto 4, Proyecto 3 y Proyecto 2)</span>
-        <span id="proyectosArrow" class="proyectos-btn-arrow">▼</span>
-      </button>
-      <p class="proyectos-hint">Toca aquí para desplegar o esconder los proyectos mensuales de aula</p>
-    </div>
-
-    <!-- CONTENEDOR COLAPSABLE DE PROYECTOS MENSUALES -->
+    <!-- CONTENEDOR DE PROYECTOS MENSUALES (SE ABRE DESDE EL MENÚ "📁 Proyectos ▾") -->
     <div id="container-proyectos-mensuales" style="display: none;">
 
     <!-- SECTION: PROYECTO 4 -->
@@ -1631,81 +1735,90 @@
   </div>
 
   <script>
-    let proyectosVisible = false;
+    function closeAllNavDropdowns() {
+      ['projects', 'support'].forEach(kind => {
+        const panel = document.getElementById(`${kind}DropdownPanel`);
+        const btn = document.getElementById(kind === 'projects' ? 'btnProjectsDropdown' : 'btnSupportDropdown');
+        const arrow = document.getElementById(`${kind}Arrow`);
+        if (panel) panel.classList.remove('open');
+        if (btn) {
+          btn.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+        if (arrow) arrow.textContent = '▾';
+      });
+    }
 
-    function toggleProyectosMensuales(forceState) {
-      const container = document.getElementById('container-proyectos-mensuales');
-      const btn = document.getElementById('btnToggleProyectos');
-      const arrow = document.getElementById('proyectosArrow');
-      const text = document.getElementById('proyectosBtnText');
-      if (!container) return;
-
-      if (forceState !== undefined) {
-        proyectosVisible = forceState;
-      } else {
-        proyectosVisible = !proyectosVisible;
-      }
-
-      if (proyectosVisible) {
-        container.style.display = 'block';
-        if (btn) btn.classList.add('open');
-        if (arrow) arrow.textContent = '▲';
-        if (text) text.textContent = 'Ocultar Proyectos de Aula Mensuales';
-      } else {
-        container.style.display = 'none';
-        if (btn) btn.classList.remove('open');
-        if (arrow) arrow.textContent = '▼';
-        if (text) text.textContent = 'Ver Proyectos de Aula Mensuales (Proyecto 4, Proyecto 3 y Proyecto 2)';
+    function toggleNavDropdown(kind, ev) {
+      if (ev) ev.stopPropagation();
+      const panel = document.getElementById(`${kind}DropdownPanel`);
+      const btn = document.getElementById(kind === 'projects' ? 'btnProjectsDropdown' : 'btnSupportDropdown');
+      const arrow = document.getElementById(`${kind}Arrow`);
+      if (!panel) return;
+      const willOpen = !panel.classList.contains('open');
+      closeAllNavDropdowns();
+      if (willOpen) {
+        panel.classList.add('open');
+        if (btn) {
+          btn.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+        if (arrow) arrow.textContent = '▴';
       }
     }
 
-    function filterCategory(cat) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      if (event && event.target) event.target.classList.add('active');
-
+    function selectMainView(view) {
+      closeAllNavDropdowns();
       const secPermanentes = document.getElementById('sec-permanentes');
-      const accordionWrap = document.querySelector('.proyectos-accordion-container');
+      const containerProyectos = document.getElementById('container-proyectos-mensuales');
+      const tabPerm = document.getElementById('tabPermanentes');
+      const btnProj = document.getElementById('btnProjectsDropdown');
+      const lblProj = document.getElementById('btnProjectsLabel');
+
+      if (view === 'permanentes') {
+        if (secPermanentes) secPermanentes.style.display = 'block';
+        if (containerProyectos) containerProyectos.style.display = 'none';
+        if (tabPerm) tabPerm.classList.add('active');
+        if (btnProj) btnProj.classList.remove('active');
+        if (lblProj) lblProj.textContent = '📁 Proyectos';
+      }
+    }
+
+    function selectProjectFromMenu(cat, labelText) {
+      closeAllNavDropdowns();
+      const secPermanentes = document.getElementById('sec-permanentes');
       const containerProyectos = document.getElementById('container-proyectos-mensuales');
       const secP4 = document.getElementById('sec-proyecto-4');
       const secP3 = document.getElementById('sec-proyecto-3');
       const secP2 = document.getElementById('sec-proyecto-2');
+      const tabPerm = document.getElementById('tabPermanentes');
+      const btnProj = document.getElementById('btnProjectsDropdown');
+      const lblProj = document.getElementById('btnProjectsLabel');
 
-      if (cat === 'todos') {
-        if (secPermanentes) secPermanentes.style.display = 'block';
-        if (accordionWrap) accordionWrap.style.display = 'block';
+      if (secPermanentes) secPermanentes.style.display = 'none';
+      if (containerProyectos) containerProyectos.style.display = 'block';
+      if (tabPerm) tabPerm.classList.remove('active');
+      if (btnProj) btnProj.classList.add('active');
+      if (lblProj) lblProj.textContent = labelText || '📁 Proyectos';
+
+      if (cat === 'proyectos-todos') {
         if (secP4) secP4.style.display = 'block';
         if (secP3) secP3.style.display = 'block';
         if (secP2) secP2.style.display = 'block';
-        if (containerProyectos && !proyectosVisible) {
-          containerProyectos.style.display = 'none';
-        }
-      } else if (cat === 'permanentes') {
-        if (secPermanentes) secPermanentes.style.display = 'block';
-        if (accordionWrap) accordionWrap.style.display = 'none';
-        if (containerProyectos) containerProyectos.style.display = 'none';
-      } else if (cat === 'proyecto-4') {
-        if (secPermanentes) secPermanentes.style.display = 'none';
-        if (accordionWrap) accordionWrap.style.display = 'none';
-        if (containerProyectos) containerProyectos.style.display = 'block';
-        if (secP4) secP4.style.display = 'block';
-        if (secP3) secP3.style.display = 'none';
-        if (secP2) secP2.style.display = 'none';
-      } else if (cat === 'proyecto-3') {
-        if (secPermanentes) secPermanentes.style.display = 'none';
-        if (accordionWrap) accordionWrap.style.display = 'none';
-        if (containerProyectos) containerProyectos.style.display = 'block';
-        if (secP4) secP4.style.display = 'none';
-        if (secP3) secP3.style.display = 'block';
-        if (secP2) secP2.style.display = 'none';
-      } else if (cat === 'proyecto-2') {
-        if (secPermanentes) secPermanentes.style.display = 'none';
-        if (accordionWrap) accordionWrap.style.display = 'none';
-        if (containerProyectos) containerProyectos.style.display = 'block';
-        if (secP4) secP4.style.display = 'none';
-        if (secP3) secP3.style.display = 'none';
-        if (secP2) secP2.style.display = 'block';
+      } else {
+        if (secP4) secP4.style.display = cat === 'proyecto-4' ? 'block' : 'none';
+        if (secP3) secP3.style.display = cat === 'proyecto-3' ? 'block' : 'none';
+        if (secP2) secP2.style.display = cat === 'proyecto-2' ? 'block' : 'none';
       }
     }
+
+    document.addEventListener('click', (e) => {
+      const pWrap = document.getElementById('projectsMenuWrap');
+      const sWrap = document.getElementById('supportMenuWrap');
+      if ((!pWrap || !pWrap.contains(e.target)) && (!sWrap || !sWrap.contains(e.target))) {
+        closeAllNavDropdowns();
+      }
+    });
 
     const AULA_PROGRESS_KEY = 'aula3a_pp_progress_v1';
     const PORTAL_REPASO_CONFIG = {
@@ -1972,31 +2085,9 @@
       if (portalSoundEnabled) playPortalUiSfx('tab');
     }
 
-    function toggleSupportCornerMenu(ev) {
-      if (ev) ev.stopPropagation();
-      const panel = document.getElementById('supportDropdownPanel');
-      const btn = document.getElementById('btnSupportCorner');
-      const arrow = document.getElementById('supportCornerArrow');
-      if (!panel) return;
-      const isOpen = panel.classList.toggle('open');
-      if (btn) {
-        btn.classList.toggle('open', isOpen);
-        btn.setAttribute('aria-expanded', String(isOpen));
-      }
-      if (arrow) arrow.textContent = isOpen ? '▴' : '▾';
-    }
-
-    document.addEventListener('click', (e) => {
-      const wrap = document.getElementById('cornerSupportMenu');
-      const panel = document.getElementById('supportDropdownPanel');
-      if (panel && panel.classList.contains('open') && wrap && !wrap.contains(e.target)) {
-        toggleSupportCornerMenu();
-      }
-    });
-
     (function initPortalUiAudio() {
       updatePortalSoundBtn();
-      const selector = '.tab-btn, #btnToggleProyectos, .btn-repaso-toggle, .btn-yt-toggle, .btn-support-corner, a.support-item-link, a.game-card, a.repaso-pp-card, a.yt-video-card, .btn-sim-exam, a.lock-req-link, .exam-lock-modal button';
+      const selector = '.tab-btn, .proj-option-btn, .btn-repaso-toggle, .btn-yt-toggle, a.support-item-link, a.game-card, a.repaso-pp-card, a.yt-video-card, .btn-sim-exam, a.lock-req-link, .exam-lock-modal button';
       let lastPtrTs = 0;
       let lastPtrEl = null;
 

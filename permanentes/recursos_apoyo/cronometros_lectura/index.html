@@ -836,8 +836,9 @@
     document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, { capture: true, passive: false });
     document.oncontextmenu = () => false;
 
-    /* 2. WEB AUDIO API SINGLETON (SONIDOS TÁCTILES, TIK-TAK DE RELOJ Y CAMPANITA) */
+    /* 2. WEB AUDIO API SINGLETON (SONIDOS TÁCTILES, TIK-TAK DE RELOJ SIN RETRASO Y CAMPANITA) */
     let sharedAudioCtx = null;
+    let audioUnlocked = false;
     let soundEnabled = true;
     let tikTakEnabled = true;
     let tikTakBeatToggle = false;
@@ -850,28 +851,49 @@
       return sharedAudioCtx;
     }
 
+    function unlockAudioEngine() {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      if (!audioUnlocked) {
+        audioUnlocked = true;
+        try {
+          const buf = ctx.createBuffer(1, 1, 22050);
+          const src = ctx.createBufferSource();
+          src.buffer = buf;
+          src.connect(ctx.destination);
+          src.start(0);
+        } catch (e) {}
+      }
+    }
+
+    window.addEventListener('pointerdown', unlockAudioEngine, { capture: true, passive: true });
+    window.addEventListener('touchstart', unlockAudioEngine, { capture: true, passive: true });
+
     function playTikTakStep(isTik) {
       if (!tikTakEnabled) return;
       const ctx = getAudioCtx();
       if (!ctx) return;
       const emit = () => {
         try {
-          const now = ctx.currentTime;
+          const now = ctx.currentTime + 0.008;
+          // Golpe principal de reloj de madera (tik agudo / tak grave)
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
-          // Tik (agudo limpio de madera) / Tak (grave suave)
-          const startFreq = isTik ? 1180 : 860;
-          const endFreq = isTik ? 720 : 520;
+          const startFreq = isTik ? 1240 : 880;
+          const endFreq = isTik ? 740 : 520;
           osc.frequency.setValueAtTime(startFreq, now);
-          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.026);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.032);
           gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.065, now + 0.004);
-          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.034);
+          gain.gain.linearRampToValueAtTime(0.14, now + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.045);
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.04);
+          osc.stop(now + 0.05);
         } catch (e) {}
       };
       if (ctx.state === 'suspended') ctx.resume().then(emit).catch(() => {});
@@ -1013,8 +1035,7 @@
                 ▶ Iniciar
               </button>
               <div class="btn-st-sub-row">
-                <button type="button" class="btn-st-mini" data-action="add30" data-idx="${idx}" title="Sumar 30 segundos a esta bina">+30s</button>
-                <button type="button" class="btn-st-mini" data-action="reset" data-idx="${idx}" title="Reiniciar solo esta bina">↺</button>
+                <button type="button" class="btn-st-mini" data-action="reset" data-idx="${idx}" title="Reiniciar solo esta bina">↺ Reiniciar</button>
               </div>
             </div>
           </div>
@@ -1111,8 +1132,20 @@
         resetSingleTimer(idx);
         return;
       }
+      const hadAnyRunning = timers.some(item => item.running && !item.finished);
       t.running = !t.running;
       playSfx(t.running ? 'start' : 'tap');
+      if (t.running && !hadAnyRunning) {
+        // Iniciar el ritmo Tik-Tak al instante sin esperar varios segundos
+        tikTakAccumMs = 0;
+        tikTakBeatToggle = true;
+        setTimeout(() => {
+          if (timers.some(item => item.running && !item.finished)) {
+            playTikTakStep(true);
+            tikTakAccumMs = 0;
+          }
+        }, 180);
+      }
       renderSingleStation(idx);
       updateActiveSummary();
     }
@@ -1144,6 +1177,7 @@
 
     /* 6. CONTROLES GLOBALES Y AJUSTES */
     function startAllTimers() {
+      const hadAnyRunning = timers.some(item => item.running && !item.finished);
       playSfx('start');
       timers.forEach((t, idx) => {
         if (t.finished) {
@@ -1154,6 +1188,16 @@
         t.running = true;
         renderSingleStation(idx);
       });
+      if (!hadAnyRunning) {
+        tikTakAccumMs = 0;
+        tikTakBeatToggle = true;
+        setTimeout(() => {
+          if (timers.some(item => item.running && !item.finished)) {
+            playTikTakStep(true);
+            tikTakAccumMs = 0;
+          }
+        }, 180);
+      }
       updateActiveSummary();
     }
 
