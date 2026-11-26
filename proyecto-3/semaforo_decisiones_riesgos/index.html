@@ -625,168 +625,168 @@
         const SCENARIOS = [
             // --- VERDES (Decisión Segura / Hábito Preventivo) ---
             {
-                area: 'Alimentación e Inmunidad',
+                area: 'Alimentación',
                 icon: '🍊',
-                text: 'Comer naranjas, mandarinas y guayabas de temporada y beber agua natural todos los días para fortalecer las defensas.',
+                text: 'Comer naranjas, mandarinas y guayabas de temporada y tomar agua natural todos los días.',
                 correctLight: 'green',
-                badge: 'Defensas y Nutrición',
-                justification: 'Consumir vitamina C y mantenerse hidratado fortalece las mucosas respiratorias para resistir las infecciones invernales.'
+                badge: 'Buena Alimentación',
+                justification: 'La vitamina C y el agua ayudan a que tus defensas estén fuertes contra los resfriados.'
             },
             {
-                area: 'Higiene Respiratoria',
+                area: 'Higiene al Toser',
                 icon: '🤧',
-                text: 'Aplicar el estornudo de etiqueta, cubriendo la nariz y boca con la parte interna del codo al toser o estornudar.',
+                text: 'Cubrirse la nariz y la boca con la parte interna del codo al toser o estornudar.',
                 correctLight: 'green',
-                badge: 'Barrera Preventiva',
-                justification: 'El pliegue del codo atrapa los microbios y evita que las gotitas de saliva viajen por el aire hacia los compañeros y útiles.'
+                badge: 'Estornudo de Etiqueta',
+                justification: 'Taparse con el codo evita que las gotitas de saliva con microbios lleguen a otros compañeros.'
             },
             {
-                area: 'Salud en el Aula',
+                area: 'Salud en el Salón',
                 icon: '🪟',
-                text: 'Mantener abiertas las ventanas del salón de clases para que el aire circule ventilado continuamente.',
+                text: 'Mantener abiertas las ventanas del salón para que circule el aire.',
                 correctLight: 'green',
-                badge: 'Ventilación Continua',
-                justification: 'La circulación constante de aire fresco expulsa los virus suspendidos y reduce drásticamente el contagio en espacios cerrados.'
+                badge: 'Ventilación',
+                justification: 'Cuando el aire circula en el salón, se acumulan menos virus y baja el riesgo de contagio.'
             },
             {
                 area: 'Higiene Personal',
                 icon: '🧼',
-                text: 'Lavarse las manos con agua y jabón durante 20 segundos antes de comer y al regresar del recreo.',
+                text: 'Lavarse las manos con agua y jabón antes de comer y al regresar del recreo.',
                 correctLight: 'green',
-                badge: 'Higiene Efectiva',
-                justification: 'El jabón disuelve la capa exterior de los virus y bacterias acumulados en las manos al tocar superficies comunes.'
+                badge: 'Lavado de Manos',
+                justification: 'El jabón elimina los microbios que se quedan en las manos al tocar objetos y jugar.'
             },
             {
-                area: 'Medicina Preventiva',
+                area: 'Vacunación',
                 icon: '💉',
-                text: 'Acudir con la familia al centro de salud para aplicarse la vacuna de la influenza al comenzar la temporada invernal.',
+                text: 'Ir con la familia al centro de salud para aplicarse la vacuna contra la influenza.',
                 correctLight: 'green',
-                badge: 'Inmunidad Activa',
-                justification: 'Las vacunas entrenan al sistema inmunológico para crear anticuerpos protectores y prevenir cuadros graves de enfermedad.'
+                badge: 'Vacunación',
+                justification: 'Las vacunas preparan las defensas del cuerpo para protegerte de enfermedades.'
             },
             {
-                area: 'Atención Oportuna',
+                area: 'Atención a Tiempo',
                 icon: '🩺',
-                text: 'Avisar enseguida al docente y a la familia si se siente fiebre, dolor de garganta o cuerpo cortado.',
+                text: 'Avisar al maestro y a la familia si se siente fiebre, dolor de garganta o malestar.',
                 correctLight: 'green',
-                badge: 'Detección Temprana',
-                justification: 'Avisar a tiempo permite recibir valoración médica oportuna, descansar en casa y evitar complicaciones mayores.'
+                badge: 'Avisar a Tiempo',
+                justification: 'Avisar pronto permite ir al médico, descansar en casa y evitar que el malestar empeore.'
             },
             {
-                area: 'Protección Colectiva',
+                area: 'Cuidado en Grupo',
                 icon: '😷',
-                text: 'Colocarse cubrebocas limpio cubriendo nariz y barbilla al presentar síntomas de catarro o tos.',
+                text: 'Usar cubrebocas cubriendo nariz y boca cuando se tiene tos o gripa.',
                 correctLight: 'green',
-                badge: 'Cuidado Solidario',
-                justification: 'El cubrebocas filtra las microgotas al hablar o toser, protegiendo la salud de toda la comunidad escolar.'
+                badge: 'Uso de Cubrebocas',
+                justification: 'El cubrebocas detiene las gotitas al hablar o toser y protege a los demás en la escuela.'
             },
 
             // --- AMARILLAS (Precaución / Atención al Entorno) ---
             {
-                area: 'Actividad Física y Clima',
+                area: 'Actividad Física',
                 icon: '🏃',
-                text: 'Salir corriendo al patio sin suéter inmediatamente después de haber sudado y agitado en Educación Física.',
+                text: 'Salir al patio sin suéter después de sudar en Educación Física.',
                 correctLight: 'yellow',
-                badge: 'Cambio Brusco de Temperatura',
-                justification: 'El enfriamiento repentino del cuerpo debilita temporalmente las defensas de la garganta y aumenta el riesgo de resfriado.'
+                badge: 'Cambio de Temperatura',
+                justification: 'Enfriarse de golpe después de sudar puede irritar la garganta y favorecer un resfriado.'
             },
             {
                 area: 'Higiene en el Recreo',
                 icon: '🥤',
-                text: 'Compartir la misma botella de refresco o agua bebiendo directamente de la boquilla entre varios compañeros.',
+                text: 'Compartir la misma botella de agua tomando directo de la boquilla entre varios compañeros.',
                 correctLight: 'yellow',
-                badge: 'Transmisión por Saliva',
-                justification: 'El contacto de boca a boquilla intercambia saliva y es una vía directa para transmitir infecciones respiratorias.'
+                badge: 'No Compartir Botellas',
+                justification: 'Al tomar de la misma botella se pasa saliva y se pueden contagiar gripa o infecciones.'
             },
             {
-                area: 'Hábitos Cotidianos',
+                area: 'Hábitos Diarios',
                 icon: '👀',
-                text: 'Frotarse los ojos y la nariz con las manos sucias después de jugar con balones o en el suelo del patio.',
+                text: 'Tallarse los ojos y la nariz con las manos sucias después de jugar en el patio.',
                 correctLight: 'yellow',
-                badge: 'Vía de Entrada de Microbios',
-                justification: 'Las mucosas de los ojos y la nariz absorben con facilidad las bacterias y virus que quedan atrapados en las manos.'
+                badge: 'Manos Sucias',
+                justification: 'Los microbios de las manos entran al cuerpo fácilmente por los ojos y la nariz.'
             },
             {
-                area: 'Cuidado en el Hogar',
+                area: 'Cuidado en Casa',
                 icon: '🦶',
-                text: 'Caminar descalzo sobre el piso frío de mosaico o cemento durante una mañana helada de invierno.',
+                text: 'Caminar descalzo sobre el piso frío en la mañana.',
                 correctLight: 'yellow',
-                badge: 'Pérdida de Calor Térmico',
-                justification: 'El contacto prolongado con el suelo gélido enfría las extremidades rápidamente y disminuye la resistencia corporal.'
+                badge: 'Pies Descalzos',
+                justification: 'Pisar el suelo frío enfría los pies y puede hacerte más propenso a resfriarte.'
             },
             {
                 area: 'Cuidado de la Garganta',
                 icon: '🧊',
-                text: 'Consumir agua con exceso de hielo o paletas heladas cuando ya se tiene ardor o carraspera en la garganta.',
+                text: 'Tomar agua con mucho hielo o comer paletas cuando ya duele la garganta.',
                 correctLight: 'yellow',
-                badge: 'Irritación de Vías Aéreas',
-                justification: 'El frío intenso contrae los capilares sanguíneos de la laringe e incrementa la inflamación y el dolor al tragar.'
+                badge: 'Garganta Irritada',
+                justification: 'Las bebidas muy frías irritan más la garganta y aumentan el dolor al tragar.'
             },
             {
                 area: 'Higiene Personal',
                 icon: '🧥',
-                text: 'Limpiarse la nariz mocosa con la manga del suéter o la chamarra en lugar de usar un pañuelo desechable.',
+                text: 'Limpiarse la nariz con la manga del suéter en lugar de usar un pañuelo.',
                 correctLight: 'yellow',
-                badge: 'Dispersión de Secreciones',
-                justification: 'La tela guarda la humedad y los gérmenes, los cuales luego se transfieren a los cuadernos, bancas y manos de otros.'
+                badge: 'Usar Pañuelo',
+                justification: 'La tela guarda los microbios y luego se pasan a los cuadernos, mesas y manos.'
             },
 
             // --- ROJAS (Peligro Inmediato / Alto Riesgo) ---
             {
-                area: 'Seguridad Farmacológica',
+                area: 'Medicamentos',
                 icon: '💊',
-                text: 'Sentir malestar y tomar pastillas o jarabes del botiquín del hogar sin la receta y supervisión de un médico.',
+                text: 'Tomar pastillas o jarabes del botiquín de casa sin receta ni permiso de un adulto.',
                 correctLight: 'red',
-                badge: 'Automedicación Peligrosa',
-                justification: 'Tomar medicamentos sin receta médica puede causar intoxicaciones severas, alergias graves y daño a órganos vitales.'
+                badge: 'No Automedicarse',
+                justification: 'Tomar medicinas sin indicación de un médico puede causar intoxicaciones y alergias.'
             },
             {
-                area: 'Prevención de Accidentes Físicos',
+                area: 'Prevención de Caídas',
                 icon: '👟',
-                text: 'Correr a máxima velocidad sobre el piso de la cancha mojado o resbaloso por el sereno matutino.',
+                text: 'Correr rápido sobre el piso mojado de la cancha.',
                 correctLight: 'red',
-                badge: 'Caídas y Fracturas',
-                justification: 'El suelo mojado pierde adherencia; un resbalón a alta velocidad puede fracturar huesos o causar traumatismos craneales.'
+                badge: 'Riesgo de Caídas',
+                justification: 'El piso mojado es resbaloso y una caída corriendo puede causar golpes fuertes o fracturas.'
             },
             {
                 area: 'Prevención de Quemaduras',
                 icon: '🧨',
-                text: 'Comprar y encender cohetes, chifladores o barrenos de pólvora en la calle durante las fiestas decembrinas.',
+                text: 'Comprar y encender cohetes o pólvora en la calle durante diciembre.',
                 correctLight: 'red',
-                badge: 'Pirotecnia y Mutilación',
-                justification: 'La pólvora es incontrolable; explota antes de tiempo y provoca pérdida de dedos, quemaduras de tercer grado y ceguera.'
+                badge: 'Peligro con Pirotecnia',
+                justification: 'La pólvora puede explotar antes de tiempo y provocar quemaduras y lesiones en manos y ojos.'
             },
             {
-                area: 'Calefacción Segura',
+                area: 'Cuidado en Casa',
                 icon: '🪵',
-                text: 'Meter braseros de carbón, leña o anafres encendidos a la recámara cerrada para calentar el cuarto en la noche.',
+                text: 'Meter anafres o braseros encendidos dentro de un cuarto cerrado para calentarse en la noche.',
                 correctLight: 'red',
-                badge: 'Intoxicación por Monóxido',
-                justification: 'La combustión de carbón consume el oxígeno y libera monóxido de carbono, un gas letal e inodoro que causa asfixia silenciosa.'
+                badge: 'Peligro de Intoxicación',
+                justification: 'El carbón encendido en un cuarto cerrado suelta un gas que no se ve ni se huele y puede intoxicar a las personas.'
             },
             {
                 area: 'Seguridad en la Cocina',
                 icon: '🔥',
-                text: 'Pegar las manos o la cara a estufas, comales al fuego o recipientes con aceite o agua hirviendo.',
+                text: 'Acercar las manos o la cara a la estufa, comales calientes u ollas con agua hirviendo.',
                 correctLight: 'red',
-                badge: 'Quemaduras por Contacto Térmico',
-                justification: 'Los líquidos hirviendo y metales calientes destruyen el tejido cutáneo en una fracción de segundo, requiriendo hospitalización.'
+                badge: 'Riesgo de Quemaduras',
+                justification: 'El fuego, el aceite y el agua hirviendo queman la piel al instante.'
             },
             {
                 area: 'Seguridad Personal',
                 icon: '🍬',
-                text: 'Aceptar pastillas, bebidas abiertas o dulces ofrecidos por personas desconocidas afuera de la escuela.',
+                text: 'Aceptar pastillas, bebidas abiertas o dulces de personas desconocidas afuera de la escuela.',
                 correctLight: 'red',
-                badge: 'Riesgo a la Integridad Personal',
-                justification: 'Nunca se deben recibir sustancias no verificadas; pone en riesgo extremo la seguridad y debe reportarse de inmediato al docente.'
+                badge: 'Cuidado con Desconocidos',
+                justification: 'Nunca se debe recibir comida ni bebidas de desconocidos; hay que avisar de inmediato a un adulto.'
             },
             {
                 area: 'Prevención de Incendios',
                 icon: '🕯️',
-                text: 'Dejar veladoras o velas encendidas durante la noche cerca de cortinas, sábanas o muebles de madera.',
+                text: 'Dejar velas o veladoras encendidas en la noche cerca de cortinas, sábanas o muebles.',
                 correctLight: 'red',
-                badge: 'Peligro Inminente de Incendio',
-                justification: 'Cualquier corriente de aire puede derribar la flama hacia telas combustibles, generando un incendio incontrolable en minutos.'
+                badge: 'Riesgo de Incendio',
+                justification: 'Una corriente de aire puede tumbar la vela y provocar un incendio en pocos minutos.'
             }
         ];
 

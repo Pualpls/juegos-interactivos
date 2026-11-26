@@ -564,6 +564,54 @@
             font-weight: 800;
             color: #38bdf8;
         }
+
+        .joint-legend-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px 16px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1.5px solid #334155;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 10px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .legend-swatch.dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .case-question-box {
+            margin-top: 10px;
+            background: rgba(56, 189, 248, 0.14);
+            border: 2px solid #38bdf8;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #e0f2fe;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -677,9 +725,9 @@
                     </div>
 
                     <div style="margin-top: 18px; background: #0f172a; padding: 14px; border-radius: 8px; border: 1.5px solid #334155;">
-                        <h3 style="font-size:15px; color:#38bdf8; margin-bottom:6px;">Dato Científico de 3° Grado:</h3>
+                        <h3 style="font-size:15px; color:#38bdf8; margin-bottom:6px;">Dato de 3° Grado:</h3>
                         <p style="font-size:14px; color:#94a3b8; line-height:1.45;">
-                            El cuerpo humano adulto tiene <strong>206 huesos</strong>. Los huesos no son inertes: son órganos vivos y resistentes que sostienen nuestro peso y protegen órganos frágiles como el cerebro y el corazón.
+                            Una persona adulta tiene <strong>206 huesos</strong>. Los huesos están vivos y son resistentes: sostienen nuestro cuerpo y protegen órganos importantes como el cerebro y el corazón.
                         </p>
                     </div>
                 </div>
@@ -694,23 +742,31 @@
                 <!-- Lienzo Interactivo de Movimiento (Canvas 2D) -->
                 <div class="panel-card">
                     <div class="card-header">
-                        <h2 id="sim-joint-title">Simulador Mecánico: Articulación del Codo</h2>
-                        <span class="badge-info" id="muscle-state-badge">Músculo Relajado</span>
+                        <h2 id="sim-joint-title">Simulador: Articulación del Codo</h2>
+                        <span class="badge-info" id="muscle-state-badge">Músculo relajado</span>
                     </div>
 
-                    <div class="joint-stage">
-                        <canvas id="joint-canvas" width="560" height="300"></canvas>
-                        
-                        <div class="joint-controls">
-                            <button class="action-btn" id="btn-contract" onclick="animateJointTo(1)">💪 Contraer / Flexionar</button>
-                            <button class="action-btn secondary btn-active" id="btn-relax" onclick="animateJointTo(0)">🦴 Relajar / Extender</button>
+                    <div class="info-card-box" id="joint-info-box" style="margin-bottom: 12px;">
+                        <div class="info-card-title" id="joint-info-title">¿Qué pasa al moverlo?</div>
+                        <div class="info-card-desc" id="joint-desc-text">
+                            Al estirar el brazo, el músculo de arriba se relaja y se alarga, mientras el de atrás ayuda a abrir el codo para dejar el brazo recto.
                         </div>
                     </div>
 
-                    <div class="info-card-box" id="joint-info-box">
-                        <div class="info-card-title" id="joint-info-title">Acción de Músculos y Tendones</div>
-                        <div class="info-card-desc" id="joint-desc-text">
-                            Al extenderse el brazo, el músculo bíceps se relaja y se alarga. El músculo tríceps (detrás del hueso húmero) ayuda a abrir la articulación del codo como una bisagra.
+                    <div class="joint-stage" style="gap: 10px;">
+                        <div class="joint-legend-bar" aria-label="Simbología de colores del simulador">
+                            <span style="color:#94a3b8;">Simbología:</span>
+                            <span class="legend-item"><span class="legend-swatch" style="background:#e2e8f0;"></span> Huesos</span>
+                            <span class="legend-item"><span class="legend-swatch" style="background:#ef4444;"></span> Músculos</span>
+                            <span class="legend-item"><span class="legend-swatch" style="background:#fde047;"></span> Tendón</span>
+                            <span class="legend-item"><span class="legend-swatch dot" style="background:#38bdf8;"></span> Articulación</span>
+                        </div>
+
+                        <canvas id="joint-canvas" width="560" height="260" style="max-height:245px;"></canvas>
+
+                        <div class="joint-controls">
+                            <button class="action-btn" id="btn-contract" onclick="animateJointTo(1)">💪 Doblar / Contraer</button>
+                            <button class="action-btn secondary btn-active" id="btn-relax" onclick="animateJointTo(0)">🦴 Estirar / Relajar</button>
                         </div>
                     </div>
                 </div>
@@ -719,26 +775,26 @@
                 <div class="panel-card">
                     <div class="card-header">
                         <h2>Elige una Articulación</h2>
-                        <span class="badge-info" id="selected-joint-badge">Codo Activo</span>
+                        <span class="badge-info" id="selected-joint-badge">Codo</span>
                     </div>
 
-                    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 12px;">
-                        Toca cualquier articulación para ver cómo sus huesos, músculos y tendones se mueven en el simulador:
+                    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 10px;">
+                        Toca una articulación para ver cómo se mueven los huesos, músculos y tendones:
                     </p>
 
                     <div class="joint-selector-grid">
-                        <div class="joint-chip active" id="chip-codo" onclick="selectJoint('codo')">🦾 Codo (Bisagra)</div>
-                        <div class="joint-chip" id="chip-rodilla" onclick="selectJoint('rodilla')">🦵 Rodilla (Soporte)</div>
-                        <div class="joint-chip" id="chip-hombro" onclick="selectJoint('hombro')">🔄 Hombro (Esférica)</div>
-                        <div class="joint-chip" id="chip-cuello" onclick="selectJoint('cuello')">👤 Cuello (Pivote)</div>
-                        <div class="joint-chip" id="chip-muneca" onclick="selectJoint('muneca')">✍️ Muñeca (Precisión)</div>
-                        <div class="joint-chip" id="chip-tobillo" onclick="selectJoint('tobillo')">👟 Tobillo (Estabilidad)</div>
+                        <div class="joint-chip active" id="chip-codo" onclick="selectJoint('codo')">🦾 Codo</div>
+                        <div class="joint-chip" id="chip-rodilla" onclick="selectJoint('rodilla')">🦵 Rodilla</div>
+                        <div class="joint-chip" id="chip-hombro" onclick="selectJoint('hombro')">🔄 Hombro</div>
+                        <div class="joint-chip" id="chip-cuello" onclick="selectJoint('cuello')">👤 Cuello</div>
+                        <div class="joint-chip" id="chip-muneca" onclick="selectJoint('muneca')">✍️ Muñeca</div>
+                        <div class="joint-chip" id="chip-tobillo" onclick="selectJoint('tobillo')">👟 Tobillo</div>
                     </div>
 
-                    <div class="info-card-box" style="margin-top: auto;">
-                        <div class="info-card-title" id="joint-detail-name">Codo (Articulación en Bisagra)</div>
+                    <div class="info-card-box" style="margin-top: 14px;">
+                        <div class="info-card-title" id="joint-detail-name">Codo (como bisagra)</div>
                         <div class="info-card-desc" id="joint-detail-text">
-                            Funciona exactamente como la bisagra de una puerta: une el húmero con el radio y cúbito, permitiendo abrir (extender) y cerrar (flexionar) el brazo para comer, peinarse o escribir.
+                            Funciona como la bisagra de una puerta: une el hueso del brazo con el antebrazo y te permite doblar y estirar el brazo para comer, peinarte o escribir.
                         </div>
                     </div>
                 </div>
@@ -759,8 +815,13 @@
                         <span class="case-student" id="case-student-name">Situación Escolar</span>
                     </div>
 
-                    <div class="case-situation" id="case-text">
-                        Cargando situación...
+                    <div id="case-prompt-block">
+                        <div class="case-situation" id="case-text">
+                            Cargando situación...
+                        </div>
+                        <div class="case-question-box" id="case-question">
+                            ¿Qué decisión responsable debe tomar?
+                        </div>
                     </div>
 
                     <div class="case-options" id="case-options-box">
@@ -1191,67 +1252,67 @@
             else emit();
         }
 
-        // Catálogo de Datos Pedagógicos y Biomecánicos de las 6 Articulaciones
+        // Catálogo de Datos Sencillos para 3° de Primaria de las 6 Articulaciones
         const JOINT_SIM_DATA = {
             codo: {
-                title: 'Simulador Mecánico: Articulación del Codo (Bisagra)',
-                badge: 'Codo (Bisagra)',
-                detailName: 'Codo (Articulación en Bisagra)',
-                detailText: 'Funciona exactamente como la bisagra de una puerta: une el húmero con el radio y cúbito, permitiendo abrir (extender) y cerrar (flexionar) el brazo para comer, peinarse o escribir.',
-                muscleContracted: 'Bíceps Contraído / Tríceps Relajado',
-                muscleRelaxed: 'Bíceps Relajado / Tríceps Extendido',
-                descContracted: '¡Observa la flexión! El músculo bíceps se contrae, acortándose y engrosándose. Al jalar el tendón blanco unido al antebrazo, dobla el codo como una bisagra.',
-                descRelaxed: 'Al extenderse el brazo, el bíceps se relaja y se alarga. El músculo tríceps (detrás del hueso húmero) ayuda a abrir la articulación del codo para dejar el brazo recto.'
+                title: 'Simulador: Articulación del Codo',
+                badge: 'Codo',
+                detailName: 'Codo (como bisagra)',
+                detailText: 'Funciona como la bisagra de una puerta: une el hueso del brazo con el antebrazo y te permite doblar y estirar el brazo para comer, peinarte o escribir.',
+                muscleContracted: 'Músculo de arriba contraído',
+                muscleRelaxed: 'Músculo de arriba relajado',
+                descContracted: 'Al doblar el brazo, el músculo de arriba (bíceps) se encoge y se hace más grueso. Al jalar el tendón amarillo unido al antebrazo, dobla el codo.',
+                descRelaxed: 'Al estirar el brazo, el músculo de arriba se relaja y se alarga, mientras el músculo de atrás ayuda a abrir el codo para dejar el brazo recto.'
             },
             rodilla: {
-                title: 'Simulador Mecánico: Articulación de la Rodilla (Soporte)',
-                badge: 'Rodilla (Soporte)',
-                detailName: 'Rodilla (Articulación de Carga Mayor)',
-                detailText: 'Soporta casi todo el peso del cuerpo al correr o saltar en el patio cívico. La rótula protege el tendón frontal y guía los movimientos entre el fémur y la tibia.',
-                muscleContracted: 'Isquiotibiales Contraídos / Pierna Doblada',
-                muscleRelaxed: 'Cuádriceps Activo / Pierna Extendida Recta',
-                descContracted: 'Al doblar la rodilla hacia atrás, los isquiotibiales (músculos traseros del muslo) se contraen con fuerza, mientras el cuádriceps frontal se estira sobre la rótula.',
-                descRelaxed: 'Al estirar la pierna recta, el músculo cuádriceps frontal se contrae y jala el tendón rotuliano blanco, permitiendo dar pasos firmes o patear un balón sin caernos.'
+                title: 'Simulador: Articulación de la Rodilla',
+                badge: 'Rodilla',
+                detailName: 'Rodilla (soporte de la pierna)',
+                detailText: 'Sostiene el peso del cuerpo cuando caminas, corres o saltas. Une el hueso del muslo (fémur) con los huesos de la pierna.',
+                muscleContracted: 'Pierna doblada',
+                muscleRelaxed: 'Pierna estirada',
+                descContracted: 'Al doblar la rodilla hacia atrás, los músculos de la parte de atrás del muslo se encogen y jalan la pierna, mientras los de adelante se estiran.',
+                descRelaxed: 'Al estirar la pierna recta, el músculo de adelante del muslo se aprieta y jala el tendón para dar pasos firmes o patear un balón.'
             },
             hombro: {
-                title: 'Simulador Mecánico: Articulación del Hombro (Esférica)',
-                badge: 'Hombro (Esférica)',
-                detailName: 'Hombro (Articulación Esférica / Enartrosis)',
-                detailText: 'Es la articulación con mayor libertad del cuerpo: una esfera (cabeza del húmero) encaja en una cavidad, permitiendo girar los brazos en círculos de 360° y elevarlos sobre la cabeza.',
-                muscleContracted: 'Deltoides Contraído / Brazo Elevado',
-                muscleRelaxed: 'Deltoides Relajado / Brazo en Reposo',
-                descContracted: '¡El brazo sube! El músculo deltoides (en la copa superior del hombro) se contrae y engrosa, levantando el húmero hacia arriba y hacia afuera.',
-                descRelaxed: 'Al bajar el brazo al costado del cuerpo, el deltoides se relaja y estira, permitiendo que el brazo descanse cómodamente pegado al tronco.'
+                title: 'Simulador: Articulación del Hombro',
+                badge: 'Hombro',
+                detailName: 'Hombro (movimiento en círculo)',
+                detailText: 'Es la articulación que se mueve en más direcciones: te permite levantar los brazos, bajarlos y girarlos en círculo.',
+                muscleContracted: 'Brazo arriba',
+                muscleRelaxed: 'Brazo abajo',
+                descContracted: 'Al subir el brazo, el músculo de arriba del hombro se encoge y jala el hueso del brazo hacia arriba.',
+                descRelaxed: 'Al bajar el brazo a un lado del cuerpo, el músculo del hombro se relaja y se estira para descansar.'
             },
             cuello: {
-                title: 'Simulador Mecánico: Articulación del Cuello (Pivotante)',
-                badge: 'Cuello (Pivote)',
-                detailName: 'Cuello (Articulación Pivotante)',
-                detailText: 'Las dos primeras vértebras cervicales (Atlas y Axis) forman un eje giratorio como un volante: nos permite voltear a ver el pizarrón y mirar a ambos lados antes de cruzar la calle.',
-                muscleContracted: 'Esternocleidomastoideo Contraído / Cuello Inclinado',
-                muscleRelaxed: 'Músculos Relajados / Cabeza Erguida',
-                descContracted: 'Al inclinar o girar la cabeza, el músculo esternocleidomastoideo se acorta y jala el cráneo suavemente sobre las vértebras pivotantes atlas y axis.',
-                descRelaxed: 'Con los músculos del cuello relajados y simétricos, la cabeza se mantiene erguida sobre la columna vertebral con una postura corporal sana.'
+                title: 'Simulador: Articulación del Cuello',
+                badge: 'Cuello',
+                detailName: 'Cuello (giro de la cabeza)',
+                detailText: 'Los primeros huesos de la columna sostienen la cabeza y te permiten girarla para mirar hacia los lados antes de cruzar la calle.',
+                muscleContracted: 'Cabeza inclinada',
+                muscleRelaxed: 'Cabeza derecha',
+                descContracted: 'Al inclinar o girar la cabeza, el músculo de un lado del cuello se encoge y jala con suavidad la cabeza.',
+                descRelaxed: 'Cuando los músculos del cuello están relajados, la cabeza se mantiene derecha sobre la columna.'
             },
             muneca: {
-                title: 'Simulador Mecánico: Articulación de la Muñeca (Precisión)',
-                badge: 'Muñeca (Condílea)',
-                detailName: 'Muñeca (Articulación Condílea y de Precisión)',
-                detailText: 'Conecta el cúbito y el radio con los 8 pequeños huesos del carpo. Hace posibles los movimientos suaves y precisos para tomar el lápiz, usar tijeras y moldear figuras.',
-                muscleContracted: 'Flexores Contraídos / Tendones Jalando Dedos',
-                muscleRelaxed: 'Músculos Relajados / Mano Abierta y Alineada',
-                descContracted: '¡Mira los tendones blancos! Los músculos del antebrazo se contraen y tiran de los tendones como cuerdas, doblando la muñeca y cerrando los dedos para sostener objetos.',
-                descRelaxed: 'Al relajar los flexores, la mano y la muñeca se alinean rectas, permitiendo soltar objetos y descansar la mano tras escribir en el aula.'
+                title: 'Simulador: Articulación de la Muñeca',
+                badge: 'Muñeca',
+                detailName: 'Muñeca (movimientos finos)',
+                detailText: 'Une los huesos del antebrazo con los de la mano. Te ayuda a mover la mano con cuidado para tomar el lápiz, usar tijeras o dibujar.',
+                muscleContracted: 'Mano doblada',
+                muscleRelaxed: 'Mano recta',
+                descContracted: 'Los músculos del antebrazo se encogen y jalan los tendones amarillos como cuerdas para doblar la muñeca y cerrar los dedos.',
+                descRelaxed: 'Al relajar los músculos del antebrazo, la muñeca y la mano vuelven a quedar derechas.'
             },
             tobillo: {
-                title: 'Simulador Mecánico: Articulación del Tobillo (De Puntitas)',
-                badge: 'Tobillo (Estabilidad)',
-                detailName: 'Tobillo (Articulación y Tendón de Aquiles)',
-                detailText: 'Une la tibia y el peroné con el astrágalo y el calcáneo. El tendón de Aquiles es el más grueso y fuerte del cuerpo: soporta todo el peso corporal al impulsarnos al correr y saltar.',
-                muscleContracted: 'Gemelos Contraídos / Talón Elevado (Puntitas)',
-                muscleRelaxed: 'Pantorrilla Relajada / Pie Plano en Suelo',
-                descContracted: '¡De puntitas! Los músculos gemelos (pantorrilla) se contraen fuertemente formando una bola muscular gruesa, jalando el resistente tendón de Aquiles para despegar el talón del suelo.',
-                descRelaxed: 'Al apoyar la planta completa en el suelo, los gemelos se alargan y el talón baja, distribuyendo el impacto de cada paso de forma equilibrada.'
+                title: 'Simulador: Articulación del Tobillo',
+                badge: 'Tobillo',
+                detailName: 'Tobillo (empuje y equilibrio)',
+                detailText: 'Une la pierna con el pie. Su tendón de atrás (tendón de Aquiles) es muy fuerte y te impulsa al caminar, correr o pararte de puntitas.',
+                muscleContracted: 'Pie de puntitas',
+                muscleRelaxed: 'Pie apoyado',
+                descContracted: 'Al ponerte de puntitas, el músculo de la pantorrilla se encoge y jala el tendón amarillo para levantar el talón del piso.',
+                descRelaxed: 'Al apoyar todo el pie en el piso, el músculo de la pantorrilla se relaja y el talón baja.'
             }
         };
 
@@ -1347,7 +1408,7 @@
             ctx.stroke();
 
             ctx.lineWidth = width;
-            ctx.strokeStyle = '#ffffff';
+            ctx.strokeStyle = '#fde047';
             ctx.beginPath();
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
@@ -1355,7 +1416,7 @@
 
             if (label) {
                 ctx.font = 'bold 11px sans-serif';
-                ctx.fillStyle = '#f8fafc';
+                ctx.fillStyle = '#fef08a';
                 ctx.fillText(label, (x1 + x2)/2 + 8, (y1 + y2)/2);
             }
             ctx.restore();
@@ -1890,38 +1951,42 @@
         const CASES = [
             {
                 student: 'Jarol y Alexander en el Salón de 3° "A"',
-                situation: 'Durante el trabajo en el cuaderno amarillo, Jarol se encorva demasiado sobre la mesa con la cabeza casi tocando las hojas.',
+                situation: 'Al trabajar en su cuaderno amarillo, Jarol se encorva mucho sobre la mesa y acerca demasiado la cabeza a las hojas.',
+                question: '¿Qué postura debe mantener Jarol para cuidar su espalda y su cuello?',
                 options: [
-                    { text: 'A) Mantener la postura encorvada porque así se lee más cerca.', correct: false, reason: 'Incorrecto. Encorvarse sobrecarga la columna vertebral y causa contracturas dolorosas en el cuello.' },
-                    { text: 'B) Apoyar la espalda recta en el respaldo del pupitre y sostener el cuaderno a una distancia adecuada.', correct: true, reason: '¡Correcto! Sentarse con la espalda derecha distribuye el peso equitativamente sobre la columna y la pelvis.' },
-                    { text: 'C) Sentarse sobre una pierna doblada en la silla.', correct: false, reason: 'Incorrecto. Doblar una pierna debajo chueca la cadera y lastima la articulación de la rodilla.' }
+                    { text: 'A) Seguir encorvado porque así ve las letras más de cerca.', correct: false, reason: 'Incorrecto. Encorvarse carga de más la columna y provoca dolor de espalda y cuello.' },
+                    { text: 'B) Apoyar la espalda derecha en el respaldo de la silla y mantener el cuaderno a buena distancia.', correct: true, reason: '¡Correcto! Sentarse derecho reparte bien el peso sobre la columna y la pelvis.' },
+                    { text: 'C) Sentarse encima de una pierna doblada en la silla.', correct: false, reason: 'Incorrecto. Doblar una pierna debajo enchueca la cadera y lastima la rodilla.' }
                 ]
             },
             {
                 student: 'Naomi y Brianna en la Cancha Escolar',
-                situation: 'Por la mañana el piso del patio cívico está húmedo por el sereno fresco de Sayula. Daniel quiere correr a máxima velocidad jugando a las traes.',
+                situation: 'Por la mañana el piso del patio está mojado y resbaloso. Daniel quiere correr muy rápido jugando a las traes.',
+                question: '¿Qué decisión segura debe tomar Daniel para evitar una caída?',
                 options: [
-                    { text: 'A) Correr sin frenar aunque el piso esté mojado.', correct: false, reason: 'Incorrecto. Correr en suelo mojado provoca resbalones graves que pueden fracturar huesos como el fémur o la muñeca.' },
-                    { text: 'B) Caminar con cuidado y elegir juegos tranquilos de pase hasta que el piso seque con el sol.', correct: true, reason: '¡Correcto! Prevenir caídas en pisos mojados cuida las articulaciones de rodillas y codos.' },
-                    { text: 'C) Correr sin tenis para no mojarlos.', correct: false, reason: 'Incorrecto. Correr descalzo o en calcetines aumenta drásticamente el riesgo de derrapes y golpes en el cráneo.' }
+                    { text: 'A) Correr sin frenar aunque el piso esté mojado.', correct: false, reason: 'Incorrecto. Correr en piso mojado provoca resbalones y puede causar golpes o fracturas.' },
+                    { text: 'B) Caminar con cuidado y elegir juegos tranquilos hasta que el piso se seque.', correct: true, reason: '¡Correcto! Evitar correr en pisos mojados protege las rodillas, los codos y la cabeza.' },
+                    { text: 'C) Quitarse los tenis para no mojarlos y correr descalzo.', correct: false, reason: 'Incorrecto. Correr descalzo o en calcetines hace más fácil resbalarse y golpearse.' }
                 ]
             },
             {
-                student: 'Jesús y Adriel con sus Mochilas Escolares',
-                situation: 'Adriel cargó libros muy pesados en su mochila y la lleva colgada de un solo hombro, caminando chueco de camino a la escuela.',
+                student: 'Jesús y Adriel con sus Mochilas',
+                situation: 'Adriel lleva muchos libros en su mochila y la carga colgada de un solo hombro, caminando inclinado rumbo a la escuela.',
+                question: '¿Cómo debe cargar Adriel su mochila para cuidar sus hombros y su espalda?',
                 options: [
-                    { text: 'A) Cargar la mochila con los dos tirantes ajustados a la espalda y llevar solo los cuadernos necesarios.', correct: true, reason: '¡Excelente! Los dos tirantes reparten el peso de forma simétrica sobre ambos hombros sin desviar la columna.' },
-                    { text: 'B) Seguir cargándola de un solo hombro para verse más rápido.', correct: false, reason: 'Incorrecto. Desequilibrar el peso fuerza los músculos de un solo lado provocando desviación en la espalda.' },
-                    { text: 'C) Correr jalando la mochila arrastrando por la banqueta.', correct: false, reason: 'Incorrecto. Arrastrarla rompe los materiales y puede tropezar a otros compañeros.' }
+                    { text: 'A) Ponerse los dos tirantes bien ajustados y llevar solo los útiles necesarios.', correct: true, reason: '¡Correcto! Usar los dos tirantes reparte el peso entre ambos hombros sin lastimar la columna.' },
+                    { text: 'B) Seguir cargándola de un solo hombro para caminar más rápido.', correct: false, reason: 'Incorrecto. Cargar todo el peso de un solo lado lastima el hombro y enchueca la espalda.' },
+                    { text: 'C) Arrastrar la mochila por la banqueta jalándola de una cinta.', correct: false, reason: 'Incorrecto. Arrastrarla daña los útiles y puede hacer tropezar a otras personas.' }
                 ]
             },
             {
-                student: 'Gael y la Intendente Lupita en el Recreo',
-                situation: 'Gael se tropezó bajando un escalón y siente un dolor muy fuerte en el tobillo que se le está hinchando rápidamente.',
+                student: 'Gael en el Recreo',
+                situation: 'Gael se tropezó al bajar un escalón y siente mucho dolor en el tobillo, que empieza a hincharse.',
+                question: '¿Qué debe hacer Gael de inmediato al lastimarse el tobillo?',
                 options: [
-                    { text: 'A) Tomar una pastilla que encontró en su mochila sin saber qué es.', correct: false, reason: '¡Peligro! Queda estrictamente prohibido tomar medicamentos sin receta médica o supervisión adulta.' },
-                    { text: 'B) Seguir corriendo para ver si el dolor se le pasa solo.', correct: false, reason: 'Incorrecto. Apoyar un tobillo lesionado puede convertir una torcedura leve en una fractura grave.' },
-                    { text: 'C) Avisar de inmediato al maestro Paul o al director Abel para recibir atención y acudir al médico.', correct: true, reason: '¡Totalmente correcto! Ante un golpe fuerte con inflamación, la regla responsable es buscar atención médica profesional de inmediato.' }
+                    { text: 'A) Tomar una pastilla que encontró en su mochila sin saber qué es.', correct: false, reason: '¡Peligro! Nunca se deben tomar medicamentos sin receta médica ni sin un adulto.' },
+                    { text: 'B) Seguir corriendo para ver si el dolor se le quita solo.', correct: false, reason: 'Incorrecto. Apoyar un tobillo lastimado puede empeorar la lesión.' },
+                    { text: 'C) Avisar de inmediato al maestro Paul o al director Abel para recibir atención médica.', correct: true, reason: '¡Correcto! Ante un golpe fuerte o hinchazón, hay que avisar a un adulto y acudir al médico.' }
                 ]
             }
         ];
@@ -1930,6 +1995,8 @@
             const c = CASES[state.currentCaseIndex];
             document.getElementById('case-student-name').textContent = c.student;
             document.getElementById('case-text').textContent = c.situation;
+            const qEl = document.getElementById('case-question');
+            if (qEl) qEl.textContent = c.question;
             document.getElementById('case-progress-badge').textContent = `Situación ${state.currentCaseIndex + 1} de ${CASES.length}`;
 
             const optionsBox = document.getElementById('case-options-box');
@@ -2032,7 +2099,7 @@
   <script src="aula_tts_karaoke.js"></script>
   <script>
     if (window.AulaTTS) {
-      AulaTTS.init({"prompts": [{"selector": "#case-text", "label": "Escuchar situación", "insert": "before"}, {"selector": "#case-feedback", "label": "Escuchar explicación", "insert": "before"}, {"selector": "#bone-info-card .info-card-desc", "label": "Escuchar función", "insert": "before"}, {"selector": "#joint-desc-text", "label": "Escuchar movimiento", "insert": "before"}, {"selector": "#joint-detail-text", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#case-options-box .option-btn", "minLength": 3}]});
+      AulaTTS.init({"prompts": [{"selector": "#case-prompt-block", "label": "Escuchar situación y pregunta", "insert": "before"}, {"selector": "#case-feedback", "label": "Escuchar explicación", "insert": "before"}, {"selector": "#bone-info-card .info-card-desc", "label": "Escuchar función", "insert": "before"}, {"selector": "#joint-desc-text", "label": "Escuchar movimiento", "insert": "before"}, {"selector": "#joint-detail-text", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#case-options-box .option-btn", "minLength": 3}]});
     }
   </script>
   <!-- AULA_TTS_KARAOKE_END -->
