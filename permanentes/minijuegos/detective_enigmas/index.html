@@ -1077,7 +1077,7 @@
             clue: "Valeria sacó de su mochila un recipiente hermético con trozos de jícama",
             options: [
               { text: "Valeria con su manzana, jícama y agua simple.", correct: true },
-              { text: "El vendedor ambulante de golosinas de la reja.", correct: false },
+              { text: "El vendedor ambulante de dulces de la reja.", correct: false },
               { text: "Un payaso de fiesta infantil.", correct: false }
             ]
           },
@@ -1788,6 +1788,13 @@
     }
 
     function speakCaseText() {
+      if (window.AulaTTS) {
+        AulaTTS.speakSequence([
+          document.getElementById('caseTitle'),
+          document.getElementById('caseText')
+        ]);
+        return;
+      }
       const c = activeCases[currentCaseIdx];
       speakText(`${c.title}. ${c.text}`);
     }
@@ -1920,9 +1927,13 @@
       qBox.style.display = 'flex';
       qBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-      // Locución de la pregunta
+      // Locución de la pregunta con subrayado
       setTimeout(() => {
-        speakText(qData.question);
+        if (window.AulaTTS) {
+          AulaTTS.speakElement(document.getElementById('qTitle'));
+        } else {
+          speakText(qData.question);
+        }
       }, 200);
     }
 
@@ -2083,5 +2094,13 @@
       }, { capture: true });
     })();
   </script>
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({"prompts": [{"selector": "#qTitle", "label": "Escuchar pregunta", "insert": "before"}, {"selector": "#qFeedback", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#optionsGrid .option-btn", "minLength": 2}]});
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

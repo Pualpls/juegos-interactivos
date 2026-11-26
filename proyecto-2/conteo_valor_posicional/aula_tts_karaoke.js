@@ -249,25 +249,25 @@
     const clean = numStr.replace(/[^\d]/g, '');
     if (!clean) return 1;
     const n = parseInt(clean, 10);
-    if (isNaN(n)) return 2.5;
-    if (n <= 15) return (n <= 10 && n !== 0) ? 2.2 : 3.0;
-    if (n < 30) return 3.9;
-    if (n < 100) return (n % 10 === 0) ? 3.3 : 5.4;
+    if (isNaN(n)) return 1.8;
+    if (n <= 15) return (n <= 10 && n !== 0) ? 1.5 : 2.1;
+    if (n < 30) return 2.6;
+    if (n < 100) return (n % 10 === 0) ? 2.2 : 3.5;
     if (n < 1000) {
       const rem = n % 100;
-      return 4.2 + (rem > 0 ? estimateNumberSyllables(String(rem)) : 0);
+      return 2.8 + (rem > 0 ? estimateNumberSyllables(String(rem)) * 0.82 : 0);
     }
-    return 6.8 + Math.min(4, clean.length);
+    return 4.6 + Math.min(3, clean.length * 0.55);
   }
 
   function estimateTokenSeconds(tok, isBeforePunct, isLastInChunk) {
     if (tok.isBlank) {
-      // Se lee como "espacio en blanco" (~0.92s)
-      return 0.92;
+      // Se lee como "espacio en blanco" (~0.88s)
+      return 0.88;
     }
     if (tok.isPunct) {
-      if (/[.!?…]/.test(tok.text)) return isLastInChunk ? 0.15 : 0.46;
-      if (/[,;:—–]/.test(tok.text)) return isLastInChunk ? 0.18 : 0.35;
+      if (/[.!?…]/.test(tok.text)) return isLastInChunk ? 0.14 : 0.44;
+      if (/[,;:—–]/.test(tok.text)) return isLastInChunk ? 0.16 : 0.33;
       return 0.10;
     }
 
@@ -275,14 +275,14 @@
     if (!t) return 0.08;
 
     let sec;
-    // Números, moneda, grados y porcentajes (Google TTS articula los números con pausa clara)
+    // Números, moneda, grados y porcentajes (ritmo ágil acorde a la Voz IA)
     if (/^[\$]?\d+(?:[.,]\d+)*[°%]?$/.test(t)) {
       let extra = 0;
-      if (t.includes('$')) extra += 2.2;
-      if (t.includes('°')) extra += 2.6;
-      if (t.includes('%')) extra += 3.0;
+      if (t.includes('$')) extra += 1.6;
+      if (t.includes('°')) extra += 1.9;
+      if (t.includes('%')) extra += 2.2;
       const syl = estimateNumberSyllables(t) + extra;
-      sec = 0.20 + syl * 0.175;
+      sec = 0.11 + syl * 0.14;
     } else if (/^[A-Da-d]\)$/.test(t)) {
       // Incisos A) B) C) D) tienen breve pausa posterior
       sec = 0.36;
