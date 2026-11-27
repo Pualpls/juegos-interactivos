@@ -590,7 +590,7 @@
 
       <div class="challenge-footer">
         <p class="feedback-text" id="feedbackText">Lee con calma y selecciona la opción que completa la situación con sentido lógico:</p>
-        <button class="btn-audio-speak" onclick="speakCurrentPrompt()">
+        <button class="btn-audio-speak" onclick="speakCurrentPrompt(this)">
           <span>🔊 Escuchar lectura</span>
         </button>
       </div>
@@ -1055,6 +1055,9 @@
 
     function stopTtsAudio() {
       currentTtsAbort = true;
+      if (window.AulaTTS) {
+        try { AulaTTS.stop(); } catch(e) {}
+      }
       if (currentTtsAudio) {
         try {
           currentTtsAudio.pause();
@@ -1139,7 +1142,15 @@
       playNextChunk();
     }
 
-    function speakCurrentPrompt() {
+    function speakCurrentPrompt(btn) {
+      if (window.AulaTTS) {
+        stopTtsAudio();
+        AulaTTS.speakSequence([
+          document.getElementById('challengeType'),
+          document.getElementById('challengePrompt')
+        ], btn || null);
+        return;
+      }
       const c = activeChallenges[currentChallengeIdx];
       speakText(`${c.type}. ${c.prompt}`);
     }
@@ -1251,6 +1262,7 @@
 
     // CARGAR DESAFÍO PEDAGÓGICO
     function loadChallenge(idx) {
+      stopTtsAudio();
       if (idx >= activeChallenges.length) {
         activeChallenges = shuffle([...ALL_CHALLENGES]);
         currentChallengeIdx = 0;
@@ -1341,6 +1353,7 @@
 
     // FINALIZAR CARRERA
     function finishRace() {
+      stopTtsAudio();
       raceActive = false;
       raceFinished = true;
       const audio = document.getElementById('bgMusic');
@@ -1500,5 +1513,15 @@
       }, { capture: true });
     })();
   </script>
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({
+        options: [{ selector: "#wordsGrid .word-card-btn", minLength: 2 }]
+      });
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>

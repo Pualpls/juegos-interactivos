@@ -602,7 +602,7 @@
             <span style="font-size: 1.25rem;">➔</span>
           </button>
 
-          <button class="btn-audio" onclick="speakCaseText()">
+          <button class="btn-audio" onclick="speakCaseText(this)">
             <span>🔊 Escuchar expediente</span>
           </button>
         </div>
@@ -1781,12 +1781,13 @@
       playNextChunk();
     }
 
-    function speakCaseText() {
+    function speakCaseText(btn) {
+      stopTtsAudio();
       if (window.AulaTTS) {
         AulaTTS.speakSequence([
           document.getElementById('caseTitle'),
           document.getElementById('caseText')
-        ]);
+        ], btn || null);
         return;
       }
       const c = activeCases[currentCaseIdx];
@@ -1803,10 +1804,22 @@
       return a;
     }
 
+    // ESTADO DE PREGUNTA Y SECTORES VISITADOS POR CASO
+    let chosenSectorIdx = -1;
+    let questionAnswered = false;
+    let askedSectorsInCase = new Set();
+
     // CARGAR ENIGMA
     function loadEnigma(idx) {
+      if (window.AulaTTS) {
+        try { AulaTTS.stop(); } catch (e) {}
+      }
+      stopTtsAudio();
       currentCaseIdx = idx;
       caseSolved = false;
+      questionAnswered = false;
+      chosenSectorIdx = -1;
+      askedSectorsInCase = new Set();
       const c = activeCases[currentCaseIdx];
 
       document.getElementById('caseNum').textContent = c.num;
@@ -1826,17 +1839,35 @@
       drawWheel();
     }
 
-    // GIRAR RULETA CON CONVERGENCIA EXACTA AL SECTOR
-    let chosenSectorIdx = 0;
-
+    // GIRAR RULETA CON CONVERGENCIA EXACTA AL SECTOR (PERMITE RE-GIRAR EN EL MISMO CASO)
     function spinWheel() {
-      if (isSpinning || caseSolved) return;
+      if (isSpinning) return;
+      if (window.AulaTTS) {
+        try { AulaTTS.stop(); } catch (e) {}
+      }
+      stopTtsAudio();
+
       isSpinning = true;
+      questionAnswered = false;
       document.getElementById('btnSpin').disabled = true;
       document.getElementById('questionBox').style.display = 'none';
 
-      // 1. Elegir un sector objetivo aleatorio entre los 4 sectores
-      chosenSectorIdx = Math.floor(Math.random() * SECTORS.length);
+      // Limpiar resaltado previo en el expediente antes de la nueva pregunta
+      const currentCase = activeCases[currentCaseIdx];
+      if (currentCase) {
+        document.getElementById('caseText').innerHTML = currentCase.text;
+      }
+
+      // 1. Elegir un sector distinto a los ya preguntados en este caso (y distinto al inmediato anterior)
+      const prevSector = chosenSectorIdx;
+      let candidates = SECTORS.map((_, i) => i).filter(i => !askedSectorsInCase.has(i) && i !== prevSector);
+      if (candidates.length === 0) {
+        askedSectorsInCase.clear();
+        candidates = SECTORS.map((_, i) => i).filter(i => i !== prevSector);
+      }
+      if (candidates.length === 0) candidates = [0];
+      chosenSectorIdx = candidates[Math.floor(Math.random() * candidates.length)];
+      askedSectorsInCase.add(chosenSectorIdx);
 
       const numSectors = SECTORS.length;
       const arc = (2 * Math.PI) / numSectors;
@@ -1921,6 +1952,10 @@
       qBox.style.display = 'flex';
       qBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
+      const btnSpin = document.getElementById('btnSpin');
+      btnSpin.disabled = false;
+      btnSpin.innerHTML = '<span>🎡</span><span>Girar otra pregunta del caso</span>';
+
       // Locución de la pregunta con subrayado
       setTimeout(() => {
         if (window.AulaTTS) {
@@ -1933,7 +1968,7 @@
 
     // MANEJAR SELECCIÓN DE RESPUESTA
     function handleOptionClick(opt, btnEl, qData) {
-      if (caseSolved) return;
+      if (questionAnswered) return;
 
       const c = activeCases[currentCaseIdx];
       const allBtns = document.querySelectorAll('.option-btn');
@@ -1941,16 +1976,19 @@
 
       if (opt.correct) {
         // Acierto
-        caseSolved = true;
-        score++;
-        document.getElementById('scoreVal').textContent = `${score} / ${activeCases.length}`;
+        questionAnswered = true;
+        if (!caseSolved) {
+          caseSolved = true;
+          score++;
+          document.getElementById('scoreVal').textContent = `${score} / ${activeCases.length}`;
+        }
 
         playTone(523.25, 'sine', 0.12);
         setTimeout(() => playTone(659.25, 'sine', 0.25), 100);
 
         btnEl.classList.add('correct');
         const qFeedback = document.getElementById('qFeedback');
-        qFeedback.textContent = "¡Deducción correcta! Pista verificada en el expediente.";
+        qFeedback.textContent = "¡Deducción correcta! Pista verificada. Puedes girar otra pregunta o continuar.";
         qFeedback.style.color = "#34d399";
 
         // Resaltar la pista en el texto
@@ -2092,7 +2130,7 @@
   <script src="aula_tts_karaoke.js"></script>
   <script>
     if (window.AulaTTS) {
-      AulaTTS.init({"prompts": [{"selector": "#qTitle", "label": "Escuchar pregunta", "insert": "before"}, {"selector": "#qFeedback", "label": "Escuchar explicación", "insert": "before"}], "options": [{"selector": "#optionsGrid .option-btn", "minLength": 2}]});
+      AulaTTS.init({"prompts": [{"selector": "#qTitle", "label": "Escuchar pregunta", "insert": "before"}], "options": [{"selector": "#optionsGrid .option-btn", "minLength": 2}]});
     }
   </script>
   <!-- AULA_TTS_KARAOKE_END -->

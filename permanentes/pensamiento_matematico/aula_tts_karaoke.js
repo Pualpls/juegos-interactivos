@@ -334,13 +334,34 @@
     return false;
   }
 
+  function findAtomicUnitAncestor(node, rootEl) {
+    let cur = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+    while (cur && cur !== rootEl && cur !== document.body) {
+      if (cur.getAttribute && (cur.getAttribute('data-tts-unit') === 'word' || cur.hasAttribute('data-tts-word'))) {
+        return cur;
+      }
+      cur = cur.parentElement;
+    }
+    return null;
+  }
+
   function extractPlainText(el) {
     if (!el) return '';
     const parts = [];
+    const seenUnits = new Set();
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
     let node;
     while ((node = walker.nextNode())) {
       if (shouldSkipNode(node)) continue;
+      const unit = findAtomicUnitAncestor(node, el);
+      if (unit) {
+        if (seenUnits.has(unit)) continue;
+        seenUnits.add(unit);
+        const ov = unit.getAttribute('data-tts-word');
+        const txt = (ov !== null && ov !== '') ? ov : (unit.textContent || '');
+        if (txt.trim()) parts.push(txt.trim());
+        continue;
+      }
       if (node.nodeValue && node.nodeValue.trim()) {
         parts.push(node.nodeValue);
       }
@@ -351,30 +372,65 @@
   function tokenizeElement(el) {
     const tokens = [];
     const restoreRecords = [];
-    const textNodes = [];
+    const orderedItems = [];
+    const seenUnits = new Set();
 
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
     let n;
     while ((n = walker.nextNode())) {
       if (shouldSkipNode(n)) continue;
+      const unit = findAtomicUnitAncestor(n, el);
+      if (unit) {
+        if (!seenUnits.has(unit)) {
+          seenUnits.add(unit);
+          orderedItems.push({ kind: 'unit', unitEl: unit });
+        }
+        continue;
+      }
       if (n.nodeValue && n.nodeValue.trim().length > 0) {
-        textNodes.push(n);
+        orderedItems.push({ kind: 'text', textNode: n });
       }
     }
 
-    // Grupos:
-    // 1. Espacios
-    // 2. Espacios en blanco didácticos: ___ , ¿ ? , [ ? ]
-    // 3. Cifras / monedas / grados / porcentajes
-    // 4. Incisos A) B) C) D)
-    // 5. Signos de pausa: , ; : . ! ? … — –
-    // 6. Palabras (incluyendo signos de apertura ¿ ¡ « " ( pegados)
-    // 7. Símbolos matemáticos (+, -, ×, =, > , <)
-    // 8. Otros caracteres
     const TOKEN_RE = /(\s+)|(_{2,}|\[\s*\?\s*\]|¿\s*\?)|([\$]?\d+(?:[.,]\d+)*[°%]?)|([A-Da-d]\))|([,;:.!?…—–]+)|([¿¡«"'(]*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9'-]+[»"')]*)|([+\-×÷=])|([^\s])/g;
     const MATH_SPOKEN = { '+': 'más', '-': 'menos', '×': 'por', '÷': 'entre', '=': 'igual a' };
 
-    textNodes.forEach((textNode) => {
+    orderedItems.forEach((entry) => {
+      if (entry.kind === 'unit') {
+        const unitEl = entry.unitEl;
+        const rawVisible = (unitEl.textContent || '').trim();
+        const overrideWord = unitEl.getAttribute('data-tts-word');
+        if (!rawVisible && !overrideWord) return;
+
+        unitEl.classList.add('aula-tts-tok');
+        // Si tiene puntuación final pegada (ej. "Sayula.") separar pausa lógica sin romper el DOM
+        const trailMatch = !overrideWord ? rawVisible.match(/^(.*?)([,;:.!?…]+)$/) : null;
+        const mainText = overrideWord ? overrideWord.trim() : (trailMatch && trailMatch[1] ? trailMatch[1] : rawVisible);
+        const isBlank = !overrideWord && /^(?:_{2,}|\[\s*\?\s*\]|·)$/.test(rawVisible);
+        const tokIdx = tokens.length;
+        tokens.push({
+          idx: tokIdx,
+          text: mainText,
+          spokenText: isBlank ? 'espacio en blanco' : mainText,
+          isPunct: false,
+          isBlank: isBlank,
+          span: unitEl
+        });
+        if (trailMatch && trailMatch[1] && trailMatch[2]) {
+          const punctSpan = unitEl.querySelector('.bicolor-punct') || unitEl;
+          tokens.push({
+            idx: tokens.length,
+            text: trailMatch[2],
+            spokenText: trailMatch[2],
+            isPunct: true,
+            isBlank: false,
+            span: punctSpan
+          });
+        }
+        return;
+      }
+
+      const textNode = entry.textNode;
       const parent = textNode.parentNode;
       if (!parent) return;
       const originalText = textNode.nodeValue;
@@ -979,6 +1035,55 @@
     }
   }
 
+  async function speakTargets(items, triggerBtn) {
+    const cleanItems = (items || []).filter((it) => it && (it.spokenText || it.text));
+    if (cleanItems.length === 0) return;
+
+    if (player.speaking && player.activeBtn && triggerBtn && player.activeBtn === triggerBtn) {
+      stop();
+      return;
+    }
+
+    stop();
+    injectStyles();
+
+    const tokens = cleanItems.map((it, idx) => {
+      if (it.el && it.el.classList) {
+        it.el.classList.add('aula-tts-tok');
+      }
+      const txt = String(it.text || it.spokenText || '').trim();
+      const spk = String(it.spokenText || it.text || '').trim();
+      return {
+        idx: idx,
+        text: txt,
+        spokenText: spk,
+        isPunct: Boolean(it.isPunct),
+        isBlank: Boolean(it.isBlank),
+        span: it.el || null
+      };
+    });
+
+    const anchorEl = (tokens.find((t) => t.span && t.span.isConnected) || {}).span || document.body;
+    const sid = ++player.sessionId;
+    player.activeEl = anchorEl;
+    player.activeBtn = triggerBtn || null;
+    player.tokens = tokens;
+    player.restoreRecords = [];
+    player.speaking = true;
+
+    if (player.activeBtn) {
+      updateBtnVisual(player.activeBtn, true);
+    }
+
+    const chunks = buildChunks(tokens);
+    const forceOfflineState = { value: (typeof navigator !== 'undefined' && navigator.onLine === false) };
+    await playChunksForCurrentTokens(chunks, sid, forceOfflineState);
+
+    if (sid === player.sessionId) {
+      stop();
+    }
+  }
+
   async function speakSequence(elements, triggerBtn) {
     const valid = (elements || []).filter((el) => el && el.isConnected && extractPlainText(el).length >= 2);
     if (valid.length === 0) return;
@@ -1218,6 +1323,7 @@
     init: init,
     speakElement: speakElement,
     speakSequence: speakSequence,
+    speakTargets: speakTargets,
     stop: stop,
     rescan: scanAndWire
   };

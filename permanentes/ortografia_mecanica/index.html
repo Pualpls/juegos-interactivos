@@ -1081,6 +1081,9 @@
 
     function stopTtsAudio() {
       currentTtsAbort = true;
+      if (window.AulaTTS) {
+        try { AulaTTS.stop(); } catch (e) {}
+      }
       if (currentTtsAudio) {
         try {
           currentTtsAudio.pause();
@@ -1167,7 +1170,47 @@
     }
 
     function repeatCurrentPromptAudio() {
+      const btn = document.getElementById('btn-tts-repeat');
+      if (speakActiveModuleKaraoke(btn)) return;
       if (currentPromptAudioText) speakText(currentPromptAudioText);
+    }
+
+    function speakActiveModuleKaraoke(btn) {
+      if (!window.AulaTTS) return false;
+      switch (currentModule) {
+        case 1:
+        case 2:
+        case 3: {
+          const el = document.getElementById('m123-context-sentence');
+          if (el) { AulaTTS.speakElement(el, btn); return true; }
+          return false;
+        }
+        case 5: {
+          const el = document.getElementById('m5-sentence-box');
+          if (el) { AulaTTS.speakElement(el, btn); return true; }
+          return false;
+        }
+        case 6:
+          speakM6Ideas(btn);
+          return true;
+        case 7:
+          speakM7Paragraph(btn);
+          return true;
+        case 8:
+          speakM8Idea(btn);
+          return true;
+        case 9:
+          speakM9Phrase(btn);
+          return true;
+        case 10:
+          speakM10List(btn);
+          return true;
+        case 11:
+          speakM11Text(btn);
+          return true;
+        default:
+          return false;
+      }
     }
 
     function adjustTextScale(delta) {
@@ -2034,6 +2077,7 @@
     }
 
     function renderCurrentChallenge() {
+      stopTtsAudio();
       hideFeedback();
       clearSelectedChip();
       challengeSolved = false;
@@ -2074,14 +2118,16 @@
       }).join('');
     }
 
-    function colorizeSentenceNoOrphan(str) {
+    function colorizeSentenceNoOrphan(str, blankSpokenWord = null) {
       if (!str) return '';
       return String(str).split(/\s+/).map(token => {
         if (token.includes('___')) {
           const rendered = token.replace('___', '<span style="display:inline-block; min-width:72px; border-bottom:4px dashed #059669; color:#059669; margin:0 3px;">___</span>');
-          return `<span style="white-space:nowrap; display:inline-block;">${rendered}</span>`;
+          const spokenFull = blankSpokenWord ? token.replace('___', blankSpokenWord) : '';
+          const ttsAttr = spokenFull ? ` data-tts-unit="word" data-tts-word="${spokenFull.replace(/"/g, '&quot;')}"` : ' data-tts-unit="word"';
+          return `<span${ttsAttr} style="white-space:nowrap; display:inline-block;">${rendered}</span>`;
         }
-        return `<span style="white-space:nowrap; display:inline-block;">${colorizeBicolor(token)}</span>`;
+        return `<span data-tts-unit="word" style="white-space:nowrap; display:inline-block;">${colorizeBicolor(token)}</span>`;
       }).join(' ');
     }
 
@@ -2097,7 +2143,7 @@
       const pLeft = document.getElementById('panel-left-content');
       pLeft.innerHTML = `
         <div style="font-size: 1.02rem; color: var(--text-muted); font-weight: 700;">
-          Observa la tarjeta ilustrada: <b>${colorizeSentenceNoOrphan(item.context)}</b>
+          Observa la tarjeta ilustrada: <b id="m123-context-sentence">${colorizeSentenceNoOrphan(item.context, item.word)}</b>
         </div>
         <div class="prompt-box" style="gap: 1.1rem; padding: 0.85rem 1.15rem;">
           ${getWordVisualCardHTML(item)}
@@ -2109,6 +2155,7 @@
         </div>
         <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
           <button class="btn btn-amber" onclick="speakText('${item.word}', 1.05, 0.82)">🔊 Escuchar Palabra</button>
+          <button class="btn btn-secondary" onclick="if(window.AulaTTS) AulaTTS.speakElement(document.getElementById('m123-context-sentence'), this)">🗣️ Escuchar Oración</button>
           <button class="btn btn-purple" onclick="comparePhoneticM123()">👂 Comparar con "${item.wrongWord}"</button>
         </div>
       `;
@@ -2321,14 +2368,15 @@
 
       const pLeft = document.getElementById('panel-left-content');
       pLeft.innerHTML = `
-        <div style="background: #ffffff; border: 3px solid #94a3b8; border-radius: 0.85rem; padding: 0.7rem 1.05rem; font-size: calc(1.52rem * var(--text-scale)); font-weight: 800; color: #0f172a; text-align: center; line-height: 1.45; box-shadow: 0 3px 6px rgba(15,23,42,0.06);">
-          ${colorizeSentenceNoOrphan(sentenceNormalized)}
+        <div id="m5-sentence-box" style="background: #ffffff; border: 3px solid #94a3b8; border-radius: 0.85rem; padding: 0.7rem 1.05rem; font-size: calc(1.52rem * var(--text-scale)); font-weight: 800; color: #0f172a; text-align: center; line-height: 1.45; box-shadow: 0 3px 6px rgba(15,23,42,0.06);">
+          ${colorizeSentenceNoOrphan(sentenceNormalized, item.correct)}
         </div>
         <div class="prompt-box" id="m5-glue-zone" style="min-height: 98px; border: 3px dashed #10b981; background: #ecfdf5; cursor: pointer;">
           <span style="color: #047857; font-size: 1.05rem;">Arrastra o toca las sílabas de la derecha para unir la palabra faltante aquí...</span>
         </div>
         <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
           <button class="btn btn-amber" onclick="speakText('${item.correct}')">🔊 Escuchar Palabra</button>
+          <button class="btn btn-secondary" onclick="if(window.AulaTTS) AulaTTS.speakElement(document.getElementById('m5-sentence-box'), this)">🗣️ Escuchar Oración</button>
           <button class="btn btn-secondary" onclick="resetM5()">🔄 Vaciar Caja</button>
         </div>
       `;
@@ -2448,18 +2496,18 @@
           Lee ambas ideas y analiza cuál conector expresa la relación correcta (causa, consecuencia, contraste, tiempo o modo):
         </div>
         <div class="prompt-box" id="m6-sentence-zone" style="min-height: 120px; border: 3px dashed #2563eb; background: #eff6ff; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.75rem; align-items: stretch; justify-content: center; text-align: center;">
-          <div style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
+          <div id="m6-idea1" style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
             ${colorizeSentenceNoOrphan(m6CurrentItem.idea1)}
           </div>
           <div id="m6-drop-slot" class="drop-slot" style="min-height: 48px; border: 2px dashed #3b82f6; background: #ffffff; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 800; color: #1d4ed8; padding: 6px 16px; margin: 0 auto; width: 85%; max-width: 420px; transition: all 0.2s;">
             <span style="color: #94a3b8; font-style: italic; font-size: 1.05rem;">¿Qué conector une mejor las dos ideas?</span>
           </div>
-          <div style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
+          <div id="m6-idea2" style="font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.4;">
             ${colorizeSentenceNoOrphan(m6CurrentItem.idea2)}
           </div>
         </div>
         <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap; margin-top: 0.75rem;">
-          <button class="btn btn-amber" onclick="speakText('${m6CurrentItem.idea1} ... ${m6CurrentItem.idea2}')">🔊 Escuchar Ideas</button>
+          <button class="btn btn-amber" onclick="speakM6Ideas(this)">🔊 Escuchar Ideas</button>
         </div>
       `;
 
@@ -2518,7 +2566,12 @@
 
         const fullSentence = `${m6CurrentItem.idea1} ${chosen} ${m6CurrentItem.idea2}`;
         showFeedback(true, `🎉 <b>¡Conector perfecto!</b> <i>"${chosen}"</i> une con sentido ambas ideas: <b>${m6CurrentItem.hint}</b>`);
-        speakText(fullSentence);
+        if (window.AulaTTS) {
+          slot.innerHTML = `<span data-tts-unit="word" data-tts-word="${chosen}">${chosen}</span>`;
+          AulaTTS.speakSequence([document.getElementById('m6-idea1'), slot, document.getElementById('m6-idea2')]);
+        } else {
+          speakText(fullSentence);
+        }
       } else {
         slot.style.border = '2px solid #dc2626';
         slot.style.background = '#fee2e2';
@@ -2536,6 +2589,22 @@
           }
         }, 1800);
       }
+    }
+
+    function speakM6Ideas(btn) {
+      if (!m6CurrentItem) return;
+      if (window.AulaTTS) {
+        const i1 = document.getElementById('m6-idea1');
+        const i2 = document.getElementById('m6-idea2');
+        const slot = document.getElementById('m6-drop-slot');
+        if (challengeSolved && slot) {
+          AulaTTS.speakSequence([i1, slot, i2], btn);
+        } else {
+          AulaTTS.speakSequence([i1, i2], btn);
+        }
+        return;
+      }
+      speakText(`${m6CurrentItem.idea1} ... ${m6CurrentItem.idea2}`);
     }
 
     /* =========================================================================
@@ -2603,7 +2672,7 @@
         </div>
         <div class="prompt-box" id="m7-sentence-box" style="font-size: 1.36rem; line-height: 2.05; justify-content: flex-start; text-align: left; padding: 0.95rem;"></div>
         <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-amber" onclick="speakText('${item.fullCorrectText}')">🔊 Escuchar Párrafo</button>
+          <button class="btn btn-amber" onclick="speakM7Paragraph(this)">🔊 Escuchar Párrafo</button>
           <button class="btn btn-secondary" onclick="resetM7Signs()">🔄 Restaurar</button>
           <button class="btn btn-primary" onclick="validateM7()">✅ Comprobar Puntuación</button>
         </div>
@@ -2652,11 +2721,38 @@
           : '';
         return `
           <span style="display:inline-flex; align-items:center; white-space:nowrap;">
-            <span>${colorizeBicolor(w)}</span>
+            <span data-m7-w="${idx}">${colorizeBicolor(w)}</span>
             <span class="interword-slot ${placed ? 'placed-sign' : ''}" style="${extraStyle}" data-gap-idx="${idx}" onclick="removeM7Sign(${idx})" title="${placed ? 'Toca para quitar este signo' : 'Suelta aquí , o .'}">${displaySlotText}</span>
           </span>
         `;
       }).join(' ');
+    }
+
+    function speakM7Paragraph(btn) {
+      const item = activeChallengeData;
+      const box = document.getElementById('m7-sentence-box');
+      if (!item || !box) return;
+      if (window.AulaTTS && AulaTTS.speakTargets) {
+        const targets = [];
+        item.words.forEach((w, idx) => {
+          targets.push({
+            text: w,
+            spokenText: w,
+            el: box.querySelector(`[data-m7-w="${idx}"]`)
+          });
+          if (item.expected && item.expected[idx]) {
+            targets.push({
+              text: item.expected[idx],
+              spokenText: item.expected[idx],
+              isPunct: true,
+              el: box.querySelector(`[data-gap-idx="${idx}"]`)
+            });
+          }
+        });
+        AulaTTS.speakTargets(targets, btn);
+        return;
+      }
+      speakText(item.fullCorrectText);
     }
 
     function removeM7Sign(idx) {
@@ -2686,7 +2782,7 @@
 
       if (allMatch) {
         showFeedback(true, `🎉 <b>¡Puntuación impecable!</b> Reemplazaste las "y" repetidas por la coma y el punto antes de <b>"${colorizeBicolor(item.capWord)}"</b>, y cerraste con punto final: <i>"${colorizeSentenceNoOrphan(item.fullCorrectText)}"</i>`);
-        speakText(item.fullCorrectText);
+        speakM7Paragraph();
       } else {
         showFeedback(false, `❌ Revisa tus signos azules: pon <b class="bicolor-punct">,</b> donde la idea continúa con minúscula, <b class="bicolor-punct">.</b> justo antes de <b style="color:#0f172a;">"${colorizeBicolor(item.capWord)}"</b> (porque empieza con <b style="color:#0f172a;">mayúscula</b>) y <b class="bicolor-punct">.</b> al final.`);
       }
@@ -2713,7 +2809,7 @@
         </div>
         <div class="prompt-box" id="m8-words-container" style="font-size: 1.42rem; flex-wrap: wrap; gap: 0.45rem; justify-content: center;"></div>
         <div style="display:flex; gap:0.65rem; justify-content:center;">
-          <button class="btn btn-amber" onclick="speakText('${cleanSentence}')">🔊 Escuchar Idea</button>
+          <button class="btn btn-amber" onclick="speakM8Idea(this)">🔊 Escuchar Idea</button>
           <button class="btn btn-secondary" onclick="resetM8()">🔄 Restaurar Puntos</button>
           <button class="btn btn-primary" onclick="validateM8()">✅ Comprobar Oración</button>
         </div>
@@ -2797,10 +2893,35 @@
 
       if (isOk) {
         showFeedback(true, `🎉 <b>¡Excelente lectura!</b> Borraste únicamente el punto falso intruso y conservaste los puntos verdaderos: <i>"${colorizeSentenceNoOrphan(cleanSentence)}"</i>`);
-        speakText(cleanSentence);
+        speakM8Idea();
       } else {
         showFeedback(false, `❌ Revisa qué punto borraste. Recuerda: no borres los puntos donde termina una oración completa; borra solo el punto intruso que corta la frase antes de una minúscula.`);
       }
+    }
+
+    function speakM8Idea(btn) {
+      const item = activeChallengeData;
+      const container = document.getElementById('m8-words-container');
+      if (!item || !container) return;
+      const cleanSentence = item.tokens.map((t, idx) => item.falseIndices.includes(idx) ? t.replace('.', '') : t).join(' ');
+      if (window.AulaTTS && AulaTTS.speakTargets) {
+        const targets = [];
+        item.tokens.forEach((tok, idx) => {
+          const isFalse = item.falseIndices.includes(idx);
+          const cleanTok = isFalse ? tok.replace('.', '') : tok;
+          const m = cleanTok.match(/^(.*?)([.,;:!?]+)$/);
+          const wEl = container.querySelector(`[data-m8-idx="${idx}"]`);
+          if (m && m[1]) {
+            targets.push({ text: m[1], spokenText: m[1], el: wEl });
+            targets.push({ text: m[2], spokenText: m[2], isPunct: true, el: wEl });
+          } else {
+            targets.push({ text: cleanTok, spokenText: cleanTok, el: wEl });
+          }
+        });
+        AulaTTS.speakTargets(targets, btn);
+        return;
+      }
+      speakText(cleanSentence);
     }
 
     /* =========================================================================
@@ -2824,22 +2945,22 @@
 
       const pLeft = document.getElementById('panel-left-content');
       pLeft.innerHTML = `
-        <div style="font-size: 0.98rem; color: var(--text-muted); font-weight: 700;">
-          <b>Situación:</b> ${colorizeSentenceNoOrphan(item.desc)}
+        <div id="m9-situacion-desc" style="font-size: 0.98rem; color: var(--text-muted); font-weight: 700;">
+          <b data-tts-unit="word">Situación:</b> ${colorizeSentenceNoOrphan(item.desc)}
         </div>
-        <div class="prompt-box" style="font-size: 1.48rem; gap: 0.45rem; flex-wrap: wrap;">
+        <div class="prompt-box" id="m9-phrase-box" style="font-size: 1.48rem; gap: 0.45rem; flex-wrap: wrap;">
           <span style="display:inline-flex; align-items:center; white-space:nowrap; gap:0.3rem;">
             <div class="drop-slot" id="m9-slot-open" data-slot="open" onclick="clearM9Slot('open')" style="min-width: 52px; min-height: 52px; color:#2563eb;" title="Toca para vaciar"></div>
-            <span>${colorizeBicolor(firstWord)}</span>
+            <span data-m9-w="0">${colorizeBicolor(firstWord)}</span>
           </span>
-          ${middleWords.map(w => `<span style="white-space:nowrap;">${colorizeBicolor(w)}</span>`).join(' ')}
+          ${middleWords.map((w, mIdx) => `<span data-m9-w="${mIdx + 1}" style="white-space:nowrap;">${colorizeBicolor(w)}</span>`).join(' ')}
           <span style="display:inline-flex; align-items:center; white-space:nowrap; gap:0.3rem;">
-            ${lastWord ? `<span>${colorizeBicolor(lastWord)}</span>` : ''}
+            ${lastWord ? `<span data-m9-w="${baseWords.length - 1}">${colorizeBicolor(lastWord)}</span>` : ''}
             <div class="drop-slot" id="m9-slot-close" data-slot="close" onclick="clearM9Slot('close')" style="min-width: 52px; min-height: 52px; color:#2563eb;" title="Toca para vaciar"></div>
           </span>
         </div>
         <div style="display:flex; gap:0.65rem; justify-content:center;">
-          <button class="btn btn-amber" onclick="speakText('${item.full}', ${item.type === 'interrogacion' ? '1.22' : '1.3'}, 0.95)">🔊 Escuchar Entonación</button>
+          <button class="btn btn-amber" onclick="speakM9Phrase(this)">🔊 Escuchar Entonación</button>
           <button class="btn btn-primary" onclick="validateM9()">🎭 Comprobar Signos</button>
         </div>
       `;
@@ -2900,19 +3021,43 @@
       renderM9Slots();
     }
 
+    function speakM9Phrase(btn) {
+      const item = activeChallengeData;
+      const box = document.getElementById('m9-phrase-box');
+      if (!item || !box) return;
+      if (window.AulaTTS && AulaTTS.speakTargets) {
+        const baseWords = item.base.trim().split(/\s+/);
+        const openCh = item.type === 'interrogacion' ? '¿' : '¡';
+        const closeCh = item.type === 'interrogacion' ? '?' : '!';
+        const targets = baseWords.map((w, idx) => {
+          let spk = w;
+          if (idx === 0) spk = openCh + spk;
+          if (idx === baseWords.length - 1) spk = spk + closeCh;
+          return {
+            text: spk,
+            spokenText: spk,
+            el: box.querySelector(`[data-m9-w="${idx}"]`)
+          };
+        });
+        AulaTTS.speakTargets(targets, btn);
+        return;
+      }
+      speakText(item.full, item.type === 'interrogacion' ? 1.22 : 1.3, 0.95);
+    }
+
     function validateM9() {
       const item = activeChallengeData;
       if (item.type === 'interrogacion') {
         if (m9OpenSign === '¿' && m9CloseSign === '?') {
           showFeedback(true, `🎉 <b>¡Pregunta perfecta!</b> Abres con <b class="bicolor-punct">¿</b> y cierras con <b class="bicolor-punct">?</b>: <i>"${colorizeSentenceNoOrphan(item.full)}"</i>`);
-          speakText(item.full, 1.25, 0.95);
+          speakM9Phrase();
         } else {
           showFeedback(false, `❌ Lee la frase: está haciendo una pregunta para saber algo. Necesita abrir con <b class="bicolor-punct">¿</b> al inicio y cerrar con <b class="bicolor-punct">?</b> al final.`);
         }
       } else {
         if (m9OpenSign === '¡' && m9CloseSign === '!') {
           showFeedback(true, `🎉 <b>¡Gran exclamación!</b> Abres con <b class="bicolor-punct">¡</b> y cierras con <b class="bicolor-punct">!</b>: <i>"${colorizeSentenceNoOrphan(item.full)}"</i>`);
-          speakText(item.full, 1.32, 1.02);
+          speakM9Phrase();
         } else {
           showFeedback(false, `❌ Esta frase expresa emoción, sorpresa o aviso urgente. Necesita abrir con <b class="bicolor-punct">¡</b> al inicio y cerrar con <b class="bicolor-punct">!</b> al final.`);
         }
@@ -2955,7 +3100,7 @@
         </div>
         <div class="prompt-box" id="m10-sentence-box" style="font-size: 1.42rem; line-height: 2.0; justify-content: center;"></div>
         <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-amber" onclick="speakText('${fullCorrect}')">🔊 Escuchar Lista</button>
+          <button class="btn btn-amber" onclick="speakM10List(this)">🔊 Escuchar Lista</button>
           <button class="btn btn-secondary" onclick="resetM10()">🔄 Limpiar Todo</button>
           <button class="btn btn-primary" onclick="validateM10()">✅ Comprobar Lista</button>
         </div>
@@ -3003,11 +3148,39 @@
         const slotColorStyle = isY ? 'color:#0f766e; border-color:#0d9488; background:#ccfbf1;' : '';
         return `
           <span style="display:inline-flex; align-items:center; white-space:nowrap;">
-            <span>${colorizeBicolor(w)}</span>
+            <span data-m10-w="${idx}">${colorizeBicolor(w)}</span>
             <span class="interword-slot ${placed ? 'placed-sign' : ''}" style="${slotColorStyle}" data-gap-idx="${idx}" onclick="removeM10Token(${idx})" title="${placed ? 'Toca para devolver este símbolo' : 'Suelta aquí , y o .'}">${placed}</span>
           </span>
         `;
       }).join(' ');
+    }
+
+    function speakM10List(btn) {
+      const item = activeChallengeData;
+      const box = document.getElementById('m10-sentence-box');
+      if (!item || !box) return;
+      if (window.AulaTTS && AulaTTS.speakTargets) {
+        const targets = [];
+        item.flatWords.forEach((w, idx) => {
+          targets.push({
+            text: w,
+            spokenText: w,
+            el: box.querySelector(`[data-m10-w="${idx}"]`)
+          });
+          if (item.expectedMap && item.expectedMap[idx]) {
+            const sym = item.expectedMap[idx];
+            targets.push({
+              text: sym,
+              spokenText: sym,
+              isPunct: sym !== 'y',
+              el: box.querySelector(`[data-gap-idx="${idx}"]`)
+            });
+          }
+        });
+        AulaTTS.speakTargets(targets, btn);
+        return;
+      }
+      speakText(item.fullCorrect);
     }
 
     function removeM10Token(idx) {
@@ -3037,7 +3210,7 @@
 
       if (isOk) {
         showFeedback(true, `🎉 <b>¡Lista perfecta!</b> Colocaste las comas, la "y" antes del último elemento y el punto final: <i>"${colorizeSentenceNoOrphan(item.fullCorrect)}"</i>`);
-        speakText(item.fullCorrect);
+        speakM10List();
       } else {
         showFeedback(false, `❌ Revisa dónde colocaste cada símbolo. Recuerda: las comas separan los primeros elementos de la lista, la "y" va antes del último elemento, y el punto va al final.`);
       }
@@ -3069,7 +3242,7 @@
         </div>
         <div class="prompt-box" id="m11-letters-box" style="padding: 0.85rem; min-height: 115px;"></div>
         <div style="display: flex; gap: 0.65rem; justify-content: center; flex-wrap: wrap;">
-          <button class="btn btn-amber" onclick="speakText('${item.correct}')">🔊 Escuchar</button>
+          <button class="btn btn-amber" onclick="speakM11Text(this)">🔊 Escuchar</button>
           <button class="btn btn-secondary" onclick="resetM11()">🔄 Reiniciar Letras</button>
           <button class="btn btn-primary" onclick="validateM11()">✅ Comprobar Mayúsculas y Minúsculas</button>
         </div>
@@ -3078,7 +3251,7 @@
       const pRight = document.getElementById('panel-right-content');
       pRight.innerHTML = `
         <div style="padding: 0.9rem; background: #fffbeb; border-radius: 0.75rem; border: 2px solid #fde68a; font-size: 0.95rem; line-height: 1.48;">
-          <p>💡 <b>Pista de este reto:</b> ${colorizeSentenceNoOrphan(item.hint)}</p>
+          <p id="m11-hint-box">💡 <b data-tts-unit="word">Pista:</b> ${colorizeSentenceNoOrphan(item.hint)}</p>
           <hr style="margin:0.55rem 0; border:none; border-top:1px dashed #f59e0b;">
           <p>📏 <b>Código de colores escolar:</b></p>
           <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
@@ -3098,12 +3271,14 @@
       if (!box) return;
       const isSentence = item.type === 'oracion';
 
-      let html = '<div class="m11-word-group">';
+      let wGroupIdx = 0;
+      let html = `<div class="m11-word-group" data-m11-w="0">`;
       m11Chars.forEach((ch, idx) => {
         if (ch === ' ') {
-          html += '</div><div class="m11-word-group">';
+          wGroupIdx++;
+          html += `</div><div class="m11-word-group" data-m11-w="${wGroupIdx}">`;
         } else if (ch === '.' || ch === ',') {
-          html += `<span style="font-size:1.65rem; font-weight:900; padding:0 4px; color:#2563eb;">${ch}</span>`;
+          html += `<span data-m11-punct="${wGroupIdx}" style="font-size:1.65rem; font-weight:900; padding:0 4px; color:#2563eb;">${ch}</span>`;
         } else {
           const isUpper = ch === ch.toUpperCase() && ch !== ch.toLowerCase();
           html += `
@@ -3116,6 +3291,29 @@
       });
       html += '</div>';
       box.innerHTML = html;
+    }
+
+    function speakM11Text(btn) {
+      const item = activeChallengeData;
+      const box = document.getElementById('m11-letters-box');
+      if (!item || !box) return;
+      if (window.AulaTTS && AulaTTS.speakTargets) {
+        const rawWords = item.correct.trim().split(/\s+/);
+        const targets = [];
+        rawWords.forEach((rw, idx) => {
+          const grpEl = box.querySelector(`[data-m11-w="${idx}"]`);
+          const m = rw.match(/^(.*?)([.,;:!?]+)$/);
+          if (m && m[1]) {
+            targets.push({ text: m[1], spokenText: m[1], el: grpEl });
+            targets.push({ text: m[2], spokenText: m[2], isPunct: true, el: box.querySelector(`[data-m11-punct="${idx}"]`) || grpEl });
+          } else {
+            targets.push({ text: rw, spokenText: rw, el: grpEl });
+          }
+        });
+        AulaTTS.speakTargets(targets, btn);
+        return;
+      }
+      speakText(item.correct);
     }
 
     function toggleM11Letter(idx) {
@@ -3140,7 +3338,7 @@
       const currentStr = m11Chars.join('');
       if (currentStr === item.correct) {
         showFeedback(true, `🎉 <b>¡Excelente!</b> Escribiste correctamente las mayúsculas y minúsculas: <b>"${item.correct}"</b>.`);
-        speakText(item.correct);
+        speakM11Text();
       } else {
         showFeedback(false, `❌ Todavía hay letras por ajustar. Tienes: <b>"${currentStr}"</b>. ${item.hint}`);
       }
@@ -3200,7 +3398,7 @@
           </div>
         </div>
 
-        <div style="text-align: center; font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
+        <div id="m12-hint-box" style="text-align: center; font-size: 0.96rem; color: var(--text-muted); font-weight: 700;">
           💡 <b>Pista:</b> ${item.hint}
         </div>
         <div style="text-align: center;">
@@ -3390,5 +3588,22 @@
       }, { capture: true });
     })();
   </script>
+  <!-- AULA_TTS_KARAOKE_START -->
+  <script src="aula_tts_karaoke.js"></script>
+  <script>
+    if (window.AulaTTS) {
+      AulaTTS.init({
+        "prompts": [
+          {"selector": "#m9-situacion-desc", "label": "Escuchar situación", "insert": "before"},
+          {"selector": "#m11-hint-box", "label": "Escuchar pista", "insert": "before"},
+          {"selector": "#m12-hint-box", "label": "Escuchar pista", "insert": "before"}
+        ],
+        "options": [
+          {"selector": "#m6-bank .connector-chip", "minLength": 2}
+        ]
+      });
+    }
+  </script>
+  <!-- AULA_TTS_KARAOKE_END -->
 </body>
 </html>
