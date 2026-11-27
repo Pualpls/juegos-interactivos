@@ -1034,6 +1034,373 @@
       .project-header-actions { width: 100%; margin-left: 0; }
       .btn-yt-toggle, .btn-repaso-toggle { flex: 1; justify-content: center; margin-left: 0; }
     }
+    .btn-proj-info {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.42rem 0.85rem;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(147, 197, 253, 0.5);
+      background: rgba(37, 99, 235, 0.22);
+      color: #dbeafe;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-proj-info:hover {
+      background: rgba(37, 99, 235, 0.45);
+      border-color: #93c5fd;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* MODAL DE FICHA INFORMATIVA DEL PROYECTO (2 DIAPOSITIVAS PARA PADRES) */
+    .proj-info-overlay,
+    .teacher-exams-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 220;
+    }
+
+    .proj-info-overlay.open,
+    .teacher-exams-overlay.open {
+      display: flex;
+    }
+
+    .proj-info-modal {
+      background: #f8fafc;
+      color: #0f172a;
+      border-radius: 1.25rem;
+      width: min(980px, 100%);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      border: 2px solid #cbd5e1;
+      animation: fadeIn 0.18s ease;
+    }
+
+    .proj-info-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+      color: #ffffff;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .proj-info-close {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.65rem;
+      padding: 0.4rem 0.75rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .proj-info-close:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .proj-slide-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.7rem 1.25rem;
+      background: #e2e8f0;
+      border-bottom: 1px solid #cbd5e1;
+      flex-wrap: wrap;
+    }
+
+    .proj-slide-tab {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .proj-slide-tab.active {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #ffffff;
+    }
+
+    .proj-info-body {
+      padding: 1.15rem 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .pi-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .pi-meta-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.75rem;
+    }
+
+    .pi-meta-lbl {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #475569;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.15rem;
+    }
+
+    .pi-meta-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .pi-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .pi-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.75rem 0.9rem;
+    }
+
+    .pi-card-title {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .pi-card p {
+      font-size: 0.84rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .pi-question-box {
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      border-radius: 0.85rem;
+      padding: 0.75rem 0.95rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .pi-pp-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .pi-pp-head,
+    .pi-pp-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .pi-pp-head {
+      background: #1e293b;
+      color: #ffffff;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.85rem;
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .pi-pp-row {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.75rem 0.85rem;
+    }
+
+    .pi-pp-name {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 0.25rem;
+    }
+
+    .pi-pp-desc {
+      font-size: 0.82rem;
+      color: #334155;
+      line-height: 1.42;
+    }
+
+    .pi-crit-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.81rem;
+      color: #1e293b;
+      line-height: 1.38;
+    }
+
+    .pi-campo-badge {
+      display: inline-block;
+      margin-top: 0.45rem;
+      font-size: 0.73rem;
+      font-weight: 700;
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+    }
+
+    .pi-pda-group {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.85rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pi-pda-campo {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: #1d4ed8;
+      display: inline-block;
+      padding: 0.22rem 0.7rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .pi-pda-item {
+      margin-bottom: 0.65rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .pi-pda-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .pi-contenido {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.3rem;
+    }
+
+    .pi-pda-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      font-size: 0.82rem;
+      color: #334155;
+      line-height: 1.42;
+    }
+
+    .proj-info-footer {
+      padding: 0.75rem 1.25rem;
+      background: #f1f5f9;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .pi-nav-btn {
+      font-family: 'Fredoka', 'Lexend', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 0.48rem 0.95rem;
+      border-radius: 0.7rem;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+    }
+
+    .pi-nav-btn:hover:not(:disabled) {
+      background: #dbeafe;
+      border-color: #60a5fa;
+    }
+
+    .pi-nav-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .teacher-exams-modal {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1.5px solid rgba(148, 163, 184, 0.35);
+      border-radius: 1.15rem;
+      width: min(460px, 100%);
+      padding: 1.25rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+      animation: fadeIn 0.16s ease;
+    }
+
+    .teacher-exam-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.8rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #f8fafc;
+      text-decoration: none;
+      margin-bottom: 0.55rem;
+      transition: all 0.16s ease;
+    }
+
+    .teacher-exam-link:hover {
+      background: rgba(37, 99, 235, 0.28);
+      border-color: #60a5fa;
+    }
+
+    @media (max-width: 760px) {
+      .pi-meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pi-two-col, .pi-pp-row { grid-template-columns: 1fr; }
+      .pi-pp-head { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -1272,6 +1639,7 @@
         <span class="section-icon">🪅</span>
         <h2 class="section-title">Proyecto 4: Juguetes, Piñatas y Tradiciones</h2>
         <span class="section-tag tag-project4">Diciembre 2026</span>
+        <button type="button" class="btn-proj-info" onclick="openProjectInfoModal('p4')" title="Ver ficha informativa, productos parciales, criterios y PDA del proyecto">📋 Sobre este Proyecto</button>
         <button class="btn-yt-toggle" onclick="toggleYtDrawer('p4')" title="Ver videos educativos sugeridos para este proyecto">
           <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           <span>Videos Sugeridos</span>
@@ -1417,7 +1785,7 @@
       <div class="sim-exam-banner" id="sim-banner-p4" style="margin-top: -1.75rem; margin-bottom: 3rem;">
         <div style="flex: 1; min-width: 240px;">
           <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 4</div>
-          <p id="sim-sub-p4" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 3 juegos del Proyecto 4 (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.</p>
+          <p id="sim-sub-p4" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa aprox. el 70% de los 3 juegos del Proyecto 4 para desbloquear el simulador del examen en este dispositivo.</p>
           <div class="sim-exam-chips" id="sim-chips-p4">
             <span class="sim-chip">⏳ Taller de Juguetes</span>
             <span class="sim-chip">⏳ Masa y Longitud</span>
@@ -1434,6 +1802,7 @@
         <span class="section-icon">❄️</span>
         <h2 class="section-title">Proyecto 3: Salud y Cuerpo Humano</h2>
         <span class="section-tag tag-project3">Noviembre 2026</span>
+        <button type="button" class="btn-proj-info" onclick="openProjectInfoModal('p3')" title="Ver ficha informativa, productos parciales, criterios y PDA del proyecto">📋 Sobre este Proyecto</button>
         <button class="btn-yt-toggle" onclick="toggleYtDrawer('p3')" title="Ver videos educativos sugeridos para este proyecto">
           <svg class="yt-svg" viewBox="0 0 24 24"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#FFFFFF" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           <span>Videos Sugeridos</span>
@@ -1586,7 +1955,7 @@
       <div class="sim-exam-banner" id="sim-banner-p3" style="margin-top: -1.75rem; margin-bottom: 3rem;">
         <div style="flex: 1; min-width: 240px;">
           <div style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 700; color: #ffffff;">📝 Simulador del Examen Final · Proyecto 3</div>
-          <p id="sim-sub-p3" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa los 3 juegos del Proyecto 3 (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.</p>
+          <p id="sim-sub-p3" style="font-size: 0.86rem; color: #cbd5e1; margin-top: 0.2rem;">Completa aprox. el 70% de los 3 juegos del Proyecto 3 para desbloquear el simulador del examen en este dispositivo.</p>
           <div class="sim-exam-chips" id="sim-chips-p3">
             <span class="sim-chip">⏳ El Cuerpo Humano</span>
             <span class="sim-chip">⏳ Semáforo de Decisiones</span>
@@ -1720,10 +2089,60 @@
           Para practicar en el Simulador del Examen Final primero debes completar todas las actividades de Repaso de Productos Parciales (PP) de este proyecto. Tu avance guardado en este dispositivo se respeta siempre.
         </p>
         <div class="lock-req-list" id="examLockList"></div>
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-          <a id="examTeacherBypassLink" href="#" style="background: #e2e8f0; color: #0f172a; text-decoration: none; border-radius: 10px; padding: 0.65rem 1rem; font-weight: 800; font-size: 0.86rem;">👨‍🏫 Modo Docente: Abrir en Pantalla ➔</a>
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
           <button type="button" onclick="closeExamLockModal()" style="background: #0f172a; color: #ffffff; border: none; border-radius: 10px; padding: 0.65rem 1.2rem; font-family: inherit; font-weight: 700; cursor: pointer;">Entendido, volver al portal</button>
         </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE FICHA INFORMATIVA DEL PROYECTO (2 DIAPOSITIVAS) -->
+    <div class="proj-info-overlay" id="projectInfoModal" role="dialog" aria-modal="true" aria-labelledby="projInfoTitle" onclick="if (event.target === this) closeProjectInfoModal()">
+      <div class="proj-info-modal">
+        <div class="proj-info-header">
+          <div>
+            <div id="projInfoBadge" style="font-size: 0.76rem; font-weight: 700; color: #bfdbfe; text-transform: uppercase; letter-spacing: 0.04em;">Ficha Informativa para Familias</div>
+            <h3 id="projInfoTitle" style="font-family: 'Fredoka', 'Lexend', sans-serif; font-size: 1.3rem; font-weight: 700; margin-top: 0.1rem;">Proyecto</h3>
+          </div>
+          <button type="button" class="proj-info-close" onclick="closeProjectInfoModal()">✕ Cerrar</button>
+        </div>
+        <div class="proj-slide-tabs" role="tablist">
+          <button type="button" class="proj-slide-tab active" id="piTab0" onclick="switchProjectInfoSlide(0)">📄 Hoja 1 · Información y Productos Parciales</button>
+          <button type="button" class="proj-slide-tab" id="piTab1" onclick="switchProjectInfoSlide(1)">📚 Hoja 2 · Contenidos y PDA</button>
+        </div>
+        <div class="proj-info-body" id="projInfoBody"></div>
+        <div class="proj-info-footer">
+          <button type="button" class="pi-nav-btn" id="piPrevBtn" onclick="switchProjectInfoSlide(0)">⬅ Hoja 1</button>
+          <span id="piSlideIndicator" style="font-size: 0.82rem; font-weight: 700; color: #475569;">Diapositiva 1 de 2</span>
+          <button type="button" class="pi-nav-btn" id="piNextBtn" onclick="switchProjectInfoSlide(1)">Hoja 2 ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DISCRETO DOCENTE PARA PROBAR SIMULADORES DE EXAMEN -->
+    <div class="teacher-exams-overlay" id="teacherExamsModal" role="dialog" aria-modal="true" aria-labelledby="teacherExamsTitle" onclick="if (event.target === this) closeTeacherExamsModal()">
+      <div class="teacher-exams-modal">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.85rem;">
+          <div>
+            <div style="font-size:0.72rem; font-weight:700; color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">Acceso Docente</div>
+            <h3 id="teacherExamsTitle" style="font-family:'Fredoka','Lexend',sans-serif; font-size:1.15rem; color:#ffffff;">Simuladores de Examen (Prueba)</h3>
+          </div>
+          <button type="button" onclick="closeTeacherExamsModal()" style="background:rgba(255,255,255,0.12); color:#e2e8f0; border:none; border-radius:8px; padding:0.35rem 0.65rem; font-weight:700; cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.85rem; line-height:1.4;">Acceso directo en modo prueba sin modificar el avance guardado en este dispositivo.</p>
+        <a class="teacher-exam-link" href="proyecto-4/simulador_examen/index.html?docente=1">
+          <div>
+            <div style="font-weight:700; font-size:0.92rem;">🪅 Examen · Proyecto 4</div>
+            <div style="font-size:0.75rem; color:#94a3b8;">Diciembre · Juguetes, Piñatas y Tradiciones</div>
+          </div>
+          <span style="font-weight:700; color:#93c5fd;">Abrir ➔</span>
+        </a>
+        <a class="teacher-exam-link" href="proyecto-3/simulador_examen/index.html?docente=1">
+          <div>
+            <div style="font-weight:700; font-size:0.92rem;">❄️ Examen · Proyecto 3</div>
+            <div style="font-size:0.75rem; color:#94a3b8;">Noviembre · Salud y Cuerpo Humano</div>
+          </div>
+          <span style="font-weight:700; color:#93c5fd;">Abrir ➔</span>
+        </a>
       </div>
     </div>
 
@@ -1731,6 +2150,19 @@
     <footer style="position: relative;">
       <p>Diseñado para uso docente en pantalla táctil interactiva Computerland · Primaria Federal "José Clemente Orozco" (CCT: 14DPR0334N · Sayula, Jalisco)</p>
       <p style="margin-top: 0.35rem; color: #475569;">100% Offline y compatible con cualquier navegador moderno · Sin anuncios ni rastreadores</p>
+      <button type="button"
+         onclick="openTeacherExamsModal()"
+         title="Prueba de exámenes"
+         aria-label="Prueba de exámenes"
+         style="position: absolute; right: 2.35rem; bottom: 0.3rem; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; border: none; background: transparent; color: #64748b; opacity: 0.32; cursor: pointer; transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;"
+         onmouseover="this.style.opacity='0.92';this.style.background='rgba(30,41,59,0.85)';this.style.color='#cbd5e1';"
+         onmouseout="this.style.opacity='0.32';this.style.background='transparent';this.style.color='#64748b';">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+          <rect x="9" y="3" width="6" height="4" rx="1"></rect>
+          <path d="m9 14 2 2 4-4"></path>
+        </svg>
+      </button>
       <a href="reuniones/index.html"
          title="Presentaciones docentes"
          aria-label="Presentaciones docentes"
@@ -1838,21 +2270,426 @@
         title: 'Proyecto 4: Juguetes, Piñatas y Tradiciones',
         examHref: 'proyecto-4/simulador_examen/index.html',
         pps: [
-          { id: 'taller_instructivos_juguetes', shortLabel: 'Taller de Juguetes', label: '📋 Taller de Juguetes (PP1 · Instructivos)', href: 'proyecto-4/taller_instructivos_juguetes/index.html?v=4.3' },
-          { id: 'laboratorio_masa_longitud', shortLabel: 'Masa y Longitud', label: '⚖️ Masa y Longitud (PP2 y PP3 · Regla y Balanza)', href: 'proyecto-4/laboratorio_masa_longitud/index.html?v=4.3' },
-          { id: 'posadas_y_tradiciones', shortLabel: 'Posadas y Tradiciones', label: '🪅 Posadas y Tradiciones (PP2 y PP3 · Crónica y Acuerdos)', href: 'proyecto-4/posadas_y_tradiciones/index.html?v=4.3' }
+          { id: 'taller_instructivos_juguetes', shortLabel: 'Taller de Juguetes', label: '📋 Taller de Juguetes (PP1 · Instructivos)', href: 'proyecto-4/taller_instructivos_juguetes/index.html?v=4.3', targetHits: 15 },
+          { id: 'laboratorio_masa_longitud', shortLabel: 'Masa y Longitud', label: '⚖️ Masa y Longitud (PP2 y PP3 · Regla y Balanza)', href: 'proyecto-4/laboratorio_masa_longitud/index.html?v=4.3', targetHits: 14 },
+          { id: 'posadas_y_tradiciones', shortLabel: 'Posadas y Tradiciones', label: '🪅 Posadas y Tradiciones (PP2 y PP3 · Crónica y Acuerdos)', href: 'proyecto-4/posadas_y_tradiciones/index.html?v=4.3', targetHits: 7 }
         ]
       },
       p3: {
         title: 'Proyecto 3: Salud y Cuerpo Humano',
         examHref: 'proyecto-3/simulador_examen/index.html',
         pps: [
-          { id: 'simulador_sistema_locomotor', shortLabel: 'El Cuerpo Humano', label: '🦴 El Cuerpo Humano (PP2 · Sistema Locomotor)', href: 'proyecto-3/simulador_sistema_locomotor/index.html' },
-          { id: 'semaforo_decisiones_riesgos', shortLabel: 'Semáforo de Decisiones', label: '🚦 Semáforo de Decisiones (PP3 · Prevención de Riesgos)', href: 'proyecto-3/semaforo_decisiones_riesgos/index.html' },
-          { id: 'causa_efecto_salud_invierno', shortLabel: 'Causa y Efecto: Salud', label: '🌡️ Causa y Efecto: Salud (PP1 y PP4 · Cartilla y Tríptico)', href: 'proyecto-3/causa_efecto_salud_invierno/index.html' }
+          { id: 'simulador_sistema_locomotor', shortLabel: 'El Cuerpo Humano', label: '🦴 El Cuerpo Humano (PP2 · Sistema Locomotor)', href: 'proyecto-3/simulador_sistema_locomotor/index.html', targetHits: 12 },
+          { id: 'semaforo_decisiones_riesgos', shortLabel: 'Semáforo de Decisiones', label: '🚦 Semáforo de Decisiones (PP3 · Prevención de Riesgos)', href: 'proyecto-3/semaforo_decisiones_riesgos/index.html', targetHits: 14 },
+          { id: 'causa_efecto_salud_invierno', shortLabel: 'Causa y Efecto: Salud', label: '🌡️ Causa y Efecto: Salud (PP1 y PP4 · Cartilla y Tríptico)', href: 'proyecto-3/causa_efecto_salud_invierno/index.html', targetHits: 7 }
         ]
       }
     };
+
+    const PROJECT_INFO_DATA = {
+      p4: {
+        badge: 'Proyecto 4 · Diciembre 2026 · 3° "A"',
+        title: 'Instructivos, juguetes reciclados y piñatas',
+        grado: '3° "A"',
+        mes: 'Diciembre 2026 (30 Nov al 18 Dic)',
+        metodologia: 'Proyecto integrador (Fase 4 - NEM)',
+        ejes: 'Apropiación de las culturas, Pensamiento crítico, Inclusión, Artes',
+        problematica: 'La consolidación y comprensión de la lectoescritura, ante la necesidad de que las y los alumnos adquieran, consoliden y apliquen las herramientas del lenguaje escrito y la comprensión lectora de manera funcional para favorecer su aprendizaje y comunicación en la comunidad.',
+        proposito: 'Fortalecer la comprensión lectora y la escritura de textos instructivos y descriptivos mediante la elaboración de juguetes con materiales reciclados y piñatas tradicionales, experimentando con la medición de longitud y masa con regla y balanza y practicando acuerdos de colaboración.',
+        pregunta: '¿Cómo podemos escribir instructivos claros para construir juguetes con materiales reciclados y piñatas midiendo sus materiales, y organizarnos en equipo para compartir nuestras tradiciones en la escuela?',
+        pps: [
+          {
+            name: 'PP1: Instructivos de juguetes y piñatas',
+            desc: 'Las y los alumnos analizan las partes de un instructivo y redactan paso a paso las indicaciones con numerales, verbos en infinitivo, comas en listas de materiales, mayúsculas con lápiz rojo y dibujos para armar juguetes reciclados y una piñata.',
+            criterios: [
+              'Identifica las características y estructura de los textos instructivos (título, materiales, procedimiento secuenciado e ilustraciones).',
+              'Redacta un instructivo paso a paso empleando verbos en infinitivo o imperativo, numerales y viñetas para listar materiales.',
+              'Emplea la coma para separar listas de materiales y escribe con lápiz rojo las mayúsculas iniciales y los puntos.'
+            ],
+            campos: 'Lenguajes'
+          },
+          {
+            name: 'PP2: Juguetes con material reciclado',
+            desc: 'Construcción de figuras de papiroflexia y de un avioncito con broche de madera y abatelenguas siguiendo los pasos de su instructivo y midiendo el largo y ancho de las piezas en centímetros con la regla.',
+            criterios: [
+              'Sigue secuencias de instrucciones escritas y diagramas para elaborar figuras de papiroflexia y un avioncito con broche de madera y abatelenguas.',
+              'Mide el largo de las piezas con la regla en centímetros y comprueba la simetría y equilibrio al ensamblarlo.',
+              'Acuerda y respeta reglas de convivencia e inclusión al probar sus juguetes en equipo.'
+            ],
+            campos: 'Lenguajes · Saberes y Pensamiento Científico · De lo Humano y lo Comunitario'
+          },
+          {
+            name: 'PP3: Elaboración de piñatas',
+            desc: 'Trabajo en equipo para preparar engrudo, medir papel y cuerda en metros, armar y decorar las piñatas, pesar su masa en kilogramos y gramos con la balanza y organizar de forma colaborativa la posada del salón.',
+            criterios: [
+              'Compara la masa (en balanza) y mide con regla/metro la longitud del papel, conos y cuerda empleados en la piñata.',
+              'Colabora con ayuda mutua y responsabilidad en su equipo durante el pegado de capas con engrudo y la decoración.',
+              'Redacta un texto descriptivo sobre el proceso y las tradiciones decembrinas de su comunidad usando comas y mayúsculas en rojo.'
+            ],
+            campos: 'Todos los campos formativos'
+          },
+          {
+            name: 'S/N: Pensamiento matemático',
+            desc: 'Trabajo con números de hasta cuatro cifras asignando el color verde a la unidad de millar (centenas amarillo, decenas rojo y unidades azul), algoritmo convencional de suma y resta con transformación y problemas razonados en el cuaderno amarillo.',
+            criterios: [
+              'Lee, escribe, ordena y descompone números naturales de hasta cuatro cifras usando el valor posicional con colores.',
+              'Resuelve problemas aditivos vinculados a presupuestos y materiales empleando el algoritmo convencional de suma y resta.',
+              'Utiliza estrategias de cálculo mental para estimar y comprobar resultados con decenas, centenas y millares.'
+            ],
+            campos: 'Saberes y Pensamiento Científico'
+          },
+          {
+            name: 'S/N: Actividades LEE',
+            desc: 'Lectura y comprensión de textos instructivos y relatos sobre tradiciones de diciembre, uso de signos de puntuación y mayúsculas con lápiz rojo, cantos de posada y cuadernillos de alfabetización para alumnos que requieren más apoyo.',
+            criterios: [
+              'Lee con fluidez y comprensión textos instructivos y descriptivos, respondiendo y socializando preguntas en grupo.',
+              'Aplica separación convencional de palabras, comas en enumeraciones y mayúsculas y puntos con lápiz rojo.',
+              'Completa actividades de conciencia silábica, lectura y escritura de palabras temáticas (alumnos en proceso de alfabetización).'
+            ],
+            campos: 'Lenguajes'
+          }
+        ],
+        curriculo: [
+          {
+            campo: 'Lenguajes',
+            items: [
+              {
+                contenido: 'Comprensión y producción de textos instructivos para realizar actividades escolares y participar en diversos juegos.',
+                pdas: [
+                  'Identifica y reflexiona sobre la función de los textos instructivos y sus características genéricas: organización de los datos; uso de numerales para ordenar cronológicamente los pasos de un procedimiento; brevedad y secuencia de la información; y precisión en las indicaciones.',
+                  'Comprende la utilidad de los recursos gráficos empleados en textos instructivos: diagramas de procesos, ilustraciones, cuadros y símbolos.',
+                  'Identifica y reflexiona respecto del vocabulario empleado en los instructivos: verbos en infinitivo o en imperativo para redactar instrucciones y términos secuenciales, como primero, después, antes de, enseguida, finalmente.',
+                  'Emplea signos de puntuación, como la coma, el punto y seguido, el punto y aparte, dos puntos.'
+                ]
+              },
+              {
+                contenido: 'Descripción de personas, lugares, hechos y procesos.',
+                pdas: [
+                  'Planea, escribe, revisa y corrige textos en los que describe hechos en orden cronológico.',
+                  'Reflexiona sobre el uso de la coma al enumerar cosas o elementos y la emplea.',
+                  'Usa mayúsculas al inicio de las oraciones y de los nombres propios.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'Saberes y Pensamiento Científico',
+            items: [
+              {
+                contenido: 'Propiedades de los materiales: masa y longitud; relación entre estados físicos y la temperatura.',
+                pdas: [
+                  'Describe la masa y la longitud como propiedades medibles de los materiales, a partir de experimentar con distintos objetos y materiales y el uso de instrumentos como balanza y regla, y establece relaciones entre el material, tamaño y forma.',
+                  'Reconoce al kilogramo (kg) como la unidad básica de medida de la masa, y al metro (m) como la unidad básica de medición de la longitud (distancia entre dos puntos), así como otras unidades que se utilizan en su comunidad para medir la masa y la longitud.'
+                ]
+              },
+              {
+                contenido: 'Estudio de los números. / Suma y resta, su relación como operaciones inversas.',
+                pdas: [
+                  'Expresa oralmente la sucesión numérica hasta cuatro cifras, en español y hasta donde sea posible, en su lengua materna, de manera ascendente y descendente a partir de un número natural dado.',
+                  'A través de situaciones cotidianas cuenta, representa de diferentes formas, interpreta, ordena, lee y escribe números naturales de hasta cuatro cifras; identifica regularidades en los números que representan decenas, centenas y millares.',
+                  'Resuelve situaciones problemáticas vinculadas a su contexto que implican sumas de números naturales de hasta tres cifras utilizando el algoritmo convencional.',
+                  'Resuelve situaciones problemáticas vinculadas a su contexto que implican restas de números naturales de hasta tres cifras utilizando agrupamientos y el algoritmo convencional.',
+                  'Utiliza, explica y comprueba sus estrategias para calcular mentalmente sumas o restas de números naturales de hasta tres cifras.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'Ética, Naturaleza y Sociedades',
+            items: [
+              {
+                contenido: 'Experiencias de organización comunitaria del pasado y del presente, y las acciones de colaboración, reciprocidad, cuidado mutuo y trabajo por el bienestar de la escuela, barrio, comunidad, pueblo y colectivo social, para configurar ambientes seguros e igualitarios, con equidad y justicia.',
+                pdas: [
+                  'Indaga en fuentes orales o escritas acerca de formas de organización participativa, en el pasado y el presente de su comunidad, e identifica la importancia de la colaboración, la reciprocidad, el respeto y el cuidado mutuo.',
+                  'Propone para su aplicación en la escuela formas de organización participativa, que contribuyan al bienestar de la colectividad escolar.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'De lo Humano y lo Comunitario',
+            items: [
+              {
+                contenido: 'Interacción motriz. / Pensamiento lúdico, estratégico y creativo.',
+                pdas: [
+                  'Establece acuerdos ante situaciones de juego y cotidianas, a partir de la interacción, para valorar su aplicación y los resultados alcanzados.',
+                  'Toma decisiones estratégicas a partir de las características de las situaciones de juego y cotidianas, con el fin de solucionarlas asertivamente.'
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      p3: {
+        badge: 'Proyecto 3 · Noviembre 2026 · 3° "A"',
+        title: 'Cuidado de la salud, mi cuerpo y prevención en invierno',
+        grado: '3° "A"',
+        mes: 'Noviembre 2026 (03 al 27 Nov)',
+        metodologia: 'Proyecto integrador (Fase 4 - NEM)',
+        ejes: 'Vida saludable, Pensamiento crítico',
+        problematica: 'La consolidación y comprensión de la lectoescritura, ante la necesidad de que las y los alumnos adquieran, consoliden y apliquen las herramientas del lenguaje escrito y la comprensión lectora de manera funcional aplicadas a la prevención de enfermedades estacionales y el cuidado de su cuerpo.',
+        proposito: 'Fortalecer las habilidades de lectoescritura, análisis de textos expositivos y formales, y pensamiento crítico mediante el conocimiento del sistema locomotor, el análisis de documentos de salud y la toma de decisiones responsables frente a riesgos del invierno.',
+        pregunta: '¿Cómo podemos cuidar nuestro cuerpo en invierno y tomar decisiones responsables para evitar enfermedades y accidentes en la escuela y el hogar?',
+        pps: [
+          {
+            name: 'PP1: Carnet Escolar de Salud y Cartilla de Vacunación Simulada',
+            desc: 'Análisis de documentos oficiales de salud, función de sellos, firmas y siglas institucionales (SSA, IMSS, Issste), registrando datos personales y vacunas invernales con mayúsculas en rojo.',
+            criterios: [
+              'Identifica las características y funciones de la cartilla de vacunación y documentos personales completando su carnet simulado.',
+              'Explica el significado de las siglas de instituciones de salud (SSA, IMSS, Issste) y el valor formal de sellos y firmas.',
+              'Escribe con lápiz rojo las mayúsculas iniciales en nombres propios, apellidos e instituciones.'
+            ],
+            campos: 'Lenguajes · De lo Humano y lo Comunitario'
+          },
+          {
+            name: 'PP2: Modelo Anatómico del Sistema Óseo y Decálogo Postural',
+            desc: 'Construcción en cartoncillo de un modelo articulado que demuestra la relación entre huesos, articulaciones y músculos, acompañada de un decálogo de postura correcta y prevención de automedicación.',
+            criterios: [
+              'Describe los componentes del sistema locomotor (huesos, articulaciones y músculos) y su función de soporte y movimiento.',
+              'Explica la importancia de la columna vertebral y la postura correcta al sentarse y cargar la mochila.',
+              'Argumenta por qué es indispensable acudir al médico y evitar la automedicación.'
+            ],
+            campos: 'Saberes y Pensamiento Científico · Lenguajes'
+          },
+          {
+            name: 'PP3: Semáforo Ético de Decisiones ante Riesgos',
+            desc: 'Análisis de situaciones dilema sobre el frío, accidentes y pirotecnia, clasificando conductas en verde, amarillo y rojo para actuar con responsabilidad y proteger la integridad física.',
+            criterios: [
+              'Clasifica situaciones cotidianas en niveles de riesgo (verde, amarillo y rojo) evaluando peligros del entorno escolar y familiar.',
+              'Explica las consecuencias directas de no abrigarse, jugar con pirotecnia o automedicarse y registra alternativas responsables.',
+              'Propone hábitos de higiene y cuidado colectivo para prevenir riesgos de salud en temporada invernal.'
+            ],
+            campos: 'Ética, Naturaleza y Sociedades · De lo Humano y lo Comunitario'
+          },
+          {
+            name: 'PP4: Tríptico Expositivo Problema-Solución',
+            desc: 'Redacción de textos expositivos estructurados en causas y consecuencias sobre enfermedades respiratorias invernales y medidas preventivas, con revisión en parejas.',
+            criterios: [
+              'Estructura un tríptico expositivo identificando el problema (enfermedades invernales) y soluciones prácticas para el hogar.',
+              'Emplea nexos causales (porque, debido a) y enumeraciones para explicar consecuencias y medidas de higiene.',
+              'Corrige la redacción en parejas escribiendo mayúsculas con lápiz rojo, puntos y separación convencional de palabras.'
+            ],
+            campos: 'Lenguajes · De lo Humano y lo Comunitario'
+          },
+          {
+            name: 'S/N: Pensamiento matemático',
+            desc: 'Registro e interpretación de datos sobre hábitos de salud en tablas de frecuencias y resolución diaria de problemas aditivos de suma y resta con desagrupación usando fichas de colores y cuaderno amarillo.',
+            criterios: [
+              'Registra datos del aula sobre síntomas de invierno y vacunas en tablas de frecuencias y pictogramas.',
+              'Resuelve problemas razonados de suma con agrupamiento y resta con desagrupación de hasta tres cifras.',
+              'Explica y comprueba sus estrategias de cálculo mental con centenas y decenas.'
+            ],
+            campos: 'Saberes y Pensamiento Científico'
+          },
+          {
+            name: 'S/N: Actividades LEE',
+            desc: 'Sesiones diarias para consolidar la fluidez lectora en textos informativos, separación léxica y mayúsculas en rojo, incorporando cuadernillos de alfabetización y dictado silábico para alumnos en proceso de alfabetización.',
+            criterios: [
+              'Lee con fluidez y entonación textos informativos breves sobre la salud respondiendo preguntas literales e inferenciales.',
+              'Aplica mayúsculas en rojo, signos de puntuación y separación de palabras en sus escritos.',
+              'Escribe y lee palabras y oraciones sencillas con apoyo del cuadernillo de alfabetización (alumnos en apoyo prioritario).'
+            ],
+            campos: 'Lenguajes'
+          }
+        ],
+        curriculo: [
+          {
+            campo: 'Lenguajes',
+            items: [
+              {
+                contenido: 'Uso de textos formales para atender diversos asuntos personales o del bienestar común.',
+                pdas: [
+                  'Explora y reconoce características de documentos personales, como acta de nacimiento, credenciales, cartilla de vacunación y comprobantes de estudio.',
+                  'Reflexiona sobre las funciones que tienen los documentos personales.',
+                  'Reconoce situaciones en las que los documentos personales son necesarios y/o útiles.',
+                  'Comprende la utilidad y el significado de las siglas de las instituciones que expiden los documentos, así como el valor de los sellos y firmas de autorización.'
+                ]
+              },
+              {
+                contenido: 'Comprensión y producción de textos expositivos en los que se planteen: problema-solución, comparación-contraste, causa-consecuencia y enumeración.',
+                pdas: [
+                  'Recurre a diversos soportes que contienen textos expositivos, para ampliar sus conocimientos sobre algún tema, así como a diccionarios para consultar definiciones.',
+                  'Comprende textos expositivos que plantean un problema y la solución al mismo.',
+                  'Reconoce semejanzas y diferencias entre textos de comparación y de contraste.',
+                  'Reconoce antecedentes y consecuentes en el cuerpo de un texto expositivo, del tipo causa-consecuencia.',
+                  'Se apoya en la enumeración para identificar los principales elementos del tema que trata.',
+                  'Participa en la planeación y escritura de algún texto expositivo, así como en su revisión y corrección, haciendo sugerencias de mejora. Reflexiona sobre palabras y frases que impliquen comparación: algunos, otros, en cambio.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'Saberes y Pensamiento Científico',
+            items: [
+              {
+                contenido: 'Estructura y funcionamiento del cuerpo humano: sistemas locomotor y digestivo, así como prácticas para su cuidado, desde su contexto sociocultural.',
+                pdas: [
+                  'Identifica y describe que el sistema locomotor está conformado por el sistema óseo (huesos y columna vertebral), y el sistema muscular (músculos y articulaciones), y que sus funciones se relacionan con el soporte, protección y movimiento del cuerpo.',
+                  'Explica y representa el funcionamiento del sistema locomotor, con modelos que muestran la acción coordinada de los sistemas óseo, muscular y nervioso, en el movimiento del cuerpo.',
+                  'Describe acciones y prácticas socioculturales para el cuidado del sistema locomotor y la prevención de accidentes y lesiones, reconoce la importancia de la postura correcta, de acudir a los servicios de salud y evitar la automedicación.'
+                ]
+              },
+              {
+                contenido: 'Organización e interpretación de datos. / Suma y resta, su relación como operaciones inversas.',
+                pdas: [
+                  'Recolecta, organiza, representa e interpreta datos en tablas de frecuencias o pictogramas para responder preguntas de su interés.',
+                  'Resuelve situaciones problemáticas vinculadas a su contexto que implican sumas de números naturales de hasta tres cifras utilizando el algoritmo convencional.',
+                  'Resuelve situaciones problemáticas vinculadas a su contexto que implican restas de números naturales de hasta tres cifras utilizando agrupamientos y el algoritmo convencional.',
+                  'Utiliza, explica y comprueba sus estrategias para calcular mentalmente sumas o restas de números naturales de hasta tres cifras.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'Ética, Naturaleza y Sociedades',
+            items: [
+              {
+                contenido: 'La toma de decisiones ante situaciones cotidianas y de riesgos, con base en el cuidado de la dignidad de todas y todos, considerando posibles consecuencias de las acciones, para actuar con responsabilidad.',
+                pdas: [
+                  'Analiza críticamente y distingue situaciones cotidianas en las que se ejerce la capacidad para tomar decisiones, empleando los criterios de valoración de los riesgos del entorno.',
+                  'Dialoga y analiza posibles consecuencias de las acciones, para actuar con responsabilidad.'
+                ]
+              }
+            ]
+          },
+          {
+            campo: 'De lo Humano y lo Comunitario',
+            items: [
+              {
+                contenido: 'Higiene para una vida saludable. / Hábitos saludables, para promover el bienestar en los seres vivos.',
+                pdas: [
+                  'Reflexiona acerca de distintos hábitos y costumbres de higiene que se realizan en la vida cotidiana en su comunidad, para mejorar prácticas de higiene con sus compañeras y compañeros de clase.',
+                  'Distingue alimentos saludables y no saludables para preparar alimentos y promover la alimentación saludable.',
+                  'Reconoce la importancia de la hidratación en el desarrollo del cuerpo de los seres vivos, para promover hábitos y actitudes saludables y de bienestar en la escuela y la comunidad.'
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    let currentProjectInfoKey = null;
+    let currentProjectInfoSlide = 0;
+
+    function openProjectInfoModal(projKey) {
+      if (!PROJECT_INFO_DATA[projKey]) return;
+      currentProjectInfoKey = projKey;
+      currentProjectInfoSlide = 0;
+      const modal = document.getElementById('projectInfoModal');
+      renderProjectInfoSlide();
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeProjectInfoModal() {
+      const modal = document.getElementById('projectInfoModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function switchProjectInfoSlide(idx) {
+      currentProjectInfoSlide = idx === 1 ? 1 : 0;
+      renderProjectInfoSlide();
+    }
+
+    function renderProjectInfoSlide() {
+      const data = PROJECT_INFO_DATA[currentProjectInfoKey];
+      if (!data) return;
+      const badgeEl = document.getElementById('projInfoBadge');
+      const titleEl = document.getElementById('projInfoTitle');
+      const bodyEl = document.getElementById('projInfoBody');
+      const tab0 = document.getElementById('piTab0');
+      const tab1 = document.getElementById('piTab1');
+      const prevBtn = document.getElementById('piPrevBtn');
+      const nextBtn = document.getElementById('piNextBtn');
+      const indEl = document.getElementById('piSlideIndicator');
+
+      if (badgeEl) badgeEl.textContent = data.badge;
+      if (titleEl) titleEl.textContent = data.title;
+      if (tab0) tab0.classList.toggle('active', currentProjectInfoSlide === 0);
+      if (tab1) tab1.classList.toggle('active', currentProjectInfoSlide === 1);
+      if (prevBtn) prevBtn.disabled = currentProjectInfoSlide === 0;
+      if (nextBtn) nextBtn.disabled = currentProjectInfoSlide === 1;
+      if (indEl) indEl.textContent = `Diapositiva ${currentProjectInfoSlide + 1} de 2`;
+
+      if (!bodyEl) return;
+      if (currentProjectInfoSlide === 0) {
+        bodyEl.innerHTML = `
+          <div class="pi-meta-grid">
+            <div class="pi-meta-box"><div class="pi-meta-lbl">Grado</div><div class="pi-meta-val">${data.grado}</div></div>
+            <div class="pi-meta-box"><div class="pi-meta-lbl">Mes / Periodo</div><div class="pi-meta-val">${data.mes}</div></div>
+            <div class="pi-meta-box"><div class="pi-meta-lbl">Metodología</div><div class="pi-meta-val">${data.metodologia}</div></div>
+            <div class="pi-meta-box"><div class="pi-meta-lbl">Ejes Articuladores</div><div class="pi-meta-val">${data.ejes}</div></div>
+          </div>
+          <div class="pi-two-col">
+            <div class="pi-card">
+              <div class="pi-card-title">Problemática</div>
+              <p>${data.problematica}</p>
+            </div>
+            <div class="pi-card">
+              <div class="pi-card-title">Propósito</div>
+              <p>${data.proposito}</p>
+            </div>
+          </div>
+          <div class="pi-question-box">
+            <div class="pi-card-title" style="margin-bottom:0.2rem;">Pregunta Generadora</div>
+            <p style="font-size:0.9rem; font-weight:700; color:#1e3a8a;">${data.pregunta}</p>
+          </div>
+          <div class="pi-pp-table">
+            <div class="pi-pp-head">
+              <div>Productos Parciales (PP)</div>
+              <div>Criterios de Evaluación</div>
+            </div>
+            ${data.pps.map(pp => `
+              <div class="pi-pp-row">
+                <div>
+                  <div class="pi-pp-name">${pp.name}</div>
+                  <p class="pi-pp-desc">${pp.desc}</p>
+                </div>
+                <div>
+                  <ul class="pi-crit-list">
+                    ${pp.criterios.map(c => `<li>• ${c}</li>`).join('')}
+                  </ul>
+                  <span class="pi-campo-badge">Campos: ${pp.campos}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        bodyEl.innerHTML = data.curriculo.map(grp => `
+          <div class="pi-pda-group">
+            <div class="pi-pda-campo">${grp.campo}</div>
+            ${grp.items.map(it => `
+              <div class="pi-pda-item">
+                <div class="pi-contenido">Contenido: ${it.contenido}</div>
+                <ul class="pi-pda-list">
+                  ${it.pdas.map(p => `<li>• ${p}</li>`).join('')}
+                </ul>
+              </div>
+            `).join('')}
+          </div>
+        `).join('');
+      }
+      bodyEl.scrollTop = 0;
+    }
+
+    function openTeacherExamsModal() {
+      const modal = document.getElementById('teacherExamsModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeTeacherExamsModal() {
+      const modal = document.getElementById('teacherExamsModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeExamLockModal();
+        closeProjectInfoModal();
+        closeTeacherExamsModal();
+      }
+    });
 
     function readPortalProgress() {
       try {
@@ -1884,6 +2721,7 @@
         cfg.pps.forEach((pp) => {
           const rec = (projData.pps && projData.pps[pp.id]) || null;
           const done = Boolean(rec && rec.completed === true);
+          const target = pp.targetHits || (rec && rec.total) || 10;
           if (done) doneCount += 1;
 
           const badgeEl = document.getElementById(`status-${projKey}-${pp.id}`);
@@ -1893,7 +2731,7 @@
               badgeEl.textContent = '✅ Completado';
             } else if (rec && typeof rec.bestScore === 'number' && rec.bestScore > 0) {
               badgeEl.classList.remove('done');
-              badgeEl.textContent = `🔄 Avance: ${rec.bestScore}/5`;
+              badgeEl.textContent = `🔄 Avance: ${Math.min(rec.bestScore, target)}/${target}`;
             } else {
               badgeEl.classList.remove('done');
               badgeEl.textContent = '⏳ Por completar';
@@ -1925,7 +2763,7 @@
         if (subEl) {
           subEl.textContent = allDone
             ? '¡Desbloqueado! Ya completaste los 3 juegos del proyecto y puedes practicar para el examen.'
-            : `Completa los ${total} juegos interactivos de este proyecto (5 aciertos en cada uno) para desbloquear el simulador del examen en este dispositivo.`;
+            : `Completa aprox. el 70% de los ${total} juegos interactivos de este proyecto para desbloquear el simulador del examen en este dispositivo.`;
         }
       });
     }
@@ -1949,20 +2787,17 @@
       const modal = document.getElementById('examLockModal');
       const subtitle = document.getElementById('examLockSubtitle');
       const list = document.getElementById('examLockList');
-      const teacherLink = document.getElementById('examTeacherBypassLink');
-      if (teacherLink) {
-        teacherLink.setAttribute('href', (simHref || cfg.examHref) + '?docente=1');
-      }
       if (subtitle) {
-        subtitle.textContent = `Para ingresar al Simulador del Examen Final de ${cfg.title}, primero completa ${missing.length} juego(s) pendiente(s) del proyecto en este dispositivo:`;
+        subtitle.textContent = `Para ingresar al Simulador del Examen Final de ${cfg.title}, primero completa aprox. el 70% de los ${missing.length} juego(s) pendiente(s) del proyecto en este dispositivo:`;
       }
       if (list) {
         list.innerHTML = cfg.pps.map((pp) => {
           const done = isPpDone(projData, pp.id);
+          const target = pp.targetHits || 10;
           return `<div class="lock-req-row ${done ? 'done' : 'pending'}">
             <div>
               <div style="font-weight: 800; color: #0f172a;">${done ? '✅' : '⏳'} ${pp.label}</div>
-              <div style="font-size: 0.8rem; color: #475569;">${done ? 'Juego completado exitosamente' : 'Pendiente por completar (logra 5 aciertos en el juego)'}</div>
+              <div style="font-size: 0.8rem; color: #475569;">${done ? 'Juego completado exitosamente' : `Pendiente por completar (~70% · meta: ${target} aciertos)`}</div>
             </div>
             ${done ? '<span style="font-weight: 800; color: #059669; font-size: 0.85rem;">Listo</span>' : `<a class="lock-req-link" href="${pp.href}">Ir al juego →</a>`}
           </div>`;

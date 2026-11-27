@@ -469,7 +469,7 @@
           <div>
             <div class="lock-banner">
               <h2 style="font-size:1.25rem;margin-bottom:0.3rem;">🔒 Completa primero tus 3 juegos del Proyecto 4</h2>
-              <p style="font-size:0.92rem;">Para desbloquear el Simulador del Examen Final, juega y logra <strong>5 aciertos</strong> en cada uno de los 3 juegos del proyecto:</p>
+              <p style="font-size:0.92rem;">Para desbloquear el Simulador del Examen Final, completa aproximadamente el <strong>70%</strong> de cada uno de los 3 juegos del proyecto:</p>
             </div>
             <div class="req-list">
               ${REQUIRED_PPS.map(r => {
@@ -479,7 +479,7 @@
                   <div class="req-card ${isDone ? 'done' : 'pending'}">
                     <div>
                       <div style="font-weight:900; font-size:1rem;">${isDone ? '✅' : '⏳'} ${r.title}</div>
-                      <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">${isDone ? 'Juego completado' : 'Pendiente por completar'}</div>
+                      <div style="font-size:0.85rem; color:#475569; margin-top:0.2rem;">${isDone ? 'Juego completado' : 'Pendiente por completar (~70% del juego)'}</div>
                     </div>
                     <a class="req-go" href="${r.href}">${isDone ? 'Jugar de nuevo ➔' : 'Ir al juego ➔'}</a>
                   </div>
@@ -488,7 +488,6 @@
             </div>
             <div class="stage-footer">
               <a class="btn-nav" href="../../index.html" style="background:#1e293b;">⬅ Volver al Portal</a>
-              <button type="button" class="btn-sec" onclick="unlockAsTeacher()">👨‍🏫 Modo Docente: Practicar en Pantalla ➔</button>
             </div>
           </div>
         `;
